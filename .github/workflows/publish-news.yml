@@ -31,36 +31,12 @@ jobs:
         id: storyboard
         env:
           NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
-        run: |
-          node --input-type=module -e "
-          import { StoryboardGenerator } from './packages/branding/storyboard.js';
-          import { fetchTopHeadlines } from './apps/api/services/news.js';
-          import { writeFileSync } from 'fs';
-          const articles = await fetchTopHeadlines({ category: '${{ github.event.inputs.category || 'technology' }}', pageSize: 5 });
-          const gen = new StoryboardGenerator();
-          const storyboard = gen.generate(articles);
-          console.log(JSON.stringify(storyboard, null, 2));
-          writeFileSync('/tmp/storyboard.json', JSON.stringify(storyboard));
-          console.log('Scenes:', storyboard.totalScenes);
-          "
+          INPUT_CATEGORY: ${{ github.event.inputs.category || 'technology' }}
+        run: node .github/scripts/generate-storyboard.mjs
 
       - name: Quality Check
         id: quality
-        run: |
-          node --input-type=module -e "
-          import { QualityScorer } from './packages/common/quality/scorer.js';
-          import { readFileSync } from 'fs';
-          const storyboard = JSON.parse(readFileSync('/tmp/storyboard.json', 'utf8'));
-          const scorer = new QualityScorer();
-          const result = scorer.score(storyboard);
-          console.log('Visual Score:', result.scores.visual + '/100');
-          console.log('Audio Score:', result.scores.audio + '/100');
-          console.log('Text Score:', result.scores.text + '/100');
-          console.log('Brand Score:', result.scores.brand + '/100');
-          console.log('Total Score:', result.total + '/100');
-          console.log('Status:', result.passed ? '✅ APPROVED' : '❌ REJECTED');
-          if (!result.passed) { console.log('Issues:', result.issues.join(', ')); process.exit(1); }
-          "
+        run: node .github/scripts/quality-check.mjs
 
       - name: Try Railway Cron First
         id: try_railway
@@ -68,17 +44,14 @@ jobs:
         env:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
-          echo "Checking Railway availability..."
           HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 https://video-gen-stack-production.up.railway.app/api/health || echo "000")
           if [ "$HTTP_CODE" = "200" ]; then
             echo "railway_available=true" >> $GITHUB_OUTPUT
-            echo "✅ Railway available, triggering cron..."
             TOKEN_ARG=""
             if [ -n "$CRON_SECRET" ]; then TOKEN_ARG="&token=$CRON_SECRET"; fi
             curl -s --max-time 180 "https://video-gen-stack-production.up.railway.app/api/cron/news-video?category=${{ github.event.inputs.category || 'technology' }}$TOKEN_ARG" || true
           else
             echo "railway_available=false" >> $GITHUB_OUTPUT
-            echo "⏳ Railway unavailable, falling back to GitHub runner"
           fi
 
       - name: Publish via GitHub Runner
@@ -88,24 +61,5 @@ jobs:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_PRIVACY: public
-        run: |
-          node --input-type=module -e "
-          import { fetchTopHeadlines } from './apps/api/services/news.js';
-          import { renderNewsVideo } from './apps/api/services/renderer.js';
-          import { uploadShort } from './apps/api/publishers/youtube.js';
-          import { readFileSync, unlinkSync } from 'fs';
-          const category = '${{ github.event.inputs.category || 'technology' }}';
-          try {
-            const articles = await fetchTopHeadlines({ category, pageSize: 5 });
-            if (!articles.length) { console.log('No articles'); process.exit(0); }
-            console.log('Rendering:', articles[0].title?.slice(0, 60));
-            const videoPath = await renderNewsVideo(articles.slice(0, 5));
-            const buffer = readFileSync(videoPath);
-            const base64 = buffer.toString('base64');
-            unlinkSync(videoPath);
-            const title = '📰 ' + articles[0].title?.slice(0, 90);
-            const desc = title + '\n\nSource: ' + (articles[0].source?.name || 'NewsAPI') + '\n\n#tech #news #AI';
-            const result = await uploadShort('data:video/mp4;base64,' + base64, title, desc, 'public');
-            console.log('✅ Published: https://youtu.be/' + result?.id);
-          } catch(e) { console.error('❌', e.message); process.exit(1); }
-          "
+          INPUT_CATEGORY: ${{ github.event.inputs.category || 'technology' }}
+        run: node .github/scripts/publish-news.mjs
