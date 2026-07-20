@@ -10,6 +10,7 @@ import renderRoutes from './routes/render.js'
 import pipelineRoutes from './routes/pipeline.js'
 import premiumRoutes from './routes/premium.js'
 import directRoutes from './routes/direct.js'
+import cronManagerRoutes from './routes/cron-manager.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const app = express()
@@ -29,20 +30,36 @@ app.use('/api', renderRoutes)
 app.use('/api', pipelineRoutes)
 app.use('/api', premiumRoutes)
 app.use('/api', directRoutes)
+app.use('/api', cronManagerRoutes)
 
 app.get('/api/health', (req, res) => {
-  // Detect renderer version from package.json
   let version = 'v3.0'
   try {
     const pkg = JSON.parse(require('fs').readFileSync('./package.json', 'utf8'))
     version = pkg.version || version
   } catch {}
 
+  // Check DB connectivity
+  let dbStatus = 'healthy'
+  let cronJobs = []
+  try {
+    const db = require('better-sqlite3')('./data/news-engine.db')
+    db.prepare('SELECT 1').get()
+    cronJobs = db.prepare('SELECT * FROM cron_jobs WHERE enabled = 1 ORDER BY name').all()
+    db.close()
+  } catch { dbStatus = 'unavailable' }
+
+  const uptime = process.uptime()
+  const hours = Math.floor(uptime / 3600)
+  const minutes = Math.floor((uptime % 3600) / 60)
+
   res.json({
     status: 'ok',
     version,
+    uptime: `${hours}h ${minutes}m`,
     renderer: 'ready',
     queue: 'healthy',
+    database: dbStatus,
     timestamp: new Date().toISOString(),
     providers: {
       gemini: !!process.env.GEMINI_API_KEY,
@@ -50,10 +67,8 @@ app.get('/api/health', (req, res) => {
       fal: !!process.env.FAL_KEY,
       replicate: !!process.env.REPLICATE_API_TOKEN,
     },
-    cronJobs: {
-      technology: '/api/cron/news-video?category=technology',
-      security: !!process.env.CRON_SECRET,
-    },
+    cronJobs,
+    cronSecret: !!process.env.CRON_SECRET,
   })
 })
 
