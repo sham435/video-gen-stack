@@ -95,8 +95,16 @@ export class NewsPipeline {
 
     // Phase 7: Quality validation
     console.log('[PIPELINE] Phase 7: Validating quality...')
-    const validation = this.validator.validateAll(freshArticle, videoPath)
-    this.validator.logValidation(contentId, validation)
+    console.log('[DEBUG] contentId type:', typeof contentId, 'value:', contentId?.slice(0, 40))
+    let validation
+    try {
+      validation = this.validator.validateAll(freshArticle, videoPath)
+      console.log('[DEBUG] validation score:', validation.totalScore)
+      this.validator.logValidation(contentId, validation)
+    } catch (err) {
+      console.error('[DEBUG] validation error:', err.message, err.stack?.slice(0, 200))
+      throw err
+    }
 
     if (!validation.passed && validation.totalScore < 50) {
       this.detector.logPipeline(contentId, 'quality', 'rejected', `Score: ${validation.totalScore}`, Date.now() - startTime)
