@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tech News Video Template</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .frame {
+    width: 1060px;
+    height: 596px;
+    background: linear-gradient(135deg, #09111F 0%, #111827 30%, #0F172A 60%, #09111F 100%);
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 0 80px rgba(59, 130, 246, 0.15);
+  }
+
+  /* Animated mesh gradient */
+  .mesh {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(34, 211, 238, 0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 80%, rgba(59, 130, 246, 0.06) 0%, transparent 50%);
+    animation: meshMove 8s ease-in-out infinite alternate;
+  }
+
+  @keyframes meshMove {
+    0% { transform: scale(1) translate(0, 0); }
+    100% { transform: scale(1.05) translate(-20px, -10px); }
+  }
+
+  /* Tech grid */
+  .grid {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image:
+      linear-gradient(rgba(59, 130, 246, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Floating particles */
+  .particle { position: absolute; border-radius: 50%; background: rgba(59, 130, 246, 0.3); }
+  .p1 { width: 3px; height: 3px; top: 15%; left: 10%; animation: float 6s ease-in-out infinite; }
+  .p2 { width: 2px; height: 2px; top: 30%; left: 70%; animation: float 8s ease-in-out infinite 1s; }
+  .p3 { width: 4px; height: 4px; top: 60%; left: 25%; animation: float 7s ease-in-out infinite 2s; }
+  .p4 { width: 2px; height: 2px; top: 75%; left: 80%; animation: float 9s ease-in-out infinite 0.5s; }
+  .p5 { width: 3px; height: 3px; top: 45%; left: 50%; animation: float 7s ease-in-out infinite 1.5s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0); opacity: 1; }
+    50% { transform: translateY(-30px) translateX(10px); opacity: 0.5; }
+  }
+
+  /* Accent sweep */
+  .sweep {
+    position: absolute;
+    width: 200px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.06), transparent);
+    animation: sweep 4s ease-in-out infinite;
+  }
+  @keyframes sweep {
+    0% { left: -200px; }
+    100% { left: 100%; }
+  }
+
+  /* Bottom accent bar */
+  .bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, #22D3EE, #3B82F6, transparent); }
+
+  /* Lower third line */
+  .lower-line { position: absolute; bottom: 78px; left: 40px; width: 600px; height: 2px; background: #3B82F6; }
+
+  /* Top right logo */
+  .logo { position: absolute; top: 28px; right: 30px; display: flex; align-items: center; gap: 10px; }
+  .logo-icon { width: 24px; height: 24px; background: #3B82F6; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #fff; font-weight: 700; }
+  .logo-text { font-size: 14px; font-weight: 700; color: #3B82F6; letter-spacing: 2px; }
+
+  /* Lower third */
+  .lower-third { position: absolute; bottom: 40px; left: 40px; display: flex; align-items: center; gap: 12px; }
+  .lower-third .tag { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; }
+  .lower-third .tag.blue { color: #3B82F6; }
+  .lower-third .tag.red { color: #EF4444; }
+  .lower-third .tag.gray { color: #94A3B8; }
+  .lower-third .tag.cyan { color: #22D3EE; }
+  .lower-third .sep { color: #334155; font-size: 11px; }
+
+  /* Headlines */
+  .headline { position: absolute; left: 48px; right: 48px; }
+  .hl-line {
+    width: 4px;
+    height: 40px;
+    background: #22D3EE;
+    border-radius: 2px;
+    position: absolute;
+    left: 0;
+  }
+  .hl-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #F8FAFC;
+    line-height: 1.3;
+    position: absolute;
+    left: 20px;
+    max-width: 650px;
+  }
+  .hl-source {
+    font-size: 14px;
+    color: #64748B;
+    font-weight: 400;
+    position: absolute;
+    left: 20px;
+  }
+
+  /* News items */
+  .news1 { top: 110px; }
+  .news1 .hl-line, .news1 .hl-title, .news1 .hl-source { animation: fadeUp 0.6s ease-out forwards; }
+  .news2 { top: 310px; }
+  .news2 .hl-line, .news2 .hl-title, .news2 .hl-source { animation: fadeUp 0.6s ease-out 0.3s forwards; opacity: 0; }
+  .news3 { top: 510px; }
+  .news3 .hl-line, .news3 .hl-title, .news3 .hl-source { animation: fadeUp 0.6s ease-out 0.6s forwards; opacity: 0; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Right side visual placeholder */
+  .visual {
+    position: absolute;
+    right: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 320px;
+    height: 320px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(34, 211, 238, 0.05));
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+  }
+
+  .visual-inner {
+    width: 100px;
+    height: 100px;
+    border: 2px solid rgba(59, 130, 246, 0.3);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: rgba(59, 130, 246, 0.4);
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.05); opacity: 1; }
+  }
+
+  /* Glowing dot */
+  .dot {
+    position: absolute;
+    width: 6px; height: 6px;
+    background: #EF4444;
+    border-radius: 50%;
+    top: 32px; left: 40px;
+    animation: blink 1.5s ease-in-out infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* Floating UI cards */
+  .card {
+    position: absolute;
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(59, 130, 246, 0.12);
+    border-radius: 10px;
+    padding: 12px 16px;
+    backdrop-filter: blur(20px);
+    animation: cardFloat 5s ease-in-out infinite;
+  }
+  .card-label { font-size: 10px; color: #64748B; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .card-value { font-size: 14px; color: #F8FAFC; font-weight: 600; }
+
+  .card1 { right: 420px; top: 100px; }
+  .card2 { right: 60px; bottom: 120px; animation-delay: 1s; }
+  .card3 { left: 60px; top: 480px; animation-delay: 2s; }
+
+  @keyframes cardFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* Animated gradient ball */
+  .gradient-ball {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.08), transparent 70%);
+    top: -50px;
+    right: -50px;
+    animation: ballMove 10s ease-in-out infinite alternate;
+  }
+  @keyframes ballMove {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(-30px, 20px) scale(1.1); }
+  }
+
+  /* Breaking badge */
+  .breaking {
+    position: absolute;
+    top: 30px;
+    left: 60px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: fadeUp 0.6s ease-out forwards;
+  }
+  .breaking-badge {
+    background: #EF4444;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+  .breaking-text {
+    font-size: 12px;
+    color: #94A3B8;
+  }
+
+  /* Loading bar animation at top */
+  .loading-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #3B82F6, #22D3EE);
+    animation: loadBar 3s ease-in-out infinite;
+    width: 0%;
+    border-radius: 0 2px 2px 0;
+  }
+  @keyframes loadBar {
+    0% { width: 0%; left: 0; }
+    50% { width: 70%; left: 15%; }
+    100% { width: 0%; left: 100%; }
+  }
+  .frame:hover .loading-bar { animation-duration: 0.5s; }
+</style>
+</head>
+<body>
+  <div class="frame">
+    <div class="loading-bar"></div>
+    <div class="mesh"></div>
+    <div class="grid"></div>
+    <div class="sweep"></div>
+    <div class="gradient-ball"></div>
+
+    <div class="particle p1"></div>
+    <div class="particle p2"></div>
+    <div class="particle p3"></div>
+    <div class="particle p4"></div>
+    <div class="particle p5"></div>
+
+    <div class="logo">
+      <div class="logo-icon">T</div>
+      <span class="logo-text">TECH NEWS</span>
+    </div>
+
+    <div class="breaking">
+      <span class="breaking-badge">BREAKING</span>
+      <span class="breaking-text">Technology News Update</span>
+    </div>
+
+    <div class="lower-line"></div>
+    <div class="bar"></div>
+    <div class="dot"></div>
+
+    <div class="lower-third">
+      <span class="tag blue">TECHNOLOGY</span>
+      <span class="sep">|</span>
+      <span class="tag red">LIVE</span>
+      <span class="sep">|</span>
+      <span class="tag gray">Jul 20, 2026</span>
+      <span class="sep">|</span>
+      <span class="tag cyan">AI GENERATED</span>
+    </div>
+
+    <div class="headline news1">
+      <div class="hl-line"></div>
+      <div class="hl-title">iOS 26 vs iOS 27: Apple Replacing Siri with Next-Gen AI</div>
+      <div class="hl-source">Geeky Gadgets · 2h ago</div>
+    </div>
+
+    <div class="headline news2">
+      <div class="hl-line"></div>
+      <div class="hl-title">Galaxy Watch 9 Powered by Snapdragon Wear Elite Chip</div>
+      <div class="hl-source">9to5Google · 3h ago</div>
+    </div>
+
+    <div class="headline news3">
+      <div class="hl-line"></div>
+      <div class="hl-title">Samsung Galaxy Z Fold8 Teased by BTS J-Hope</div>
+      <div class="hl-source">GSMArena · 5h ago</div>
+    </div>
+
+    <div class="visual">
+      <div class="visual-inner">📱</div>
+    </div>
+
+    <div class="card card1">
+      <div class="card-label">Trending</div>
+      <div class="card-value">#AI #Tech #Samsung</div>
+    </div>
+
+    <div class="card card2">
+      <div class="card-label">Market</div>
+      <div class="card-value">AAPL ▲ 1.2%</div>
+    </div>
+
+    <div class="card card3">
+      <div class="card-label">Views</div>
+      <div class="card-value">24.5K watching</div>
+    </div>
+  </div>
+
+  <script>
+    // Rotate headlines every 5 seconds to simulate video
+    const headlines = [
+      ['iOS 26 vs iOS 27: Apple Replacing Siri with Next-Gen AI', 'Geeky Gadgets · 2h ago'],
+      ['Galaxy Watch 9 Powered by Snapdragon Wear Elite Chip', '9to5Google · 3h ago'],
+      ['Samsung Galaxy Z Fold8 Teased by BTS J-Hope Ahead of Launch', 'GSMArena · 5h ago'],
+      ['Real Reason KFC Stopped Using Kentucky Fried Chicken Name', 'New York Post · 6h ago'],
+    ];
+    let i = 0;
+    setInterval(() => {
+      i = (i + 1) % headlines.length;
+      document.querySelectorAll('.headline').forEach((el, j) => {
+        const idx = (i + j) % headlines.length;
+        el.querySelector('.hl-title').textContent = headlines[idx][0];
+        el.querySelector('.hl-source').textContent = headlines[idx][1];
+        el.style.animation = 'none';
+        el.offsetHeight;
+        el.style.animation = '';
+      });
+    }, 5000);
+  </script>
+</body>
+</html>

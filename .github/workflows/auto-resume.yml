@@ -1,0 +1,26 @@
+name: Auto-Resume Railway
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  check-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check Railway status
+        id: check
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            "https://video-gen-stack-production.up.railway.app/api/health" 2>&1)
+          echo "railway_up=$([ "$STATUS" = "200" ] && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
+
+      - name: Deploy queued version
+        if: steps.check.outputs.railway_up == 'true'
+        uses: bervProject/railway-deploy@v1
+        with:
+          railway_token: ${{ secrets.RAILWAY_TOKEN }}
+          project_id: "6aac38ba-aa76-4907-98bd-759e4b021df0"
+          service_id: "3f29353f-b675-44c8-a7ce-56f6641dd531"

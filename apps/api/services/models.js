@@ -1,0 +1,136 @@
+export const VIDEO_MODELS = [
+  {
+    id: 'gemini-2.0-flash',
+    name: 'Gemini 2.0 Flash',
+    provider: 'Google (Free tier)',
+    capabilities: ['text-to-video', 'image-to-video'],
+    speed: 'fast',
+    quality: 'good',
+    duration: { min: 3, max: 10 },
+    supportsAspectRatios: ['16:9', '9:16'],
+    openSource: false,
+    freeTier: true,
+    endpoints: {
+      'gemini': 'gemini-2.0-flash',
+    },
+  },
+  {
+    id: 'wan/v2.2',
+    name: 'Wan 2.2',
+    provider: 'Alibaba (Apache 2.0)',
+    capabilities: ['text-to-video'],
+    speed: 'medium',
+    quality: 'good',
+    duration: { min: 3, max: 10 },
+    supportsAspectRatios: ['16:9', '9:16'],
+    openSource: true,
+    freeTier: false,
+    endpoints: {
+      'fal.ai': 'fal-ai/wan/v2.2/text-to-video',
+      'replicate': 'lucataco/wan-v2.2',
+      'colab': null,
+    },
+  },
+  {
+    id: 'kling/v3',
+    name: 'Kling V3',
+    provider: 'Kuaishou',
+    capabilities: ['text-to-video', 'image-to-video'],
+    speed: 'fast',
+    quality: 'excellent',
+    duration: { min: 3, max: 10 },
+    supportsAspectRatios: ['16:9', '9:16'],
+    openSource: false,
+    freeTier: false,
+    endpoints: {
+      'fal.ai': 'fal-ai/kling-video/v3/standard/text-to-video',
+      'replicate': 'nightlystreet/kling-v3',
+    },
+  },
+  {
+    id: 'kling/v3/pro',
+    name: 'Kling V3 Pro',
+    provider: 'Kuaishou',
+    capabilities: ['text-to-video', 'image-to-video'],
+    speed: 'medium',
+    quality: 'excellent',
+    duration: { min: 3, max: 10 },
+    supportsAspectRatios: ['16:9', '9:16'],
+    openSource: false,
+    freeTier: false,
+    endpoints: {
+      'fal.ai': 'fal-ai/kling-video/v3/pro/text-to-video',
+    },
+  },
+  {
+    id: 'seedance-2.0',
+    name: 'Seedance 2.0',
+    provider: 'ByteDance',
+    capabilities: ['text-to-video', 'image-to-video', 'reference-to-video', 'native-audio'],
+    speed: 'medium',
+    quality: 'excellent',
+    duration: { min: 3, max: 10 },
+    supportsAspectRatios: ['16:9', '9:16'],
+    openSource: false,
+    freeTier: false,
+    endpoints: {
+      'fal.ai': 'fal-ai/bytedance/seedance-2.0/text-to-video',
+    },
+  },
+  {
+    id: 'happy-horse',
+    name: 'Happy Horse 1.1',
+    provider: 'Alibaba',
+    capabilities: ['text-to-video', 'image-to-video', 'native-audio'],
+    speed: 'medium',
+    quality: 'excellent',
+    duration: { min: 3, max: 10 },
+    supportsAspectRatios: ['16:9', '9:16'],
+    openSource: false,
+    freeTier: false,
+    endpoints: {
+      'fal.ai': 'fal-ai/alibaba/happy-horse/v1.1/text-to-video',
+    },
+  },
+  {
+    id: 'pixverse/v6',
+    name: 'PixVerse V6',
+    provider: 'PixVerse',
+    capabilities: ['text-to-video', 'image-to-video'],
+    speed: 'fast',
+    quality: 'good',
+    duration: { min: 3, max: 8 },
+    supportsAspectRatios: ['16:9', '9:16'],
+    openSource: false,
+    freeTier: false,
+    endpoints: {
+      'fal.ai': 'fal-ai/pixverse/v6/text-to-video',
+      'replicate': 'pixverse/pixverse-v6',
+    },
+  },
+  {
+    id: 'grok-imagine-video',
+    name: 'Grok Imagine Video',
+    provider: 'xAI',
+    capabilities: ['text-to-video', 'video-extension'],
+    speed: 'medium',
+    quality: 'good',
+    duration: { min: 3, max: 10 },
+    supportsAspectRatios: ['16:9', '9:16'],
+    openSource: false,
+    freeTier: false,
+    endpoints: {
+      'fal.ai': 'fal-ai/xai/grok-imagine-video/text-to-video',
+    },
+  },
+]
+
+export function getModel(id) {
+  return VIDEO_MODELS.find(m => m.id === id)
+}
+
+export function getEndpoint(modelId, providerName) {
+  const model = getModel(modelId)
+  if (!model) return null
+  return model.endpoints?.[providerName] ?? null
+}

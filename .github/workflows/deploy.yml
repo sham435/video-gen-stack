@@ -1,0 +1,35 @@
+name: Deploy to Railway
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check Railway availability
+        id: railway_status
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://backboard.railway.app/graphql -X POST \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+            -d '{"query":"{ project(id: \"6aac38ba-aa76-4907-98bd-759e4b021df0\") { id name } }"}' 2>&1)
+          echo "railway_available=$([ "$STATUS" = "200" ] && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
+
+      - name: Deploy to Railway
+        if: steps.railway_status.outputs.railway_available == 'true'
+        uses: bervProject/railway-deploy@v1
+        with:
+          railway_token: ${{ secrets.RAILWAY_TOKEN }}
+          project_id: "6aac38ba-aa76-4907-98bd-759e4b021df0"
+          service_id: "3f29353f-b675-44c8-a7ce-56f6641dd531"
+
+      - name: Queue deployment for later
+        if: steps.railway_status.outputs.railway_available != 'true'
+        run: |
+          echo "Railway unavailable. Queuing deployment..."
+          COMMIT=$(git rev-parse HEAD)
+          echo "{\"commit\":\"$COMMIT\",\"branch\":\"main\",\"status\":\"WAITING\",\"created_at\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > deployment_queue.json
+          echo "✅ Deployment queued for commit $COMMIT"

@@ -1,0 +1,9 @@
+node_modules/
+.env
+data/
+storage/
+snapshots/
+.DS_Store
+*.log
+Library/
+.virtualenvs/

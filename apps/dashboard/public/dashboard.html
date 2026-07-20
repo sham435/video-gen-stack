@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI News Pipeline Dashboard</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    background: #07111F; color: #F8FAFC;
+    min-height: 100vh; padding: 24px;
+  }
+  .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+  .header h1 { font-size: 24px; font-weight: 700; }
+  .header .status { padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; background: rgba(16,185,129,0.15); color: #10B981; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .card {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 20px; backdrop-filter: blur(10px);
+  }
+  .card .label { font-size: 12px; color: #64748B; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .card .value { font-size: 32px; font-weight: 700; color: #F8FAFC; }
+  .card .value.blue { color: #3B82F6; }
+  .card .value.green { color: #10B981; }
+  .card .value.red { color: #EF4444; }
+  .card .value.cyan { color: #22D3EE; }
+
+  .logs { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; }
+  .logs-header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); font-weight: 600; font-size: 14px; }
+  .log-entry { padding: 10px 20px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px; display: flex; gap: 12px; align-items: center; }
+  .log-entry:last-child { border-bottom: none; }
+  .log-time { color: #64748B; font-size: 12px; white-space: nowrap; }
+  .log-stage { padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; background: rgba(59,130,246,0.15); color: #3B82F6; white-space: nowrap; }
+  .log-msg { color: #94A3B8; flex: 1; }
+  .log-status { font-size: 11px; font-weight: 600; }
+  .log-status.success { color: #10B981; }
+  .log-status.error { color: #EF4444; }
+
+  .actions { display: flex; gap: 8px; margin-top: 24px; }
+  .btn { padding: 8px 16px; border-radius: 8px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; background: #3B82F6; color: #fff; }
+  .btn:hover { opacity: 0.9; }
+  .btn.secondary { background: rgba(255,255,255,0.08); color: #F8FAFC; border: 1px solid rgba(255,255,255,0.1); }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1>🧠 AI News Pipeline</h1>
+    <span class="status">● LIVE</span>
+  </div>
+
+  <div class="grid" id="stats">
+    <div class="card"><div class="label">Total Published</div><div class="value blue" id="total">-</div></div>
+    <div class="card"><div class="label">Published Today</div><div class="value green" id="published">-</div></div>
+    <div class="card"><div class="label">Skipped (Duplicates)</div><div class="value cyan" id="skipped">-</div></div>
+    <div class="card"><div class="label">Last Video</div><div class="value red" id="lastVideo" style="font-size:16px;">-</div></div>
+  </div>
+
+  <div class="logs">
+    <div class="logs-header">Pipeline Activity Log</div>
+    <div id="logs"></div>
+  </div>
+
+  <div class="actions">
+    <button class="btn" onclick="triggerRun()">Run Pipeline Now</button>
+    <button class="btn secondary" onclick="location.reload()">Refresh</button>
+  </div>
+
+  <script>
+    async function load() {
+      const res = await fetch('/api/pipeline/status')
+      const data = await res.json()
+
+      document.getElementById('total').textContent = data.totalArticles
+      document.getElementById('published').textContent = data.published
+      document.getElementById('skipped').textContent = data.skipped
+
+      const logs = document.getElementById('logs')
+      if (data.recentLogs?.length) {
+        const last = data.recentLogs[0]
+        document.getElementById('lastVideo').textContent = last.message.slice(0, 40) + '...'
+        logs.innerHTML = data.recentLogs.map(l => {
+          const stageClass = l.status === 'success' ? 'success' : 'error'
+          return `<div class="log-entry">
+            <span class="log-time">${l.created_at?.slice(11, 19) || ''}</span>
+            <span class="log-stage">${l.stage}</span>
+            <span class="log-msg">${l.message}</span>
+            <span class="log-status ${stageClass}">${l.status}</span>
+          </div>`
+        }).join('')
+      }
+    }
+
+    async function triggerRun() {
+      const btn = document.querySelector('.btn')
+      btn.textContent = 'Running...'
+      btn.disabled = true
+      const res = await fetch('/api/pipeline/run?category=technology')
+      const data = await res.json()
+      alert(data.status === 'published' ? `✅ Published: ${data.url}` : `ℹ️ ${data.status}`)
+      btn.textContent = 'Run Pipeline Now'
+      btn.disabled = false
+      load()
+    }
+
+    load()
+    setInterval(load, 15000)
+  </script>
+</body>
+</html>

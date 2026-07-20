@@ -1,0 +1,49 @@
+import 'dotenv/config'
+import express from 'express'
+import cors from 'cors'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import videoRoutes from './routes/video.js'
+import newsRoutes from './routes/news.js'
+import publishRoutes from './routes/publish.js'
+import renderRoutes from './routes/render.js'
+import pipelineRoutes from './routes/pipeline.js'
+import premiumRoutes from './routes/premium.js'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const app = express()
+const PORT = process.env.PORT || 3001
+
+app.use(cors())
+app.use(express.json({ limit: '10mb' }))
+app.use(express.static(path.join(__dirname, '..', 'public')))
+
+app.use('/api', videoRoutes)
+app.use('/api/news', newsRoutes)
+app.use('/api', publishRoutes)
+app.use('/api', renderRoutes)
+app.use('/api', pipelineRoutes)
+app.use('/api', premiumRoutes)
+
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    providers: {
+      gemini: !!process.env.GEMINI_API_KEY,
+      colab: !!process.env.COLAB_API_URL,
+      fal: !!process.env.FAL_KEY,
+      replicate: !!process.env.REPLICATE_API_TOKEN,
+    },
+  })
+})
+
+app.listen(PORT, () => {
+  console.log(`🍿 Video Gen Stack running at http://localhost:${PORT}`)
+  if (!process.env.GEMINI_API_KEY) {
+    console.log('📋 Get a FREE Gemini API key (no CC): https://aistudio.google.com/apikey')
+    console.log('   Then add to .env: GEMINI_API_KEY=your_key_here')
+  }
+  if (process.env.GEMINI_API_KEY) {
+    console.log('✅ Gemini free provider ready!')
+  }
+})

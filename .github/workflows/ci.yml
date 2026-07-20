@@ -1,0 +1,38 @@
+name: CI
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [develop]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: package.json
+
+      - name: Install dependencies
+        run: npm ci --omit=optional
+
+      - name: Check Node version
+        run: node --version
+
+      - name: Validate imports
+        run: node -e "
+          import('./server/services/news.js').then(m => console.log('✅ news OK'));
+          import('./server/services/renderer.js').then(m => console.log('✅ renderer OK'));
+          import('./packages/database/schema.js').then(m => console.log('✅ database OK'));
+          " 2>&1
+
+      - name: Static analysis
+        run: node --check server/index.js server/routes/*.js
+
+      - name: Dockerfile check
+        run: |
+          if [ -f Dockerfile ]; then echo "✅ Dockerfile exists"; fi
+          if [ -f railway.json ]; then echo "✅ railway.json exists"; fi
