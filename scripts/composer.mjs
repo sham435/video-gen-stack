@@ -106,6 +106,9 @@ if(import.meta.url.endsWith('composer.mjs')){
     const outDir = 'output'
     fs.mkdirSync(outDir, {recursive:true})
 
+    // 0. Ensure background music exists (downloads free lofi if missing)
+    ensureMusicExists()
+
     // 1. Generate 12s intro only once
     console.log('Generating intro...')
     const { generateCommonIntro } = await import('./intro.mjs')
