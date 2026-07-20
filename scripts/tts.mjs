@@ -1,47 +1,41 @@
+
+import fs from 'fs'
 import { execSync } from 'child_process'
-import { writeFileSync, existsSync } from 'fs'
 
-export function buildNarrationScript(article) {
-  const title = article.title || ''
-  const source = article.source || 'Tech News'
-  return `${title}. According to ${source}.`
-}
-
-export async function generateTTS(script, outPath) {
+export async function generateTTS(text, outPath='output/voice.mp3'){
   const apiKey = process.env.ELEVENLABS_API_KEY
-  const voiceId = process.env.ELEVENLABS_VOICE_ID || '21m00Tcm4TlvDq8ikWAM'
+  const voiceId = process.env.ELEVENLABS_VOICE_ID || '21m00Tcm4TlvDq8ikWAM' // Rachel default
 
-  if (apiKey) {
-    try {
-      const resp = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
-        method: 'POST',
-        headers: {
-          'Accept': 'audio/mpeg',
-          'Content-Type': 'application/json',
-          'xi-api-key': apiKey,
-        },
-        body: JSON.stringify({
-          text: script,
-          model_id: 'eleven_monolingual_v1',
-          voice_settings: { stability: 0.5, similarity_boost: 0.5 },
-        }),
-      })
-      const buffer = await resp.arrayBuffer()
-      writeFileSync(outPath, Buffer.from(buffer))
-      console.log('✅ ElevenLabs TTS generated')
+  if(!apiKey){
+    console.log('No ELEVENLABS_API_KEY, using edge-tts fallback')
+    // fallback free: edge-tts
+    try{
+      execSync(`pip install edge-tts -q && edge-tts --voice en-US-AriaNeural --text "${text.replace(/"/g,'\"').slice(0,800)}" --write-media ${outPath}`, {stdio:'inherit'})
       return outPath
-    } catch (e) {
-      console.log('ElevenLabs failed, falling back to edge-tts:', e.message)
+    }catch{
+      // ultimate fallback: espeak
+      execSync(`espeak "${text.slice(0,500)}" --stdout > ${outPath}`, {stdio:'inherit'})
+      return outPath
     }
   }
 
-  // Fallback: edge-tts (free, no API key needed)
-  try {
-    execSync(`edge-tts --voice en-US-GuyNeural --text "${script.slice(0, 300)}" --write-media "${outPath}"`, { stdio: 'pipe', timeout: 30000 })
-    console.log('✅ Edge TTS generated')
-  } catch {
-    // Final fallback: silent
-    execSync(`ffmpeg -y -f lavfi -i anullsrc=r=44100:cl=stereo -t 5 "${outPath}"`, { stdio: 'pipe', timeout: 10000 })
-  }
+  const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`, {
+    method:'POST',
+    headers:{'xi-api-key': apiKey, 'Content-Type':'application/json'},
+    body: JSON.stringify({
+      text: text.slice(0, 2500),
+      model_id: 'eleven_multilingual_v2',
+      voice_settings: { stability: 0.5, similarity_boost: 0.75, style: 0.4, use_speaker_boost: true }
+    })
+  })
+  if(!res.ok) throw new Error(`ElevenLabs ${res.status}: ${await res.text()}`)
+  const buf = Buffer.from(await res.arrayBuffer())
+  fs.writeFileSync(outPath, buf)
+  console.log('✅ TTS generated', outPath, buf.length)
   return outPath
+}
+
+export function buildNarrationScript(article){
+  // YouTube friendly ~20 sec script
+  return `${article.title}. According to ${article.source}, ${article.summary||article.title}. Latest tech update. Follow for more.`
 }

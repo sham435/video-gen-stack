@@ -1,17 +1,71 @@
 
-import { renderFrame } from './render.mjs'
-import { getRandomMusic } from './audio.mjs'
-import { generateTTS, buildNarrationScript } from './tts.mjs'
-import { execSync } from 'child_process'
+import { createCanvas, GlobalFonts } from '@napi-rs/canvas'
 import fs from 'fs'
 import path from 'path'
+import { execSync } from 'child_process'
+import { getRandomMusic } from './audio.mjs'
+import { generateTTS, buildNarrationScript } from './tts.mjs'
 import ogs from 'open-graph-scraper'
 
-async function getOgImage(url){
+try{
+  if(fs.existsSync('assets/fonts/Anton-Regular.ttf')) GlobalFonts.registerFromPath('assets/fonts/Anton-Regular.ttf','Anton')
+  if(fs.existsSync('assets/fonts/Inter-Black.ttf')) GlobalFonts.registerFromPath('assets/fonts/Inter-Black.ttf','InterBlack')
+}catch{}
+
+const W=1080, H=1920
+
+function drawHugeFrame(text, outPath, accent='#FFFFFF'){
+  const canvas = createCanvas(W,H)
+  const ctx = canvas.getContext('2d')
+  ctx.fillStyle='#000000'
+  ctx.fillRect(0,0,W,H)
+
+  const len = text.length
+  const fontSize = len > 18 ? 110 : len > 12 ? 135 : 165
+  ctx.font = `900 ${fontSize}px Anton, InterBlack, Impact, sans-serif`
+  ctx.fillStyle=accent
+  ctx.textAlign='center'
+  ctx.textBaseline='middle'
+
+  ctx.save()
+  ctx.translate(W/2, H/2)
+  ctx.transform(1, 0, -0.20, 1, 0, 0)
+  ctx.scale(0.9, 1)
+  // word wrap for 2 lines if needed
+  const words = text.split(' ')
+  if(words.length>2 && len>14){
+    const mid = Math.ceil(words.length/2)
+    const line1 = words.slice(0,mid).join(' ')
+    const line2 = words.slice(mid).join(' ')
+    ctx.fillText(line1.toUpperCase(), 0, -fontSize*0.6)
+    ctx.fillText(line2.toUpperCase(), 0, fontSize*0.6)
+  }else{
+    ctx.fillText(text.toUpperCase(), 0, 0)
+  }
+  ctx.restore()
+
+  fs.mkdirSync(path.dirname(outPath), {recursive:true})
+  fs.writeFileSync(outPath, canvas.toBuffer('image/png'))
+  return outPath
+}
+
+function splitIntoHooks(title){
+  // Turn "iOS 27 vs iOS 26: How Apple Is Completely Replacing Siri" -> ["iOS 27", "REPLACING SIRI", "ACTUALLY SEE"]
+  const clean = title.replace(/[^a-zA-Z0-9 ]/g,' ').replace(/\s+/g,' ').trim()
+  const words = clean.split(' ').filter(w=>w.length>2)
+  const hooks = []
+  if(words.length>=2) hooks.push(words.slice(0,2).join(' '))
+  if(words.length>=4) hooks.push(words.slice(2,4).join(' '))
+  if(words.length>=6) hooks.push(words.slice(4,6).join(' ').toUpperCase() || 'ACTUALLY SEE')
+  if(hooks.length<3) hooks.push('BREAKING NEWS')
+  return hooks.slice(0,4)
+}
+
+async function getOg(url){
   try{
-    const {result} = await ogs({url, timeout:8000, headers:{'user-agent':'Mozilla/5.0'}})
-    return { image: result.ogImage?.[0]?.url || null, desc: result.ogDescription || result.description || '' }
-  }catch{ return {image:null, desc:''} }
+    const {result}=await ogs({url, timeout:8000, headers:{'user-agent':'Mozilla/5.0'}})
+    return {image: result.ogImage?.[0]?.url || null, desc: result.ogDescription || ''}
+  }catch{return {image:null, desc:''}}
 }
 
 export async function composeVideo(articles, outDir='output'){
@@ -20,58 +74,73 @@ export async function composeVideo(articles, outDir='output'){
   if(!article) throw new Error('No articles')
 
   if(!article.imageUrl && article.url){
-    const og = await getOgImage(article.url)
+    const og = await getOg(article.url)
     article.imageUrl = og.image
     article.summary = og.desc
   }
-  article.source = article.source || 'Tech News'
 
-  const framePath = path.join(outDir, 'frame.png')
-  await renderFrame(article, framePath)
+  // 1. Create HUGE text frames like you asked
+  const hooks = splitIntoHooks(article.title)
+  console.log('Hooks:', hooks)
+  const frameDir = `${outDir}/frames`
+  fs.mkdirSync(frameDir, {recursive:true})
+  const frames = hooks.map((h,i)=> drawHugeFrame(h, `${frameDir}/f${String(i).padStart(2,'0')}.png`, i===0?'#FFFFFF':'#FFFFFF'))
 
-  // 1. Generate TTS
-  const script = buildNarrationScript(article)
-  console.log('Script:', script)
-  const voicePath = path.join(outDir, 'voice.mp3')
-  await generateTTS(script, voicePath)
-
-  const voiceDuration = parseFloat(execSync(`ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${voicePath}"`).toString()||'10')
-  const duration = Math.max(18, Math.min(28, Math.ceil(voiceDuration+2)))
-
-  // 2. Base silent video with Ken Burns
-  const silentVideo = path.join(outDir, 'silent.mp4')
-  const zoomCmd = `ffmpeg -y -loop 1 -i "${framePath}" -f lavfi -i anullsrc=channel_layout=stereo:sample_rate=48000 -filter_complex "[0:v]scale=1920:1080,zoompan=z='min(zoom+0.0012,1.25)':d=1:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)',fps=30,format=yuv420p[v]" -map "[v]" -map 1:a -c:v libx264 -pix_fmt yuv420p -c:a aac -t ${duration} -shortest "${silentVideo}"`
-  execSync(zoomCmd, {stdio:'inherit'})
-
-  // 3. Mix: voice + music ducked when voice speaks
-  const musicPath = getRandomMusic()
-  const finalPath = path.join(outDir, 'final.mp4')
-  
-  if(musicPath){
-    // duck music under voice: sidechaincompressor
-    const mixCmd = `ffmpeg -y -i "${silentVideo}" -i "${voicePath}" -stream_loop -1 -i "${musicPath}" -filter_complex "[2:a]aformat=channel_layouts=stereo,volume=0.14,loudnorm=I=-20:TP=-1.5:LRA=11[bg];[1:a]aformat=channel_layouts=stereo,loudnorm=I=-16:TP=-1.5:LRA=11[voice];[bg][voice]sidechaincompress=threshold=0.04:ratio=8:attack=200:release=500[ducked];[voice][ducked]amix=inputs=2:duration=longest:dropout_transition=0:normalize=0,afade=t=in:st=0:d=0.3,afade=t=out:st=${duration-0.8}:d=0.8[a]" -map 0:v -map "[a]" -c:v copy -c:a aac -b:a 192k -t ${duration} "${finalPath}"`
-    execSync(mixCmd, {stdio:'inherit'})
-  } else {
-    const mixCmd = `ffmpeg -y -i "${silentVideo}" -i "${voicePath}" -filter_complex "[1:a]aformat=channel_layouts=stereo,loudnorm=I=-16:TP=-1.5:LRA=11[a]" -map 0:v -map "[a]" -c:v copy -c:a aac -b:a 192k -t ${duration} "${finalPath}"`
-    execSync(mixCmd, {stdio:'inherit'})
+  // 2. Also create image frame if OG exists
+  if(article.imageUrl){
+    const imgFrame = `${frameDir}/img.png`
+    // download and render with blur bg
+    try{
+      const res = await fetch(article.imageUrl)
+      const buf = Buffer.from(await res.arrayBuffer())
+      fs.writeFileSync(`${outDir}/og.jpg`, buf)
+      // render mixed frame
+      const {createCanvas: CC, loadImage} = await import('@napi-rs/canvas')
+      const canvas=CC(W,H); const ctx=canvas.getContext('2d')
+      const img=await loadImage(`${outDir}/og.jpg`)
+      ctx.drawImage(img,0,0,W,H)
+      ctx.fillStyle='rgba(0,0,0,0.55)'; ctx.fillRect(0,0,W,H)
+      ctx.font=`900 90px Anton, Impact`; ctx.fillStyle='#FFF'; ctx.textAlign='center'
+      ctx.save(); ctx.translate(W/2,H/2); ctx.transform(1,0,-0.15,1,0,0)
+      const lines = article.title.match(/.{1,18}(\s|$)/g) || [article.title]
+      lines.slice(0,3).forEach((l,li)=> ctx.fillText(l.toUpperCase(),0,(li-1)*100))
+      ctx.restore()
+      fs.writeFileSync(imgFrame, canvas.toBuffer('image/png'))
+      frames.push(imgFrame)
+    }catch{}
   }
 
-  // 4. Burn subtitles
-  const subPath = path.join(outDir, 'final_with_subs.mp4')
-  try {
-    const { generateSRT, burnSubtitles } = await import('./captions.mjs')
-    const srt = generateSRT(script, duration)
-    const srtFile = path.join(outDir, 'captions.srt')
-    fs.writeFileSync(srtFile, srt)
-    burnSubtitles(finalPath, srtFile, subPath)
-    fs.renameSync(subPath, finalPath)
-  } catch(e) { console.log('Subtitles skipped:', e.message) }
+  // 3. TTS
+  const script = `${hooks.join('. ')}. ${article.title}. According to ${article.source||'Tech News'}.`
+  const voicePath = `${outDir}/voice.mp3`
+  await generateTTS(script, voicePath)
+  const voiceDur = parseFloat(execSync(`ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${voicePath}"`).toString()||'12')
+  const totalDur = Math.max(15, Math.min(30, Math.ceil(voiceDur+1)))
 
-  console.log('✅ Final with TTS+Music+Subtitles:', finalPath)
-  return { finalPath, article, script }
+  // 4. Build video from frames: each frame ~ totalDur/frames.length sec
+  const listPath = `${outDir}/list.txt`
+  const perFrame = totalDur / frames.length
+  let listContent=''
+  for(const f of frames){ listContent += `file '${path.resolve(f)}'\nduration ${perFrame}\n` }
+  listContent += `file '${path.resolve(frames[frames.length-1])}'\n`
+  fs.writeFileSync(listPath, listContent)
+
+  const silentVideo = `${outDir}/silent.mp4`
+  execSync(`ffmpeg -y -f concat -safe 0 -i "${listPath}" -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,format=yuv420p,fps=30,zoompan=z='min(zoom+0.0008,1.08)':d=1:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'" -pix_fmt yuv420p "${silentVideo}"`, {stdio:'inherit'})
+
+  // 5. Mix music ducked + voice
+  const musicPath = getRandomMusic()
+  const finalPath = `${outDir}/final.mp4`
+  if(musicPath){
+    execSync(`ffmpeg -y -i "${silentVideo}" -i "${voicePath}" -stream_loop -1 -i "${musicPath}" -filter_complex "[2:a]aformat=channel_layouts=stereo,volume=0.15,loudnorm=I=-20[bg];[1:a]aformat=channel_layouts=stereo,loudnorm=I=-16[voice];[bg][voice]sidechaincompress=threshold=0.03:ratio=10:attack=200:release=400[ducked];[voice][ducked]amix=inputs=2:duration=longest:dropout_transition=0[a]" -map 0:v -map "[a]" -c:v libx264 -c:a aac -b:a 192k -t ${totalDur} "${finalPath}"`, {stdio:'inherit'})
+  }else{
+    execSync(`ffmpeg -y -i "${silentVideo}" -i "${voicePath}" -c:v copy -c:a aac -t ${totalDur} "${finalPath}"`, {stdio:'inherit'})
+  }
+
+  console.log('✅ Final HUGE text video:', finalPath)
+  return {finalPath, hooks, script}
 }
 
 if(import.meta.url.endsWith('composer.mjs')){
-  const mock = [{title: process.argv[2]||'iOS 26 vs iOS 27: How Apple Is Completely Replacing Siri With Next-Gen AI', url:'https://www.geeky-gadgets.com/ios-27-siri-replacement/', source:'Geeky Gadgets'}]
-  composeVideo(mock)
+  composeVideo([{title: process.argv[2]||'Actually See How Apple Is Replacing Siri With iOS 27', url:'', source:'Geeky Gadgets'}])
 }
