@@ -31,13 +31,28 @@ app.use('/api', premiumRoutes)
 app.use('/api', directRoutes)
 
 app.get('/api/health', (req, res) => {
+  // Detect renderer version from package.json
+  let version = 'v3.0'
+  try {
+    const pkg = JSON.parse(require('fs').readFileSync('./package.json', 'utf8'))
+    version = pkg.version || version
+  } catch {}
+
   res.json({
     status: 'ok',
+    version,
+    renderer: 'ready',
+    queue: 'healthy',
+    timestamp: new Date().toISOString(),
     providers: {
       gemini: !!process.env.GEMINI_API_KEY,
       colab: !!process.env.COLAB_API_URL,
       fal: !!process.env.FAL_KEY,
       replicate: !!process.env.REPLICATE_API_TOKEN,
+    },
+    cronJobs: {
+      technology: '/api/cron/news-video?category=technology',
+      security: !!process.env.CRON_SECRET,
     },
   })
 })

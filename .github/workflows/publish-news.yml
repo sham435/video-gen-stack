@@ -58,8 +58,27 @@ jobs:
           if (!result.passed) { console.log('Issues:', result.issues.join(', ')); process.exit(1); }
           "
 
-      - name: Publish News Video
-        if: steps.quality.outcome == 'success'
+      - name: Try Railway Cron First
+        id: try_railway
+        continue-on-error: true
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          echo "Checking Railway availability..."
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 https://video-gen-stack-production.up.railway.app/api/health || echo "000")
+          if [ "$HTTP_CODE" = "200" ]; then
+            echo "railway_available=true" >> $GITHUB_OUTPUT
+            echo "✅ Railway available, triggering cron..."
+            TOKEN_ARG=""
+            if [ -n "$CRON_SECRET" ]; then TOKEN_ARG="&token=$CRON_SECRET"; fi
+            curl -s --max-time 180 "https://video-gen-stack-production.up.railway.app/api/cron/news-video?category=${{ github.event.inputs.category || 'technology' }}$TOKEN_ARG" || true
+          else
+            echo "railway_available=false" >> $GITHUB_OUTPUT
+            echo "⏳ Railway unavailable, falling back to GitHub runner"
+          fi
+
+      - name: Publish via GitHub Runner
+        if: steps.try_railway.outputs.railway_available == 'false'
         env:
           NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}

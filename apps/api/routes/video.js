@@ -130,8 +130,17 @@ router.post('/news-video', async (req, res) => {
   }
 })
 
+function validateCronToken(req) {
+  const token = (req.body || req.query).token
+  const secret = process.env.CRON_SECRET
+  if (secret && token !== secret) {
+    throw new Error('Unauthorized: invalid or missing cron token')
+  }
+}
+
 // Cron endpoint — auto-render news video and upload to YouTube (direct, simple)
 router.all('/cron/news-video', async (req, res) => {
+  try { validateCronToken(req) } catch (e) { return res.status(401).json({ error: e.message }) }
   const { category = 'technology' } = req.body || req.query
   try {
     const { fetchTopHeadlines, articlesToSummary } = await import('../services/news.js')
