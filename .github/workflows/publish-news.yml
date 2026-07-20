@@ -24,11 +24,11 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci --omit=optional
+        run: npm ci
 
       - name: Install FFmpeg + TTS
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg python3-pip build-essential
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg python3-pip
           pip3 install edge-tts -q
 
       - name: Generate + Compose News Video
