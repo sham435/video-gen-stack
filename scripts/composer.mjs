@@ -142,5 +142,47 @@ export async function composeVideo(articles, outDir='output'){
 }
 
 if(import.meta.url.endsWith('composer.mjs')){
-  composeVideo([{title: process.argv[2]||'Actually See How Apple Is Replacing Siri With iOS 27', url:'', source:'Geeky Gadgets'}])
+  // Full pipeline when run from CLI / GitHub Actions
+  const runFull = async () => {
+    const category = process.env.INPUT_CATEGORY || process.argv[2] || 'technology'
+    const outDir = 'output'
+    fs.mkdirSync(outDir, {recursive:true})
+
+    // 1. Fetch news
+    let articles
+    if (process.env.NEWSAPI_KEY) {
+      const { fetchTopHeadlines } = await import('../apps/api/services/news.js')
+      articles = await fetchTopHeadlines({ category, pageSize: 5 })
+    }
+    if (!articles?.length) {
+      articles = [{title: process.argv[2] || 'Actually See How Apple Is Replacing Siri With iOS 27', url: '', source: 'Tech News'}]
+    }
+
+    // 2. Generate 12s intro
+    console.log('Generating BREAKING NEWS UNFILTERED intro...')
+    const { generateCommonIntro } = await import('./intro.mjs')
+    const introPath = generateCommonIntro(outDir)
+
+    // 3. Compose main video
+    console.log('Composing news video...')
+    const { finalPath } = await composeVideo(articles, outDir)
+
+    // 4. Concat intro + main
+    const finalWithIntro = `${outDir}/final_with_intro.mp4`
+    execSync(`ffmpeg -y -i "${introPath}" -i "${finalPath}" -filter_complex "[0:v:0][0:a:0][1:v:0][1:a:0]concat=n=2:v=1:a=1[v][a]" -map "[v]" -map "[a]" -c:v libx264 -c:a aac -shortest "${finalWithIntro}"`, {stdio:'inherit', timeout:60000})
+    console.log('✅ Final with intro:', finalWithIntro)
+
+    // 5. Upload to YouTube
+    if (process.env.YOUTUBE_REFRESH_TOKEN) {
+      console.log('Uploading to YouTube...')
+      const { uploadShort } = await import('../apps/api/publishers/youtube.js')
+      const buffer = fs.readFileSync(finalWithIntro)
+      const base64 = buffer.toString('base64')
+      const title = `📰 ${articles[0]?.title?.slice(0, 90) || 'News Update'}`
+      const desc = `${title}\n\nSource: ${articles[0]?.source || 'NewsAPI'}\n\n#tech #news`
+      const result = await uploadShort(`data:video/mp4;base64,${base64}`, title, desc, 'public')
+      console.log(`✅ Published: https://youtu.be/${result?.id}`)
+    }
+  }
+  runFull().catch(e => { console.error('❌', e.stack || e); process.exit(1) })
 }

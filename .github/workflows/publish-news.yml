@@ -1,5 +1,7 @@
 name: Publish News Video
 on:
+  push:
+    branches: [main]
   schedule:
     - cron: '*/30 * * * *'
   workflow_dispatch:
@@ -24,39 +26,13 @@ jobs:
       - name: Install dependencies
         run: npm ci --omit=optional
 
-      - name: Install FFmpeg + TTS
+      - name: Install FFmpeg + TTS + deps
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg python3-pip
           pip3 install edge-tts -q
+          npm install @napi-rs/canvas open-graph-scraper --no-optional
 
-      - name: Generate Storyboard
-        id: storyboard
-        env:
-          NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
-          INPUT_CATEGORY: ${{ github.event.inputs.category || 'technology' }}
-        run: node .github/scripts/generate-storyboard.mjs
-
-      - name: Quality Check
-        id: quality
-        run: node .github/scripts/quality-check.mjs
-
-      - name: Try Railway Cron First
-        id: try_railway
-        continue-on-error: true
-        env:
-          CRON_SECRET: ${{ secrets.CRON_SECRET }}
-        run: |
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 https://video-gen-stack-production.up.railway.app/api/health || echo "000")
-          if [ "$HTTP_CODE" = "200" ]; then
-            echo "railway_available=true" >> $GITHUB_OUTPUT
-            TOKEN_ARG=""
-            if [ -n "$CRON_SECRET" ]; then TOKEN_ARG="&token=$CRON_SECRET"; fi
-            curl -s --max-time 180 "https://video-gen-stack-production.up.railway.app/api/cron/news-video?category=${{ github.event.inputs.category || 'technology' }}$TOKEN_ARG" || true
-          else
-            echo "railway_available=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Publish via GitHub Runner
+      - name: Generate + Compose News Video
         env:
           NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
@@ -64,4 +40,4 @@ jobs:
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_PRIVACY: public
           INPUT_CATEGORY: ${{ github.event.inputs.category || 'technology' }}
-        run: node .github/scripts/publish-news.mjs
+        run: node scripts/composer.mjs
