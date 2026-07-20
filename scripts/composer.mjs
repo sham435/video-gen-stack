@@ -2,9 +2,9 @@ import { createCanvas, GlobalFonts } from '@napi-rs/canvas'
 import fs from 'fs'
 import path from 'path'
 import { execSync } from 'child_process'
-import { getRandomMusic } from './audio.mjs'
+import { getRandomMusic, ensureMusicExists } from './audio.mjs'
 import { generateTTS } from './tts.mjs'
-import ogs from 'open-graph-scraper'
+import { fetchBestImage } from './pexels.mjs'
 
 try{
   if(fs.existsSync('assets/fonts/Anton-Regular.ttf'))
@@ -46,15 +46,15 @@ function splitHooks(title){
   return hooks.slice(0,3)
 }
 
-async function getOg(url){
-  try{const {result}=await ogs({url, timeout:8000, headers:{'user-agent':'Mozilla/5.0'}}); return {image:result.ogImage?.[0]?.url||null, desc:result.ogDescription||''}}catch{return {image:null,desc:''}}
-}
-
 export async function composeVideo(articles, outDir='output'){
   fs.mkdirSync(outDir,{recursive:true})
   const article=articles[0]
   if(!article)throw new Error('No articles')
-  if(!article.imageUrl && article.url){const og=await getOg(article.url); article.imageUrl=og.image; article.summary=og.desc}
+
+  // Fetch best image: Pexels stock photo > OG image > none
+  if(!article.imageUrl){
+    await fetchBestImage(article)
+  }
 
   const hooks=splitHooks(article.title)
   console.log('Hooks:', hooks)
