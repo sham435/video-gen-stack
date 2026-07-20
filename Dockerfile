@@ -7,8 +7,7 @@ COPY package*.json ./
 RUN npm install --omit=optional
 COPY apps/ ./apps/
 COPY packages/ ./packages/
-COPY storage/ ./storage/
-COPY config/ ./config/
-COPY railway.json ./
+RUN mkdir -p storage/renders storage/news storage/assets storage/thumbnails storage/subtitles storage/audio storage/cache
+
 EXPOSE 3001
 CMD ["node", "apps/api/server.js"]
