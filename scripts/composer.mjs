@@ -96,6 +96,16 @@ export async function composeVideo(articles, outDir='output'){
   }
 
   console.log('✅ Final with intro:', finalPath)
+
+  // 6. Overlay footer taskbar (permanent bottom bar)
+  const footerPath = 'assets/footer.png'
+  if(fs.existsSync(footerPath)){
+    const withFooter = `${outDir}/final_with_footer.mp4`
+    execSync(`ffmpeg -y -i "${finalPath}" -i "${footerPath}" -filter_complex "[0:v][1:v]overlay=0:main_h-overlay_h:format=auto,format=yuv420p[v]" -map "[v]" -map 0:a -c:a copy "${withFooter}"`, {stdio:'inherit'})
+    fs.copyFileSync(withFooter, finalPath)
+    console.log('✅ Footer taskbar overlaid')
+  }
+
   return {finalPath, hooks}
 }
 
