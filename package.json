@@ -16,5 +16,8 @@
     "express": "^4.21.0",
     "open-graph-scraper": "^6.12.0",
     "uuid": "^10.0.0"
+  },
+  "optionalDependencies": {
+    "@napi-rs/canvas-linux-x64-gnu": "^1.0.2"
   }
 }
