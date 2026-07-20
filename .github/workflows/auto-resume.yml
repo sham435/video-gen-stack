@@ -13,14 +13,19 @@ jobs:
       - name: Check Railway status
         id: check
         run: |
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 \
             "https://video-gen-stack-production.up.railway.app/api/health" 2>&1)
           echo "railway_up=$([ "$STATUS" = "200" ] && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
+          echo "Status: $STATUS"
 
-      - name: Deploy queued version
+      - name: Install Railway CLI
         if: steps.check.outputs.railway_up == 'true'
-        uses: bervProject/railway-deploy@v1
-        with:
-          railway_token: ${{ secrets.RAILWAY_TOKEN }}
-          project_id: "6aac38ba-aa76-4907-98bd-759e4b021df0"
-          service_id: "3f29353f-b675-44c8-a7ce-56f6641dd531"
+        run: npm i -g @railway/cli
+
+      - name: Redeploy via Railway CLI
+        if: steps.check.outputs.railway_up == 'true'
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          railway login --token "$RAILWAY_TOKEN"
+          railway up --service video-gen-stack
