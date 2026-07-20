@@ -32,23 +32,25 @@ jobs:
         env:
           NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
         run: |
-          node -e "
-          const { StoryboardGenerator } = await import('./packages/branding/storyboard.js');
-          const { fetchTopHeadlines } = await import('./apps/api/services/news.js');
+          node --input-type=module -e "
+          import { StoryboardGenerator } from './packages/branding/storyboard.js';
+          import { fetchTopHeadlines } from './apps/api/services/news.js';
+          import { writeFileSync } from 'fs';
           const articles = await fetchTopHeadlines({ category: '${{ github.event.inputs.category || 'technology' }}', pageSize: 5 });
           const gen = new StoryboardGenerator();
           const storyboard = gen.generate(articles);
-          console.log('Storyboard:', JSON.stringify(storyboard, null, 2));
-          require('fs').writeFileSync('/tmp/storyboard.json', JSON.stringify(storyboard));
+          console.log(JSON.stringify(storyboard, null, 2));
+          writeFileSync('/tmp/storyboard.json', JSON.stringify(storyboard));
           console.log('Scenes:', storyboard.totalScenes);
           "
 
       - name: Quality Check
         id: quality
         run: |
-          node -e "
-          const { QualityScorer } = await import('./packages/common/quality/scorer.js');
-          const storyboard = JSON.parse(require('fs').readFileSync('/tmp/storyboard.json', 'utf8'));
+          node --input-type=module -e "
+          import { QualityScorer } from './packages/common/quality/scorer.js';
+          import { readFileSync } from 'fs';
+          const storyboard = JSON.parse(readFileSync('/tmp/storyboard.json', 'utf8'));
           const scorer = new QualityScorer();
           const result = scorer.score(storyboard);
           console.log('Visual Score:', result.scores.visual + '/100');
@@ -87,27 +89,23 @@ jobs:
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_PRIVACY: public
         run: |
-          node -e "
+          node --input-type=module -e "
+          import { fetchTopHeadlines } from './apps/api/services/news.js';
+          import { renderNewsVideo } from './apps/api/services/renderer.js';
+          import { uploadShort } from './apps/api/publishers/youtube.js';
+          import { readFileSync, unlinkSync } from 'fs';
           const category = '${{ github.event.inputs.category || 'technology' }}';
-          Promise.all([
-            import('./apps/api/services/news.js'),
-            import('./apps/api/services/renderer.js'),
-            import('./apps/api/publishers/youtube.js'),
-            import('fs')
-          ]).then(async ([news, renderer, youtube, fs]) => {
-            const articles = await news.fetchTopHeadlines({ category, pageSize: 5 });
+          try {
+            const articles = await fetchTopHeadlines({ category, pageSize: 5 });
             if (!articles.length) { console.log('No articles'); process.exit(0); }
-            
             console.log('Rendering:', articles[0].title?.slice(0, 60));
-            const videoPath = await renderer.renderNewsVideo(articles.slice(0, 5));
-            const buffer = fs.readFileSync(videoPath);
+            const videoPath = await renderNewsVideo(articles.slice(0, 5));
+            const buffer = readFileSync(videoPath);
             const base64 = buffer.toString('base64');
-            fs.unlinkSync(videoPath);
-            
+            unlinkSync(videoPath);
             const title = '📰 ' + articles[0].title?.slice(0, 90);
             const desc = title + '\n\nSource: ' + (articles[0].source?.name || 'NewsAPI') + '\n\n#tech #news #AI';
-            const result = await youtube.uploadShort('data:video/mp4;base64,' + base64, title, desc, 'public');
-            
+            const result = await uploadShort('data:video/mp4;base64,' + base64, title, desc, 'public');
             console.log('✅ Published: https://youtu.be/' + result?.id);
-          }).catch(e => { console.error('❌', e.message); process.exit(1); });
+          } catch(e) { console.error('❌', e.message); process.exit(1); }
           "
