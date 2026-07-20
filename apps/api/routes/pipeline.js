@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { NewsPipeline } from '../../apps/worker/pipeline.js'
+import { NewsPipeline } from '../../worker/pipeline.js'
 
 const router = Router()
 let pipeline = null

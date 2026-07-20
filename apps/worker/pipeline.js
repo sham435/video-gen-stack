@@ -96,7 +96,7 @@ export class NewsPipeline {
     // Phase 7: Quality validation
     console.log('[PIPELINE] Phase 7: Validating quality...')
     const validation = this.validator.validateAll(freshArticle, videoPath)
-    this.validator.logValidation(contentId, validation)
+    var articleId = contentId; this.validator.logValidation(contentId, validation)
 
     if (!validation.passed && validation.totalScore < 50) {
       this.detector.logPipeline(contentId, 'quality', 'rejected', `Score: ${validation.totalScore}`, Date.now() - startTime)

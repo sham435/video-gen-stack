@@ -134,7 +134,7 @@ router.post('/news-video', async (req, res) => {
 router.all('/cron/news-video', async (req, res) => {
   const { category, topic } = req.body || req.query
   try {
-    const { NewsPipeline } = await import('../../apps/worker/pipeline.js')
+    const { NewsPipeline } = await import('../../worker/pipeline.js')
     const pipeline = new NewsPipeline()
     const result = await pipeline.run({ category, topic, publish: true })
     res.json(result)
