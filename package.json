@@ -6,7 +6,14 @@
   "type": "module",
   "scripts": {
     "dev": "node --watch server/index.js",
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "newsroom": "node packages/editorial/pipeline.mjs",
+    "dashboard": "node packages/dashboard/index.mjs",
+    "db:init": "node packages/database/db.mjs",
+    "templates": "node packages/editorial/templates.mjs",
+    "storage": "node packages/storage/manager.mjs",
+    "pipeline": "node scripts/composer.mjs",
+    "dev:composer": "node --watch scripts/composer.mjs"
   },
   "dependencies": {
     "@napi-rs/canvas": "^1.0.2",
