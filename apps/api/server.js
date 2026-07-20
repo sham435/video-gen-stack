@@ -16,7 +16,10 @@ const PORT = process.env.PORT || 3001
 
 app.use(cors())
 app.use(express.json({ limit: '10mb' }))
-app.use(express.static(path.join(__dirname, '..', 'public')))
+app.use(express.static(path.join(__dirname, '..', 'dashboard', 'public')))
+
+// Also serve root dashboard path
+app.use(express.static(path.join(__dirname, '..', '..', 'public')))
 
 app.use('/api', videoRoutes)
 app.use('/api/news', newsRoutes)
