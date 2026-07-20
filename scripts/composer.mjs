@@ -116,9 +116,15 @@ if(import.meta.url.endsWith('composer.mjs')){
     const outDir = 'output'
     fs.mkdirSync(outDir, {recursive:true})
 
-    // Initialize V3 newsroom database
-    console.log('🗄️  Initializing V3 Newsroom...')
-    const { runFullPipeline, completeRender, failRender, queuePublishJob } = await import('../packages/editorial/pipeline.mjs')
+    // Optional: V3 Newsroom Database (graceful if unavailable)
+    let v3 = { pipeline: null, completeRender: null, queuePublishJob: null }
+    try {
+      const mod = await import('../packages/editorial/pipeline.mjs')
+      v3 = { pipeline: mod.runFullPipeline, completeRender: mod.completeRender, queuePublishJob: mod.queuePublishJob }
+      console.log('🗄️  V3 Newsroom database initialized')
+    } catch(e) {
+      console.log('ℹ️  V3 Newsroom DB unavailable (expected in CI):', e.message.split('\n')[0])
+    }
 
     // 0. Ensure background music exists (downloads free lofi if missing)
     ensureMusicExists()
@@ -140,7 +146,7 @@ if(import.meta.url.endsWith('composer.mjs')){
       articles = [{title: process.argv[2] || 'Actually See How Apple Is Replacing Siri', url: '', source: 'Tech News'}]
     }
 
-    // Process each article through V3 pipeline
+    // Process each article — compose video (V3 DB is optional)
     for (const rawArticle of articles) {
       const article = {
         title: rawArticle.title,
@@ -153,24 +159,34 @@ if(import.meta.url.endsWith('composer.mjs')){
       }
 
       console.log(`\n📰 Processing: "${article.title?.slice(0, 80)}..."`)
-      const pipeline = await runFullPipeline(article, { mode: 'auto', publish: false })
-      if (pipeline.skipped) {
-        console.log('⏭️  Skipping (already published)')
-        continue
+
+      // Register in V3 pipeline if available (optional)
+      let projectId = null, renderJobId = null
+      if (v3.pipeline) {
+        try {
+          const p = await v3.pipeline(article, { mode: 'auto', publish: false })
+          if (p?.skipped) { console.log('⏭️  Skipping (duplicate)'); continue }
+          projectId = p?.projectId
+          renderJobId = p?.renderJobId
+        } catch(e) { console.log('ℹ️  V3 pipeline skipped:', e.message?.slice(0, 80)) }
       }
 
-      // 3. Compose the video (existing render pipeline)
+      // Compose the video (core render)
       console.log('Composing news video...')
       const renderStart = Date.now()
       const { finalPath, hooks } = await composeVideo([article], outDir)
 
-      // Record render completion in database
+      // Record render in V3 DB if available
       const renderTime = Date.now() - renderStart
-      await completeRender(pipeline.projectId, pipeline.renderJobId, finalPath, renderTime)
+      if (v3.completeRender && projectId && renderJobId) {
+        try { await v3.completeRender(projectId, renderJobId, finalPath, renderTime) } catch {}
+      }
 
-      // 4. Upload to YouTube
+      // Upload to YouTube
       if (process.env.YOUTUBE_REFRESH_TOKEN) {
-        const pbJob = queuePublishJob(pipeline.projectId, pipeline.renderJobId, { mode: 'auto', privacy: process.env.YOUTUBE_PRIVACY || 'public' })
+        if (v3.queuePublishJob && projectId && renderJobId) {
+          try { v3.queuePublishJob(projectId, renderJobId, { mode: 'auto', privacy: process.env.YOUTUBE_PRIVACY || 'public' }) } catch {}
+        }
 
         console.log('Uploading to YouTube...')
         try {
@@ -180,14 +196,6 @@ if(import.meta.url.endsWith('composer.mjs')){
           const desc = `${title}\n\nSource: ${article.source || 'NewsAPI'}\n\n#tech #news #breaking`
           const result = await uploadShort(`data:video/mp4;base64,${buffer.toString('base64')}`, title, desc, process.env.YOUTUBE_PRIVACY || 'public')
           console.log(`✅ Published: https://youtu.be/${result?.id}`)
-
-          // Update publish job with YouTube ID
-          if (result?.id) {
-            const { updatePublishJob: updatePub } = await import('../packages/database/db.mjs')
-            if (typeof updatePub === 'function') {
-              updatePub(pbJob.jobId || pbJob, { status: 'published', youtube_id: result.id, published_time: new Date().toISOString() })
-            }
-          }
         } catch(e) { console.log('Upload failed:', e.message) }
       }
     }
