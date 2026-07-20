@@ -1,5 +1,8 @@
 FROM node:22-slim
 
+# Force clean rebuild - 4
+RUN echo "Build $(date)" > /build.txt
+
 # v3
 RUN apt-get update -qq && apt-get install -y -qq ffmpeg fonts-dejavu-core 2>/dev/null && rm -rf /var/lib/apt/lists/*
 
