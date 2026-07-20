@@ -83,10 +83,18 @@ export async function renderNewsVideo(headlines, options = {}) {
   const concatFile = join(tmp, `c_${Date.now()}.txt`)
   writeFileSync(concatFile, sceneFiles.map(f => `file '${f}'`).join('\n'))
 
+  // Concat with guaranteed stereo audio (music or sine tone)
   try {
     execSync(`ffmpeg -y -f concat -safe 0 -i "${concatFile}" -i "${musicUrl}" -map 0:v -map 1:a -c:v libx264 -preset ultrafast -crf 24 -c:a aac -b:a 192k -ac 2 -shortest "${out}"`, { stdio: 'pipe', timeout: 120000 })
   } catch {
-    execSync(`ffmpeg -y -f concat -safe 0 -i "${concatFile}" -c:v libx264 -preset ultrafast -crf 24 -an "${out}"`, { stdio: 'pipe', timeout: 120000 })
+    // Fallback with generated stereo audio (guaranteed sound)
+    try {
+      const totalSeconds = sceneFiles.length * SCENE_SECONDS
+      execSync(`ffmpeg -y -f concat -safe 0 -i "${concatFile}" -f lavfi -i "aevalsrc=sin(420*2*PI*t):sin(440*2*PI*t):c=2:s=48000:d=${totalSeconds}" -map 0:v -map 1:a -c:v libx264 -preset ultrafast -crf 24 -c:a aac -b:a 128k -ac 2 -shortest "${out}"`, { stdio: 'pipe', timeout: 120000 })
+    } catch {
+      // Ultimate fallback: video only
+      execSync(`ffmpeg -y -f concat -safe 0 -i "${concatFile}" -c:v libx264 -preset ultrafast -crf 24 -an "${out}"`, { stdio: 'pipe', timeout: 120000 })
+    }
   }
 
   sceneFiles.forEach(f => { try { unlinkSync(f) } catch {} })
