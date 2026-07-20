@@ -1,0 +1,61 @@
+name: Publish News Video
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+    inputs:
+      category:
+        description: 'News category'
+        required: false
+        default: 'technology'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --omit=optional
+
+      - name: Install FFmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+
+      - name: Publish News Video
+        env:
+          NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_PRIVACY: public
+        run: |
+          node -e "
+          const category = '${{ github.event.inputs.category || 'technology' }}';
+          Promise.all([
+            import('./apps/api/services/news.js'),
+            import('./apps/api/services/renderer.js'),
+            import('./apps/api/publishers/youtube.js'),
+            import('fs')
+          ]).then(async ([news, renderer, youtube, fs]) => {
+            const articles = await news.fetchTopHeadlines({ category, pageSize: 5 });
+            if (!articles.length) { console.log('No articles'); process.exit(0); }
+            
+            console.log('Rendering:', articles[0].title?.slice(0, 60));
+            const videoPath = await renderer.renderNewsVideo(articles.slice(0, 3));
+            const buffer = fs.readFileSync(videoPath);
+            const base64 = buffer.toString('base64');
+            fs.unlinkSync(videoPath);
+            
+            const title = '📰 ' + articles[0].title?.slice(0, 90);
+            const desc = title + '\n\nSource: ' + (articles[0].source?.name || 'NewsAPI') + '\n\n#tech #news #AI';
+            const result = await youtube.uploadShort('data:video/mp4;base64,' + base64, title, desc, 'public');
+            
+            console.log('✅ Published: https://youtu.be/' + result?.id);
+          }).catch(e => { console.error('❌', e.message); process.exit(1); });
+          "
