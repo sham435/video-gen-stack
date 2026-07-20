@@ -29,6 +29,8 @@ jobs:
 
       - name: Generate Storyboard
         id: storyboard
+        env:
+          NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
         run: |
           node -e "
           const { StoryboardGenerator } = await import('./packages/branding/storyboard.js');
@@ -78,7 +80,6 @@ jobs:
           fi
 
       - name: Publish via GitHub Runner
-        if: always()
         env:
           NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
@@ -86,8 +87,6 @@ jobs:
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_PRIVACY: public
         run: |
-          echo "Testing NEWSAPI_KEY..."
-          node -e "console.log('KEY length:', (process.env.NEWSAPI_KEY || '').length, 'First char:', (process.env.NEWSAPI_KEY || '')[0])"
           node -e "
           const category = '${{ github.event.inputs.category || 'technology' }}';
           Promise.all([
