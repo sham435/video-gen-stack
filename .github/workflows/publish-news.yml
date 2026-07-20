@@ -27,7 +27,39 @@ jobs:
       - name: Install FFmpeg
         run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
 
+      - name: Generate Storyboard
+        id: storyboard
+        run: |
+          node -e "
+          const { StoryboardGenerator } = await import('./packages/branding/storyboard.js');
+          const { fetchTopHeadlines } = await import('./apps/api/services/news.js');
+          const articles = await fetchTopHeadlines({ category: '${{ github.event.inputs.category || 'technology' }}', pageSize: 5 });
+          const gen = new StoryboardGenerator();
+          const storyboard = gen.generate(articles);
+          console.log('Storyboard:', JSON.stringify(storyboard, null, 2));
+          require('fs').writeFileSync('/tmp/storyboard.json', JSON.stringify(storyboard));
+          console.log('Scenes:', storyboard.totalScenes);
+          "
+
+      - name: Quality Check
+        id: quality
+        run: |
+          node -e "
+          const { QualityScorer } = await import('./packages/common/quality/scorer.js');
+          const storyboard = JSON.parse(require('fs').readFileSync('/tmp/storyboard.json', 'utf8'));
+          const scorer = new QualityScorer();
+          const result = scorer.score(storyboard);
+          console.log('Visual Score:', result.scores.visual + '/100');
+          console.log('Audio Score:', result.scores.audio + '/100');
+          console.log('Text Score:', result.scores.text + '/100');
+          console.log('Brand Score:', result.scores.brand + '/100');
+          console.log('Total Score:', result.total + '/100');
+          console.log('Status:', result.passed ? '✅ APPROVED' : '❌ REJECTED');
+          if (!result.passed) { console.log('Issues:', result.issues.join(', ')); process.exit(1); }
+          "
+
       - name: Publish News Video
+        if: steps.quality.outcome == 'success'
         env:
           NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
@@ -47,7 +79,7 @@ jobs:
             if (!articles.length) { console.log('No articles'); process.exit(0); }
             
             console.log('Rendering:', articles[0].title?.slice(0, 60));
-            const videoPath = await renderer.renderNewsVideo(articles.slice(0, 3));
+            const videoPath = await renderer.renderNewsVideo(articles.slice(0, 5));
             const buffer = fs.readFileSync(videoPath);
             const base64 = buffer.toString('base64');
             fs.unlinkSync(videoPath);
