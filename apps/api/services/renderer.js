@@ -2,7 +2,7 @@ import { execSync } from 'child_process'
 import { writeFileSync, unlinkSync } from 'fs'
 import { tmpdir } from 'os'
 import { join } from 'path'
-import { detectTheme } from '../../packages/branding/themes.js'
+import { detectTheme } from '../../../packages/branding/themes.js'
 
 const MUSIC = [
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
