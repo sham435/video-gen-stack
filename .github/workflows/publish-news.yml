@@ -31,9 +31,6 @@ jobs:
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg python3-pip
           pip3 install edge-tts -q
 
-      - name: Debug - test canvas import
-        run: node scripts/debug.mjs
-
       - name: Generate + Compose News Video
         env:
           NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
