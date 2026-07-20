@@ -50,3 +50,22 @@ app.listen(PORT, () => {
     console.log('✅ Gemini free provider ready!')
   }
 })
+
+// Debug: check deployed file
+app.get('/api/debug/pipeline', (req, res) => {
+  import('fs').then(fs => {
+    const code = fs.readFileSync('./apps/worker/pipeline.js', 'utf8');
+    const lines = code.split('\n');
+    const relevant = lines.filter((l, i) => 
+      l.includes('articleId') || 
+      l.includes('logValidation') || 
+      l.includes('contentId') ||
+      i > 96 && i < 105
+    );
+    res.json({ 
+      totalLines: lines.length,
+      importPath: lines[0]?.slice(0, 80),
+      relevantLines: relevant.slice(0, 20)
+    });
+  });
+});

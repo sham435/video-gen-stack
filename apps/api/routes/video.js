@@ -139,8 +139,8 @@ router.all('/cron/news-video', async (req, res) => {
     const result = await pipeline.run({ category, topic, publish: true })
     res.json(result)
   } catch (e) {
-    console.error(`[CRON] Error:`, e.stack || e.message)
-    res.status(500).json({ error: e.stack || e.message })
+    console.error(`[CRON] Error:`, e.stack)
+    res.status(500).json({ error: e.message, stack: e.stack?.split('\n').slice(0,5).join(' | ') })
   }
 })
 
