@@ -1,5 +1,6 @@
 FROM node:22-slim
 
+# Force fresh build - v2
 RUN apt-get update -qq && apt-get install -y -qq ffmpeg fonts-dejavu-core 2>/dev/null && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
