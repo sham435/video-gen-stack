@@ -2,7 +2,7 @@ import { execSync } from 'child_process'
 import { writeFileSync, unlinkSync } from 'fs'
 import { tmpdir } from 'os'
 import { join } from 'path'
-import { detectTheme } from '../../../packages/branding/themes.js'
+import { detectTheme } from '../../packages/branding/themes.js'
 
 const MUSIC = [
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
@@ -10,94 +10,93 @@ const MUSIC = [
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
 ]
 
+const THEMES = {
+  apple:   { bg0: '#0A0A23', bg1: '#1E1E60', accent: '#5E5CFF' },
+  samsung: { bg0: '#0A1623', bg1: '#0F3A5F', accent: '#00A8FF' },
+  ai:      { bg0: '#0A0A1A', bg1: '#1A0A3E', accent: '#8B5CF6' },
+  gaming:  { bg0: '#230A14', bg1: '#601E3A', accent: '#FF2D7B' },
+  security:{ bg0: '#1A0505', bg1: '#3A0A0A', accent: '#EF4444' },
+  default: { bg0: '#0B1020', bg1: '#1A2A5A', accent: '#3B82F6' },
+}
+
+function getTheme(title) {
+  const t = (title || '').toLowerCase()
+  if (t.includes('apple') || t.includes('iphone') || t.includes('siri') || t.includes('ios')) return 'apple'
+  if (t.includes('samsung') || t.includes('galaxy') || t.includes('fold')) return 'samsung'
+  if (t.includes('ai') || t.includes('chatgpt') || t.includes('openai')) return 'ai'
+  if (t.includes('xbox') || t.includes('playstation') || t.includes('nintendo') || t.includes('game')) return 'gaming'
+  if (t.includes('cyber') || t.includes('hack') || t.includes('breach')) return 'security'
+  return 'default'
+}
+
 function ff(c) { return c.replace('#', '0x') }
 
 export async function renderNewsVideo(headlines, options = {}) {
   const tmp = tmpdir()
   const out = join(tmp, `v_${Date.now()}.mp4`)
   const musicUrl = options.musicUrl || MUSIC[Math.floor(Math.random() * MUSIC.length)]
+  const imageUrl = options.imageUrl || (headlines[0] || {}).imageUrl
 
-  const SCENE_SECONDS = 5
-  const sceneFiles = []
-  const count = Math.min(headlines.length, 5)
+  const article = headlines[0] || {}
+  const title = (article.title || '').replace(/['":\\,]/g, '').slice(0, 80)
+  const source = (article.source || '').replace(/['":\\,]/g, '').slice(0, 40)
+  const theme = THEMES[getTheme(title)]
+  const duration = 10
+  const bg0 = ff(theme.bg0)
+  const bg1 = ff(theme.bg1)
+  const accent = ff(theme.accent)
 
-  for (let i = 0; i < count; i++) {
-    const h = headlines[i]
-    const title = (h.title || '').replace(/['":\\,]/g, '').slice(0, 60)
-    const source = (h.source?.name || '').replace(/['":\\,]/g, '').slice(0, 30)
-    const theme = detectTheme(h.title, options.category)
-    const bg1 = ff(theme.background[0])
-    const bg2 = ff(theme.background[1])
-    const accent = ff(theme.primary)
-    const line = ff(theme.line)
-    const lightAccent = ff(theme.accent)
-    const sceneOut = join(tmp, `s_${i}_${Date.now()}.mp4`)
+  // Scene files
+  const bgPath = join(tmp, `bg_${Date.now()}.mp4`)
+  const imgPath = join(tmp, `img_${Date.now()}.jpg`)
+  const overlayPath = join(tmp, `ol_${Date.now()}.mp4`)
+  const renderedPath = join(tmp, `ren_${Date.now()}.mp4`)
 
-    // Multi-layer scene:
-    // 1. Gradient background (two layers blended)
-    // 2. Tech grid overlay
-    // 3. Left accent bar (80px wide, full height)
-    // 4. Headline text (72px, bold)
-    // 5. Source with accent line
-    // 6. Bottom info bar with glass effect
-
-    const bgLayer1 = `color=c=${bg1}:s=1920x1080:d=${SCENE_SECONDS}:r=30`
-    const bgLayer2 = `color=c=${bg2}:s=1920x1080:d=${SCENE_SECONDS}:r=30,format=rgba,colorchannelmixer=aa=0.3`
-
-    // Left accent bar (vertical)
-    const accentBar = `drawtext=text='':fontcolor=${accent}:fontsize=10:box=1:boxcolor=${accent}:boxborderw=0:x=0:y=0,drawtext=text='|':fontcolor=${accent}:fontsize=900:x=-340:y=0`
-
-    // Headline - 72px
-    const headline = `drawtext=text='${title}':fontcolor=white:fontsize=52:x=100:y=240:box=1:boxcolor=black@0.3:boxborderw=16:line_spacing=12:enable='between(t\\,0\\,${SCENE_SECONDS})'`
-
-    // Accent underline
-    const underline = `drawtext=text='▬':fontcolor=${accent}:fontsize=20:x=100:y=460:box=1:boxcolor=black@0.2:boxborderw=4:enable='between(t\\,0\\,${SCENE_SECONDS})'`
-
-    // Source text
-    const srcText = source ? `,drawtext=text='${source}':fontcolor=${lightAccent}:fontsize=22:x=100:y=500:box=1:boxcolor=black@0.2:boxborderw=10:enable='between(t\\,0\\,${SCENE_SECONDS})'` : ''
-
-    // Topic badge
-    const badge = `drawtext=text='${theme.name.split('_')[0]?.toUpperCase() || 'TECH'}':fontcolor=${accent}:fontsize=14:x=80:y=80:box=1:boxcolor=black@0.4:boxborderw=8:enable='between(t\\,0\\,${SCENE_SECONDS})'`
-
-    // Particle overlay (small dots)
-    const particles = Array.from({ length: 8 }).map((_, pi) => {
-      const px = 100 + (pi * 200 + Date.now()) % 1800
-      const py = 100 + (pi * 150 + Date.now() * (pi + 1)) % 800
-      return `drawtext=text='•':fontcolor=${lightAccent}:fontsize=${8 + pi % 4}:x=${px}:y=${py}:enable='between(t\\,${pi % SCENE_SECONDS}\\,${SCENE_SECONDS})'`
-    }).join(',')
-
-    const bottomBar = `drawtext=text='${theme.mood.toUpperCase()}  |  ${i + 1}/${count}':fontcolor=gray:fontsize=16:x=80:y=h-60:box=1:boxcolor=black@0.3:boxborderw=8:enable='between(t\\,0\\,${SCENE_SECONDS})'`
-
-    // Combine: bg1 overlaid with bg2, then all drawtexts
-    const vf = `[0]${bgLayer1}[base];[base][1]overlay=0:0[bg];[bg]${accentBar},${headline}${srcText},${underline},${badge},${particles},${bottomBar}[out]`
-
-    // Use simpler approach: single color with all drawtexts
-    const simpleFilter = `${headline}${srcText},${underline},${badge},${bottomBar}`
-
-    const cmd = `ffmpeg -y -f lavfi -i "color=c=${bg1}:s=1920x1080:d=${SCENE_SECONDS}:r=30" -vf "${simpleFilter}" -c:v libx264 -preset ultrafast -crf 24 -pix_fmt yuv420p "${sceneOut}"`
-    execSync(cmd, { stdio: 'pipe', timeout: 60000 })
-    sceneFiles.push(sceneOut)
-  }
-
-  // Concat scenes
-  const concatFile = join(tmp, `c_${Date.now()}.txt`)
-  writeFileSync(concatFile, sceneFiles.map(f => `file '${f}'`).join('\n'))
-
-  // Concat with guaranteed stereo audio (music or sine tone)
   try {
-    execSync(`ffmpeg -y -f concat -safe 0 -i "${concatFile}" -i "${musicUrl}" -map 0:v -map 1:a -c:v libx264 -preset ultrafast -crf 24 -c:a aac -b:a 192k -ac 2 -shortest "${out}"`, { stdio: 'pipe', timeout: 120000 })
-  } catch {
-    // Fallback with generated stereo audio (guaranteed sound)
-    try {
-      const totalSeconds = sceneFiles.length * SCENE_SECONDS
-      execSync(`ffmpeg -y -f concat -safe 0 -i "${concatFile}" -f lavfi -i "aevalsrc=sin(420*2*PI*t):sin(440*2*PI*t):c=2:s=48000:d=${totalSeconds}" -map 0:v -map 1:a -c:v libx264 -preset ultrafast -crf 24 -c:a aac -b:a 128k -ac 2 -shortest "${out}"`, { stdio: 'pipe', timeout: 120000 })
-    } catch {
-      // Ultimate fallback: video only
-      execSync(`ffmpeg -y -f concat -safe 0 -i "${concatFile}" -c:v libx264 -preset ultrafast -crf 24 -an "${out}"`, { stdio: 'pipe', timeout: 120000 })
+    // 1. Gradient background
+    execSync(`ffmpeg -y -f lavfi -i "color=c=${bg0}:s=1920x1080:d=${duration}:r=30" -f lavfi -i "color=c=${bg1}:s=1920x1080:d=${duration}:r=30,format=rgba,colorchannelmixer=aa=0.35" -filter_complex "[0][1]overlay=0:0" -c:v libx264 -preset ultrafast -crf 24 "${bgPath}"`, { stdio: 'pipe', timeout: 30000 })
+
+    // 2. Image overlay if available
+    let hasImage = false
+    if (imageUrl) {
+      try {
+        execSync(`curl -sL "${imageUrl}" -o "${imgPath}" --max-time 10`, { stdio: 'pipe', timeout: 15000 })
+        execSync(`ffmpeg -y -i "${imgPath}" -vf "scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,gblur=sigma=25,colorchannelmixer=aa=0.3" -c:v libx264 -preset ultrafast -crf 28 -t ${duration} -r 30 "${overlayPath}"`, { stdio: 'pipe', timeout: 30000 })
+        hasImage = true
+      } catch {}
     }
+
+    // 3. Final scene with text overlay
+    const accentLine = `drawtext=text='|':fontcolor=${accent}:fontsize=80:x=80:y=200:box=1:boxcolor=0x000000@0.2:boxborderw=2`
+    const headline = `drawtext=text='${title}':fontcolor=white:fontsize=52:x=100:y=280:box=1:boxcolor=0x000000@0.4:boxborderw=16`
+    const srcText = source ? `,drawtext=text='${source}':fontcolor=${accent}:fontsize=22:x=100:y=500:box=1:boxcolor=0x000000@0.3:boxborderw=10` : ''
+    const badgeText = `,drawtext=text='${getTheme(title).toUpperCase()}':fontcolor=${accent}:fontsize=14:x=80:y=80:box=1:boxcolor=0x000000@0.4:boxborderw=8`
+    const bottomText = `,drawtext=text='NEWS  |  1/1':fontcolor=gray:fontsize=16:x=80:y=h-60:box=1:boxcolor=0x000000@0.3:boxborderw=8`
+
+    const inputSource = hasImage ? `-i "${overlayPath}"` : `-i "${bgPath}"`
+    const vf = `${accentLine},${headline}${srcText}${badgeText}${bottomText}`
+
+    execSync(`ffmpeg -y ${inputSource} -vf "${vf}" -c:v libx264 -preset ultrafast -crf 24 "${renderedPath}"`, { stdio: 'pipe', timeout: 30000 })
+
+    // 4. Add music with loudnorm
+    try {
+      execSync(
+        `ffmpeg -y -i "${renderedPath}" -i "${musicUrl}" -map 0:v -map 1:a ` +
+        `-filter_complex "[1:a]volume=0.18,afade=t=in:st=0:d=1.5,afade=t=out:st=${duration-1.5}:d=1.5,loudnorm=I=-16:TP=-1.5:LRA=11[mu]" ` +
+        `-map "[mu]" -c:v copy -c:a aac -b:a 192k -ac 2 -shortest "${out}"`,
+        { stdio: 'pipe', timeout: 60000 }
+      )
+    } catch {
+      execSync(`ffmpeg -y -i "${renderedPath}" -c:v copy -an "${out}"`, { stdio: 'pipe', timeout: 30000 })
+    }
+  } catch (e) {
+    // Ultimate fallback: simple text on color
+    const simpleCmd = `ffmpeg -y -f lavfi -i "color=c=0x0B1020:s=1920x1080:d=${duration}:r=30" -vf "drawtext=text='${title}':fontcolor=white:fontsize=48:x=(w-text_w)/2:y=(h-text_h)/2:box=1:boxcolor=black@0.4:boxborderw=16" -c:v libx264 -preset ultrafast -crf 28 -an "${out}"`
+    execSync(simpleCmd, { stdio: 'pipe', timeout: 60000 })
   }
 
-  sceneFiles.forEach(f => { try { unlinkSync(f) } catch {} })
-  try { unlinkSync(concatFile) } catch {}
+  // Cleanup temp files
+  try { [bgPath, imgPath, overlayPath, renderedPath].forEach(p => { try { unlinkSync(p) } catch {} }) } catch {}
+
   return out
 }
