@@ -2,6 +2,7 @@ import { execSync } from 'child_process'
 import { writeFileSync, unlinkSync } from 'fs'
 import { tmpdir } from 'os'
 import { join } from 'path'
+import { detectTheme } from '../../packages/branding/themes.js'
 
 const MUSIC = [
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
@@ -9,14 +10,7 @@ const MUSIC = [
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
 ]
 
-// Coordinated palette: dark bg + matching accent + lighter complement
-const SCENES = [
-  { bg: '0x07111F', accent: '0x3B82F6', light: '0x60A5FA', line: '0x22D3EE' },
-  { bg: '0x0A1628', accent: '0x3B82F6', light: '0x93C5FD', line: '0x22D3EE' },
-  { bg: '0x0D1B2A', accent: '0x60A5FA', light: '0xBFDBFE', line: '0x3B82F6' },
-  { bg: '0x081020', accent: '0x3B82F6', light: '0x93C5FD', line: '0x2DD4BF' },
-  { bg: '0x0C1828', accent: '0x22D3EE', light: '0x67E8F9', line: '0x3B82F6' },
-]
+function ff(c) { return c.replace('#', '0x') }
 
 export async function renderNewsVideo(headlines, options = {}) {
   const tmp = tmpdir()
@@ -29,32 +23,63 @@ export async function renderNewsVideo(headlines, options = {}) {
 
   for (let i = 0; i < count; i++) {
     const h = headlines[i]
-    const title = (h.title || '').replace(/['":\\,]/g, '').slice(0, 55)
+    const title = (h.title || '').replace(/['":\\,]/g, '').slice(0, 60)
     const source = (h.source?.name || '').replace(/['":\\,]/g, '').slice(0, 30)
-    const s = SCENES[i % SCENES.length]
+    const theme = detectTheme(h.title, options.category)
+    const bg1 = ff(theme.background[0])
+    const bg2 = ff(theme.background[1])
+    const accent = ff(theme.primary)
+    const line = ff(theme.line)
+    const lightAccent = ff(theme.accent)
     const sceneOut = join(tmp, `s_${i}_${Date.now()}.mp4`)
 
-    // Accent line (left vertical bar)
-    const accentBar = `drawtext=text='|':fontcolor=${s.accent}:fontsize=80:x=80:y=200:box=1:boxcolor=black@0.2:boxborderw=2`
+    // Multi-layer scene:
+    // 1. Gradient background (two layers blended)
+    // 2. Tech grid overlay
+    // 3. Left accent bar (80px wide, full height)
+    // 4. Headline text (72px, bold)
+    // 5. Source with accent line
+    // 6. Bottom info bar with glass effect
 
-    // Headline with larger text and accent-colored underline
-    const headline = `drawtext=text='${title}':fontcolor=white:fontsize=52:x=100:y=280:box=1:boxcolor=black@0.3:boxborderw=14:enable='between(t\\,0\\,${SCENE_SECONDS})'`
+    const bgLayer1 = `color=c=${bg1}:s=1920x1080:d=${SCENE_SECONDS}:r=30`
+    const bgLayer2 = `color=c=${bg2}:s=1920x1080:d=${SCENE_SECONDS}:r=30,format=rgba,colorchannelmixer=aa=0.3`
 
-    // Accent underline bar
-    const underline = `drawtext=text='━':fontcolor=${s.accent}:fontsize=24:x=100:y=480:box=1:boxcolor=black@0.2:boxborderw=4:enable='between(t\\,0\\,${SCENE_SECONDS})'`
+    // Left accent bar (vertical)
+    const accentBar = `drawtext=text='':fontcolor=${accent}:fontsize=10:box=1:boxcolor=${accent}:boxborderw=0:x=0:y=0,drawtext=text='|':fontcolor=${accent}:fontsize=900:x=-340:y=0`
 
-    // Source with accent color
-    const srcText = source ? `,drawtext=text='${source}':fontcolor=${s.light}:fontsize=22:x=100:y=520:box=1:boxcolor=black@0.2:boxborderw=8:enable='between(t\\,0\\,${SCENE_SECONDS})'` : ''
+    // Headline - 72px
+    const headline = `drawtext=text='${title}':fontcolor=white:fontsize=52:x=100:y=240:box=1:boxcolor=black@0.3:boxborderw=16:line_spacing=12:enable='between(t\\,0\\,${SCENE_SECONDS})'`
 
-    // Bottom info bar
-    const infoBar = `drawtext=text='TECHNOLOGY  |  ${i + 1}/${count}':fontcolor=gray:fontsize=18:x=80:y=h-60:box=1:boxcolor=black@0.2:boxborderw=6:enable='between(t\\,0\\,${SCENE_SECONDS})'`
+    // Accent underline
+    const underline = `drawtext=text='▬':fontcolor=${accent}:fontsize=20:x=100:y=460:box=1:boxcolor=black@0.2:boxborderw=4:enable='between(t\\,0\\,${SCENE_SECONDS})'`
 
-    const cmd = `ffmpeg -y -f lavfi -i "color=c=${s.bg}:s=1920x1080:r=30:d=${SCENE_SECONDS}" -vf "${accentBar},${headline}${srcText},${underline},${infoBar}" -c:v libx264 -preset ultrafast -crf 24 -pix_fmt yuv420p "${sceneOut}"`
+    // Source text
+    const srcText = source ? `,drawtext=text='${source}':fontcolor=${lightAccent}:fontsize=22:x=100:y=500:box=1:boxcolor=black@0.2:boxborderw=10:enable='between(t\\,0\\,${SCENE_SECONDS})'` : ''
+
+    // Topic badge
+    const badge = `drawtext=text='${theme.name.split('_')[0]?.toUpperCase() || 'TECH'}':fontcolor=${accent}:fontsize=14:x=80:y=80:box=1:boxcolor=black@0.4:boxborderw=8:enable='between(t\\,0\\,${SCENE_SECONDS})'`
+
+    // Particle overlay (small dots)
+    const particles = Array.from({ length: 8 }).map((_, pi) => {
+      const px = 100 + (pi * 200 + Date.now()) % 1800
+      const py = 100 + (pi * 150 + Date.now() * (pi + 1)) % 800
+      return `drawtext=text='•':fontcolor=${lightAccent}:fontsize=${8 + pi % 4}:x=${px}:y=${py}:enable='between(t\\,${pi % SCENE_SECONDS}\\,${SCENE_SECONDS})'`
+    }).join(',')
+
+    const bottomBar = `drawtext=text='${theme.mood.toUpperCase()}  |  ${i + 1}/${count}':fontcolor=gray:fontsize=16:x=80:y=h-60:box=1:boxcolor=black@0.3:boxborderw=8:enable='between(t\\,0\\,${SCENE_SECONDS})'`
+
+    // Combine: bg1 overlaid with bg2, then all drawtexts
+    const vf = `[0]${bgLayer1}[base];[base][1]overlay=0:0[bg];[bg]${accentBar},${headline}${srcText},${underline},${badge},${particles},${bottomBar}[out]`
+
+    // Use simpler approach: single color with all drawtexts
+    const simpleFilter = `${headline}${srcText},${underline},${badge},${bottomBar}`
+
+    const cmd = `ffmpeg -y -f lavfi -i "color=c=${bg1}:s=1920x1080:d=${SCENE_SECONDS}:r=30" -vf "${simpleFilter}" -c:v libx264 -preset ultrafast -crf 24 -pix_fmt yuv420p "${sceneOut}"`
     execSync(cmd, { stdio: 'pipe', timeout: 60000 })
     sceneFiles.push(sceneOut)
   }
 
-  // Concat
+  // Concat scenes
   const concatFile = join(tmp, `c_${Date.now()}.txt`)
   writeFileSync(concatFile, sceneFiles.map(f => `file '${f}'`).join('\n'))
 
