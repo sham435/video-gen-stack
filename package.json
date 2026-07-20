@@ -13,7 +13,14 @@
     "templates": "node packages/editorial/templates.mjs",
     "storage": "node packages/storage/manager.mjs",
     "pipeline": "node scripts/composer.mjs",
-    "dev:composer": "node --watch scripts/composer.mjs"
+    "dev:composer": "node --watch scripts/composer.mjs",
+    "dev:hot": "node scripts/dev.mjs",
+    "dev:hot-intro": "node scripts/dev.mjs --intro",
+    "ai": "node .github/scripts/ai-helper.mjs",
+    "ai:health": "node .github/scripts/ai-helper.mjs health",
+    "ai:enhance": "node .github/scripts/ai-helper.mjs enhance",
+    "ai:debug": "node .github/scripts/ai-helper.mjs debug",
+    "ai:full": "node .github/scripts/ai-helper.mjs full"
   },
   "dependencies": {
     "@napi-rs/canvas": "^1.0.2",

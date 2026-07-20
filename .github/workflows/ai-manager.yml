@@ -1,0 +1,56 @@
+name: AI Pipeline Manager
+on:
+  workflow_run:
+    workflows: ["Publish News Video"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'debug / enhance / health / full'
+        default: 'health'
+        type: choice
+        options: [debug, enhance, health, full]
+
+jobs:
+  ai-manage:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' || github.event_name == 'workflow_dispatch' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install --omit=dev
+
+      - name: 🤖 AI Debug Failed Run
+        if: github.event.workflow_run.conclusion == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "📥 Fetching logs for failed run #${{ github.event.workflow_run.id }}..."
+          gh run view ${{ github.event.workflow_run.id }} --log > output/debug.log 2>/dev/null || true
+          node .github/scripts/ai-helper.mjs debug
+
+      - name: 💡 AI Enhance Stack
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node .github/scripts/ai-helper.mjs enhance
+          echo "📋 Suggestions:"
+          cat output/ai_suggestions.json | python3 -m json.tool 2>/dev/null || cat output/ai_suggestions.json
+
+      - name: 🏥 AI Health Check
+        run: node .github/scripts/ai-helper.mjs health
+
+      - name: 📤 Upload AI Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-reports
+          path: output/ai_*.json
+          retention-days: 30

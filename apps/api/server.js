@@ -11,6 +11,7 @@ import pipelineRoutes from './routes/pipeline.js'
 import premiumRoutes from './routes/premium.js'
 import directRoutes from './routes/direct.js'
 import cronManagerRoutes from './routes/cron-manager.js'
+import aiManagerRoutes from './routes/ai-manager.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const app = express()
@@ -31,6 +32,7 @@ app.use('/api', pipelineRoutes)
 app.use('/api', premiumRoutes)
 app.use('/api', directRoutes)
 app.use('/api', cronManagerRoutes)
+app.use('/api/ai', aiManagerRoutes)
 
 app.get('/api/health', (req, res) => {
   let version = 'v3.0'
