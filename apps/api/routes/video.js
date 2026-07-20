@@ -130,17 +130,33 @@ router.post('/news-video', async (req, res) => {
   }
 })
 
-// Cron endpoint — auto-render news video and upload to YouTube (uses pipeline)
+// Cron endpoint — auto-render news video and upload to YouTube (direct, simple)
 router.all('/cron/news-video', async (req, res) => {
-  const { category, topic } = req.body || req.query
+  const { category = 'technology' } = req.body || req.query
   try {
-    const { NewsPipeline } = await import('../../worker/pipeline.js')
-    const pipeline = new NewsPipeline()
-    const result = await pipeline.run({ category, topic, publish: true })
-    res.json(result)
+    const { fetchTopHeadlines, articlesToSummary } = await import('../services/news.js')
+    const { renderNewsVideo } = await import('../services/renderer.js')
+    const { uploadShort } = await import('../publishers/youtube.js')
+    const { readFileSync, unlinkSync } = await import('fs')
+
+    const articles = await fetchTopHeadlines({ category, pageSize: 5 })
+    if (!articles.length) return res.json({ status: 'no_articles' })
+    const article = articles[0]
+
+    const videoPath = await renderNewsVideo(articles.slice(0, 3))
+    const buffer = readFileSync(videoPath)
+    const base64 = buffer.toString('base64')
+    unlinkSync(videoPath)
+
+    const title = `📰 ${article.title.slice(0, 90)}`
+    const desc = `${title}\n\nSource: ${article.source?.name || 'NewsAPI'}\n\n#tech #news #AI`
+    const result = await uploadShort(`data:video/mp4;base64,${base64}`, title, desc, 'public')
+
+    console.log(`[CRON] Published: https://youtu.be/${result?.id}`)
+    res.json({ status: 'published', videoId: result?.id, url: `https://youtu.be/${result?.id}` })
   } catch (e) {
     console.error(`[CRON] Error:`, e.stack)
-    res.status(500).json({ error: e.message, stack: e.stack?.split('\n').slice(0,5).join(' | ') })
+    res.status(500).json({ error: e.message })
   }
 })
 

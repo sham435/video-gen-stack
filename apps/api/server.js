@@ -9,6 +9,7 @@ import publishRoutes from './routes/publish.js'
 import renderRoutes from './routes/render.js'
 import pipelineRoutes from './routes/pipeline.js'
 import premiumRoutes from './routes/premium.js'
+import directRoutes from './routes/direct.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const app = express()
@@ -27,6 +28,7 @@ app.use('/api', publishRoutes)
 app.use('/api', renderRoutes)
 app.use('/api', pipelineRoutes)
 app.use('/api', premiumRoutes)
+app.use('/api', directRoutes)
 
 app.get('/api/health', (req, res) => {
   res.json({
