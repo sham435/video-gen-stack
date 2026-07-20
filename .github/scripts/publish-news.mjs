@@ -18,8 +18,19 @@ try {
   console.log('Source:', article.source?.name)
   console.log('Image:', article.urlToImage || 'none')
 
-  // Get OG image
+  // Get image: Pexels API (free stock photos) > OG image > none
   let imageUrl = article.urlToImage || null
+  const PEXELS_KEY = process.env.PEXELS_API_KEY
+  if (!imageUrl && PEXELS_KEY) {
+    try {
+      const query = encodeURIComponent((article.title || '').split(' ').slice(0, 4).join(' '))
+      const resp = await fetch(`https://api.pexels.com/v1/search?query=${query}&per_page=1&orientation=landscape`, {
+        headers: { 'Authorization': PEXELS_KEY }
+      })
+      const data = await resp.json()
+      if (data.photos?.[0]) imageUrl = data.photos[0].src.large
+    } catch {}
+  }
   if (!imageUrl && article.url) {
     try {
       const resp = await fetch(article.url, { signal: AbortSignal.timeout(5000) })
