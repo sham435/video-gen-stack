@@ -151,7 +151,7 @@ router.all('/cron/rotate', async (req, res) => {
   const category = CATEGORIES[catIndex % CATEGORIES.length]
   catIndex++
   try {
-    const { NewsPipeline } = await import('../../apps/worker/pipeline.js')
+    const { NewsPipeline } = await import('../../worker/pipeline.js')
     const pipeline = new NewsPipeline()
     const result = await pipeline.run({ category, publish: true })
     res.json({ ...result, category })
