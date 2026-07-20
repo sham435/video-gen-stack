@@ -56,7 +56,18 @@ export async function composeVideo(articles, outDir='output'){
     execSync(mixCmd, {stdio:'inherit'})
   }
 
-  console.log('✅ Final with TTS+Music:', finalPath)
+  // 4. Burn subtitles
+  const subPath = path.join(outDir, 'final_with_subs.mp4')
+  try {
+    const { generateSRT, burnSubtitles } = await import('./captions.mjs')
+    const srt = generateSRT(script, duration)
+    const srtFile = path.join(outDir, 'captions.srt')
+    fs.writeFileSync(srtFile, srt)
+    burnSubtitles(finalPath, srtFile, subPath)
+    fs.renameSync(subPath, finalPath)
+  } catch(e) { console.log('Subtitles skipped:', e.message) }
+
+  console.log('✅ Final with TTS+Music+Subtitles:', finalPath)
   return { finalPath, article, script }
 }
 

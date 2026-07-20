@@ -53,9 +53,32 @@ export async function renderFrame(article, outPath){
     ctx.fillText(line, W/2, y)
   })
 
+  // Source
   ctx.font='400 26px Inter, sans-serif'
   ctx.fillStyle='rgba(255,255,255,0.7)'
   ctx.fillText(`Source: ${article.source||'Tech'}`, W/2, 1000)
+
+  // BREAKING badge (top-left)
+  ctx.fillStyle = theme.accent
+  ctx.fillRect(40, 40, 200, 48)
+  ctx.fillStyle = '#000000'
+  ctx.font = '700 22px Inter, sans-serif'
+  ctx.textAlign = 'center'
+  ctx.fillText('BREAKING', 140, 72)
+
+  // Channel logo (top-right)
+  ctx.fillStyle = 'rgba(255,255,255,0.15)'
+  ctx.font = '700 18px Inter, sans-serif'
+  ctx.textAlign = 'right'
+  ctx.fillText('TECH NEWS', W - 40, 70)
+  ctx.fillStyle = theme.accent
+  ctx.fillRect(W - 220, 78, 180, 2)
+
+  // Progress bar (bottom)
+  ctx.fillStyle = 'rgba(255,255,255,0.1)'
+  ctx.fillRect(0, H - 6, W, 6)
+  ctx.fillStyle = theme.accent
+  ctx.fillRect(0, H - 6, W * 0.35, 6)
 
   const buf = canvas.toBuffer('image/png')
   fs.writeFileSync(outPath, buf)
