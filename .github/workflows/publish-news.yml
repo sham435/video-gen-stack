@@ -1,5 +1,11 @@
 name: Publish News Video
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/**'
+      - 'packages/**'
+      - '.github/workflows/publish-news.yml'
   schedule:
     - cron: '*/30 * * * *'
   workflow_dispatch:
