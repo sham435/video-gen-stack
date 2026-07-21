@@ -639,24 +639,29 @@ export function generateCommonIntro(outDir = 'output', format = 'hd') {
  */
 function generateIntroAudio(outPath) {
   try {
+    // BREAKING NEWS HYPE TRACK — cinematic impacts + driving bass + energy
     const parts = []
-    // Impact hit (0-0.5s)
-    parts.push('-f lavfi -t 0.5 -i "sine=f=60:r=44100,afade=t=out:st=0.4:d=0.1,volume=0.6"')
-    // Whoosh rise (0.5-2s)
-    parts.push('-f lavfi -t 1.5 -i "sine=f=200:r=44100,afade=t=in:st=0:d=0.3,afade=t=out:st=1.2:d=0.3,volume=0.2"')
-    // Ambient bass bed (2-12s)
-    parts.push('-f lavfi -t 10 -i "sine=f=55:r=44100,volume=0.15"')
-    // Pink noise texture
-    parts.push('-f lavfi -t 12 -i "anoisesrc=d=12:c=pink:a=0.03:r=44100,afade=t=in:st=0:d=1,afade=t=out:st=10:d=2,volume=0.2"')
-    // Cinematic hit at end (11.5-12s)
-    parts.push('-f lavfi -t 0.8 -i "sine=f=80:r=44100,afade=t=in:st=0:d=0.01,afade=t=out:st=0.7:d=0.1,volume=0.5"')
+    // Main impact hit (0-0.3s)
+    parts.push('-f lavfi -t 0.3 -i "sine=f=80:r=48000,afade=t=out:st=0.25:d=0.05,volume=1.0"')
+    // Secondary impact (0.3-0.8s)
+    parts.push('-f lavfi -t 0.8 -i "sine=f=120:r=48000,afade=t=out:st=0.7:d=0.1,volume=0.5"')
+    // Deep bass hit at 2.5s (BREAKING reveal)
+    parts.push('-f lavfi -t 0.5 -i "sine=f=60:r=48000,afade=t=out:st=0.4:d=0.1,volume=0.8"')
+    // Driving pink noise energy bed (full 12s)
+    parts.push('-f lavfi -t 12 -i "anoisesrc=d=12:c=pink:a=0.06:r=48000,afade=t=in:st=0:d=0.5,afade=t=out:st=11:d=1,volume=0.35"')
+    // Sub bass drone (full 12s)
+    parts.push('-f lavfi -t 12 -i "sine=f=55:r=48000,afade=t=in:st=0:d=0.5,afade=t=out:st=11.5:d=0.5,volume=0.12"')
+    // High frequency alert ping (1.5s)
+    parts.push('-f lavfi -t 1.5 -i "sine=f=440:r=48000,afade=t=in:st=0:d=0.05,afade=t=out:st=1.3:d=0.2,volume=0.25"')
+    // Ambient harmonic drone (full 12s)
+    parts.push('-f lavfi -t 12 -i "sine=f=220:r=48000,afade=t=in:st=0:d=0.3,afade=t=out:st=11.5:d=0.5,volume=0.08"')
 
     const cmd = `ffmpeg -y ${parts.join(' ')} \
-      -filter_complex "[0:a][1:a][2:a][3:a][4:a]amix=inputs=5:duration=longest:normalize=0,volume=0.6,aformat=sample_rates=44100:channel_layouts=stereo,afade=t=out:st=11.5:d=0.5[a]" \
-      -map "[a]" -c:a libmp3lame -b:a 192k "${outPath}"`
+      -filter_complex "[0:a]adelay=0|0[hit1];[1:a]adelay=300|300[hit2];[2:a]adelay=2500|2500[hit3];[3:a][4:a][5:a][6:a]amix=inputs=4:duration=longest:normalize=0,volume=0.4[bed];[hit1][hit2][hit3][bed]amix=inputs=4:duration=longest:normalize=0,volume=0.65,aformat=sample_rates=48000:channel_layouts=stereo,afade=t=out:st=11.5:d=0.5[a]" \
+      -map "[a]" -c:a libmp3lame -b:a 256k "${outPath}"`
 
     execSync(cmd, { stdio: 'pipe', timeout: 15000 })
-    console.log('✅ Intro audio generated')
+    console.log('✅ BREAKING NEWS hype audio generated')
   } catch (e) {
     console.log('⚠️ Intro audio generation skipped:', e.message)
   }
