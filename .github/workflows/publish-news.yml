@@ -1,11 +1,7 @@
-name: Publish News Video
+name: Publish News Video — PRODUCTION
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'scripts/**'
-      - 'packages/**'
-      - '.github/workflows/publish-news.yml'
+  # Only schedule + manual. No push trigger.
+  # Push to main triggers ci.yml (validation only, no publish)
   schedule:
     - cron: '*/30 * * * *'
   workflow_dispatch:
@@ -14,6 +10,11 @@ on:
         description: 'News category'
         required: false
         default: 'technology'
+
+# Only one publish at a time
+concurrency:
+  group: publish-news
+  cancel-in-progress: false
 
 jobs:
   publish:

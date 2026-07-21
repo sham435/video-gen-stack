@@ -1,7 +1,11 @@
 name: Deploy to Railway
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Why deploy?'
+        required: false
+        default: 'manual deploy'
 
 jobs:
   deploy:
@@ -18,6 +22,7 @@ jobs:
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 \
             "https://video-gen-stack-production.up.railway.app/api/health" 2>&1)
           echo "railway_up=$([ "$STATUS" = "200" ] && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
+          echo "Status: $STATUS"
 
       - name: Deploy to Railway
         if: steps.check.outputs.railway_up == 'true'
@@ -27,7 +32,6 @@ jobs:
           railway login --token "$RAILWAY_TOKEN"
           railway up --service video-gen-stack
 
-      - name: Queue deployment for later
+      - name: Skip
         if: steps.check.outputs.railway_up != 'true'
-        run: |
-          echo "✅ Railway unavailable. Queued for auto-resume."
+        run: echo "⏳ Railway unavailable (free tier sleep). Manual deploy needed when awake."

@@ -1,31 +1,23 @@
 name: Auto-Resume Railway
 on:
-  schedule:
-    - cron: '*/30 * * * *'
   workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Why resume?'
+        required: false
+        default: 'manual resume'
 
 jobs:
-  check-and-deploy:
+  resume:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
       - name: Check Railway status
-        id: check
         run: |
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 \
             "https://video-gen-stack-production.up.railway.app/api/health" 2>&1)
-          echo "railway_up=$([ "$STATUS" = "200" ] && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
-          echo "Status: $STATUS"
-
-      - name: Install Railway CLI
-        if: steps.check.outputs.railway_up == 'true'
-        run: npm i -g @railway/cli
-
-      - name: Redeploy via Railway CLI
-        if: steps.check.outputs.railway_up == 'true'
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          railway login --token "$RAILWAY_TOKEN"
-          railway up --service video-gen-stack
+          echo "Railway status: $STATUS"
+          if [ "$STATUS" = "200" ]; then
+            echo "✅ Railway is awake"
+          else
+            echo "⏳ Railway is asleep (free tier). Run deploy.yml to wake it."
+          fi
