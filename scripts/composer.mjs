@@ -147,6 +147,8 @@ if(import.meta.url.endsWith('composer.mjs')){
     }
 
     // Process each article — compose video (V3 DB is optional)
+    // Only the FIRST article gets uploaded to YouTube (daily upload limit)
+    let uploadCount = 0
     for (const rawArticle of articles) {
       const article = {
         title: rawArticle.title,
@@ -182,8 +184,9 @@ if(import.meta.url.endsWith('composer.mjs')){
         try { await v3.completeRender(projectId, renderJobId, finalPath, renderTime) } catch {}
       }
 
-      // Upload to YouTube
-      if (process.env.YOUTUBE_REFRESH_TOKEN) {
+      // Upload ONLY first article to YouTube (daily quota limit)
+      if (process.env.YOUTUBE_REFRESH_TOKEN && uploadCount === 0) {
+        uploadCount++
         if (v3.queuePublishJob && projectId && renderJobId) {
           try { v3.queuePublishJob(projectId, renderJobId, { mode: 'auto', privacy: process.env.YOUTUBE_PRIVACY || 'public' }) } catch {}
         }
