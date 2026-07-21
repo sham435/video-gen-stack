@@ -5,9 +5,9 @@
  *         5 scenes over 12 seconds
  *
  * Scenes:
- *   0-2s    Dark digital grid + floating data particles + camera push
+ *   0-2s    "BREAKING NEWS" + "Real Tech, Real Trends, Real News." + grid
  *   2-4.5s  "UNFILTERED" digital fragment assemble + red glow
- *   4.5-7s  "BREAKING TECH" energy burst + data streams + holographic panels
+ *   4.5-7s  "BREAKING NEWS" energy burst + data streams + holographic panels
  *   7-9.5s  Global AI network globe + radar scan + orbital camera
  *   9.5-12s Final card: TECH-MONSTER logo + anchor sham435 + live dot + ticker
  */
@@ -121,6 +121,30 @@ function drawScene1(ctx, p) {
   ctx.strokeStyle = `rgba(0,0,0,${pp * 0.15})`
   ctx.lineWidth = (1 - vScale) * W / 2
   ctx.strokeRect(0, 0, W, H)
+
+  // BREAKING NEWS — appears from first second
+  const bp = Math.min(1, pp * 2)
+  ctx.save()
+  ctx.globalAlpha = bp
+  ctx.font = '900 90px Anton, Impact, sans-serif'
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.shadowColor = COLORS.red
+  ctx.shadowBlur = 40 * (1 - bp * 0.5)
+  ctx.fillStyle = '#FFFFFF'
+  ctx.fillText('BREAKING', W/2, H * 0.38)
+  ctx.fillStyle = COLORS.red
+  ctx.fillText('NEWS', W/2, H * 0.52)
+  ctx.shadowBlur = 0
+  ctx.restore()
+
+  // "Real Tech, Real Trends, Real News." from the start
+  const tp = Math.min(1, pp * 2.5)
+  ctx.font = '500 42px Inter, sans-serif'
+  ctx.fillStyle = `rgba(255,255,255,${tp * 0.8})`
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillText('Real Tech, Real Trends, Real News.', W/2, H * 0.66)
 }
 
 /**
@@ -196,7 +220,7 @@ function drawScene2(ctx, p) {
 }
 
 /**
- * Scene 3: BREAKING TECH energy burst + data streams
+ * Scene 3: BREAKING NEWS energy burst + data streams
  */
 function drawScene3(ctx, p) {
   const pp = p  // 0→1 over 2.5s
@@ -237,7 +261,7 @@ function drawScene3(ctx, p) {
     ctx.stroke()
   }
 
-  // "BREAKING TECH" with energy burst
+  // "BREAKING NEWS" with energy burst
   const burstP = Math.min(1, pp * 2)
   const scale = 0.6 + burstP * 0.4
   const alpha = Math.min(1, burstP * 2)
@@ -263,7 +287,9 @@ function drawScene3(ctx, p) {
   ctx.shadowColor = COLORS.red
   ctx.shadowBlur = 40 * (1 - burstP * 0.5)
   ctx.fillStyle = '#FFFFFF'
-  ctx.fillText('BREAKING TECH', 0, 0)
+  ctx.fillText('BREAKING', 0, -45)
+  ctx.fillStyle = COLORS.red
+  ctx.fillText('NEWS', 0, 45)
   ctx.shadowBlur = 0
 
   ctx.restore()
@@ -271,8 +297,8 @@ function drawScene3(ctx, p) {
   // Tagline
   if (pp > 0.3) {
     const tp = Math.min(1, (pp - 0.3) / 0.3)
-    ctx.font = '500 22px Inter, sans-serif'
-    ctx.fillStyle = `rgba(255,255,255,${tp * 0.7})`
+    ctx.font = '500 42px Inter, sans-serif'
+    ctx.fillStyle = `rgba(255,255,255,${tp * 0.8})`
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.fillText('Real Tech. Real Trends. Real News.', W/2, H/2 + 90)
@@ -372,15 +398,15 @@ function drawScene4(ctx, p) {
   ctx.ellipse(cx, cy, r * 0.6, r * 0.4, 0, scanAngle - 0.5, scanAngle)
   ctx.fill()
 
-  // "LIVE TECHNOLOGY UPDATE" flash in
+  // "BREAKING NOW" flash in — RED
   const fp = Math.min(1, pp * 1.5)
-  ctx.font = `800 ${50 + fp * 10}px Anton, Impact, sans-serif`
+  ctx.font = `800 ${70 + fp * 10}px Anton, Impact, sans-serif`
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
-  ctx.fillStyle = `rgba(255,255,255,${fp})`
-  ctx.shadowColor = COLORS.cyan
-  ctx.shadowBlur = 20 * fp
-  ctx.fillText('LIVE TECHNOLOGY UPDATE', W/2, H * 0.15)
+  ctx.fillStyle = `rgba(225, 6, 0, ${fp})`
+  ctx.shadowColor = COLORS.red
+  ctx.shadowBlur = 30 * fp
+  ctx.fillText('BREAKING NOW', W/2, H * 0.15)
   ctx.shadowBlur = 0
 }
 
@@ -444,8 +470,8 @@ function drawScene5(ctx, p) {
 
   // Tagline
   const tagP = Math.min(1, (pp - 0.25) / 0.3)
-  ctx.font = '500 22px Inter, sans-serif'
-  ctx.fillStyle = `rgba(255,255,255,${tagP * 0.7})`
+  ctx.font = '500 42px Inter, sans-serif'
+  ctx.fillStyle = `rgba(255,255,255,${tagP * 0.8})`
   ctx.fillText('Real Tech. Real Trends. Real News.', W/2, H * 0.56)
 
   // Anchor
