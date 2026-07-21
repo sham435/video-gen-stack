@@ -40,7 +40,11 @@ export async function uploadShort(videoUrl, title, description, privacy = 'publi
   const token = await getAccessToken()
 
   const videoResp = await fetch(videoUrl)
+  if (!videoResp.ok) {
+    throw new Error(`Failed to fetch video data: ${videoResp.status} ${videoResp.statusText}`)
+  }
   const videoBuffer = await videoResp.arrayBuffer()
+  console.log(`📤 Uploading to YouTube: ${(videoBuffer.byteLength / 1024 / 1024).toFixed(1)}MB`)
 
   // YouTube uses multipart upload
   const boundary = 'boundary123'
@@ -69,5 +73,18 @@ export async function uploadShort(videoUrl, title, description, privacy = 'publi
     body: combined,
   })
 
-  return res.json()
+  const data = await res.json()
+
+  if (data.error) {
+    console.error('❌ YouTube API error:', data.error.message || JSON.stringify(data.error))
+    throw new Error(`YouTube upload failed: ${data.error.message || JSON.stringify(data.error)}`)
+  }
+
+  if (!data.id) {
+    console.error('❌ YouTube response missing video ID:', JSON.stringify(data).slice(0, 500))
+    throw new Error('YouTube upload succeeded but no video ID returned')
+  }
+
+  console.log(`✅ YouTube upload complete: https://youtu.be/${data.id}`)
+  return data
 }
