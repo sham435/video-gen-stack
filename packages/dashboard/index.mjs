@@ -120,6 +120,29 @@ app.get('/api/ai/code-stats', (req, res) => {
   res.json(stats)
 })
 
+// ========== VIDEO QUALITY API ==========
+app.post('/api/quality/analyze', async (req, res) => {
+  const { VideoTestingEngine } = await import('../src/quality/VideoTestingEngine.mjs')
+  const { AIQualityScorer } = await import('../src/quality/AIQualityScorer.mjs')
+  const { RetentionPredictor } = await import('../src/quality/RetentionPredictor.mjs')
+  const { ImprovementEngine } = await import('../src/quality/ImprovementEngine.mjs')
+
+  const tester = new VideoTestingEngine()
+  const scorer = new AIQualityScorer()
+  const predictor = new RetentionPredictor()
+  const improver = new ImprovementEngine()
+
+  const { videoPath, scenes, category } = req.body
+  const technical = videoPath ? await tester.test(videoPath) : null
+  const duration = technical?.duration?.value || 30
+  const quality = scorer.score(scenes || [], technical, duration)
+  const retention = predictor.predict(scenes || [], category || 'technology')
+  const suggestions = improver.suggest(quality, scenes || [], technical)
+  const publish = improver.shouldPublish(quality)
+
+  res.json({ technical, quality, retention, suggestions, publish })
+})
+
 // ========== LEGACY API (DB-based) ==========
 if (dbReady) {
   const { getDB, getArticles, getProjects, getAuditLog, getProject } = await import('../database/db.mjs')
