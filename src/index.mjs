@@ -11,10 +11,13 @@ import { QualityChecker } from './quality/QualityChecker.mjs'
 import { AudioMixer } from './audio/AudioMixer.mjs'
 
 const W = 1080, H = 1920
-const FPS = 30
+const RENDER_FPS = 10
+const OUTPUT_FPS = 30
 
 export class NewsBroadcastEngine {
-  constructor() {
+  constructor(options = {}) {
+    this.renderFps = options.renderFps || RENDER_FPS
+    this.outputFps = options.outputFps || OUTPUT_FPS
     this.sceneEngine = null
     this.timeline = null
     this.voiceSync = new VoiceSync()
@@ -44,7 +47,7 @@ export class NewsBroadcastEngine {
     this.validateTemplate(scenes)
 
     this.sceneEngine = new SceneEngine(template)
-    this.timeline = new Timeline(scenes, FPS)
+    this.timeline = new Timeline(scenes, this.renderFps)
 
     const captionScript = this.voiceSync.buildNarrationScript(scenes)
     const totalDuration = scenes[scenes.length - 1].end
@@ -54,8 +57,9 @@ export class NewsBroadcastEngine {
     const voiceDur = this.voiceSync.getDuration(voicePath)
     console.log(`Narration duration: ${voiceDur.toFixed(1)}s, template: ${totalDuration}s`)
 
-    const totalFrames = Math.ceil(totalDuration * FPS)
-    console.log(`Rendering ${totalFrames} frames...`)
+    const totalFrames = Math.ceil(totalDuration * this.renderFps)
+    const reportEvery = Math.max(1, Math.floor(totalFrames / 20))
+    console.log(`Rendering ${totalFrames} frames at ${this.renderFps}fps (output: ${this.outputFps}fps)...`)
 
     for (let frame = 0; frame < totalFrames; frame++) {
       const { scene, progress, time } = this.timeline.getSceneForFrame(frame)
@@ -70,7 +74,7 @@ export class NewsBroadcastEngine {
       const framePath = `${framesDir}/f${String(frame).padStart(5, '0')}.png`
       fs.writeFileSync(framePath, png)
 
-      if (frame % 60 === 0 || frame === totalFrames - 1) {
+      if (frame % reportEvery === 0 || frame === totalFrames - 1) {
         process.stdout.write(`  Frame ${frame + 1}/${totalFrames} (${((frame + 1) / totalFrames * 100).toFixed(0)}%)\r`)
       }
     }
@@ -226,7 +230,7 @@ export class NewsBroadcastEngine {
 
     const silentVideo = `${outDir}/silent_broadcast.mp4`
     execSync(
-      `ffmpeg -y -f concat -safe 0 -i "${listPath}" -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,format=yuv420p,fps=${FPS}" -pix_fmt yuv420p "${silentVideo}"`,
+      `ffmpeg -y -f concat -safe 0 -i "${listPath}" -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,format=yuv420p,fps=${this.outputFps}" -pix_fmt yuv420p "${silentVideo}"`,
       { stdio: 'inherit' }
     )
 
