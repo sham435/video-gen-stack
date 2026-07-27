@@ -1,0 +1,7 @@
+{
+  "headline": { "font": "Anton", "weight": 900, "sizes": { "hero": 130, "large": 100, "medium": 72, "small": 52 } },
+  "caption": { "font": "Inter", "weight": 800, "sizes": { "default": 52, "small": 42, "highlight": 75 } },
+  "body": { "font": "Inter", "weight": 600, "sizes": { "default": 42, "small": 36, "detail": 28 } },
+  "badge": { "font": "Inter", "weight": 700, "sizes": { "label": 14, "anchor": 28, "cta": 34 } },
+  "ticker": { "font": "Inter", "weight": 600, "sizes": { "item": 16, "label": 30 } }
+}

@@ -1,0 +1,25 @@
+{
+  "brand": {
+    "primary": "#E10600",
+    "secondary": "#00E5FF",
+    "accent": "#FFD700",
+    "background": "#000000",
+    "text": "#FFFFFF"
+  },
+  "categories": {
+    "gaming": { "primary": "#E100FF", "secondary": "#00FFE5", "bg": "#0A0015" },
+    "sports": { "primary": "#FFD700", "secondary": "#E10600", "bg": "#050510" },
+    "politics": { "primary": "#E10600", "secondary": "#0044FF", "bg": "#050508" },
+    "science": { "primary": "#00E5FF", "secondary": "#FFFFFF", "bg": "#000510" },
+    "space": { "primary": "#FFFFFF", "secondary": "#00E5FF", "bg": "#000510" },
+    "ai": { "primary": "#00E5FF", "secondary": "#E10600", "bg": "#050510" },
+    "cybersecurity": { "primary": "#00FF41", "secondary": "#E10600", "bg": "#000A05" },
+    "biotech": { "primary": "#00FF88", "secondary": "#00E5FF", "bg": "#000A05" }
+  },
+  "semantic": {
+    "success": "#00FF41",
+    "warning": "#FFD700",
+    "error": "#E10600",
+    "info": "#00E5FF"
+  }
+}
