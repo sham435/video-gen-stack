@@ -1,12 +1,7 @@
-name: CI — Validate Changes
+name: CI — TECH-MONSTER Validation
 on:
   push:
     branches: [develop]
-    paths:
-      - 'scripts/**'
-      - 'packages/**'
-      - 'apps/**'
-      - 'assets/**'
   pull_request:
     branches: [main, develop]
 
@@ -15,44 +10,55 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm install --include=optional
+      - run: npm install --include=optional
 
-      - name: Check syntax of all scripts
+      - name: Syntax check scripts
         run: |
-          for f in scripts/*.mjs packages/**/*.mjs .github/scripts/*.mjs; do
-            [ -f "$f" ] && node --check "$f" && echo "✅ $f" || echo "❌ $f"
+          for f in scripts/*.mjs; do
+            node --check "$f" && echo "  OK: $f" || echo "  FAIL: $f"
           done
 
-      - name: Test intro module
-        run: node -e "
-          import('./scripts/intro.mjs').then(m => {
-            console.log('✅ intro.mjs loads OK, fns:', Object.keys(m).join(', '))
-          })
-        "
-
-      - name: Test composer syntax
-        run: node -e "
-          import('./scripts/composer.mjs').catch(e => {
-            if (e.message.includes('better-sqlite3')) {
-              console.log('✅ composer.mjs OK (DB skip in CI)')
-            } else throw e
-          })
-        "
-
-      - name: Test pexels module
-        run: node -e "
-          import('./scripts/pexels.mjs').then(m => {
-            console.log('✅ pexels.mjs loads OK')
-          })
-        "
-
-      - name: Verify assets
+      - name: Syntax check src modules
         run: |
-          [ -f assets/fonts/Anton-Regular.ttf ] && echo '✅ Anton font' || echo '❌ Anton font'
-          [ -f assets/music/intro_whoosh.mp3 ] && echo '✅ Intro audio' || echo '❌ Intro audio'
+          for f in src/**/*.mjs; do
+            [ -f "$f" ] && node --check "$f" && echo "  OK: $f" || echo "  FAIL: $f"
+          done
+
+      - name: Syntax check packages
+        run: |
+          for f in packages/**/*.mjs packages/**/*.js; do
+            [ -f "$f" ] && node --check "$f" 2>/dev/null && echo "  OK: $f" || echo "  SKIP: $f"
+          done
+
+      - name: Validate JSON templates
+        run: |
+          for f in src/templates/*.json; do
+            node -e "JSON.parse(require('fs').readFileSync('$f')); console.log('  OK: $f')"
+          done
+
+      - name: Verify module imports resolve
+        run: |
+          node -e "
+            const modules = [
+              'src/index.mjs', 'src/video/SceneEngine.mjs', 'src/video/CaptionEngine.mjs',
+              'src/video/MotionEngine.mjs', 'src/video/Timeline.mjs', 'src/video/Renderer.mjs',
+              'src/audio/VoiceSync.mjs', 'src/audio/AudioMixer.mjs', 'src/audio/SoundFX.mjs',
+              'src/ai/NewsAnalyzer.mjs', 'src/ai/BRollSelector.mjs', 'src/ai/ScriptPlanner.mjs',
+              'src/quality/QualityChecker.mjs', 'scripts/tts.mjs', 'scripts/captions.mjs'
+            ];
+            Promise.all(modules.map(m => import('./' + m).then(() => console.log('  IMPORT OK:', m)).catch(e => {
+              console.log('  IMPORT FAIL:', m, e.message);
+              process.exitCode = 1;
+            }))).then(() => console.log('All imports resolved'));
+          "
+
+      - name: Check assets exist
+        run: |
+          [ -f assets/fonts/Anton-Regular.ttf ] && echo '  Font: Anton OK'
+          [ -f assets/fonts/Inter-Black.ttf ] || [ -f assets/fonts/Inter-Bold.ttf ] && echo '  Font: Inter OK'

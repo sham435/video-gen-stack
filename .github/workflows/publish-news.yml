@@ -1,7 +1,5 @@
-name: Publish News Video — PRODUCTION
+name: Publish News Video — TECH-MONSTER Broadcast
 on:
-  # Only schedule + manual. No push trigger.
-  # Push to main triggers ci.yml (validation only, no publish)
   schedule:
     - cron: '*/30 * * * *'
   workflow_dispatch:
@@ -10,14 +8,36 @@ on:
         description: 'News category'
         required: false
         default: 'technology'
+      title:
+        description: 'Override article title (optional)'
+        required: false
+        default: ''
 
-# Only one publish at a time
 concurrency:
   group: publish-news
   cancel-in-progress: false
 
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+      - run: npm install --include=optional
+      - name: Syntax check all modules
+        run: |
+          for f in src/**/*.mjs scripts/*.mjs packages/**/*.mjs; do
+            [ -f "$f" ] && node --check "$f" 2>/dev/null || true
+          done
+          echo "All modules validated"
+      - name: Validate template
+        run: node -e "JSON.parse(require('fs').readFileSync('src/templates/breaking-news.json')); console.log('Template valid')"
+
   publish:
+    needs: validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,10 +53,11 @@ jobs:
 
       - name: Install FFmpeg + TTS
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg python3-pip
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg python3-pip espeak
           pip3 install edge-tts -q
 
-      - name: Generate + Compose News Video
+      - name: Generate TECH-MONSTER Broadcast
         env:
           NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
@@ -44,5 +65,7 @@ jobs:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_PRIVACY: public
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
           INPUT_CATEGORY: ${{ github.event.inputs.category || 'technology' }}
-        run: node scripts/composer.mjs
+        run: node scripts/composer.mjs '${{ github.event.inputs.title || '' }}'

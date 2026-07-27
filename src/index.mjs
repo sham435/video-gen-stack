@@ -8,8 +8,7 @@ import { SoundFX } from './audio/SoundFX.mjs'
 import { NewsAnalyzer } from './ai/NewsAnalyzer.mjs'
 import { BRollSelector } from './ai/BRollSelector.mjs'
 import { QualityChecker } from './quality/QualityChecker.mjs'
-import { getRandomMusic, ensureMusicExists } from '../scripts/audio.mjs'
-import { generateTTS } from '../scripts/tts.mjs'
+import { AudioMixer } from './audio/AudioMixer.mjs'
 
 const W = 1080, H = 1920
 const FPS = 30
@@ -23,6 +22,7 @@ export class NewsBroadcastEngine {
     this.newsAnalyzer = new NewsAnalyzer()
     this.bRollSelector = new BRollSelector()
     this.qualityChecker = new QualityChecker()
+    this.audioMixer = new AudioMixer()
   }
 
   async loadTemplate(templatePath) {
@@ -35,7 +35,7 @@ export class NewsBroadcastEngine {
     const framesDir = `${outDir}/frames`
     fs.mkdirSync(framesDir, { recursive: true })
 
-    ensureMusicExists()
+    this.audioMixer.ensureMusicExists()
 
     const analysis = this.newsAnalyzer.analyze(article)
     const template = await this.loadTemplate('src/templates/breaking-news.json')
@@ -49,7 +49,7 @@ export class NewsBroadcastEngine {
     const captionScript = this.voiceSync.buildNarrationScript(scenes)
     const totalDuration = scenes[scenes.length - 1].end
     const voicePath = `${outDir}/narration.mp3`
-    await generateTTS(captionScript, voicePath)
+    await this.voiceSync.generateTTS(captionScript, voicePath)
 
     const voiceDur = this.voiceSync.getDuration(voicePath)
     console.log(`Narration duration: ${voiceDur.toFixed(1)}s, template: ${totalDuration}s`)
@@ -230,34 +230,16 @@ export class NewsBroadcastEngine {
       { stdio: 'inherit' }
     )
 
-    const musicPath = getRandomMusic()
+    const musicPath = this.audioMixer.getRandomMusic()
 
-    if (musicPath && fs.existsSync(musicPath)) {
-      execSync(
-        `ffmpeg -y -i "${silentVideo}" -i "${voicePath}" -stream_loop -1 -i "${musicPath}" ` +
-        `-filter_complex "[2:a]aformat=channel_layouts=stereo,volume=0.10,afade=t=in:st=0:d=1,apad[bg];` +
-        `[1:a]aformat=channel_layouts=stereo,volume=1.3,apad[voice];` +
-        `[voice][bg]amix=inputs=2:duration=longest:dropout_transition=0:normalize=0[a]" ` +
-        `-map 0:v -map "[a]" -c:v libx264 -preset medium -crf 20 -c:a aac -b:a 192k -t ${totalDuration} "${videoPath}"`,
-        { stdio: 'inherit' }
-      )
-    } else {
-      execSync(
-        `ffmpeg -y -i "${silentVideo}" -i "${voicePath}" -map 0:v -map 1:a -c:v copy -c:a aac -t ${totalDuration} "${videoPath}"`,
-        { stdio: 'inherit' }
-      )
-    }
+    this.audioMixer.mixAudio(silentVideo, voicePath, musicPath, totalDuration, videoPath)
 
     console.log('Broadcast video:', videoPath)
 
-    const footerPath = 'assets/footer.png'
-    if (fs.existsSync(footerPath)) {
-      const withFooter = `${outDir}/broadcast_final.mp4`
-      execSync(
-        `ffmpeg -y -i "${videoPath}" -i "${footerPath}" -filter_complex "[0:v][1:v]overlay=0:main_h-overlay_h:format=auto,format=yuv420p[v]" -map "[v]" -map 0:a -c:a copy "${withFooter}"`,
-        { stdio: 'inherit' }
-      )
-      fs.copyFileSync(withFooter, videoPath)
+    const footerWith = `${outDir}/broadcast_final.mp4`
+    this.audioMixer.overlayFooter(videoPath, 'assets/footer.png', footerWith)
+    if (fs.existsSync(footerWith)) {
+      fs.copyFileSync(footerWith, videoPath)
     }
 
     return videoPath

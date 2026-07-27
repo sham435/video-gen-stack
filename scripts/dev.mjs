@@ -89,7 +89,7 @@ function startWatcher() {
 
 console.log(`
 ╔═══════════════════════════════════════════╗
-║   🎬  UNFILTERED Dev Hot-Reload          ║
+║   TECH-MONSTER Dev Hot-Reload            ║
 ║───────────────────────────────────────────║
 ║  Commands:                               ║
 ║  node scripts/dev.mjs                    ║
@@ -103,9 +103,10 @@ console.log(`
 ║  node scripts/dev.mjs --health           ║
 ║    → One-shot health check               ║
 ║───────────────────────────────────────────║
-║  npm run dev:composer   Quick start       ║
-║  npm run dashboard      Admin UI          ║
-║  npm run api            API server        ║
+║  npm run broadcast      News broadcast   ║
+║  npm run dev:hot        Watch mode       ║
+║  npm run dashboard      Admin UI         ║
+║  npm run api            API server       ║
 ╚═══════════════════════════════════════════╝
 `)
 

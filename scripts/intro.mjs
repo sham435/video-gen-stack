@@ -180,7 +180,8 @@ function drawScene2(ctx, p) {
 
   chars.forEach((ch, i) => {
     const charP = Math.max(0, Math.min(1, (pp * 1.5) - i * 0.08))
-    const xOffset = (1 - charP) * (Math.random() > 0.5 ? 80 : -80) * (1 - i * 0.1)
+    const dir = (i % 2 === 0) ? 1 : -1
+    const xOffset = (1 - charP) * 80 * dir * (1 - i * 0.1)
     const alpha = charP
     const yOffset = (1 - charP) * 40
 
@@ -189,7 +190,6 @@ function drawScene2(ctx, p) {
     ctx.translate(startX + i * charWidth + charWidth / 2 + xOffset, H/2 - 20 + yOffset)
     ctx.transform(1, 0, -0.12 * (1 - charP), 1, 0, 0)
 
-    // Red glow on assemble
     if (charP < 0.8) {
       ctx.shadowColor = COLORS.red
       ctx.shadowBlur = 30 * (1 - charP)

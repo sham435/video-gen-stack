@@ -128,7 +128,7 @@ export async function generateFooter(outPath = 'assets/footer.png') {
   ctx.font = '700 11px Inter, sans-serif'
   ctx.fillStyle = '#333333'
   ctx.textAlign = 'center'
-  ctx.fillText('UNFILTERED', logoX + logoSize / 2, logoY + logoSize + 14)
+  ctx.fillText('TECH-MONSTER', logoX + logoSize / 2, logoY + logoSize + 14)
 
   // ── Save ──
   fs.mkdirSync(path.dirname(outPath), { recursive: true })
