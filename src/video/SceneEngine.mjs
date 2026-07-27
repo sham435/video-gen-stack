@@ -124,7 +124,7 @@ export class SceneEngine {
     ctx.shadowBlur = 8
     const tp = Math.min(1, progress * 3)
     ctx.globalAlpha = tp
-    ctx.fillText('TECH-MONSTER EXCLUSIVE', W / 2, H * 0.52)
+    ctx.fillText('TECH-MONSTER', W / 2, H * 0.52)
     ctx.shadowBlur = 0
     ctx.restore()
 
@@ -158,12 +158,14 @@ export class SceneEngine {
     ctx.scale(scale, scale)
     ctx.translate(-W / 2, -H / 2)
 
+    const keywords = ['10X', 'FASTER', 'CONTROLS', 'ON-DEVICE', 'BREAKING', 'NEW', 'GLOBAL']
+    const isHighlighted = keywords.some(k => scene.text.toUpperCase().includes(k))
     ctx.font = `900 ${fontSize}px Anton, Impact, sans-serif`
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
-    ctx.shadowColor = '#E10600'
-    ctx.shadowBlur = 20 * (1 - p * 0.5)
-    ctx.fillStyle = '#FFFFFF'
+    ctx.shadowColor = isHighlighted ? '#FFD700' : '#E10600'
+    ctx.shadowBlur = 30 * (1 - p * 0.5)
+    ctx.fillStyle = isHighlighted ? '#FFD700' : '#FFFFFF'
     ctx.fillText(scene.text, W / 2, startY)
     ctx.shadowBlur = 0
 
@@ -184,15 +186,18 @@ export class SceneEngine {
     const heading = scene.text.split('.')[0]
     ctx.save()
     ctx.globalAlpha = Math.min(1, progress * 2)
-    ctx.font = '800 42px Inter, sans-serif'
+    ctx.font = '800 52px Inter, sans-serif'
     ctx.fillStyle = '#00E5FF'
     ctx.textAlign = 'left'
     ctx.textBaseline = 'top'
+    ctx.shadowColor = 'rgba(0,0,0,0.8)'
+    ctx.shadowBlur = 6
     const hp = Math.min(1, progress * 2)
     ctx.globalAlpha = hp
     ctx.fillText('WHY IT MATTERS', startX, H * 0.15)
+    ctx.shadowBlur = 0
     ctx.fillStyle = '#E10600'
-    ctx.fillRect(startX, H * 0.15 + 48, 60, 4)
+    ctx.fillRect(startX, H * 0.15 + 60, 80, 5)
     ctx.restore()
 
     ctx.save()
@@ -200,17 +205,17 @@ export class SceneEngine {
     ctx.globalAlpha = bodyP
 
     const body = scene.text.replace(heading + '. ', '')
-    ctx.font = '600 36px Inter, sans-serif'
-    ctx.fillStyle = 'rgba(255,255,255,0.9)'
+    ctx.font = '700 42px Inter, sans-serif'
+    ctx.fillStyle = 'rgba(255,255,255,0.95)'
     ctx.textAlign = 'left'
     ctx.textBaseline = 'top'
-    ctx.shadowColor = 'rgba(0,0,0,0.8)'
-    ctx.shadowBlur = 8
+    ctx.shadowColor = 'rgba(0,0,0,0.9)'
+    ctx.shadowBlur = 10
 
-    const maxChars = 25
+    const maxChars = 22
     const words = body.split(' ')
     let line = ''
-    let lineY = H * 0.18 + 70
+    let lineY = H * 0.18 + 80
     for (const w of words) {
       if ((line + ' ' + w).trim().length <= maxChars) line += (line ? ' ' : '') + w
       else {
@@ -238,18 +243,21 @@ export class SceneEngine {
     ctx.save()
     const tp = Math.min(1, (progress - 0.05) / 0.3)
     ctx.globalAlpha = tp
-    ctx.font = '700 26px Inter, sans-serif'
+    ctx.font = '800 52px Inter, sans-serif'
     ctx.fillStyle = '#E10600'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
+    ctx.shadowColor = '#E10600'
+    ctx.shadowBlur = 12
 
     const alertPulse = 0.4 + Math.sin(progress * 12) * 0.3
     ctx.fillStyle = `rgba(225, 6, 0, ${alertPulse})`
     ctx.beginPath()
-    ctx.arc(W / 2 - 100, H * 0.20, 6, 0, Math.PI * 2)
+    ctx.arc(W / 2 - 180, H * 0.20, 10, 0, Math.PI * 2)
     ctx.fill()
-    ctx.fillStyle = '#FFFFFF'
+    ctx.fillStyle = '#E10600'
     ctx.fillText('BREAKING ANALYSIS', W / 2, H * 0.20)
+    ctx.shadowBlur = 0
     ctx.restore()
 
     ctx.save()
@@ -259,13 +267,13 @@ export class SceneEngine {
     ctx.translate(W / 2, H * 0.50)
     ctx.scale(scale, scale)
 
-    ctx.font = '800 44px Inter, sans-serif'
-    ctx.fillStyle = '#FFFFFF'
+    ctx.font = '800 52px Inter, sans-serif'
+    ctx.fillStyle = '#FFD700'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.shadowColor = 'rgba(0,0,0,0.9)'
     ctx.shadowBlur = 12
-    const maxChars = 30
+    const maxChars = 28
     const textLines = []
     let currentLine = ''
     for (const w of scene.text.split(' ')) {
