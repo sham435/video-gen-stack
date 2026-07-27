@@ -1,0 +1,18 @@
+{
+  "version": "2.0",
+  "brand": "NEWS-MONSTER",
+  "anchor": "sham435",
+  "resolution": {"width": 1080, "height": 1920},
+  "fps": 30,
+  "duration": 30,
+  "visual_style": "high energy stadium, dramatic sports lighting, motion blur, crowd atmosphere, vibrant colors, professional camera, 8k, vertical 9:16",
+  "colors": {"primary": "#FFD700", "secondary": "#E10600", "background": "#050510", "text": "#FFFFFF"},
+  "scenes": [
+    {"id":"hook","type":"hook","start":0,"end":2.5,"text":"SPORTS BREAKING NEWS","headline":"BREAKING","subheadline":"{{title}}","visual":"stadium","effect":"flash","audio":"impact"},
+    {"id":"reveal","type":"fact","start":2.5,"end":5,"text":"{{brand}}","caption":"{{brand}}","visual":"team","effect":"zoom_in","audio":"whoosh"},
+    {"id":"detail","type":"explanation","start":5,"end":12,"text":"{{explanation_1}}","caption":"SPORTS UPDATE","visual":"action","effect":"cinematic_zoom","audio":"narration"},
+    {"id":"stats","type":"explanation","start":12,"end":18,"text":"{{explanation_2}}","caption":"STATS & ANALYSIS","visual":"stats","effect":"data_panel","audio":"narration"},
+    {"id":"close","type":"brand_close","start":18,"end":25,"text":"","caption":"Follow NEWS-MONSTER — Breaking News, AI, Science, Sports, Politics & Future Tech","visual":"brand_card","effect":"brand_reveal","audio":"outro"}
+  ],
+  "ticker": ["SPORTS", "SCORES", "CHAMPIONS", "ATHLETES", "STADIUM", "FANS"]
+}

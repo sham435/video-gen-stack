@@ -1,0 +1,18 @@
+{
+  "version": "2.0",
+  "brand": "NEWS-MONSTER",
+  "anchor": "sham435",
+  "resolution": {"width": 1080, "height": 1920},
+  "fps": 30,
+  "duration": 30,
+  "visual_style": "retro future, gaming, pixel art, neon purple and cyan, CRT glow, arcade lighting, 8k, vertical 9:16",
+  "colors": {"primary": "#E100FF", "secondary": "#00FFE5", "background": "#0A0015", "text": "#FFFFFF"},
+  "scenes": [
+    {"id":"hook","type":"hook","start":0,"end":2.5,"text":"GAMING BREAKING NEWS","headline":"BREAKING","subheadline":"{{title}}","visual":"gaming","effect":"glitch","audio":"impact"},
+    {"id":"reveal","type":"fact","start":2.5,"end":5,"text":"{{brand}}","caption":"{{brand}}","visual":"console","effect":"pixel_slide","audio":"whoosh"},
+    {"id":"detail","type":"explanation","start":5,"end":12,"text":"{{explanation_1}}","caption":"GAMING NEWS","visual":"gameplay","effect":"scanlines","audio":"narration"},
+    {"id":"reaction","type":"retention","start":12,"end":18,"text":"{{retention}}","caption":"FANS REACT","visual":"community","effect":"glitch","audio":"suspense"},
+    {"id":"close","type":"brand_close","start":18,"end":25,"text":"","caption":"Follow NEWS-MONSTER — Breaking News, AI, Science, Sports, Politics & Future Tech","visual":"brand_card","effect":"brand_reveal","audio":"outro"}
+  ],
+  "ticker": ["GAMING", "ESPORTS", "RETRO", "CONSOLES", "PC", "VR", "INDIE"]
+}
