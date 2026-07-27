@@ -17,13 +17,19 @@ export class StoryPlanner {
       messages: [
         {
           role: 'system',
-          content: `You are a viral short-form video scriptwriter for the TECH-MONSTER news channel.
+          content: `You are a viral short-form video scriptwriter for TECH-MONSTER, a premium tech news channel.
 
 Given a news article, produce a structured video plan as JSON.
 
+Style: mysterious, exclusive, documentary-style. Write hooks like:
+- "Why [Company] Buried This Secret For Years"
+- "Nobody Expected What [Product] Just Did"
+- "The Hidden Feature [Company] Never Told You About"
+- "[Number] Years Later, We Found The Truth"
+
 Rules:
 - Duration: 25-35 seconds total
-- Hook (0-3s): create urgency/curiosity, max 10 words
+- Hook (0-3s): create urgency/curiosity, max 10 words, use "declassified/exclusive" tone
 - Each scene: 3-7 seconds, with specific purpose
 - Every scene has:
   - type: hook | fact | reveal | explanation | reaction | close
@@ -38,8 +44,8 @@ Rules:
 
 Output ONLY valid JSON:
 {
-  "headline": "short headline",
-  "hook": "curiosity hook text",
+  "headline": "short declassified-style headline",
+  "hook": "curiosity hook text, mystery/reveal style",
   "scenes": [
     {
       "id": 1,
@@ -101,18 +107,18 @@ Category: ${article.category || 'technology'}`
     const desc = article.description || ''
     const sentences = desc.split(/[.!?]+/).filter(s => s.trim().length > 10)
     return {
-      headline: title.slice(0, 60),
-      hook: `Nobody expected what ${(title.split(' ')[0] || 'they')} just did.`,
+      headline: `${(title.split(' ')[0] || 'TECH').toUpperCase()} DECLASSIFIED`,
+      hook: `Why ${(title.split(' ').slice(0, 3).join(' ') || 'they')} buried this secret.`,
       scenes: [
-        { id: 1, type: 'hook', purpose: 'breaking news alert', narration: `${title.split(' ').slice(0, 8).join(' ')}.`, visual_prompt: `cinematic news broadcast breaking ${title.slice(0, 40)}, dramatic lighting, 8k`, camera: 'push_in', transition: 'flash', emotion: 'shock', music_cue: 'intro', sfx: 'impact', caption_focus: 'BREAKING', duration: 2.5 },
-        { id: 2, type: 'fact', purpose: 'reveal the company', narration: `${title.split(' ').slice(0, 6).join(' ')} has announced a major development.`, visual_prompt: `technology company headquarters, modern architecture, cinematic lighting, 8k`, camera: 'slow_zoom', transition: 'cut', emotion: 'awe', music_cue: 'build', sfx: 'whoosh', caption_focus: 'ANNOUNCES', duration: 4 },
-        { id: 3, type: 'explanation', purpose: 'explain what happened', narration: sentences[0] || `This changes the technology landscape significantly.`, visual_prompt: `futuristic technology concept, holographic display, data visualization, blue neon, 8k`, camera: 'orbit', transition: 'zoom_blur', emotion: 'curiosity', music_cue: 'build', sfx: 'whoosh', caption_focus: 'CHANGES', duration: 5 },
-        { id: 4, type: 'reaction', purpose: 'create tension', narration: sentences[1] || `Industry experts are calling this a game-changing move.`, visual_prompt: `analysts discussing technology, news studio, professional lighting, 8k`, camera: 'parallax', transition: 'light_leak', emotion: 'tension', music_cue: 'suspense', sfx: 'alert', caption_focus: 'GAME CHANGER', duration: 4 },
-        { id: 5, type: 'reveal', purpose: 'the hidden detail', narration: `But here is what nobody is talking about yet.`, visual_prompt: `hidden discovery, dramatic reveal, spotlight, dark environment, cinematic, 8k`, camera: 'shake', transition: 'glitch', emotion: 'tension', music_cue: 'suspense', sfx: 'riser', caption_focus: 'NOBODY', duration: 3.5 },
-        { id: 6, type: 'reaction', purpose: 'community response', narration: `The community is already reacting to this development.`, visual_prompt: `social media reactions, glowing comments, digital interface, neon, 8k`, camera: 'pan', transition: 'cut', emotion: 'excitement', music_cue: 'resolve', sfx: 'reveal', caption_focus: 'REACTING', duration: 3 },
-        { id: 7, type: 'close', purpose: 'call to action', narration: `Follow TECH-MONSTER for daily tech breakthroughs.`, visual_prompt: `TECH-MONSTER brand logo, red and cyan, futuristic, cinematic, 8k`, camera: 'pull_back', transition: 'fade', emotion: 'excitement', music_cue: 'outro', sfx: 'none', caption_focus: 'FOLLOW', duration: 3 },
+        { id: 1, type: 'hook', purpose: 'stop scroll with exclusive reveal', narration: `Why ${(title.split(' ').slice(0, 3).join(' ') || 'they')} buried this secret.`, visual_prompt: `cinematic mystery reveal, dark dramatic lighting, glitch effect, split screen, carbon fiber texture, 8k`, camera: 'push_in', transition: 'glitch', emotion: 'shock', music_cue: 'intro', sfx: 'impact', caption_focus: 'SECRET', duration: 2.5 },
+        { id: 2, type: 'fact', purpose: 'reveal what happened', narration: `${title.split(' ').slice(0, 6).join(' ')}. Nobody expected this move.`, visual_prompt: `dramatic technology reveal, cinematic lighting, mystery atmosphere, neon accents, 8k`, camera: 'slow_zoom', transition: 'flash', emotion: 'awe', music_cue: 'build', sfx: 'whoosh', caption_focus: 'NOBODY', duration: 4 },
+        { id: 3, type: 'explanation', purpose: 'explain the hidden detail', narration: sentences[0] || `This changes everything you thought you knew.`, visual_prompt: `forensic analysis, digital evidence, code on screen, carbon fiber background, neon magenta, 8k`, camera: 'orbit', transition: 'zoom_blur', emotion: 'curiosity', music_cue: 'build', sfx: 'riser', caption_focus: 'EXPOSED', duration: 5 },
+        { id: 4, type: 'reaction', purpose: 'create tension and doubt', narration: sentences[1] || `Most people still don't know about this.`, visual_prompt: `hidden truth revealed, spotlight on evidence, dramatic documentary style, 8k`, camera: 'parallax', transition: 'light_leak', emotion: 'tension', music_cue: 'suspense', sfx: 'alert', caption_focus: 'HIDDEN', duration: 4 },
+        { id: 5, type: 'reveal', purpose: 'the big reveal', narration: `But here is what nobody noticed until now.`, visual_prompt: `explosive reveal, dramatic impact, particles flying, cinematic lighting, 8k`, camera: 'shake', transition: 'glitch', emotion: 'tension', music_cue: 'suspense', sfx: 'reveal', caption_focus: 'REVEALED', duration: 3.5 },
+        { id: 6, type: 'reaction', purpose: 'why it matters', narration: `This changes the entire industry going forward.`, visual_prompt: `industry impact visualization, glowing data streams, futuristic interface, 8k`, camera: 'pan', transition: 'cut', emotion: 'excitement', music_cue: 'resolve', sfx: 'whoosh', caption_focus: 'IMPACT', duration: 3 },
+        { id: 7, type: 'close', purpose: 'call to action', narration: `Follow TECH-MONSTER for exclusive analysis you won't find anywhere else.`, visual_prompt: `TECH-MONSTER brand logo, red and cyan, futuristic, cinematic, 8k`, camera: 'pull_back', transition: 'fade', emotion: 'excitement', music_cue: 'outro', sfx: 'none', caption_focus: 'FOLLOW', duration: 3 },
       ],
-      cta: 'Follow for more tech news.',
+      cta: 'Follow TECH-MONSTER for exclusive analysis you will not find anywhere else.',
     }
   }
 

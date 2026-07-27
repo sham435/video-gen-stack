@@ -48,35 +48,35 @@ export async function generateFooter(outPath = 'assets/footer.png') {
   ctx.fillRect(0, H - 3, W, 3)
 
   // ── Section 1: AVAILABLE ON + badges ──
-  ctx.font = '700 13px Inter, sans-serif'
+  ctx.font = '800 30px Inter, sans-serif'
   ctx.fillStyle = '#1A1A1A'
   ctx.textAlign = 'left'
-  ctx.fillText('AVAILABLE ON', 16, 24)
+  ctx.fillText('AVAILABLE ON', 16, 32)
 
   // Apple badge
   try {
     const applePath = 'assets/logos/apple.png'
     if (fs.existsSync(applePath)) {
       const apple = await loadImage(applePath)
-      ctx.drawImage(apple, 16, 34, 30, 30)
+      ctx.drawImage(apple, 16, 48, 42, 42)
     } else {
-      ctx.font = '26px sans-serif'
-      ctx.fillText('🍎', 16, 58)
+      ctx.font = '36px sans-serif'
+      ctx.fillText('🍎', 16, 80)
     }
-  } catch { ctx.font = '26px sans-serif'; ctx.fillText('🍎', 16, 58) }
+  } catch { ctx.font = '36px sans-serif'; ctx.fillText('🍎', 16, 80) }
 
   // Android badge
-  const androidX = 52
+  const androidX = 66
   try {
     const androidPath = 'assets/logos/android.png'
     if (fs.existsSync(androidPath)) {
       const android = await loadImage(androidPath)
-      ctx.drawImage(android, androidX, 34, 30, 30)
+      ctx.drawImage(android, androidX, 48, 42, 42)
     } else {
-      ctx.font = '26px sans-serif'
-      ctx.fillText('🤖', androidX, 58)
+      ctx.font = '36px sans-serif'
+      ctx.fillText('🤖', androidX, 80)
     }
-  } catch { ctx.font = '26px sans-serif'; ctx.fillText('🤖', androidX, 58) }
+  } catch { ctx.font = '36px sans-serif'; ctx.fillText('🤖', androidX, 80) }
 
   // ── Section 2: Website ──
   ctx.font = '800 20px Inter, sans-serif'
