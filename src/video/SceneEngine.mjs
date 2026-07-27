@@ -303,7 +303,7 @@ export class SceneEngine {
       ctx.textBaseline = 'middle'
       ctx.shadowColor = 'rgba(0,0,0,0.8)'
       ctx.shadowBlur = 10
-      ctx.fillText(scene.caption || 'Follow for daily AI & tech breakthroughs', W / 2, H * 0.50)
+      ctx.fillText(scene.caption || 'Follow for BREAKING DAILY NEWS IN SPORTS, ROBOTICS, CYBERSECURITY, SPACE, PROGRAMMING, QUANTUM, BIOTECH, AI', W / 2, H * 0.50)
       ctx.shadowBlur = 0
       ctx.restore()
     }

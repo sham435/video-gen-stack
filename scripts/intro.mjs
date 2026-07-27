@@ -456,7 +456,7 @@ function drawScene5(ctx, p) {
   ctx.fillStyle = '#FFFFFF'
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
-  ctx.fillText('T', W/2, logoY + logoSize/2 + 6)
+  ctx.fillText('TM', W/2, logoY + logoSize/2 + 6)
 
   ctx.restore()
 
