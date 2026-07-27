@@ -2,11 +2,10 @@ import { writeFileSync, mkdirSync, existsSync } from 'fs'
 
 export function generateSRT(script, duration) {
   const words = script.split(' ')
-  const wordsPerLine = 4
-  const lines = []
   const chunkSize = Math.ceil(words.length / Math.ceil(duration / 2.5))
   const timePerChunk = duration / Math.ceil(words.length / chunkSize)
 
+  const lines = []
   for (let i = 0; i < words.length; i += chunkSize) {
     const chunk = words.slice(i, i + chunkSize)
     const start = i * timePerChunk
@@ -26,7 +25,7 @@ export function generateSRT(script, duration) {
   return lines.join('\n')
 }
 
-export function burnSubtitles(videoPath, subtitlePath, outputPath) {
+export async function burnSubtitles(videoPath, subtitlePath, outputPath) {
   const { execSync } = await import('child_process')
   execSync(
     `ffmpeg -y -i "${videoPath}" -vf "subtitles=${subtitlePath}:force_style='FontName=Inter,FontSize=24,PrimaryColour=&H00FFFFFF,BackColour=&H80000000,Outline=0,Shadow=1,Alignment=2,MarginV=80'" -c:a copy "${outputPath}"`,

@@ -5,6 +5,7 @@ import { execSync } from 'child_process'
 import { getRandomMusic, ensureMusicExists } from './audio.mjs'
 import { generateTTS } from './tts.mjs'
 import { fetchBestImage } from './pexels.mjs'
+import { NewsBroadcastEngine } from '../src/index.mjs'
 
 try{
   if(fs.existsSync('assets/fonts/Anton-Regular.ttf'))
@@ -51,90 +52,58 @@ export async function composeVideo(articles, outDir='output'){
   const article=articles[0]
   if(!article)throw new Error('No articles')
 
-  // Fetch best image: Pexels stock photo > OG image > none
   if(!article.imageUrl){
     await fetchBestImage(article)
   }
 
+  const broadcastEngine = new NewsBroadcastEngine()
+  const broadcastPath = await broadcastEngine.generateFromArticle(article, outDir)
+
   const hooks=splitHooks(article.title)
   console.log('Hooks:', hooks)
-  const frameDir=`${outDir}/frames`; fs.mkdirSync(frameDir,{recursive:true})
-  const frames=hooks.map((h,i)=>drawHugeFrame(h, `${frameDir}/f${String(i).padStart(2,'0')}.png`))
-
-  const script=`${hooks.join('. ')}. ${article.title}.`
-  const voicePath=`${outDir}/voice.mp3`
-  await generateTTS(script, voicePath)
-  let voiceDur=13
-  try{voiceDur=parseFloat(execSync(`ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${voicePath}"`).toString())}catch{}
-  const totalDur=Math.max(15, Math.min(22, Math.ceil(voiceDur+2)))
-
-  const listPath=`${outDir}/list.txt`
-  const perFrame=totalDur/frames.length
-  let listContent=''
-  for(const f of frames){listContent+=`file '${path.resolve(f)}'\nduration ${perFrame}\n`}
-  listContent+=`file '${path.resolve(frames[frames.length-1])}'\n`
-  fs.writeFileSync(listPath, listContent)
-
-  const silentVideo=`${outDir}/silent.mp4`
-  execSync(`ffmpeg -y -f concat -safe 0 -i "${listPath}" -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,format=yuv420p,fps=30" -pix_fmt yuv420p "${silentVideo}"`, {stdio:'inherit'})
-
-  const musicPath=getRandomMusic()||'assets/music/intro_whoosh.mp3'
-  const finalNoIntro=`${outDir}/final_no_intro.mp4`
-
-  if(musicPath && fs.existsSync(musicPath)){
-    execSync(`ffmpeg -y -i "${silentVideo}" -i "${voicePath}" -stream_loop -1 -i "${musicPath}" -filter_complex "[2:a]aformat=channel_layouts=stereo,volume=0.12,apad[bg];[1:a]aformat=channel_layouts=stereo,volume=1.2,apad[voice];[voice][bg]amix=inputs=2:duration=longest:dropout_transition=0:normalize=0[a]" -map 0:v -map "[a]" -c:v libx264 -c:a aac -b:a 192k -t ${totalDur} "${finalNoIntro}"`, {stdio:'inherit'})
-  } else {
-    execSync(`ffmpeg -y -i "${silentVideo}" -i "${voicePath}" -map 0:v -map 1:a -c:v copy -c:a aac -t ${totalDur} "${finalNoIntro}"`, {stdio:'inherit'})
-  }
 
   const introPath=`${outDir}/intro_12s.mp4`
   const finalPath=`${outDir}/final.mp4`
   if(fs.existsSync(introPath)){
-    execSync(`ffmpeg -y -i "${introPath}" -i "${finalNoIntro}" -filter_complex "[0:v]scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=black[v0];[1:v]scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=black[v1];[v0][0:a][v1][1:a]concat=n=2:v=1:a=1[v][a]" -map "[v]" -map "[a]" -c:v libx264 -c:a aac "${finalPath}"`, {stdio:'inherit'})
+    execSync(`ffmpeg -y -i "${introPath}" -i "${broadcastPath}" -filter_complex "[0:v]scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=black[v0];[1:v]scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=black[v1];[v0][0:a][v1][1:a]concat=n=2:v=1:a=1[v][a]" -map "[v]" -map "[a]" -c:v libx264 -c:a aac "${finalPath}"`, {stdio:'inherit'})
   } else {
-    fs.copyFileSync(finalNoIntro, finalPath)
+    fs.copyFileSync(broadcastPath, finalPath)
   }
 
-  console.log('✅ Final with intro:', finalPath)
+  console.log('Final broadcast:', finalPath)
 
-  // 6. Overlay footer taskbar (permanent bottom bar)
   const footerPath = 'assets/footer.png'
   if(fs.existsSync(footerPath)){
     const withFooter = `${outDir}/final_with_footer.mp4`
     execSync(`ffmpeg -y -i "${finalPath}" -i "${footerPath}" -filter_complex "[0:v][1:v]overlay=0:main_h-overlay_h:format=auto,format=yuv420p[v]" -map "[v]" -map 0:a -c:a copy "${withFooter}"`, {stdio:'inherit'})
     fs.copyFileSync(withFooter, finalPath)
-    console.log('✅ Footer taskbar overlaid')
+    console.log('Footer taskbar overlaid')
   }
 
   return {finalPath, hooks}
 }
 
-// CLI / GitHub Actions pipeline — V3 Newsroom Platform
 if(import.meta.url.endsWith('composer.mjs')){
   const runFull = async () => {
     const category = process.env.INPUT_CATEGORY || process.argv[2] || 'technology'
     const outDir = 'output'
     fs.mkdirSync(outDir, {recursive:true})
 
-    // Optional: V3 Newsroom Database (graceful if unavailable)
     let v3 = { pipeline: null, completeRender: null, queuePublishJob: null }
     try {
       const mod = await import('../packages/editorial/pipeline.mjs')
       v3 = { pipeline: mod.runFullPipeline, completeRender: mod.completeRender, queuePublishJob: mod.queuePublishJob }
-      console.log('🗄️  V3 Newsroom database initialized')
+      console.log('V3 Newsroom database initialized')
     } catch(e) {
-      console.log('ℹ️  V3 Newsroom DB unavailable (expected in CI):', e.message.split('\n')[0])
+      console.log('V3 Newsroom DB unavailable:', e.message.split('\n')[0])
     }
 
-    // 0. Ensure background music exists (downloads free lofi if missing)
     ensureMusicExists()
 
-    // 1. Generate 12s intro only once
     console.log('Generating intro...')
     const { generateCommonIntro } = await import('./intro.mjs')
     const introPath = generateCommonIntro(outDir)
 
-    // 2. Fetch news
     let articles
     if (process.env.NEWSAPI_KEY) {
       try {
@@ -143,11 +112,9 @@ if(import.meta.url.endsWith('composer.mjs')){
       } catch(e) { console.log('NewsAPI error:', e.message) }
     }
     if (!articles?.length) {
-      articles = [{title: process.argv[2] || 'Actually See How Apple Is Replacing Siri', url: '', source: 'Tech News'}]
+      articles = [{title: process.argv[2] || 'Apple releases groundbreaking AI model that changes everything', url: '', source: 'Tech News'}]
     }
 
-    // Process each article — compose video (V3 DB is optional)
-    // Only the FIRST article gets uploaded to YouTube (daily upload limit)
     let uploadCount = 0
     for (const rawArticle of articles) {
       const article = {
@@ -160,31 +127,27 @@ if(import.meta.url.endsWith('composer.mjs')){
         publishedAt: rawArticle.publishedAt || new Date().toISOString(),
       }
 
-      console.log(`\n📰 Processing: "${article.title?.slice(0, 80)}..."`)
+      console.log(`\nProcessing: "${article.title?.slice(0, 80)}..."`)
 
-      // Register in V3 pipeline if available (optional)
       let projectId = null, renderJobId = null
       if (v3.pipeline) {
         try {
           const p = await v3.pipeline(article, { mode: 'auto', publish: false })
-          if (p?.skipped) { console.log('⏭️  Skipping (duplicate)'); continue }
+          if (p?.skipped) { console.log('Skipping (duplicate)'); continue }
           projectId = p?.projectId
           renderJobId = p?.renderJobId
-        } catch(e) { console.log('ℹ️  V3 pipeline skipped:', e.message?.slice(0, 80)) }
+        } catch(e) { console.log('V3 pipeline skipped:', e.message?.slice(0, 80)) }
       }
 
-      // Compose the video (core render)
-      console.log('Composing news video...')
+      console.log('Composing broadcast news video...')
       const renderStart = Date.now()
       const { finalPath, hooks } = await composeVideo([article], outDir)
 
-      // Record render in V3 DB if available
       const renderTime = Date.now() - renderStart
       if (v3.completeRender && projectId && renderJobId) {
         try { await v3.completeRender(projectId, renderJobId, finalPath, renderTime) } catch {}
       }
 
-      // Upload ONLY first article to YouTube (daily quota limit)
       if (process.env.YOUTUBE_REFRESH_TOKEN && uploadCount === 0) {
         uploadCount++
         if (v3.queuePublishJob && projectId && renderJobId) {
@@ -195,15 +158,15 @@ if(import.meta.url.endsWith('composer.mjs')){
         try {
           const { uploadShort } = await import('../apps/api/publishers/youtube.js')
           const buffer = fs.readFileSync(finalPath)
-          const title = `${article.title?.slice(0, 90) || 'News Update'}`
-          const desc = `${title}\n\nSource: ${article.source || 'NewsAPI'}\n\n#tech #news #breaking`
+          const title = `${article.title?.slice(0, 90) || 'News Update'} | TECH-MONSTER`
+          const desc = `${title}\n\nSource: ${article.source || 'NewsAPI'}\n\n#tech #news #breaking #ai #TECHMONSTER`
           const result = await uploadShort(`data:video/mp4;base64,${buffer.toString('base64')}`, title, desc, process.env.YOUTUBE_PRIVACY || 'public')
-          console.log(`✅ Published: https://youtu.be/${result?.id}`)
+          console.log(`Published: https://youtu.be/${result?.id}`)
         } catch(e) { console.log('Upload failed:', e.message) }
       }
     }
 
-    console.log('\n✅ V3 Pipeline Complete')
+    console.log('\nTECH-MONSTER Broadcast Pipeline Complete')
   }
-  runFull().catch(e => { console.error('❌', e.stack || e); process.exit(1) })
+  runFull().catch(e => { console.error('Fatal:', e.stack || e); process.exit(1) })
 }

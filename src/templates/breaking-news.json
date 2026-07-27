@@ -1,0 +1,153 @@
+{
+  "version": "1.0",
+  "brand": "TECH-MONSTER",
+  "anchor": "sham435",
+  "resolution": {"width": 1080, "height": 1920},
+  "fps": 30,
+  "duration": 60,
+  "colors": {
+    "primary": "#E10600",
+    "secondary": "#00E5FF",
+    "background": "#050505",
+    "text": "#FFFFFF",
+    "glass": "rgba(255,255,255,0.06)",
+    "glassBorder": "rgba(255,255,255,0.1)"
+  },
+  "scenes": [
+    {
+      "id": "hook",
+      "type": "hook",
+      "start": 0,
+      "end": 3,
+      "text": "BREAKING: Apple just changed AI forever",
+      "headline": "BREAKING",
+      "subheadline": "Apple changes AI forever",
+      "visual": "apple_logo",
+      "effect": "glitch_red",
+      "audio": "impact",
+      "caption": ""
+    },
+    {
+      "id": "who_1",
+      "type": "fact",
+      "start": 3,
+      "end": 6,
+      "text": "APPLE",
+      "caption": "APPLE",
+      "visual": "apple_logo",
+      "effect": "zoom_in",
+      "audio": "whoosh"
+    },
+    {
+      "id": "what_1",
+      "type": "fact",
+      "start": 6,
+      "end": 9,
+      "text": "RELEASED NEW AI MODEL",
+      "caption": "NEW AI MODEL",
+      "visual": "ai_chip",
+      "effect": "slide_up",
+      "audio": "whoosh"
+    },
+    {
+      "id": "where_1",
+      "type": "fact",
+      "start": 9,
+      "end": 12,
+      "text": "AVAILABLE WORLDWIDE",
+      "caption": "GLOBAL RELEASE",
+      "visual": "world_map",
+      "effect": "parallax",
+      "audio": "whoosh"
+    },
+    {
+      "id": "when_1",
+      "type": "fact",
+      "start": 12,
+      "end": 15,
+      "text": "RELEASED TODAY",
+      "caption": "LAUNCHED TODAY",
+      "visual": "calendar",
+      "effect": "slide_up",
+      "audio": "whoosh"
+    },
+    {
+      "id": "explain_1",
+      "type": "explanation",
+      "start": 15,
+      "end": 20,
+      "text": "This new model can process images, video, and text simultaneously. It is ten times faster than the previous version.",
+      "caption": "Processes images, video & text",
+      "visual": "product_screenshot",
+      "effect": "cinematic_zoom",
+      "audio": "narration"
+    },
+    {
+      "id": "explain_2",
+      "type": "explanation",
+      "start": 20,
+      "end": 25,
+      "text": "Developers can now build AI apps that understand the real world. The SDK launches next month.",
+      "caption": "SDK launches next month",
+      "visual": "code_screenshot",
+      "effect": "data_panel",
+      "audio": "narration"
+    },
+    {
+      "id": "explain_3",
+      "type": "explanation",
+      "start": 25,
+      "end": 30,
+      "text": "Industry analysts call this the biggest shift since the iPhone. Competitors are already scrambling.",
+      "caption": "Biggest shift since iPhone",
+      "visual": "chart",
+      "effect": "radar_scan",
+      "audio": "narration"
+    },
+    {
+      "id": "explain_4",
+      "type": "explanation",
+      "start": 30,
+      "end": 35,
+      "text": "The model runs on-device, meaning all processing happens locally. Privacy is fully preserved.",
+      "caption": "Runs on-device, fully private",
+      "visual": "security",
+      "effect": "hologram",
+      "audio": "narration"
+    },
+    {
+      "id": "retention_1",
+      "type": "retention",
+      "start": 35,
+      "end": 42,
+      "text": "But there is one hidden change nobody noticed... The new model can also control every app on your phone.",
+      "caption": "Hidden change: controls all apps",
+      "visual": "phone_ui",
+      "effect": "dramatic_zoom",
+      "audio": "suspense"
+    },
+    {
+      "id": "retention_2",
+      "type": "retention",
+      "start": 42,
+      "end": 48,
+      "text": "This means AI can now book flights, send messages, and edit photos without opening a single app.",
+      "caption": "AI controls everything",
+      "visual": "app_grid",
+      "effect": "light_sweep",
+      "audio": "reveal"
+    },
+    {
+      "id": "close",
+      "type": "brand_close",
+      "start": 48,
+      "end": 55,
+      "text": "",
+      "caption": "Follow for daily AI & tech breakthroughs",
+      "visual": "brand_card",
+      "effect": "brand_reveal",
+      "audio": "outro"
+    }
+  ],
+  "ticker": ["AI", "Robotics", "Cybersecurity", "Space", "Programming", "Quantum", "Biotech"]
+}
