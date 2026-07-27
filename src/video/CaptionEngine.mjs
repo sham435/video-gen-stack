@@ -25,8 +25,8 @@ export function renderCaptions(ctx, text, wordIndex, progress) {
     lines.push(words.slice(i, i + maxWordsPerLine))
   }
 
-  const fontSize = 34
-  const lineH = fontSize * 1.5
+  const fontSize = 52
+  const lineH = fontSize * 1.6
   const totalH = lines.length * lineH
   const startY = H * 0.78 - totalH / 2
   let wordCounter = 0
@@ -35,15 +35,18 @@ export function renderCaptions(ctx, text, wordIndex, progress) {
 
   for (const line of lines) {
     const lineText = line.join(' ')
-    ctx.font = `600 ${fontSize}px Inter, sans-serif`
+    ctx.font = `800 ${fontSize}px Inter, sans-serif`
     const lineW = ctx.measureText(lineText.toUpperCase()).width
-    const startX = W / 2 - lineW / 2 - 20
+    const startX = W / 2 - lineW / 2 - 30
 
-    const bgAlpha = (wordCounter <= wordIndex && wordIndex >= 0) ? 0.7 : 0.4
+    const bgAlpha = (wordCounter <= wordIndex && wordIndex >= 0) ? 0.75 : 0.45
     ctx.fillStyle = `rgba(0, 0, 0, ${bgAlpha})`
     ctx.beginPath()
-    ctx.roundRect(startX, startY + lines.indexOf(line) * lineH - fontSize * 0.3, lineW + 40, fontSize * 1.15, 8)
+    ctx.roundRect(startX - 10, startY + lines.indexOf(line) * lineH - fontSize * 0.35, lineW + 60, fontSize * 1.3, 12)
     ctx.fill()
+
+    ctx.shadowColor = 'rgba(0,0,0,0.5)'
+    ctx.shadowBlur = 10
 
     for (const w of line) {
       const isActive = wordCounter === wordIndex
@@ -53,19 +56,19 @@ export function renderCaptions(ctx, text, wordIndex, progress) {
       ctx.save()
 
       if (isActive) {
-        const scale = 0.85 + lp * 0.15
-        ctx.translate(startX + 20 + line.indexOf(w) * (lineW / line.length) + fontSize * 0.2, startY + lines.indexOf(line) * lineH + fontSize * 0.15)
+        const scale = 0.8 + lp * 0.2
+        ctx.translate(startX + 15 + line.indexOf(w) * (lineW / line.length) + fontSize * 0.25, startY + lines.indexOf(line) * lineH + fontSize * 0.18)
         ctx.scale(scale, scale)
         ctx.shadowColor = '#00E5FF'
-        ctx.shadowBlur = 12 * lp
+        ctx.shadowBlur = 20 * lp
         ctx.fillStyle = '#FFFFFF'
-        ctx.font = `700 ${fontSize}px Inter, sans-serif`
+        ctx.font = `800 ${fontSize}px Inter, sans-serif`
       } else if (isPast) {
-        ctx.fillStyle = 'rgba(255,255,255,0.5)'
-        ctx.font = `500 ${fontSize}px Inter, sans-serif`
+        ctx.fillStyle = 'rgba(255,255,255,0.55)'
+        ctx.font = `600 ${fontSize}px Inter, sans-serif`
       } else {
         ctx.fillStyle = 'rgba(255,255,255,0.2)'
-        ctx.font = `500 ${fontSize}px Inter, sans-serif`
+        ctx.font = `600 ${fontSize}px Inter, sans-serif`
       }
 
       ctx.textAlign = 'center'
@@ -77,5 +80,6 @@ export function renderCaptions(ctx, text, wordIndex, progress) {
     }
   }
 
+  ctx.shadowBlur = 0
   ctx.restore()
 }

@@ -20,7 +20,7 @@ const COLORS = {
   glassBorder: 'rgba(255,255,255,0.1)',
 }
 
-function drawBackground(ctx, theme = 'dark') {
+function drawBackground(ctx, progress = 0, accentColor = '#E10600') {
   const grad = ctx.createRadialGradient(W / 2, H * 0.3, 0, W / 2, H * 0.3, W * 0.8)
   grad.addColorStop(0, '#0D0D0D')
   grad.addColorStop(0.5, '#080808')
@@ -42,6 +42,16 @@ function drawBackground(ctx, theme = 'dark') {
     ctx.lineTo(W, y)
     ctx.stroke()
   }
+
+  const blobX = W / 2 + Math.sin(progress * 1.5) * 200
+  const blobY = H * 0.4 + Math.cos(progress * 1.2) * 150
+  const blobR = 500 + Math.sin(progress * 2) * 100
+  const blobGrad = ctx.createRadialGradient(blobX, blobY, 0, blobX, blobY, blobR)
+  blobGrad.addColorStop(0, `${accentColor}15`)
+  blobGrad.addColorStop(0.5, `${accentColor}08`)
+  blobGrad.addColorStop(1, `${accentColor}00`)
+  ctx.fillStyle = blobGrad
+  ctx.fillRect(0, 0, W, H)
 }
 
 export class SceneEngine {
@@ -67,7 +77,7 @@ export class SceneEngine {
 
     applyMotionEffect(ctx, 'camera_shake', progress)
 
-    drawBackground(ctx)
+    drawBackground(ctx, progress)
 
     switch (scene.type) {
       case 'hook':
@@ -133,7 +143,7 @@ export class SceneEngine {
   async renderFactScene(ctx, scene, progress) {
     const p = Math.min(1, progress * 1.5)
     const words = scene.text.split(' ')
-    const fontSize = scene.text.length > 8 ? 110 : 140
+    const fontSize = scene.text.length > 8 ? 130 : 160
     const lineH = fontSize * 1.1
     const totalH = lineH
     const startY = H / 2 - totalH / 2
@@ -171,7 +181,7 @@ export class SceneEngine {
     const heading = scene.text.split('.')[0]
     ctx.save()
     ctx.globalAlpha = Math.min(1, progress * 2)
-    ctx.font = '700 36px Inter, sans-serif'
+    ctx.font = '800 42px Inter, sans-serif'
     ctx.fillStyle = '#00E5FF'
     ctx.textAlign = 'left'
     ctx.textBaseline = 'top'
@@ -179,7 +189,7 @@ export class SceneEngine {
     ctx.globalAlpha = hp
     ctx.fillText('WHY IT MATTERS', startX, H * 0.15)
     ctx.fillStyle = '#E10600'
-    ctx.fillRect(startX, H * 0.15 + 40, 60, 3)
+    ctx.fillRect(startX, H * 0.15 + 48, 60, 4)
     ctx.restore()
 
     ctx.save()
@@ -187,24 +197,27 @@ export class SceneEngine {
     ctx.globalAlpha = bodyP
 
     const body = scene.text.replace(heading + '. ', '')
-    ctx.font = '500 28px Inter, sans-serif'
-    ctx.fillStyle = 'rgba(255,255,255,0.85)'
+    ctx.font = '600 36px Inter, sans-serif'
+    ctx.fillStyle = 'rgba(255,255,255,0.9)'
     ctx.textAlign = 'left'
     ctx.textBaseline = 'top'
+    ctx.shadowColor = 'rgba(0,0,0,0.8)'
+    ctx.shadowBlur = 8
 
-    const maxChars = 35
+    const maxChars = 25
     const words = body.split(' ')
     let line = ''
-    let lineY = H * 0.18 + 60
+    let lineY = H * 0.18 + 70
     for (const w of words) {
       if ((line + ' ' + w).trim().length <= maxChars) line += (line ? ' ' : '') + w
       else {
         ctx.fillText(line, startX, lineY)
         line = w
-        lineY += 38
+        lineY += 48
       }
     }
     if (line) ctx.fillText(line, startX, lineY)
+    ctx.shadowBlur = 0
     ctx.restore()
   }
 
@@ -243,11 +256,24 @@ export class SceneEngine {
     ctx.translate(W / 2, H * 0.50)
     ctx.scale(scale, scale)
 
-    ctx.font = '700 36px Inter, sans-serif'
+    ctx.font = '800 44px Inter, sans-serif'
     ctx.fillStyle = '#FFFFFF'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
-    ctx.fillText(scene.text, 0, 0)
+    ctx.shadowColor = 'rgba(0,0,0,0.9)'
+    ctx.shadowBlur = 12
+    const maxChars = 30
+    const textLines = []
+    let currentLine = ''
+    for (const w of scene.text.split(' ')) {
+      if ((currentLine + ' ' + w).trim().length <= maxChars) currentLine += (currentLine ? ' ' : '') + w
+      else { textLines.push(currentLine); currentLine = w }
+    }
+    if (currentLine) textLines.push(currentLine)
+    const lineHeight = 54
+    const startY2 = -(textLines.length - 1) * lineHeight / 2
+    textLines.forEach((l, i) => ctx.fillText(l, 0, startY2 + i * lineHeight))
+    ctx.shadowBlur = 0
     ctx.restore()
   }
 
@@ -260,11 +286,14 @@ export class SceneEngine {
     if (ctaP > 0) {
       ctx.save()
       ctx.globalAlpha = ctaP
-      ctx.font = '500 22px Inter, sans-serif'
-      ctx.fillStyle = 'rgba(255,255,255,0.8)'
+      ctx.font = '700 34px Inter, sans-serif'
+      ctx.fillStyle = 'rgba(255,255,255,0.9)'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
+      ctx.shadowColor = 'rgba(0,0,0,0.8)'
+      ctx.shadowBlur = 10
       ctx.fillText(scene.caption || 'Follow for daily AI & tech breakthroughs', W / 2, H * 0.50)
+      ctx.shadowBlur = 0
       ctx.restore()
     }
 
