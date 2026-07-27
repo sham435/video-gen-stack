@@ -122,7 +122,7 @@ export async function generateFooter(outPath = 'assets/footer.png') {
   ctx.font = '800 34px Inter, sans-serif'
   ctx.fillStyle = '#FFFFFF'
   ctx.textAlign = 'center'
-  ctx.fillText('T', logoX + logoSize / 2, logoY + 42)
+  ctx.fillText('TM', logoX + logoSize / 2, logoY + 42)
 
   // Channel name below
   ctx.font = '700 11px Inter, sans-serif'
