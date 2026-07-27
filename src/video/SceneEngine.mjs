@@ -97,7 +97,7 @@ export class SceneEngine {
         break
     }
 
-    if (scene.caption && scene.type !== 'hook') {
+    if (scene.caption) {
       renderCaptions(ctx, scene.caption, wordIndex, progress)
     }
 
@@ -116,13 +116,16 @@ export class SceneEngine {
     drawBreakingBanner(ctx, scene.subheadline || scene.text, progress)
 
     ctx.save()
-    ctx.font = '900 28px Inter, sans-serif'
-    ctx.fillStyle = 'rgba(255,255,255,0.6)'
+    ctx.font = '900 52px Inter, sans-serif'
+    ctx.fillStyle = 'rgba(255,255,255,0.7)'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
+    ctx.shadowColor = 'rgba(0,0,0,0.8)'
+    ctx.shadowBlur = 8
     const tp = Math.min(1, progress * 3)
     ctx.globalAlpha = tp
     ctx.fillText('TECH-MONSTER EXCLUSIVE', W / 2, H * 0.52)
+    ctx.shadowBlur = 0
     ctx.restore()
 
     applyMotionEffect(ctx, 'particle_burst', progress)

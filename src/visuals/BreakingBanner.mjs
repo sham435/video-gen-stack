@@ -39,18 +39,18 @@ export function drawBreakingBanner(ctx, text, progress) {
   ctx.fill()
 
   ctx.globalAlpha = p
-  ctx.font = '900 90px Anton, Impact, sans-serif'
+  ctx.font = '900 120px Anton, Impact, sans-serif'
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
   ctx.fillStyle = COLORS.white
   ctx.shadowColor = COLORS.red
-  ctx.shadowBlur = 30
+  ctx.shadowBlur = 50
   ctx.fillText('BREAKING', W / 2, bannerY + bannerH * 0.38)
 
-  ctx.font = '900 56px Anton, Impact, sans-serif'
+  ctx.font = '900 72px Anton, Impact, sans-serif'
   ctx.fillStyle = COLORS.red
   ctx.shadowColor = COLORS.red
-  ctx.shadowBlur = 20
+  ctx.shadowBlur = 30
   ctx.fillText(text.toUpperCase(), W / 2, bannerY + bannerH * 0.72)
   ctx.shadowBlur = 0
 

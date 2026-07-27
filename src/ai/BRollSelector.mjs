@@ -61,6 +61,39 @@ export class BRollSelector {
     return imageUrl
   }
 
+  buildAIPrompt(scene, article) {
+    const style = 'ultra realistic cinematic news broadcast, dramatic lighting, volumetric fog, 8K, highly detailed, photorealistic, vertical 9:16'
+    const topic = article.title?.slice(0, 80) || 'technology'
+    const sceneContext = scene.text || scene.caption || topic
+    return `${sceneContext}, ${style}`
+  }
+
+  async generateWithFal(prompt, falKey) {
+    if (!falKey) return null
+    try {
+      const resp = await fetch('https://fal.run/fal-ai/fast-sdxl', {
+        method: 'POST',
+        headers: { 'Authorization': `Key ${falKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, image_size: 'portrait_16_9', num_inference_steps: 25, guidance_scale: 7.5 }),
+      })
+      if (!resp.ok) return null
+      const data = await resp.json()
+      const requestId = data.request_id
+      if (!requestId) return null
+      for (let i = 0; i < 30; i++) {
+        const poll = await fetch(`https://fal.run/fal-ai/fast-sdxl/requests/${requestId}`, {
+          headers: { 'Authorization': `Key ${falKey}` },
+        })
+        if (!poll.ok) return null
+        const result = await poll.json()
+        if (result.status === 'completed' && result.images?.[0]?.url) return result.images[0].url
+        if (result.status === 'failed') return null
+        await new Promise(r => setTimeout(r, 2000))
+      }
+    } catch {}
+    return null
+  }
+
   extractVisualKeywords(title) {
     const lower = title.toLowerCase()
     const matched = []

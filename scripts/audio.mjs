@@ -68,9 +68,10 @@ export function ensureMusicExists(){
 
   if(existing.length > 0) return // already has music
 
-  console.log('Downloading free background music...')
+  console.log('Downloading cinematic news background music...')
   const tracks = [
     { name: 'lofi-study.mp3', url: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3' },
+    { name: 'tech-drive.mp3', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
   ]
 
   for(const track of tracks){
