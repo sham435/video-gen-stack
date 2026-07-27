@@ -1,0 +1,25 @@
+{
+  "version": "2.0",
+  "brand": "TECH-MONSTER",
+  "anchor": "sham435",
+  "resolution": {"width": 1080, "height": 1920},
+  "fps": 30,
+  "duration": 35,
+  "visual_style": "science, space exploration, biology research, laboratory environment, clean lighting, blue tones, microscopic detail, 8k, photorealistic, vertical 9:16",
+  "colors": {
+    "primary": "#00E5FF",
+    "secondary": "#E10600",
+    "background": "#050510",
+    "text": "#FFFFFF"
+  },
+  "scenes": [
+    {"id":"hook","type":"hook","start":0,"end":3,"text":"BREAKING: {{title}}","headline":"BREAKING","subheadline":"{{title}}","visual":"science","effect":"glitch_red","audio":"impact"},
+    {"id":"headline","type":"fact","start":3,"end":6,"text":"{{brand}}","caption":"{{brand}}","visual":"lab","effect":"zoom_in","audio":"whoosh"},
+    {"id":"evidence","type":"fact","start":6,"end":10,"text":"{{headline}}","caption":"{{headline}}","visual":"microscope","effect":"slide_up","audio":"whoosh"},
+    {"id":"closeup","type":"explanation","start":10,"end":16,"text":"{{explanation_1}}","caption":"SCIENTIFIC BREAKTHROUGH","visual":"lab","effect":"cinematic_zoom","audio":"narration"},
+    {"id":"detail","type":"explanation","start":16,"end":22,"text":"{{explanation_2}}","caption":"PEER REVIEWED","visual":"data","effect":"data_panel","audio":"narration"},
+    {"id":"reaction","type":"retention","start":22,"end":28,"text":"{{retention}}","caption":"CHANGES EVERYTHING","visual":"globe","effect":"dramatic_zoom","audio":"suspense"},
+    {"id":"close","type":"brand_close","start":28,"end":35,"text":"","caption":"Follow for daily science & tech breakthroughs","visual":"brand_card","effect":"brand_reveal","audio":"outro"}
+  ],
+  "ticker": ["Space", "Biology", "Physics", "Climate", "Medicine", "Quantum"]
+}

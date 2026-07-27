@@ -28,8 +28,27 @@ export class NewsBroadcastEngine {
     this.audioMixer = new AudioMixer()
   }
 
-  async loadTemplate(templatePath) {
-    const raw = fs.readFileSync(templatePath, 'utf-8')
+  getCategoryConfig(category) {
+    const configs = {
+      technology: { template: 'tech-news.json', duration: 30, visual_style: 'technology, cyberpunk, neon blue cyan, dark cinematic, holographic, 8k' },
+      science: { template: 'science.json', duration: 35, visual_style: 'science, space, biology, lab, clean lighting, blue tones, microscopic, 8k' },
+      business: { template: 'tech-news.json', duration: 30, visual_style: 'business, corporate, financial, modern office, professional, blue dark tones, 8k' },
+    }
+    return configs[category] || configs.technology
+  }
+
+  injectVariables(template, vars) {
+    const str = JSON.stringify(template)
+    const injected = str.replace(/\{\{(\w+)\}\}/g, (_, key) => {
+      const val = vars[key]
+      return val !== undefined ? String(val) : `{{${key}}}`
+    })
+    return JSON.parse(injected)
+  }
+
+  async loadTemplate(category) {
+    const cfg = this.getCategoryConfig(category)
+    const raw = fs.readFileSync(`src/templates/${cfg.template}`, 'utf-8')
     return JSON.parse(raw)
   }
 
@@ -41,7 +60,19 @@ export class NewsBroadcastEngine {
     this.audioMixer.ensureMusicExists()
 
     const analysis = this.newsAnalyzer.analyze(article)
-    const template = await this.loadTemplate('src/templates/breaking-news.json')
+    const category = article.category || 'technology'
+    const rawTemplate = await this.loadTemplate(category)
+    const brand = analysis.detectBrand?.(article.title) || 'TECH'
+    const words = (article.title || '').replace(/[^a-zA-Z0-9 ]/g, ' ').split(/\s+/).filter(w => w.length > 0)
+    const template = this.injectVariables(rawTemplate, {
+      title: article.title?.slice(0, 50) || 'Tech News',
+      brand,
+      headline: words.slice(0, 3).join(' ').toUpperCase() || 'BREAKING NEWS',
+      explanation_1: article.description?.split('.')?.[0] || 'Major development in technology.',
+      explanation_2: article.description?.split('.')?.[1] || 'Industry experts are watching closely.',
+      retention: analysis.generateRetentionHook?.(article.title, brand) || 'But there is one hidden detail nobody noticed...',
+    })
+    template.visual_style = this.getCategoryConfig(category).visual_style
 
     const scenes = this.buildScenesFromAnalysis(template, article, analysis)
     this.validateTemplate(scenes)
