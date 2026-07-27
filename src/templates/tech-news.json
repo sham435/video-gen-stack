@@ -19,7 +19,7 @@
     {"id":"closeup","type":"explanation","start":8,"end":13,"text":"{{explanation_1}}","caption":"ON-DEVICE 10X FASTER","visual":"chip","effect":"cinematic_zoom","audio":"narration"},
     {"id":"detail","type":"explanation","start":13,"end":18,"text":"{{explanation_2}}","caption":"SDK LAUNCHES GLOBALLY","visual":"code","effect":"data_panel","audio":"narration"},
     {"id":"reaction","type":"retention","start":18,"end":23,"text":"{{retention}}","caption":"CONTROLS ALL APPS","visual":"phone","effect":"dramatic_zoom","audio":"suspense"},
-    {"id":"close","type":"brand_close","start":23,"end":30,"text":"","caption":"Follow for BREAKING DAILY NEWS IN SPORTS, ROBOTICS, CYBERSECURITY, SPACE, PROGRAMMING, QUANTUM, BIOTECH, AI","visual":"brand_card","effect":"brand_reveal","audio":"outro"}
+    {"id":"close","type":"brand_close","start":23,"end":30,"text":"","caption":"Follow TECH-MONSTER — Breaking News, AI, Science, Sports, Politics & Future Tech","visual":"brand_card","effect":"brand_reveal","audio":"outro"}
   ],
   "ticker": ["AI", "Robotics", "Cybersecurity", "Space", "Programming", "Quantum", "Biotech"]
 }
