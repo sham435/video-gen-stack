@@ -9,6 +9,10 @@ import { NewsAnalyzer } from './ai/NewsAnalyzer.mjs'
 import { BRollSelector } from './ai/BRollSelector.mjs'
 import { QualityChecker } from './quality/QualityChecker.mjs'
 import { AudioMixer } from './audio/AudioMixer.mjs'
+import { StoryPlanner } from './ai/StoryPlanner.mjs'
+import { ScenePlanner } from './ai/ScenePlanner.mjs'
+import { VisualPlanner } from './ai/VisualPlanner.mjs'
+import { AssetManager } from './ai/AssetManager.mjs'
 
 const W = 1080, H = 1920
 const RENDER_FPS = 10
@@ -26,6 +30,10 @@ export class NewsBroadcastEngine {
     this.bRollSelector = new BRollSelector()
     this.qualityChecker = new QualityChecker()
     this.audioMixer = new AudioMixer()
+    this.storyPlanner = new StoryPlanner()
+    this.scenePlanner = new ScenePlanner()
+    this.visualPlanner = new VisualPlanner()
+    this.assetManager = new AssetManager()
   }
 
   getCategoryConfig(category) {
@@ -41,7 +49,8 @@ export class NewsBroadcastEngine {
     const str = JSON.stringify(template)
     const injected = str.replace(/\{\{(\w+)\}\}/g, (_, key) => {
       const val = vars[key]
-      return val !== undefined ? String(val) : `{{${key}}}`
+      if (val === undefined) return `{{${key}}}`
+      return JSON.stringify(String(val)).slice(1, -1)
     })
     return JSON.parse(injected)
   }
@@ -59,29 +68,23 @@ export class NewsBroadcastEngine {
 
     this.audioMixer.ensureMusicExists()
 
-    const analysis = this.newsAnalyzer.analyze(article)
-    const category = article.category || 'technology'
-    const rawTemplate = await this.loadTemplate(category)
-    const brand = analysis.detectBrand?.(article.title) || 'TECH'
-    const words = (article.title || '').replace(/[^a-zA-Z0-9 ]/g, ' ').split(/\s+/).filter(w => w.length > 0)
-    const template = this.injectVariables(rawTemplate, {
-      title: article.title?.slice(0, 50) || 'Tech News',
-      brand,
-      headline: words.slice(0, 3).join(' ').toUpperCase() || 'BREAKING NEWS',
-      explanation_1: article.description?.split('.')?.[0] || 'Major development in technology.',
-      explanation_2: article.description?.split('.')?.[1] || 'Industry experts are watching closely.',
-      retention: analysis.generateRetentionHook?.(article.title, brand) || 'But there is one hidden detail nobody noticed...',
+    console.log('Planning story...')
+    const story = await this.storyPlanner.plan(article)
+    console.log(`Story: ${story.headline} (${story.scenes.length} scenes)`)
+
+    const rawScenes = this.scenePlanner.planScenes(article, story)
+    const scenesWithVisuals = await this.visualPlanner.resolveScenes(rawScenes, article)
+    const scenes = await this.assetManager.resolve(scenesWithVisuals, article, async (scene, art) => {
+      return await this.visualPlanner.resolveSceneVisual(scene, art)
     })
-    template.visual_style = this.getCategoryConfig(category).visual_style
+    const timedScenes = this.scenePlanner.assignTimestamps(scenes)
+    this.validateTemplate(timedScenes)
 
-    const scenes = this.buildScenesFromAnalysis(template, article, analysis)
-    this.validateTemplate(scenes)
+    this.sceneEngine = new SceneEngine(timedScenes)
+    this.timeline = new Timeline(timedScenes, this.renderFps)
 
-    this.sceneEngine = new SceneEngine(template)
-    this.timeline = new Timeline(scenes, this.renderFps)
-
-    const captionScript = this.voiceSync.buildNarrationScript(scenes)
-    const totalDuration = scenes[scenes.length - 1].end
+    const captionScript = this.scenePlanner.buildNarrationScript(timedScenes)
+    const totalDuration = timedScenes[timedScenes.length - 1].end
     const voicePath = `${outDir}/narration.mp3`
     await this.voiceSync.generateTTS(captionScript, voicePath)
 
@@ -111,7 +114,7 @@ export class NewsBroadcastEngine {
     }
     process.stdout.write('\n')
 
-    const videoPath = await this.assembleVideo(framesDir, voicePath, scenes, totalDuration, outDir)
+    const videoPath = await this.assembleVideo(framesDir, voicePath, timedScenes, totalDuration, outDir)
     await this.qualityChecker.analyzeRenderedVideo(videoPath)
 
     return videoPath
