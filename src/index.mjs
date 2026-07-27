@@ -87,106 +87,15 @@ export class NewsBroadcastEngine {
   }
 
   buildScenesFromAnalysis(template, article, analysis) {
-    const scenes = []
     const title = article.title || 'Tech News Update'
-    const desc = article.description || 'Latest technology update'
+    const brand = analysis.detectBrand?.(title) || 'TECH'
 
-    const hook = template.scenes.find(s => s.type === 'hook') || {
-      id: 'hook', type: 'hook', start: 0, end: 3,
-      text: `BREAKING: ${title.slice(0, 40)}`,
-      headline: 'BREAKING', subheadline: title,
-      visual: 'logo', effect: 'glitch_red', audio: 'impact',
-    }
-
-    scenes.push({
-      ...hook,
-      subheadline: title,
-      visual: article.imageUrl || 'logo',
-    })
-
-    const brand = analysis.detectBrand?.(title)
-    const words = title.replace(/[^a-zA-Z0-9 ]/g, ' ').split(/\s+/).filter(w => w.length > 0)
-    const factTexts = [
-      brand || (words[0] || 'TECH').toUpperCase(),
-      (words.slice(1, 3).join(' ') || 'MAJOR ANNOUNCEMENT').toUpperCase(),
-      'GLOBAL RELEASE',
-      analysis.extractTimeframe?.(desc) || 'LATEST UPDATE',
-    ]
-
-    let timeCursor = 3
-    for (let i = 0; i < Math.min(4, factTexts.length); i++) {
-      scenes.push({
-        id: `fact_${i}`,
-        type: 'fact',
-        start: timeCursor,
-        end: timeCursor + 3,
-        text: factTexts[i],
-        caption: factTexts[i],
-        visual: article.imageUrl || 'logo',
-        effect: 'slide_up',
-        audio: 'whoosh',
-      })
-      timeCursor += 3
-    }
-
-    const explanations = analysis.generateExplanation?.(desc, title) || [`${title}. This is a major development in technology.`]
-    const expDuration = Math.max(3, Math.min(5, Math.floor(20 / Math.max(1, explanations.length))))
-
-    for (let i = 0; i < Math.min(4, explanations.length); i++) {
-      scenes.push({
-        id: `explain_${i}`,
-        type: 'explanation',
-        start: timeCursor,
-        end: timeCursor + expDuration,
-        text: explanations[i],
-        caption: explanations[i].slice(0, 40),
-        visual: article.imageUrl || 'logo',
-        effect: i % 2 === 0 ? 'cinematic_zoom' : 'data_panel',
-        audio: 'narration',
-      })
-      timeCursor += expDuration
-    }
-
-    const retentionHook = analysis.generateRetentionHook?.(title, desc) || 'But there is one hidden detail nobody noticed...'
-    const retentionText = `${retentionHook} ${title}.`
-    scenes.push({
-      id: 'retention_1',
-      type: 'retention',
-      start: timeCursor,
-      end: timeCursor + 7,
-      text: retentionHook,
-      caption: 'One hidden detail...',
-      visual: article.imageUrl || 'logo',
-      effect: 'dramatic_zoom',
-      audio: 'suspense',
-    })
-    timeCursor += 7
-
-    const revealText = `This is ${brand || 'a major'} development that changes the technology landscape forever.`
-    scenes.push({
-      id: 'retention_2',
-      type: 'retention',
-      start: timeCursor,
-      end: timeCursor + 5,
-      text: revealText,
-      caption: 'Changes the landscape forever',
-      visual: article.imageUrl || 'logo',
-      effect: 'light_sweep',
-      audio: 'reveal',
-    })
-    timeCursor += 5
-
-    scenes.push({
-      id: 'close',
-      type: 'brand_close',
-      start: timeCursor,
-      end: timeCursor + 8,
-      text: '',
-      caption: 'Follow for daily AI & tech breakthroughs',
-      visual: 'brand_card',
-      effect: 'brand_reveal',
-      audio: 'outro',
-    })
+    const scenes = template.scenes.map((s, i) => ({
+      ...s,
+      subheadline: s.type === 'hook' ? title : s.subheadline,
+      text: s.type === 'hook' ? `BREAKING: ${title.slice(0, 50)}` : s.text,
+      visual: article.imageUrl || s.visual,
+    }))
 
     return scenes
   }

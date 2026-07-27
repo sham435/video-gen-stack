@@ -50,6 +50,18 @@ if (import.meta.url.endsWith('composer.mjs')) {
       } catch (e) { console.log('NewsAPI error:', e.message) }
     }
 
+    if (articles?.length) {
+      const techKeywords = ['ai', 'apple', 'google', 'microsoft', 'meta', 'tesla', 'nvidia', 'openai', 'chatgpt', 'iphone', 'samsung', 'robot', 'chip', 'software', 'update', 'launch', 'cyber', 'quantum', 'space', 'data', 'cloud', 'app', 'digital', 'tech', 'computer', 'phone', 'electric', 'gaming', 'console', 'startup', 'algorithm', 'neural', 'blockchain', 'autonomous', 'drone', 'satellite', 'battery', 'solar', 'ai', 'vr', 'ar', '5g', '6g', 'processor', 'gpu', 'cpu', 'security', 'privacy']
+      articles = articles.filter(a => {
+        const t = (a.title || '').toLowerCase()
+        return techKeywords.some(k => t.includes(k))
+      })
+      if (articles.length === 0) {
+        console.log('No tech articles found, using fallback')
+        articles = null
+      }
+    }
+
     if (!articles?.length) {
       articles = [{
         title: process.argv[2] || 'Apple releases groundbreaking AI model that changes everything',
