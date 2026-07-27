@@ -120,6 +120,25 @@ app.get('/api/ai/code-stats', (req, res) => {
   res.json(stats)
 })
 
+// ========== VIDEO STUDIO API ==========
+app.post('/api/studio/analyze', async (req, res) => {
+  const { VideoAnalyzer } = await import('../src/video-studio/VideoAnalyzer.mjs')
+  const { SceneReviewer } = await import('../src/video-studio/SceneReviewer.mjs')
+  const { ScoreEngine } = await import('../src/video-studio/ScoreEngine.mjs')
+  const { videoPath, scenes, category } = req.body
+
+  const analyzer = new VideoAnalyzer()
+  const reviewer = new SceneReviewer()
+  const scorer = new ScoreEngine()
+
+  const analysis = videoPath ? await analyzer.analyze(videoPath, scenes || [], category) : null
+  const reviewed = reviewer.review(scenes || [])
+  const duration = analysis?.duration || scenes?.reduce((s, s2) => s + (s2.duration || 3), 0) || 30
+  const rated = scorer.rate(scenes || [], analysis?.technical, category, duration)
+
+  res.json({ analysis, scenes: reviewed, rating: rated })
+})
+
 // ========== VIDEO QUALITY API ==========
 app.post('/api/quality/analyze', async (req, res) => {
   const { VideoTestingEngine } = await import('../src/quality/VideoTestingEngine.mjs')
@@ -204,8 +223,10 @@ body{background:#000;color:#F8FAFC;font-family:'Inter',system-ui,sans-serif;min-
         <div class="text-xs text-gray-500">AI Command Center</div>
       </div>
     </div>
-    <div class="flex items-center gap-4 text-sm">
-      <span id="systemStatus" class="flex items-center gap-1 text-green-400"><span class="w-2 h-2 rounded-full bg-green-400 pulse"></span>Live</span>
+    <div class="flex items-center gap-3 text-sm">
+      <a href="/" class="px-3 py-1.5 rounded-lg bg-white/10 text-white hover:bg-white/20">Dashboard</a>
+      <a href="/studio" class="px-3 py-1.5 rounded-lg bg-white/5 text-gray-300 hover:bg-white/20">Video Studio</a>
+      <span id="systemStatus" class="flex items-center gap-1 text-green-400 ml-2"><span class="w-2 h-2 rounded-full bg-green-400 pulse"></span>Live</span>
       <span id="lastUpdate" class="text-gray-500"></span>
     </div>
   </div>
@@ -336,6 +357,132 @@ setInterval(load, 15000)
 </html>`
 
 app.get('/', (req, res) => res.type('html').send(HTML))
+
+// ========== VIDEO STUDIO PAGE ==========
+const STUDIO_HTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Studio — NEWS-MONSTER</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+body{background:#000;color:#F8FAFC;font-family:'Inter',system-ui,sans-serif}
+.card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:16px}
+.pulse{animation:pulse 2s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.score-ring{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900}
+</style>
+</head>
+<body>
+<div class="max-w-7xl mx-auto p-4 md:p-8">
+  <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-lg bg-yellow-500 flex items-center justify-center font-black text-black text-xl">NM</div>
+      <div><h1 class="text-xl font-black">NEWS-MONSTER</h1><div class="text-xs text-gray-500">Video Studio</div></div>
+    </div>
+    <div class="flex gap-3 text-sm">
+      <a href="/" class="px-3 py-1.5 rounded-lg bg-white/5 text-gray-300 hover:bg-white/20">Dashboard</a>
+      <a href="/studio" class="px-3 py-1.5 rounded-lg bg-white/10 text-white">Video Studio</a>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+    <div class="lg:col-span-2 card">
+      <div class="text-sm font-bold mb-3">AI Video Analyzer</div>
+      <div class="space-y-3">
+        <div>
+          <label class="text-xs text-gray-500 block mb-1">Video File Path</label>
+          <input id="videoPath" type="text" value="output/broadcast.mp4" class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm">
+        </div>
+        <div>
+          <label class="text-xs text-gray-500 block mb-1">Category</label>
+          <select id="category" class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm">
+            <option>ai</option><option>gaming</option><option>sports</option><option>politics</option><option>science</option><option>space</option><option>technology</option>
+          </select>
+        </div>
+        <button onclick="analyze()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-bold">Run AI Analysis</button>
+      </div>
+    </div>
+    <div class="card flex flex-col items-center justify-center">
+      <div class="text-xs text-gray-500 mb-1">AI OVERALL SCORE</div>
+      <div id="overallScore" class="score-ring bg-white/5 text-gray-400 text-lg">--</div>
+      <div id="publishStatus" class="mt-2 text-xs"></div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-4">
+    <div class="card text-center"><div class="text-xs text-gray-500">TECHNICAL</div><div id="scoreTech" class="text-2xl font-black mt-1">--</div></div>
+    <div class="card text-center"><div class="text-xs text-gray-500">STORY</div><div id="scoreStory" class="text-2xl font-black mt-1">--</div></div>
+    <div class="card text-center"><div class="text-xs text-gray-500">VISUAL</div><div id="scoreVisual" class="text-2xl font-black mt-1">--</div></div>
+    <div class="card text-center"><div class="text-xs text-gray-500">RETENTION</div><div id="scoreRetention" class="text-2xl font-black mt-1">--</div></div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <div class="card">
+      <div class="text-sm font-bold mb-3">Scene Inspector</div>
+      <div id="sceneList" class="space-y-2 text-sm"></div>
+    </div>
+    <div class="card">
+      <div class="text-sm font-bold mb-3">AI Recommendations</div>
+      <div id="recommendations" class="space-y-2 text-sm"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const api = async (path, body) => { try { const r = await fetch(path, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); return await r.json() } catch { return null } }
+
+async function analyze() {
+  const path = document.getElementById('videoPath').value
+  const category = document.getElementById('category').value
+  const scenes = [
+    {type:'hook',duration:2.5,emotion:'shock',camera:'push_in',transition:'flash',narration:'Breaking news alert.',caption:'BREAKING'},
+    {type:'fact',duration:4,emotion:'awe',camera:'slow_zoom',transition:'cut',narration:'Major announcement today.',caption:'MAJOR'},
+    {type:'explanation',duration:8,emotion:'curiosity',camera:'orbit',transition:'zoom_blur',narration:'This changes how we think about technology.',caption:'CHANGES'},
+    {type:'retention',duration:5,emotion:'tension',camera:'shake',transition:'glitch',narration:'But heres what nobody noticed.',caption:'NOBODY'},
+    {type:'close',duration:3,emotion:'excitement',camera:'pull_back',transition:'fade',narration:'Follow NEWS-MONSTER.',caption:'FOLLOW'},
+  ]
+
+  const result = await api('/api/studio/analyze', { videoPath: path, scenes, category })
+  if (!result) return
+
+  const r = result.rating
+  document.getElementById('overallScore').textContent = r?.scores?.overall || '--'
+  document.getElementById('overallScore').style.background = (r?.scores?.overall || 0) >= 80 ? 'rgba(34,197,94,0.2)' : (r?.scores?.overall || 0) >= 60 ? 'rgba(234,179,8,0.2)' : 'rgba(239,68,68,0.2)'
+  document.getElementById('overallScore').style.color = (r?.scores?.overall || 0) >= 80 ? '#22C55E' : (r?.scores?.overall || 0) >= 60 ? '#EAB308' : '#EF4444'
+  document.getElementById('publishStatus').textContent = r?.publish?.decision || ''
+  document.getElementById('publishStatus').className = 'mt-2 text-xs ' + (r?.publish?.decision === 'publish' ? 'text-green-400' : r?.publish?.decision === 'improve' ? 'text-yellow-400' : 'text-red-400')
+
+  document.getElementById('scoreTech').textContent = r?.scores?.technical ?? '--'
+  document.getElementById('scoreStory').textContent = r?.scores?.story ?? '--'
+  document.getElementById('scoreVisual').textContent = r?.scores?.visual ?? '--'
+  document.getElementById('scoreRetention').textContent = r?.scores?.retention ?? '--'
+
+  if (result.scenes) {
+    document.getElementById('sceneList').innerHTML = result.scenes.map(s =>
+      '<div class="bg-white/5 rounded-lg p-3 flex justify-between items-start">' +
+      '<div><span class="text-xs text-gray-400">Scene '+s.id+'</span><div class="font-medium capitalize">'+s.type+'</div>' +
+      '<div class="text-xs text-gray-500">'+s.duration+'s · '+s.camera+' · '+s.transition+'</div>' +
+      (s.issues.length ? '<div class="mt-1 text-xs text-yellow-400">'+s.issues[0].message+'</div>' : '<div class="mt-1 text-xs text-green-400">No issues</div>') +
+      '</div><span class="text-sm font-bold" style="color:'+(s.score>=80?'#22C55E':s.score>=60?'#EAB308':'#EF4444')+'">'+s.score+'</span></div>'
+    ).join('')
+  }
+
+  if (r?.suggestions) {
+    document.getElementById('recommendations').innerHTML = r.suggestions.map(s =>
+      '<div class="bg-white/5 rounded-lg p-3 flex items-start gap-3">' +
+      '<span class="text-lg '+(s.priority==='critical'?'text-red-400':s.priority==='high'?'text-yellow-400':'text-blue-400')+'">'+
+      (s.priority==='critical'?'🔴':s.priority==='high'?'🟡':'🔵')+'</span>' +
+      '<div><div class="text-xs">'+s.message+'</div><div class="text-xs text-gray-500 mt-1">'+s.action+'</div></div></div>'
+    ).join('')
+  }
+}
+
+analyze()
+</script>
+</body>
+</html>`
+
+app.get('/studio', (req, res) => res.type('html').send(STUDIO_HTML))
 
 const PORT = process.env.DASHBOARD_PORT || 3456
 app.listen(PORT, () => {
