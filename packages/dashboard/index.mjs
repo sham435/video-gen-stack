@@ -120,6 +120,42 @@ app.get('/api/ai/code-stats', (req, res) => {
   res.json(stats)
 })
 
+// ========== SESSION MANAGER API ==========
+const { SessionManager } = await import('../src/video-studio/SessionManager.mjs')
+const sessionMgr = new SessionManager()
+
+app.get('/api/sessions', (req, res) => {
+  sessionMgr.expireWindows()
+  const { status } = req.query
+  res.json(status ? sessionMgr.list(status) : sessionMgr.list())
+})
+
+app.get('/api/sessions/queue', (req, res) => { sessionMgr.expireWindows(); res.json(sessionMgr.queue()) })
+
+app.post('/api/sessions/create', (req, res) => {
+  const { title, category } = req.body
+  const session = sessionMgr.create(title, category)
+  res.json(session)
+})
+
+app.post('/api/sessions/:id/transition', (req, res) => {
+  try {
+    const session = sessionMgr.transition(req.params.id, req.body.status)
+    res.json(session)
+  } catch (e) { res.status(400).json({ error: e.message }) }
+})
+
+app.post('/api/sessions/:id/score', (req, res) => {
+  sessionMgr.updateScore(req.params.id, req.body.scores)
+  res.json({ ok: true })
+})
+
+app.get('/api/sessions/:id', (req, res) => {
+  const session = sessionMgr.get(req.params.id)
+  if (!session) return res.status(404).json({ error: 'Not found' })
+  res.json(session)
+})
+
 // ========== VIDEO STUDIO API ==========
 app.post('/api/studio/analyze', async (req, res) => {
   const { VideoAnalyzer } = await import('../src/video-studio/VideoAnalyzer.mjs')
@@ -385,50 +421,145 @@ body{background:#000;color:#F8FAFC;font-family:'Inter',system-ui,sans-serif}
     </div>
   </div>
 
+  <!-- Queue Overview -->
+  <div class="grid grid-cols-5 gap-3 mb-4 text-center text-xs" id="queueStats"></div>
+
+  <!-- Create Session -->
+  <div class="card mb-4">
+    <div class="text-sm font-bold mb-3">New Video Session</div>
+    <div class="flex gap-3">
+      <input id="newTitle" type="text" placeholder="Video title" class="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm">
+      <select id="newCategory" class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm">
+        <option>ai</option><option>gaming</option><option>sports</option><option>politics</option><option>science</option><option>space</option><option>technology</option>
+      </select>
+      <button onclick="createSession()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-bold">Create</button>
+    </div>
+  </div>
+
+  <!-- Session List + Editor -->
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
     <div class="lg:col-span-2 card">
-      <div class="text-sm font-bold mb-3">AI Video Analyzer</div>
-      <div class="space-y-3">
-        <div>
-          <label class="text-xs text-gray-500 block mb-1">Video File Path</label>
-          <input id="videoPath" type="text" value="output/broadcast.mp4" class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm">
-        </div>
-        <div>
-          <label class="text-xs text-gray-500 block mb-1">Category</label>
-          <select id="category" class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm">
-            <option>ai</option><option>gaming</option><option>sports</option><option>politics</option><option>science</option><option>space</option><option>technology</option>
-          </select>
-        </div>
-        <button onclick="analyze()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-bold">Run AI Analysis</button>
-      </div>
+      <div class="text-sm font-bold mb-3">Video Queue</div>
+      <div id="sessionList" class="space-y-2"></div>
     </div>
-    <div class="card flex flex-col items-center justify-center">
-      <div class="text-xs text-gray-500 mb-1">AI OVERALL SCORE</div>
-      <div id="overallScore" class="score-ring bg-white/5 text-gray-400 text-lg">--</div>
-      <div id="publishStatus" class="mt-2 text-xs"></div>
+    <div class="card">
+      <div class="text-sm font-bold mb-3">Editing Session</div>
+      <div id="activeSession" class="text-sm text-gray-400">Select a video to edit</div>
+      <div id="sessionActions" class="mt-3 space-y-2 hidden"></div>
     </div>
   </div>
 
-  <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-4">
-    <div class="card text-center"><div class="text-xs text-gray-500">TECHNICAL</div><div id="scoreTech" class="text-2xl font-black mt-1">--</div></div>
-    <div class="card text-center"><div class="text-xs text-gray-500">STORY</div><div id="scoreStory" class="text-2xl font-black mt-1">--</div></div>
-    <div class="card text-center"><div class="text-xs text-gray-500">VISUAL</div><div id="scoreVisual" class="text-2xl font-black mt-1">--</div></div>
-    <div class="card text-center"><div class="text-xs text-gray-500">RETENTION</div><div id="scoreRetention" class="text-2xl font-black mt-1">--</div></div>
-  </div>
-
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-    <div class="card">
-      <div class="text-sm font-bold mb-3">Scene Inspector</div>
-      <div id="sceneList" class="space-y-2 text-sm"></div>
+  <!-- Analyzer -->
+  <div class="card mb-4">
+    <div class="text-sm font-bold mb-3">AI Video Analyzer</div>
+    <div class="flex gap-3 mb-3">
+      <input id="videoPath" type="text" value="output/broadcast.mp4" class="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm">
+      <select id="category" class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm">
+        <option>ai</option><option>gaming</option><option>sports</option><option>politics</option><option>science</option><option>space</option><option>technology</option>
+      </select>
+      <button onclick="analyze()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-bold">Analyze</button>
     </div>
-    <div class="card">
-      <div class="text-sm font-bold mb-3">AI Recommendations</div>
-      <div id="recommendations" class="space-y-2 text-sm"></div>
-    </div>
+    <div id="analysisResults"></div>
   </div>
 </div>
 
 <script>
+const api = async (path, opts) => { try{const r=await fetch(path,opts||{});return await r.json()}catch{return null} }
+
+async function loadQueue(){
+  const q = await api('/api/sessions/queue')
+  if(!q) return
+  document.getElementById('queueStats').innerHTML = [
+    ['Generated',q.generated||0,'text-blue-400'],
+    ['Ready',q.readyForReview||0,'text-yellow-400'],
+    ['Editing',q.editing||0,'text-purple-400'],
+    ['Approved',q.approved||0,'text-green-400'],
+    ['Published',q.published||0,'text-gray-400'],
+  ].map(([l,v,c]) => '<div class="card"><div class="font-bold text-lg '+c+'">'+v+'</div><div class="text-gray-500">'+l+'</div></div>').join('')
+}
+
+async function loadSessions(){
+  const sessions = await api('/api/sessions')
+  if(!sessions) return
+  const statusColor = {GENERATED:'text-blue-400',READY_FOR_REVIEW:'text-yellow-400',EDITING_SESSION_ACTIVE:'text-purple-400',APPROVED_FOR_PUBLISH:'text-green-400',PUBLISHED:'text-gray-400'}
+  document.getElementById('sessionList').innerHTML = sessions.length ? sessions.map(s =>
+    '<div class="bg-white/5 rounded-lg p-3 flex items-center justify-between cursor-pointer hover:bg-white/10" onclick="selectSession(\''+s.id+'\')">' +
+    '<div><div class="text-sm font-medium">'+(s.title||'Untitled')+'</div>' +
+    '<div class="text-xs text-gray-500">'+s.id+' · '+s.category+' · '+new Date(s.createdAt).toLocaleString()+'</div></div>' +
+    '<span class="text-sm '+ (statusColor[s.status]||'text-gray-400') +'">'+s.status.replace(/_/g,' ')+'</span></div>'
+  ).join('') : '<div class="text-sm text-gray-500 text-center py-4">No sessions</div>'
+}
+
+async function createSession(){
+  const title = document.getElementById('newTitle').value
+  const category = document.getElementById('newCategory').value
+  const s = await api('/api/sessions/create', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title,category})})
+  if(s) { loadSessions(); loadQueue() }
+}
+
+let selectedSessionId = null
+
+async function selectSession(id){
+  selectedSessionId = id
+  const s = await api('/api/sessions/'+id)
+  if(!s) return
+  document.getElementById('activeSession').innerHTML =
+    '<div class="font-medium">'+(s.title||'Untitled')+'</div>' +
+    '<div class="text-xs text-gray-500 mt-1">'+s.id+' · '+s.status.replace(/_/g,' ')+'</div>' +
+    (s.scores ? '<div class="mt-2 text-xs">Score: '+s.scores.overall+'/100</div>' : '')
+  document.getElementById('sessionActions').className = 'mt-3 space-y-2'
+
+  const transitions = {GENERATED:'READY_FOR_REVIEW',READY_FOR_REVIEW:'EDITING_SESSION_ACTIVE',EDITING_SESSION_ACTIVE:'APPROVED_FOR_PUBLISH',APPROVED_FOR_PUBLISH:'PUBLISHED'}
+  const next = transitions[s.status]
+  if(next){
+    const labels = {READY_FOR_REVIEW:'Submit for Review',EDITING_SESSION_ACTIVE:'Start Editing Session',APPROVED_FOR_PUBLISH:'Approve for Publish',PUBLISHED:'Publish to YouTube'}
+    document.getElementById('sessionActions').innerHTML =
+      '<button onclick="transitionSession()" class="w-full bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg text-sm font-bold">'+ (labels[next]||next) +'</button>'
+  }
+  if(s.publishUrl) document.getElementById('sessionActions').innerHTML += '<div class="text-xs text-green-400 mt-2">Published: '+s.publishUrl+'</div>'
+  if(s.editingWindow && s.status==='EDITING_SESSION_ACTIVE'){
+    const expires = new Date(s.editingWindow.expiresAt).getTime()
+    const remaining = Math.max(0, Math.floor((expires-Date.now())/1000))
+    document.getElementById('sessionActions').innerHTML +=
+      '<div class="text-xs text-yellow-400 mt-2">Editing window: '+Math.floor(remaining/60)+':'+String(remaining%60).padStart(2,'0')+' remaining</div>'
+  }
+}
+
+async function transitionSession(){
+  if(!selectedSessionId) return
+  const s = await api('/api/sessions/'+selectedSessionId)
+  if(!s) return
+  const next = {GENERATED:'READY_FOR_REVIEW',READY_FOR_REVIEW:'EDITING_SESSION_ACTIVE',EDITING_SESSION_ACTIVE:'APPROVED_FOR_PUBLISH',APPROVED_FOR_PUBLISH:'PUBLISHED'}
+  const r = await api('/api/sessions/'+selectedSessionId+'/transition', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:next[s.status]})})
+  if(r) { loadSessions(); loadQueue(); selectSession(selectedSessionId) }
+}
+
+async function analyze(){
+  const path = document.getElementById('videoPath').value
+  const category = document.getElementById('category').value
+  const scenes = [
+    {type:'hook',duration:2.5,emotion:'shock',camera:'push_in',transition:'flash',narration:'Breaking news alert.',caption:'BREAKING'},
+    {type:'fact',duration:4},{type:'explanation',duration:8,emotion:'curiosity'},
+    {type:'retention',duration:5,emotion:'tension'},{type:'close',duration:3},
+  ]
+  const result = await api('/api/studio/analyze', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({videoPath:path,scenes,category})})
+  if(!result) return
+  const r = result.rating
+  document.getElementById('analysisResults').innerHTML =
+    '<div class="grid grid-cols-4 gap-3 mt-2">' +
+    ['Technical','Story','Visual','Retention'].map((k,i)=>{
+      const v=[r?.scores?.technical,r?.scores?.story,r?.scores?.visual,r?.scores?.retention][i]
+      const c = v>=80?'text-green-400':v>=60?'text-yellow-400':'text-red-400'
+      return '<div class="bg-white/5 rounded-lg p-3 text-center"><div class="text-xs text-gray-500">'+k+'</div><div class="text-xl font-black '+c+'">'+(v||'--')+'</div></div>'
+    }).join('')+'</div>' +
+    '<div class="mt-2 text-sm '+(r?.publish?.decision==='publish'?'text-green-400':r?.publish?.decision==='improve'?'text-yellow-400':'text-red-400')+'">'+(r?.publish?.reason||'')+'</div>'
+  if(r?.suggestions?.length) document.getElementById('analysisResults').innerHTML +=
+    '<div class="mt-2 space-y-1">'+r.suggestions.slice(0,3).map(s=>'<div class="text-xs text-gray-400">→ '+s.message+'</div>').join('')+'</div>'
+}
+
+loadQueue(); loadSessions()
+setInterval(()=>{ loadQueue(); loadSessions() }, 10000)
+</script>
 const api = async (path, body) => { try { const r = await fetch(path, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); return await r.json() } catch { return null } }
 
 async function analyze() {
