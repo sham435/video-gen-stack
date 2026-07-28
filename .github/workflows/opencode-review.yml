@@ -1,0 +1,88 @@
+name: OpenCode — Automated Code Review
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to review'
+        required: true
+
+concurrency:
+  group: opencode-review-${{ github.event.number || github.event.inputs.pr_number }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install --include=optional
+
+      - name: Syntax check
+        run: |
+          CHANGED=$(git diff --name-only origin/main...HEAD -- '*.mjs' '*.js' 2>/dev/null || echo "")
+          if [ -n "$CHANGED" ]; then
+            for f in $CHANGED; do
+              [ -f "$f" ] && node --check "$f" 2>&1 && echo "  ✓ $f" || echo "  ✗ $f"
+            done
+          else
+            echo "No JS/MJS files changed"
+          fi
+
+      - name: Template validation
+        run: |
+          for f in src/templates/*.json; do
+            [ -f "$f" ] && node -e "JSON.parse(require('fs').readFileSync('$f')); console.log('  ✓ $f')" || echo "  ✗ $f"
+          done
+
+      - name: OpenCode review
+        id: review
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.number || github.event.inputs.pr_number }}
+        run: |
+          PR=${PR_NUMBER}
+          echo "Reviewing PR #${PR}..."
+          {
+            echo "## OpenCode Review"
+            echo ""
+            echo "**PR**: #${PR}"
+            echo "**Commit**: ${{ github.sha }}"
+            echo ""
+            echo "### Files Changed"
+            git diff --name-only origin/main...HEAD -- || echo "(first commit)"
+            echo ""
+            echo "### Syntax Check"
+            find . -name '*.mjs' -newer HEAD~1 -exec node --check {} \; 2>&1 || echo "No new .mjs files"
+          } > review-report.md
+          cat review-report.md
+
+      - name: Upload review report
+        uses: actions/upload-artifact@v4
+        with:
+          name: opencode-review
+          path: review-report.md
+
+      - name: Post PR comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('review-report.md', 'utf-8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: report
+            });

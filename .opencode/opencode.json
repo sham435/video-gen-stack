@@ -1,0 +1,92 @@
+{
+  "engine": "NEWS-MONSTER-OpenCode-Engine-v1",
+  "description": "Embedded engineering intelligence layer for the NEWS-MONSTER autonomous AI media platform",
+  "version": "1.0.0",
+  "agents": {
+    "engineering": {
+      "path": "agents/engineering.md",
+      "capabilities": ["code-analysis", "refactoring", "architecture-review", "performance-optimization"],
+      "access": ["src/", "packages/", "scripts/"]
+    },
+    "ui-lead": {
+      "path": "agents/ui-lead.md",
+      "capabilities": ["ux-review", "design-system-audit", "accessibility-check", "component-optimization"],
+      "access": ["packages/dashboard/", "apps/dashboard/", "design-system/", "apps/renderer/remotion/"]
+    },
+    "video-director": {
+      "path": "agents/video-director.md",
+      "capabilities": ["video-quality-review", "scene-analysis", "broadcast-audit", "render-optimization"],
+      "access": ["src/video/", "src/visuals/", "src/broadcast/", "src/audio/", "output/"]
+    },
+    "editor-in-chief": {
+      "path": "agents/editor-in-chief.md",
+      "capabilities": ["content-strategy", "prompt-optimization", "brand-consistency", "trend-analysis"],
+      "access": ["src/ai/", "src/templates/", "memory/brand/", "packages/branding/"]
+    },
+    "qa": {
+      "path": "agents/qa.md",
+      "capabilities": ["test-generation", "quality-validation", "regression-testing", "pipeline-validation"],
+      "access": ["tests/", "src/quality/", "packages/common/quality/", "scripts/"]
+    },
+    "devops": {
+      "path": "agents/devops.md",
+      "capabilities": ["infrastructure-review", "ci-cd-optimization", "deployment-validation", "monitoring"],
+      "access": [".github/", "Dockerfile", "railway.json", "apps/api/"]
+    },
+    "github": {
+      "path": "agents/github.md",
+      "capabilities": ["pr-analysis", "commit-review", "ci-monitoring", "changelog-generation"],
+      "access": [".git/", ".github/"]
+    }
+  },
+  "memory": {
+    "architecture": "memory/architecture.md",
+    "coding-standards": "memory/coding-standards.md",
+    "product-roadmap": "memory/product-roadmap.md",
+    "ui-guidelines": "memory/ui-guidelines.md",
+    "content-strategy": "memory/content-strategy.md",
+    "lessons-learned": "memory/lessons-learned.md"
+  },
+  "workflows": {
+    "feature-development": "workflows/feature-development.md",
+    "code-review": "workflows/code-review.md",
+    "release-process": "workflows/release-process.md",
+    "video-production": "workflows/video-production.md"
+  },
+  "policies": {
+    "security": "policies/security.md",
+    "testing": "policies/testing.md",
+    "publishing": "policies/publishing.md",
+    "ai-approval": "policies/ai-approval.md"
+  },
+  "approval_required": [
+    "push-to-main",
+    "merge-pr",
+    "deploy-production",
+    "delete-files",
+    "modify-secrets",
+    "infrastructure-change",
+    "dependency-add",
+    "schema-change"
+  ],
+  "data_sources": [
+    "project-directory",
+    "git-history",
+    "pull-requests",
+    "github-actions",
+    "build-logs",
+    "eslint-output",
+    "test-reports",
+    "performance-metrics",
+    "video-pipeline-metrics",
+    "user-feedback",
+    "dashboard-analytics",
+    "feature-roadmap",
+    "architecture-documentation"
+  ],
+  "integration_points": [
+    { "name": "admin-center", "path": "packages/dashboard/routes/opencode.mjs", "protocol": "rest-api" },
+    { "name": "github-actions", "path": ".github/workflows/opencode-review.yml", "protocol": "workflow" },
+    { "name": "cli", "command": "node .opencode/cli.mjs", "protocol": "cli" }
+  ]
+}

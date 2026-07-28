@@ -747,6 +747,9 @@ loadRelease(); scanDebt(); loadHealth()
 
 app.get('/engineering', (req, res) => res.type('html').send(ENGINE_HTML))
 
+const { default: opencodeRoutes } = await import('./routes/opencode.mjs')
+app.use(opencodeRoutes)
+
 const PORT = process.env.DASHBOARD_PORT || 3456
 app.listen(PORT, () => {
   console.log(`\n╔════════════════════════════════════════════╗`)
@@ -762,5 +765,6 @@ app.listen(PORT, () => {
   console.log(`║  /api/ai/code-stats  - Code analysis     ║`)
   console.log(`║  /api/pipeline/events- Pipeline outputs  ║`)
   console.log(`║  /api/engineering/   - GitHub AI         ║`)
+  console.log(`║  /api/opencode/      - OpenCode Engine   ║`)
   console.log(`╚════════════════════════════════════════════╝\n`)
 })
