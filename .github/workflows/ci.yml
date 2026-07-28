@@ -1,4 +1,4 @@
-name: CI — TECH-MONSTER Validation
+name: CI — NEWS-MONSTER Validation
 on:
   push:
     branches: [develop]

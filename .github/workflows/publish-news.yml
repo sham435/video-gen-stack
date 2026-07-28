@@ -1,4 +1,4 @@
-name: Publish News Video — TECH-MONSTER Broadcast
+name: Publish News Video — NEWS-MONSTER Broadcast
 on:
   schedule:
     - cron: '*/30 * * * *'
