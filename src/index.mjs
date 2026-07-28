@@ -90,7 +90,13 @@ export class NewsBroadcastEngine {
     await this.voiceSync.generateTTS(captionScript, voicePath)
 
     const voiceDur = this.voiceSync.getDuration(voicePath)
-    console.log(`Narration duration: ${voiceDur.toFixed(1)}s, template: ${totalDuration}s`)
+    const voiceSize = fs.existsSync(voicePath) ? fs.statSync(voicePath).size : 0
+    console.log(`Narration: ${voiceDur.toFixed(1)}s, ${(voiceSize / 1024).toFixed(0)}KB (template: ${totalDuration}s)`)
+
+    if (voiceSize < 1024 || voiceDur < 1) {
+      console.warn('Voice file too small or empty, falling back to espeak')
+      await this.voiceSync.fallbackTTS(captionScript, voicePath)
+    }
 
     const totalFrames = Math.ceil(totalDuration * this.renderFps)
     const reportEvery = Math.max(1, Math.floor(totalFrames / 20))

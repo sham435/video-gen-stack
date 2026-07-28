@@ -47,22 +47,64 @@ export class VoiceSync {
       }
     )
 
-    if (!res.ok) throw new Error(`ElevenLabs ${res.status}: ${await res.text()}`)
+    if (!res.ok) {
+      console.warn(`ElevenLabs returned ${res.status}, falling back to edge-tts`)
+      return this.fallbackTTS(text, outPath)
+    }
+
     const buf = Buffer.from(await res.arrayBuffer())
+    if (buf.length < 1024) {
+      console.warn(`ElevenLabs response suspiciously small (${buf.length}B), falling back to edge-tts`)
+      return this.fallbackTTS(text, outPath)
+    }
+
     fs.mkdirSync('output', { recursive: true })
     fs.writeFileSync(outPath, buf)
+
+    if (!this.validateAudio(outPath)) {
+      console.warn('ElevenLabs output is not valid audio, falling back to edge-tts')
+      return this.fallbackTTS(text, outPath)
+    }
+
     console.log('News narration generated:', outPath, `(${(buf.length / 1024).toFixed(0)}KB)`)
     return outPath
   }
 
-  async fallbackTTS(text, outPath) {
+  validateAudio(audioPath) {
     try {
-      execSync(`pip install edge-tts -q && edge-tts --voice en-US-AriaNeural --text "${text.replace(/"/g, '\"').slice(0, 800)}" --write-media ${outPath}`, { stdio: 'inherit' })
-      return outPath
+      const dur = parseFloat(
+        execSync(
+          `ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${audioPath}"`
+        ).toString()
+      )
+      return dur > 0.5
     } catch {
-      execSync(`espeak "${text.slice(0, 500)}" --stdout > ${outPath}`, { stdio: 'inherit' })
-      return outPath
+      return false
     }
+  }
+
+  async fallbackTTS(text, outPath) {
+    const sanitized = text.replace(/"/g, '\\"').slice(0, 1000)
+    try {
+      execSync(
+        `edge-tts --voice en-US-AriaNeural --text "${sanitized}" --write-media "${outPath}"`,
+        { stdio: 'inherit', timeout: 60000 }
+      )
+      if (this.validateAudio(outPath)) {
+        console.log('TTS via edge-tts:', outPath)
+        return outPath
+      }
+      console.warn('edge-tts produced invalid audio, falling back to espeak')
+    } catch (e) {
+      console.warn('edge-tts failed:', e.message)
+    }
+
+    execSync(
+      `espeak "${text.slice(0, 500)}" --stdout > "${outPath}"`,
+      { stdio: 'inherit' }
+    )
+    console.log('TTS via espeak:', outPath)
+    return outPath
   }
 
   getDuration(audioPath) {

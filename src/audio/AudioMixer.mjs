@@ -1,4 +1,4 @@
-import { execSync } from 'child_process'
+import { execSync, execFileSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
@@ -58,19 +58,40 @@ export class AudioMixer {
     const effectiveMusic = musicPath || this.getRandomMusic()
 
     if (effectiveMusic && fs.existsSync(effectiveMusic)) {
-      execSync(
-        `ffmpeg -y -i "${videoPath}" -i "${voicePath}" -stream_loop -1 -i "${effectiveMusic}" ` +
-        `-filter_complex "[2:a]aformat=channel_layouts=stereo,volume=0.10,afade=t=in:st=0:d=1,apad[bg];` +
-        `[1:a]aformat=channel_layouts=stereo,volume=1.3,apad[voice];` +
-        `[voice][bg]amix=inputs=2:duration=longest:dropout_transition=0:normalize=0[a]" ` +
-        `-map 0:v -map "[a]" -c:v libx264 -preset medium -crf 20 -c:a aac -b:a 192k -t ${totalDuration} "${outPath}"`,
-        { stdio: 'inherit' }
-      )
+      const cmd = [
+        'ffmpeg', '-y',
+        '-i', videoPath,
+        '-i', voicePath,
+        '-stream_loop', '-1', '-i', effectiveMusic,
+        '-filter_complex',
+        '[2:a]aformat=channel_layouts=stereo,volume=0.10,afade=t=in:st=0:d=1,apad[bg];' +
+        '[1:a]aformat=channel_layouts=stereo,volume=1.3,apad[voice];' +
+        '[voice][bg]amix=inputs=2:duration=longest:dropout_transition=0:normalize=0[a]',
+        '-map', '0:v', '-map', '[a]',
+        '-c:v', 'libx264', '-preset', 'medium', '-crf', '20',
+        '-c:a', 'aac', '-b:a', '192k',
+        '-t', String(totalDuration),
+        outPath
+      ]
+      try {
+        execFileSync(cmd[0], cmd.slice(1), { stdio: 'inherit' })
+      } catch (e) {
+        console.error('FFmpeg audio mix failed. Checking inputs...')
+        for (const [label, p] of [['video', videoPath], ['voice', voicePath], ['music', effectiveMusic]]) {
+          const exists = fs.existsSync(p)
+          const size = exists ? fs.statSync(p).size : 0
+          console.error(`  ${label}: ${p} (exists=${exists}, size=${size}B)`)
+        }
+        throw e
+      }
     } else {
-      execSync(
-        `ffmpeg -y -i "${videoPath}" -i "${voicePath}" -map 0:v -map 1:a -c:v copy -c:a aac -t ${totalDuration} "${outPath}"`,
-        { stdio: 'inherit' }
-      )
+      const cmd = ['ffmpeg', '-y', '-i', videoPath, '-i', voicePath, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac', '-t', String(totalDuration), outPath]
+      try {
+        execFileSync(cmd[0], cmd.slice(1), { stdio: 'inherit' })
+      } catch (e) {
+        console.error('FFmpeg audio mix (no music) failed')
+        throw e
+      }
     }
     return outPath
   }
@@ -80,10 +101,15 @@ export class AudioMixer {
       fs.copyFileSync(videoPath, outPath)
       return outPath
     }
-    execSync(
-      `ffmpeg -y -i "${videoPath}" -i "${footerPath}" -filter_complex "[0:v][1:v]overlay=0:main_h-overlay_h:format=auto,format=yuv420p[v]" -map "[v]" -map 0:a -c:a copy "${outPath}"`,
-      { stdio: 'inherit' }
-    )
+    const cmd = ['ffmpeg', '-y', '-i', videoPath, '-i', footerPath,
+      '-filter_complex', '[0:v][1:v]overlay=0:main_h-overlay_h:format=auto,format=yuv420p[v]',
+      '-map', '[v]', '-map', '0:a', '-c:a', 'copy', outPath]
+    try {
+      execFileSync(cmd[0], cmd.slice(1), { stdio: 'inherit' })
+    } catch (e) {
+      console.error('FFmpeg footer overlay failed')
+      throw e
+    }
     return outPath
   }
 }
