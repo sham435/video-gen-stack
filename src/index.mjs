@@ -84,7 +84,8 @@ export class NewsBroadcastEngine {
     this.timeline = new Timeline(timedScenes, this.renderFps)
 
     const captionScript = this.scenePlanner.buildNarrationScript(timedScenes)
-    const totalDuration = timedScenes[timedScenes.length - 1].end
+    const rawDuration = timedScenes.length > 0 ? timedScenes[timedScenes.length - 1].end : 30
+    const totalDuration = isNaN(rawDuration) || rawDuration < 15 ? 30 : rawDuration
     const voicePath = `${outDir}/narration.mp3`
     await this.voiceSync.generateTTS(captionScript, voicePath)
 
@@ -162,7 +163,7 @@ export class NewsBroadcastEngine {
       .sort()
       .map(f => path.resolve(`${framesDir}/${f}`))
 
-    const perFrame = totalDuration / frameFiles.length
+    const perFrame = isNaN(totalDuration) || totalDuration <= 0 ? 0.1 : totalDuration / frameFiles.length
     for (const f of frameFiles) {
       listContent += `file '${f}'\nduration ${perFrame.toFixed(4)}\n`
     }
@@ -172,10 +173,23 @@ export class NewsBroadcastEngine {
     fs.writeFileSync(listPath, listContent)
 
     const silentVideo = `${outDir}/silent_broadcast.mp4`
-    execSync(
-      `ffmpeg -y -f concat -safe 0 -i "${listPath}" -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,format=yuv420p,fps=${this.outputFps}" -pix_fmt yuv420p "${silentVideo}"`,
-      { stdio: 'inherit' }
-    )
+    console.log('FFmpeg concat frames to video...')
+    try {
+      execSync(
+        `ffmpeg -y -f concat -safe 0 -i "${listPath}" -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,format=yuv420p,fps=${this.outputFps}" -pix_fmt yuv420p "${silentVideo}" 2>&1`,
+        { stdio: 'inherit', timeout: 120000 }
+      )
+    } catch (e) {
+      console.error('FFmpeg concat failed. Checking frames...')
+      const frameCount = fs.readdirSync(framesDir).filter(f => f.endsWith('.png')).length
+      console.error(`Frames found: ${frameCount} in ${framesDir}`)
+      console.error(`List file exists: ${fs.existsSync(listPath)}, size: ${fs.existsSync(listPath) ? fs.statSync(listPath).size : 0}`)
+      if (fs.existsSync(listPath)) {
+        const lines = fs.readFileSync(listPath, 'utf-8').split('\n').filter(Boolean)
+        console.error(`List file lines: ${lines.length}, first: ${lines[0]?.slice(0, 80)}`)
+      }
+      throw e
+    }
 
     const musicPath = this.audioMixer.getRandomMusic()
 

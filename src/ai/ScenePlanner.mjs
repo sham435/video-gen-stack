@@ -1,23 +1,17 @@
-import { ScriptPlanner } from './ScriptPlanner.mjs'
-
 export class ScenePlanner {
-  constructor() {
-    this.scriptPlanner = new ScriptPlanner()
-  }
-
   planScenes(article, story) {
-    const analysis = this.scriptPlanner.plan(article.title, article.description, article.source)
-    const scenes = story.scenes.map((s, i) => this.buildScene(s, i, article, analysis))
+    const scenes = story.scenes.map((s, i) => this.buildScene(s, i, article))
     return scenes
   }
 
-  buildScene(sceneDef, index, article, analysis) {
-    const start = index === 0 ? 0 : 0
+  buildScene(sceneDef, index, article) {
     const scene = {
-      id: sceneDef.id,
-      type: sceneDef.type,
+      id: sceneDef.id || index + 1,
+      type: sceneDef.type || 'fact',
       purpose: sceneDef.purpose || '',
-      start,
+      start: 0,
+      end: 0,
+      duration: Math.max(2, Math.min(8, sceneDef.duration || 3)),
       end: 0,
       duration: sceneDef.duration || 3,
       narration: this.cleanNarration(sceneDef.narration),
@@ -34,16 +28,10 @@ export class ScenePlanner {
       sfx: sceneDef.sfx || 'none',
       visual: {
         type: this.inferVisualType(sceneDef.type),
-        prompt: this.buildVisualPrompt(sceneDef.visual_prompt, article, analysis),
+        prompt: sceneDef.visual_prompt || '',
         motion: sceneDef.camera || 'push_in',
       },
       colors: this.emotionColors(sceneDef.emotion),
-      article: article,
-    }
-
-    if (sceneDef.type === 'hook') {
-      scene.start = 0
-      scene.end = scene.duration
     }
     return scene
   }
