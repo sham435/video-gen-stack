@@ -26,11 +26,16 @@ export class AssetManager {
         continue
       }
       const enriched = await resolveFn(scene, article)
-      if (enriched.visual?.primary?.path) {
-        const localPath = await this.downloadToCache(key, enriched.visual.primary.path)
-        enriched.visual.primary.path = localPath
+      const mergedVisual = {
+        ...scene.visual,
+        assets: enriched.assets || scene.visual?.assets || [],
+        primary: enriched.primary || scene.visual?.primary || { type: 'gradient', path: null, source: 'fallback' },
       }
-      resolved.push(enriched)
+      if (mergedVisual.primary?.path && !mergedVisual.primary.path.startsWith('file://') && !mergedVisual.primary.path.startsWith('/')) {
+        const localPath = await this.downloadToCache(key, mergedVisual.primary.path)
+        mergedVisual.primary.path = localPath
+      }
+      resolved.push({ ...scene, visual: mergedVisual })
     }
     return resolved
   }

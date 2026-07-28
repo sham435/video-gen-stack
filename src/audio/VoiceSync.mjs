@@ -100,7 +100,7 @@ export class VoiceSync {
     }
 
     execSync(
-      `espeak "${text.slice(0, 500)}" --stdout > "${outPath}"`,
+      `espeak "${text.slice(0, 500)}" -w "${outPath}"`,
       { stdio: 'inherit' }
     )
     console.log('TTS via espeak:', outPath)

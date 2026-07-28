@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import { fileURLToPath } from 'url'
 import { execSync } from 'child_process'
 import { SceneEngine } from './video/SceneEngine.mjs'
 import { Timeline } from './video/Timeline.mjs'
@@ -85,7 +86,7 @@ export class NewsBroadcastEngine {
 
     const captionScript = this.scenePlanner.buildNarrationScript(timedScenes)
     const rawDuration = timedScenes.length > 0 ? timedScenes[timedScenes.length - 1].end : 30
-    const totalDuration = isNaN(rawDuration) || rawDuration < 15 ? 30 : rawDuration
+    const totalDuration = (!rawDuration || isNaN(rawDuration) || Number(rawDuration) < 15) ? 30 : Number(rawDuration)
     const voicePath = `${outDir}/narration.mp3`
     await this.voiceSync.generateTTS(captionScript, voicePath)
 
@@ -222,7 +223,7 @@ export class NewsBroadcastEngine {
   }
 }
 
-if (process.argv[1] && import.meta.url.endsWith('index.mjs')) {
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const engine = new NewsBroadcastEngine()
 
   const run = async () => {

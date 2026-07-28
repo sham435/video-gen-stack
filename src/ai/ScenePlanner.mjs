@@ -15,6 +15,8 @@ export class ScenePlanner {
       end: 0,
       duration: sceneDef.duration || 3,
       narration: this.cleanNarration(sceneDef.narration),
+      text: this.cleanNarration(sceneDef.narration) || (article.title || '').slice(0, 60),
+      subheadline: this.cleanNarration(sceneDef.narration) || (article.title || '').slice(0, 60),
       caption: sceneDef.caption_focus || (sceneDef.narration || '').split(' ').slice(0, 3).join(' ').toUpperCase(),
       captionFocus: (sceneDef.caption_focus || '').toUpperCase(),
       camera: {
