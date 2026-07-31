@@ -1,9 +1,12 @@
+import { existsSync } from 'node:fs'
+
 const CLIENT_ID = process.env.YOUTUBE_CLIENT_ID
 const CLIENT_SECRET = process.env.YOUTUBE_CLIENT_SECRET
 const REFRESH_TOKEN = process.env.YOUTUBE_REFRESH_TOKEN
+const REDIRECT_URI = process.env.YOUTUBE_REDIRECT_URI || 'https://video-gen-stack-production.up.railway.app/api/auth/youtube/callback'
 const BASE = 'https://www.googleapis.com'
 
-export const authUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${CLIENT_ID}&redirect_uri=http://localhost:4567/auth/youtube/callback&scope=https://www.googleapis.com/auth/youtube.upload&response_type=code&access_type=offline`
+export const authUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=https://www.googleapis.com/auth/youtube.upload&response_type=code&access_type=offline`
 
 export async function exchangeCode(code) {
   const res = await fetch(`${BASE}/oauth2/v4/token`, {
@@ -14,7 +17,7 @@ export async function exchangeCode(code) {
       client_secret: CLIENT_SECRET,
       code,
       grant_type: 'authorization_code',
-      redirect_uri: 'http://localhost:4567/auth/youtube/callback',
+      redirect_uri: REDIRECT_URI,
     }),
   })
   return res.json()
@@ -86,5 +89,50 @@ export async function uploadShort(videoUrl, title, description, privacy = 'publi
   }
 
   console.log(`✅ YouTube upload complete: https://youtu.be/${data.id}`)
+
+  // Upload thumbnail if provided
+  if (data.id) {
+    try {
+      await setThumbnail(token, data.id)
+    } catch (e) {
+      console.warn(`⚠️  Thumbnail upload skipped: ${e.message}`)
+    }
+  }
+
   return data
+}
+
+export async function setThumbnail(token, videoId, coverPath) {
+  if (!coverPath) coverPath = 'output/cover.png'
+  if (!existsSync(coverPath)) return
+
+  const thumbResp = await fetch(coverPath)
+  if (!thumbResp.ok) throw new Error(`Failed to read cover: ${thumbResp.status}`)
+  const thumbBuffer = await thumbResp.arrayBuffer()
+
+  const boundary = 'thumb_boundary'
+  const body = new Uint8Array([
+    ...new TextEncoder().encode(`--${boundary}\r\nContent-Type: image/png\r\n\r\n`),
+    ...new Uint8Array(thumbBuffer),
+    ...new TextEncoder().encode(`\r\n--${boundary}--\r\n`),
+  ])
+
+  const res = await fetch(
+    `https://www.googleapis.com/upload/youtube/v3/thumbnails/set?videoId=${videoId}`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': `multipart/related; boundary=${boundary}`,
+      },
+      body,
+    }
+  )
+
+  const data = await res.json()
+  if (data.error) {
+    console.warn(`⚠️  YouTube thumbnail upload failed: ${data.error.message}`)
+  } else {
+    console.log(`✅ YouTube thumbnail set: ${data.items?.length || 0} items`)
+  }
 }

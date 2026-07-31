@@ -4,19 +4,23 @@ import fs from 'fs'
 import path from 'path'
 
 const router = Router()
-const bridge = new OpenCodeBridge()
+let _bridge = null
+function getBridge() {
+  if (!_bridge) _bridge = new OpenCodeBridge()
+  return _bridge
+}
 
 router.get('/api/opencode/status', (req, res) => {
-  res.json(bridge.getSystemContext())
+  res.json(getBridge().getSystemContext())
 })
 
 router.get('/api/opencode/agents', (req, res) => {
-  res.json(bridge.getAgentNames())
+  res.json(getBridge().getAgentNames())
 })
 
 router.get('/api/opencode/agent/:name', (req, res) => {
   try {
-    const agent = bridge.loadAgent(req.params.name)
+    const agent = getBridge().loadAgent(req.params.name)
     res.json({ name: agent.name, capabilities: agent.capabilities, content: agent.content.slice(0, 2000) })
   } catch (e) {
     res.status(404).json({ error: e.message })
@@ -25,7 +29,7 @@ router.get('/api/opencode/agent/:name', (req, res) => {
 
 router.get('/api/opencode/memory/:name', (req, res) => {
   try {
-    const content = bridge.loadMemory(req.params.name)
+    const content = getBridge().loadMemory(req.params.name)
     res.json({ name: req.params.name, content: content.slice(0, 5000) })
   } catch (e) {
     res.status(404).json({ error: e.message })
@@ -34,7 +38,7 @@ router.get('/api/opencode/memory/:name', (req, res) => {
 
 router.get('/api/opencode/workflow/:name', (req, res) => {
   try {
-    const content = bridge.loadWorkflow(req.params.name)
+    const content = getBridge().loadWorkflow(req.params.name)
     res.json({ name: req.params.name, content: content.slice(0, 5000) })
   } catch (e) {
     res.status(404).json({ error: e.message })
@@ -42,40 +46,40 @@ router.get('/api/opencode/workflow/:name', (req, res) => {
 })
 
 router.get('/api/opencode/policies', (req, res) => {
-  res.json(bridge.getPolicies())
+  res.json(getBridge().getPolicies())
 })
 
 router.get('/api/opencode/diagnostics', async (req, res) => {
-  const results = await bridge.runDiagnostics()
+  const results = await getBridge().runDiagnostics()
   res.json(results)
 })
 
 router.post('/api/opencode/session', (req, res) => {
-  const session = bridge.createSession(req.body?.context || {})
+  const session = getBridge().createSession(req.body?.context || {})
   res.json(session)
 })
 
 router.get('/api/opencode/session/:id', (req, res) => {
-  const session = bridge.getSession(req.params.id)
+  const session = getBridge().getSession(req.params.id)
   if (!session) return res.status(404).json({ error: 'Session not found' })
   res.json(session)
 })
 
 router.get('/api/opencode/approval-required', (req, res) => {
-  res.json(bridge.getApprovalRequiredActions())
+  res.json(getBridge().getApprovalRequiredActions())
 })
 
 router.post('/api/opencode/check-approval', (req, res) => {
   const { action } = req.body || {}
   if (!action) return res.status(400).json({ error: 'action required' })
-  res.json({ action, level: bridge.getApprovalLevel(action) })
+  res.json({ action, level: getBridge().getApprovalLevel(action) })
 })
 
 router.get('/api/opencode/memory/architecture', (req, res) => {
   const archPath = path.resolve('memory/brand')
   const files = fs.existsSync(archPath) ? fs.readdirSync(archPath).map(f => ({ name: f, path: path.join(archPath, f) })) : []
   res.json({
-    opencode: bridge.getSystemContext(),
+    opencode: getBridge().getSystemContext(),
     brand: files,
   })
 })

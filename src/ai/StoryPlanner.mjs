@@ -1,23 +1,19 @@
-const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions'
-
 export class StoryPlanner {
-  constructor(apiKey) {
-    this.apiKey = apiKey || process.env.OPENROUTER_API_KEY
+  constructor(provider) {
+    this.provider = provider
   }
 
   async plan(article) {
-    const prompt = this.buildPrompt(article)
-    const story = await this.queryLLM(prompt)
+    const messages = this.buildPrompt(article)
+    const story = await this.queryLLM(messages, article)
     return this.validate(story, article)
   }
 
   buildPrompt(article) {
-    return {
-      model: process.env.LLM_MODEL || 'openrouter/auto',
-      messages: [
-        {
-          role: 'system',
-          content: `You are a viral short-form video scriptwriter for TECH-MONSTER, a premium tech news channel.
+    return [
+      {
+        role: 'system',
+        content: `You are a viral short-form video scriptwriter for NEWS-MONSTER, a premium tech news channel.
 
 Given a news article, produce a structured video plan as JSON.
 
@@ -72,34 +68,16 @@ Source: ${article.source || 'News'}
 Description: ${(article.description || article.title || '').slice(0, 500)}
 Category: ${article.category || 'technology'}`
         }
-      ],
-      temperature: 0.7,
-      response_format: { type: 'json_object' }
-    }
+      ]
   }
 
-  async queryLLM(payload) {
-    if (this.apiKey) {
+  async queryLLM(messages, article) {
+    if (this.provider) {
       try {
-        const res = await fetch(OPENROUTER_URL, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${this.apiKey}`,
-            'Content-Type': 'application/json',
-            'HTTP-Referer': 'https://github.com/sham435/video-gen-stack',
-          },
-          body: JSON.stringify({ ...payload, stream: false }),
-          signal: AbortSignal.timeout(30000),
-        })
-        if (res.ok) {
-          const data = await res.json()
-          const content = data.choices?.[0]?.message?.content
-          if (content) return JSON.parse(content)
-        }
-      } catch (e) { console.log('OpenRouter LLM error:', e.message) }
+        return await this.provider.generate(messages, { json: true })
+      } catch (e) { console.log('StoryPlanner provider error:', e.message) }
     }
-
-    return this.fallbackPlan(payload)
+    return this.fallbackPlan(article)
   }
 
   fallbackPlan(article) {
@@ -116,9 +94,9 @@ Category: ${article.category || 'technology'}`
         { id: 4, type: 'reaction', purpose: 'create tension and doubt', narration: sentences[1] || `Most people still don't know about this.`, visual_prompt: `hidden truth revealed, spotlight on evidence, dramatic documentary style, 8k`, camera: 'parallax', transition: 'light_leak', emotion: 'tension', music_cue: 'suspense', sfx: 'alert', caption_focus: 'HIDDEN', duration: 4 },
         { id: 5, type: 'reveal', purpose: 'the big reveal', narration: `But here is what nobody noticed until now.`, visual_prompt: `explosive reveal, dramatic impact, particles flying, cinematic lighting, 8k`, camera: 'shake', transition: 'glitch', emotion: 'tension', music_cue: 'suspense', sfx: 'reveal', caption_focus: 'REVEALED', duration: 3.5 },
         { id: 6, type: 'reaction', purpose: 'why it matters', narration: `This changes the entire industry going forward.`, visual_prompt: `industry impact visualization, glowing data streams, futuristic interface, 8k`, camera: 'pan', transition: 'cut', emotion: 'excitement', music_cue: 'resolve', sfx: 'whoosh', caption_focus: 'IMPACT', duration: 3 },
-        { id: 7, type: 'close', purpose: 'call to action', narration: `Follow TECH-MONSTER for exclusive analysis you won't find anywhere else.`, visual_prompt: `TECH-MONSTER brand logo, red and cyan, futuristic, cinematic, 8k`, camera: 'pull_back', transition: 'fade', emotion: 'excitement', music_cue: 'outro', sfx: 'none', caption_focus: 'FOLLOW', duration: 3 },
+        { id: 7, type: 'close', purpose: 'call to action', narration: `Follow NEWS-MONSTER for exclusive analysis you won't find anywhere else.`, visual_prompt: `NEWS-MONSTER brand logo, red and cyan, futuristic, cinematic, 8k`, camera: 'pull_back', transition: 'fade', emotion: 'excitement', music_cue: 'outro', sfx: 'none', caption_focus: 'FOLLOW', duration: 3 },
       ],
-      cta: 'Follow TECH-MONSTER for exclusive analysis you will not find anywhere else.',
+      cta: 'Follow NEWS-MONSTER for exclusive analysis you will not find anywhere else.',
     }
   }
 

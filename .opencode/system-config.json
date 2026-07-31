@@ -1,0 +1,173 @@
+{
+  "engine": "NEWS-MONSTER-OpenCode-Engine-v1",
+  "description": "Embedded engineering intelligence layer for the NEWS-MONSTER autonomous AI media platform",
+  "version": "1.0.0",
+  "agents": {
+    "engineering": {
+      "path": "agents/engineering.md",
+      "capabilities": ["code-analysis", "refactoring", "architecture-review", "performance-optimization"],
+      "access": ["src/", "packages/", "scripts/"]
+    },
+    "ui-lead": {
+      "path": "agents/ui-lead.md",
+      "capabilities": ["ux-review", "design-system-audit", "accessibility-check", "component-optimization"],
+      "access": ["packages/dashboard/", "apps/dashboard/", "design-system/", "apps/renderer/remotion/"]
+    },
+    "video-director": {
+      "path": "agents/video-director.md",
+      "capabilities": ["video-quality-review", "scene-analysis", "broadcast-audit", "render-optimization"],
+      "access": ["src/video/", "src/visuals/", "src/broadcast/", "src/audio/", "output/"]
+    },
+    "editor-in-chief": {
+      "path": "agents/editor-in-chief.md",
+      "capabilities": ["content-strategy", "prompt-optimization", "brand-consistency", "trend-analysis"],
+      "access": ["src/ai/", "src/templates/", "memory/brand/", "packages/branding/"]
+    },
+    "qa": {
+      "path": "agents/qa.md",
+      "capabilities": ["test-generation", "quality-validation", "regression-testing", "pipeline-validation"],
+      "access": ["tests/", "src/quality/", "packages/common/quality/", "scripts/"]
+    },
+    "devops": {
+      "path": "agents/devops.md",
+      "capabilities": ["infrastructure-review", "ci-cd-optimization", "deployment-validation", "monitoring"],
+      "access": [".github/", "Dockerfile", "railway.json", "apps/api/"]
+    },
+    "github": {
+      "path": "agents/github.md",
+      "capabilities": ["pr-analysis", "commit-review", "ci-monitoring", "changelog-generation"],
+      "access": [".git/", ".github/"]
+    }
+  },
+  "memory": {
+    "architecture": "memory/architecture.md",
+    "coding-standards": "memory/coding-standards.md",
+    "product-roadmap": "memory/product-roadmap.md",
+    "ui-guidelines": "memory/ui-guidelines.md",
+    "content-strategy": "memory/content-strategy.md",
+    "lessons-learned": "memory/lessons-learned.md"
+  },
+  "workflows": {
+    "feature-development": "workflows/feature-development.md",
+    "code-review": "workflows/code-review.md",
+    "release-process": "workflows/release-process.md",
+    "video-production": "workflows/video-production.md",
+    "opencode-self-mod": "workflows/opencode-self-mod.md"
+  },
+  "policies": {
+    "security": "policies/security.md",
+    "testing": "policies/testing.md",
+    "publishing": "policies/publishing.md",
+    "ai-approval": "policies/ai-approval.md"
+  },
+  "approval_required": [
+    "push-to-main",
+    "merge-pr",
+    "deploy-production",
+    "delete-files",
+    "modify-secrets",
+    "infrastructure-change",
+    "dependency-add",
+    "schema-change"
+  ],
+  "data_sources": [
+    "project-directory",
+    "git-history",
+    "pull-requests",
+    "github-actions",
+    "build-logs",
+    "eslint-output",
+    "test-reports",
+    "performance-metrics",
+    "video-pipeline-metrics",
+    "user-feedback",
+    "dashboard-analytics",
+    "feature-roadmap",
+    "architecture-documentation"
+  ],
+  "integration_points": [
+    { "name": "admin-center", "path": "packages/dashboard/routes/opencode.mjs", "protocol": "rest-api" },
+    { "name": "github-actions", "path": ".github/workflows/opencode-review.yml", "protocol": "workflow" },
+    { "name": "cli", "command": "node .opencode/cli.mjs", "protocol": "cli" }
+  ],
+  "validation_schemas": {
+    "resource_kinds": {
+      "agent": {
+        "registry_key": "agents",
+        "path_extractor": "entry.path",
+        "loader": "bridge.loadAgent",
+        "checks": ["registered", "exists", "markdown", "bridge.loadAgent", "dashboard.route"]
+      },
+      "memory": {
+        "registry_key": "memory",
+        "path_extractor": "entry as string",
+        "loader": "bridge.loadMemory",
+        "checks": ["registered", "exists", "markdown", "bridge.loadMemory", "dashboard.route"]
+      },
+      "workflow": {
+        "registry_key": "workflows",
+        "path_extractor": "entry as string",
+        "loader": "bridge.loadWorkflow",
+        "checks": ["registered", "exists", "markdown", "bridge.loadWorkflow", "dashboard.route"]
+      },
+      "policy": {
+        "registry_key": "policies",
+        "path_extractor": "entry as string",
+        "loader": "bridge.getPolicies()[name]",
+        "checks": ["registered", "exists", "markdown", "bridge.loadPolicy", "dashboard.route"]
+      }
+    },
+    "public_api": {
+      "OpenCodeBridge": [
+        "constructor",
+        "loadAgent",
+        "loadMemory",
+        "loadWorkflow",
+        "getPolicies",
+        "getApprovalLevel",
+        "getAgentNames",
+        "getSystemContext",
+        "loadAllAgents",
+        "loadAllMemory",
+        "loadAllWorkflows",
+        "loadAllPolicies",
+        "validateIntegrity",
+        "snapshotForRollback",
+        "isConfigSameAs",
+        "runDiagnostics"
+      ]
+    },
+    "performance_budgets_ms": {
+      "constructor": 50,
+      "registrySweep": 100,
+      "schemaValidation": 20,
+      "dashboardImport": 60,
+      "fullValidation": 250
+    },
+    "plugin_paths": [
+      "scripts/validators/schema.js",
+      "scripts/validators/registry.js",
+      "scripts/validators/bridge.js",
+      "scripts/validators/dashboard.js",
+      "scripts/validators/depgraph.js",
+      "scripts/validators/rollback.js",
+      "scripts/validators/performance.js",
+      "scripts/validators/api-stability.js",
+      "scripts/validators/mutation.js",
+      "scripts/validators/thumbnail.js",
+      "scripts/validators/ai-provider.js"
+    ],
+    "severity_levels": {
+      "INFO": 0,
+      "NOTICE": 1,
+      "WARNING": 2,
+      "ERROR": 3,
+      "CRITICAL": 4
+    },
+    "exit_code_map": {
+      "maxSeverity<=1": 0,
+      "maxSeverity===2": 1,
+      "maxSeverity>=3": 2
+    }
+  }
+}

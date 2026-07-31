@@ -93,8 +93,32 @@ export class NewsPipeline {
     const renderTime = Date.now() - renderStart
     this.detector.logPipeline(contentId, 'render', 'success', `Rendered in ${renderTime}ms`, renderTime)
 
-    // Phase 7: Quality validation
-    console.log('[PIPELINE] Phase 7: Validating quality...')
+    // Phase 7: Generate thumbnail
+    console.log('[PIPELINE] Phase 7: Generating thumbnail...')
+    let thumbnailPath = null
+    try {
+      const { generateThumbnail } = await import('../../scripts/validators/plugins/thumbnail/generator.mjs')
+      const thumbResult = await generateThumbnail(freshArticle, {
+        platform: 'youtube',
+        style: 'cinematic',
+      })
+      thumbnailPath = thumbResult.path
+      const destPath = assets.path('thumbnail', `${contentId}.png`)
+      const { copyFileSync } = await import('fs')
+      copyFileSync(thumbnailPath, destPath)
+      assets.save('thumbnail_metadata', 'thumbnail.json', {
+        hash: thumbResult.hash,
+        cached: thumbResult.cached,
+        note: thumbResult.note || null,
+        generatedAt: new Date().toISOString(),
+      })
+      console.log(`[PIPELINE] Thumbnail ${thumbResult.cached ? 'cached' : 'generated'}: ${thumbResult.path}`)
+    } catch (e) {
+      console.warn(`[PIPELINE] Thumbnail generation skipped: ${e.message}`)
+    }
+
+    // Phase 8: Quality validation
+    console.log('[PIPELINE] Phase 8: Validating quality...')
     console.log('[DEBUG] contentId type:', typeof contentId, 'value:', contentId?.slice(0, 40))
     let validation
     try {
@@ -156,6 +180,8 @@ export class NewsPipeline {
         headline,
         videoId: youtubeResult?.id,
         url: `https://youtu.be/${youtubeResult?.id}`,
+        thumbnail: thumbnailPath,
+        video: videoPath,
         qualityScore: validation.totalScore,
         templateVersion: this.typography.getActiveVersion('technology_news')?.version,
         renderTime: `${renderTime}ms`,
@@ -163,6 +189,6 @@ export class NewsPipeline {
       }
     }
 
-    return { status: 'rendered_not_published', contentId, videoPath }
+    return { status: 'rendered_not_published', contentId, videoPath, thumbnail: thumbnailPath }
   }
 }

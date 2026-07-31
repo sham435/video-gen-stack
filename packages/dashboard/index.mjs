@@ -29,6 +29,41 @@ async function getDB() {
 
 // ========== AI COMMAND CENTER API ==========
 
+// Initialize DashboardAI with optional AI provider
+let dashboardAI = null
+async function initDashboardAI() {
+  const { DashboardAI } = await import('./DashboardAI.mjs')
+  dashboardAI = new DashboardAI()
+  try {
+    const { ProviderChain } = await import('../../src/ai/providers/ProviderChain.mjs')
+    const { OpenRouterProvider } = await import('../../src/ai/providers/OpenRouterProvider.mjs')
+    const { OpenAIProvider } = await import('../../src/ai/providers/OpenAIProvider.mjs')
+    const { GeminiProvider } = await import('../../src/ai/providers/GeminiProvider.mjs')
+    const { OllamaProvider } = await import('../../src/ai/providers/OllamaProvider.mjs')
+
+    // Route keys to the right provider by key prefix
+    const openaiKey = process.env.OPENAI_API_KEY || ''
+    const openrouterKey = process.env.OPENROUTER_API_KEY || ''
+    const geminiKey = process.env.GEMINI_API_KEY || ''
+
+    const isOpenRouterKey = (k) => k.startsWith('sk-or-v1')
+
+    const providers = []
+    if (openrouterKey) providers.push(new OpenRouterProvider(openrouterKey))
+    else if (isOpenRouterKey(openaiKey)) providers.push(new OpenRouterProvider(openaiKey))
+    if (openaiKey && !isOpenRouterKey(openaiKey)) providers.push(new OpenAIProvider(openaiKey))
+    if (geminiKey) providers.push(new GeminiProvider(geminiKey))
+    providers.push(new OllamaProvider())
+
+    const chain = new ProviderChain(providers)
+    dashboardAI = new DashboardAI({ aiProvider: chain })
+    console.log(`[DashboardAI] enabled: ${chain.name} (${chain.providers.length} providers)`)
+  } catch (e) {
+    console.log(`[DashboardAI] AI provider unavailable, using fallback: ${e.message}`)
+  }
+}
+initDashboardAI()
+
 // AI Dashboard — live system status
 app.get('/api/ai/status', (req, res) => {
   const checks = {
@@ -43,16 +78,15 @@ app.get('/api/ai/status', (req, res) => {
   res.json(checks)
 })
 
-// AI Suggestions Engine
-app.get('/api/ai/suggestions', (req, res) => {
-  const suggestions = [
-    { id: 1, type: 'content', priority: 'high', icon: '🔥', message: 'Gaming retention is 28% higher than average. Increase gaming output.', action: 'Adjust schedule' },
-    { id: 2, type: 'content', priority: 'high', icon: '📊', message: 'Technology hook strength dropped 15%. Use mystery/reveal format.', action: 'Update prompt' },
-    { id: 3, type: 'pipeline', priority: 'medium', icon: '⚡', message: 'Render time increased. Consider 8fps render → 30fps output.', action: 'Optimize' },
-    { id: 4, type: 'ui', priority: 'medium', icon: '🎨', message: 'Politics category needs stronger visual identity.', action: 'Create theme' },
-    { id: 5, type: 'code', priority: 'low', icon: '🔧', message: 'Circular dependency detected: composer.mjs imports src/', action: 'Review code' },
-  ]
-  res.json(suggestions)
+// AI Suggestions Engine — uses AIProvider when available, falls back to static
+app.get('/api/ai/suggestions', async (req, res) => {
+  try {
+    const status = { pipeline: { uptime: process.uptime().toFixed(0) + 's' }, templates: { count: existsSync(ROOT + '/src/templates') ? readdirSync(ROOT + '/src/templates').filter(f => f.endsWith('.json')).length : 0 } }
+    const suggestions = dashboardAI ? await dashboardAI.generateSuggestions(status) : [{ id: 1, type: 'content', priority: 'high', icon: '🤖', message: 'AI provider connecting...', action: 'Waiting' }]
+    res.json(suggestions)
+  } catch {
+    res.json([{ id: 1, type: 'content', priority: 'high', icon: '🔥', message: 'AI Suggestions temporarily unavailable', action: 'Retry' }])
+  }
 })
 
 // Trending topics
@@ -146,8 +180,21 @@ app.post('/api/engineering/debt/resolve', async (req, res) => {
   catch { res.json({ ok: false }) }
 })
 
+// ========== AI SCRIPT ANALYSIS ==========
+app.post('/api/ai/analyze-script', async (req, res) => {
+  const { title, category, description } = req.body
+  const article = { title: title || 'News Update', category: category || 'technology', description: description || '' }
+  try {
+    if (!dashboardAI) return res.json({ error: 'DashboardAI not initialized', fallback: true })
+    const result = await dashboardAI.analyzeScript(article, { topic: title })
+    res.json(result)
+  } catch (e) {
+    res.json({ error: e.message, fallback: true })
+  }
+})
+
 // ========== SESSION MANAGER API ==========
-const { SessionManager } = await import('../src/video-studio/SessionManager.mjs')
+  const { SessionManager } = await import('../../src/video-studio/SessionManager.mjs')
 const sessionMgr = new SessionManager()
 
 app.get('/api/sessions', (req, res) => {
@@ -184,9 +231,9 @@ app.get('/api/sessions/:id', (req, res) => {
 
 // ========== VIDEO STUDIO API ==========
 app.post('/api/studio/analyze', async (req, res) => {
-  const { VideoAnalyzer } = await import('../src/video-studio/VideoAnalyzer.mjs')
-  const { SceneReviewer } = await import('../src/video-studio/SceneReviewer.mjs')
-  const { ScoreEngine } = await import('../src/video-studio/ScoreEngine.mjs')
+  const { VideoAnalyzer } = await import('../../src/video-studio/VideoAnalyzer.mjs')
+  const { SceneReviewer } = await import('../../src/video-studio/SceneReviewer.mjs')
+  const { ScoreEngine } = await import('../../src/video-studio/ScoreEngine.mjs')
   const { videoPath, scenes, category } = req.body
 
   const analyzer = new VideoAnalyzer()
@@ -414,7 +461,7 @@ async function load(){
   document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString()
 }
 load()
-setInterval(load, 15000)
+setInterval(load, 30000)
 </script>
 </body>
 </html>`
@@ -474,6 +521,19 @@ body{background:#000;color:#F8FAFC;font-family:'Inter',system-ui,sans-serif}
       <div id="activeSession" class="text-sm text-gray-400">Select a video to edit</div>
       <div id="sessionActions" class="mt-3 space-y-2 hidden"></div>
     </div>
+  </div>
+
+  <!-- AI Story Planner -->
+  <div class="card mb-4">
+    <div class="text-sm font-bold mb-3">AI Story Planning</div>
+    <div class="flex gap-3 mb-3">
+      <input id="storyTitle" type="text" placeholder="News headline" class="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm">
+      <select id="storyCategory" class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm">
+        <option>ai</option><option>gaming</option><option>sports</option><option>politics</option><option>science</option><option>space</option><option>technology</option>
+      </select>
+      <button onclick="analyzeScript()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-bold">Plan with AI</button>
+    </div>
+    <div id="storyPlan"></div>
   </div>
 
   <!-- Analyzer -->
@@ -561,6 +621,32 @@ async function transitionSession(){
   if(r) { loadSessions(); loadQueue(); selectSession(selectedSessionId) }
 }
 
+async function analyzeScript(){
+  const title = document.getElementById('storyTitle').value
+  const category = document.getElementById('storyCategory').value
+  if(!title) { document.getElementById('storyPlan').innerHTML = '<div class="text-xs text-yellow-400">Enter a news headline first</div>'; return }
+  document.getElementById('storyPlan').innerHTML = '<div class="text-xs text-gray-400">Planning with AI...</div>'
+  const result = await api('/api/ai/analyze-script', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title,category})})
+  if(!result || result.fallback) {
+    document.getElementById('storyPlan').innerHTML = '<div class="text-xs text-gray-500">AI provider not available. Set OPENROUTER_API_KEY or OPENAI_API_KEY for AI-powered story planning.</div>'
+    return
+  }
+  const story = result.story
+  const scenes = story.scenePlan || story.scenes || []
+  document.getElementById('storyPlan').innerHTML =
+    '<div class="flex items-center gap-2 mb-2 text-xs"><span class="text-green-400">AI</span><span class="text-gray-500">'+result.provider+'</span></div>'+
+    '<div class="text-sm font-bold mb-2">'+(story.headline||'Story Plan')+'</div>'+
+    (scenes.length ? scenes.map((s,i) =>
+      '<div class="bg-white/5 rounded-lg p-2 mb-1 flex items-start gap-2">'+
+      '<span class="text-xs text-gray-500 w-6">'+(i+1)+'</span>'+
+      '<div class="flex-1"><div class="text-xs font-medium capitalize">'+s.type+'</div>'+
+      '<div class="text-xs text-gray-400">'+(s.narration||'')+'</div>'+
+      '<div class="text-xs text-gray-600">'+(s.duration||'')+'s · '+(s.camera||'')+' · '+(s.transition||'')+'</div></div>'+
+      '</div>'
+    ).join('') : '<div class="text-xs text-gray-400">No scenes generated</div>')+
+    (story.cta ? '<div class="mt-2 text-xs text-yellow-400">CTA: '+story.cta+'</div>' : '')
+}
+
 async function analyze(){
   const path = document.getElementById('videoPath').value
   const category = document.getElementById('category').value
@@ -586,56 +672,6 @@ async function analyze(){
 
 loadQueue(); loadSessions()
 setInterval(()=>{ loadQueue(); loadSessions() }, 10000)
-</script>
-const api = async (path, body) => { try { const r = await fetch(path, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); return await r.json() } catch { return null } }
-
-async function analyze() {
-  const path = document.getElementById('videoPath').value
-  const category = document.getElementById('category').value
-  const scenes = [
-    {type:'hook',duration:2.5,emotion:'shock',camera:'push_in',transition:'flash',narration:'Breaking news alert.',caption:'BREAKING'},
-    {type:'fact',duration:4,emotion:'awe',camera:'slow_zoom',transition:'cut',narration:'Major announcement today.',caption:'MAJOR'},
-    {type:'explanation',duration:8,emotion:'curiosity',camera:'orbit',transition:'zoom_blur',narration:'This changes how we think about technology.',caption:'CHANGES'},
-    {type:'retention',duration:5,emotion:'tension',camera:'shake',transition:'glitch',narration:'But heres what nobody noticed.',caption:'NOBODY'},
-    {type:'close',duration:3,emotion:'excitement',camera:'pull_back',transition:'fade',narration:'Follow NEWS-MONSTER.',caption:'FOLLOW'},
-  ]
-
-  const result = await api('/api/studio/analyze', { videoPath: path, scenes, category })
-  if (!result) return
-
-  const r = result.rating
-  document.getElementById('overallScore').textContent = r?.scores?.overall || '--'
-  document.getElementById('overallScore').style.background = (r?.scores?.overall || 0) >= 80 ? 'rgba(34,197,94,0.2)' : (r?.scores?.overall || 0) >= 60 ? 'rgba(234,179,8,0.2)' : 'rgba(239,68,68,0.2)'
-  document.getElementById('overallScore').style.color = (r?.scores?.overall || 0) >= 80 ? '#22C55E' : (r?.scores?.overall || 0) >= 60 ? '#EAB308' : '#EF4444'
-  document.getElementById('publishStatus').textContent = r?.publish?.decision || ''
-  document.getElementById('publishStatus').className = 'mt-2 text-xs ' + (r?.publish?.decision === 'publish' ? 'text-green-400' : r?.publish?.decision === 'improve' ? 'text-yellow-400' : 'text-red-400')
-
-  document.getElementById('scoreTech').textContent = r?.scores?.technical ?? '--'
-  document.getElementById('scoreStory').textContent = r?.scores?.story ?? '--'
-  document.getElementById('scoreVisual').textContent = r?.scores?.visual ?? '--'
-  document.getElementById('scoreRetention').textContent = r?.scores?.retention ?? '--'
-
-  if (result.scenes) {
-    document.getElementById('sceneList').innerHTML = result.scenes.map(s =>
-      '<div class="bg-white/5 rounded-lg p-3 flex justify-between items-start">' +
-      '<div><span class="text-xs text-gray-400">Scene '+s.id+'</span><div class="font-medium capitalize">'+s.type+'</div>' +
-      '<div class="text-xs text-gray-500">'+s.duration+'s · '+s.camera+' · '+s.transition+'</div>' +
-      (s.issues.length ? '<div class="mt-1 text-xs text-yellow-400">'+s.issues[0].message+'</div>' : '<div class="mt-1 text-xs text-green-400">No issues</div>') +
-      '</div><span class="text-sm font-bold" style="color:'+(s.score>=80?'#22C55E':s.score>=60?'#EAB308':'#EF4444')+'">'+s.score+'</span></div>'
-    ).join('')
-  }
-
-  if (r?.suggestions) {
-    document.getElementById('recommendations').innerHTML = r.suggestions.map(s =>
-      '<div class="bg-white/5 rounded-lg p-3 flex items-start gap-3">' +
-      '<span class="text-lg '+(s.priority==='critical'?'text-red-400':s.priority==='high'?'text-yellow-400':'text-blue-400')+'">'+
-      (s.priority==='critical'?'🔴':s.priority==='high'?'🟡':'🔵')+'</span>' +
-      '<div><div class="text-xs">'+s.message+'</div><div class="text-xs text-gray-500 mt-1">'+s.action+'</div></div></div>'
-    ).join('')
-  }
-}
-
-analyze()
 </script>
 </body>
 </html>`
