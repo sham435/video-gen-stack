@@ -1,4 +1,4 @@
-import { existsSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 
 const CLIENT_ID = process.env.YOUTUBE_CLIENT_ID
 const CLIENT_SECRET = process.env.YOUTUBE_CLIENT_SECRET
@@ -39,7 +39,7 @@ async function getAccessToken() {
   return data.access_token
 }
 
-export async function uploadShort(videoUrl, title, description, privacy = 'public') {
+export async function uploadShort(videoUrl, title, description, privacy = 'public', coverPath = null) {
   const token = await getAccessToken()
 
   const videoResp = await fetch(videoUrl)
@@ -93,7 +93,7 @@ export async function uploadShort(videoUrl, title, description, privacy = 'publi
   // Upload thumbnail if provided
   if (data.id) {
     try {
-      await setThumbnail(token, data.id)
+      await setThumbnail(token, data.id, coverPath)
     } catch (e) {
       console.warn(`⚠️  Thumbnail upload skipped: ${e.message}`)
     }
@@ -104,11 +104,12 @@ export async function uploadShort(videoUrl, title, description, privacy = 'publi
 
 export async function setThumbnail(token, videoId, coverPath) {
   if (!coverPath) coverPath = 'output/cover.png'
-  if (!existsSync(coverPath)) return
+  if (!existsSync(coverPath)) {
+    console.warn(`⚠️  Cover image not found at ${coverPath} — skipping thumbnail`)
+    return
+  }
 
-  const thumbResp = await fetch(coverPath)
-  if (!thumbResp.ok) throw new Error(`Failed to read cover: ${thumbResp.status}`)
-  const thumbBuffer = await thumbResp.arrayBuffer()
+  const thumbBuffer = readFileSync(coverPath)
 
   const boundary = 'thumb_boundary'
   const body = new Uint8Array([

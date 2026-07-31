@@ -152,7 +152,8 @@ export class NewsPipeline {
         `data:video/mp4;base64,${base64}`,
         title,
         description,
-        process.env.YOUTUBE_PRIVACY || 'public'
+        process.env.YOUTUBE_PRIVACY || 'public',
+        thumbnailPath
       )
 
       // Save final assets

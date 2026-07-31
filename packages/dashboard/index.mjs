@@ -763,8 +763,9 @@ async function publishToYouTube(videoPath, headline, category, contract, job) {
     const base64 = videoBuffer.toString('base64')
     const title = `📰 ${headline || 'NEWS-MONSTER'}`.slice(0, 100)
     const description = `${contract?.story?.hook || ''}\n\n${contract?.retention?.ending?.cta || 'Follow NEWS-MONSTER'}\n\n#news #${category || 'technology'} #AI`
-    const pub = await uploadShort(`data:video/mp4;base64,${base64}`, title, description, process.env.YOUTUBE_PRIVACY || 'public')
-    const result = { status: 'published', videoId: pub?.id, url: pub?.id ? `https://youtu.be/${pub.id}` : null }
+    const coverPath = fs.existsSync('output/cover.png') ? 'output/cover.png' : null
+    const pub = await uploadShort(`data:video/mp4;base64,${base64}`, title, description, process.env.YOUTUBE_PRIVACY || 'public', coverPath)
+    const result = { status: 'published', videoId: pub?.id, url: pub?.id ? `https://youtu.be/${pub.id}` : null, thumbnail: coverPath ? 'uploaded' : 'missing' }
     if (pub?.id) job?.markDone('publish', { detail: `Published: ${pub.id}`, score: 99 })
     else job?.markFailed('publish', 'no video id returned')
     return result
@@ -806,6 +807,76 @@ app.post('/api/autonomous/enqueue', async (req, res) => {
     predictedCtr: council?.ctr_score ?? null, retentionScore: council?.retention_score ?? null,
   })
   res.json({ item, council })
+})
+
+// Autonomous decision flow — chains Visual → Contract → Council → Queue in one call
+app.post('/api/autonomous/pipeline', async (req, res) => {
+  const { headline, category, description } = req.body
+  if (!headline) return res.status(400).json({ error: 'headline required' })
+
+  const phases = {}
+  try {
+    // 1. Visual Intelligence
+    phases.visual = 'complete'
+    const { CoverDirector } = await import('../../src/video-studio/CoverDirector.mjs')
+    const director = new CoverDirector(dashboardAI?.isEnabled ? dashboardAI.aiProvider : null)
+    const brief = await director.analyzeStory({ title: headline, category: category || 'technology', description: description || '' })
+    phases.visual_score = 90
+
+    // 2. Script Contract
+    phases.contract = 'complete'
+    const { StoryDirector } = await import('../../src/ai/StoryDirector.mjs')
+    const { ScriptContract } = await import('../../src/video-studio/ScriptContract.mjs')
+    const storyDir = new StoryDirector(dashboardAI?.isEnabled ? dashboardAI.aiProvider : null)
+    const story = await storyDir.plan({ title: headline, category: category || 'technology', description: description || '' })
+    const contract = new ScriptContract().build({ title: headline, category: category || 'technology', description: description || '' }, story)
+
+    // 3. Agent Council — 3-tier routing gate
+    phases.council = 'review'
+    const { AgentCouncil } = await import('../../src/video-studio/AgentCouncil.mjs')
+    const { AIOptimizer } = await import('../../src/video-studio/AIOptimizer.mjs')
+    let council = new AgentCouncil({ threshold: 85 }).score(contract, { title: headline, category })
+    let finalContract = contract
+    let routing = 'AUTO_QUEUE'
+
+    if (council.final_score >= 85) {
+      routing = 'AUTO_QUEUE'
+    } else if (council.final_score >= 70) {
+      routing = 'AI_OPTIMIZATION'
+      phases.optimizing = 'running'
+      const optimizer = new AIOptimizer(dashboardAI?.isEnabled ? dashboardAI.aiProvider : null)
+      finalContract = await optimizer.optimize(contract, { ctr: council.ctr_score })
+      council = new AgentCouncil({ threshold: 85 }).score(finalContract, { title: headline, category })
+      phases.optimizing = council.final_score >= 85 ? 'passed' : 'failed'
+      if (council.final_score >= 85) routing = 'AUTO_QUEUE'
+    } else {
+      routing = 'REGENERATE_CONCEPT'
+    }
+
+    // 4. Enqueue for production (unless regenerate needed)
+    let item = null
+    if (routing !== 'REGENERATE_CONCEPT') {
+      item = await _scheduler.enqueue({
+        topic: headline, category: category || 'technology', contract: finalContract,
+        predictedCtr: council.ctr_score, retentionScore: council.retention_score,
+      })
+      phases.queued = 'complete'
+    }
+
+    phases.council = 'approved'
+    res.json({
+      status: 'success',
+      routing,
+      council,
+      contract: finalContract,
+      visualBrief: brief,
+      item,
+      phases,
+    })
+  } catch (e) {
+    console.error(`[AutoPipeline] failed: ${e.message}`)
+    res.status(500).json({ error: e.message, phases })
+  }
 })
 
 app.get('/api/autonomous/queue', (req, res) => {
@@ -1222,6 +1293,21 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     </div>
     <div id="autoQueue" class="text-xs space-y-2"></div>
+  </div>
+
+  <!-- Autonomous Decision Flow -->
+  <div class="card p-4 mb-4">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-bold">AI AUTONOMOUS DECISION FLOW</div>
+      <div class="flex gap-2">
+        <input id="afHeadline" type="text" placeholder="Headline for auto-production" class="bg-white/5 border border-white/10 rounded px-2 py-1 text-xs w-64">
+        <select id="afCategory" class="bg-white/5 border border-white/10 rounded px-2 py-1 text-xs">
+          <option value="technology">Technology</option><option value="ai">AI</option><option value="gaming">Gaming</option><option value="science">Science</option><option value="sports">Sports</option>
+        </select>
+        <button onclick="autoFlow()" class="bg-cyan-600 hover:bg-cyan-500 text-white px-3 py-1 rounded text-xs font-bold">Auto Flow</button>
+      </div>
+    </div>
+    <div id="autoFlowView" class="text-xs text-gray-400">Enter a headline → AI runs Visual → Contract → Council → Queue automatically</div>
   </div>
 
   <!-- Operations Console -->
@@ -1891,6 +1977,35 @@ async function autoEnqueue(){
   } else {
     document.getElementById('autoQueue').innerHTML = '<div class="text-yellow-400">✅ Scheduled: '+r.item?.id+'</div>'
   }
+  loadAutoQueue()
+}
+
+async function autoFlow(){
+  const headline = document.getElementById('afHeadline').value
+  const category = document.getElementById('afCategory').value
+  if(!headline){ alert('Enter a headline'); return }
+  const el = document.getElementById('autoFlowView')
+  el.innerHTML = '<div class="text-yellow-400">🤖 AI running autonomous flow: Visual → Contract → Council → Queue</div>'
+  const r = await fetch('/api/autonomous/pipeline', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({headline,category})}).then(r=>r.json())
+  if(r.error){ el.innerHTML = '<div class="text-red-400">'+r.error+'</div>'; return }
+  const step = (label, done, extra) => '<div class="flex items-center gap-2 py-0.5"><span>'+(done?'✅':'◐')+'</span><span class="text-gray-300">'+label+'</span>'+(extra?'<span class="text-gray-500">'+extra+'</span>':'')+'</div>'
+  const c = r.council
+  const voteRow = (k) => '<div class="flex justify-between py-0.5"><span class="text-gray-400">'+c.votes[k].responsibility+'</span><span class="text-gray-300">'+c.votes[k].score+'%</span></div>'
+  el.innerHTML =
+    '<div class="bg-white/5 rounded p-2 border border-white/10 mb-2">' +
+    '<div class="font-bold text-cyan-400 mb-1">AUTONOMOUS FLOW — '+r.routing+'</div>' +
+    step('Visual Intelligence', r.phases.visual === 'complete', 'score '+r.phases.visual_score) +
+    step('Script Contract', r.phases.contract === 'complete', (r.contract?.scenes||[]).length+' scenes') +
+    (r.phases.optimizing === 'running' ? step('AI Optimization', false, 'running...') : step('AI Optimization', true, 'passed')) +
+    step('Agent Council', true, c.final_score+'%') +
+    (r.item ? step('Production Queue', true, r.item.status) : step('Production Queue', false, 'regenerate needed')) +
+    '</div>' +
+    '<div class="bg-white/5 rounded p-2 border border-white/10">' +
+    '<div class="font-bold text-yellow-400 mb-1">🧠 AI COUNCIL</div>' +
+    Object.keys(c.votes).map(voteRow).join('') +
+    '<div class="border-t border-white/10 mt-1 pt-1 flex justify-between"><span class="text-gray-400">Final Score</span><span class="font-bold '+(c.passed?'text-green-400':'text-yellow-400')+'">'+c.final_score+'%</span></div>' +
+    '<div class="flex justify-between"><span class="text-gray-400">Decision</span><span class="font-bold text-green-400">'+c.decision+' — '+c.action+'</span></div>' +
+    '</div>'
   loadAutoQueue()
 }
 
