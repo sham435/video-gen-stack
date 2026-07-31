@@ -142,7 +142,7 @@ export class ProductionJob {
 
   canStart(stageId) {
     const stage = STAGES.find(s => s.id === stageId)
-    if (!stage) return false
+    if (!stage) return { ok: false, reason: `unknown stage: ${stageId}` }
     if (stage.approval && !this.approved) return { ok: false, reason: `Approval required before ${stage.label}` }
     for (const req of stage.requires) {
       if (this.stages[req].status !== 'success') return { ok: false, reason: `${stage.label} requires ${req} to succeed` }

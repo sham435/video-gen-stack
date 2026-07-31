@@ -431,7 +431,7 @@ app.post('/api/ai/execute-action', async (req, res) => {
         const bridge = await dashboardAI.getBridge()
         if (!bridge) return { ok: true, result: 'Diagnostics queued', note: 'Run: node scripts/opencode-validate.mjs' }
         const diag = bridge.runDiagnostics ? await bridge.runDiagnostics() : null
-        return { ok: true, result: 'Diagnostics complete', ok: diag?.ok, detail: diag ? { agents: `${diag.summary.agentsSweep.total}/${diag.summary.agentsSweep.total}`, memory: `${diag.summary.memorySweep.total}/${diag.summary.memorySweep.total}`, workflows: `${diag.summary.workflowsSweep.total}/${diag.summary.workflowsSweep.total}`, policies: `${diag.summary.policiesSweep.total}/${diag.summary.policiesSweep.total}` } : null }
+        return { ok: diag?.ok === true, result: 'Diagnostics complete', detail: diag ? { agents: `${diag.summary.agentsSweep.total}/${diag.summary.agentsSweep.total}`, memory: `${diag.summary.memorySweep.total}/${diag.summary.memorySweep.total}`, workflows: `${diag.summary.workflowsSweep.total}/${diag.summary.workflowsSweep.total}`, policies: `${diag.summary.policiesSweep.total}/${diag.summary.policiesSweep.total}` } : null }
       } catch { return { ok: true, result: 'Diagnostics queued: run node scripts/opencode-validate.mjs' } }
     },
     'Load Memory': async () => {
@@ -637,20 +637,20 @@ app.get('/api/ai/code-stats', (req, res) => {
 })
 
 // ========== ENGINEERING INTELLIGENCE API ==========
-const loadPR = () => import('../src/engineering/PRReviewer.mjs').then(m => new m.PRReviewer())
+const loadPR = () => import('../../src/engineering/PRReviewer.mjs').then(m => new m.PRReviewer())
 app.get('/api/engineering/pr-review', async (req, res) => {
   try { const r = await loadPR(); res.json(r.analyze()) }
   catch { res.json({ score: 0, files: 0, issues: [], summary: 'No changes to review' }) }
 })
 
 app.get('/api/engineering/release-notes', async (req, res) => {
-  try { const { ReleaseManager } = await import('../src/engineering/ReleaseManager.mjs'); res.json(new ReleaseManager().generateNotes()) }
+  try { const { ReleaseManager } = await import('../../src/engineering/ReleaseManager.mjs'); res.json(new ReleaseManager().generateNotes()) }
   catch { res.json({ version: '?', date: new Date().toISOString(), commits: 0 }) }
 })
 
 app.get('/api/engineering/debt', async (req, res) => {
   try {
-    const { EngineeringMemory } = await import('../src/engineering/EngineeringMemory.mjs')
+    const { EngineeringMemory } = await import('../../src/engineering/EngineeringMemory.mjs')
     const mem = new EngineeringMemory()
     if (req.query.scan === 'true') mem.scanAndRecord()
     res.json({ debt: mem.getDebt(req.query.status), improvements: mem.getImprovements() })
@@ -658,7 +658,7 @@ app.get('/api/engineering/debt', async (req, res) => {
 })
 
 app.post('/api/engineering/debt/resolve', async (req, res) => {
-  try { const { EngineeringMemory } = await import('../src/engineering/EngineeringMemory.mjs'); const mem = new EngineeringMemory(); mem.resolveDebt(req.body.id); res.json({ ok: true }) }
+  try { const { EngineeringMemory } = await import('../../src/engineering/EngineeringMemory.mjs'); const mem = new EngineeringMemory(); mem.resolveDebt(req.body.id); res.json({ ok: true }) }
   catch { res.json({ ok: false }) }
 })
 
@@ -787,11 +787,14 @@ _scheduler.setOnAutoExecute(async (items) => {
       const engine = new NewsBroadcastEngine()
       const job = new ProductionJob({ title: item.topic, category: item.category })
       job.contract = item.contract
-      await engine.generateFromArticle({ title: item.topic, category: item.category }, 'output', job)
-      const pub = await publishToYouTube(engine.coverPath ? 'output/broadcast.mp4' : 'output/broadcast.mp4', item.topic, item.category, item.contract, job)
+      const result = await engine.generateFromArticle({ title: item.topic, category: item.category }, 'output', job, { contract: item.contract })
+      const videoPath = typeof result === 'string' ? result : result.videoPath
+      const pub = await publishToYouTube(videoPath, item.topic, item.category, item.contract, job)
       console.log(`[AutoExecute] ${item.topic} → ${pub.status}`)
+      _scheduler.complete(item.id, { status: pub.status, url: pub.url || null })
     } catch (e) {
       console.error(`[AutoExecute] ${item.topic} failed: ${e.message}`)
+      _scheduler.fail(item.id, e.message)
     }
   }
 })
@@ -964,7 +967,7 @@ app.post('/api/production/run', async (req, res) => {
     const engine = new NewsBroadcastEngine()
     const job = new (await import('../../src/video-studio/ProductionJob.mjs')).ProductionJob(article)
     job.contract = optimizedContract
-    const result = await engine.generateFromArticle(article, 'output', job)
+    const result = await engine.generateFromArticle(article, 'output', job, { contract: optimizedContract })
 
     // Phase 2b: Autonomous quality auto-fix — if quality fails, retry with AI optimization
     const qStage = result.job.stages.quality
@@ -975,7 +978,7 @@ app.post('/api/production/run', async (req, res) => {
       const fixed = await optimizer.optimize(optimizedContract, { ctr: council.ctr_score })
       const retryJob = new (await import('../../src/video-studio/ProductionJob.mjs')).ProductionJob(article)
       retryJob.contract = fixed
-      const retryResult = await engine.generateFromArticle({ ...article, title: fixed.story?.headline || article.title }, 'output', retryJob)
+      const retryResult = await engine.generateFromArticle({ ...article, title: fixed.story?.headline || article.title }, 'output', retryJob, { contract: fixed })
       const retryQ = retryResult.job.stages.quality
       if (retryQ?.status === 'success') {
         phase(`quality auto-fixed on retry: ${retryQ.score}`)
@@ -1496,6 +1499,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 
 <script>
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]))
 const api = async (path) => { try { const r = await fetch(path); return await r.json() } catch { return [] } }
 
 async function load(){
@@ -1656,8 +1660,8 @@ async function viLoadNews(){
   list.innerHTML = _viNews.slice(0, 10).map((a,i) =>
     '<div class="flex items-center gap-2 p-1.5 rounded cursor-pointer hover:bg-white/10 '+( _viSelected===i ? 'bg-white/10 border border-purple-500/50' : 'bg-white/5')+'" onclick="viPick('+i+')">'+
     '<span class="text-xs text-gray-500 w-4">'+(i+1)+'</span>'+
-    '<div class="flex-1 min-w-0"><div class="text-xs font-medium truncate">'+a.title+'</div>'+
-    '<div class="text-xs text-gray-600">'+((a.source?.name)||'')+'</div></div>'+
+    '<div class="flex-1 min-w-0"><div class="text-xs font-medium truncate">'+esc(a.title)+'</div>'+
+    '<div class="text-xs text-gray-600">'+esc(a.source?.name||'')+'</div></div>'+
     '</div>'
   ).join('')
 }
@@ -2019,11 +2023,11 @@ async function loadAutoQueue(){
   el.innerHTML = q.map(item => {
     const statusColor = item.status === 'WAITING_USER_CONFIRMATION' ? 'text-yellow-400' : item.status === 'AUTO_EXECUTING' ? 'text-green-400' : item.status === 'CANCELLED' ? 'text-red-400' : 'text-gray-300'
     return '<div class="bg-white/5 rounded p-2 border border-white/10">' +
-      '<div class="flex justify-between"><span class="font-medium text-gray-200">'+item.topic+'</span><span class="'+statusColor+'">'+item.status.replace(/_/g,' ')+'</span></div>' +
-      '<div class="flex justify-between text-gray-500 mt-0.5"><span>'+item.category+'</span><span>'+(item.predictedCtr?'CTR '+item.predictedCtr+'%':'')+'</span></div>' +
+      '<div class="flex justify-between"><span class="font-medium text-gray-200">'+esc(item.topic)+'</span><span class="'+statusColor+'">'+esc(item.status.replace(/_/g,' '))+'</span></div>' +
+      '<div class="flex justify-between text-gray-500 mt-0.5"><span>'+esc(item.category)+'</span><span>'+(item.predictedCtr?'CTR '+item.predictedCtr+'%':'')+'</span></div>' +
       (item.status === 'WAITING_USER_CONFIRMATION' ? '<div class="flex justify-between mt-1"><span class="text-yellow-400">⏱ Auto start: '+fmt(item.autoStartRemaining)+'</span>' +
-        '<span class="flex gap-2"><button onclick="autoAct(\''+item.id+'\',\'approve\')" class="px-2 py-0.5 rounded bg-green-600 text-white text-[10px]">Approve</button>' +
-        '<button onclick="autoAct(\''+item.id+'\',\'cancel\')" class="px-2 py-0.5 rounded bg-white/10 text-gray-300 text-[10px]">Cancel</button></span></div>' : '') +
+        '<span class="flex gap-2"><button data-auto-id="'+item.id+'" data-auto-act="approve" class="auto-btn px-2 py-0.5 rounded bg-green-600 text-white text-[10px]">Approve</button>' +
+        '<button data-auto-id="'+item.id+'" data-auto-act="cancel" class="auto-btn px-2 py-0.5 rounded bg-white/10 text-gray-300 text-[10px]">Cancel</button></span></div>' : '') +
       (item.status === 'AUTO_EXECUTING' ? '<div class="text-green-400 mt-1">🤖 '+item.reason+'</div>' : '') +
       '</div>'
   }).join('')
@@ -2033,6 +2037,11 @@ async function autoAct(id, action){
   const r = await fetch('/api/autonomous/'+id+'/'+action, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({reason:'user action'})}).then(r=>r.json())
   if(r) loadAutoQueue()
 }
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.auto-btn')
+  if (!btn) return
+  autoAct(btn.dataset.autoId, btn.dataset.autoAct)
+})
 
 async function loadOps(){
   const d = await fetch('/api/ops/status').then(r=>r.json()).catch(()=>null)
@@ -2266,7 +2275,7 @@ async function loadSessions(){
   if(!sessions) return
   const statusColor = {GENERATED:'text-blue-400',READY_FOR_REVIEW:'text-yellow-400',EDITING_SESSION_ACTIVE:'text-purple-400',APPROVED_FOR_PUBLISH:'text-green-400',PUBLISHED:'text-gray-400'}
   document.getElementById('sessionList').innerHTML = sessions.length ? sessions.map(s =>
-    '<div class="bg-white/5 rounded-lg p-3 flex items-center justify-between cursor-pointer hover:bg-white/10" onclick="selectSession(\''+s.id+'\')">' +
+    '<div class="bg-white/5 rounded-lg p-3 flex items-center justify-between cursor-pointer hover:bg-white/10" data-sel="'+s.id+'">' +
     '<div><div class="text-sm font-medium">'+(s.title||'Untitled')+'</div>' +
     '<div class="text-xs text-gray-500">'+s.id+' · '+s.category+' · '+new Date(s.createdAt).toLocaleString()+'</div></div>' +
     '<span class="text-sm '+ (statusColor[s.status]||'text-gray-400') +'">'+s.status.replace(/_/g,' ')+'</span></div>'
@@ -2308,8 +2317,8 @@ function renderNews(data, category){
   document.getElementById('newsList').innerHTML = data.slice(0,12).map((a,i) =>
     '<div class="flex items-center gap-2 p-2 rounded-lg cursor-pointer hover:bg-white/10 '+(selectedNews && selectedNews.index===i ? 'bg-white/10 border border-red-500/50' : 'bg-white/5')+'" onclick="pickNews('+i+')">'+
     '<span class="text-xs text-gray-500 w-5">'+(i+1)+'</span>'+
-    '<div class="flex-1 min-w-0"><div class="text-xs font-medium truncate">'+a.title+'</div>'+
-    '<div class="text-xs text-gray-500 truncate">'+((a.source?.name)||'')+' · '+((a.publishedAt||'').slice(0,10))+'</div></div>'+
+    '<div class="flex-1 min-w-0"><div class="text-xs font-medium truncate">'+esc(a.title)+'</div>'+
+    '<div class="text-xs text-gray-500 truncate">'+esc(a.source?.name||'')+' · '+esc((a.publishedAt||'').slice(0,10))+'</div></div>'+
     '</div>'
   ).join('')
   window._news = data
@@ -2416,6 +2425,11 @@ async function analyze(){
   if(r?.suggestions?.length) document.getElementById('analysisResults').innerHTML +=
     '<div class="mt-2 space-y-1">'+r.suggestions.slice(0,3).map(s=>'<div class="text-xs text-gray-400">→ '+s.message+'</div>').join('')+'</div>'
 }
+
+document.addEventListener('click', (e) => {
+  const row = e.target.closest('[data-sel]')
+  if (row) selectSession(row.dataset.sel)
+})
 
 loadQueue(); loadSessions(); loadNews()
 setInterval(()=>{ loadQueue(); loadSessions() }, 10000)

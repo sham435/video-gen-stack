@@ -10,6 +10,29 @@ export class AutonomousScheduler {
     this.queue = this._load()
     this._timer = null
     this._onAutoExecute = null
+    // Resume T-10 auto-execution for persisted pending items after restart
+    this._armTimer()
+  }
+
+  // Terminal transitions so items never stay stuck in AUTO_EXECUTING
+  complete(id, detail) {
+    const item = this.queue.find(q => q.id === id)
+    if (!item) return null
+    item.status = 'COMPLETED'
+    item.completedAt = new Date().toISOString()
+    item.result = detail
+    this._persist()
+    return item
+  }
+
+  fail(id, error) {
+    const item = this.queue.find(q => q.id === id)
+    if (!item) return null
+    item.status = 'FAILED'
+    item.completedAt = new Date().toISOString()
+    item.error = error
+    this._persist()
+    return item
   }
 
   _load() {

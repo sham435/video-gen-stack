@@ -112,11 +112,14 @@ export async function setThumbnail(token, videoId, coverPath) {
   const thumbBuffer = readFileSync(coverPath)
 
   const boundary = 'thumb_boundary'
-  const body = new Uint8Array([
-    ...new TextEncoder().encode(`--${boundary}\r\nContent-Type: image/png\r\n\r\n`),
-    ...new Uint8Array(thumbBuffer),
-    ...new TextEncoder().encode(`\r\n--${boundary}--\r\n`),
-  ])
+  const parts = [
+    new TextEncoder().encode(`--${boundary}\r\nContent-Type: image/png\r\n\r\n`),
+    thumbBuffer,
+    new TextEncoder().encode(`\r\n--${boundary}--\r\n`),
+  ]
+  const body = new Uint8Array(parts.reduce((acc, b) => acc + b.length, 0))
+  let offset = 0
+  for (const b of parts) { body.set(b, offset); offset += b.length }
 
   const res = await fetch(
     `https://www.googleapis.com/upload/youtube/v3/thumbnails/set?videoId=${videoId}`,

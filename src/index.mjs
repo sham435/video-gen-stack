@@ -68,7 +68,7 @@ export class NewsBroadcastEngine {
     return JSON.parse(raw)
   }
 
-  async generateFromArticle(article, outDir = 'output', job = null) {
+  async generateFromArticle(article, outDir = 'output', job = null, options = {}) {
     fs.mkdirSync(outDir, { recursive: true })
     const framesDir = `${outDir}/frames`
     fs.mkdirSync(framesDir, { recursive: true })
@@ -83,7 +83,12 @@ export class NewsBroadcastEngine {
     job.markDone('story', { detail: `${directorStory.scenePlan.length} scenes planned`, score: 80 })
 
     // Structured Script Contract — single source of truth for all downstream engines
-    this.contract = this.scriptContract.build(article, directorStory)
+    // Use the pre-built optimized contract when provided (from AutonomousOrchestrator/AIOptimizer)
+    if (options.contract) {
+      this.contract = options.contract
+    } else {
+      this.contract = this.scriptContract.build(article, directorStory)
+    }
     job.contract = this.contract
 
     // Phase 3: Contract enforcement — validate before any rendering work
@@ -96,14 +101,13 @@ export class NewsBroadcastEngine {
       job.markFailed('story', `contract invalid: ${validation.errors.slice(0, 2).join('; ') || validation.missing.join(', ')}`)
       throw new Error(`Contract validation failed: ${validation.errors.slice(0, 3).join('; ')}`)
     }
-    // Phase 6: Agent Council scoring gate
-    const council = new AgentCouncil()
-    const scores = council.score(this.contract, article)
-    this.contract.council = scores
-    job.contract = this.contract
-    console.log(`Council: story ${scores.story_score} / ctr ${scores.ctr_score} / retention ${scores.retention_score} → final ${scores.final_score} (${scores.passed ? 'PASS' : 'BELOW THRESHOLD'})`)
-    if (!scores.passed) {
-      console.warn('Story below council threshold — proceeding with fallback plan')
+    // Phase 6: Agent Council scoring gate (skip re-score if contract already carries council)
+    if (!this.contract.council) {
+      const council = new AgentCouncil()
+      const scores = council.score(this.contract, article)
+      this.contract.council = scores
+      job.contract = this.contract
+      console.log(`Council: story ${scores.story_score} / ctr ${scores.ctr_score} / retention ${scores.retention_score} → final ${scores.final_score} (${scores.passed ? 'PASS' : 'BELOW THRESHOLD'})`)
     }
 
     const sceneDefs = directorStory.scenePlan.map((s, i) => ({
