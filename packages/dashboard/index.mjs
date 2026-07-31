@@ -741,6 +741,21 @@ async function publishToYouTube(videoPath, headline, category, contract, job) {
   }
 }
 
+// Autonomous Orchestrator — control modes + council gate
+const { AutonomousOrchestrator } = await import('../../src/video-studio/AutonomousOrchestrator.mjs')
+const _orchestrator = new AutonomousOrchestrator({ aiProvider: null })
+if (dashboardAI?.aiProvider) _orchestrator.aiProvider = dashboardAI.aiProvider
+
+app.get('/api/ops/mode', (req, res) => {
+  res.json({ mode: _orchestrator.getMode(), modes: AutonomousOrchestrator.CONTROL_MODES, lifecycle: AutonomousOrchestrator.LIFECYCLE })
+})
+
+app.post('/api/ops/mode', (req, res) => {
+  const { mode } = req.body || {}
+  const result = _orchestrator.setMode(mode)
+  res.json(result)
+})
+
 // 1-click Pipeline Run — headline in → full production sweep with Council gate
 app.post('/api/production/run', async (req, res) => {
   const { title, category, description } = req.body
@@ -766,24 +781,27 @@ app.post('/api/production/run', async (req, res) => {
       return res.status(422).json({ error: 'Contract invalid', validation, contract })
     }
 
-    // Autonomous gate: if council below threshold, run AI auto-fix once then re-check
+    // Autonomous gate: council review (optimization loop in autonomous mode)
     let optimizedContract = contract
     let finalCouncil = council
     let optimizationChanges = []
+    _orchestrator.aiProvider = dashboardAI?.isEnabled ? dashboardAI.aiProvider : null
     if (!council.passed) {
-      phase(`council ${council.final_score} below threshold — auto-fixing...`)
-      const { AIOptimizer } = await import('../../src/video-studio/AIOptimizer.mjs')
-      const optimizer = new AIOptimizer(dashboardAI?.isEnabled ? dashboardAI.aiProvider : null)
-      optimizedContract = await optimizer.optimize(contract, { ctr: council.ctr_score })
-      optimizationChanges = optimizedContract.changes || []
-      finalCouncil = new AgentCouncil().score(optimizedContract, article)
-      phase(`auto-fixed: council ${council.final_score} → ${finalCouncil.final_score}`)
-      if (!finalCouncil.passed) {
+      phase(`council ${council.final_score} below threshold — orchestrator review (mode: ${_orchestrator.getMode()})...`)
+      const decision = await _orchestrator.review(contract, council)
+      if (decision.optimized) {
+        optimizedContract = decision.contract
+        finalCouncil = { ...council, final_score: decision.score, ctr_score: Math.round(decision.estimated_ctr * 100), retention_score: Math.round(decision.estimated_retention * 100), passed: decision.approved }
+        optimizationChanges = (decision.history || []).flatMap(h => h.changes || [])
+        phase(`orchestrator: ${decision.history?.[0]?.score} → ${decision.score} over ${decision.attempts} attempt(s)`)
+      }
+      if (!decision.approved) {
         return res.status(422).json({
-          error: `Council score ${finalCouncil.final_score} still below threshold after auto-fix`,
+          error: `Council score ${decision.score} still below threshold after ${decision.attempts || 1} attempt(s)`,
           council: finalCouncil,
-          recommendations: finalCouncil.recommendations,
+          recommendations: decision.recommendations || council.recommendations,
           contract: optimizedContract,
+          optimizationHistory: decision.history || null,
         })
       }
     }
@@ -1095,6 +1113,19 @@ document.addEventListener('DOMContentLoaded', () => {
       <button onclick="loadOps()" class="text-xs px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-gray-300">Refresh</button>
     </div>
     <div id="opsWidgets" class="grid grid-cols-4 md:grid-cols-8 gap-2 text-xs"></div>
+  </div>
+
+  <!-- Automation Control Mode -->
+  <div class="card p-3 mb-4">
+    <div class="flex items-center justify-between">
+      <div class="text-xs font-bold text-gray-400">AUTOMATION MODE</div>
+      <div class="flex gap-2" id="modeButtons">
+        <button onclick="setMode('manual')" class="px-2 py-1 rounded text-xs bg-white/10 text-gray-300">Manual</button>
+        <button onclick="setMode('assisted')" class="px-2 py-1 rounded text-xs bg-white/10 text-gray-300">Assisted</button>
+        <button onclick="setMode('autonomous')" class="px-2 py-1 rounded text-xs bg-white/10 text-gray-300">Autonomous</button>
+      </div>
+    </div>
+    <div id="modeDesc" class="text-xs text-gray-500 mt-1"></div>
   </div>
 
   <!-- Operations Console -->
@@ -1700,6 +1731,29 @@ async function oneClickRun(){
   }
 }
 
+const MODE_DESC = {
+  manual: 'User approves every stage before it runs.',
+  assisted: 'AI recommends actions; user confirms major gates (council, publish).',
+  autonomous: 'AI runs the entire pipeline automatically after Visual + Contract complete.',
+}
+
+async function loadMode(){
+  const d = await fetch('/api/ops/mode').then(r=>r.json()).catch(()=>null)
+  if(!d) return
+  const desc = document.getElementById('modeDesc')
+  if(desc) desc.textContent = MODE_DESC[d.mode] || d.mode
+  const btns = document.querySelectorAll('#modeButtons button')
+  btns.forEach(b => {
+    const active = b.textContent.toLowerCase() === d.mode
+    b.className = 'px-2 py-1 rounded text-xs ' + (active ? 'bg-cyan-600 text-white font-bold' : 'bg-white/10 text-gray-300')
+  })
+}
+
+async function setMode(mode){
+  const r = await fetch('/api/ops/mode', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode})}).then(r=>r.json())
+  if(r.ok) loadMode()
+}
+
 async function loadOps(){
   const d = await fetch('/api/ops/status').then(r=>r.json()).catch(()=>null)
   if(!d) return
@@ -1800,6 +1854,7 @@ async function sendChat(){
 load()
 loadProdStatus()
 loadOps()
+loadMode()
 loadStages()
 loadEvents()
 loadAnalytics()
