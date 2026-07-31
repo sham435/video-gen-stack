@@ -720,6 +720,27 @@ app.post('/api/contract/build', async (req, res) => {
   }
 })
 
+// Shared publish helper — uploads video + cover to YouTube
+async function publishToYouTube(videoPath, headline, category, contract, job) {
+  if (!process.env.YOUTUBE_REFRESH_TOKEN) return { status: 'skipped', reason: 'YOUTUBE_REFRESH_TOKEN not set' }
+  try {
+    const { uploadShort } = await import('../../apps/api/publishers/youtube.js')
+    const fs = await import('fs')
+    const videoBuffer = fs.readFileSync(videoPath)
+    const base64 = videoBuffer.toString('base64')
+    const title = `📰 ${headline || 'NEWS-MONSTER'}`.slice(0, 100)
+    const description = `${contract?.story?.hook || ''}\n\n${contract?.retention?.ending?.cta || 'Follow NEWS-MONSTER'}\n\n#news #${category || 'technology'} #AI`
+    const pub = await uploadShort(`data:video/mp4;base64,${base64}`, title, description, process.env.YOUTUBE_PRIVACY || 'public')
+    const result = { status: 'published', videoId: pub?.id, url: pub?.id ? `https://youtu.be/${pub.id}` : null }
+    if (pub?.id) job?.markDone('publish', { detail: `Published: ${pub.id}`, score: 99 })
+    else job?.markFailed('publish', 'no video id returned')
+    return result
+  } catch (e) {
+    job?.markFailed('publish', e.message)
+    return { status: 'failed', reason: e.message }
+  }
+}
+
 // 1-click Pipeline Run — headline in → full production sweep with Council gate
 app.post('/api/production/run', async (req, res) => {
   const { title, category, description } = req.body
@@ -789,6 +810,12 @@ app.post('/api/production/run', async (req, res) => {
       if (retryQ?.status === 'success') {
         phase(`quality auto-fixed on retry: ${retryQ.score}`)
         optimizationChanges = [...optimizationChanges, ...(fixed.changes || []), '✓ Quality passed on auto-fix retry']
+        const retryPublish = await publishToYouTube(retryResult.videoPath, fixed.story?.headline, category, fixed, retryJob)
+        try {
+          const { AnalyticsFeedback } = await import('../../src/video-studio/AnalyticsFeedback.mjs')
+          new AnalyticsFeedback().record({ title: article.title, category }, { ctr: finalCouncil.ctr_score, retention30s: finalCouncil.retention_score })
+          retryJob.markDone('analytics', { detail: 'metrics recorded', score: finalCouncil.final_score })
+        } catch { /* ignore */ }
         return res.json({
           status: 'success',
           autoFixed: true,
@@ -798,12 +825,30 @@ app.post('/api/production/run', async (req, res) => {
           videoPath: retryResult.videoPath,
           coverPath: engine.coverPath,
           optimization: optimizationChanges,
+          publish: retryPublish,
         })
       }
       return res.status(422).json({ error: 'Quality failed after auto-fix retry', job: retryResult.job.toJSON() })
     }
 
     phase(`done: ${result.videoPath}`)
+
+    // Phase 3: Publish — upload video + cover to YouTube when configured
+    phase('publishing to YouTube...')
+    const publishResult = await publishToYouTube(result.videoPath, optimizedContract.story?.headline, category, optimizedContract, job)
+    if (publishResult.status === 'published') phase(`published: ${publishResult.url}`)
+    else if (publishResult.status === 'failed') phase(`publish failed: ${publishResult.reason}`)
+
+    // Phase 4: Analytics recording
+    try {
+      const { AnalyticsFeedback } = await import('../../src/video-studio/AnalyticsFeedback.mjs')
+      const fb = new AnalyticsFeedback()
+      fb.record(article, { ctr: finalCouncil.ctr_score, retention30s: finalCouncil.retention_score })
+      job.markDone('analytics', { detail: 'metrics recorded', score: finalCouncil.final_score })
+    } catch (e) {
+      console.warn(`[PipelineRun] analytics record failed: ${e.message}`)
+    }
+
     res.json({
       status: 'success',
       job: result.job.toJSON(),
@@ -812,6 +857,7 @@ app.post('/api/production/run', async (req, res) => {
       videoPath: result.videoPath,
       coverPath: engine.coverPath,
       optimization: optimizationChanges,
+      publish: publishResult,
       phases: { contract: 'ok', council: finalCouncil.final_score, cover: engine.coverBrief?.subject || null },
     })
   } catch (e) {
