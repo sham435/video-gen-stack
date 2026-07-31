@@ -93,15 +93,48 @@ app.get('/api/ai/status', (req, res) => {
   res.json(checks)
 })
 
-// AI Suggestions Engine — uses AIProvider when available, falls back to static
+// AI Optimization Queue — self-improving suggestions engine (closed-loop)
+const { SuggestionsEngine } = await import('./SuggestionsEngine.mjs')
+let _suggestions = null
+async function refreshSuggestions() {
+  try {
+    const bridge = await (dashboardAI?.getBridge ? dashboardAI.getBridge() : Promise.resolve(null))
+    const ops = await new (await import('./OperationsConsole.mjs')).OperationsConsole(ROOT).status()
+    _suggestions = new SuggestionsEngine({ bridge, root: ROOT })
+    const sys = {
+      agents: ops?.agents || null,
+      memory: ops?.memory || null,
+      templates: ops?.templates || null,
+      system: ops?.system || null,
+    }
+    _suggestions.ctx = { bridge, root: ROOT }
+    Object.assign(_suggestions.ctx, sys)
+    return _suggestions.refresh()
+  } catch (e) {
+    console.warn(`[Suggestions] init failed: ${e.message}`)
+    return []
+  }
+}
+refreshSuggestions()
+
 app.get('/api/ai/suggestions', async (req, res) => {
   try {
-    const status = { pipeline: { uptime: process.uptime().toFixed(0) + 's' }, templates: { count: existsSync(ROOT + '/src/templates') ? readdirSync(ROOT + '/src/templates').filter(f => f.endsWith('.json')).length : 0 } }
-    const suggestions = dashboardAI ? await dashboardAI.generateSuggestions(status) : [{ id: 1, type: 'content', priority: 'high', icon: '🤖', message: 'AI provider connecting...', action: 'Waiting' }]
-    res.json(suggestions)
-  } catch {
-    res.json([{ id: 1, type: 'content', priority: 'high', icon: '🔥', message: 'AI Suggestions temporarily unavailable', action: 'Retry' }])
+    const list = await refreshSuggestions()
+    res.json(list)
+  } catch (e) {
+    res.json([])
   }
+})
+
+app.get('/api/ai/suggestions/stats', (req, res) => {
+  res.json(_suggestions ? _suggestions.stats() : { active: 0, running: 0, scheduled: 0, resolvedToday: 0 })
+})
+
+app.post('/api/ai/suggestions/execute', async (req, res) => {
+  const { id } = req.body || {}
+  if (!id || !_suggestions) return res.status(400).json({ error: 'suggestion id required' })
+  const result = await _suggestions.execute(id)
+  res.json(result)
 })
 
 // Live pipeline stage status — replaces static Collector/Analyzer/Renderer/Publisher dots
@@ -1347,19 +1380,25 @@ async function load(){
     '<div class="flex justify-between text-xs"><span>'+t.topic.slice(0,20)+'</span><span class="text-green-400">'+t.growth+'</span></div>'
   ).join('')
 
-  // Suggestions
-  const suggestions = await api('/api/ai/suggestions')
-  document.getElementById('suggestionCount').textContent = suggestions.length + ' active'
-  document.getElementById('suggestions').innerHTML = suggestions.map(s =>
-    '<div class="flex items-start gap-3 p-2 rounded-lg bg-white/5">' +
-    '<span class="text-lg">'+s.icon+'</span>' +
-    '<div class="flex-1 min-w-0">' +
-    '<div class="text-xs font-medium">'+s.message+'</div>' +
-    '<div class="flex gap-2 mt-1"><span class="text-xs px-1.5 py-0.5 rounded ' +
-    (s.priority==='high'?'bg-red-900/50 text-red-300':s.priority==='medium'?'bg-yellow-900/50 text-yellow-300':'bg-blue-900/50 text-blue-300')+'">'+s.priority+'</span>' +
-    '<button data-action="'+s.action+'" data-id="'+s.id+'" class="action-btn text-xs px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-gray-300">'+s.action+'</button>' +
-    '</div><div id="action-result-'+s.id+'" class="text-xs text-green-400 mt-1 hidden"></div></div></div>'
-  ).join('')
+   // AI Optimization Queue (closed-loop suggestions)
+   const suggestions = await api('/api/ai/suggestions')
+   const sugStats = await api('/api/ai/suggestions/stats')
+   const PRIO_GLYPH = { high: '🔴', medium: '🟠', low: '🟢' }
+   const PRIO_COLOR = { high: 'bg-red-900/50 text-red-300', medium: 'bg-yellow-900/50 text-yellow-300', low: 'bg-blue-900/50 text-blue-300' }
+   document.getElementById('suggestionCount').textContent = 'Active: '+(sugStats?.active||0)+' · Resolved Today: '+(sugStats?.resolvedToday||0)
+   document.getElementById('suggestions').innerHTML = suggestions.length ? suggestions.map(s => {
+     const statusDot = s.status === 'running' ? '◐' : s.status === 'scheduled' ? '⏱' : s.status === 'resolved' ? '✅' : '○'
+     const statusColor = s.status === 'running' ? 'text-yellow-400' : s.status === 'scheduled' ? 'text-gray-400' : s.status === 'resolved' ? 'text-green-400' : 'text-gray-300'
+     return '<div class="flex items-start gap-3 p-2 rounded-lg bg-white/5">' +
+     '<span class="text-lg">'+(PRIO_GLYPH[s.priority]||'⚪')+'</span>' +
+     '<div class="flex-1 min-w-0">' +
+     '<div class="text-xs font-medium">'+s.title+'</div>' +
+     (s.plan ? '<div class="text-[10px] text-gray-500 mt-0.5">AI Plan: '+s.plan+'</div>' : '') +
+     '<div class="flex gap-2 mt-1 items-center"><span class="text-xs px-1.5 py-0.5 rounded '+(PRIO_COLOR[s.priority]||'')+'">'+s.priority+'</span>' +
+     '<span class="text-xs '+statusColor+'">'+statusDot+' '+(s.status||'active')+'</span>' +
+     (s.status === 'active' ? '<button data-sugid="'+s.id+'" class="sug-exec text-xs px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-gray-300">Run Fix</button>' : '') +
+     '</div><div id="sug-result-'+s.id+'" class="text-xs mt-1 hidden"></div></div></div>'
+   }).join('') : '<div class="text-xs text-gray-500 text-center py-2">No active suggestions — system healthy</div>'
 
   // Performance
   const perf = await api('/api/ai/performance')
@@ -1381,6 +1420,23 @@ async function load(){
 }
 
 document.addEventListener('click', async (e) => {
+  const execBtn = e.target.closest('.sug-exec')
+  if (execBtn) {
+    const sugId = execBtn.dataset.sugid
+    execBtn.disabled = true; execBtn.textContent = 'Running...'
+    try {
+      const res = await fetch('/api/ai/suggestions/execute', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id: sugId})}).then(r=>r.json())
+      const el = document.getElementById('sug-result-'+sugId)
+      if (el) {
+        const detail = res.result ? Object.entries(res.result).map(([k,v]) => '<div><span class="text-gray-500">'+k+':</span> '+v+'</div>').join('') : ''
+        el.innerHTML = (res.ok ? '✅ Resolved — validation '+(res.validation||'passed') : '❌ Failed: '+(res.error||'unknown')) + '<div class="mt-0.5">'+detail+'</div>'
+        el.className = 'text-xs mt-1 ' + (res.ok ? 'text-green-400' : 'text-red-400')
+        el.classList.remove('hidden')
+      }
+    } catch {}
+    setTimeout(load, 1500) // refresh to show next suggestion
+    return
+  }
   const btn = e.target.closest('.action-btn')
   if (!btn) return
   const action = btn.dataset.action
