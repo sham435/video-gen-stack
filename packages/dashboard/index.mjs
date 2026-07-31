@@ -774,6 +774,54 @@ async function publishToYouTube(videoPath, headline, category, contract, job) {
   }
 }
 
+// Autonomous Scheduler — ProductionIntent + user confirmation window + auto-execute
+const { AutonomousScheduler } = await import('./AutonomousScheduler.mjs')
+const _scheduler = new AutonomousScheduler()
+_scheduler.setOnAutoExecute(async (items) => {
+  for (const item of items) {
+    console.log(`[AutoExecute] ${item.topic} — AI took ownership, launching production...`)
+    try {
+      const { NewsBroadcastEngine } = await import('../../src/index.mjs')
+      const { ProductionJob } = await import('../../src/video-studio/ProductionJob.mjs')
+      const engine = new NewsBroadcastEngine()
+      const job = new ProductionJob({ title: item.topic, category: item.category })
+      job.contract = item.contract
+      await engine.generateFromArticle({ title: item.topic, category: item.category }, 'output', job)
+      const pub = await publishToYouTube(engine.coverPath ? 'output/broadcast.mp4' : 'output/broadcast.mp4', item.topic, item.category, item.contract, job)
+      console.log(`[AutoExecute] ${item.topic} → ${pub.status}`)
+    } catch (e) {
+      console.error(`[AutoExecute] ${item.topic} failed: ${e.message}`)
+    }
+  }
+})
+
+// Autonomous Controller endpoints
+app.post('/api/autonomous/enqueue', async (req, res) => {
+  const { topic, category, contract } = req.body
+  if (!topic) return res.status(400).json({ error: 'topic required' })
+  const { AgentCouncil } = await import('../../src/video-studio/AgentCouncil.mjs')
+  const council = contract ? new AgentCouncil().score(contract, { title: topic, category }) : null
+  const item = await _scheduler.enqueue({
+    topic, category: category || 'technology', contract: contract || null,
+    predictedCtr: council?.ctr_score ?? null, retentionScore: council?.retention_score ?? null,
+  })
+  res.json({ item, council })
+})
+
+app.get('/api/autonomous/queue', (req, res) => {
+  res.json({ queue: _scheduler.list(), userWindowMs: AutonomousScheduler.USER_WINDOW_MS, autoStartMs: AutonomousScheduler.AUTO_START_MS })
+})
+
+app.post('/api/autonomous/:id/approve', (req, res) => {
+  const item = _scheduler.approve(req.params.id)
+  res.json(item || { error: 'not found' })
+})
+
+app.post('/api/autonomous/:id/cancel', (req, res) => {
+  const item = _scheduler.cancel(req.params.id, req.body?.reason)
+  res.json(item || { error: 'not found' })
+})
+
 // Autonomous Orchestrator — control modes + council gate
 const { AutonomousOrchestrator } = await import('../../src/video-studio/AutonomousOrchestrator.mjs')
 const _orchestrator = new AutonomousOrchestrator({ aiProvider: null })
@@ -1159,6 +1207,21 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     </div>
     <div id="modeDesc" class="text-xs text-gray-500 mt-1"></div>
+  </div>
+
+  <!-- Autonomous Controller -->
+  <div class="card p-4 mb-4">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-bold">AI AUTONOMOUS CONTROLLER</div>
+      <div class="flex gap-2">
+        <input id="autoTopic" type="text" placeholder="News topic to auto-produce" class="bg-white/5 border border-white/10 rounded px-2 py-1 text-xs w-64">
+        <select id="autoCategory" class="bg-white/5 border border-white/10 rounded px-2 py-1 text-xs">
+          <option value="technology">Technology</option><option value="ai">AI</option><option value="gaming">Gaming</option><option value="science">Science</option><option value="sports">Sports</option>
+        </select>
+        <button onclick="autoEnqueue()" class="bg-yellow-500 hover:bg-yellow-400 text-black px-3 py-1 rounded text-xs font-bold">Schedule Production</button>
+      </div>
+    </div>
+    <div id="autoQueue" class="text-xs space-y-2"></div>
   </div>
 
   <!-- Operations Console -->
@@ -1810,6 +1873,52 @@ async function setMode(mode){
   if(r.ok) loadMode()
 }
 
+async function autoEnqueue(){
+  const topic = document.getElementById('autoTopic').value
+  const category = document.getElementById('autoCategory').value
+  if(!topic){ alert('Enter a news topic'); return }
+  const r = await fetch('/api/autonomous/enqueue', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({topic,category})}).then(r=>r.json())
+  if(r.council){
+    const c = r.council
+    const row = (a) => '<div class="flex justify-between py-0.5"><span class="text-gray-400">'+a+'</span><span class="text-gray-300">'+c.votes[a]?.score+'</span></div>'
+    const cv = document.getElementById('autoQueue')
+    cv.innerHTML = '<div class="bg-white/5 rounded p-2 border border-white/10"><div class="font-bold text-cyan-400 mb-1">🧠 AI COUNCIL DECISION</div>' +
+      ['story-agent','ctr-agent','retention-agent','trend-agent','brand-agent'].map(row).join('') +
+      '<div class="border-t border-white/10 mt-1 pt-1 flex justify-between"><span class="text-gray-400">Council Score</span><span class="font-bold '+(c.passed?'text-green-400':'text-yellow-400')+'">'+c.final_score+'%</span></div>' +
+      '<div class="flex justify-between"><span class="text-gray-400">Decision</span><span class="font-bold '+(c.passed?'text-green-400':'text-yellow-400')+'">'+c.decision+' — '+c.action+'</span></div>' +
+      '<div class="mt-2 text-yellow-400">⏱ Scheduled for auto-production (20-min review window)</div>' +
+      '<div class="mt-1 text-gray-500">'+r.item.id+'</div></div>'
+  } else {
+    document.getElementById('autoQueue').innerHTML = '<div class="text-yellow-400">✅ Scheduled: '+r.item?.id+'</div>'
+  }
+  loadAutoQueue()
+}
+
+async function loadAutoQueue(){
+  const d = await fetch('/api/autonomous/queue').then(r=>r.json()).catch(()=>null)
+  const el = document.getElementById('autoQueue')
+  if(!el || !d) return
+  const q = d.queue || []
+  if(!q.length){ el.innerHTML = '<div class="text-gray-500">No productions scheduled. Enter a topic above to auto-produce.</div>'; return }
+  const fmt = (ms) => { const s = Math.max(0, Math.floor(ms/1000)); const m = Math.floor(s/60); return m+':'+String(s%60).padStart(2,'0') }
+  el.innerHTML = q.map(item => {
+    const statusColor = item.status === 'WAITING_USER_CONFIRMATION' ? 'text-yellow-400' : item.status === 'AUTO_EXECUTING' ? 'text-green-400' : item.status === 'CANCELLED' ? 'text-red-400' : 'text-gray-300'
+    return '<div class="bg-white/5 rounded p-2 border border-white/10">' +
+      '<div class="flex justify-between"><span class="font-medium text-gray-200">'+item.topic+'</span><span class="'+statusColor+'">'+item.status.replace(/_/g,' ')+'</span></div>' +
+      '<div class="flex justify-between text-gray-500 mt-0.5"><span>'+item.category+'</span><span>'+(item.predictedCtr?'CTR '+item.predictedCtr+'%':'')+'</span></div>' +
+      (item.status === 'WAITING_USER_CONFIRMATION' ? '<div class="flex justify-between mt-1"><span class="text-yellow-400">⏱ Auto start: '+fmt(item.autoStartRemaining)+'</span>' +
+        '<span class="flex gap-2"><button onclick="autoAct(\''+item.id+'\',\'approve\')" class="px-2 py-0.5 rounded bg-green-600 text-white text-[10px]">Approve</button>' +
+        '<button onclick="autoAct(\''+item.id+'\',\'cancel\')" class="px-2 py-0.5 rounded bg-white/10 text-gray-300 text-[10px]">Cancel</button></span></div>' : '') +
+      (item.status === 'AUTO_EXECUTING' ? '<div class="text-green-400 mt-1">🤖 '+item.reason+'</div>' : '') +
+      '</div>'
+  }).join('')
+}
+
+async function autoAct(id, action){
+  const r = await fetch('/api/autonomous/'+id+'/'+action, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({reason:'user action'})}).then(r=>r.json())
+  if(r) loadAutoQueue()
+}
+
 async function loadOps(){
   const d = await fetch('/api/ops/status').then(r=>r.json()).catch(()=>null)
   if(!d) return
@@ -1911,6 +2020,7 @@ load()
 loadProdStatus()
 loadOps()
 loadMode()
+loadAutoQueue()
 loadStages()
 loadEvents()
 loadAnalytics()
@@ -1918,6 +2028,7 @@ viLoadNews()
 setInterval(load, 30000)
 setInterval(loadProdStatus, 30000)
 setInterval(loadOps, 10000)
+setInterval(loadAutoQueue, 5000)
 setInterval(loadStages, 10000)
 setInterval(loadActiveJob, 5000)
 setInterval(loadEvents, 5000)

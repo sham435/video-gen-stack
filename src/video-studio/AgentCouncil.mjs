@@ -7,24 +7,53 @@ export class AgentCouncil {
     const story = this._storyScore(contract, article)
     const ctr = this._ctrScore(contract, article)
     const retention = this._retentionScore(contract)
+    const trend = this._trendScore(contract, article)
+    const brand = this._brandScore(contract, article)
 
-    const weights = { story: 0.35, ctr: 0.35, retention: 0.30 }
-    const final = Math.round(story * weights.story + ctr * weights.ctr + retention * weights.retention)
+    // 5-agent council: Story 30, CTR 30, Retention 20, Trend 10, Brand 10
+    const weights = { story: 0.30, ctr: 0.30, retention: 0.20, trend: 0.10, brand: 0.10 }
+    const final = Math.round(story * weights.story + ctr * weights.ctr + retention * weights.retention + trend * weights.trend + brand * weights.brand)
 
     return {
       story_score: story,
       ctr_score: ctr,
       retention_score: retention,
+      trend_score: trend,
+      brand_score: brand,
       final_score: final,
       passed: final >= this.threshold,
       threshold: this.threshold,
+      decision: final >= this.threshold ? 'APPROVED' : 'REVIEW',
+      action: final >= this.threshold ? 'AUTO PRODUCE' : 'AUTO OPTIMIZE',
       votes: {
-        'editor-in-chief': { score: story, decision: story >= 70 ? 'approve' : 'reconsider' },
-        'ctr-agent': { score: ctr, decision: ctr >= 70 ? 'approve' : 'reconsider' },
-        'retention-agent': { score: retention, decision: retention >= 70 ? 'approve' : 'reconsider' },
+        'story-agent': { score: story, responsibility: 'Hook strength', decision: story >= 70 ? 'approve' : 'reconsider' },
+        'ctr-agent': { score: ctr, responsibility: 'Cover prediction', decision: ctr >= 70 ? 'approve' : 'reconsider' },
+        'retention-agent': { score: retention, responsibility: 'Watch probability', decision: retention >= 70 ? 'approve' : 'reconsider' },
+        'trend-agent': { score: trend, responsibility: 'Viral potential', decision: trend >= 60 ? 'approve' : 'reconsider' },
+        'brand-agent': { score: brand, responsibility: 'Brand consistency', decision: brand >= 60 ? 'approve' : 'reconsider' },
       },
-      recommendations: this._recommendations({ story, ctr, retention }, contract),
+      recommendations: this._recommendations({ story, ctr, retention, trend, brand }, contract),
     }
+  }
+
+  _trendScore(contract, article) {
+    let score = 50
+    const category = contract?.category || article.category || ''
+    const hot = ['ai', 'gaming', 'space', 'cybersecurity']
+    if (hot.includes(category)) score += 20
+    if (contract?.story?.hook) score += 10
+    if (contract?.retention?.pattern) score += 10
+    if (contract?.story?.target_audience) score += 10
+    return Math.min(99, score)
+  }
+
+  _brandScore(contract, article) {
+    let score = 50
+    if (contract?.cover?.accent_color) score += 15
+    if (contract?.brand_color) score += 15
+    if (contract?.category) score += 10
+    if (contract?.voice?.style) score += 9
+    return Math.min(99, score)
   }
 
   _recommendations(scores, contract) {
