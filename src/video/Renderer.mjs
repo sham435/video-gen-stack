@@ -84,7 +84,7 @@ export class Renderer {
 
     ctx.font = '400 26px Inter, sans-serif'
     ctx.fillStyle = 'rgba(255,255,255,0.7)'
-    ctx.fillText(`Source: ${article.source || 'TECH-MONSTER'}`, this.W / 2, this.H - 80)
+    ctx.fillText(`Source: ${article.source || 'NEWS-MONSTER'}`, this.W / 2, this.H - 80)
 
     fs.mkdirSync(path.dirname(outPath), { recursive: true })
     fs.writeFileSync(outPath, canvas.toBuffer('image/png'))

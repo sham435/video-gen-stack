@@ -12,17 +12,27 @@ export class BrandingLayer {
   }
 
   drawWatermark(ctx) {
+    // Consistent top-left brand chip (lower-third style) on every scene
+    ctx.save()
+    ctx.globalAlpha = 0.85
+    ctx.fillStyle = 'rgba(0,0,0,0.5)'
+    ctx.beginPath()
+    ctx.roundRect(14, 12, 260, 44, 8)
+    ctx.fill()
+    ctx.fillStyle = DesignSystem.brand.primary
+    ctx.fillRect(14, 12, 6, 44)
     const wmFont = DesignSystem.getTypography('watermark', 'default')
     ctx.font = `${wmFont.weight} ${wmFont.size}px ${wmFont.font}, sans-serif`
-    ctx.fillStyle = 'rgba(255,255,255,0.12)'
+    ctx.fillStyle = 'rgba(255,255,255,0.9)'
     ctx.textAlign = 'left'
-    ctx.textBaseline = 'top'
-    ctx.fillText('NEWS-MONSTER', 16, 14)
+    ctx.textBaseline = 'middle'
+    ctx.fillText('NEWS-MONSTER', 30, 34)
+    ctx.restore()
 
-    ctx.fillStyle = 'rgba(255,255,255,0.04)'
-    ctx.fillRect(0, H - 2, W, 2)
+    ctx.fillStyle = 'rgba(255,255,255,0.06)'
+    ctx.fillRect(0, H - 3, W, 3)
     ctx.fillStyle = DesignSystem.brand.primary
-    ctx.fillRect(0, H - 2, W * 0.3, 2)
+    ctx.fillRect(0, H - 3, W * 0.3, 3)
   }
 
   drawTicker(ctx, scene, progress) {

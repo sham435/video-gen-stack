@@ -175,7 +175,7 @@ function drawChannelBadge(ctx) {
   ctx.font = '700 16px Inter, sans-serif'
   ctx.fillStyle = 'rgba(255,255,255,0.7)'
   ctx.textAlign = 'right'
-  ctx.fillText('TECH-MONSTER', W - 30, 45)
+  ctx.fillText('NEWS-MONSTER', W - 30, 45)
 }
 
 /**

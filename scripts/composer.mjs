@@ -15,7 +15,8 @@ export async function composeVideo(articles, outDir = 'output') {
   }
 
   const engine = new NewsBroadcastEngine()
-  const broadcastPath = await engine.generateFromArticle(article, outDir)
+  const result = await engine.generateFromArticle(article, outDir)
+  const broadcastPath = typeof result === 'string' ? result : result.videoPath
 
   const finalPath = `${outDir}/final.mp4`
   fs.copyFileSync(broadcastPath, finalPath)
@@ -98,7 +99,7 @@ if (import.meta.url.endsWith('composer.mjs')) {
         try {
           const { uploadShort } = await import('../apps/api/publishers/youtube.js')
           const buffer = fs.readFileSync(finalPath)
-          const title = `${article.title?.slice(0, 90) || 'News Update'} | TECH-MONSTER`
+          const title = `${article.title?.slice(0, 90) || 'News Update'} | NEWS-MONSTER`
           const desc = `${title}\n\nSource: ${article.source || 'NewsAPI'}\n\n#tech #news #breaking #ai #TECHMONSTER`
           const result = await uploadShort(
             `data:video/mp4;base64,${buffer.toString('base64')}`,
@@ -110,7 +111,7 @@ if (import.meta.url.endsWith('composer.mjs')) {
       }
     }
 
-    console.log('\nTECH-MONSTER Broadcast Pipeline Complete')
+    console.log('\nNEWS-MONSTER Broadcast Pipeline Complete')
   }
 
   runFull().catch(e => {

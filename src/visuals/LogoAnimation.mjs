@@ -1,6 +1,6 @@
 const W = 1080, H = 1920
 
-export function drawLogoAnimation(ctx, progress, brand = 'TECH-MONSTER') {
+export function drawLogoAnimation(ctx, progress, brand = 'NEWS-MONSTER') {
   const p = Math.min(1, progress * 2)
   if (p <= 0) return
 

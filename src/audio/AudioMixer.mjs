@@ -70,6 +70,7 @@ export class AudioMixer {
         '-map', '0:v', '-map', '[a]',
         '-c:v', 'libx264', '-preset', 'medium', '-crf', '20',
         '-c:a', 'aac', '-b:a', '192k',
+        '-movflags', '+faststart',
         '-t', String(totalDuration),
         outPath
       ]
@@ -85,7 +86,7 @@ export class AudioMixer {
         throw e
       }
     } else {
-      const cmd = ['ffmpeg', '-y', '-i', videoPath, '-i', voicePath, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac', '-t', String(totalDuration), outPath]
+      const cmd = ['ffmpeg', '-y', '-i', videoPath, '-i', voicePath, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac', '-movflags', '+faststart', '-t', String(totalDuration), outPath]
       try {
         execFileSync(cmd[0], cmd.slice(1), { stdio: 'inherit' })
       } catch (e) {

@@ -13,17 +13,19 @@ export function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF') {
   }
   if (line) lines.push(line)
 
-  const fontSize = text.length > 15 ? 100 : text.length > 8 ? 120 : 140
+  const fontSize = text.length > 15 ? 96 : text.length > 8 ? 116 : 136
   const lineH = fontSize * 1.2
   const totalH = lines.length * lineH
-  const startY = H / 2 - totalH / 2
+  // Rule of thirds: headline sits in the upper-middle band, keeping the
+  // bottom third clear for caption overlays (caption safe area at 0.78H)
+  const startY = H * 0.30 - totalH / 2
 
   ctx.save()
 
   const scale = 0.7 + p * 0.3
-  ctx.translate(W / 2, H / 2)
+  ctx.translate(W / 2, H * 0.30)
   ctx.scale(scale, scale)
-  ctx.translate(-W / 2, -H / 2)
+  ctx.translate(-W / 2, -H * 0.30)
 
   const depthOffset = (1 - p) * 40
   ctx.shadowColor = 'rgba(0,0,0,0.5)'

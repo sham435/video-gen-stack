@@ -17,7 +17,7 @@ export function getActiveWordIndex(wordTimings, time) {
   return -1
 }
 
-export function renderCaptions(ctx, text, wordIndex, progress) {
+export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accentColor = '#E10600') {
   const words = text.split(' ')
   const maxWordsPerLine = 3
   const lines = []
@@ -25,32 +25,34 @@ export function renderCaptions(ctx, text, wordIndex, progress) {
     lines.push(words.slice(i, i + maxWordsPerLine))
   }
 
-  const fontSize = 52
+  const fontSize = 58
   const lineH = fontSize * 1.6
   const totalH = lines.length * lineH
   const startY = H * 0.78 - totalH / 2
   let wordCounter = 0
+  const focusKey = (focusWord || '').toUpperCase()
 
   ctx.save()
 
   for (const line of lines) {
     const lineText = line.join(' ')
-    ctx.font = `800 ${fontSize}px Inter, sans-serif`
+    ctx.font = `900 ${fontSize}px Inter, sans-serif`
     const lineW = ctx.measureText(lineText.toUpperCase()).width
     const startX = W / 2 - lineW / 2 - 30
 
-    const bgAlpha = (wordCounter <= wordIndex && wordIndex >= 0) ? 0.75 : 0.45
+    const bgAlpha = (wordCounter <= wordIndex && wordIndex >= 0) ? 0.8 : 0.5
     ctx.fillStyle = `rgba(0, 0, 0, ${bgAlpha})`
     ctx.beginPath()
-    ctx.roundRect(startX - 10, startY + lines.indexOf(line) * lineH - fontSize * 0.35, lineW + 60, fontSize * 1.3, 12)
+    ctx.roundRect(startX - 14, startY + lines.indexOf(line) * lineH - fontSize * 0.35, lineW + 68, fontSize * 1.35, 12)
     ctx.fill()
 
-    ctx.shadowColor = 'rgba(0,0,0,0.5)'
-    ctx.shadowBlur = 10
+    ctx.shadowColor = 'rgba(0,0,0,0.85)'
+    ctx.shadowBlur = 12
 
     for (const w of line) {
       const isActive = wordCounter === wordIndex
       const isPast = wordCounter < wordIndex
+      const isFocus = focusKey && w.toUpperCase().includes(focusKey)
       const lp = Math.min(1, Math.max(0, (progress - wordCounter * 0.12) / 0.12))
 
       ctx.save()
@@ -59,16 +61,16 @@ export function renderCaptions(ctx, text, wordIndex, progress) {
         const scale = 0.8 + lp * 0.2
         ctx.translate(startX + 15 + line.indexOf(w) * (lineW / line.length) + fontSize * 0.25, startY + lines.indexOf(line) * lineH + fontSize * 0.18)
         ctx.scale(scale, scale)
-        ctx.shadowColor = '#00E5FF'
+        ctx.shadowColor = isFocus ? accentColor : '#00E5FF'
         ctx.shadowBlur = 20 * lp
-        ctx.fillStyle = '#FFFFFF'
-        ctx.font = `800 ${fontSize}px Inter, sans-serif`
+        ctx.fillStyle = isFocus ? accentColor : '#FFFFFF'
+        ctx.font = `900 ${fontSize}px Inter, sans-serif`
       } else if (isPast) {
-        ctx.fillStyle = 'rgba(255,255,255,0.55)'
-        ctx.font = `600 ${fontSize}px Inter, sans-serif`
+        ctx.fillStyle = isFocus ? accentColor : 'rgba(255,255,255,0.65)'
+        ctx.font = `800 ${fontSize}px Inter, sans-serif`
       } else {
-        ctx.fillStyle = 'rgba(255,255,255,0.2)'
-        ctx.font = `600 ${fontSize}px Inter, sans-serif`
+        ctx.fillStyle = isFocus ? accentColor : 'rgba(255,255,255,0.25)'
+        ctx.font = `800 ${fontSize}px Inter, sans-serif`
       }
 
       ctx.textAlign = 'center'

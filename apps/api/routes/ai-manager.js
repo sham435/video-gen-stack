@@ -36,7 +36,7 @@ router.get('/health', (req, res) => {
   ]
   const score = Math.round(checks.filter(c => c.ok).length / checks.length * 100)
   res.json({
-    channel: 'UNFILTERED',
+    channel: 'NEWS-MONSTER',
     anchor: 'sham435',
     score,
     checks,

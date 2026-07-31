@@ -28,30 +28,58 @@ export class InformationLayer {
   }
 
   renderHook(ctx, scene, progress, category) {
-    drawBreakingBanner(ctx, scene.subheadline || scene.text, progress)
     const catStyle = DesignSystem.getCategoryStyle(category)
-
-    ctx.save()
-    ctx.font = `${DesignSystem.getTypography('headline', 'medium').weight} ${DesignSystem.getTypography('headline', 'medium').size}px ${DesignSystem.getTypography('headline', 'medium').font}, sans-serif`
-    ctx.fillStyle = 'rgba(255,255,255,0.7)'
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'middle'
-    ctx.shadowColor = 'rgba(0,0,0,0.8)'
-    ctx.shadowBlur = 8
+    const primary = catStyle.colors.primary || DesignSystem.brand.primary
     const tp = Math.min(1, progress * 3)
-    ctx.globalAlpha = tp
-    ctx.fillText('NEWS-MONSTER', W / 2, H * 0.52)
-    ctx.shadowBlur = 0
-    ctx.restore()
 
-    const countdownP = Math.max(0, 1 - progress * 0.5)
-    if (countdownP > 0) {
+    // Punch-in zoom on the NEWS-MONSTER brand mark (first ~0.5s of hook)
+    if (progress < 0.55) {
+      const punch = Math.max(0, Math.min(1, (0.55 - progress) / 0.55))
+      const scale = 1 + punch * 0.12
+      const zoom = 1 - Math.sin(punch * Math.PI) * 0.06
       ctx.save()
-      ctx.globalAlpha = countdownP * 0.15
-      ctx.fillStyle = catStyle.colors.primary
+      ctx.translate(W / 2, H * 0.52)
+      ctx.scale(scale, scale)
+      ctx.font = `${900} ${150}px Anton, Impact, sans-serif`
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.globalAlpha = tp
+      ctx.fillStyle = '#FFFFFF'
+      ctx.shadowColor = primary
+      ctx.shadowBlur = 40 * tp
+      ctx.fillText('NEWS-MONSTER', 0, 0)
+      ctx.shadowBlur = 0
+      ctx.globalAlpha = tp * 0.25
+      ctx.fillStyle = primary
       ctx.beginPath()
-      ctx.arc(W / 2, H / 2, 300 * (1 + (1 - countdownP) * 2), 0, Math.PI * 2)
+      ctx.arc(0, 0, 300 * zoom, 0, Math.PI * 2)
       ctx.fill()
+      ctx.restore()
+    } else {
+      drawBreakingBanner(ctx, scene.subheadline || scene.text, progress)
+    }
+
+    // Hook headline — big, punchy, above the breaking banner
+    if (progress > 0.45) {
+      const hp = Math.min(1, (progress - 0.45) / 0.2)
+      ctx.save()
+      ctx.globalAlpha = hp
+      const hScale = 0.6 + hp * 0.4
+      ctx.translate(W / 2, H * 0.62)
+      ctx.scale(hScale, hScale)
+      const text = (scene.text || scene.subheadline || '').replace('BREAKING: ', '').toUpperCase()
+      const words = text.split(' ')
+      const mid = Math.ceil(words.length / 2)
+      ctx.font = '900 92px Anton, Impact, sans-serif'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.fillStyle = '#FFFFFF'
+      ctx.shadowColor = 'rgba(0,0,0,0.9)'
+      ctx.shadowBlur = 16
+      ctx.fillText(words.slice(0, mid).join(' '), 0, -46)
+      ctx.fillStyle = primary
+      ctx.fillText(words.slice(mid).join(' ') || 'BREAKING', 0, 46)
+      ctx.shadowBlur = 0
       ctx.restore()
     }
   }

@@ -122,13 +122,13 @@ export async function generateFooter(outPath = 'assets/footer.png') {
   ctx.font = '800 34px Inter, sans-serif'
   ctx.fillStyle = '#FFFFFF'
   ctx.textAlign = 'center'
-  ctx.fillText('TM', logoX + logoSize / 2, logoY + 42)
+  ctx.fillText('NM', logoX + logoSize / 2, logoY + 42)
 
   // Channel name below
   ctx.font = '700 11px Inter, sans-serif'
   ctx.fillStyle = '#333333'
   ctx.textAlign = 'center'
-  ctx.fillText('TECH-MONSTER', logoX + logoSize / 2, logoY + logoSize + 14)
+  ctx.fillText('NEWS-MONSTER', logoX + logoSize / 2, logoY + logoSize + 14)
 
   // ── Save ──
   fs.mkdirSync(path.dirname(outPath), { recursive: true })

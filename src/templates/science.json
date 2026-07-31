@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "brand": "TECH-MONSTER",
+  "brand": "NEWS-MONSTER",
   "anchor": "sham435",
   "resolution": {"width": 1080, "height": 1920},
   "fps": 30,
@@ -19,7 +19,7 @@
     {"id":"closeup","type":"explanation","start":10,"end":16,"text":"{{explanation_1}}","caption":"SCIENTIFIC BREAKTHROUGH","visual":"lab","effect":"cinematic_zoom","audio":"narration"},
     {"id":"detail","type":"explanation","start":16,"end":22,"text":"{{explanation_2}}","caption":"PEER REVIEWED","visual":"data","effect":"data_panel","audio":"narration"},
     {"id":"reaction","type":"retention","start":22,"end":28,"text":"{{retention}}","caption":"CHANGES EVERYTHING","visual":"globe","effect":"dramatic_zoom","audio":"suspense"},
-    {"id":"close","type":"brand_close","start":28,"end":35,"text":"","caption":"Follow TECH-MONSTER — Breaking News, AI, Science, Sports, Politics & Future Tech","visual":"brand_card","effect":"brand_reveal","audio":"outro"}
+    {"id":"close","type":"brand_close","start":28,"end":35,"text":"","caption":"Follow NEWS-MONSTER — Breaking News, AI, Science, Sports, Politics & Future Tech","visual":"brand_card","effect":"brand_reveal","audio":"outro"}
   ],
   "ticker": ["Space", "Biology", "Physics", "Climate", "Medicine", "Quantum"]
 }

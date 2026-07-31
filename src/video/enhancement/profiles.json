@@ -1,0 +1,15 @@
+{
+  "technology": { "profile": "crisp", "sharpen": 1.3, "denoise": 0.2, "contrast": 1.15, "saturation": 1.1 },
+  "ai": { "profile": "crisp", "sharpen": 1.4, "denoise": 0.15, "contrast": 1.18, "saturation": 1.12 },
+  "gaming": { "profile": "vibrant", "sharpen": 1.5, "denoise": 0.1, "contrast": 1.25, "saturation": 1.3 },
+  "sports": { "profile": "vibrant", "sharpen": 1.4, "denoise": 0.12, "contrast": 1.2, "saturation": 1.25 },
+  "science": { "profile": "cinema", "sharpen": 1.0, "denoise": 0.4, "contrast": 1.2, "saturation": 0.9 },
+  "space": { "profile": "cinema", "sharpen": 1.1, "denoise": 0.3, "contrast": 1.3, "saturation": 0.95 },
+  "politics": { "profile": "hd", "sharpen": 1.2, "denoise": 0.3, "contrast": 1.1, "saturation": 0.85 },
+  "finance": { "profile": "hd", "sharpen": 1.1, "denoise": 0.3, "contrast": 1.12, "saturation": 0.9 },
+  "health": { "profile": "soft", "sharpen": 0.8, "denoise": 0.5, "contrast": 1.0, "saturation": 1.05 },
+  "entertainment": { "profile": "soft", "sharpen": 0.8, "denoise": 0.5, "saturation": 1.15 },
+  "cybersecurity": { "profile": "hd", "sharpen": 1.2, "denoise": 0.25, "contrast": 1.15, "saturation": 0.8 },
+  "robotics": { "profile": "vibrant", "sharpen": 1.4, "denoise": 0.15, "contrast": 1.2, "saturation": 1.15 },
+  "default": { "profile": "hd", "sharpen": 1.2, "denoise": 0.25, "contrast": 1.12, "saturation": 1.0 }
+}

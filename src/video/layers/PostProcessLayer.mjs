@@ -1,13 +1,21 @@
 import { applyMotionEffect, applyDefaultEffects } from '../MotionEngine.mjs'
 import { DesignSystem } from '../../visuals/DesignSystem.mjs'
 import { drawGlitchOverlay } from '../../visuals/BreakingBanner.mjs'
+import { FrameEnhancer } from '../enhancement/FrameEnhancer.mjs'
 
 const { W, H } = DesignSystem
 
 export class PostProcessLayer {
+  constructor() {
+    this.enhancer = new FrameEnhancer()
+  }
+
   draw(ctx, scene, progress, category) {
     const catStyle = DesignSystem.getCategoryStyle(category)
     this.drawVignette(ctx, progress)
+
+    // Category profile enhance: sharpen + denoise + contrast + saturation + grade
+    this.enhancer.enhance(ctx, category)
 
     if (scene.effect) {
       applyMotionEffect(ctx, scene.effect, progress)

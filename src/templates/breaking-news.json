@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "brand": "TECH-MONSTER",
+  "brand": "NEWS-MONSTER",
   "anchor": "sham435",
   "resolution": {"width": 1080, "height": 1920},
   "fps": 30,
@@ -87,7 +87,7 @@
       "start": 23,
       "end": 30,
       "text": "",
-      "caption": "Follow TECH-MONSTER — Breaking News, AI, Science, Sports, Politics & Future Tech",
+      "caption": "Follow NEWS-MONSTER — Breaking News, AI, Science, Sports, Politics & Future Tech",
       "visual": "brand_card",
       "effect": "brand_reveal",
       "audio": "outro"

@@ -6,9 +6,9 @@ export class OpenRouterProvider extends AIProvider {
   constructor(apiKey, options = {}) {
     super()
     this.apiKey = apiKey || process.env.OPENROUTER_API_KEY
-    this.model = options.model || process.env.LLM_MODEL || 'openrouter/auto'
+    this.model = options.model || process.env.LLM_MODEL || 'google/gemma-4-26b-a4b-it:free'
     this.referer = options.referer || 'https://github.com/sham435/video-gen-stack'
-    this.timeout = options.timeout || 30000
+    this.timeout = options.timeout || 60000
   }
 
   get name() {

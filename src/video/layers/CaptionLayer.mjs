@@ -1,8 +1,11 @@
 import { renderCaptions } from '../CaptionEngine.mjs'
+import { DesignSystem } from '../../visuals/DesignSystem.mjs'
 
 export class CaptionLayer {
   draw(ctx, scene, progress, wordIndex) {
     if (!scene.caption) return
-    renderCaptions(ctx, scene.caption, wordIndex, progress)
+    const catStyle = DesignSystem.getCategoryStyle(scene.category || 'technology')
+    const accent = catStyle?.colors?.primary || DesignSystem.brand.accent
+    renderCaptions(ctx, scene.caption, wordIndex, progress, scene.caption_focus || scene.focus, accent)
   }
 }
