@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Hot-Reload Dev Mode — UNFILTERED | anchor: sham435
+ * Hot-Reload Dev Mode — NEWS-MONSTER | anchor: sham435
  *
  * Watches scripts/ and packages/ for changes, auto-restarts the pipeline.
  * Also starts the dashboard and API server alongside.
@@ -89,7 +89,7 @@ function startWatcher() {
 
 console.log(`
 ╔═══════════════════════════════════════════╗
-║   TECH-MONSTER Dev Hot-Reload            ║
+║   NEWS-MONSTER Dev Hot-Reload            ║
 ║───────────────────────────────────────────║
 ║  Commands:                               ║
 ║  node scripts/dev.mjs                    ║

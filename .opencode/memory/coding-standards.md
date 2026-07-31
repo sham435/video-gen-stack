@@ -84,3 +84,15 @@ function syncFn() { return 42 }  // fine
 - Hardcoded paths (use `path.join` or config constants)
 - Duplicate property assignments in object literals
 - Unused imports or variables
+
+## OpenCode Self-Modification Standard
+
+When an AI agent modifies ANY OpenCode-internal file (`.opencode/**` OR `src/integration/OpenCodeBridge.mjs` OR `packages/dashboard/routes/opencode.mjs` OR `.github/workflows/opencode-*.yml`):
+
+1. **Use the workflow**: Follow `.opencode/workflows/opencode-self-mod.md` — 8 Phases + 10 Safeguards, no shortcuts.
+2. **Snapshot before edit**: `(new OpenCodeBridge()).snapshotForRollback([...files])` — restore on ANY validation failure.
+3. **Validate the hard way**: Run `validateIntegrity()` (not just JSON.parse). Required: 0 schemaErrors, 0 brokenRegistry, full-sweep all pass, orphans empty or explained.
+4. **Minimal diffs only**: No whitespace cleanups adjacent to changes. Max 40 lines/file for Review-level.
+5. **Report in standard format**: End with the Safeguard 10 Standard Report block exactly as written in the workflow doc.
+6. **No orphaned .md files**: If you create a file in `.opencode/{agents,memory,workflows,policies}/`, register it in `system-config.json` in the SAME edit.
+7. **Preserve existing API**: `getSystemContext()` must always return its 6 historical keys. Schema changes to REQUIRED_TOP_LEVEL_KEYS require Approve-level approval (see ai-approval.md lines 36-45).

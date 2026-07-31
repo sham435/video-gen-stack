@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * AI Pipeline Manager — UNFILTERED | Anchor: sham435
+ * AI Pipeline Manager — NEWS-MONSTER | Anchor: sham435
  *
  * Modes:
  *   debug   — Parse GitHub Actions logs for known errors, suggest/codefix
@@ -199,7 +199,7 @@ function createAutoPR(issues, fixes) {
 const mode = process.argv[2] || 'health'
 console.log(`\n╔══════════════════════════════════════╗`)
 console.log(`║  🤖 AI Pipeline Manager            ║`)
-console.log(`║  UNFILTERED | anchor: sham435      ║`)
+console.log(`║  NEWS-MONSTER | anchor: sham435      ║`)
 console.log(`║  Mode: ${mode.padEnd(29)}║`)
 console.log(`╚══════════════════════════════════════╝\n`)
 

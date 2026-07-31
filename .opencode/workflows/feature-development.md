@@ -37,7 +37,12 @@ Constraints:
   - Follow coding-standards.md
   - Add validation at boundaries
   - Include fallback chains for external deps
-  - Update known_files in opencode.json
+  - If ANY modified file is under .opencode/ OR src/integration/OpenCodeBridge.mjs
+    OR packages/dashboard/routes/opencode.mjs OR .github/workflows/opencode-*.yml:
+        → SWITCH TO workflows/opencode-self-mod.md for the rest of this task
+        → Apply its 8 Phases + 10 Safeguards instead of generic implementation steps
+  - Else (no OpenCode files touched):
+        → Update known_files in .opencode/system-config.json (was: opencode.json, renamed 2026-07-30)
 Branch naming: feature/<short-description>
 ```
 
@@ -93,5 +98,6 @@ Branch: feature/* → develop
 - [ ] Syntax check passes
 - [ ] Import resolution verified
 - [ ] Affected subsystems tested
-- [ ] Known_files updated
+- [ ] Known_files updated in .opencode/system-config.json (opencode.json → renamed 2026-07-30)
+- [ ] If OpenCode files touched: self-mod workflow applied, integrity check passed, standard report produced
 - [ ] Human approval obtained for high-impact changes

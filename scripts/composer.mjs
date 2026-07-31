@@ -101,10 +101,12 @@ if (import.meta.url.endsWith('composer.mjs')) {
           const buffer = fs.readFileSync(finalPath)
           const title = `${article.title?.slice(0, 90) || 'News Update'} | NEWS-MONSTER`
           const desc = `${title}\n\nSource: ${article.source || 'NewsAPI'}\n\n#tech #news #breaking #ai #TECHMONSTER`
+          const coverPath = fs.existsSync('output/cover.png') ? 'output/cover.png' : null
           const result = await uploadShort(
             `data:video/mp4;base64,${buffer.toString('base64')}`,
             title, desc,
-            process.env.YOUTUBE_PRIVACY || 'public'
+            process.env.YOUTUBE_PRIVACY || 'public',
+            coverPath
           )
           console.log(`Published: https://youtu.be/${result?.id}`)
         } catch (e) { console.log('Upload failed:', e.message) }

@@ -14,7 +14,12 @@
     "space": { "primary": "#FFFFFF", "secondary": "#00E5FF", "bg": "#000510" },
     "ai": { "primary": "#00E5FF", "secondary": "#E10600", "bg": "#050510" },
     "cybersecurity": { "primary": "#00FF41", "secondary": "#E10600", "bg": "#000A05" },
-    "biotech": { "primary": "#00FF88", "secondary": "#00E5FF", "bg": "#000A05" }
+    "biotech": { "primary": "#00FF88", "secondary": "#00E5FF", "bg": "#000A05" },
+    "robotics": { "primary": "#FF6B00", "secondary": "#00E5FF", "bg": "#0A0500" },
+    "programming": { "primary": "#00E5FF", "secondary": "#FFD700", "bg": "#050510" },
+    "quantum": { "primary": "#E100FF", "secondary": "#00E5FF", "bg": "#050005" },
+    "technology": { "primary": "#E10600", "secondary": "#00E5FF", "bg": "#050505" },
+    "lifestyle": { "primary": "#FF6B9D", "secondary": "#00E5FF", "bg": "#050510" }
   },
   "semantic": {
     "success": "#00FF41",

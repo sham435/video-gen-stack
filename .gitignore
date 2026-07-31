@@ -8,3 +8,4 @@ snapshots/
 Library/
 .virtualenvs/
 output/
+scripts/get-youtube-token.mjs
