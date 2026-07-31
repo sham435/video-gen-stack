@@ -172,6 +172,20 @@ app.get('/api/pipeline/stages', async (req, res) => {
   res.json({ updatedAt: new Date().toISOString(), stages })
 })
 
+// Operations Console — aggregated production ops status
+const { OperationsConsole } = await import('./OperationsConsole.mjs')
+const _ops = new OperationsConsole(ROOT)
+
+app.get('/api/ops/status', (req, res) => {
+  res.json(_ops.status())
+})
+
+app.post('/api/ops/retry', (req, res) => {
+  const { stage, count } = req.body || {}
+  const ok = _ops.updateRetryPolicy(stage, count)
+  res.json({ ok, retryPolicy: _ops.retryPolicy })
+})
+
 // Production status — aggregated operational metrics at a glance
 app.get('/api/ai/production-status', async (req, res) => {
   try {
@@ -1028,6 +1042,37 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
   </div>
 
+  <!-- Operations Status Widgets -->
+  <div class="card p-3 mb-4">
+    <div class="flex items-center justify-between mb-2">
+      <div class="text-xs font-bold text-gray-400">SYSTEM STATUS</div>
+      <button onclick="loadOps()" class="text-xs px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-gray-300">Refresh</button>
+    </div>
+    <div id="opsWidgets" class="grid grid-cols-4 md:grid-cols-8 gap-2 text-xs"></div>
+  </div>
+
+  <!-- Operations Console -->
+  <div class="card p-4 mb-6">
+    <div class="text-sm font-bold mb-3">PRODUCTION OPERATIONS CONSOLE</div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 text-xs">
+      <div class="bg-white/5 rounded p-2">
+        <div class="font-bold text-gray-300 mb-1">AGENT HEALTH</div>
+        <div id="opsAgents"></div>
+        <div id="opsHealthScore" class="mt-1"></div>
+      </div>
+      <div class="bg-white/5 rounded p-2">
+        <div class="font-bold text-gray-300 mb-1">PIPELINE RELIABILITY</div>
+        <div id="opsReliability"></div>
+      </div>
+      <div class="bg-white/5 rounded p-2">
+        <div class="font-bold text-gray-300 mb-1">AUTO-RETRY POLICY</div>
+        <div id="opsRetry"></div>
+        <div class="font-bold text-gray-300 mt-2 mb-1">TEMPLATE COVERAGE</div>
+        <div id="opsTemplates"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-6">
     <!-- AI Assistant Panel -->
     <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -1609,6 +1654,57 @@ async function oneClickRun(){
   }
 }
 
+async function loadOps(){
+  const d = await fetch('/api/ops/status').then(r=>r.json()).catch(()=>null)
+  if(!d) return
+  // Status widgets
+  const widgets = document.getElementById('opsWidgets')
+  if(widgets){
+    const w = (label, value, color) => '<div class="bg-white/5 rounded p-2 text-center"><div class="text-gray-500">'+label+'</div><div class="font-bold '+color+'">'+value+'</div></div>'
+    widgets.innerHTML =
+      w('Uptime', d.system?.uptime, 'text-gray-300') +
+      w('Agents', (d.agents?.healthy||0)+' / '+(d.agents?.total||0), d.agents?.healthy === d.agents?.total ? 'text-green-400' : 'text-red-400') +
+      w('Running', d.queue?.running||0, 'text-yellow-400') +
+      w('Queue', d.queue?.waiting||0, 'text-gray-300') +
+      w('CPU', (d.resources?.cpu||0)+'%', 'text-gray-300') +
+      w('RAM', d.resources?.ram, 'text-gray-300') +
+      w('Success', (d.selfHealing?.successRate||0)+'%', 'text-green-400') +
+      w('Health', (d.agents?.healthScore||0)+'%', d.agents?.healthScore >= 90 ? 'text-green-400' : 'text-yellow-400')
+  }
+  // Agent health
+  const agents = document.getElementById('opsAgents')
+  if(agents && d.agents?.list){
+    agents.innerHTML = d.agents.list.map(a =>
+      '<div class="flex justify-between py-0.5"><span class="text-gray-400">'+a.agent+'</span><span class="'+(a.healthy?'text-green-400':'text-red-400')+'">'+(a.healthy?'✅ Healthy':'⚠ Issue')+'</span></div>'
+    ).join('')
+    document.getElementById('opsHealthScore').innerHTML = '<div class="text-gray-500 mt-1">'+d.agents.healthy+' / '+d.agents.total+' healthy · Health Score <span class="font-bold '+(d.agents.healthScore>=90?'text-green-400':'text-yellow-400')+'">'+d.agents.healthScore+'%</span></div>'
+  }
+  // Reliability
+  const rel = document.getElementById('opsReliability')
+  if(rel && d.reliability){
+    rel.innerHTML = Object.entries(d.reliability).map(([k,v]) =>
+      '<div class="flex justify-between py-0.5"><span class="capitalize text-gray-400">'+k+'</span><span class="text-green-400">'+v+'%</span></div>'
+    ).join('') +
+    '<div class="mt-2 pt-2 border-t border-white/10">' +
+    Object.entries(d.selfHealing||{}).filter(([k]) => k !== 'successRate').map(([k,v]) => '<div class="flex justify-between py-0.5"><span class="capitalize text-gray-400">'+k+'</span><span class="text-gray-300">'+(v===true?'✅ Enabled':v===false?'❌ Off':v)+'</span></div>').join('') +
+    '</div>'
+  }
+  // Retry policy + templates
+  const retry = document.getElementById('opsRetry')
+  if(retry && d.retryPolicy){
+    retry.innerHTML = Object.entries(d.retryPolicy).filter(([k]) => k !== 'backoff' && k !== 'deadLetterQueue').map(([k,v]) =>
+      '<div class="flex justify-between py-0.5"><span class="capitalize text-gray-400">'+k+'</span><span class="text-gray-300">Retry '+v+'</span></div>'
+    ).join('') + '<div class="text-gray-500 mt-1">Backoff: '+(d.retryPolicy.backoff||[]).map(b=>b/1000+'s').join(' / ')+' · DLQ: '+(d.retryPolicy.deadLetterQueue?'✅':'❌')+'</div>'
+  }
+  const tpl = document.getElementById('opsTemplates')
+  if(tpl && d.templates){
+    tpl.innerHTML = Object.entries(d.templates.coverage||{}).map(([k,v]) =>
+      '<div class="flex items-center gap-1 py-0.5"><span class="capitalize text-gray-400 w-20">'+k+'</span><div class="flex-1 bg-white/10 rounded h-2 overflow-hidden"><div class="h-full '+(v>=8?'bg-green-500':v>=4?'bg-yellow-500':'bg-red-500')+'" style="width:'+(v*10)+'%"></div></div></div>'
+    ).join('') +
+    '<div class="text-gray-500 mt-1">Missing: '+(d.templates.missing||[]).join(', ')+'</div>'
+  }
+}
+
 async function loadProdStatus(){
   const data = await fetch('/api/ai/production-status').then(r=>r.json()).catch(()=>null)
   if(!data) return
@@ -1657,12 +1753,14 @@ async function sendChat(){
 
 load()
 loadProdStatus()
+loadOps()
 loadStages()
 loadEvents()
 loadAnalytics()
 viLoadNews()
 setInterval(load, 30000)
 setInterval(loadProdStatus, 30000)
+setInterval(loadOps, 10000)
 setInterval(loadStages, 10000)
 setInterval(loadActiveJob, 5000)
 setInterval(loadEvents, 5000)
