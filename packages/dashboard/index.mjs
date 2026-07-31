@@ -2554,19 +2554,21 @@ const server = app.listen(PORT, () => {
 
 server.on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
-    const alt = PORT + 1
-    console.log(`⚠️  Port ${PORT} in use — falling back to port ${alt}`)
-    const s2 = app.listen(alt, () => {
-      console.log(`\n╔════════════════════════════════════════════╗`)
-      console.log(`║  NEWS-MONSTER AI Command Center          ║`)
-      console.log(`║──────────────────────────────────────────║`)
-      console.log(`║  http://localhost:${alt}                    ║`)
-      console.log(`╚════════════════════════════════════════════╝\n`)
-    })
-    s2.on('error', () => {
-      console.error(`❌  Port ${PORT} and ${alt} both in use. Free a port and retry.`)
-      process.exit(1)
-    })
+    // Always run on a single port — check if this dashboard is already running there.
+    fetch(`http://localhost:${PORT}/api/ai/status`)
+      .then(r => r.json())
+      .then(() => {
+        console.log(`\n✅  NEWS-MONSTER AI Command Center is ALREADY RUNNING on port ${PORT}`)
+        console.log(`    http://localhost:${PORT}\n`)
+        console.log('    (Duplicate instance exited — the existing server is still active.)')
+        process.exit(0)
+      })
+      .catch(() => {
+        console.error(`❌  Port ${PORT} is in use by another process, and it is not this dashboard.`)
+        console.error(`    Free the port with:  kill \$(lsof -ti:${PORT})`)
+        console.error(`    Then run:  npm run dashboard`)
+        process.exit(1)
+      })
   } else {
     console.error(`❌  Server error: ${err.message}`)
     process.exit(1)
