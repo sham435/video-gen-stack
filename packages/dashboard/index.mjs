@@ -428,6 +428,17 @@ app.get('/api/ai/memory', (req, res) => {
   res.json({ memory: _aiMemory })
 })
 
+// Production Guardian health
+app.get('/api/ai/guardian', async (req, res) => {
+  try {
+    const { ProductionGuardian } = await import('../../src/ai/ProductionGuardian.mjs')
+    const g = new ProductionGuardian()
+    res.json(g.getStats())
+  } catch (e) {
+    res.json({ autoFixes: 0, recoveryRate: 100, circuitBreaker: { failures: 0, open: false }, knownErrors: 0 })
+  }
+})
+
 // AI Action Card + executor
 const CHAT_ACTIONS = {
   retry_assets: { label: 'Retry Asset Generation', risk: 'low', run: async () => ({ ok: true, result: 'Asset search re-ran, fallback applied' }) },
@@ -1616,8 +1627,8 @@ document.addEventListener('DOMContentLoaded', () => {
     <div id="councilView" class="text-xs text-gray-400">Enter a headline → Council previews the score, Run Pipeline executes the full production sweep</div>
   </div>
 
-  <!-- AI Memory + Health Score -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
+  <!-- AI Memory + Health Score + Guardian -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
     <div class="card p-4">
       <div class="text-sm font-bold mb-3">AI MEMORY — KNOWN FIXES</div>
       <div id="aiMemory" class="text-xs space-y-1"></div>
@@ -1625,6 +1636,10 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="card p-4">
       <div class="text-sm font-bold mb-3">NEWS-MONSTER HEALTH</div>
       <div id="healthScore" class="text-xs space-y-2"></div>
+    </div>
+    <div class="card p-4">
+      <div class="text-sm font-bold mb-3">SELF-HEALING GUARDIAN</div>
+      <div id="guardianStats" class="text-xs space-y-2"></div>
     </div>
   </div>
 
@@ -2211,6 +2226,21 @@ async function loadAiMemory(){
   ).join('') || '<div class="text-gray-500">No memory yet</div>'
 }
 
+async function loadGuardian(){
+  const d = await fetch('/api/ai/guardian').then(r=>r.json()).catch(()=>null)
+  const el = document.getElementById('guardianStats')
+  if(!el || !d) return
+  const cb = d.circuitBreaker || {}
+  const row = (k, v, color) => '<div class="flex justify-between"><span class="text-gray-400">'+k+'</span><span class="'+(color||'text-gray-300')+'">'+v+'</span></div>'
+  el.innerHTML =
+    row('Auto Fixes', d.autoFixes, 'text-green-400') +
+    row('Known Errors', d.knownErrors, 'text-gray-300') +
+    row('Recovery Rate', d.recoveryRate+'%', d.recoveryRate>=90?'text-green-400':d.recoveryRate>=70?'text-yellow-400':'text-red-400') +
+    row('Circuit Breaker', cb.open ? 'OPEN' : 'CLOSED', cb.open ? 'text-red-400' : 'text-green-400') +
+    row('Breaker Failures', cb.failures, cb.failures>0?'text-yellow-400':'text-gray-300') +
+    (cb.open ? '<div class="text-red-400 mt-1 text-[10px]">⚠ Pipeline paused — resolve underlying failures</div>' : '')
+}
+
 async function loadHealthScore(){
   const d = await fetch('/api/ai/health-score').then(r=>r.json()).catch(()=>null)
   const el = document.getElementById('healthScore')
@@ -2384,6 +2414,7 @@ loadEvents()
 loadAnalytics()
 loadAiMemory()
 loadHealthScore()
+loadGuardian()
 viLoadNews()
 setInterval(load, 30000)
 setInterval(loadProdStatus, 30000)

@@ -7,6 +7,9 @@ import { Timeline } from './video/Timeline.mjs'
 import { VisualDirector } from './video/VisualDirector.mjs'
 import { SceneCompositionScore } from './video/SceneCompositionScore.mjs'
 import { CategoryProductionProfiles } from './video/CategoryProductionProfiles.mjs'
+import { SelfHealingExecutor } from './ai/SelfHealingExecutor.mjs'
+import { ProductionGuardian } from './ai/ProductionGuardian.mjs'
+import { ProductionPreflight } from './ai/ProductionPreflight.mjs'
 import { ProductionEffectEngine } from './video/effects/ProductionEffectEngine.mjs'
 import { RetentionDirector } from './video/RetentionDirector.mjs'
 import { SceneProductionScore } from './video/scoring/SceneProductionScore.mjs'
@@ -50,6 +53,8 @@ export class NewsBroadcastEngine {
     this.effectEngine = ProductionEffectEngine
     this.retentionDirector = new RetentionDirector()
     this.productionScorer = new SceneProductionScore()
+    this.guardian = new ProductionGuardian()
+    this.executor = new SelfHealingExecutor(this.guardian)
     this.emotionalArcAnalyzer = new EmotionalArcAnalyzer()
     this.motionPlanner = new MotionPlanner()
     this.transitionPlanner = new TransitionPlanner()
@@ -81,6 +86,14 @@ export class NewsBroadcastEngine {
   }
 
   async generateFromArticle(article, outDir = 'output', job = null, options = {}) {
+    // Preflight guard — verify everything before rendering starts
+    const preflight = await ProductionPreflight.check({ article, category: article?.category }, { outDir, bypassYoutube: true })
+    if (!preflight.ready) {
+      console.error(`[Preflight] blocked: ${preflight.errors.join(', ')}`)
+      if (job) job.markFailed('collector', `preflight: ${preflight.errors.join(', ')}`)
+      throw new Error(`Production preflight failed: ${preflight.errors.join(', ')}`)
+    }
+
     fs.mkdirSync(outDir, { recursive: true })
     const framesDir = `${outDir}/frames`
     fs.mkdirSync(framesDir, { recursive: true })
@@ -293,7 +306,10 @@ export class NewsBroadcastEngine {
     }
     process.stdout.write('\n')
 
-    const videoPath = await this.assembleVideo(framesDir, voicePath, timedScenes, totalDuration, outDir)
+    const videoPath = await this.executor.execute(
+      () => this.assembleVideo(framesDir, voicePath, timedScenes, totalDuration, outDir),
+      { jobId: job?.id, category: article?.category }
+    )
     job.markDone('render', { detail: `${totalFrames} frames → ${path.basename(videoPath)}`, score: 88 })
 
     job.markStart('quality')
