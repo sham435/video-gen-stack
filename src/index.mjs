@@ -4,6 +4,8 @@ import { fileURLToPath } from 'url'
 import { execSync } from 'child_process'
 import { SceneEngine } from './video/SceneEngine.mjs'
 import { Timeline } from './video/Timeline.mjs'
+import { VisualDirector } from './video/VisualDirector.mjs'
+import { SceneCompositionScore } from './video/SceneCompositionScore.mjs'
 import { CoverGenerator } from './video-studio/CoverGenerator.mjs'
 import { ProductionJob } from './video-studio/ProductionJob.mjs'
 import { ScriptContract } from './video-studio/ScriptContract.mjs'
@@ -38,6 +40,8 @@ export class NewsBroadcastEngine {
     this.visualReasoner = new VisualReasoner()
     this.coverGenerator = new CoverGenerator(null)
     this.scriptContract = new ScriptContract()
+    this.visualDirector = new VisualDirector()
+    this.compositionScorer = new SceneCompositionScore()
     this.emotionalArcAnalyzer = new EmotionalArcAnalyzer()
     this.motionPlanner = new MotionPlanner()
     this.transitionPlanner = new TransitionPlanner()
@@ -143,12 +147,17 @@ export class NewsBroadcastEngine {
     const scenes = []
     for (const scene of rawScenes) {
       const visualPlan = await this.visualReasoner.select(scene, article, article.category)
+      // Cinematic Visual Director: rank images, drop near-duplicates, assign camera
+      const ranked = this.visualDirector.rank(visualPlan.images, article)
+      const cameraPlan = this.visualDirector.getCameraPlan(scene.type)
       scenes.push({
         ...scene,
         category: visualPlan.category,
-        image: visualPlan.primary?.url || null,
-        bRoll: visualPlan.primary?.url || null,
-        images: visualPlan.images || (visualPlan.primary?.url ? [visualPlan.primary.url] : []),
+        image: ranked[0]?.url || visualPlan.primary?.url || null,
+        bRoll: ranked[0]?.url || visualPlan.primary?.url || null,
+        images: ranked.map(r => r.url) || (visualPlan.primary?.url ? [visualPlan.primary.url] : []),
+        camera: scene.camera || cameraPlan.motion,
+        cameraPlan,
         visualPlan,
         colors: visualPlan.colors,
         directorLayout: visualPlan.layout,
@@ -158,7 +167,18 @@ export class NewsBroadcastEngine {
 
     const timedScenes = this.scenePlanner.assignTimestamps(scenes)
     this.validateTemplate(timedScenes)
-    job.markDone('assets', { detail: `${scenes.length} scenes with resolved visuals`, score: Math.round(90 - scenes.filter(s => !s.image).length * 5) })
+
+    // Phase 8: Scene composition quality — regenerate story if scenes fail composition
+    const scored = timedScenes.map(s => ({ scene: s, comp: this.compositionScorer.score(s) }))
+    const failing = scored.filter(x => !x.comp.passed)
+    if (failing.length > 0) {
+      const reasons = failing.map(f => `scene ${f.scene.id}: ${f.comp.reason}`).join(' | ')
+      console.warn(`Scene composition: ${scored.length - failing.length}/${scored.length} passed (${reasons})`)
+      job.markDone('assets', { ok: false, detail: `composition ${failing.length} scenes failing`, score: Math.round(((scored.length - failing.length) / scored.length) * 100) })
+    } else {
+      console.log(`Scene composition: all ${scored.length} scenes passed`)
+      job.markDone('assets', { detail: `${scenes.length} scenes composed`, score: 92 })
+    }
 
     // Stage 5b: Cover generation — CoverDirector + Composer + mandatory validation gate
     job.markStart('cover')

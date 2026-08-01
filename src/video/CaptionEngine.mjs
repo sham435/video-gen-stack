@@ -18,7 +18,17 @@ export function getActiveWordIndex(wordTimings, time) {
 }
 
 export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accentColor = '#E10600') {
-  const words = text.split(' ')
+  // Phase 1 — Duplicate Word Filter: the emphasis word is already rendered large
+  // by InformationLayer. Remove it from the caption sentence so it's never repeated.
+  const focusKey = (focusWord || '').toUpperCase()
+  const words = text.split(' ').filter(w => {
+    if (!focusKey) return true
+    const clean = w.replace(/[^a-zA-Z0-9]/g, '').toUpperCase()
+    const cleanFocus = focusKey.replace(/[^a-zA-Z0-9]/g, '')
+    if (cleanFocus && clean === cleanFocus) return false
+    return true
+  })
+
   const maxWordsPerLine = 3
   const lines = []
   for (let i = 0; i < words.length; i += maxWordsPerLine) {
@@ -30,7 +40,6 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
   const totalH = lines.length * lineH
   const startY = H * 0.78 - totalH / 2
   let wordCounter = 0
-  const focusKey = (focusWord || '').toUpperCase()
 
   ctx.save()
 
