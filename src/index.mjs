@@ -12,6 +12,9 @@ import { ProductionGuardian } from './ai/ProductionGuardian.mjs'
 import { ProductionPreflight } from './ai/ProductionPreflight.mjs'
 import { SceneTextManifest } from './pipeline/SceneTextManifest.mjs'
 import { TextConflictResolver } from './pipeline/TextConflictResolver.mjs'
+import { VisualIntentEngine } from './pipeline/VisualIntentEngine.mjs'
+import { ProductionMemory } from './pipeline/ProductionMemory.mjs'
+import { HookAnalyzer } from './quality/HookAnalyzer.mjs'
 import { ProductionEffectEngine } from './video/effects/ProductionEffectEngine.mjs'
 import { RetentionDirector } from './video/RetentionDirector.mjs'
 import { SceneProductionScore } from './video/scoring/SceneProductionScore.mjs'
@@ -58,6 +61,9 @@ export class NewsBroadcastEngine {
     this.guardian = new ProductionGuardian()
     this.executor = new SelfHealingExecutor(this.guardian)
     this.textResolver = new TextConflictResolver()
+    this.visualIntentEngine = new VisualIntentEngine()
+    this.productionMemory = new ProductionMemory()
+    this.hookAnalyzer = new HookAnalyzer()
     this.emotionalArcAnalyzer = new EmotionalArcAnalyzer()
     this.motionPlanner = new MotionPlanner()
     this.transitionPlanner = new TransitionPlanner()
@@ -171,8 +177,12 @@ export class NewsBroadcastEngine {
     const scenes = []
     for (const scene of rawScenes) {
       const visualPlan = await this.visualReasoner.select(scene, article, article.category) || { primary: null, images: [], colors: {}, category: article.category }
+      // V4 Visual Intent — build scene meaning, score candidates by relevance
+      const visualIntent = this.visualIntentEngine.buildIntent(scene, article)
+      const intentRanked = this.visualIntentEngine.rankCandidates(visualPlan.images || [], visualIntent)
+      const topScore = intentRanked[0]?.score ?? null
       // Cinematic Visual Director: rank images, drop near-duplicates, assign camera
-      const ranked = this.visualDirector.rank(visualPlan.images || [], article)
+      const ranked = this.visualDirector.rank(intentRanked.map(r => r.url), article)
       const categoryCamera = this.categoryProfiles.getCamera(article.category, scene.type)
       const cameraPlan = { ...this.visualDirector.getCameraPlan(scene.type), motion: scene.camera || categoryCamera }
       const effects = this.effectEngine.buildSceneEffects(scene, article.category)
@@ -189,6 +199,8 @@ export class NewsBroadcastEngine {
         layoutStyle: this.categoryProfiles.getLayout(article.category),
         effects,
         visualPlan,
+        visualIntent,
+        visualRelevanceScore: topScore,
         colors: visualPlan.colors || {},
         directorLayout: visualPlan.layout,
         directorCaption: visualPlan.caption,
@@ -200,6 +212,16 @@ export class NewsBroadcastEngine {
       const sc = scenes.find(s => (s.id || 0) === plan.sceneId)
       if (sc) sc.retentionPlan = plan.plan
     })
+
+    // Hook Analyzer — evaluate the opening scene for Shorts retention
+    const hookScene = scenes.find(s => s.type === 'hook')
+    if (hookScene) {
+      const hook = this.hookAnalyzer.analyze(hookScene, article)
+      hookScene.hookScore = hook.hookScore
+      hookScene.hookAnalysis = hook
+      console.log(`Hook: ${hook.hookScore}/100 ${hook.passed ? '(strong)' : `— ${hook.recommendation}`}`)
+      this.productionMemory.learn('hook_opening', { preventedBy: 'HookAnalyzer' })
+    }
 
     // Text Intent Engine — single source of truth for scene text.
     // Build a manifest per scene, resolve duplicate emphasis/caption words,
