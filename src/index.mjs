@@ -10,6 +10,8 @@ import { CategoryProductionProfiles } from './video/CategoryProductionProfiles.m
 import { SelfHealingExecutor } from './ai/SelfHealingExecutor.mjs'
 import { ProductionGuardian } from './ai/ProductionGuardian.mjs'
 import { ProductionPreflight } from './ai/ProductionPreflight.mjs'
+import { SceneTextManifest } from './pipeline/SceneTextManifest.mjs'
+import { TextConflictResolver } from './pipeline/TextConflictResolver.mjs'
 import { ProductionEffectEngine } from './video/effects/ProductionEffectEngine.mjs'
 import { RetentionDirector } from './video/RetentionDirector.mjs'
 import { SceneProductionScore } from './video/scoring/SceneProductionScore.mjs'
@@ -55,6 +57,7 @@ export class NewsBroadcastEngine {
     this.productionScorer = new SceneProductionScore()
     this.guardian = new ProductionGuardian()
     this.executor = new SelfHealingExecutor(this.guardian)
+    this.textResolver = new TextConflictResolver()
     this.emotionalArcAnalyzer = new EmotionalArcAnalyzer()
     this.motionPlanner = new MotionPlanner()
     this.transitionPlanner = new TransitionPlanner()
@@ -197,6 +200,18 @@ export class NewsBroadcastEngine {
       const sc = scenes.find(s => (s.id || 0) === plan.sceneId)
       if (sc) sc.retentionPlan = plan.plan
     })
+
+    // Text Intent Engine — single source of truth for scene text.
+    // Build a manifest per scene, resolve duplicate emphasis/caption words,
+    // then write the resolved caption back so the renderer never duplicates.
+    for (const sc of scenes) {
+      sc.textManifest = SceneTextManifest.build(sc)
+      const resolved = this.textResolver.process(sc.textManifest)
+      const captionLayer = resolved.text_layers.find(l => l.type === 'caption')
+      // Write resolved caption back to the scene (empty = hidden)
+      sc.caption = captionLayer && captionLayer.visible !== false ? captionLayer.text : ''
+      sc.captionHidden = captionLayer?.visible === false
+    }
 
     const timedScenes = this.scenePlanner.assignTimestamps(scenes)
     this.validateTemplate(timedScenes)
