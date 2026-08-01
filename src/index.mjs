@@ -95,8 +95,10 @@ export class NewsBroadcastEngine {
   }
 
   async generateFromArticle(article, outDir = 'output', job = null, options = {}) {
-    // Preflight guard — verify everything before rendering starts
-    const preflight = await ProductionPreflight.check({ article, category: article?.category }, { outDir, bypassYoutube: true })
+    // Preflight guard — verify everything before rendering starts.
+    // Scenes are built inside this function, so the SCENE_EMPTY check only
+    // applies to orchestrator jobs that arrive with pre-built scenes.
+    const preflight = await ProductionPreflight.check({ article, category: article?.category }, { outDir, bypassYoutube: true, bypassScenes: true })
     if (!preflight.ready) {
       console.error(`[Preflight] blocked: ${preflight.errors.join(', ')}`)
       if (job) job.markFailed('collector', `preflight: ${preflight.errors.join(', ')}`)
