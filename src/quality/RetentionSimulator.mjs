@@ -1,60 +1,20 @@
+import { ViewerBehaviorModel } from './ViewerBehaviorModel.mjs'
+
 // Viewer Retention Simulator — the third feedback dimension.
 //
 // Predicts whether a viewer will stay until the end by simulating attention
-// decay second-by-second across the timeline. Each scene contributes a
-// hazard rate based on production signals (hook strength, motion, caption
-// density, visual relevance, judge friction, emotion arc, pacing).
-//
-// Output: predicted completion rate, average watch seconds, drop zones
-// (where viewers actually leave), and an optimize() pass that applies safe
-// deterministic fixes — duration trims + hook caption promotion — so the
-// pipeline asks not just "is this scene correct?" but "will a viewer stay?"
-const BASE_HAZARD = 0.008 // per-second baseline (≈20% watch a 30s short)
-const SCENE_TYPE_HAZARD = { hook: 1.0, fact: 1.15, reveal: 0.75, explanation: 1.25, reaction: 0.95, close: 0.6 }
-const EMOTION_HAZARD = { shock: 0.7, excitement: 0.8, tension: 0.9, awe: 0.9, curiosity: 1.0, neutral: 1.15 }
-
+// decay second-by-second across the timeline, using the calibrated
+// ViewerBehaviorModel hazard rates. Outputs retention score, aggregate drop
+// zones, confidence-weighted per-scene drop risks, and structured
+// recommendations. optimize() applies safe deterministic fixes — duration
+// trims, key-fact promotion (reorder), hook caption strengthening — and
+// learns the performance patterns into ProductionMemory.
 export class RetentionSimulator {
   constructor(options = {}) {
     this.memory = options.memory || null
     this.viewers = options.viewers || 100
     this.completionThreshold = options.threshold || 55
-  }
-
-  _sceneHazard(scene, ctx) {
-    const typeMul = SCENE_TYPE_HAZARD[scene.type] ?? 1.1
-    const emotionMul = EMOTION_HAZARD[scene.emotion] ?? 1.1
-
-    // Pacing — long scenes bleed attention
-    const dur = scene.duration || 3
-    const durMul = dur > 4 ? 1 + 0.12 * (dur - 4) : 1
-
-    // Motion clarity — the retention plan promises a change every ~2.5s
-    const hasMotion = scene.retentionPlan || (scene.camera && scene.camera !== 'static')
-    const motionMul = hasMotion ? 0.75 : 1.45
-
-    // Readability — too much text loses the eye
-    const capLen = (scene.caption || '').length
-    const captionMul = capLen > 60 ? 1.5 : capLen >= 5 ? 0.92 : 1.0
-    const emphasisCount = Array.isArray(scene.textManifest?.emphasis) ? scene.textManifest.emphasis.length : 0
-    const emphasisMul = emphasisCount > 3 ? 1.1 : 1.0
-
-    // Visual relevance — unrelated visuals confuse, viewers leave
-    const rel = scene.visualRelevanceScore
-    const relevanceMul = rel == null ? 1.1 : rel < 55 ? 1.3 : 1.0
-
-    // Judge friction — unresolved issues tax attention
-    const issues = scene.judge?.issues || []
-    const judgeMul = issues.length ? 1 + 0.12 * issues.length : 1
-    const unrelatedMul = issues.includes('visual_unrelated') ? 1.25 : 1
-
-    // Hook strength — the first 3 seconds decide everything
-    let hookMul = 1
-    if (scene.type === 'hook') {
-      const h = scene.hookScore
-      hookMul = h >= 85 ? 0.5 : h == null ? 1.2 : h < 60 ? 2.2 : 1.2
-    }
-
-    return BASE_HAZARD * typeMul * emotionMul * durMul * motionMul * captionMul * emphasisMul * relevanceMul * judgeMul * unrelatedMul * hookMul
+    this.model = new ViewerBehaviorModel({ memory: this.memory })
   }
 
   // Second-by-second simulation across the full timeline (floats internally
@@ -65,7 +25,7 @@ export class RetentionSimulator {
     let cursor = 0
     for (const scene of scenes) {
       const dur = Math.max(1, Math.round(scene.duration || 3))
-      const hz = this._sceneHazard(scene, {})
+      const hz = this.model.hazard(scene)
       for (let t = 0; t < dur; t++) {
         survivors = Math.max(0, survivors * (1 - hz))
         curve.push({ second: cursor + t, sceneId: scene.id, survivors })
@@ -76,13 +36,13 @@ export class RetentionSimulator {
   }
 
   evaluate(scenes) {
-    if (!scenes?.length) return { score: 0, completionRate: 0, avgWatch: 0, curve: [], dropZones: [], recommendations: [] }
+    if (!scenes?.length) return { retentionScore: 0, completionRate: 0, avgWatch: 0, curve: [], dropZones: [], dropRisks: [], recommendations: [] }
     const curve = this.simulate(scenes)
     const total = curve.length
     const final = curve.length ? curve[curve.length - 1].survivors : 0
     const completion = Math.round((final / this.viewers) * 100)
     const avgWatch = total ? curve.reduce((s, p) => s + p.survivors, 0) / this.viewers : 0
-    const score = Math.round((0.6 * completion) + (0.4 * (avgWatch / Math.max(1, total)) * 100))
+    const retentionScore = Math.round((0.6 * completion) + (0.4 * (avgWatch / Math.max(1, total)) * 100))
 
     // Drop zones — scenes that lose a disproportionate share of viewers.
     // startSurvivors = the viewers entering the scene (previous point).
@@ -107,8 +67,36 @@ export class RetentionSimulator {
     }
     dropZones.sort((a, b) => b.share - a.share)
 
-    const recommendations = this._recommendations(scenes, { completion, avgWatch, total, dropZones })
-    return { score, completionRate: completion, avgWatch: Math.round(avgWatch * 10) / 10, curve, dropZones, recommendations }
+    // Confidence-weighted drop risks, best first. All risks are collected,
+    // sorted by confidence, then deduped to at most 2 per scene so the list
+    // stays diverse and low-confidence structural risks can still surface
+    // once memory calibration boosts them.
+    const all = scenes.flatMap(s => this.model.risks(s).map(r => ({ scene: s.id, risk: r.type, confidence: r.confidence, detail: r.detail })))
+    all.sort((a, b) => b.confidence - a.confidence)
+    const perSceneCount = new Map()
+    const dropRisks = []
+    for (const r of all) {
+      const n = perSceneCount.get(r.scene) || 0
+      if (n >= 3) continue
+      perSceneCount.set(r.scene, n + 1)
+      dropRisks.push(r)
+      if (dropRisks.length >= 8) break
+    }
+
+    // Structured recommendations from the highest-confidence risks
+    const recommendations = []
+    const seen = new Set()
+    for (const r of [...dropRisks, ...scenes.flatMap(s => this.model.risks(s).map(x => ({ scene: s.id, risk: x.type, confidence: x.confidence }))).sort((a, b) => b.confidence - a.confidence)]) {
+      const scene = scenes.find(s => s.id === r.scene)
+      const rec = this.model.recommendations(scene, r)
+      if (rec.action !== 'monitor' && !seen.has(rec.action + r.scene)) {
+        recommendations.push(rec)
+        seen.add(rec.action + r.scene)
+      }
+      if (recommendations.length >= 5) break
+    }
+
+    return { retentionScore, completionRate: completion, avgWatch: Math.round(avgWatch * 10) / 10, curve, dropZones, dropRisks, recommendations }
   }
 
   _zoneReason(scene, dropped) {
@@ -120,54 +108,69 @@ export class RetentionSimulator {
     return 'mid-roll attention decay'
   }
 
-  _recommendations(scenes, r) {
-    const recs = []
-    const total = r.total
-    if (total && r.avgWatch / total < 0.5) {
-      recs.push('hook_too_weak: promote the strongest keyword into scene 1 caption')
-    }
-    for (const z of r.dropZones) {
-      const scene = scenes.find(s => s.id === z.sceneId)
-      if (!scene) continue
-      if ((scene.duration || 3) > 4) recs.push(`shorten_scene_${z.sceneId}: ${z.reason}`)
-      else if (!scene.retentionPlan && scene.camera === 'static') recs.push(`add_motion_scene_${z.sceneId}: ${z.reason}`)
-      else recs.push(`fix_scene_${z.sceneId}: ${z.reason}`)
-    }
-    if (r.completion < this.completionThreshold && recs.length === 0) recs.push('tighten overall pacing')
-    return recs
-  }
-
-  // Safe deterministic optimization: duration trims + hook caption promotion.
+  // Safe deterministic optimization from structured recommendations.
   // Returns the list of applied changes; mutates scenes in place.
   optimize(scenes, result) {
     const changes = []
     if (!scenes?.length) return { changes }
 
-    for (const z of result.dropZones || []) {
-      const scene = scenes.find(s => s.id === z.sceneId)
+    for (const rec of result.recommendations || []) {
+      const scene = scenes.find(s => s.id === rec.scene)
       if (!scene) continue
-      if ((scene.duration || 3) > 4) {
-        const before = scene.duration
-        scene.duration = 3.0
-        changes.push(`trimmed scene ${z.sceneId} ${before}s → 3s`)
+      switch (rec.action) {
+        case 'shorten_scene': {
+          const before = scene.duration
+          scene.duration = Math.max(3, Math.round((before - (rec.seconds || 1.5)) * 10) / 10)
+          if (scene.duration < before) changes.push(`trimmed scene ${rec.scene} ${before}s → ${scene.duration}s`)
+          break
+        }
+        case 'move_key_fact_forward': {
+          // Bring a fact/reaction scene ahead of post-hook exposition (safe swap)
+          if (scenes[0]?.type === 'hook' && scenes[1]?.type === 'explanation' && ['fact', 'reaction'].includes(scenes[2]?.type)) {
+            const idx1 = scenes.indexOf(scenes[1])
+            const idx2 = scenes.indexOf(scenes[2])
+            ;[scenes[idx1], scenes[idx2]] = [scenes[idx2], scenes[idx1]]
+            changes.push(`reordered: key fact (scene ${scenes[idx1].id}) moved before exposition (scene ${scenes[idx2].id})`)
+          }
+          break
+        }
+        case 'strengthen_hook': {
+          const hook = scenes.find(s => s.type === 'hook')
+          const next = scenes[1]
+          if (hook && (!hook.caption || hook.captionHidden) && (next?.caption || '').length >= 8) {
+            hook.caption = next.caption.slice(0, 38)
+            hook.captionHidden = false
+            next.caption = ''
+            next.captionHidden = true
+            changes.push(`promoted scene 2 caption to hook: "${hook.caption.slice(0, 30)}"`)
+          }
+          break
+        }
+        case 'truncate_caption': {
+          if ((scene.caption || '').length > 38) {
+            scene.caption = scene.caption.slice(0, 38)
+            changes.push(`truncated scene ${rec.scene} caption to 38 chars`)
+          }
+          break
+        }
+        // replace_visual / add_motion / fix_scene_issues are handled by the
+        // judge + semantic ranker; here they are advisory only.
       }
     }
 
-    // Hook promotion: if completion is low and the hook caption is missing,
-    // lift the strongest caption from scene 2 into the opening (display-only)
-    if (result.completionRate < this.completionThreshold && scenes.length > 1) {
-      const hook = scenes.find(s => s.type === 'hook')
-      const next = scenes[1]
-      if (hook && (!hook.caption || hook.captionHidden) && (next?.caption || '').length >= 8) {
-        hook.caption = next.caption.slice(0, 38)
-        hook.captionHidden = false
-        next.caption = ''
-        next.captionHidden = true
-        changes.push(`promoted scene 2 caption to hook: "${hook.caption.slice(0, 30)}"`)
-      }
-    }
-
+    // Learn performance patterns: each risk on a touched scene becomes a
+    // calibrated rule (negative retentionImpact, smoothed over frequency)
     if (changes.length && this.memory) {
+      const touchedScenes = new Set()
+      for (const c of changes) {
+        const m = c.match(/scene (\d+)/)
+        if (m) touchedScenes.add(Number(m[1]))
+      }
+      for (const r of result.dropRisks || []) {
+        if (touchedScenes.has(r.scene)) {
+          this.memory.learn(r.risk, { status: 'detected', introducedIn: 'V4', preventedBy: null, retentionImpact: -5 })
+        }
+      }
       this.memory.learn('retention_low', { status: 'resolved', introducedIn: 'V4', preventedBy: 'RetentionSimulator', preferredFix: changes.join('; ') })
     }
     return { changes }

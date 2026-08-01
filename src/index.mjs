@@ -288,7 +288,8 @@ export class NewsBroadcastEngine {
     const dropInfo = retentionRun.dropZones.length
       ? `drops at ${retentionRun.dropZones.map(z => `~${z.second}s (scene ${z.sceneId})`).join(', ')}`
       : 'no significant drop zones'
-    console.log(`Retention: predicted ${retentionRun.completionRate}% completion, ${retentionRun.avgWatch}s avg watch — ${dropInfo}`)
+    const topRisk = retentionRun.dropRisks[0]
+    console.log(`Retention: score ${retentionRun.retentionScore}/100, ${retentionRun.completionRate}% completion, ${retentionRun.avgWatch}s avg watch — ${dropInfo}${topRisk ? ` | top risk: ${topRisk.risk}@scene${topRisk.scene} (${topRisk.confidence})` : ''}`)
 
     // Phase 8: Scene composition quality + AI Production Score
     const scored = timedScenes.map(s => ({ scene: s, comp: this.compositionScorer.score(s) }))

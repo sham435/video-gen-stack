@@ -29,15 +29,22 @@ export class ProductionMemory {
     return this.memory.rules.find(r => r.rule === rule) || null
   }
 
-  // Record a resolved issue as reusable knowledge
-  learn(rule, { status = 'resolved', introducedIn = 'V4', preventedBy = null, preferredFix = null } = {}) {
+  // Record a resolved issue as reusable knowledge.
+  // retentionImpact aggregates performance patterns (negative = hurts
+  // retention, positive = helps), smoothed over frequency.
+  learn(rule, { status = 'resolved', introducedIn = 'V4', preventedBy = null, preferredFix = null, retentionImpact = null } = {}) {
     const existing = this.memory.rules.find(r => r.rule === rule)
     if (existing) {
       existing.frequency = (existing.frequency || 1) + 1
       if (preferredFix) existing.preferredFix = preferredFix
       if (preventedBy) existing.preventedBy = preventedBy
+      if (retentionImpact != null) {
+        existing.retentionImpact = existing.retentionImpact == null
+          ? retentionImpact
+          : Math.round(((existing.retentionImpact * (existing.frequency - 1)) + retentionImpact) / existing.frequency)
+      }
     } else {
-      this.memory.rules.push({ rule, status, introducedIn, preventedBy, preferredFix, frequency: 1, learnedAt: new Date().toISOString() })
+      this.memory.rules.push({ rule, status, introducedIn, preventedBy, preferredFix, retentionImpact, frequency: 1, learnedAt: new Date().toISOString() })
     }
     this._persist()
     return this.memory.rules.find(r => r.rule === rule)
