@@ -13,6 +13,7 @@ import { ProductionPreflight } from './ai/ProductionPreflight.mjs'
 import { SceneTextManifest } from './pipeline/SceneTextManifest.mjs'
 import { TextConflictResolver } from './pipeline/TextConflictResolver.mjs'
 import { VisualIntentEngine } from './pipeline/VisualIntentEngine.mjs'
+import { SemanticVisualRankerV2 } from './pipeline/SemanticVisualRankerV2.mjs'
 import { ProductionMemory } from './pipeline/ProductionMemory.mjs'
 import { HookAnalyzer } from './quality/HookAnalyzer.mjs'
 import { CompositionJudge } from './quality/CompositionJudge.mjs'
@@ -63,6 +64,7 @@ export class NewsBroadcastEngine {
     this.executor = new SelfHealingExecutor(this.guardian)
     this.textResolver = new TextConflictResolver()
     this.visualIntentEngine = new VisualIntentEngine()
+    this.visualRankerV2 = new SemanticVisualRankerV2({ memory: this.productionMemory })
     this.productionMemory = new ProductionMemory()
     this.hookAnalyzer = new HookAnalyzer()
     this.compositionJudge = new CompositionJudge({ memory: this.productionMemory })
@@ -258,6 +260,17 @@ export class NewsBroadcastEngine {
       console.warn(`Composition Judge: ${judgeRun.results.length - judgeFailed.length}/${judgeRun.results.length} passed (avg ${judgeRun.avg}/100) — ${judgeFailed.map(f => `scene ${f.scene}: ${f.recommendation}`).join(' | ')}`)
     } else {
       console.log(`Composition Judge: all ${judgeRun.results.length} scenes passed (avg ${judgeRun.avg}/100)${judgeRun.aiUsed ? ' [AI]' : ''}`)
+    }
+
+    // Phase 9b: Semantic Visual Ranking V2 — judge feedback re-selects visuals.
+    // A visual_unrelated verdict triggers a semantic re-rank of the candidate
+    // pool (excluding the current selection), making the judge an active
+    // visual optimizer instead of a passive gate.
+    for (const sc of timedScenes) {
+      const reranked = this.visualRankerV2.applyFeedback(sc, article)
+      if (reranked) {
+        console.log(`Visual Rerank: scene ${sc.id} → ${String(reranked.url).split('/').pop().slice(0, 30)} (${reranked.score}/100)`)
+      }
     }
 
     // Phase 8: Scene composition quality + AI Production Score
