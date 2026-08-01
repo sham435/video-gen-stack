@@ -15,7 +15,7 @@ export class PostProcessLayer {
     this.drawVignette(ctx, progress)
 
     // Category profile enhance: sharpen + denoise + contrast + saturation + grade
-    this.enhancer.enhance(ctx, category)
+    this.enhancer.enhance(ctx, category, { quick: scene.quickRender })
 
     if (scene.effect) {
       applyMotionEffect(ctx, scene.effect, progress)

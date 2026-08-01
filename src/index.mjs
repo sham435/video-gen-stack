@@ -154,24 +154,26 @@ export class NewsBroadcastEngine {
 
     const scenes = []
     for (const scene of rawScenes) {
-      const visualPlan = await this.visualReasoner.select(scene, article, article.category)
+      const visualPlan = await this.visualReasoner.select(scene, article, article.category) || { primary: null, images: [], colors: {}, category: article.category }
       // Cinematic Visual Director: rank images, drop near-duplicates, assign camera
-      const ranked = this.visualDirector.rank(visualPlan.images, article)
+      const ranked = this.visualDirector.rank(visualPlan.images || [], article)
       const categoryCamera = this.categoryProfiles.getCamera(article.category, scene.type)
       const cameraPlan = { ...this.visualDirector.getCameraPlan(scene.type), motion: scene.camera || categoryCamera }
       const effects = this.effectEngine.buildSceneEffects(scene, article.category)
+      const rankedUrls = ranked.map(r => r.url).filter(Boolean)
+      const fallbackUrls = visualPlan.primary?.url ? [visualPlan.primary.url] : []
       scenes.push({
         ...scene,
-        category: visualPlan.category,
-        image: ranked[0]?.url || visualPlan.primary?.url || null,
-        bRoll: ranked[0]?.url || visualPlan.primary?.url || null,
-        images: ranked.map(r => r.url) || (visualPlan.primary?.url ? [visualPlan.primary.url] : []),
+        category: visualPlan.category || article.category,
+        image: rankedUrls[0] || visualPlan.primary?.url || null,
+        bRoll: rankedUrls[0] || visualPlan.primary?.url || null,
+        images: rankedUrls.length ? rankedUrls : fallbackUrls,
         camera: cameraPlan.motion,
         cameraPlan,
         layoutStyle: this.categoryProfiles.getLayout(article.category),
         effects,
         visualPlan,
-        colors: visualPlan.colors,
+        colors: visualPlan.colors || {},
         directorLayout: visualPlan.layout,
         directorCaption: visualPlan.caption,
       })
@@ -280,7 +282,7 @@ export class NewsBroadcastEngine {
       const wordTimings = this.timeline.getActiveWordTimings(scene.caption || '', sceneDuration)
       const wordIndex = this.timeline.getActiveWordIndex(wordTimings, sceneTime)
 
-      const png = await this.sceneEngine.renderSceneFrame(scene, progress, wordTimings, wordIndex)
+      const png = await this.sceneEngine.renderSceneFrame({ ...scene, quickRender: options.quick }, progress, wordTimings, wordIndex)
 
       const framePath = `${framesDir}/f${String(frame).padStart(5, '0')}.png`
       fs.writeFileSync(framePath, png)

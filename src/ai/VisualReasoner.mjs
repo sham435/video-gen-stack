@@ -15,12 +15,17 @@ export class VisualReasoner {
 
   async select(scene, article, category) {
     const cat = category || this.classifier.classify(article).category
-    const director = CategoryDirector.getDirector(cat)
-    const layout = director.getLayout(scene.type)
+    const director = CategoryDirector.getDirector(cat) || {}
+    const layout = director.getLayout ? director.getLayout(scene.type) : {}
     const keywords = this.extractKeywords(scene, article)
 
     // Resolve a set of candidate visuals (Pexels up to 3, then article image, then FAL)
-    const assets = await this.resolveAssets(keywords, article, cat, scene)
+    let assets = []
+    try {
+      assets = await this.resolveAssets(keywords, article, cat, scene) || []
+    } catch {
+      assets = article?.imageUrl ? [{ type: 'image', url: article.imageUrl, source: 'article' }] : []
+    }
     const primary = assets[0] || { type: 'gradient', url: null, source: 'fallback' }
 
     return {
@@ -29,9 +34,9 @@ export class VisualReasoner {
       images: assets.map(a => a.url).filter(Boolean), // multiple images for b-roll cycling
       keywords,
       layout,
-      colors: director.getColorGrade(),
-      caption: director.getCaption(),
-      overlays: director.getOverlays(),
+      colors: (director.getColorGrade && director.getColorGrade()) || {},
+      caption: (director.getCaption && director.getCaption()) || {},
+      overlays: (director.getOverlays && director.getOverlays()) || {},
     }
   }
 

@@ -67,5 +67,6 @@ jobs:
           YOUTUBE_PRIVACY: public
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
+          QUICK_RENDER: 'true'
           INPUT_CATEGORY: ${{ github.event.inputs.category || 'technology' }}
         run: node scripts/composer.mjs '${{ github.event.inputs.title || '' }}'

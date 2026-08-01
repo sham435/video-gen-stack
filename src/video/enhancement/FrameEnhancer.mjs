@@ -5,9 +5,11 @@ export class FrameEnhancer {
     this.manager = EnhancementProfileManager
   }
 
-  enhance(ctx, category) {
+  enhance(ctx, category, options = {}) {
     const profile = this.manager.getProfileFor(category)
     this.applyColorGrade(ctx, profile)
+    // Skip expensive per-pixel passes in quick mode for fast CI publishing
+    if (options.quick) return
     this.applyContrast(ctx, profile.contrast)
     this.applySaturation(ctx, profile.saturation)
     this.applySharpen(ctx, profile.sharpen)

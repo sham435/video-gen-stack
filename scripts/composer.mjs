@@ -15,7 +15,7 @@ export async function composeVideo(articles, outDir = 'output') {
   }
 
   const engine = new NewsBroadcastEngine()
-  const result = await engine.generateFromArticle(article, outDir)
+  const result = await engine.generateFromArticle(article, outDir, null, { quick: !!process.env.QUICK_RENDER })
   const broadcastPath = typeof result === 'string' ? result : result.videoPath
 
   const finalPath = `${outDir}/final.mp4`
