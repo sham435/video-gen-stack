@@ -762,7 +762,14 @@ async function publishToYouTube(videoPath, headline, category, contract, job) {
     const videoBuffer = fs.readFileSync(videoPath)
     const base64 = videoBuffer.toString('base64')
     const title = `📰 ${headline || 'NEWS-MONSTER'}`.slice(0, 100)
-    const description = `${contract?.story?.hook || ''}\n\n${contract?.retention?.ending?.cta || 'Follow NEWS-MONSTER'}\n\n#news #${category || 'technology'} #AI`
+    const { HashtagBuilder } = await import('../../src/publishing/HashtagBuilder.mjs')
+    const hashtags = HashtagBuilder.build({
+      topic: HashtagBuilder.topicFromHeadline(headline),
+      category: category || 'tech',
+      pipelineProfile: 'breaking',
+      channel: 'NEWS-MONSTER',
+    })
+    const description = `${contract?.story?.hook || ''}\n\n${contract?.retention?.ending?.cta || 'Follow NEWS-MONSTER'}\n\n${hashtags}`
     const coverPath = fs.existsSync('output/cover.png') ? 'output/cover.png' : null
     const pub = await uploadShort(`data:video/mp4;base64,${base64}`, title, description, process.env.YOUTUBE_PRIVACY || 'public', coverPath)
     const result = { status: 'published', videoId: pub?.id, url: pub?.id ? `https://youtu.be/${pub.id}` : null, thumbnail: coverPath ? 'uploaded' : 'missing' }

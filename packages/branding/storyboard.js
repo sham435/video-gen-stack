@@ -1,8 +1,8 @@
 import { detectTheme } from './themes.js'
 
 const BRAND = {
-  channelName: 'TECH-MONSTER',
-  logoText: 'TM',
+  channelName: 'NEWS-MONSTER',
+  logoText: 'NM',
   font: 'Inter',
   subtitleStyle: 'glass bottom center',
   introAnimation: 'zoom reveal',

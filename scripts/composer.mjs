@@ -100,8 +100,15 @@ if (import.meta.url.endsWith('composer.mjs')) {
           const { uploadShort } = await import('../apps/api/publishers/youtube.js')
           const buffer = fs.readFileSync(finalPath)
           const title = `${article.title?.slice(0, 90) || 'News Update'} | NEWS-MONSTER`
-          const desc = `${title}\n\nSource: ${article.source || 'NewsAPI'}\n\n#tech #news #breaking #ai #TECHMONSTER`
           const coverPath = fs.existsSync('output/cover.png') ? 'output/cover.png' : null
+          const { HashtagBuilder } = await import('../src/publishing/HashtagBuilder.mjs')
+          const hashtags = HashtagBuilder.build({
+            topic: HashtagBuilder.topicFromHeadline(article.title),
+            category: category || 'tech',
+            pipelineProfile: 'breaking',
+            channel: 'NEWS-MONSTER',
+          })
+          const desc = `${title}\n\nSource: ${article.source || 'NewsAPI'}\n\n${hashtags}`
           const result = await uploadShort(
             `data:video/mp4;base64,${buffer.toString('base64')}`,
             title, desc,
