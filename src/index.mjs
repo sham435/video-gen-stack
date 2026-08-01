@@ -7,6 +7,9 @@ import { Timeline } from './video/Timeline.mjs'
 import { VisualDirector } from './video/VisualDirector.mjs'
 import { SceneCompositionScore } from './video/SceneCompositionScore.mjs'
 import { CategoryProductionProfiles } from './video/CategoryProductionProfiles.mjs'
+import { ProductionEffectEngine } from './video/effects/ProductionEffectEngine.mjs'
+import { RetentionDirector } from './video/RetentionDirector.mjs'
+import { SceneProductionScore } from './video/scoring/SceneProductionScore.mjs'
 import { CoverGenerator } from './video-studio/CoverGenerator.mjs'
 import { ProductionJob } from './video-studio/ProductionJob.mjs'
 import { ScriptContract } from './video-studio/ScriptContract.mjs'
@@ -44,6 +47,9 @@ export class NewsBroadcastEngine {
     this.visualDirector = new VisualDirector()
     this.compositionScorer = new SceneCompositionScore()
     this.categoryProfiles = CategoryProductionProfiles
+    this.effectEngine = ProductionEffectEngine
+    this.retentionDirector = new RetentionDirector()
+    this.productionScorer = new SceneProductionScore()
     this.emotionalArcAnalyzer = new EmotionalArcAnalyzer()
     this.motionPlanner = new MotionPlanner()
     this.transitionPlanner = new TransitionPlanner()
@@ -153,6 +159,7 @@ export class NewsBroadcastEngine {
       const ranked = this.visualDirector.rank(visualPlan.images, article)
       const categoryCamera = this.categoryProfiles.getCamera(article.category, scene.type)
       const cameraPlan = { ...this.visualDirector.getCameraPlan(scene.type), motion: scene.camera || categoryCamera }
+      const effects = this.effectEngine.buildSceneEffects(scene, article.category)
       scenes.push({
         ...scene,
         category: visualPlan.category,
@@ -162,6 +169,7 @@ export class NewsBroadcastEngine {
         camera: cameraPlan.motion,
         cameraPlan,
         layoutStyle: this.categoryProfiles.getLayout(article.category),
+        effects,
         visualPlan,
         colors: visualPlan.colors,
         directorLayout: visualPlan.layout,
@@ -169,19 +177,31 @@ export class NewsBroadcastEngine {
       })
     }
 
+    // Retention Director: plan a visual/motion/information change every ~2.5s
+    this.retentionDirector.plan(scenes).forEach(plan => {
+      const sc = scenes.find(s => (s.id || 0) === plan.sceneId)
+      if (sc) sc.retentionPlan = plan.plan
+    })
+
     const timedScenes = this.scenePlanner.assignTimestamps(scenes)
     this.validateTemplate(timedScenes)
 
-    // Phase 8: Scene composition quality — regenerate story if scenes fail composition
+    // Phase 8: Scene composition quality + AI Production Score
     const scored = timedScenes.map(s => ({ scene: s, comp: this.compositionScorer.score(s) }))
+    const prodScored = timedScenes.map(s => ({ scene: s, prod: this.productionScorer.score(s) }))
     const failing = scored.filter(x => !x.comp.passed)
-    if (failing.length > 0) {
-      const reasons = failing.map(f => `scene ${f.scene.id}: ${f.comp.reason}`).join(' | ')
-      console.warn(`Scene composition: ${scored.length - failing.length}/${scored.length} passed (${reasons})`)
-      job.markDone('assets', { ok: false, detail: `composition ${failing.length} scenes failing`, score: Math.round(((scored.length - failing.length) / scored.length) * 100) })
+    const prodFailing = prodScored.filter(x => !x.prod.passed)
+    if (failing.length > 0 || prodFailing.length > 0) {
+      const reasons = [
+        ...failing.map(f => `scene ${f.scene.id}: ${f.comp.reason}`),
+        ...prodFailing.map(f => `scene ${f.scene.id}: ${f.prod.reason}`),
+      ].join(' | ')
+      console.warn(`Scene production: ${scored.length - prodFailing.length}/${scored.length} passed (${reasons})`)
+      job.markDone('assets', { ok: prodFailing.length === 0, detail: reasons.slice(0, 120), score: Math.round(((scored.length - prodFailing.length) / scored.length) * 100) })
     } else {
-      console.log(`Scene composition: all ${scored.length} scenes passed`)
-      job.markDone('assets', { detail: `${scenes.length} scenes composed`, score: 92 })
+      const avgProd = Math.round(prodScored.reduce((s, x) => s + x.prod.overall, 0) / prodScored.length)
+      console.log(`Scene production: all ${scored.length} scenes passed (avg ${avgProd}/100)`)
+      job.markDone('assets', { detail: `${scenes.length} scenes, production ${avgProd}`, score: avgProd })
     }
 
     // Stage 5b: Cover generation — CoverDirector + Composer + mandatory validation gate
