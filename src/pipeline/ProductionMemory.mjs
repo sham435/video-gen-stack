@@ -30,12 +30,14 @@ export class ProductionMemory {
   }
 
   // Record a resolved issue as reusable knowledge
-  learn(rule, { status = 'resolved', introducedIn = 'V4', preventedBy = null } = {}) {
+  learn(rule, { status = 'resolved', introducedIn = 'V4', preventedBy = null, preferredFix = null } = {}) {
     const existing = this.memory.rules.find(r => r.rule === rule)
     if (existing) {
       existing.frequency = (existing.frequency || 1) + 1
+      if (preferredFix) existing.preferredFix = preferredFix
+      if (preventedBy) existing.preventedBy = preventedBy
     } else {
-      this.memory.rules.push({ rule, status, introducedIn, preventedBy, frequency: 1, learnedAt: new Date().toISOString() })
+      this.memory.rules.push({ rule, status, introducedIn, preventedBy, preferredFix, frequency: 1, learnedAt: new Date().toISOString() })
     }
     this._persist()
     return this.memory.rules.find(r => r.rule === rule)

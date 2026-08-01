@@ -15,6 +15,7 @@ import { TextConflictResolver } from './pipeline/TextConflictResolver.mjs'
 import { VisualIntentEngine } from './pipeline/VisualIntentEngine.mjs'
 import { ProductionMemory } from './pipeline/ProductionMemory.mjs'
 import { HookAnalyzer } from './quality/HookAnalyzer.mjs'
+import { CompositionJudge } from './quality/CompositionJudge.mjs'
 import { ProductionEffectEngine } from './video/effects/ProductionEffectEngine.mjs'
 import { RetentionDirector } from './video/RetentionDirector.mjs'
 import { SceneProductionScore } from './video/scoring/SceneProductionScore.mjs'
@@ -64,6 +65,7 @@ export class NewsBroadcastEngine {
     this.visualIntentEngine = new VisualIntentEngine()
     this.productionMemory = new ProductionMemory()
     this.hookAnalyzer = new HookAnalyzer()
+    this.compositionJudge = new CompositionJudge({ memory: this.productionMemory })
     this.emotionalArcAnalyzer = new EmotionalArcAnalyzer()
     this.motionPlanner = new MotionPlanner()
     this.transitionPlanner = new TransitionPlanner()
@@ -242,6 +244,20 @@ export class NewsBroadcastEngine {
     const scenePreflight = await ProductionPreflight.check({ article, category: article?.category, scenes: timedScenes }, { stage: 'scene' })
     if (!scenePreflight.ready) {
       throw new Error(`Scene preflight failed: ${scenePreflight.errors.join(', ')}`)
+    }
+
+    // Phase 9: AI Composition Judge — overall production critique per scene.
+    // Applies known remediation from ProductionMemory automatically.
+    const judgeRun = await this.compositionJudge.evaluate(timedScenes, article)
+    timedScenes.forEach(sc => {
+      const j = judgeRun.results.find(r => r.scene === sc.id)
+      if (j) sc.judge = j
+    })
+    const judgeFailed = judgeRun.failed
+    if (judgeFailed.length > 0) {
+      console.warn(`Composition Judge: ${judgeRun.results.length - judgeFailed.length}/${judgeRun.results.length} passed (avg ${judgeRun.avg}/100) — ${judgeFailed.map(f => `scene ${f.scene}: ${f.recommendation}`).join(' | ')}`)
+    } else {
+      console.log(`Composition Judge: all ${judgeRun.results.length} scenes passed (avg ${judgeRun.avg}/100)${judgeRun.aiUsed ? ' [AI]' : ''}`)
     }
 
     // Phase 8: Scene composition quality + AI Production Score
