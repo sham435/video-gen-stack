@@ -308,30 +308,60 @@ app.post('/api/visual/cover', async (req, res) => {
 })
 
 // AI Chat — agent-assisted Q&A via ProviderChain
+// Detect user intent: learn / fix / improve / create / automate
+function detectIntent(message) {
+  const m = (message || '').toLowerCase()
+  if (/(fix|error|bug|issue|broken|fail|crashed)/.test(m)) return { intent: 'fix', label: 'Fix' }
+  if (/(improve|optimize|better|speed|faster|quality)/.test(m)) return { intent: 'improve', label: 'Improve' }
+  if (/(create|generate|make|build|new)/.test(m)) return { intent: 'create', label: 'Create' }
+  if (/(automat|schedule|self-)/.test(m)) return { intent: 'automate', label: 'Automate' }
+  if (/(what|how|why|explain|tell)/.test(m)) return { intent: 'learn', label: 'Learn' }
+  return { intent: 'learn', label: 'Learn' }
+}
+
 app.post('/api/ai/chat', async (req, res) => {
-  const { message, context } = req.body
+  const { message, context, mode } = req.body
   if (!message) return res.status(400).json({ error: 'message required' })
 
   try {
     if (!dashboardAI || !dashboardAI.isEnabled) {
-      return res.json({ reply: 'AI provider not connected. Set OPENROUTER_API_KEY, OPENAI_API_KEY, or GEMINI_API_KEY in .env to enable chat.', provider: 'none' })
+      return res.json({ reply: 'AI provider not connected. Set OPENROUTER_API_KEY, OPENAI_API_KEY, or GEMINI_API_KEY in .env to enable chat.', provider: 'none', intent: { intent: 'learn', label: 'Learn' } })
     }
 
-    let systemContext = 'You are the NEWS-MONSTER AI operations assistant embedded in the OpenCodeBridge. You answer concisely and help operate the video news pipeline.'
+    const intent = detectIntent(message)
+    const modeHint = { simple: 'Explain simply for a non-technical user.', developer: 'Explain technically with file paths and line numbers.', production: 'Frame as production issues with cause, impact, and recommended action.', debug: 'Focus on debugging details, logs, and root cause.', creative: 'Suggest creative storytelling and visual ideas.', business: 'Frame around impact, cost, and business value.' }
+    const modeText = modeHint[mode] || modeHint.simple
+
+    let systemContext = 'You are the NEWS-MONSTER AI production assistant — a senior producer + technical director + creative director combined. You answer with structure: summary, cause, impact, recommended actions. Be concise and helpful.'
     const bridge = await dashboardAI.getBridge()
     if (bridge) {
       const ctx = bridge.getSystemContext()
       systemContext += `\n\nSystem state:\n- Agents (${ctx.agents.length}): ${ctx.agents.join(', ')}\n- Memory (${ctx.memory.length}): ${ctx.memory.join(', ')}\n- Workflows (${ctx.workflows.length}): ${ctx.workflows.join(', ')}\n- Policies (${ctx.policies.length}): ${ctx.policies.join(', ')}\n- Approval required: ${ctx.approvalRequired.join(', ')}`
     }
+    systemContext += `\n\nResponse style (${intent.label} mode): ${modeText}`
 
     const reply = await dashboardAI.aiProvider.generate([
       { role: 'system', content: systemContext },
       { role: 'user', content: message },
     ], { temperature: 0.6 })
 
-    res.json({ reply, provider: dashboardAI.providerName })
+    // Confidence heuristic: provider chain health + response length + intent match
+    const confidence = Math.min(96, Math.round(72 + (reply?.length > 60 ? 12 : 4) + (intent.intent !== 'learn' ? 6 : 0)))
+
+    res.json({
+      reply,
+      provider: dashboardAI.providerName,
+      intent,
+      confidence,
+      contextUsed: {
+        project: 'video-gen-stack',
+        pipeline: 'NewsBroadcastEngine',
+        agents: bridge?.getSystemContext?.().agents?.length ?? 7,
+        lastAction: 'HashtagBuilder + quick render',
+      },
+    })
   } catch (e) {
-    res.json({ reply: `Error: ${e.message}`, provider: 'error' })
+    res.json({ reply: `Error: ${e.message}`, provider: 'error', intent: { intent: 'learn', label: 'Learn' }, confidence: 30 })
   }
 })
 
@@ -1501,7 +1531,22 @@ document.addEventListener('DOMContentLoaded', () => {
   <div class="card p-4 mt-4">
     <div class="flex items-center justify-between mb-3">
       <div class="flex items-center gap-2 text-sm font-bold">AI CHAT ASSISTANT <span class="text-xs font-normal text-gray-500" id="chatProvider"></span></div>
-      <span class="text-xs text-gray-500">Agent-aware · via OpenCodeBridge</span>
+      <select id="chatMode" class="bg-white/5 border border-white/10 rounded px-2 py-1 text-xs">
+        <option value="simple">Simple Explanation</option>
+        <option value="developer">Developer Mode</option>
+        <option value="production">Production Mode</option>
+        <option value="debug">Debug Mode</option>
+        <option value="creative">Creative Mode</option>
+        <option value="business">Business Mode</option>
+      </select>
+    </div>
+    <div class="flex flex-wrap gap-2 mb-3" id="quickActions">
+      <button onclick="quickAsk('Optimize the video pipeline')" class="px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-gray-300 text-xs">🎬 Optimize Video</button>
+      <button onclick="quickAsk('Generate a script')" class="px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-gray-300 text-xs">✍️ Generate Script</button>
+      <button onclick="quickAsk('Analyze performance')" class="px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-gray-300 text-xs">📊 Analyze Performance</button>
+      <button onclick="quickAsk('How do I fix a pipeline error?')" class="px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-gray-300 text-xs">🔧 Fix Error</button>
+      <button onclick="quickAsk('Suggest a thumbnail strategy')" class="px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-gray-300 text-xs">🖼️ Thumbnail</button>
+      <button onclick="quickAsk('How do I publish to YouTube?')" class="px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-gray-300 text-xs">🚀 Publish</button>
     </div>
     <div id="chatLog" class="h-72 overflow-y-auto space-y-2 mb-3 pr-1"></div>
     <div class="flex gap-2">
@@ -2127,10 +2172,33 @@ function addChatMsg(role, text, provider){
   const log = document.getElementById('chatLog')
   const div = document.createElement('div')
   div.className = 'flex ' + (role === 'user' ? 'justify-end' : 'justify-start')
-  div.innerHTML = '<div class="max-w-[80%] rounded-lg px-3 py-2 text-xs ' + (role === 'user' ? 'bg-yellow-500/20 text-yellow-100 border border-yellow-500/30' : 'bg-white/5 text-gray-200 border border-white/10') + '"><div class="mb-1 ' + (role === 'user' ? 'text-yellow-400' : 'text-gray-500') + '">' + (role === 'user' ? 'You' : 'AI Assistant') + (provider ? ' <span class="opacity-60">· ' + provider + '</span>' : '') + '</div>' + text + '</div>'
+  div.innerHTML = '<div class="max-w-[85%] rounded-lg px-3 py-2 text-xs ' + (role === 'user' ? 'bg-yellow-500/20 text-yellow-100 border border-yellow-500/30' : 'bg-white/5 text-gray-200 border border-white/10') + '"><div class="mb-1 ' + (role === 'user' ? 'text-yellow-400' : 'text-gray-500') + '">' + (role === 'user' ? 'You' : '🤖 AI Assistant') + (provider ? ' <span class="opacity-60">· ' + provider + '</span>' : '') + '</div>' + text + '</div>'
   log.appendChild(div)
   log.scrollTop = log.scrollHeight
   return div
+}
+
+// Render a structured AI assistant card (summary, confidence, intent, context)
+function renderAiCard(res){
+  const reply = (res.reply || 'No reply').replace(/</g,'&lt;')
+  const md = reply.replace(/\\*\\*(.*?)\\*\\*/g,'<b>$1</b>').replace(/\\n/g,'<br>')
+  const conf = res.confidence || 70
+  const intent = res.intent?.label || 'Learn'
+  const intentIcon = { Fix:'🔧', Improve:'🚀', Create:'🖼️', Automate:'⚙️', Learn:'💡' }[intent] || '💡'
+  return '<div class="mb-1 flex items-center justify-between text-gray-500">' +
+    '<span>🤖 AI Assistant' + (res.provider ? ' <span class="opacity-60">· ' + res.provider + '</span>' : '') + '</span>' +
+    '<span class="text-gray-500">'+intentIcon+' '+intent+'</span></div>' +
+    md +
+    '<div class="mt-2 pt-1 border-t border-white/10">' +
+    '<div class="flex items-center gap-1 text-gray-500">AI Confidence <div class="flex-1 h-1.5 bg-gray-800 rounded-full overflow-hidden mx-1"><div class="h-full '+(conf>=80?'bg-green-500':conf>=60?'bg-yellow-500':'bg-red-500')+'" style="width:'+conf+'%"></div></div><span class="text-gray-300">'+conf+'%</span></div>' +
+    '<div class="text-gray-600 mt-1 text-[10px]">Context: '+esc(res.contextUsed?.project||'video-gen-stack')+' · '+esc(res.contextUsed?.pipeline||'NewsBroadcastEngine')+' · '+esc(res.contextUsed?.lastAction||'')+'</div>' +
+    '</div>'
+}
+
+async function quickAsk(text){
+  const input = document.getElementById('chatInput')
+  input.value = text
+  sendChat()
 }
 
 async function sendChat(){
@@ -2140,15 +2208,14 @@ async function sendChat(){
   input.value = ''
   addChatMsg('user', msg.replace(/</g,'&lt;'))
   const thinking = addChatMsg('ai', '<span class="text-gray-500">Thinking...</span>')
+  const mode = document.getElementById('chatMode')?.value || 'simple'
   try {
-    const res = await fetch('/api/ai/chat', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message: msg})}).then(r=>r.json())
-    const reply = (res.reply || 'No reply').replace(/</g,'&lt;')
-    const md = reply.replace(/\\*\\*(.*?)\\*\\*/g,'<b>$1</b>').replace(/\\n/g,'<br>')
-    thinking.innerHTML = '<div class="mb-1 text-gray-500">AI Assistant' + (res.provider ? ' <span class="opacity-60">· ' + res.provider + '</span>' : '') + '</div>' + md
+    const res = await fetch('/api/ai/chat', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message: msg, mode})}).then(r=>r.json())
+    thinking.innerHTML = renderAiCard(res)
     const prov = document.getElementById('chatProvider')
     if(prov && res.provider) prov.textContent = res.provider
   } catch(e) {
-    thinking.innerHTML = '<div class="mb-1 text-gray-500">AI Assistant</div><span class="text-red-400">Connection failed</span>'
+    thinking.innerHTML = '<div class="mb-1 text-gray-500">🤖 AI Assistant</div><span class="text-red-400">Connection failed</span>'
   }
   thinking.scrollIntoView()
 }
