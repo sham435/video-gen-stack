@@ -17,6 +17,7 @@ import { SemanticVisualRankerV2 } from './pipeline/SemanticVisualRankerV2.mjs'
 import { ProductionMemory } from './pipeline/ProductionMemory.mjs'
 import { HookAnalyzer } from './quality/HookAnalyzer.mjs'
 import { CompositionJudge } from './quality/CompositionJudge.mjs'
+import { RetentionSimulator } from './quality/RetentionSimulator.mjs'
 import { ProductionEffectEngine } from './video/effects/ProductionEffectEngine.mjs'
 import { RetentionDirector } from './video/RetentionDirector.mjs'
 import { SceneProductionScore } from './video/scoring/SceneProductionScore.mjs'
@@ -68,6 +69,7 @@ export class NewsBroadcastEngine {
     this.productionMemory = new ProductionMemory()
     this.hookAnalyzer = new HookAnalyzer()
     this.compositionJudge = new CompositionJudge({ memory: this.productionMemory })
+    this.retentionSimulator = new RetentionSimulator({ memory: this.productionMemory })
     this.emotionalArcAnalyzer = new EmotionalArcAnalyzer()
     this.motionPlanner = new MotionPlanner()
     this.transitionPlanner = new TransitionPlanner()
@@ -272,6 +274,21 @@ export class NewsBroadcastEngine {
         console.log(`Visual Rerank: scene ${sc.id} → ${String(reranked.url).split('/').pop().slice(0, 30)} (${reranked.score}/100)`)
       }
     }
+
+    // Phase 10: Viewer Retention Simulator — predict drop-off, then optimize.
+    // Answers "will a viewer stay?" — trims long scenes, promotes the
+    // strongest caption into the hook when completion is predicted low.
+    const retentionRun = this.retentionSimulator.evaluate(timedScenes)
+    const retentionChanges = this.retentionSimulator.optimize(timedScenes, retentionRun)
+    if (retentionChanges.changes.length > 0) {
+      // Duration trims invalidate timestamps — re-sync before narration/render
+      timedScenes = this.scenePlanner.assignTimestamps(timedScenes)
+      console.log(`Retention Optimizer: ${retentionChanges.changes.join('; ')}`)
+    }
+    const dropInfo = retentionRun.dropZones.length
+      ? `drops at ${retentionRun.dropZones.map(z => `~${z.second}s (scene ${z.sceneId})`).join(', ')}`
+      : 'no significant drop zones'
+    console.log(`Retention: predicted ${retentionRun.completionRate}% completion, ${retentionRun.avgWatch}s avg watch — ${dropInfo}`)
 
     // Phase 8: Scene composition quality + AI Production Score
     const scored = timedScenes.map(s => ({ scene: s, comp: this.compositionScorer.score(s) }))
