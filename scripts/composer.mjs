@@ -97,6 +97,12 @@ if (import.meta.url.endsWith('composer.mjs')) {
         uploadCount++
         console.log('Uploading to YouTube...')
         try {
+          // Stage 4: Publish preflight — video must exist before upload
+          const { ProductionPreflight } = await import('../src/ai/ProductionPreflight.mjs')
+          const publishPreflight = await ProductionPreflight.check({}, { outDir, stage: 'publish' })
+          if (!publishPreflight.ready) {
+            throw new Error(`Publish preflight failed: ${publishPreflight.errors.join(', ')}`)
+          }
           const { uploadShort } = await import('../apps/api/publishers/youtube.js')
           const buffer = fs.readFileSync(finalPath)
           const title = `${article.title?.slice(0, 90) || 'News Update'} | NEWS-MONSTER`

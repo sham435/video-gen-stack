@@ -95,11 +95,8 @@ export class NewsBroadcastEngine {
   }
 
   async generateFromArticle(article, outDir = 'output', job = null, options = {}) {
-    // Preflight guard — verify everything before rendering starts.
-    // Scenes are built inside this function, so expectScenes stays false —
-    // SCENE_EMPTY is only demanded when a caller re-validates a job that
-    // already contains pre-built scenes (e.g. the autonomous orchestrator).
-    const preflight = await ProductionPreflight.check({ article, category: article?.category }, { outDir, bypassYoutube: true })
+    // Stage 1: Article preflight — verify the source data before any work.
+    const preflight = await ProductionPreflight.check({ article, category: article?.category }, { outDir, bypassYoutube: true, stage: 'article' })
     if (!preflight.ready) {
       console.error(`[Preflight] blocked: ${preflight.errors.join(', ')}`)
       if (job) job.markFailed('collector', `preflight: ${preflight.errors.join(', ')}`)
@@ -241,6 +238,12 @@ export class NewsBroadcastEngine {
     const timedScenes = this.scenePlanner.assignTimestamps(scenes)
     this.validateTemplate(timedScenes)
 
+    // Stage 2: Scene preflight — scenes must exist before scoring/render prep
+    const scenePreflight = await ProductionPreflight.check({ article, category: article?.category, scenes: timedScenes }, { stage: 'scene' })
+    if (!scenePreflight.ready) {
+      throw new Error(`Scene preflight failed: ${scenePreflight.errors.join(', ')}`)
+    }
+
     // Phase 8: Scene composition quality + AI Production Score
     const scored = timedScenes.map(s => ({ scene: s, comp: this.compositionScorer.score(s) }))
     const prodScored = timedScenes.map(s => ({ scene: s, prod: this.productionScorer.score(s) }))
@@ -324,6 +327,12 @@ export class NewsBroadcastEngine {
 
     const totalFrames = Math.ceil(totalDuration * this.renderFps)
     const reportEvery = Math.max(1, Math.floor(totalFrames / 20))
+
+    // Stage 3: Render preflight — environment + narration ready before the loop
+    const renderPreflight = await ProductionPreflight.check({ article }, { outDir, stage: 'render' })
+    if (!renderPreflight.ready) {
+      throw new Error(`Render preflight failed: ${renderPreflight.errors.join(', ')}`)
+    }
     console.log(`Rendering ${totalFrames} frames at ${this.renderFps}fps (output: ${this.outputFps}fps)...`)
     job.markStart('render')
 
