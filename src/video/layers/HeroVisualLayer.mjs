@@ -20,11 +20,18 @@ export class HeroVisualLayer {
   }
 
   async draw(ctx, scene, progress) {
-    const imgUrl = scene.image || scene.backgroundImage || scene.bRoll
-    if (!imgUrl) return
+    const urls = scene.images || (scene.image ? [scene.image] : null) || (scene.bRoll ? [scene.bRoll] : null) || (scene.backgroundImage ? [scene.backgroundImage] : null)
+    if (!urls || urls.length === 0) return
 
+    // B-roll cycling: swap the hero image every ~2.5s within the scene
+    const cycle = Math.floor(progress * 3.5) % urls.length
+    const imgUrl = urls[cycle]
     const img = await this.load(imgUrl)
     if (!img) return
+
+    // Crossfade between images on swap
+    const local = progress * 3.5 - Math.floor(progress * 3.5)
+    const blendAlpha = 0.6 * (1 - Math.abs(local - 0.5) * 1.4)
 
     ctx.save()
 
@@ -50,7 +57,7 @@ export class HeroVisualLayer {
       sy = (imgH - sh) / 2
     }
 
-    ctx.globalAlpha = 0.6
+    ctx.globalAlpha = Math.max(0.35, blendAlpha)
     ctx.drawImage(img, sx, sy, sw, sh, offsetX, offsetY, W * zoom, H * zoom)
 
     const fadeGrad = ctx.createLinearGradient(0, H * 0.5, 0, H)

@@ -19,29 +19,57 @@ export class VisualReasoner {
     const layout = director.getLayout(scene.type)
     const keywords = this.extractKeywords(scene, article)
 
-    let asset = await this.tryPexels(keywords)
-    if (!asset && this.falKey) {
-      const prompt = this.promptEngine.imagePrompt({
-        category: cat,
-        sceneType: scene.type,
-        keywords,
-        hookStrategy: scene.hookStrategy,
-      })
-      asset = await this.tryFalAI(prompt)
-    }
-    if (!asset && article.imageUrl) {
-      asset = { type: 'image', url: article.imageUrl, source: 'article' }
-    }
+    // Resolve a set of candidate visuals (Pexels up to 3, then article image, then FAL)
+    const assets = await this.resolveAssets(keywords, article, cat, scene)
+    const primary = assets[0] || { type: 'gradient', url: null, source: 'fallback' }
 
     return {
       category: cat,
-      primary: asset || { type: 'gradient', url: null, source: 'fallback' },
+      primary,
+      images: assets.map(a => a.url).filter(Boolean), // multiple images for b-roll cycling
       keywords,
       layout,
       colors: director.getColorGrade(),
       caption: director.getCaption(),
       overlays: director.getOverlays(),
     }
+  }
+
+  async resolveAssets(keywords, article, cat, scene) {
+    const assets = []
+    // 1. Pexels — pull up to 3 portrait photos for b-roll variety
+    if (this.pexelsKey) {
+      for (const term of keywords.slice(0, 3)) {
+        const url = await this._pexelsOne(term)
+        if (url) assets.push({ type: 'image', url, source: 'pexels', keyword: term })
+        if (assets.length >= 3) break
+      }
+    }
+    // 2. Article image as a fallback/extra
+    if (article?.imageUrl && assets.length < 3) {
+      assets.push({ type: 'image', url: article.imageUrl, source: 'article' })
+    }
+    // 3. FAL AI generation if still thin
+    if (assets.length === 0 && this.falKey) {
+      const prompt = this.promptEngine.imagePrompt({
+        category: cat, sceneType: scene.type, keywords, hookStrategy: scene.hookStrategy,
+      })
+      const ai = await this.tryFalAI(prompt)
+      if (ai) assets.push(ai)
+    }
+    return assets
+  }
+
+  async _pexelsOne(term) {
+    try {
+      const res = await fetch(
+        `${PEXELS_BASE}/search?query=${encodeURIComponent(term)}&per_page=3&orientation=portrait`,
+        { headers: { Authorization: this.pexelsKey }, signal: AbortSignal.timeout(5000) }
+      )
+      if (!res.ok) return null
+      const data = await res.json()
+      return data.photos?.[0]?.src?.large2x || data.photos?.[0]?.src?.large || null
+    } catch { return null }
   }
 
   extractKeywords(scene, article) {

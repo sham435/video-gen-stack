@@ -148,6 +148,7 @@ export class NewsBroadcastEngine {
         category: visualPlan.category,
         image: visualPlan.primary?.url || null,
         bRoll: visualPlan.primary?.url || null,
+        images: visualPlan.images || (visualPlan.primary?.url ? [visualPlan.primary.url] : []),
         visualPlan,
         colors: visualPlan.colors,
         directorLayout: visualPlan.layout,
