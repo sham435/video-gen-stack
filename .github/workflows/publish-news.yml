@@ -2,6 +2,7 @@ name: Publish News Video — NEWS-MONSTER Broadcast
 on:
   schedule:
     - cron: '*/30 * * * *'
+    - cron: '23 3 * * *'
   workflow_dispatch:
     inputs:
       category:
@@ -48,6 +49,12 @@ jobs:
           node-version: 22
           cache: 'npm'
 
+      - name: Restore production memory + retention snapshots
+        uses: actions/cache@v4
+        with:
+          path: data
+          key: newsroom-data-v1
+
       - name: Install dependencies
         run: npm install --include=optional
 
@@ -70,3 +77,39 @@ jobs:
           QUICK_RENDER: 'true'
           INPUT_CATEGORY: ${{ github.event.inputs.category || 'technology' }}
         run: node scripts/composer.mjs '${{ github.event.inputs.title || '' }}'
+
+      - name: Persist production memory + retention snapshots
+        if: always()
+        uses: actions/cache@v4
+        with:
+          path: data
+          key: newsroom-data-v1
+
+  retention-learning:
+    # Daily 3:23am — calibrate ProductionMemory with real viewer analytics
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Restore production memory + retention snapshots
+        uses: actions/cache@v4
+        with:
+          path: data
+          key: newsroom-data-v1
+      - name: Install dependencies
+        run: npm install --include=optional
+      - name: Learn retention patterns
+        env:
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+        run: node scripts/retention-learning.mjs
+      - name: Persist calibrated production memory
+        if: always()
+        uses: actions/cache@v4
+        with:
+          path: data
+          key: newsroom-data-v1

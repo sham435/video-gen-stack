@@ -290,6 +290,15 @@ export class NewsBroadcastEngine {
       : 'no significant drop zones'
     const topRisk = retentionRun.dropRisks[0]
     console.log(`Retention: score ${retentionRun.retentionScore}/100, ${retentionRun.completionRate}% completion, ${retentionRun.avgWatch}s avg watch — ${dropInfo}${topRisk ? ` | top risk: ${topRisk.risk}@scene${topRisk.scene} (${topRisk.confidence})` : ''}`)
+    // Stash the prediction for the RetentionPatternLearner at publish time
+    this.lastRetention = {
+      retentionScore: retentionRun.retentionScore,
+      completionRate: retentionRun.completionRate,
+      avgWatch: retentionRun.avgWatch,
+      dropRisks: retentionRun.dropRisks,
+      recommendations: retentionRun.recommendations,
+      appliedFixes: retentionChanges.changes,
+    }
 
     // Phase 8: Scene composition quality + AI Production Score
     const scored = timedScenes.map(s => ({ scene: s, comp: this.compositionScorer.score(s) }))

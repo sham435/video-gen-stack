@@ -32,7 +32,7 @@ export async function composeVideo(articles, outDir = 'output') {
     fs.copyFileSync(withFooter, finalPath)
   }
 
-  return { finalPath, hooks: [] }
+  return { finalPath, hooks: [], retention: engine.lastRetention || null }
 }
 
 if (import.meta.url.endsWith('composer.mjs')) {
@@ -90,7 +90,7 @@ if (import.meta.url.endsWith('composer.mjs')) {
       console.log(`\nProcessing: "${article.title?.slice(0, 80)}..."`)
 
       const renderStart = Date.now()
-      const { finalPath } = await composeVideo([article], outDir)
+      const { finalPath, retention } = await composeVideo([article], outDir)
       const renderTime = Date.now() - renderStart
 
       if (process.env.YOUTUBE_REFRESH_TOKEN && uploadCount === 0) {
@@ -122,6 +122,16 @@ if (import.meta.url.endsWith('composer.mjs')) {
             coverPath
           )
           console.log(`Published: https://youtu.be/${result?.id}`)
+
+          // Snapshot the pipeline's retention prediction for the
+          // RetentionPatternLearner (real analytics calibrate memory later)
+          if (result?.id && retention) {
+            try {
+              const { RetentionPatternLearner } = await import('../src/analytics/RetentionPatternLearner.mjs')
+              new RetentionPatternLearner().appendSnapshot({ videoId: result.id, title: article.title?.slice(0, 100), retention })
+              console.log('Retention snapshot recorded for learning loop')
+            } catch (e) { console.log('Retention snapshot skipped:', e.message) }
+          }
         } catch (e) { console.log('Upload failed:', e.message) }
       }
     }

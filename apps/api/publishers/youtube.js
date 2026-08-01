@@ -23,7 +23,7 @@ export async function exchangeCode(code) {
   return res.json()
 }
 
-async function getAccessToken() {
+export async function getAccessToken() {
   if (!REFRESH_TOKEN) throw new Error('YOUTUBE_REFRESH_TOKEN not set. Complete OAuth first.')
   const res = await fetch(`${BASE}/oauth2/v4/token`, {
     method: 'POST',

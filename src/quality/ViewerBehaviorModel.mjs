@@ -20,9 +20,9 @@ export class ViewerBehaviorModel {
 
   _patternConfidence(rule) {
     const p = this.memory?.lookup(rule)
-    if (!p?.frequency) return { factor: 1, frequency: 0 }
+    if (!p?.frequency) return { factor: 1, frequency: 0, confidence: 0 }
     // Negative retentionImpact (bad pattern) → hazard UP; positive → hazard DOWN
-    return { factor: 1 - (p.retentionImpact || 0) / 100, frequency: p.frequency }
+    return { factor: 1 - (p.retentionImpact || 0) / 100, frequency: p.frequency, confidence: p.confidence || 0 }
   }
 
   // Per-scene hazard rate for the survival simulation, memory-calibrated
@@ -105,10 +105,12 @@ export class ViewerBehaviorModel {
     // Post-hook information delivery — key facts buried behind exposition
     if (scene.id === 2 && scene.type === 'explanation') risks.push({ type: 'slow_information_delivery', confidence: 0.7, detail: 'exposition directly after hook delays the key fact' })
 
-    // Memory calibration: known patterns boost confidence with frequency
+    // Memory calibration: known patterns boost confidence with frequency;
+    // data-backed rules (measured confidence from analytics) weigh more
     return risks.map(r => {
-      const { frequency } = this._patternConfidence(r.type)
-      const calibrated = Math.min(0.97, r.confidence + frequency * 0.01)
+      const { frequency, confidence: measured } = this._patternConfidence(r.type)
+      const boost = Math.max(frequency * 0.01, measured * 0.25)
+      const calibrated = Math.min(0.97, r.confidence + boost)
       return { ...r, confidence: Math.round(calibrated * 100) / 100 }
     })
   }
