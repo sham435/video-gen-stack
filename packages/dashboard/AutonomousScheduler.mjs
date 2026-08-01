@@ -73,6 +73,17 @@ export class AutonomousScheduler {
     return item
   }
 
+  // Activity-aware: any user edit resets the idle countdown
+  touch(id) {
+    const item = this.queue.find(q => q.id === id)
+    if (!item) return null
+    item.touched = true
+    item.confirmBy = new Date(Date.now() + USER_WINDOW_MS).toISOString()
+    item.autoStartAt = new Date(Date.now() + AUTO_START_MS).toISOString()
+    this._persist()
+    return item
+  }
+
   // User actions
   approve(id) {
     const item = this.queue.find(q => q.id === id)

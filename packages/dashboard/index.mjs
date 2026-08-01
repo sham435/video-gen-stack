@@ -896,6 +896,12 @@ app.post('/api/autonomous/:id/cancel', (req, res) => {
   res.json(item || { error: 'not found' })
 })
 
+// User activity resets the idle countdown for a scheduled production
+app.post('/api/autonomous/:id/touch', (req, res) => {
+  const item = _scheduler.touch(req.params.id)
+  res.json(item || { error: 'not found' })
+})
+
 // Autonomous Orchestrator — control modes + council gate
 const { AutonomousOrchestrator } = await import('../../src/video-studio/AutonomousOrchestrator.mjs')
 const _orchestrator = new AutonomousOrchestrator({ aiProvider: null })

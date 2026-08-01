@@ -6,6 +6,7 @@ import { SceneEngine } from './video/SceneEngine.mjs'
 import { Timeline } from './video/Timeline.mjs'
 import { VisualDirector } from './video/VisualDirector.mjs'
 import { SceneCompositionScore } from './video/SceneCompositionScore.mjs'
+import { CategoryProductionProfiles } from './video/CategoryProductionProfiles.mjs'
 import { CoverGenerator } from './video-studio/CoverGenerator.mjs'
 import { ProductionJob } from './video-studio/ProductionJob.mjs'
 import { ScriptContract } from './video-studio/ScriptContract.mjs'
@@ -42,6 +43,7 @@ export class NewsBroadcastEngine {
     this.scriptContract = new ScriptContract()
     this.visualDirector = new VisualDirector()
     this.compositionScorer = new SceneCompositionScore()
+    this.categoryProfiles = CategoryProductionProfiles
     this.emotionalArcAnalyzer = new EmotionalArcAnalyzer()
     this.motionPlanner = new MotionPlanner()
     this.transitionPlanner = new TransitionPlanner()
@@ -149,15 +151,17 @@ export class NewsBroadcastEngine {
       const visualPlan = await this.visualReasoner.select(scene, article, article.category)
       // Cinematic Visual Director: rank images, drop near-duplicates, assign camera
       const ranked = this.visualDirector.rank(visualPlan.images, article)
-      const cameraPlan = this.visualDirector.getCameraPlan(scene.type)
+      const categoryCamera = this.categoryProfiles.getCamera(article.category, scene.type)
+      const cameraPlan = { ...this.visualDirector.getCameraPlan(scene.type), motion: scene.camera || categoryCamera }
       scenes.push({
         ...scene,
         category: visualPlan.category,
         image: ranked[0]?.url || visualPlan.primary?.url || null,
         bRoll: ranked[0]?.url || visualPlan.primary?.url || null,
         images: ranked.map(r => r.url) || (visualPlan.primary?.url ? [visualPlan.primary.url] : []),
-        camera: scene.camera || cameraPlan.motion,
+        camera: cameraPlan.motion,
         cameraPlan,
+        layoutStyle: this.categoryProfiles.getLayout(article.category),
         visualPlan,
         colors: visualPlan.colors,
         directorLayout: visualPlan.layout,
