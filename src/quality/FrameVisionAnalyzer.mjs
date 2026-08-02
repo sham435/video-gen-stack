@@ -16,10 +16,48 @@ import { SafeZoneManager, SAFE_ZONES } from '../layout/SafeZoneManager.mjs'
 // deterministic checks cannot provide: it verifies what actually rendered.
 const W = 1080
 const H = 1920
-const HEADLINE = SAFE_ZONES.headline // y 0..220
-const SUBJECT = SAFE_ZONES.subject // x 200..880, y 250..650
-const CAPTION = SAFE_ZONES.caption // y 750..950
 const SAMPLE_STEP = 4 // analyze every 4th pixel
+
+// Scene-type text presets — calibrated against the actual renderer layout
+// (InformationLayer + CaptionEngine) on rendered 1080x1920 output:
+//   hook:        headline band y1080-1320 (H*0.62±46) + captions y1405-1630
+//   fact:        headline card centered at H*0.30 (y~450-750) + captions
+//   explanation: "WHY IT MATTERS" header at y288 (+ body when present) + captions
+//   reaction/reveal: captions only — the background image is NOT text
+//   retention/brand_close: center text at H*0.50 (y~960) + captions
+// Every scene carries word captions at y1405-1630, so that band is the
+// universal text signal. The bright brand footer starts at y1820 and must
+// never count as text bleed.
+const LAYOUTS = {
+  hook: {
+    textBands: [SAFE_ZONES.headline, SAFE_ZONES.caption],
+    subject: SAFE_ZONES.subject,
+  },
+  fact: {
+    textBands: [{ x: 0, y: 400, width: 1080, height: 400 }, SAFE_ZONES.caption],
+    subject: { x: 200, y: 800, width: 680, height: 500 },
+  },
+  explanation: {
+    textBands: [{ x: 0, y: 250, width: 1080, height: 560 }, SAFE_ZONES.caption],
+    subject: { x: 200, y: 820, width: 680, height: 480 },
+  },
+  reaction: {
+    textBands: [SAFE_ZONES.caption],
+    subject: SAFE_ZONES.subject,
+  },
+  reveal: {
+    textBands: [SAFE_ZONES.caption],
+    subject: SAFE_ZONES.subject,
+  },
+  centered: {
+    textBands: [{ x: 0, y: 880, width: 1080, height: 280 }, SAFE_ZONES.caption],
+    subject: { x: 200, y: 450, width: 680, height: 400 },
+  },
+}
+// Gap between caption band (ends y1640) and the brand footer (starts y1820).
+// Text bleeding past the captions lands here — this is the only bleed zone
+// that stays reliably content-free on rendered frames.
+const BLEED_BOTTOM = { x: 200, y: 1650, width: 680, height: 40 }
 
 export class FrameVisionAnalyzer {
   constructor(options = {}) {
@@ -64,33 +102,34 @@ export class FrameVisionAnalyzer {
     const checks = {}
     const penalties = { total: 0, issues: [] }
     const flag = (name, pts) => { checks[name] = false; penalties.total += pts; penalties.issues.push(name) }
+    const layout = LAYOUTS[scene.type] || LAYOUTS.centered
 
     // Overall blank detection
     const overall = this._regionStats(buf, { x: 0, y: 0, width: W, height: H }, 16)
     checks.blank = !(overall.mean < 10 && overall.stddev < 8)
     if (!checks.blank) { penalties.total += 40; penalties.issues.push('blank') }
 
-    // Contrast — text bands must have enough luminance variance to be legible
-    const headline = this._regionStats(buf, HEADLINE)
-    const caption = this._regionStats(buf, CAPTION)
-    const textStd = Math.max(headline.stddev, caption.stddev)
-    checks.contrast = textStd >= 25
-    if (!checks.contrast) flag('contrast', textStd >= 15 ? 5 : 20)
+    // Contrast — text bands must have enough luminance variance to be legible.
+    // Calibrated to measured renders: captions ~17-22, headlines ~68-77.
+    const textStd = Math.max(...layout.textBands.map(b => this._regionStats(buf, b).stddev))
+    checks.contrast = textStd >= 15
+    if (!checks.contrast) flag('contrast', textStd >= 10 ? 5 : 20)
 
-    // Text presence — unless the layer is intentionally hidden, expect ink
-    checks.textRendered = headline.hiRatio > 0.8 || caption.hiRatio > 0.8 || scene.captionHidden
-    if (!checks.textRendered && !scene.captionHidden) flag('textRendered', 10)
+    // Text presence — any layout text band must show ink (headline band for
+    // hook/fact, centered CTA for close scenes, or the universal caption band)
+    const ink = layout.textBands.map(b => this._regionStats(buf, b))
+    const textRendered = ink.some(s => s.hiRatio > 0.8 || s.stddev >= 10) || scene.captionHidden
+    checks.textRendered = textRendered
+    if (!textRendered && !scene.captionHidden) flag('textRendered', 10)
 
-    // Safe margin — no text bleeding past the headline/caption zones.
-    // Bands kept thin and OUTSIDE the subject zone (y 250..650) so that
-    // legitimate subject detail never counts as text bleed.
-    const bleedTop = this._regionStats(buf, { x: 200, y: 220, width: 680, height: 26 }, 4).hiRatio
-    const bleedBottom = this._regionStats(buf, { x: 200, y: 950, width: 680, height: 26 }, 4).hiRatio
-    checks.safeMargin = bleedTop < 0.15 && bleedBottom < 0.15
+    // Safe margin — no text bleeding past the caption band (footer at y1820
+    // is brand chrome, not bleed)
+    const bleed = this._regionStats(buf, BLEED_BOTTOM, 8).hiRatio
+    checks.safeMargin = bleed < 0.15
     if (!checks.safeMargin) flag('safeMargin', 20)
 
     // Face visibility proxy — subject band should carry visual detail
-    const subject = this._regionStats(buf, SUBJECT)
+    const subject = this._regionStats(buf, layout.subject)
     checks.faceVisibility = subject.stddev >= 12
     if (!checks.faceVisibility) flag('faceVisibility', subject.stddev >= 8 ? 5 : 10)
 
@@ -112,7 +151,12 @@ export class FrameVisionAnalyzer {
   async analyze(videoPath, scenes, options = {}) {
     const results = []
     for (const scene of scenes || []) {
-      const at = options.secondsForScene ? options.secondsForScene(scene) : (scene.start || 0) + 0.2
+      // Sample at ~65% of the scene duration — after the headline/caption
+      // animations have fully rendered (text animates in at progress 0.45+,
+      // so sampling at +0.2s would catch empty pre-animation frames)
+      const at = options.secondsForScene
+        ? options.secondsForScene(scene)
+        : scene.start + (scene.end - scene.start) * 0.65
       const buf = this._extractFrame(videoPath, Math.max(0, at))
       results.push({ scene: scene.id, ...this._frameChecks(buf, scene) })
     }

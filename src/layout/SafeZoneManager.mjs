@@ -1,10 +1,13 @@
 // Safe Zone Manager — reserves screen regions and detects text collisions.
 // Never places text randomly; each layer maps to a designated band.
+// Zones match the actual 1080x1920 renderer layout (InformationLayer +
+// CaptionEngine): hook headline ~y1144-1236, word captions ~y1405-1630,
+// visuals occupy the band above the headline.
 export const SAFE_ZONES = {
-  headline: { x: 0, y: 0, width: 1080, height: 220 },        // top band
-  subject: { x: 200, y: 250, width: 680, height: 400 },      // face/object band — no text
-  caption: { x: 0, y: 750, width: 1080, height: 200 },       // bottom caption band
-  logo: { x: 850, y: 850, width: 180, height: 100 },         // lower-right logo
+  headline: { x: 0, y: 1080, width: 1080, height: 240 },        // hook headline band
+  subject: { x: 200, y: 320, width: 680, height: 700 },         // face/object band — no text
+  caption: { x: 0, y: 1340, width: 1080, height: 300 },         // word-caption band
+  logo: { x: 850, y: 850, width: 180, height: 100 },            // lower-right logo
 }
 
 export class SafeZoneManager {
