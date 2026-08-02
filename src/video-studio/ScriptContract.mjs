@@ -1,8 +1,16 @@
 import { BrandStyleResolver } from '../visual/BrandStyleResolver.mjs'
+import { TextConflictResolver } from '../pipeline/TextConflictResolver.mjs'
 
 export class ScriptContract {
   constructor() {
     this.resolver = new BrandStyleResolver()
+    this.textResolver = new TextConflictResolver()
+  }
+
+  // Contract-time dedupe: the caption must never repeat the emphasis keyword
+  // (fixes the "SECRET rendered twice" bug — emphasis + caption both showed it).
+  _dedupeCaption(caption, focus) {
+    return this.textResolver.removeDuplicateWords(focus || '', caption || '')
   }
 
   build(article, directorStory) {
@@ -40,7 +48,7 @@ export class ScriptContract {
         transition: s.transition || 'cut',
         emotion: s.emotion || 'neutral',
         caption_focus: s.caption?.focus || '',
-        caption: s.caption?.fullText || s.narration || '',
+        caption: this._dedupeCaption(s.caption?.fullText || s.narration || '', s.caption?.focus),
       })),
       voice: {
         style: 'documentary',

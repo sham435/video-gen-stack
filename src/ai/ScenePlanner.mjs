@@ -17,7 +17,10 @@ export class ScenePlanner {
       narration: this.cleanNarration(sceneDef.narration),
       text: this.cleanNarration(sceneDef.narration) || (article.title || '').slice(0, 60),
       subheadline: this.cleanNarration(sceneDef.narration) || (article.title || '').slice(0, 60),
-      caption: sceneDef.caption_focus || (sceneDef.narration || '').split(' ').slice(0, 3).join(' ').toUpperCase(),
+      // Never fall back caption to caption_focus or narration words — the
+      // manifest emits narration as its own caption layer; duplicating the
+      // keyword here is what produced the "SECRET twice" render bug.
+      caption: '',
       captionFocus: (sceneDef.caption_focus || '').toUpperCase(),
       camera: {
         type: sceneDef.camera || 'push_in',
