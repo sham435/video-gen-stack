@@ -123,6 +123,18 @@ if (import.meta.url.endsWith('composer.mjs')) {
           )
           console.log(`Published: https://youtu.be/${result?.id}`)
 
+          // Community loop — post the topic-specific pinned-comment question.
+          // The 100% 'stayed to watch' audience needs a reason to comment.
+          if (result?.id) {
+            try {
+              const { PinnedCommentBuilder } = await import('../src/publishing/PinnedCommentBuilder.mjs')
+              const { postComment } = await import('../apps/api/publishers/youtube.js')
+              const comment = new PinnedCommentBuilder().build(article)
+              const posted = await postComment(result.id, comment.question)
+              console.log(`Pinned comment suggestion: "${comment.question}"${posted ? '' : ' (post the comment above manually in Studio and pin it)'}`)
+            } catch (e) { console.log('Pinned comment skipped:', e.message) }
+          }
+
           // Snapshot the pipeline's retention prediction for the
           // RetentionPatternLearner (real analytics calibrate memory later)
           if (result?.id && retention) {

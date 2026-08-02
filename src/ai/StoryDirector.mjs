@@ -1,4 +1,5 @@
 import { PromptEngine } from './PromptEngine.mjs'
+import { TopicCtaBuilder } from '../publishing/TopicCtaBuilder.mjs'
 
 const HOOK_STRATEGIES = ['mystery', 'shock', 'question', 'stat']
 const SCENE_TYPES = ['hook', 'fact', 'reveal', 'explanation', 'reaction', 'close']
@@ -109,6 +110,9 @@ Target Format: ${targetFormat}`
     const desc = article.description || ''
     const sentences = desc.split(/[.!?]+/).filter(s => s.trim().length > 10)
     const brand = (title.split(' ')[0] || 'TECH').toUpperCase()
+    // Topic-specific outro — the generic follow plea causes end-of-video
+    // drop-off (measured in analytics). Name the brand + a specific next step.
+    const cta = new TopicCtaBuilder().build(article)
     return {
       headline: `${brand} CHANGED EVERYTHING`,
       hookStrategy: 'curiosity',
@@ -120,10 +124,11 @@ Target Format: ${targetFormat}`
         { type: 'reaction', duration: 4, narration: sentences[1] || 'Most people still do not know about this.', visual: { subject: 'spotlight evidence', style: 'documentary', composition: 'medium' }, camera: 'parallax', motion: 'depthBlur', transition: 'light_leak', emotion: 'tension', caption: { focus: 'DOUBT', fullText: 'THE DOUBT REMAINS' } },
         { type: 'reveal', duration: 3.5, narration: 'But here is what happened after the announcement.', visual: { subject: 'aftermath reveal', style: 'dramatic impact', composition: 'close_up' }, camera: 'shake', motion: 'particleField', transition: 'glitch', emotion: 'tension', caption: { focus: 'AFTER', fullText: 'WHAT HAPPENED NEXT' } },
         { type: 'reaction', duration: 3, narration: 'This changes the entire industry going forward.', visual: { subject: 'industry impact', style: 'glowing data streams', composition: 'wide' }, camera: 'pan', motion: 'digitalHUD', transition: 'cut', emotion: 'excitement', caption: { focus: 'IMPACT', fullText: 'INDUSTRY IMPACT' } },
-        { type: 'close', duration: 3, narration: 'Follow NEWS-MONSTER for exclusive analysis.', visual: { subject: 'NEWS-MONSTER brand', style: 'red and cyan futuristic', composition: 'medium' }, camera: 'pull_back', motion: null, transition: 'fade', emotion: 'excitement', caption: { focus: 'FOLLOW', fullText: 'FOLLOW NEWS-MONSTER' } },
+        { type: 'close', duration: 3, narration: cta.narration, visual: { subject: 'NEWS-MONSTER brand', style: 'red and cyan futuristic', composition: 'medium' }, camera: 'pull_back', motion: null, transition: 'fade', emotion: 'excitement', caption: { focus: 'SUB', fullText: cta.caption } },
       ],
       brandMoment: { type: 'cta', sceneIndex: 6 },
-      cta: 'Follow NEWS-MONSTER for exclusive analysis you will not find anywhere else.',
+      cta: cta.cta,
+      engagement: cta.engagement,
     }
   }
 

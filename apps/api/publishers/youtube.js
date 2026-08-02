@@ -140,3 +140,27 @@ export async function setThumbnail(token, videoId, coverPath) {
     console.log(`✅ YouTube thumbnail set: ${data.items?.length || 0} items`)
   }
 }
+
+// Post a comment on a published video (best-effort — the public API can
+// create a top-level comment; pinning still requires the Studio UI).
+export async function postComment(videoId, text) {
+  if (!videoId || !text) return null
+  const token = await getAccessToken()
+  const res = await fetch(`${BASE}/youtube/v3/comments?part=snippet`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      snippet: { videoId, textOriginal: text.slice(0, 500) },
+    }),
+  })
+  const data = await res.json()
+  if (data.error) {
+    console.warn(`⚠️  Comment post failed: ${data.error.message}`)
+    return null
+  }
+  console.log(`✅ Comment posted: ${data.snippet?.textOriginal?.slice(0, 60)}...`)
+  return data
+}

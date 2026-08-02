@@ -1,3 +1,5 @@
+import { TopicCtaBuilder } from '../publishing/TopicCtaBuilder.mjs'
+
 export class StoryPlanner {
   constructor(provider) {
     this.provider = provider
@@ -85,6 +87,7 @@ Category: ${article.category || 'technology'}`
     const desc = article.description || ''
     const sentences = desc.split(/[.!?]+/).filter(s => s.trim().length > 10)
     const brand = (title.split(' ')[0] || 'TECH').toUpperCase()
+    const cta = new TopicCtaBuilder().build(article)
     return {
       headline: `${brand} CHANGES EVERYTHING`,
       hook: `Nobody expected this move from ${brand}.`,
@@ -95,9 +98,10 @@ Category: ${article.category || 'technology'}`
         { id: 4, type: 'reaction', purpose: 'create tension and doubt', narration: sentences[1] || `Most people still do not know about this.`, visual_prompt: `spotlight on evidence, dramatic documentary style, 8k`, camera: 'parallax', transition: 'light_leak', emotion: 'tension', music_cue: 'suspense', sfx: 'alert', caption_focus: 'DOUBT', duration: 4 },
         { id: 5, type: 'reveal', purpose: 'the big reveal', narration: `But here is what happened after the announcement.`, visual_prompt: `explosive reveal, dramatic impact, particles flying, cinematic lighting, 8k`, camera: 'shake', transition: 'glitch', emotion: 'tension', music_cue: 'suspense', sfx: 'reveal', caption_focus: 'AFTER', duration: 3.5 },
         { id: 6, type: 'reaction', purpose: 'why it matters', narration: `This changes the entire industry going forward.`, visual_prompt: `industry impact visualization, glowing data streams, futuristic interface, 8k`, camera: 'pan', transition: 'cut', emotion: 'excitement', music_cue: 'resolve', sfx: 'whoosh', caption_focus: 'IMPACT', duration: 3 },
-        { id: 7, type: 'close', purpose: 'call to action', narration: `Follow NEWS-MONSTER for analysis you will not find anywhere else.`, visual_prompt: `NEWS-MONSTER brand logo, red and cyan, futuristic, cinematic, 8k`, camera: 'pull_back', transition: 'fade', emotion: 'excitement', music_cue: 'outro', sfx: 'none', caption_focus: 'FOLLOW', duration: 3 },
+        { id: 7, type: 'close', purpose: 'call to action', narration: cta.narration, visual_prompt: `NEWS-MONSTER brand logo, red and cyan, futuristic, cinematic, 8k`, camera: 'pull_back', transition: 'fade', emotion: 'excitement', music_cue: 'outro', sfx: 'none', caption_focus: 'SUB', duration: 3 },
       ],
-      cta: 'Follow NEWS-MONSTER for analysis you will not find anywhere else.',
+      cta: cta.cta,
+      engagement: cta.engagement,
     }
   }
 
