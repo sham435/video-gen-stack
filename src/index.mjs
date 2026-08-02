@@ -20,6 +20,8 @@ import { CompositionJudge } from './quality/CompositionJudge.mjs'
 import { RetentionSimulator } from './quality/RetentionSimulator.mjs'
 import { FrameVisionAnalyzer } from './quality/FrameVisionAnalyzer.mjs'
 import { QualityGuardian } from './quality/QualityGuardian.mjs'
+import { BrandPerformanceMemory } from './pipeline/BrandPerformanceMemory.mjs'
+import { ThumbnailBrandOptimizer } from './ai/thumbnail/ThumbnailBrandOptimizer.mjs'
 import { ProductionEffectEngine } from './video/effects/ProductionEffectEngine.mjs'
 import { RetentionDirector } from './video/RetentionDirector.mjs'
 import { SceneProductionScore } from './video/scoring/SceneProductionScore.mjs'
@@ -74,6 +76,8 @@ export class NewsBroadcastEngine {
     this.retentionSimulator = new RetentionSimulator({ memory: this.productionMemory })
     this.frameVision = new FrameVisionAnalyzer()
     this.qualityGuardian = new QualityGuardian()
+    this.brandPerformance = new BrandPerformanceMemory()
+    this.thumbnailBrandOptimizer = new ThumbnailBrandOptimizer({ brandMemory: this.brandPerformance })
     this.emotionalArcAnalyzer = new EmotionalArcAnalyzer()
     this.motionPlanner = new MotionPlanner()
     this.transitionPlanner = new TransitionPlanner()
@@ -125,6 +129,26 @@ export class NewsBroadcastEngine {
     const directorStory = await this.storyDirector.plan(article)
     console.log(`Story: ${directorStory.headline} (${directorStory.scenePlan.length} scenes, hook: ${directorStory.hookStrategy})`)
     job.markDone('story', { detail: `${directorStory.scenePlan.length} scenes planned`, score: 80 })
+
+    // Channel Growth Optimizer — ThumbnailBrandOptimizer packaging judge.
+    // Detects repetitive brand patterns (HIDDEN/REVEALED/SECRET/SHOCKING),
+    // scores alternatives with the CTR predictor + brand safety + novelty,
+    // and swaps in the strongest curiosity-gap title before the contract,
+    // cover, and publish title are built. BrandPerformanceMemory makes the
+    // avoidance automatic once real CTR data proves a pattern weak.
+    job.markStart('packaging')
+    const packaging = this.thumbnailBrandOptimizer.judge(article, this.contract?.cover || null, article.title)
+    if (packaging.selected && packaging.selected.title !== article.title) {
+      console.log(`Packaging: "${article.title}" → "${packaging.selected.title}" (${packaging.selected.score}/100, ${packaging.selected.angle || 'curiosity'})`)
+      article.title = packaging.selected.title
+      directorStory.headline = packaging.selected.title
+    } else if (packaging.analysis.brandRisk !== 'LOW') {
+      console.warn(`Packaging: ${packaging.analysis.brandRisk} risk${packaging.analysis.detected.length ? ` — ${packaging.analysis.detected.join(', ')}` : ''} (best candidate ${packaging.score}/100)`)
+    } else {
+      console.log(`Packaging: "${article.title}" cleared (${packaging.score}/100)`)
+    }
+    this.packaging = packaging
+    job.markDone('packaging', { detail: packaging.selected ? `selected "${packaging.selected.title.slice(0, 60)}" ${packaging.score}/100` : `no replacement (${packaging.score}/100)`, score: packaging.score })
 
     // Structured Script Contract — single source of truth for all downstream engines
     // Use the pre-built optimized contract when provided (from AutonomousOrchestrator/AIOptimizer)

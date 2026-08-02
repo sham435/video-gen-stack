@@ -110,7 +110,7 @@ export class ScriptPlanner {
 
   generateRetentionHook(title, brand) {
     const hooks = [
-      `But there is one hidden detail nobody noticed...`,
+      `But there is one overlooked detail nobody noticed...`,
       `However, there is a catch you need to know about.`,
       `What ${brand || 'the company'} did not tell you changes everything.`,
       `This shifts the entire industry. Here is how.`,

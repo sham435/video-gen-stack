@@ -72,7 +72,7 @@ export class ScriptContract {
 
   _angleFromEmotion(emotion) {
     const angles = {
-      shock: 'unexpected disruption', curiosity: 'hidden truth reveal',
+      shock: 'unexpected disruption', curiosity: 'the detail everyone missed',
       awe: 'industry milestone', tension: 'looming consequence',
       excitement: 'paradigm shift', neutral: 'developing story',
     }

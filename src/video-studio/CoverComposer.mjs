@@ -101,7 +101,7 @@ export class CoverComposer {
     ctx.shadowBlur = 0
 
     // bottom overlay badge
-    const bottomText = brief.text_overlay?.bottom || 'REVEALED'
+    const bottomText = brief.text_overlay?.bottom || 'NEW DETAILS'
     ctx.shadowBlur = 0
     ctx.font = '900 44px Anton, Impact, sans-serif'
     const bw = ctx.measureText(bottomText).width + 60

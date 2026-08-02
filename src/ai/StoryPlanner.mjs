@@ -84,19 +84,20 @@ Category: ${article.category || 'technology'}`
     const title = article.title || 'Tech News'
     const desc = article.description || ''
     const sentences = desc.split(/[.!?]+/).filter(s => s.trim().length > 10)
+    const brand = (title.split(' ')[0] || 'TECH').toUpperCase()
     return {
-      headline: `${(title.split(' ')[0] || 'TECH').toUpperCase()} DECLASSIFIED`,
-      hook: `Why ${(title.split(' ').slice(0, 3).join(' ') || 'they')} buried this secret.`,
+      headline: `${brand} CHANGES EVERYTHING`,
+      hook: `Nobody expected this move from ${brand}.`,
       scenes: [
-        { id: 1, type: 'hook', purpose: 'stop scroll with exclusive reveal', narration: `Why ${(title.split(' ').slice(0, 3).join(' ') || 'they')} buried this secret.`, visual_prompt: `cinematic mystery reveal, dark dramatic lighting, glitch effect, split screen, carbon fiber texture, 8k`, camera: 'push_in', transition: 'glitch', emotion: 'shock', music_cue: 'intro', sfx: 'impact', caption_focus: 'SECRET', duration: 2.5 },
-        { id: 2, type: 'fact', purpose: 'reveal what happened', narration: `${title.split(' ').slice(0, 6).join(' ')}. Nobody expected this move.`, visual_prompt: `dramatic technology reveal, cinematic lighting, mystery atmosphere, neon accents, 8k`, camera: 'slow_zoom', transition: 'flash', emotion: 'awe', music_cue: 'build', sfx: 'whoosh', caption_focus: 'NOBODY', duration: 4 },
-        { id: 3, type: 'explanation', purpose: 'explain the hidden detail', narration: sentences[0] || `This changes everything you thought you knew.`, visual_prompt: `forensic analysis, digital evidence, code on screen, carbon fiber background, neon magenta, 8k`, camera: 'orbit', transition: 'zoom_blur', emotion: 'curiosity', music_cue: 'build', sfx: 'riser', caption_focus: 'EXPOSED', duration: 5 },
-        { id: 4, type: 'reaction', purpose: 'create tension and doubt', narration: sentences[1] || `Most people still don't know about this.`, visual_prompt: `hidden truth revealed, spotlight on evidence, dramatic documentary style, 8k`, camera: 'parallax', transition: 'light_leak', emotion: 'tension', music_cue: 'suspense', sfx: 'alert', caption_focus: 'HIDDEN', duration: 4 },
-        { id: 5, type: 'reveal', purpose: 'the big reveal', narration: `But here is what nobody noticed until now.`, visual_prompt: `explosive reveal, dramatic impact, particles flying, cinematic lighting, 8k`, camera: 'shake', transition: 'glitch', emotion: 'tension', music_cue: 'suspense', sfx: 'reveal', caption_focus: 'REVEALED', duration: 3.5 },
+        { id: 1, type: 'hook', purpose: 'stop scroll with a curiosity gap', narration: `Nobody expected this move from ${brand}.`, visual_prompt: `cinematic dramatic lighting, glitch effect, split screen, carbon fiber texture, 8k`, camera: 'push_in', transition: 'glitch', emotion: 'shock', music_cue: 'intro', sfx: 'impact', caption_focus: 'NOBODY', duration: 2.5 },
+        { id: 2, type: 'fact', purpose: 'reveal what happened', narration: `${title.split(' ').slice(0, 6).join(' ')}. This changed the plan overnight.`, visual_prompt: `dramatic technology reveal, cinematic lighting, mystery atmosphere, neon accents, 8k`, camera: 'slow_zoom', transition: 'flash', emotion: 'awe', music_cue: 'build', sfx: 'whoosh', caption_focus: 'CHANGED', duration: 4 },
+        { id: 3, type: 'explanation', purpose: 'explain the overlooked detail', narration: sentences[0] || `Here is the detail everyone missed.`, visual_prompt: `forensic analysis, digital evidence, code on screen, carbon fiber background, neon magenta, 8k`, camera: 'orbit', transition: 'zoom_blur', emotion: 'curiosity', music_cue: 'build', sfx: 'riser', caption_focus: 'MISSED', duration: 5 },
+        { id: 4, type: 'reaction', purpose: 'create tension and doubt', narration: sentences[1] || `Most people still do not know about this.`, visual_prompt: `spotlight on evidence, dramatic documentary style, 8k`, camera: 'parallax', transition: 'light_leak', emotion: 'tension', music_cue: 'suspense', sfx: 'alert', caption_focus: 'DOUBT', duration: 4 },
+        { id: 5, type: 'reveal', purpose: 'the big reveal', narration: `But here is what happened after the announcement.`, visual_prompt: `explosive reveal, dramatic impact, particles flying, cinematic lighting, 8k`, camera: 'shake', transition: 'glitch', emotion: 'tension', music_cue: 'suspense', sfx: 'reveal', caption_focus: 'AFTER', duration: 3.5 },
         { id: 6, type: 'reaction', purpose: 'why it matters', narration: `This changes the entire industry going forward.`, visual_prompt: `industry impact visualization, glowing data streams, futuristic interface, 8k`, camera: 'pan', transition: 'cut', emotion: 'excitement', music_cue: 'resolve', sfx: 'whoosh', caption_focus: 'IMPACT', duration: 3 },
-        { id: 7, type: 'close', purpose: 'call to action', narration: `Follow NEWS-MONSTER for exclusive analysis you won't find anywhere else.`, visual_prompt: `NEWS-MONSTER brand logo, red and cyan, futuristic, cinematic, 8k`, camera: 'pull_back', transition: 'fade', emotion: 'excitement', music_cue: 'outro', sfx: 'none', caption_focus: 'FOLLOW', duration: 3 },
+        { id: 7, type: 'close', purpose: 'call to action', narration: `Follow NEWS-MONSTER for analysis you will not find anywhere else.`, visual_prompt: `NEWS-MONSTER brand logo, red and cyan, futuristic, cinematic, 8k`, camera: 'pull_back', transition: 'fade', emotion: 'excitement', music_cue: 'outro', sfx: 'none', caption_focus: 'FOLLOW', duration: 3 },
       ],
-      cta: 'Follow NEWS-MONSTER for exclusive analysis you will not find anywhere else.',
+      cta: 'Follow NEWS-MONSTER for analysis you will not find anywhere else.',
     }
   }
 

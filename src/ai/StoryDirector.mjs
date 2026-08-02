@@ -28,11 +28,11 @@ export class StoryDirector {
 Given a news article and target format, produce a structured video production plan as JSON.
 
 ## Hook Strategies
-Pick one:
-- "mystery": "Why X buried this secret for years"
-- "shock": "Nobody expected what X just did"  
+Pick one (avoid "hidden/revealed/secret/shocking" phrasing — the channel uses dynamic curiosity patterns only):
+- "mystery": "Nobody expected what X just did"
+- "shock": "X changed everything overnight"
 - "question": "What if everything you knew about X was wrong?"
-- "stat": "[Number] years later, we found the truth"
+- "stat": "One number explains why X just changed everything"
 
 ## Scene Types
 - hook (0-3s): stop-scroll intro, max 10 words
@@ -110,15 +110,15 @@ Target Format: ${targetFormat}`
     const sentences = desc.split(/[.!?]+/).filter(s => s.trim().length > 10)
     const brand = (title.split(' ')[0] || 'TECH').toUpperCase()
     return {
-      headline: `${brand} DECLASSIFIED`,
-      hookStrategy: 'mystery',
+      headline: `${brand} CHANGED EVERYTHING`,
+      hookStrategy: 'curiosity',
       emotionalArc: ['curiosity', 'surprise', 'authority', 'futureVision'],
       scenePlan: [
-        { type: 'hook', duration: 2.5, narration: `Why ${brand} buried this secret.`, visual: { subject: brand, style: 'cinematic mystery', composition: 'close_up' }, camera: 'push_in', motion: 'cinematicReveal', transition: 'glitch', emotion: 'shock', caption: { focus: 'SECRET', fullText: 'BURIED SECRET'.toUpperCase() } },
-        { type: 'fact', duration: 4, narration: `${title.split(' ').slice(0, 6).join(' ')}. Nobody expected this.`, visual: { subject: 'technology reveal', style: 'dramatic lighting', composition: 'medium' }, camera: 'slow_zoom', motion: 'depthBlur', transition: 'flash', emotion: 'awe', caption: { focus: 'NOBODY', fullText: 'NOBODY EXPECTED THIS' } },
-        { type: 'explanation', duration: 5, narration: sentences[0] || 'This changes everything you thought you knew.', visual: { subject: 'analysis', style: 'forensic digital', composition: 'wide' }, camera: 'orbit', motion: null, transition: 'zoom_blur', emotion: 'curiosity', caption: { focus: 'CHANGES', fullText: 'CHANGES EVERYTHING' } },
-        { type: 'reaction', duration: 4, narration: sentences[1] || 'Most people still do not know about this.', visual: { subject: 'hidden truth', style: 'documentary', composition: 'medium' }, camera: 'parallax', motion: 'depthBlur', transition: 'light_leak', emotion: 'tension', caption: { focus: 'HIDDEN', fullText: 'HIDDEN TRUTH' } },
-        { type: 'reveal', duration: 3.5, narration: 'But here is what nobody noticed until now.', visual: { subject: 'explosive reveal', style: 'dramatic impact', composition: 'close_up' }, camera: 'shake', motion: 'particleField', transition: 'glitch', emotion: 'tension', caption: { focus: 'REVEALED', fullText: 'NOW REVEALED' } },
+        { type: 'hook', duration: 2.5, narration: `Nobody expected this move from ${brand}.`, visual: { subject: brand, style: 'cinematic dramatic', composition: 'close_up' }, camera: 'push_in', motion: 'cinematicReveal', transition: 'glitch', emotion: 'shock', caption: { focus: 'NOBODY', fullText: 'NOBODY EXPECTED THIS' } },
+        { type: 'fact', duration: 4, narration: `${title.split(' ').slice(0, 6).join(' ')}. This changed the plan overnight.`, visual: { subject: 'technology reveal', style: 'dramatic lighting', composition: 'medium' }, camera: 'slow_zoom', motion: 'depthBlur', transition: 'flash', emotion: 'awe', caption: { focus: 'CHANGED', fullText: 'CHANGED OVERNIGHT' } },
+        { type: 'explanation', duration: 5, narration: sentences[0] || 'Here is the detail everyone missed.', visual: { subject: 'analysis', style: 'forensic digital', composition: 'wide' }, camera: 'orbit', motion: null, transition: 'zoom_blur', emotion: 'curiosity', caption: { focus: 'MISSED', fullText: 'EVERYONE MISSED THIS' } },
+        { type: 'reaction', duration: 4, narration: sentences[1] || 'Most people still do not know about this.', visual: { subject: 'spotlight evidence', style: 'documentary', composition: 'medium' }, camera: 'parallax', motion: 'depthBlur', transition: 'light_leak', emotion: 'tension', caption: { focus: 'DOUBT', fullText: 'THE DOUBT REMAINS' } },
+        { type: 'reveal', duration: 3.5, narration: 'But here is what happened after the announcement.', visual: { subject: 'aftermath reveal', style: 'dramatic impact', composition: 'close_up' }, camera: 'shake', motion: 'particleField', transition: 'glitch', emotion: 'tension', caption: { focus: 'AFTER', fullText: 'WHAT HAPPENED NEXT' } },
         { type: 'reaction', duration: 3, narration: 'This changes the entire industry going forward.', visual: { subject: 'industry impact', style: 'glowing data streams', composition: 'wide' }, camera: 'pan', motion: 'digitalHUD', transition: 'cut', emotion: 'excitement', caption: { focus: 'IMPACT', fullText: 'INDUSTRY IMPACT' } },
         { type: 'close', duration: 3, narration: 'Follow NEWS-MONSTER for exclusive analysis.', visual: { subject: 'NEWS-MONSTER brand', style: 'red and cyan futuristic', composition: 'medium' }, camera: 'pull_back', motion: null, transition: 'fade', emotion: 'excitement', caption: { focus: 'FOLLOW', fullText: 'FOLLOW NEWS-MONSTER' } },
       ],

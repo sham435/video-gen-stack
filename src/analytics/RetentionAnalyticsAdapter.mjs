@@ -90,4 +90,24 @@ export class RetentionAnalyticsAdapter {
     }
     return stats?.avgViewPercentage ?? null
   }
+
+  // Click-through rate — the packaging growth signal (shortsCtr on Shorts,
+  // impressions-driven CTR on long-form). Best-effort; null when unavailable.
+  async fetchCTR(videoId, { sinceDays = 60 } = {}) {
+    const token = await this._accessToken()
+    if (!token) return null
+    const url = `${ANALYTICS}?ids=channel%3D%3DMINE&startDate=${this._sinceDate(sinceDays)}&endDate=${this._sinceDate(0)}&metrics=shortsCtr&filters=video%3D%3D${videoId}`
+    try {
+      const res = await fetch(url, {
+        headers: { 'Authorization': `Bearer ${token}` },
+        signal: AbortSignal.timeout(this.timeoutMs),
+      })
+      if (!res.ok) return null
+      const data = await res.json()
+      const ctr = data.rows?.[0]?.[0]
+      return ctr == null ? null : Math.round(ctr * 100) / 100
+    } catch {
+      return null
+    }
+  }
 }

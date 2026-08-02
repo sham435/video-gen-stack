@@ -83,7 +83,7 @@ export class NewsAnalyzer {
 
   generateRetentionHook(title, desc) {
     const hooks = [
-      `But there is one hidden detail nobody noticed...`,
+      `But there is one overlooked detail nobody noticed...`,
       `However, there is a catch you need to know about.`,
       `What the company did not tell you is surprising.`,
       `This changes everything for the industry. Here is how.`,

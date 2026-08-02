@@ -20,8 +20,10 @@ const OVERLAY_PAIRS = [
   ['FIRST LOOK', 'INNOVATION'],
   ['WHY IT', 'MATTERS'],
   ['THE TRUTH', 'BEHIND IT'],
-  ['SECRET', 'REVEALED'],
   ['INSIDE', 'THE STORY'],
+  ['NOBODY', 'EXPECTED THIS'],
+  ['CHANGED', 'OVERNIGHT'],
+  ['WHAT HAPPENED', 'NEXT'],
 ]
 
 export class CoverDirector {

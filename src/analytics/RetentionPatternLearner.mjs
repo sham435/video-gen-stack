@@ -2,6 +2,8 @@ import fs from 'fs'
 import path from 'path'
 import { RetentionAnalyticsAdapter } from './RetentionAnalyticsAdapter.mjs'
 import { ProductionMemory } from '../pipeline/ProductionMemory.mjs'
+import { BrandPerformanceMemory } from '../pipeline/BrandPerformanceMemory.mjs'
+import { patternKey } from '../ai/thumbnail/ThumbnailBrandOptimizer.mjs'
 
 const SNAPSHOTS_FILE = path.resolve(process.cwd(), 'data', 'retention-analytics.json')
 
@@ -22,6 +24,7 @@ export class RetentionPatternLearner {
   constructor(options = {}) {
     this.adapter = options.adapter || new RetentionAnalyticsAdapter(options)
     this.memory = options.memory || new ProductionMemory()
+    this.brandMemory = options.brandMemory || new BrandPerformanceMemory()
     this.minViews = options.minViews || 10
     this.minObservations = options.minObservations || 3
   }
@@ -50,6 +53,7 @@ export class RetentionPatternLearner {
 
     const deltas = new Map() // risk → [deltas]
     const completions = new Map() // risk → [actualCompletion]
+    const brandRecords = [] // title pattern → measured CTR
     let analyzed = 0
     let skipped = 0
 
@@ -57,6 +61,24 @@ export class RetentionPatternLearner {
       if (!snap.videoId || !snap.retention) { skipped++; continue }
       const stats = await this.adapter.fetchVideoStats(snap.videoId, { sinceDays })
       if (!stats || stats.views < this.minViews) { skipped++; continue }
+
+      // Channel growth signal — measured CTR per title pattern. This is what
+      // makes packaging optimization automatic: once a pattern proves weak
+      // (CTR < 4.0%) the ThumbnailBrandOptimizer avoids it in every title.
+      if (snap.title) {
+        const ctr = await this.adapter.fetchCTR(snap.videoId, { sinceDays })
+        if (ctr != null) {
+          const pattern = patternKey(snap.title)
+          this.brandMemory.recordPattern(pattern, {
+            videos: 1,
+            avgCTR: ctr,
+            impact: Math.round((ctr - 4.5) * 10), // 4.5% baseline → positive/negative
+            source: 'analytics',
+          })
+          brandRecords.push({ pattern, ctr, title: snap.title.slice(0, 60) })
+          if (verbose) console.log(`Brand: ${pattern} → CTR ${ctr}% ("${snap.title.slice(0, 50)}")`)
+        }
+      }
 
       const curve = await this.adapter.fetchRetentionCurve(snap.videoId, { sinceDays })
       const actual = this.adapter.completionFrom(stats, curve)
@@ -89,7 +111,7 @@ export class RetentionPatternLearner {
       if (verbose) console.log(`Calibrated: ${risk} → impact ${mean > 0 ? '+' : ''}${mean}% over ${n} videos (conf ${confidence})`)
     }
 
-    return { learned, analyzed, skipped }
+    return { learned, analyzed, skipped, brandLearned: brandRecords }
   }
 }
 

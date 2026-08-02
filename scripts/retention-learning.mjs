@@ -21,6 +21,12 @@ async function run() {
   for (const r of result.learned) {
     console.log(`  ${r.rule}: ${r.frequency} videos, impact ${r.retentionImpact > 0 ? '+' : ''}${r.retentionImpact}%, confidence ${r.confidence}`)
   }
+  if (result.brandLearned?.length) {
+    console.log(`\nBrand learning (${result.brandLearned.length} patterns measured):`)
+    for (const b of result.brandLearned) {
+      console.log(`  ${b.pattern} → CTR ${b.ctr}%${b.ctr < 4.0 ? ' (WEAK — will be avoided automatically)' : ''}`)
+    }
+  }
 }
 
 run().catch(e => {
