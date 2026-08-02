@@ -57,10 +57,10 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
     const lineW = ctx.measureText(lineText.toUpperCase()).width
     const startX = layout ? centerX - lineW / 2 : W / 2 - lineW / 2 - 30
 
-    const bgAlpha = (wordCounter <= wordIndex && wordIndex >= 0) ? 0.8 : 0.5
+    const bgAlpha = (wordCounter <= wordIndex && wordIndex >= 0) ? 0.45 : 0.4
     ctx.fillStyle = `rgba(0, 0, 0, ${bgAlpha})`
     ctx.beginPath()
-    ctx.roundRect(startX - 14, startY + lines.indexOf(line) * lineH - fontSize * 0.35, lineW + 68, fontSize * 1.35, 12)
+    ctx.roundRect(startX - 12, startY + lines.indexOf(line) * lineH - fontSize * 0.35, lineW + 48, fontSize * 1.35, 12)
     ctx.fill()
 
     ctx.shadowColor = 'rgba(0,0,0,0.85)'

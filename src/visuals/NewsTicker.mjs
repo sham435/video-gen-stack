@@ -19,7 +19,7 @@ export function drawNewsTicker(ctx, items, progress) {
   const scrollP = (progress * 60) % items.length
   const startIdx = Math.floor(scrollP)
 
-  ctx.font = '600 14px Inter, sans-serif'
+  ctx.font = '600 28px Inter, sans-serif'
   ctx.textBaseline = 'middle'
 
   for (let i = 0; i < 4; i++) {

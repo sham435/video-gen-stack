@@ -6,9 +6,13 @@ const COLORS = {
   bg: '#050505',
 }
 
-export function drawBreakingBanner(ctx, text, progress, fontSize = 120) {
+// Breaking banner — locked to the top 15% of the frame. Subtext is optional:
+// pass '' when the headline below already carries that text (no duplicate
+// render). Without subtext the bar shrinks to a compact band.
+export function drawBreakingBanner(ctx, text, progress, fontSize = 64) {
   const p = Math.min(1, progress * 2)
-  const bannerH = 300
+  const hasSub = Boolean(text && String(text).trim())
+  const bannerH = hasSub ? 300 : 170
   const bannerY = H * 0.15
 
   ctx.save()
@@ -45,13 +49,15 @@ export function drawBreakingBanner(ctx, text, progress, fontSize = 120) {
   ctx.fillStyle = COLORS.white
   ctx.shadowColor = COLORS.red
   ctx.shadowBlur = 50
-  ctx.fillText('BREAKING', W / 2, bannerY + bannerH * 0.38)
+  ctx.fillText('BREAKING', W / 2, bannerY + bannerH * (hasSub ? 0.38 : 0.5))
 
-  ctx.font = `900 ${Math.max(40, fontSize * 0.6)}px Anton, Impact, sans-serif`
-  ctx.fillStyle = COLORS.red
-  ctx.shadowColor = COLORS.red
-  ctx.shadowBlur = 30
-  ctx.fillText(text.toUpperCase(), W / 2, bannerY + bannerH * 0.72)
+  if (hasSub) {
+    ctx.font = `900 ${Math.max(36, fontSize * 0.68)}px Anton, Impact, sans-serif`
+    ctx.fillStyle = COLORS.red
+    ctx.shadowColor = COLORS.red
+    ctx.shadowBlur = 30
+    ctx.fillText(String(text).toUpperCase(), W / 2, bannerY + bannerH * 0.72)
+  }
   ctx.shadowBlur = 0
 
   for (let i = 0; i < 8; i++) {

@@ -68,12 +68,12 @@ ok('overflow:false — preflight passes')
 
 // 6. Layout manifest shape
 console.log('Layout manifest shape:')
-const manifest = TextLayoutEngine.layout({ text: 'PRICE', role: 'emphasis', canvas: CANVAS })
+const manifest = TextLayoutEngine.layout({ text: 'PRICE', role: 'emphasis', canvas: CANVAS, preferredFontSize: 120 })
 for (const key of ['text', 'lines', 'fontSize', 'lineHeight', 'width', 'height', 'x', 'y', 'scalePercent', 'overflow']) {
   assert.ok(key in manifest, `missing key: ${key}`)
 }
 assert.ok(manifest.lines.length > 0)
-assert.equal(manifest.fontSize, 58, 'short emphasis keeps preferred size')
+assert.equal(manifest.fontSize, 120, 'short emphasis keeps preferred size')
 ok(`keys present; fontSize ${manifest.fontSize}px (${manifest.scalePercent}%)`)
 
 // 7. Height budget: total layout height stays inside the zone height

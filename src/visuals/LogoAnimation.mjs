@@ -35,13 +35,13 @@ export function drawLogoAnimation(ctx, progress, brand = 'NEWS-MONSTER') {
   if (nameP > 0) {
     ctx.save()
     ctx.globalAlpha = nameP
-    ctx.font = '900 28px Anton, Impact, sans-serif'
+    ctx.font = '900 32px Anton, Impact, sans-serif'
     ctx.fillStyle = '#FFFFFF'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.fillText(brand, W / 2, logoY + logoSize + 30)
 
-    ctx.font = '400 12px Inter, sans-serif'
+    ctx.font = '400 28px Inter, sans-serif'
     ctx.fillStyle = 'rgba(0, 229, 255, 0.7)'
     ctx.fillText('TECH NEWS NETWORK', W / 2, logoY + logoSize + 54)
     ctx.restore()

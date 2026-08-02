@@ -1,5 +1,6 @@
 import { DesignSystem } from '../../visuals/DesignSystem.mjs'
 import { drawNewsTicker } from '../../visuals/NewsTicker.mjs'
+import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
 
 const { W, H } = DesignSystem
 
@@ -9,30 +10,57 @@ export class BrandingLayer {
     if (scene.type === 'brand_close') {
       this.drawTicker(ctx, scene, progress)
     }
+    this.drawFooter(ctx, scene, progress)
   }
 
   drawWatermark(ctx) {
-    // Consistent top-left brand chip (lower-third style) on every scene
+    // Top-left brand chip (bug) — broadcast minimum 32px bold on a dark pill
+    const bug = BROADCAST_TEXT.bug
     ctx.save()
-    ctx.globalAlpha = 0.85
-    ctx.fillStyle = 'rgba(0,0,0,0.5)'
+    ctx.font = `${bug.weight} ${bug.size}px ${DesignSystem.getTypography('watermark', 'default').font}, sans-serif`
+    const label = 'NEWS-MONSTER'
+    const textW = ctx.measureText(label).width
+    const padX = bug.padding[1]
+    const padY = bug.padding[0]
+    ctx.fillStyle = bug.bg
     ctx.beginPath()
-    ctx.roundRect(14, 12, 260, 44, 8)
+    ctx.roundRect(14, 12, textW + padX * 2, bug.size + padY * 2, bug.borderRadius)
     ctx.fill()
     ctx.fillStyle = DesignSystem.brand.primary
-    ctx.fillRect(14, 12, 6, 44)
-    const wmFont = DesignSystem.getTypography('watermark', 'default')
-    ctx.font = `${wmFont.weight} ${wmFont.size}px ${wmFont.font}, sans-serif`
-    ctx.fillStyle = 'rgba(255,255,255,0.9)'
+    ctx.fillRect(14, 12, 6, bug.size + padY * 2)
+    ctx.fillStyle = 'rgba(255,255,255,0.95)'
     ctx.textAlign = 'left'
     ctx.textBaseline = 'middle'
-    ctx.fillText('NEWS-MONSTER', 30, 34)
+    ctx.fillText(label, 14 + 6 + padX, 12 + (bug.size + padY * 2) / 2)
     ctx.restore()
 
     ctx.fillStyle = 'rgba(255,255,255,0.06)'
     ctx.fillRect(0, H - 3, W, 3)
     ctx.fillStyle = DesignSystem.brand.primary
     ctx.fillRect(0, H - 3, W * 0.3, 3)
+  }
+
+  // Footer — 80px bar with the brand URL at broadcast size (32px bold).
+  // Drawn every scene; it is chrome, not content, so it stays subtle but
+  // readable after compression.
+  drawFooter(ctx, scene, progress) {
+    const footer = BROADCAST_TEXT.footer
+    const p = Math.min(1, progress * 1.5)
+    ctx.save()
+    ctx.globalAlpha = 0.85 * p
+    ctx.fillStyle = 'rgba(5,5,5,0.72)'
+    ctx.fillRect(0, H - footer.height, W, footer.height)
+    ctx.fillStyle = 'rgba(255,255,255,0.08)'
+    ctx.fillRect(0, H - footer.height, W, 1)
+
+    ctx.font = `${footer.weight} ${footer.urlSize}px ${DesignSystem.getTypography('watermark', 'footer').font}, sans-serif`
+    ctx.fillStyle = 'rgba(255,255,255,0.9)'
+    ctx.textAlign = 'right'
+    ctx.textBaseline = 'middle'
+    ctx.shadowColor = 'rgba(0,0,0,0.9)'
+    ctx.shadowBlur = 4
+    ctx.fillText('www.tech-monster.tv', W - 24, H - footer.height / 2)
+    ctx.restore()
   }
 
   drawTicker(ctx, scene, progress) {
@@ -58,15 +86,6 @@ export class BrandingLayer {
     if (p > 0.6) {
       drawNewsTicker(ctx, tickerItems, p)
     }
-
-    ctx.save()
-    ctx.globalAlpha = Math.min(1, Math.max(0, (p - 0.5) / 0.3))
-    const wmFont = DesignSystem.getTypography('watermark', 'footer')
-    ctx.font = `${wmFont.weight} ${wmFont.size}px ${wmFont.font}, sans-serif`
-    ctx.fillStyle = 'rgba(255,255,255,0.25)'
-    ctx.textAlign = 'right'
-    ctx.textBaseline = 'bottom'
-    ctx.fillText('NEWS-MONSTER', W - 24, H - 10)
     ctx.restore()
   }
 }

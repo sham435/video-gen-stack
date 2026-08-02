@@ -7,7 +7,7 @@
 // safe zone and legibility floors.
 
 const DEFAULTS = {
-  emphasis: { preferredFontSize: 58, maxLines: 2 },
+  emphasis: { preferredFontSize: 120, maxLines: 1 },
   headline: { preferredFontSize: 92, maxLines: 3 },
   caption: { preferredFontSize: 58, maxLines: 2 },
   source: { preferredFontSize: 48, maxLines: 1 },
@@ -37,7 +37,7 @@ export class LayoutPolicy {
     const hazard = model.hazard(scene)
     const strongHook = scene.type === 'hook' && (scene.hookScore ?? 0) >= 85
     if (strongHook || hazard < 0.010) {
-      policy.emphasis.preferredFontSize = 72
+      policy.emphasis.preferredFontSize = 150
     }
 
     // Repeated emphasis text: prefer shorter layouts over denser ones

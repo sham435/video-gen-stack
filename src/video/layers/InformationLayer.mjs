@@ -30,36 +30,17 @@ export class InformationLayer {
   renderHook(ctx, scene, progress, category) {
     const catStyle = DesignSystem.getCategoryStyle(category)
     const primary = catStyle.colors.primary || DesignSystem.brand.primary
-    const tp = Math.min(1, progress * 3)
 
-    // Punch-in zoom on the NEWS-MONSTER brand mark (first ~0.5s of hook)
-    if (progress < 0.55) {
-      const punch = Math.max(0, Math.min(1, (0.55 - progress) / 0.55))
-      const scale = 1 + punch * 0.12
-      const zoom = 1 - Math.sin(punch * Math.PI) * 0.06
-      ctx.save()
-      ctx.translate(W / 2, H * 0.52)
-      ctx.scale(scale, scale)
-      ctx.font = `${900} ${150}px Anton, Impact, sans-serif`
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'middle'
-      ctx.globalAlpha = tp
-      ctx.fillStyle = '#FFFFFF'
-      ctx.shadowColor = primary
-      ctx.shadowBlur = 40 * tp
-      ctx.fillText('NEWS-MONSTER', 0, 0)
-      ctx.shadowBlur = 0
-      ctx.globalAlpha = tp * 0.25
-      ctx.fillStyle = primary
-      ctx.beginPath()
-      ctx.arc(0, 0, 300 * zoom, 0, Math.PI * 2)
-      ctx.fill()
-      ctx.restore()
-    } else {
-      drawBreakingBanner(ctx, scene.subheadline || scene.text, progress, scene.headlineLayout?.fontSize || scene.headlineFontSize || 120)
-    }
+    // Breaking banner locked to the top 15% of the frame. The subtext must
+    // never duplicate the headline below — pass it only when it is a short,
+    // distinct tagline (the full narration is rendered by the hook headline).
+    const bannerText = scene.subheadline && scene.subheadline !== scene.text && scene.subheadline.split(' ').length <= 6
+      ? scene.subheadline
+      : ''
+    drawBreakingBanner(ctx, bannerText, progress, scene.headlineLayout?.fontSize || scene.headlineFontSize || 64)
 
-    // Hook headline — big, punchy, above the breaking banner
+    // Hook headline — big, punchy, center of frame, max 2 lines from the
+    // validated layout; 4px outline so it cuts through any background
     if (progress > 0.45) {
       const hp = Math.min(1, (progress - 0.45) / 0.2)
       ctx.save()
@@ -67,18 +48,31 @@ export class InformationLayer {
       const hScale = 0.6 + hp * 0.4
       ctx.translate(W / 2, H * 0.62)
       ctx.scale(hScale, hScale)
-      const text = (scene.text || scene.subheadline || '').replace('BREAKING: ', '').toUpperCase()
+      const layoutLines = scene.headlineLayout?.lines?.length ? scene.headlineLayout.lines : []
+      const text = (scene.text || '').replace('BREAKING: ', '').toUpperCase()
       const words = text.split(' ')
       const mid = Math.ceil(words.length / 2)
-      ctx.font = `900 ${scene.headlineLayout?.fontSize || scene.headlineFontSize || 92}px Anton, Impact, sans-serif`
+      const lines = layoutLines.length ? layoutLines : [words.slice(0, mid).join(' '), words.slice(mid).join(' ')]
+      const fontSize = scene.headlineLayout?.fontSize || scene.headlineFontSize || 92
+      ctx.font = `900 ${fontSize}px Anton, Impact, sans-serif`
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
-      ctx.fillStyle = '#FFFFFF'
+      ctx.lineWidth = 4
+      ctx.strokeStyle = 'rgba(0,0,0,0.85)'
+      ctx.lineJoin = 'round'
       ctx.shadowColor = 'rgba(0,0,0,0.9)'
       ctx.shadowBlur = 16
-      ctx.fillText(words.slice(0, mid).join(' '), 0, -46)
-      ctx.fillStyle = primary
-      ctx.fillText(words.slice(mid).join(' ') || 'BREAKING', 0, 46)
+      const lineH = scene.headlineLayout?.lineHeight || fontSize * 1.25
+      const offset = ((lines.length - 1) * lineH) / 2
+      lines.forEach((line, i) => {
+        ctx.fillStyle = '#FFFFFF'
+        ctx.strokeText(line, 0, -offset + i * lineH)
+        ctx.fillText(line, 0, -offset + i * lineH)
+      })
+      if (lines.length > 1) {
+        ctx.fillStyle = primary
+        ctx.fillText(lines[1], 0, -offset + lineH)
+      }
       ctx.shadowBlur = 0
       ctx.restore()
     }

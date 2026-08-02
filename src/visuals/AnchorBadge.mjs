@@ -35,7 +35,7 @@ export function drawAnchorBadge(ctx, name, progress) {
   ctx.textBaseline = 'middle'
   ctx.fillText(name, badgeX + 56, badgeY + badgeH / 2)
 
-  ctx.font = '600 20px Inter, sans-serif'
+  ctx.font = '600 28px Inter, sans-serif'
   ctx.fillStyle = 'rgba(0, 229, 255, 0.7)'
   ctx.textAlign = 'right'
   ctx.fillText('ANCHOR', badgeX + badgeW - 16, badgeY + badgeH / 2)

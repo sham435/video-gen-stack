@@ -56,7 +56,7 @@ export class IntroEngine {
     else if (p < 4.5/12) this.hook(ctx, (p-2/12)/(2.5/12), style)
     else if (p < 7.5/12) this.scope(ctx, (p-4.5/12)/(3/12), pool)
     else this.lock(ctx, (p-7.5/12)/(4.5/12), brand)
-    ctx.font = '500 10px Inter,sans-serif'
+    ctx.font = '500 28px Inter,sans-serif'
     ctx.fillStyle = 'rgba(255,255,255,0.08)'
     ctx.textAlign = 'left'; ctx.textBaseline = 'top'
     ctx.fillText(brand, 12, 12)
@@ -154,23 +154,23 @@ export class IntroEngine {
     ctx.save(); ctx.globalAlpha=np; ctx.font='900 42px Anton,Impact,sans-serif'; ctx.fillStyle='#FFF'
     ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(brand,W/2,H*0.40); ctx.restore()
     const tp=Math.min(1,(pp-0.2)/0.25)
-    ctx.save(); ctx.globalAlpha=tp; ctx.font='600 22px Inter,sans-serif'
+    ctx.save(); ctx.globalAlpha=tp; ctx.font='600 32px Inter,sans-serif'
     ctx.fillStyle=`rgba(255,255,255,${tp*0.7})`; ctx.textAlign='center'; ctx.textBaseline='middle'
     ctx.fillText('Unfiltered Breaking News From The Future.',W/2,H*0.46); ctx.restore()
     const ap=Math.min(1,(pp-0.35)/0.25)
     ctx.save(); ctx.globalAlpha=ap; const d=0.4+Math.sin(pp*20)*0.3
     ctx.fillStyle=`rgba(255,0,0,${d})`; ctx.beginPath(); ctx.arc(W/2-120,H*0.55,7,0,Math.PI*2); ctx.fill()
-    ctx.font='800 28px Inter,sans-serif'; ctx.fillStyle='#FFF'
+    ctx.font='800 32px Inter,sans-serif'; ctx.fillStyle='#FFF'
     ctx.textAlign='left'; ctx.textBaseline='middle'
     ctx.fillText('sham435',W/2-100,H*0.55)
-    ctx.font='500 14px Inter,sans-serif'; ctx.fillStyle=`rgba(255,255,255,${ap*0.4})`
+    ctx.font='500 28px Inter,sans-serif'; ctx.fillStyle=`rgba(255,255,255,${ap*0.4})`
     ctx.fillText('ANCHOR',W/2-100,H*0.55+30); ctx.restore()
     const tk=Math.min(1,(pp-0.5)/0.3)
     ctx.save(); ctx.globalAlpha=tk
     ctx.fillStyle='rgba(255,255,255,0.06)'
     ctx.beginPath(); ctx.roundRect(W*0.05,H*0.78,W*0.9,55,10); ctx.fill()
     const items=['AI','ROBOTICS','QUANTUM','CYBERSECURITY','BIOTECH','SPACE']
-    const sc=(pp*4)%items.length; ctx.font='600 16px Inter,sans-serif'
+    const sc=(pp*4)%items.length; ctx.font='600 28px Inter,sans-serif'
     ctx.textAlign='center'; ctx.textBaseline='middle'
     for(let i=0;i<4;i++){
       const idx=Math.floor(sc+i)%items.length

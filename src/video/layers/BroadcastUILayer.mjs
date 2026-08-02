@@ -1,4 +1,5 @@
 import { DesignSystem } from '../../visuals/DesignSystem.mjs'
+import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
 
 const { W, H } = DesignSystem
 
@@ -9,25 +10,32 @@ export class BroadcastUILayer {
 
     const p = Math.min(1, progress * 1.5)
 
+    // LIVE indicator — 36px bold on a red pill with padding; never text-only
+    const live = BROADCAST_TEXT.live
     const liveAlpha = (0.7 + Math.sin(progress * 6) * 0.3) * p
     ctx.save()
     ctx.globalAlpha = Math.max(0, liveAlpha)
 
     const liveFont = DesignSystem.getTypography('overlay', 'live')
-    ctx.font = `${liveFont.weight} ${liveFont.size}px ${liveFont.font}, sans-serif`
+    ctx.font = `${live.weight} ${live.size}px ${liveFont.font}, sans-serif`
 
     const liveX = W - overlays.live.position.right - 80
     const liveY = overlays.live.position.top + 14
+    const liveW = ctx.measureText('LIVE').width + live.padding[1] * 2
+    const liveH = live.size + live.padding[0] * 2
 
-    ctx.fillStyle = DesignSystem.brand.primary
+    ctx.fillStyle = live.bg
     ctx.beginPath()
-    ctx.roundRect(liveX, liveY - liveFont.size * 0.4, 60, liveFont.size * 1.2, 4)
+    ctx.roundRect(liveX, liveY - liveH / 2, liveW, liveH, live.borderRadius)
     ctx.fill()
 
     ctx.fillStyle = '#FFFFFF'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
-    ctx.fillText('LIVE', liveX + 30, liveY + 2)
+    ctx.shadowColor = 'rgba(0,0,0,0.8)'
+    ctx.shadowBlur = 4
+    ctx.fillText('LIVE', liveX + liveW / 2, liveY + 1)
+    ctx.shadowBlur = 0
     ctx.restore()
 
     const catTagP = Math.min(1, progress * 2)

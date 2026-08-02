@@ -82,7 +82,7 @@ export class Renderer {
       ctx.fillText(line, this.W / 2, y)
     })
 
-    ctx.font = '400 26px Inter, sans-serif'
+    ctx.font = '400 32px Inter, sans-serif'
     ctx.fillStyle = 'rgba(255,255,255,0.7)'
     ctx.fillText(`Source: ${article.source || 'NEWS-MONSTER'}`, this.W / 2, this.H - 80)
 

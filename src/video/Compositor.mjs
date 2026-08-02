@@ -2,6 +2,7 @@ import { BackgroundLayer } from './layers/BackgroundLayer.mjs'
 import { HeroVisualLayer } from './layers/HeroVisualLayer.mjs'
 import { GlassCardLayer } from './layers/GlassCardLayer.mjs'
 import { InformationLayer } from './layers/InformationLayer.mjs'
+import { EmphasisLayer } from './layers/EmphasisLayer.mjs'
 import { CaptionLayer } from './layers/CaptionLayer.mjs'
 import { BroadcastUILayer } from './layers/BroadcastUILayer.mjs'
 import { BrandingLayer } from './layers/BrandingLayer.mjs'
@@ -14,6 +15,7 @@ export class Compositor {
     this.hero = new HeroVisualLayer()
     this.glass = new GlassCardLayer()
     this.info = new InformationLayer()
+    this.emphasis = new EmphasisLayer()
     this.captions = new CaptionLayer()
     this.broadcast = new BroadcastUILayer()
     this.branding = new BrandingLayer()
@@ -41,6 +43,7 @@ export class Compositor {
     }
 
     await this.info.draw(ctx, scene, progress, category)
+    this.emphasis.draw(ctx, scene, progress, category)
     this.captions.draw(ctx, scene, progress, wordIndex)
 
     if (director.getOverlays().liveBadge) {

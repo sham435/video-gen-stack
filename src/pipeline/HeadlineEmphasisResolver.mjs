@@ -15,7 +15,7 @@
 //   + 40  word taught by production memory learning
 //   +  5  stability bias for the current keyword (only replace when clearly better)
 
-const STOPWORDS = new Set([
+export const STOPWORDS = new Set([
   'BREAKING', 'THE', 'A', 'AN', 'AND', 'OR', 'BUT', 'IN', 'ON', 'AT', 'OF', 'FOR',
   'TO', 'WITH', 'BY', 'FROM', 'IS', 'ARE', 'WAS', 'WERE', 'HAS', 'HAVE', 'HAD',
   'ITS', 'IT', 'THIS', 'THAT', 'THESE', 'THOSE', 'NEW', 'ALL', 'ANY', 'OVER',

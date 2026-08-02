@@ -24,7 +24,7 @@ export const SAFE_ZONES = {
 
 // --- B) Layout roles ---
 export const ROLE_CONFIG = {
-  emphasis: { priority: 3, widthRatio: 0.90, heightRatio: 0.35, anchor: 0.40, floor: 30, maxLines: 2 },
+  emphasis: { priority: 3, widthRatio: 0.90, heightRatio: 0.35, anchor: 0.78, floor: 30, maxLines: 2 },
   headline: { priority: 2, widthRatio: 0.85, heightRatio: 0.25, anchor: 0.30, floor: 20, maxLines: 3 },
   caption:  { priority: 1, widthRatio: 0.85, heightRatio: 0.25, anchor: 0.78, floor: 14, maxLines: 2 },
   source:   { priority: 0, widthRatio: 0.85, heightRatio: 0.20, anchor: 0.90, floor: 14, maxLines: 1 },
