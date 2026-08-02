@@ -17,7 +17,7 @@ export function getActiveWordIndex(wordTimings, time) {
   return -1
 }
 
-export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accentColor = '#E10600') {
+export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accentColor = '#E10600', fontSize = 58) {
   // Phase 1 — Duplicate Word Filter: the emphasis word is already rendered large
   // by InformationLayer. Remove it from the caption sentence so it's never repeated.
   const focusKey = (focusWord || '').toUpperCase()
@@ -35,7 +35,6 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
     lines.push(words.slice(i, i + maxWordsPerLine))
   }
 
-  const fontSize = 58
   const lineH = fontSize * 1.6
   const totalH = lines.length * lineH
   const startY = H * 0.78 - totalH / 2

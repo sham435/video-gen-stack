@@ -12,6 +12,7 @@ import { ProductionGuardian } from './ai/ProductionGuardian.mjs'
 import { ProductionPreflight } from './ai/ProductionPreflight.mjs'
 import { SceneTextManifest } from './pipeline/SceneTextManifest.mjs'
 import { TextConflictResolver } from './pipeline/TextConflictResolver.mjs'
+import { ResponsiveTextScaler } from './pipeline/ResponsiveTextScaler.mjs'
 import { VisualIntentEngine } from './pipeline/VisualIntentEngine.mjs'
 import { SemanticVisualRankerV2 } from './pipeline/SemanticVisualRankerV2.mjs'
 import { ProductionMemory } from './pipeline/ProductionMemory.mjs'
@@ -259,7 +260,9 @@ export class NewsBroadcastEngine {
 
     // Text Intent Engine — single source of truth for scene text.
     // Build a manifest per scene, resolve duplicate emphasis/caption words,
-    // then write the resolved caption back so the renderer never duplicates.
+    // fit each text layer to the Shorts safe zone (85% x 25% canvas), then
+    // write resolved values back so the renderer never duplicates or clips.
+    const LAYER_FONT_SIZE = { emphasis: 58, headline: 92, caption: 58, source: 48 }
     for (const sc of scenes) {
       sc.textManifest = SceneTextManifest.build(sc)
       const resolved = this.textResolver.process(sc.textManifest)
@@ -267,6 +270,16 @@ export class NewsBroadcastEngine {
       // Write resolved caption back to the scene (empty = hidden)
       sc.caption = captionLayer && captionLayer.visible !== false ? captionLayer.text : ''
       sc.captionHidden = captionLayer?.visible === false
+      // Fit every text layer to the safe zone; the layers draw at these sizes
+      for (const layer of resolved.text_layers) {
+        const fitted = ResponsiveTextScaler.fitForCanvas({
+          text: layer.text,
+          fontSize: LAYER_FONT_SIZE[layer.type] || 58,
+        })
+        layer.fontSize = fitted.fontSize
+        layer.scale = fitted.scalePercent
+        sc[`${layer.type}FontSize`] = fitted.fontSize
+      }
     }
 
     const timedScenes = this.scenePlanner.assignTimestamps(scenes)

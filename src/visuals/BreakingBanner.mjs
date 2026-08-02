@@ -6,7 +6,7 @@ const COLORS = {
   bg: '#050505',
 }
 
-export function drawBreakingBanner(ctx, text, progress) {
+export function drawBreakingBanner(ctx, text, progress, fontSize = 120) {
   const p = Math.min(1, progress * 2)
   const bannerH = 300
   const bannerY = H * 0.15
@@ -39,7 +39,7 @@ export function drawBreakingBanner(ctx, text, progress) {
   ctx.fill()
 
   ctx.globalAlpha = p
-  ctx.font = '900 120px Anton, Impact, sans-serif'
+  ctx.font = `900 ${fontSize}px Anton, Impact, sans-serif`
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
   ctx.fillStyle = COLORS.white
@@ -47,7 +47,7 @@ export function drawBreakingBanner(ctx, text, progress) {
   ctx.shadowBlur = 50
   ctx.fillText('BREAKING', W / 2, bannerY + bannerH * 0.38)
 
-  ctx.font = '900 72px Anton, Impact, sans-serif'
+  ctx.font = `900 ${Math.max(40, fontSize * 0.6)}px Anton, Impact, sans-serif`
   ctx.fillStyle = COLORS.red
   ctx.shadowColor = COLORS.red
   ctx.shadowBlur = 30

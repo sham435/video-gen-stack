@@ -1,6 +1,6 @@
 const W = 1080, H = 1920
 
-export function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF') {
+export function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF', fontSize = 0) {
   const p = Math.min(1, progress * 1.5)
   const words = text.split(' ')
   const lines = []
@@ -13,8 +13,8 @@ export function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF') {
   }
   if (line) lines.push(line)
 
-  const fontSize = text.length > 15 ? 96 : text.length > 8 ? 116 : 136
-  const lineH = fontSize * 1.2
+  const size = fontSize > 0 ? fontSize : text.length > 15 ? 96 : text.length > 8 ? 116 : 136
+  const lineH = size * 1.2
   const totalH = lines.length * lineH
   // Rule of thirds: headline sits in the upper-middle band, keeping the
   // bottom third clear for caption overlays (caption safe area at 0.78H)
@@ -40,7 +40,7 @@ export function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF') {
 
     ctx.save()
     ctx.globalAlpha = charP
-    ctx.font = `900 ${fontSize}px Anton, Impact, sans-serif`
+    ctx.font = `900 ${size}px Anton, Impact, sans-serif`
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.fillStyle = color
