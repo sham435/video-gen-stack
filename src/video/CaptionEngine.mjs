@@ -17,7 +17,7 @@ export function getActiveWordIndex(wordTimings, time) {
   return -1
 }
 
-export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accentColor = '#E10600', fontSize = 58) {
+export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accentColor = '#E10600', fontSize = 58, layout = null) {
   // Phase 1 — Duplicate Word Filter: the emphasis word is already rendered large
   // by InformationLayer. Remove it from the caption sentence so it's never repeated.
   const focusKey = (focusWord || '').toUpperCase()
@@ -29,15 +29,24 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
     return true
   })
 
-  const maxWordsPerLine = 3
-  const lines = []
-  for (let i = 0; i < words.length; i += maxWordsPerLine) {
-    lines.push(words.slice(i, i + maxWordsPerLine))
+  // Phase 2 — Layout Manifest: when the pipeline provides a pre-computed
+  // layout, honor its wrapping, size, and position instead of guessing.
+  let lines
+  if (layout && layout.lines && layout.lines.length) {
+    lines = layout.lines.map(l => l.split(' '))
+    fontSize = layout.fontSize
+  } else {
+    const maxWordsPerLine = 3
+    lines = []
+    for (let i = 0; i < words.length; i += maxWordsPerLine) {
+      lines.push(words.slice(i, i + maxWordsPerLine))
+    }
   }
 
-  const lineH = fontSize * 1.6
+  const lineH = layout ? layout.lineHeight : fontSize * 1.6
   const totalH = lines.length * lineH
-  const startY = H * 0.78 - totalH / 2
+  const startY = layout ? layout.y : H * 0.78 - totalH / 2
+  const centerX = layout ? layout.x + layout.width / 2 : W / 2
   let wordCounter = 0
 
   ctx.save()
@@ -46,7 +55,7 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
     const lineText = line.join(' ')
     ctx.font = `900 ${fontSize}px Inter, sans-serif`
     const lineW = ctx.measureText(lineText.toUpperCase()).width
-    const startX = W / 2 - lineW / 2 - 30
+    const startX = layout ? centerX - lineW / 2 : W / 2 - lineW / 2 - 30
 
     const bgAlpha = (wordCounter <= wordIndex && wordIndex >= 0) ? 0.8 : 0.5
     ctx.fillStyle = `rgba(0, 0, 0, ${bgAlpha})`

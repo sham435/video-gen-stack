@@ -6,6 +6,6 @@ export class CaptionLayer {
     if (!scene.caption || scene.captionHidden) return
     const catStyle = DesignSystem.getCategoryStyle(scene.category || 'technology')
     const accent = catStyle?.colors?.primary || DesignSystem.brand.accent
-    renderCaptions(ctx, scene.caption, wordIndex, progress, scene.caption_focus || scene.focus, accent, scene.captionFontSize || 58)
+    renderCaptions(ctx, scene.caption, wordIndex, progress, scene.caption_focus || scene.focus, accent, scene.captionLayout?.fontSize || 58, scene.captionLayout || null)
   }
 }

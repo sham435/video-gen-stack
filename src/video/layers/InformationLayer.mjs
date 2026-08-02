@@ -56,7 +56,7 @@ export class InformationLayer {
       ctx.fill()
       ctx.restore()
     } else {
-      drawBreakingBanner(ctx, scene.subheadline || scene.text, progress, scene.headlineFontSize || 120)
+      drawBreakingBanner(ctx, scene.subheadline || scene.text, progress, scene.headlineLayout?.fontSize || scene.headlineFontSize || 120)
     }
 
     // Hook headline — big, punchy, above the breaking banner
@@ -70,7 +70,7 @@ export class InformationLayer {
       const text = (scene.text || scene.subheadline || '').replace('BREAKING: ', '').toUpperCase()
       const words = text.split(' ')
       const mid = Math.ceil(words.length / 2)
-      ctx.font = `900 ${scene.headlineFontSize || 92}px Anton, Impact, sans-serif`
+      ctx.font = `900 ${scene.headlineLayout?.fontSize || scene.headlineFontSize || 92}px Anton, Impact, sans-serif`
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
       ctx.fillStyle = '#FFFFFF'
@@ -85,7 +85,7 @@ export class InformationLayer {
   }
 
   renderFact(ctx, scene, progress) {
-    drawHeadlineCard(ctx, scene.text, progress, '#FFFFFF', scene.headlineFontSize || 0)
+    drawHeadlineCard(ctx, scene.text, progress, '#FFFFFF', scene.headlineLayout?.fontSize || scene.headlineFontSize || 0, scene.headlineLayout || null)
   }
 
   renderExplanation(ctx, scene, progress) {

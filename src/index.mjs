@@ -12,7 +12,8 @@ import { ProductionGuardian } from './ai/ProductionGuardian.mjs'
 import { ProductionPreflight } from './ai/ProductionPreflight.mjs'
 import { SceneTextManifest } from './pipeline/SceneTextManifest.mjs'
 import { TextConflictResolver } from './pipeline/TextConflictResolver.mjs'
-import { ResponsiveTextScaler } from './pipeline/ResponsiveTextScaler.mjs'
+import { TextLayoutEngine } from './layout/TextLayoutEngine.mjs'
+import { TextLayoutPreflight } from './layout/TextLayoutPreflight.mjs'
 import { VisualIntentEngine } from './pipeline/VisualIntentEngine.mjs'
 import { SemanticVisualRankerV2 } from './pipeline/SemanticVisualRankerV2.mjs'
 import { ProductionMemory } from './pipeline/ProductionMemory.mjs'
@@ -260,8 +261,8 @@ export class NewsBroadcastEngine {
 
     // Text Intent Engine — single source of truth for scene text.
     // Build a manifest per scene, resolve duplicate emphasis/caption words,
-    // fit each text layer to the Shorts safe zone (85% x 25% canvas), then
-    // write resolved values back so the renderer never duplicates or clips.
+    // then lay out every layer (lines, font size, position) against its safe
+    // zone so the renderer never duplicates, wraps by guesswork, or clips.
     const LAYER_FONT_SIZE = { emphasis: 58, headline: 92, caption: 58, source: 48 }
     for (const sc of scenes) {
       sc.textManifest = SceneTextManifest.build(sc)
@@ -270,17 +271,25 @@ export class NewsBroadcastEngine {
       // Write resolved caption back to the scene (empty = hidden)
       sc.caption = captionLayer && captionLayer.visible !== false ? captionLayer.text : ''
       sc.captionHidden = captionLayer?.visible === false
-      // Fit every text layer to the safe zone; the layers draw at these sizes
-      for (const layer of resolved.text_layers) {
-        const fitted = ResponsiveTextScaler.fitForCanvas({
+      // Layout every text layer (priority order: emphasis > headline > caption)
+      for (const layer of [...resolved.text_layers].sort((a, b) => {
+        const prio = { emphasis: 3, headline: 2, caption: 1, source: 0 }
+        return (prio[b.type] ?? 0) - (prio[a.type] ?? 0)
+      })) {
+        const layout = TextLayoutEngine.layout({
           text: layer.text,
-          fontSize: LAYER_FONT_SIZE[layer.type] || 58,
+          role: layer.type,
+          fontFamily: layer.type === 'headline' || layer.type === 'emphasis' ? 'Anton' : 'Inter',
+          preferredFontSize: LAYER_FONT_SIZE[layer.type] || 58,
         })
-        layer.fontSize = fitted.fontSize
-        layer.scale = fitted.scalePercent
-        sc[`${layer.type}FontSize`] = fitted.fontSize
+        layer.fontSize = layout.fontSize
+        layer.scale = layout.scalePercent
+        sc[`${layer.type}Layout`] = layout
+        sc[`${layer.type}FontSize`] = layout.fontSize
       }
     }
+    // Hard failure gate: abort before FFmpeg if any layout still overflows
+    for (const sc of scenes) TextLayoutPreflight.validateScene(sc)
 
     const timedScenes = this.scenePlanner.assignTimestamps(scenes)
     this.validateTemplate(timedScenes)

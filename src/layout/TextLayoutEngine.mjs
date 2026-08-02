@@ -1,0 +1,60 @@
+// TextLayoutEngine — the layout authority. Converts any text layer into a
+// deterministic layout manifest (lines, font size, line height, box,
+// position) constrained by the role's safe zone. Runs before render so
+// drawing layers never guess about wrapping, sizing, or placement.
+//
+// Role priority: emphasis(3) > headline(2) > caption(1) > source(0).
+// Higher priority = wider stage, taller band, higher legibility floor.
+import { FontMetrics } from './FontMetrics.mjs'
+import { LineWrapper } from './LineWrapper.mjs'
+import { SafeZoneManager } from './SafeZoneManager.mjs'
+import { ResponsiveTextScaler } from './ResponsiveTextScaler.mjs'
+
+export class TextLayoutEngine {
+  // { text, role, canvas, safeZone, fontFamily, preferredFontSize, maxLines } ->
+  // {
+  //   text, role, priority, lines, fontSize, lineHeight, width, height,
+  //   x, y, scalePercent, overflow
+  // }
+  static layout({ text, role = 'caption', canvas = { width: 1080, height: 1920 }, safeZone = null, fontFamily = 'Inter', preferredFontSize = 58, maxLines = null } = {}) {
+    const cfg = SafeZoneManager.roleConfig(role)
+    const zone = safeZone || SafeZoneManager.roleZone(role, canvas)
+    const preferred = Math.max(1, Math.floor(preferredFontSize))
+    const lineCap = maxLines || cfg.maxLines
+    const font = fontFamily === 'Inter' && role !== 'source' ? 'Inter' : fontFamily
+
+    const fitted = ResponsiveTextScaler.fit({
+      text,
+      maxWidth: zone.width,
+      maxHeight: zone.height,
+      fontSize: preferred,
+      minFontSize: cfg.floor,
+      fontFamily: font,
+      maxLines: lineCap,
+    })
+
+    const lines = fitted.wrap.lines
+    const lineHeight = FontMetrics.lineHeight(fitted.fontSize)
+    const width = Math.max(...fitted.wrap.widths, 0)
+    const height = lines.length * lineHeight
+
+    return {
+      text: String(text ?? ''),
+      role,
+      priority: cfg.priority,
+      lines,
+      fontSize: fitted.fontSize,
+      lineHeight,
+      width,
+      height,
+      x: Math.round(zone.left + (zone.width - width) / 2),
+      y: Math.round(canvas.height * cfg.anchor - height / 2),
+      scalePercent: fitted.scalePercent,
+      overflow: fitted.overflow,
+    }
+  }
+
+  static measure(text, fontSize, fontFamily = 'Inter') {
+    return FontMetrics.measure(text, fontSize, fontFamily)
+  }
+}

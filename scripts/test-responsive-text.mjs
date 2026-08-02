@@ -4,7 +4,7 @@
 // presets (85% width / 25% height) are applied.
 // Run: node scripts/test-responsive-text.mjs
 import assert from 'node:assert/strict'
-import { ResponsiveTextScaler } from '../src/pipeline/ResponsiveTextScaler.mjs'
+import { ResponsiveTextScaler } from '../src/layout/ResponsiveTextScaler.mjs'
 
 let passed = 0
 const ok = (name) => { passed++; console.log('  ok —', name) }
@@ -12,16 +12,26 @@ const ok = (name) => { passed++; console.log('  ok —', name) }
 const CANVAS_W = 1080
 const CANVAS_H = 1920
 
-// 1. Long caption at 58px must shrink to fit the 85% safe zone
+// 1. Long single word (unbreakable) at 58px must shrink to fit the 85% safe zone
 console.log('Long caption shrinks:')
 const long = ResponsiveTextScaler.fitForCanvas({
-  text: 'Nobody expected this move from SECRET.',
+  text: 'NOBODYEXPECTEDTHISMOVEFROMTHESECRETLEAK',
   canvasWidth: CANVAS_W, canvasHeight: CANVAS_H,
   fontSize: 58,
 })
 assert.ok(long.fontSize < 58, `expected shrink, got ${long.fontSize}px`)
 assert.ok(long.scalePercent > 0 && long.scalePercent < 100)
 ok(`58px -> ${long.fontSize}px (${long.scalePercent}%)`)
+
+// 1b. Sentence text wraps into lines instead of shrinking (layout semantics)
+console.log('Sentence wraps:')
+const wrapped = ResponsiveTextScaler.fitForCanvas({
+  text: 'Nobody expected this move from SECRET.',
+  canvasWidth: CANVAS_W, canvasHeight: CANVAS_H,
+  fontSize: 58,
+})
+assert.ok(wrapped.wrap.lines.length >= 2, `expected multi-line wrap, got ${wrapped.wrap.lines.length}`)
+ok(`wraps to ${wrapped.wrap.lines.length} lines at ${wrapped.fontSize}px`)
 
 // 2. Short emphasis word keeps its size (no unnecessary shrinking)
 console.log('Short word keeps size:')

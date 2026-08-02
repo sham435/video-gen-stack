@@ -1,24 +1,28 @@
 const W = 1080, H = 1920
 
-export function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF', fontSize = 0) {
+export function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF', fontSize = 0, layout = null) {
   const p = Math.min(1, progress * 1.5)
   const words = text.split(' ')
   const lines = []
-  let line = ''
   const maxChars = 10
 
-  for (const w of words) {
-    if ((line + ' ' + w).length <= maxChars) line += (line ? ' ' : '') + w
-    else { lines.push(line); line = w }
+  if (layout && layout.lines && layout.lines.length) {
+    lines.push(...layout.lines)
+  } else {
+    let line = ''
+    for (const w of words) {
+      if ((line + ' ' + w).length <= maxChars) line += (line ? ' ' : '') + w
+      else { lines.push(line); line = w }
+    }
+    if (line) lines.push(line)
   }
-  if (line) lines.push(line)
 
-  const size = fontSize > 0 ? fontSize : text.length > 15 ? 96 : text.length > 8 ? 116 : 136
-  const lineH = size * 1.2
+  const size = layout ? layout.fontSize : fontSize > 0 ? fontSize : text.length > 15 ? 96 : text.length > 8 ? 116 : 136
+  const lineH = layout ? layout.lineHeight : size * 1.2
   const totalH = lines.length * lineH
   // Rule of thirds: headline sits in the upper-middle band, keeping the
   // bottom third clear for caption overlays (caption safe area at 0.78H)
-  const startY = H * 0.30 - totalH / 2
+  const startY = layout ? layout.y : H * 0.30 - totalH / 2
 
   ctx.save()
 
