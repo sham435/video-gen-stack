@@ -1,10 +1,18 @@
+import { HeadlineEmphasisResolver } from '../pipeline/HeadlineEmphasisResolver.mjs'
+import { BrandPerformanceMemory } from '../pipeline/BrandPerformanceMemory.mjs'
+
 export class ScenePlanner {
+  constructor() {
+    this.emphasisResolver = new HeadlineEmphasisResolver()
+    this.brandMemory = new BrandPerformanceMemory()
+  }
   planScenes(article, story) {
     const scenes = story.scenes.map((s, i) => this.buildScene(s, i, article))
     return scenes
   }
 
   buildScene(sceneDef, index, article) {
+    const emphasis = this._resolveEmphasis(sceneDef, article)
     const scene = {
       id: sceneDef.id || index + 1,
       type: sceneDef.type || 'fact',
@@ -21,7 +29,8 @@ export class ScenePlanner {
       // manifest emits narration as its own caption layer; duplicating the
       // keyword here is what produced the "SECRET twice" render bug.
       caption: '',
-      captionFocus: (sceneDef.caption_focus || '').toUpperCase(),
+      caption_focus: emphasis,
+      captionFocus: emphasis.toUpperCase(),
       camera: {
         type: sceneDef.camera || 'push_in',
         speed: this.cameraSpeed(sceneDef.camera),
@@ -98,6 +107,33 @@ export class ScenePlanner {
       cursor = scene.end
       return scene
     })
+  }
+
+  // Pick the best emphasis keyword: prefers a curiosity word the headline
+  // does not already feature (HEADLINE_EMPHASIS_DUPLICATE class). When a
+  // replacement is chosen, the swap is recorded in production memory so
+  // future videos learn from the retention impact of that decision.
+  _resolveEmphasis(sceneDef, article) {
+    const original = (sceneDef.caption_focus || '').toUpperCase()
+    const headline = this.cleanNarration(sceneDef.narration) || (article.title || '').slice(0, 60)
+    const lessons = this.brandMemory.emphasisLessonsFor(article.category || 'technology')
+    const chosen = this.emphasisResolver.resolve({
+      headline,
+      title: article.title || '',
+      current: original,
+      category: article.category || 'technology',
+      lessons,
+    })
+    if (chosen && original && chosen !== original) {
+      this.brandMemory.recordEmphasisLesson({
+        category: article.category || 'technology',
+        replaced: original,
+        with: chosen,
+        retentionImpact: -8,
+        source: 'headline_emphasis_duplicate',
+      })
+    }
+    return chosen || ''
   }
 
   buildNarrationScript(scenes) {

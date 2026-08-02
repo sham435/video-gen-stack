@@ -2,6 +2,7 @@
 // Verifies contract-time dedupe, planner separation, manifest layers,
 // and the TextConflictResolver safety net.
 // Run: node scripts/test-text-dedup.mjs
+process.env.BRAND_MEMORY_FILE = '/tmp/nm-test-brand-memory.json'
 import assert from 'node:assert/strict'
 import { ScriptContract } from '../src/video-studio/ScriptContract.mjs'
 import { ScenePlanner } from '../src/ai/ScenePlanner.mjs'
@@ -48,9 +49,10 @@ ok('non-focus caption text preserved')
 // 2. ScenePlanner: caption never falls back to caption_focus or narration words
 console.log('ScenePlanner.buildScene:')
 const planner = new ScenePlanner()
-const scene = planner.buildScene({ id: 1, type: 'hook', duration: 2.5, narration: 'SECRET APPLE leaked today.', caption_focus: 'SECRET' }, 0, article)
+planner.brandMemory.memory = { patterns: [] }
+const scene = planner.buildScene({ id: 1, type: 'hook', duration: 2.5, narration: 'NOBODY EXPECTED THIS FROM APPLE', caption_focus: 'NOBODY' }, 0, { title: 'NOBODY EXPECTED THIS FROM APPLE', category: 'technology' })
+assert.equal(scene.caption_focus, 'NOBODY')
 assert.equal(scene.caption, '')
-assert.equal(scene.captionFocus, 'SECRET')
 ok('planner keeps caption_focus separate, caption empty')
 
 // 3. Manifest + resolver safety net: emphasis word stripped, empty caption hidden

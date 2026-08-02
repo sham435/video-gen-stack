@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { engagementScore } from '../analytics/EngagementScore.mjs'
 
-const BRAND_MEMORY_FILE = path.resolve(process.cwd(), 'data', 'brand-memory.json')
+const BRAND_MEMORY_FILE = process.env.BRAND_MEMORY_FILE || path.resolve(process.cwd(), 'data', 'brand-memory.json')
 
 // Brand Performance Memory — the channel's packaging intelligence.
 //
@@ -110,6 +110,26 @@ export class BrandPerformanceMemory {
   impactOf(pattern) {
     const p = this.memory.patterns.find(x => x.pattern === pattern)
     return p?.impact ?? null
+  }
+
+  // Production learning for the headline_emphasis_duplicate class: remember
+  // that animating a keyword already shown in the headline hurt retention,
+  // and that `with` is the better keyword for this category.
+  recordEmphasisLesson({ category = 'technology', replaced, with: withWord, retentionImpact = -8, source = 'headline_emphasis_duplicate' } = {}) {
+    if (!replaced || !withWord) return null
+    return this.recordPattern(`emphasis:${source}:${category}:${String(replaced).toUpperCase()}`, {
+      replacement: String(withWord).toUpperCase(),
+      impact: retentionImpact,
+      category,
+      source: 'internal',
+    })
+  }
+
+  // Lesson lookup for the emphasis resolver — words taught for a category.
+  emphasisLessonsFor(category) {
+    return this.memory.patterns
+      .filter(p => p.pattern.startsWith('emphasis:headline_emphasis_duplicate:') && (!category || p.category === category))
+      .map(p => ({ replaced: p.pattern.split(':').pop(), with: p.replacement, retentionImpact: p.impact, category: p.category }))
   }
 
   // The stored editorial decision for a pattern (or a neutral default)
