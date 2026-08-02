@@ -115,6 +115,9 @@ export class ScenePlanner {
   // future videos learn from the retention impact of that decision.
   _resolveEmphasis(sceneDef, article) {
     const original = (sceneDef.caption_focus || '').toUpperCase()
+    // Close scenes animate the CTA keyword itself — never swap it for a
+    // title word (the on-screen CTA is the scene's only job).
+    if (sceneDef.type === 'close' || sceneDef.type === 'brand_close') return original
     const headline = this.cleanNarration(sceneDef.narration) || (article.title || '').slice(0, 60)
     const lessons = this.brandMemory.emphasisLessonsFor(article.category || 'technology')
     const chosen = this.emphasisResolver.resolve({

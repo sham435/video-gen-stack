@@ -78,5 +78,14 @@ const clean = await ScenePreflight.run({ scenes: [
 assert.equal(clean.warnings.length, 0, `unexpected warnings: ${clean.warnings}`)
 ok('preflight clean when emphasis avoids the headline word')
 
+// 8. Close scenes keep their CTA focus — never swapped for a title word
+console.log('Close scene emphasis:')
+const closeScene = planner.buildScene(
+  { id: 9, type: 'close', duration: 2.5, narration: 'Sub for the next Apple leak!', caption_focus: 'SUB' },
+  8, { title: TITLE, category: 'technology' },
+)
+assert.equal(closeScene.caption_focus, 'SUB', `expected SUB, got ${closeScene.caption_focus}`)
+ok('close scene CTA focus preserved: SUB')
+
 console.log(`\nAll ${passed} checks passed.`)
 try { fs.unlinkSync('/tmp/nm-test-brand-memory.json') } catch { /* temp file already gone */ }

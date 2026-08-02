@@ -1,16 +1,17 @@
 import { BrandStyleResolver } from '../visual/BrandStyleResolver.mjs'
-import { TextConflictResolver } from '../pipeline/TextConflictResolver.mjs'
+import { CaptionConflictResolver } from '../pipeline/CaptionConflictResolver.mjs'
 
 export class ScriptContract {
   constructor() {
     this.resolver = new BrandStyleResolver()
-    this.textResolver = new TextConflictResolver()
+    this.captionResolver = new CaptionConflictResolver()
   }
 
-  // Contract-time dedupe: the caption must never repeat the emphasis keyword
-  // (fixes the "SECRET rendered twice" bug — emphasis + caption both showed it).
-  _dedupeCaption(caption, focus) {
-    return this.textResolver.removeDuplicateWords(focus || '', caption || '')
+  // Contract-time dedupe: the caption must never repeat the emphasis keyword —
+  // grammar-aware, so natural-language captions ("The real price of the
+  // headset") are preserved while keyword-style duplicates are stripped.
+  _dedupeCaption(caption, focus, headline) {
+    return this.captionResolver.resolve({ focus: focus || '', caption: caption || '', headline: headline || '' }).caption
   }
 
   build(article, directorStory) {
@@ -48,7 +49,7 @@ export class ScriptContract {
         transition: s.transition || 'cut',
         emotion: s.emotion || 'neutral',
         caption_focus: s.caption?.focus || '',
-        caption: this._dedupeCaption(s.caption?.fullText || s.narration || '', s.caption?.focus),
+        caption: this._dedupeCaption(s.caption?.fullText || s.narration || '', s.caption?.focus, directorStory?.headline || article.title),
       })),
       voice: {
         style: 'documentary',
