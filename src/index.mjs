@@ -18,6 +18,8 @@ import { ProductionMemory } from './pipeline/ProductionMemory.mjs'
 import { HookAnalyzer } from './quality/HookAnalyzer.mjs'
 import { CompositionJudge } from './quality/CompositionJudge.mjs'
 import { RetentionSimulator } from './quality/RetentionSimulator.mjs'
+import { FrameVisionAnalyzer } from './quality/FrameVisionAnalyzer.mjs'
+import { QualityGuardian } from './quality/QualityGuardian.mjs'
 import { ProductionEffectEngine } from './video/effects/ProductionEffectEngine.mjs'
 import { RetentionDirector } from './video/RetentionDirector.mjs'
 import { SceneProductionScore } from './video/scoring/SceneProductionScore.mjs'
@@ -70,6 +72,8 @@ export class NewsBroadcastEngine {
     this.hookAnalyzer = new HookAnalyzer()
     this.compositionJudge = new CompositionJudge({ memory: this.productionMemory })
     this.retentionSimulator = new RetentionSimulator({ memory: this.productionMemory })
+    this.frameVision = new FrameVisionAnalyzer()
+    this.qualityGuardian = new QualityGuardian()
     this.emotionalArcAnalyzer = new EmotionalArcAnalyzer()
     this.motionPlanner = new MotionPlanner()
     this.transitionPlanner = new TransitionPlanner()
@@ -423,6 +427,24 @@ export class NewsBroadcastEngine {
       ?? (typeof qc?.checks === 'object' ? (qc.checks.score ?? qc.checks.overall ?? 80) : 80)
       ?? 80
     job.markDone('quality', { detail: `Quality ${qScore}/100`, score: qScore })
+
+    // Post-render Quality Guardian — pixel-level verification of what
+    // actually rendered (contrast, safe margins, subject presence, blank
+    // frames). Rejections are learned into ProductionMemory so the same
+    // class of failure never ships twice.
+    try {
+      const frameAnalysis = await this.frameVision.analyze(videoPath, timedScenes)
+      const guardian = this.qualityGuardian.evaluate(frameAnalysis)
+      if (!guardian.passed) {
+        this.productionMemory.learn('frame_quality_reject', { status: 'detected', introducedIn: 'V4', preventedBy: null, preferredFix: 're_render_with_fixes', retentionImpact: -8 })
+        console.warn(`Quality Guardian: frame analysis ${guardian.score}/100 — ${guardian.issues.join('; ') || 'below threshold'}`)
+      } else {
+        console.log(`Quality Guardian: frame analysis passed (${guardian.score}/100)`)
+      }
+      job.markDone('quality', { detail: `Guardian ${guardian.score}/100`, score: guardian.score })
+    } catch (e) {
+      console.warn(`Quality Guardian skipped: ${e.message}`)
+    }
 
     return { videoPath, job }
   }
