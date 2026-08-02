@@ -333,6 +333,7 @@ app.post('/api/ai/chat', async (req, res) => {
     const modeText = modeHint[mode] || modeHint.simple
 
     let systemContext = 'You are the NEWS-MONSTER AI production assistant — a senior producer + technical director + creative director combined. You answer with structure: summary, cause, impact, recommended actions. Be concise and helpful.'
+    systemContext += '\n\nRepository tools available (call by EXACT name only): read_file, write_file, list_directory, find, grep, search_symbols, git_status, git_diff, bash, apply_patch. To use one, reply with a fenced block exactly like this:\n```tool:grep\n{"pattern":"class RepoAgentTools","path":"src"}\n```\nThe runtime executes it and returns results for your final answer. Never read .env or files under data/. Mutating or privileged actions will be blocked pending approval. Always verify claims against the code before answering (file paths + line numbers).'
     const bridge = await dashboardAI.getBridge()
     if (bridge) {
       const ctx = bridge.getSystemContext()
@@ -344,6 +345,52 @@ app.post('/api/ai/chat', async (req, res) => {
       { role: 'system', content: systemContext },
       { role: 'user', content: message },
     ], { temperature: 0.6 })
+
+    // Agentic tool loop — execute ```tool:name {json}``` blocks the model
+    // emitted, then synthesize the final answer from the results.
+    const compactToolResult = (r) => {
+      const c = { ...r }
+      if (typeof c.content === 'string' && c.content.length > 2000) c.content = c.content.slice(0, 2000) + '\n...[truncated]'
+      if (typeof c.stdout === 'string' && c.stdout.length > 2000) c.stdout = c.stdout.slice(0, 2000) + '\n...[truncated]'
+      if (Array.isArray(c.results)) c.results = c.results.slice(0, 20)
+      if (Array.isArray(c.matches)) c.matches = c.matches.slice(0, 20)
+      if (Array.isArray(c.entries)) c.entries = c.entries.slice(0, 40)
+      return c
+    }
+    let finalReply = reply
+    let toolCalls = []
+    let resultsText = ''
+    const toolCallRe = /```tool:(\w+)[^\n]*\n([\s\S]*?)```/g
+    let match
+    const { RepoAgentTools } = await import('../../src/integration/RepoAgentTools.mjs')
+    const repoTools = new RepoAgentTools()
+    while ((match = toolCallRe.exec(reply))) {
+      const name = match[1]
+      let args = {}
+      try { args = JSON.parse(match[2]) } catch { /* empty args */ }
+      const result = repoTools.execute(name, args)
+      toolCalls.push({ tool: name, args, ok: result.ok, approvalRequired: result.approvalRequired || null, result: result.ok ? compactToolResult(result) : { error: result.error || result.blocked || 'failed' } })
+    }
+    if (toolCalls.length) {
+      resultsText = JSON.stringify(toolCalls.map(t => ({ tool: t.tool, args: t.args, ok: t.ok, approvalRequired: t.approvalRequired, result: t.result })), null, 2).slice(0, 12000)
+      finalReply = await dashboardAI.aiProvider.generate([
+        { role: 'system', content: systemContext + '\n\nYou just called repository tools. Results:\n' + resultsText + '\n\nNow write your final answer as plain text ONLY — do not emit any ```tool: blocks. Structure it: summary, cause, impact, recommended actions. Cite the files/lines you verified.' },
+        { role: 'user', content: message },
+      ], { temperature: 0.6 })
+    }
+    // Defensive: never surface raw tool blocks in the final reply; if the
+    // synthesis pass only re-emitted blocks or came back empty, retry once,
+    // then fall back to the first pass + a plain rendering of tool results.
+    const stripBlocks = (text) => String(text || '').replace(/```tool:\w+[\s\S]*?```/g, '').replace(/\n{3,}/g, '\n\n').trim()
+    let cleaned = stripBlocks(finalReply)
+    if (toolCalls.length && cleaned.length <= 40) {
+      const retry = await dashboardAI.aiProvider.generate([
+        { role: 'system', content: 'Write a plain-text answer (summary, cause, impact, recommended actions) using ONLY this tool evidence. No tool blocks, no markdown fences.' + '\n\nEvidence:\n' + resultsText },
+        { role: 'user', content: message },
+      ], { temperature: 0.6 })
+      cleaned = stripBlocks(retry)
+    }
+    finalReply = cleaned.length > 40 ? cleaned : ((stripBlocks(reply) || 'Tool call finished — see the tool results panel.') + (toolCalls.length ? '\n\nTool results:\n' + JSON.stringify(toolCalls.map(t => ({ tool: t.tool, ok: t.ok, result: t.result })), null, 2).slice(0, 2500) : ''))
 
     // Confidence heuristic: provider chain health + response length + intent match
     const confidence = Math.min(96, Math.round(72 + (reply?.length > 60 ? 12 : 4) + (intent.intent !== 'learn' ? 6 : 0)))
@@ -376,17 +423,18 @@ app.post('/api/ai/chat', async (req, res) => {
     }
 
     res.json({
-      reply,
+      reply: finalReply,
       provider: dashboardAI.providerName,
       intent,
       confidence,
       confidenceReason,
       actionCard,
+      toolCalls: toolCalls.length ? toolCalls : undefined,
       contextUsed: {
         project: 'video-gen-stack',
         pipeline: 'NewsBroadcastEngine',
         agents: bridge?.getSystemContext?.().agents?.length ?? 7,
-        lastAction: 'HashtagBuilder + quick render',
+        lastAction: toolCalls.length ? `repo tools executed: ${toolCalls.map(t => t.tool).join(', ')}` : 'HashtagBuilder + quick render',
       },
     })
   } catch (e) {
@@ -2814,6 +2862,9 @@ app.get('/engineering', (req, res) => res.type('html').send(ENGINE_HTML))
 
 const { default: opencodeRoutes } = await import('./routes/opencode.mjs')
 app.use(opencodeRoutes)
+
+const { default: repoToolsRoutes } = await import('./routes/repo-tools.mjs')
+app.use(repoToolsRoutes)
 
 const PORT = process.env.DASHBOARD_PORT || 3456
 const server = app.listen(PORT, () => {

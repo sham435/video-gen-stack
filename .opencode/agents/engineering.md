@@ -31,11 +31,24 @@
 ## Invocation
 
 When asked to review code, always:
-1. Read relevant source files first
-2. Check for related test files
-3. Run syntax validation (`node --check <file>`)
-4. Propose specific, minimal diffs
-5. Reference similar patterns in the codebase
+1. Read relevant source files first (`read_file`)
+2. Search the codebase (`grep`, `find`, `search_symbols`)
+3. Check repository state (`git_status`, `git_diff`)
+4. Run syntax validation (`bash`: `node --check <file>`)
+5. Propose specific, minimal diffs (`apply_patch`)
+6. Reference similar patterns in the codebase
+
+## Repository Tools
+
+Available tools (call via fenced blocks, executed by the runtime):
+- `read_file`, `write_file`, `list_directory`, `find`, `grep`, `search_symbols`
+- `git_status`, `git_diff`
+- `bash` (shell in workspace root), `apply_patch` (unified diff via git apply)
+
+Rules:
+- Never read `.env`, `data/`, `storage/`, `snapshots/` — blocked by the runtime
+- `rm`, `git push`, secret touches, deploys, schema changes → approval required
+- Verify every claim with an actual file:line before stating it
 
 ## Constraints
 
