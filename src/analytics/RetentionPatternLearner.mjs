@@ -65,23 +65,42 @@ export class RetentionPatternLearner {
       // Channel growth signal — measured CTR per title pattern. This is what
       // makes packaging optimization automatic: once a pattern proves weak
       // (CTR < 4.0%) the ThumbnailBrandOptimizer avoids it in every title.
+      // The full signal set (retention3s, completion, engagement counters)
+      // also feeds the editorial decision so the newsroom can boost or avoid
+      // topics autonomously.
+      const curve = await this.adapter.fetchRetentionCurve(snap.videoId, { sinceDays })
+      const actual = this.adapter.completionFrom(stats, curve)
       if (snap.title) {
         const ctr = await this.adapter.fetchCTR(snap.videoId, { sinceDays })
         if (ctr != null) {
           const pattern = patternKey(snap.title)
+          const engagement = await this.adapter.fetchEngagement(snap.videoId)
+          const retention3s = curve?.[0]?.pct ?? null
           this.brandMemory.recordPattern(pattern, {
             videos: 1,
             avgCTR: ctr,
             impact: Math.round((ctr - 4.5) * 10), // 4.5% baseline → positive/negative
             source: 'analytics',
+            category: snap.category || 'technology',
+            signals: {
+              ctr,
+              retention3s,
+              completion: actual,
+              comments: engagement?.comments ?? null,
+              likes: engagement?.likes ?? null,
+              shares: engagement?.shares ?? null,
+              views: stats.views,
+            },
           })
-          brandRecords.push({ pattern, ctr, title: snap.title.slice(0, 60) })
-          if (verbose) console.log(`Brand: ${pattern} → CTR ${ctr}% ("${snap.title.slice(0, 50)}")`)
+          const decision = this.brandMemory.decisionFor(pattern)
+          brandRecords.push({
+            pattern, ctr, title: snap.title.slice(0, 60),
+            completion: actual, retention3s,
+            decision, recommendation: this.brandMemory.patterns().find(p => p.pattern === pattern)?.recommendation,
+          })
+          if (verbose) console.log(`Brand: ${pattern} → CTR ${ctr}% · completion ${actual ?? 'n/a'}% · retention3s ${retention3s ?? 'n/a'}% · boostTopic=${decision.boostTopic} (${snap.title.slice(0, 50)})`)
         }
       }
-
-      const curve = await this.adapter.fetchRetentionCurve(snap.videoId, { sinceDays })
-      const actual = this.adapter.completionFrom(stats, curve)
       const predicted = snap.retention.completionRate
       if (actual == null || predicted == null) { skipped++; continue }
 

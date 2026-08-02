@@ -24,7 +24,9 @@ async function run() {
   if (result.brandLearned?.length) {
     console.log(`\nBrand learning (${result.brandLearned.length} patterns measured):`)
     for (const b of result.brandLearned) {
-      console.log(`  ${b.pattern} → CTR ${b.ctr}%${b.ctr < 4.0 ? ' (WEAK — will be avoided automatically)' : ''}`)
+      console.log(`  ${b.pattern} → CTR ${b.ctr}% · completion ${b.completion ?? 'n/a'}% · retention3s ${b.retention3s ?? 'n/a'}%`)
+      console.log(`    decision: boostTopic=${b.decision?.boostTopic} boostHookStyle=${b.decision?.boostHookStyle ?? 'n/a'} avoidOutro=${b.decision?.avoidOutro ?? 'none'}`)
+      if (b.recommendation && b.recommendation !== 'neutral') console.log(`    recommendation: ${b.recommendation}`)
     }
   }
 }

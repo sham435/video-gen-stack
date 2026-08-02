@@ -1,4 +1,7 @@
 import { subjectOf } from '../ai/thumbnail/CuriosityEngine.mjs'
+import { patternKey } from '../ai/thumbnail/ThumbnailBrandOptimizer.mjs'
+import { BrandPerformanceMemory } from '../pipeline/BrandPerformanceMemory.mjs'
+import { engagementLevel } from '../analytics/EngagementScore.mjs'
 
 // Topic CTA Builder — optimizes the last 2 seconds of every Short.
 //
@@ -31,25 +34,42 @@ export class TopicCtaBuilder {
     this.forbidden = ['hidden', 'revealed', 'secret', 'shocking', "you won't believe", 'exposed', 'buried']
   }
 
-  // Outro CTA — short enough to land in the last 2 seconds
+  // Outro CTA — short enough to land in the last 2 seconds.
+  // Engagement-aware: when the channel's measured interaction with this
+  // title pattern is low (or unknown), a question CTA beats a subscribe
+  // plea — questions create comments, which is the missing signal.
   build(article) {
     const { brand, topic } = subjectOf(article, { forbidden: this.forbidden })
     const b = brand || topic || 'NEWS'
     const category = (article?.category || 'default').toLowerCase()
     const topicWord = topic.split(' ')[0].toLowerCase()
 
-    const cta = article?.description?.toLowerCase().includes('leak') || article?.title?.toLowerCase().includes('leak')
-      ? SUB_CTA(b)
-      : article?.description?.toLowerCase().includes('update') || article?.title?.toLowerCase().includes('update')
-        ? FOLLOW_CTA(b)
-        : WATCH_CTA(b)
+    const pattern = article?.title ? patternKey(article.title) : null
+    const memory = new BrandPerformanceMemory()
+    const engagement = pattern ? memory.engagementOf(pattern) : null
+    const mode = engagementLevel(engagement) === 'low' ? 'question' : 'subscribe'
+
+    let cta, caption
+    if (mode === 'question') {
+      const question = this._engagementPrompt(article, b, category)
+      cta = question
+      caption = 'TELL US BELOW'
+    } else {
+      cta = article?.description?.toLowerCase().includes('leak') || article?.title?.toLowerCase().includes('leak')
+        ? SUB_CTA(b)
+        : article?.description?.toLowerCase().includes('update') || article?.title?.toLowerCase().includes('update')
+          ? FOLLOW_CTA(b)
+          : WATCH_CTA(b)
+      caption = `SUB FOR NEXT ${b.toUpperCase()}`.slice(0, 24)
+    }
 
     return {
       cta,
       narration: cta, // close scene narration = the CTA itself
-      caption: `SUB FOR NEXT ${b.toUpperCase()}`.slice(0, 24),
+      caption,
       engagement: this._engagementPrompt(article, b, category),
       topic: topicWord,
+      mode,
     }
   }
 

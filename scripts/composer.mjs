@@ -121,26 +121,52 @@ if (import.meta.url.endsWith('composer.mjs')) {
             process.env.YOUTUBE_PRIVACY || 'public',
             coverPath
           )
-          console.log(`Published: https://youtu.be/${result?.id}`)
+          console.log(`[UPLOAD] videoId=${result?.id} url=https://youtu.be/${result?.id}`)
 
           // Community loop — post the topic-specific pinned-comment question.
           // The 100% 'stayed to watch' audience needs a reason to comment.
+          let commentEvent = null
           if (result?.id) {
             try {
               const { PinnedCommentBuilder } = await import('../src/publishing/PinnedCommentBuilder.mjs')
+              const { TopicCtaBuilder } = await import('../src/publishing/TopicCtaBuilder.mjs')
               const { postComment } = await import('../apps/api/publishers/youtube.js')
+              const cta = new TopicCtaBuilder().build(article)
               const comment = new PinnedCommentBuilder().build(article)
+              console.log(`[CTA] topic=${cta.topic} mode=${cta.mode} "${cta.narration}"`)
+              console.log(`[PIN COMMENT] "${comment.question}"`)
               const posted = await postComment(result.id, comment.question)
-              console.log(`Pinned comment suggestion: "${comment.question}"${posted ? '' : ' (post the comment above manually in Studio and pin it)'}`)
-            } catch (e) { console.log('Pinned comment skipped:', e.message) }
+              console.log(`[COMMENT INSERT] ${posted?.id ? `success commentId=${posted.id}` : 'failed — post it manually in Studio and pin it'}`)
+              commentEvent = {
+                text: comment.question,
+                status: posted?.id ? 'published' : 'failed',
+                commentId: posted?.id || null,
+              }
+            } catch (e) { console.log('[PIN COMMENT] skipped:', e.message) }
           }
+
+          // Ground-truth artifact: what the pipeline shipped (CTA + comment)
+          // joins with later analytics to measure whether the loop works.
+          try {
+            const { TopicCtaBuilder } = await import('../src/publishing/TopicCtaBuilder.mjs')
+            const { PublishEventsStore } = await import('../src/publishing/PublishEventsStore.mjs')
+            const cta = new TopicCtaBuilder().build(article)
+            new PublishEventsStore().record({
+              videoId: result?.id,
+              title: article.title?.slice(0, 100),
+              category: category || 'technology',
+              cta: { topic: cta.topic, mode: cta.mode, text: cta.narration },
+              comment: commentEvent || null,
+            })
+            console.log('[ARTIFACT] data/publish-events.json updated')
+          } catch (e) { console.log('[ARTIFACT] skipped:', e.message) }
 
           // Snapshot the pipeline's retention prediction for the
           // RetentionPatternLearner (real analytics calibrate memory later)
           if (result?.id && retention) {
             try {
               const { RetentionPatternLearner } = await import('../src/analytics/RetentionPatternLearner.mjs')
-              new RetentionPatternLearner().appendSnapshot({ videoId: result.id, title: article.title?.slice(0, 100), retention })
+              new RetentionPatternLearner().appendSnapshot({ videoId: result.id, title: article.title?.slice(0, 100), category: category || 'technology', retention })
               console.log('Retention snapshot recorded for learning loop')
             } catch (e) { console.log('Retention snapshot skipped:', e.message) }
           }

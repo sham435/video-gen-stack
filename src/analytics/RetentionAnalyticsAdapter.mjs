@@ -110,4 +110,29 @@ export class RetentionAnalyticsAdapter {
       return null
     }
   }
+
+  // Engagement counters — comments/likes/shares per video (YouTube Data API
+  // statistics). The interaction quality signal behind EngagementScore.
+  async fetchEngagement(videoId) {
+    const token = await this._accessToken()
+    if (!token) return null
+    const url = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoId}`
+    try {
+      const res = await fetch(url, {
+        headers: { 'Authorization': `Bearer ${token}` },
+        signal: AbortSignal.timeout(this.timeoutMs),
+      })
+      if (!res.ok) return null
+      const item = (await res.json()).items?.[0]
+      if (!item?.statistics) return null
+      const st = item.statistics
+      return {
+        comments: Number(st.commentCount) || 0,
+        likes: Number(st.likeCount) || 0,
+        shares: Number(st.shareCount) || 0,
+      }
+    } catch {
+      return null
+    }
+  }
 }
