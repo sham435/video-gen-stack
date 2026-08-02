@@ -6,7 +6,7 @@ const REFRESH_TOKEN = process.env.YOUTUBE_REFRESH_TOKEN
 const REDIRECT_URI = process.env.YOUTUBE_REDIRECT_URI || 'https://video-gen-stack-production.up.railway.app/api/auth/youtube/callback'
 const BASE = 'https://www.googleapis.com'
 
-export const authUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=https://www.googleapis.com/auth/youtube.upload&response_type=code&access_type=offline`
+export const authUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${encodeURIComponent('https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube.force-ssl')}&response_type=code&access_type=offline`
 
 export async function exchangeCode(code) {
   const res = await fetch(`${BASE}/oauth2/v4/token`, {

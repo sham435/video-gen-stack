@@ -79,11 +79,13 @@ export class TopicCtaBuilder {
     const title = (article?.title || '').toLowerCase()
     const desc = (article?.description || '').toLowerCase()
     const pair = QUESTION_PAIRS[category] || QUESTION_PAIRS.default
-    // Prefer two concrete aspects from the article description
+    // Prefer two concrete aspects from the article description, excluding
+    // the brand and generic filler words
+    const brandWords = (brand || '').toLowerCase().split(' ').filter(Boolean)
     const keywords = (desc + ' ' + title)
       .replace(/[^a-zA-Z ]/g, ' ')
       .split(' ')
-      .filter(w => w.length > 4 && !['about','their','there','which','these','those','after','before','being','while','still','massive','camera','battery','leaked','leak','reported','according','including','beginning','month','announced','release','new'].includes(w))
+      .filter(w => w.length > 4 && !['about','their','there','which','these','those','after','before','being','while','still','massive','camera','battery','leaked','leak','reported','according','including','beginning','month','announced','release','new','coming','final','batch','specs','rumor','rumors','every'].includes(w) && !brandWords.includes(w))
     const [a, b] = [keywords[0], keywords[1]].filter(Boolean)
     if (a && b) return QUESTION(a, b)
     return TEAM_QUESTION(brand)

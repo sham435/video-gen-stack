@@ -20,20 +20,21 @@ const QUESTION_BANK = {
 export class PinnedCommentBuilder {
   constructor() {
     this.forbidden = ['hidden', 'revealed', 'secret', 'shocking', "you won't believe", 'exposed', 'buried']
-    this.stopwords = new Set(['about', 'their', 'there', 'which', 'these', 'those', 'after', 'before', 'being', 'while', 'still', 'massive', 'between', 'through', 'during', 'without', 'leaked', 'leak', 'reported', 'according', 'including', 'beginning', 'month', 'announced', 'release', 'new'])
+    this.stopwords = new Set(['about', 'their', 'there', 'which', 'these', 'those', 'after', 'before', 'being', 'while', 'still', 'massive', 'between', 'through', 'during', 'without', 'leaked', 'leak', 'reported', 'according', 'including', 'beginning', 'month', 'announced', 'release', 'new', 'coming', 'final', 'batch', 'specs', 'rumor', 'rumors', 'every'])
   }
 
-  _aspects(article) {
+  _aspects(article, brand) {
     const text = `${article?.description || ''} ${article?.title || ''}`
       .toLowerCase().replace(/[^a-zA-Z ]/g, ' ').replace(/\s+/g, ' ').trim()
-    const words = text.split(' ').filter(w => w.length > 4 && !this.stopwords.has(w))
+    const brandWords = (brand || '').toLowerCase().split(' ').filter(Boolean)
+    const words = text.split(' ').filter(w => w.length > 4 && !this.stopwords.has(w) && !brandWords.includes(w))
     return [words[0], words[1]].filter(Boolean)
   }
 
   build(article) {
     const { brand, topic } = subjectOf(article, { forbidden: this.forbidden })
     const category = (article?.category || 'default').toLowerCase()
-    const [a, c] = this._aspects(article)
+    const [a, c] = this._aspects(article, brand)
     const bank = QUESTION_BANK[category] || QUESTION_BANK.default
     return {
       question: bank(brand || 'NEWS-MONSTER', a, c),
