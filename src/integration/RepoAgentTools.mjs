@@ -1,9 +1,14 @@
 import fs from 'fs'
 import path from 'path'
-import { execSync } from 'child_process'
+import { execSync, execFileSync } from 'child_process'
 import { fileURLToPath } from 'url'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..')
+
+// The dashboard Node process may start without Homebrew on PATH — rg lives
+// in /opt/homebrew/bin on Apple Silicon.
+const TOOL_PATHS = ['/opt/homebrew/bin', '/usr/local/bin', process.env.PATH].filter(Boolean).join(':')
+const RG_ARGS = ['--line-number', '--no-heading', '-g', '!**/node_modules/**', '-g', '!.git/**']
 
 const MAX_OUTPUT = 50000
 const MAX_LINES = 200
@@ -77,13 +82,40 @@ export class RepoAgentTools {
 
   _rgAvailable() {
     if (this._rg != null) return this._rg
-    try { this._rg = !!execSync('which rg', { stdio: 'pipe' }).toString().trim() } catch { this._rg = false }
+    try {
+      execFileSync('rg', ['--version'], { env: { ...process.env, PATH: TOOL_PATHS }, stdio: 'pipe' })
+      this._rg = true
+    } catch { this._rg = false }
     return this._rg
+  }
+
+  // Real ripgrep tool (exit 1 = no matches, not an error)
+  rg({ pattern, path: p = '', include }) {
+    if (!pattern) return { ok: false, error: 'pattern required' }
+    if (!this._rgAvailable()) return { ok: false, error: 'ripgrep not installed — use grep tool instead (brew install ripgrep)' }
+    const base = this._resolve(p)
+    const args = [...RG_ARGS]
+    if (include) args.push('-g', include)
+    args.push(pattern, base)
+    try {
+      const out = execFileSync('rg', args, { env: { ...process.env, PATH: TOOL_PATHS }, encoding: 'utf-8', maxBuffer: MAX_OUTPUT * 4, timeout: 15000 })
+      const lines = out.trim().split('\n').filter(Boolean).slice(0, MAX_LINES)
+      const results = lines.map(l => {
+        const m = l.match(/^([^:]+):(\d+):(.*)$/)
+        return m ? { file: path.relative(this.root, m[1]), line: Number(m[2]), content: m[3].slice(0, 300) } : { raw: l.slice(0, 300) }
+      })
+      return { ok: true, pattern, count: results.length, results }
+    } catch (e) {
+      if (e.status === 1) return { ok: true, pattern, count: 0, results: [] }
+      return { ok: false, error: this._cap(e.stderr || e.message) }
+    }
   }
 
   // ---------- tools ----------
 
-  read_file({ path: p }) {
+  read_file({ path: p, file }) {
+    p = p || file || '' // model habit uses `file`, protocol uses `path`
+    if (!p) return { ok: false, error: 'path required' }
     const full = this._resolve(p)
     if (this._isSecret(full)) return { ok: false, blocked: 'workspace.secret', error: 'reading secret files is not allowed' }
     const content = fs.readFileSync(full, 'utf-8')
@@ -205,6 +237,7 @@ export class RepoAgentTools {
   }
 
   execute(name, args = {}) {
+    if (name === 'terminal') name = 'bash' // audit-style alias
     if (typeof this[name] !== 'function' || name.startsWith('_')) {
       return { ok: false, error: `unknown tool: ${name}` }
     }
@@ -221,13 +254,14 @@ export class RepoAgentTools {
       { name: 'write_file', args: { path: 'string', content: 'string' }, description: 'Write a file inside the workspace (secrets need approval)' },
       { name: 'list_directory', args: { path: 'string' }, description: 'List directory entries' },
       { name: 'find', args: { pattern: 'glob', path: 'string' }, description: 'Find files by glob pattern (skips node_modules/.git)' },
-      { name: 'grep', args: { pattern: 'regex', path: 'string', include: 'glob' }, description: 'Search file contents with line numbers' },
+      { name: 'grep', args: { pattern: 'regex', path: 'string', include: 'glob' }, description: 'Search file contents with line numbers (built-in)' },
+      { name: 'rg', args: { pattern: 'regex', path: 'string', include: 'glob' }, description: this._rgAvailable() ? 'Ripgrep search (installed, /opt/homebrew/bin on PATH)' : 'NOT installed — use grep (brew install ripgrep)' },
       { name: 'search_symbols', args: { pattern: 'string' }, description: 'Symbol map of classes/functions/consts in .mjs/.js/.ts/.tsx' },
       { name: 'git_status', args: {}, description: 'git status --short --branch' },
       { name: 'git_diff', args: { path: 'string' }, description: 'git diff (optionally for one path)' },
       { name: 'bash', args: { command: 'string', timeout: 'number' }, description: 'Run a shell command in the workspace (approval matrix applies)' },
+      { name: 'terminal', args: { command: 'string' }, description: 'Alias of bash — shell execution (approval matrix applies)' },
       { name: 'apply_patch', args: { diff: 'unified diff' }, description: 'Apply a unified diff via git apply' },
-      { name: 'rg', available: this._rgAvailable(), description: this._rgAvailable() ? 'Available — grep tool is the wired-in search path' : 'NOT installed (brew install ripgrep); grep tool is the fallback' },
     ]
   }
 }

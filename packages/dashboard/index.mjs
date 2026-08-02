@@ -333,7 +333,7 @@ app.post('/api/ai/chat', async (req, res) => {
     const modeText = modeHint[mode] || modeHint.simple
 
     let systemContext = 'You are the NEWS-MONSTER AI production assistant — a senior producer + technical director + creative director combined. You answer with structure: summary, cause, impact, recommended actions. Be concise and helpful.'
-    systemContext += '\n\nRepository tools available (call by EXACT name only): read_file, write_file, list_directory, find, grep, search_symbols, git_status, git_diff, bash, apply_patch. To use one, reply with a fenced block exactly like this:\n```tool:grep\n{"pattern":"class RepoAgentTools","path":"src"}\n```\nThe runtime executes it and returns results for your final answer. Never read .env or files under data/. Mutating or privileged actions will be blocked pending approval. Always verify claims against the code before answering (file paths + line numbers).'
+    systemContext += '\n\nRepository tools available (call by EXACT name only): read_file, write_file, list_directory, find, grep, rg, search_symbols, git_status, git_diff, bash, terminal, apply_patch. To use one, reply with a fenced block exactly like this:\n```tool:grep\n{"pattern":"class RepoAgentTools","path":"src"}\n```\nThe runtime executes it and returns results for your final answer. Never read .env or files under data/. Mutating or privileged actions will be blocked pending approval. Always verify claims against the code before answering (file paths + line numbers).'
     const bridge = await dashboardAI.getBridge()
     if (bridge) {
       const ctx = bridge.getSystemContext()
@@ -361,20 +361,30 @@ app.post('/api/ai/chat', async (req, res) => {
     let toolCalls = []
     let resultsText = ''
     const toolCallRe = /```tool:(\w+)[^\n]*\n([\s\S]*?)```/g
-    let match
     const { RepoAgentTools } = await import('../../src/integration/RepoAgentTools.mjs')
     const repoTools = new RepoAgentTools()
-    while ((match = toolCallRe.exec(reply))) {
-      const name = match[1]
-      let args = {}
-      try { args = JSON.parse(match[2]) } catch { /* empty args */ }
-      const result = repoTools.execute(name, args)
-      toolCalls.push({ tool: name, args, ok: result.ok, approvalRequired: result.approvalRequired || null, result: result.ok ? compactToolResult(result) : { error: result.error || result.blocked || 'failed' } })
-    }
-    if (toolCalls.length) {
+
+    // Iterative agentic loop: execute every tool block, feed results back,
+    // let the model batch more calls or write its final answer (max 3 rounds).
+    for (let round = 0; round < 3; round++) {
+      let match
+      const calls = []
+      while ((match = toolCallRe.exec(finalReply))) {
+        const name = match[1]
+        let args = {}
+        try { args = JSON.parse(match[2]) } catch { /* empty args */ }
+        const result = repoTools.execute(name, args)
+        calls.push({ tool: name, args, ok: result.ok, approvalRequired: result.approvalRequired || null, result: result.ok ? compactToolResult(result) : { error: result.error || result.blocked || 'failed' } })
+      }
+      if (!calls.length) break
+      toolCalls.push(...calls)
       resultsText = JSON.stringify(toolCalls.map(t => ({ tool: t.tool, args: t.args, ok: t.ok, approvalRequired: t.approvalRequired, result: t.result })), null, 2).slice(0, 12000)
+      const sys = systemContext + '\n\nYou just called repository tools. Results:\n' + resultsText +
+        (round < 2
+          ? '\n\nYou may call MORE tools if you need evidence (batch multiple ```tool: blocks in one reply). Do not repeat calls you already made. When you have enough evidence, write your final answer as plain text only — no tool blocks. Structure: summary, cause, impact, recommended actions. Cite files/lines you verified.'
+          : '\n\nTool-call limit reached. Write your final answer NOW as plain text only — no tool blocks. Structure: summary, cause, impact, recommended actions. Cite files/lines you verified.')
       finalReply = await dashboardAI.aiProvider.generate([
-        { role: 'system', content: systemContext + '\n\nYou just called repository tools. Results:\n' + resultsText + '\n\nNow write your final answer as plain text ONLY — do not emit any ```tool: blocks. Structure it: summary, cause, impact, recommended actions. Cite the files/lines you verified.' },
+        { role: 'system', content: sys },
         { role: 'user', content: message },
       ], { temperature: 0.6 })
     }
