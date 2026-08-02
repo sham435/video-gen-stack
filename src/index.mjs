@@ -14,6 +14,8 @@ import { SceneTextManifest } from './pipeline/SceneTextManifest.mjs'
 import { TextConflictResolver } from './pipeline/TextConflictResolver.mjs'
 import { TextLayoutEngine } from './layout/TextLayoutEngine.mjs'
 import { TextLayoutPreflight } from './layout/TextLayoutPreflight.mjs'
+import { LayoutPolicy } from './layout/LayoutPolicy.mjs'
+import { LayoutSnapshotStore } from './layout/LayoutSnapshotStore.mjs'
 import { VisualIntentEngine } from './pipeline/VisualIntentEngine.mjs'
 import { SemanticVisualRankerV2 } from './pipeline/SemanticVisualRankerV2.mjs'
 import { ProductionMemory } from './pipeline/ProductionMemory.mjs'
@@ -272,15 +274,20 @@ export class NewsBroadcastEngine {
       sc.caption = captionLayer && captionLayer.visible !== false ? captionLayer.text : ''
       sc.captionHidden = captionLayer?.visible === false
       // Layout every text layer (priority order: emphasis > headline > caption)
+      // Retention signals (ViewerBehaviorModel) tune parameters; the layout
+      // engine still guarantees the safe zone and legibility floors.
+      const layoutPolicy = this.retentionSimulator?.model ? LayoutPolicy.policyFor(sc, this.retentionSimulator.model) : LayoutPolicy.defaults()
       for (const layer of [...resolved.text_layers].sort((a, b) => {
         const prio = { emphasis: 3, headline: 2, caption: 1, source: 0 }
         return (prio[b.type] ?? 0) - (prio[a.type] ?? 0)
       })) {
+        const rolePolicy = layoutPolicy[layer.type] || {}
         const layout = TextLayoutEngine.layout({
           text: layer.text,
           role: layer.type,
           fontFamily: layer.type === 'headline' || layer.type === 'emphasis' ? 'Anton' : 'Inter',
-          preferredFontSize: LAYER_FONT_SIZE[layer.type] || 58,
+          preferredFontSize: rolePolicy.preferredFontSize || LAYER_FONT_SIZE[layer.type] || 58,
+          maxLines: rolePolicy.maxLines,
         })
         layer.fontSize = layout.fontSize
         layer.scale = layout.scalePercent
@@ -290,6 +297,8 @@ export class NewsBroadcastEngine {
     }
     // Hard failure gate: abort before FFmpeg if any layout still overflows
     for (const sc of scenes) TextLayoutPreflight.validateScene(sc)
+    // Layout snapshots for regression testing (LAYOUT_SNAPSHOTS=1 to record)
+    if (process.env.LAYOUT_SNAPSHOTS === '1') LayoutSnapshotStore.capture(scenes)
 
     const timedScenes = this.scenePlanner.assignTimestamps(scenes)
     this.validateTemplate(timedScenes)

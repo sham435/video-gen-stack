@@ -1,0 +1,382 @@
+[
+  {
+    "sceneId": "1",
+    "sceneType": "hook",
+    "role": "emphasis",
+    "priority": 3,
+    "fontSize": 72,
+    "lineHeight": 90,
+    "lines": [
+      "AI"
+    ],
+    "width": 81.648,
+    "height": 90,
+    "x": 499,
+    "y": 723,
+    "scalePercent": 100,
+    "overflow": false,
+    "safeZone": "shorts"
+  },
+  {
+    "sceneId": "1",
+    "sceneType": "hook",
+    "role": "headline",
+    "priority": 2,
+    "fontSize": 80,
+    "lineHeight": 100,
+    "lines": [
+      "NOBODY EXPECTED",
+      "THIS MOVE FROM",
+      "SECRET."
+    ],
+    "width": 911.5200000000001,
+    "height": 300,
+    "x": 84,
+    "y": 426,
+    "scalePercent": 87,
+    "overflow": false,
+    "safeZone": "shorts"
+  },
+  {
+    "sceneId": "1",
+    "sceneType": "hook",
+    "role": "caption",
+    "priority": 1,
+    "fontSize": 58,
+    "lineHeight": 72.5,
+    "lines": [],
+    "width": 0,
+    "height": 0,
+    "x": 540,
+    "y": 1498,
+    "scalePercent": 100,
+    "overflow": false,
+    "safeZone": "shorts"
+  },
+  {
+    "sceneId": "2",
+    "sceneType": "fact",
+    "role": "emphasis",
+    "priority": 3,
+    "fontSize": 72,
+    "lineHeight": 90,
+    "lines": [
+      "AI"
+    ],
+    "width": 81.648,
+    "height": 90,
+    "x": 499,
+    "y": 723,
+    "scalePercent": 100,
+    "overflow": false,
+    "safeZone": "shorts"
+  },
+  {
+    "sceneId": "2",
+    "sceneType": "fact",
+    "role": "headline",
+    "priority": 2,
+    "fontSize": 52,
+    "lineHeight": 65,
+    "lines": [
+      "SECRET APPLE VISION PRO",
+      "LEAKED PRICE. THIS CHANGED",
+      "THE PLAN OVERNIGHT."
+    ],
+    "width": 915.408,
+    "height": 195,
+    "x": 82,
+    "y": 479,
+    "scalePercent": 57,
+    "overflow": false,
+    "safeZone": "shorts"
+  },
+  {
+    "sceneId": "2",
+    "sceneType": "fact",
+    "role": "caption",
+    "priority": 1,
+    "fontSize": 58,
+    "lineHeight": 72.5,
+    "lines": [],
+    "width": 0,
+    "height": 0,
+    "x": 540,
+    "y": 1498,
+    "scalePercent": 100,
+    "overflow": false,
+    "safeZone": "shorts"
+  },
+  {
+    "sceneId": "3",
+    "sceneType": "explanation",
+    "role": "emphasis",
+    "priority": 3,
+    "fontSize": 72,
+    "lineHeight": 90,
+    "lines": [
+      "AI"
+    ],
+    "width": 81.648,
+    "height": 90,
+    "x": 499,
+    "y": 723,
+    "scalePercent": 100,
+    "overflow": false,
+    "safeZone": "shorts"
+  },
+  {
+    "sceneId": "3",
+    "sceneType": "explanation",
+    "role": "headline",
+    "priority": 2,
+    "fontSize": 60,
+    "lineHeight": 75,
+    "lines": [
+      "APPLE'S NEW HEADSET IS",
+      "REAL AND IT IS CHEAPER",
+      "THAN YOU THINK"
+    ],
+    "width": 897.4800000000001,
+    "height": 225,
+    "x": 91,
+    "y": 464,
+    "scalePercent": 65,
+    "overflow": false,
+    "safeZone": "shorts"
+  },
+  {
+    "sceneId": "3",
+    "sceneType": "explanation",
+    "role": "caption",
+    "priority": 1,
+    "fontSize": 58,
+    "lineHeight": 72.5,
+    "lines": [],
+    "width": 0,
+    "height": 0,
+    "x": 540,
+    "y": 1498,
+    "scalePercent": 100,
+    "overflow": false,
+    "safeZone": "shorts"
+  },
+  {
+    "sceneId": "4",
+    "sceneType": "reaction",
+    "role": "emphasis",
+    "priority": 3,
+    "fontSize": 72,
+    "lineHeight": 90,
+    "lines": [
+      "AI"
+    ],
+    "width": 81.648,
+    "height": 90,
+    "x": 499,
+    "y": 723,
+    "scalePercent": 100,
+    "overflow": false,
+    "safeZone": "shorts"
+  },
+  {
+    "sceneId": "4",
+    "sceneType": "reaction",
+    "role": "headline",
+    "priority": 2,
+    "fontSize": 80,
+    "lineHeight": 100,
+    "lines": [
+      "MOST PEOPLE",
+      "STILL DO NOT",
+      "KNOW ABOUT THIS."
+    ],
+    "width": 898.5600000000002,
+    "height": 300,
+    "x": 91,
+    "y": 426,
+    "scalePercent": 87,
+    "overflow": false,
+    "safeZone": "shorts"
+  },
+  {
+    "sceneId": "4",
+    "sceneType": "reaction",
+    "role": "caption",
+    "priority": 1,
+    "fontSize": 58,
+    "lineHeight": 72.5,
+    "lines": [],
+    "width": 0,
+    "height": 0,
+    "x": 540,
+    "y": 1498,
+    "scalePercent": 100,
+    "overflow": false,
+    "safeZone": "shorts"
+  },
+  {
+    "sceneId": "5",
+    "sceneType": "reveal",
+    "role": "emphasis",
+    "priority": 3,
+    "fontSize": 72,
+    "lineHeight": 90,
+    "lines": [
+      "AI"
+    ],
+    "width": 81.648,
+    "height": 90,
+    "x": 499,
+    "y": 723,
+    "scalePercent": 100,
+    "overflow": false,
+    "safeZone": "shorts"
+  },
+  {
+    "sceneId": "5",
+    "sceneType": "reveal",
+    "role": "headline",
+    "priority": 2,
+    "fontSize": 72,
+    "lineHeight": 90,
+    "lines": [
+      "BUT HERE IS WHAT",
+      "HAPPENED AFTER",
+      "THE ANNOUNCEMENT."
+    ],
+    "width": 902.0160000000001,
+    "height": 270,
+    "x": 89,
+    "y": 441,
+    "scalePercent": 78,
+    "overflow": false,
+    "safeZone": "shorts"
+  },
+  {
+    "sceneId": "5",
+    "sceneType": "reveal",
+    "role": "caption",
+    "priority": 1,
+    "fontSize": 58,
+    "lineHeight": 72.5,
+    "lines": [],
+    "width": 0,
+    "height": 0,
+    "x": 540,
+    "y": 1498,
+    "scalePercent": 100,
+    "overflow": false,
+    "safeZone": "shorts"
+  },
+  {
+    "sceneId": "6",
+    "sceneType": "reaction",
+    "role": "emphasis",
+    "priority": 3,
+    "fontSize": 72,
+    "lineHeight": 90,
+    "lines": [
+      "AI"
+    ],
+    "width": 81.648,
+    "height": 90,
+    "x": 499,
+    "y": 723,
+    "scalePercent": 100,
+    "overflow": false,
+    "safeZone": "shorts"
+  },
+  {
+    "sceneId": "6",
+    "sceneType": "reaction",
+    "role": "headline",
+    "priority": 2,
+    "fontSize": 82,
+    "lineHeight": 102.5,
+    "lines": [
+      "THIS CHANGES THE",
+      "ENTIRE INDUSTRY",
+      "GOING FORWARD."
+    ],
+    "width": 916.5959999999999,
+    "height": 307.5,
+    "x": 82,
+    "y": 422,
+    "scalePercent": 89,
+    "overflow": false,
+    "safeZone": "shorts"
+  },
+  {
+    "sceneId": "6",
+    "sceneType": "reaction",
+    "role": "caption",
+    "priority": 1,
+    "fontSize": 58,
+    "lineHeight": 72.5,
+    "lines": [],
+    "width": 0,
+    "height": 0,
+    "x": 540,
+    "y": 1498,
+    "scalePercent": 100,
+    "overflow": false,
+    "safeZone": "shorts"
+  },
+  {
+    "sceneId": "7",
+    "sceneType": "close",
+    "role": "emphasis",
+    "priority": 3,
+    "fontSize": 72,
+    "lineHeight": 90,
+    "lines": [
+      "SUB"
+    ],
+    "width": 163.296,
+    "height": 90,
+    "x": 458,
+    "y": 723,
+    "scalePercent": 100,
+    "overflow": false,
+    "safeZone": "shorts"
+  },
+  {
+    "sceneId": "7",
+    "sceneType": "close",
+    "role": "headline",
+    "priority": 2,
+    "fontSize": 92,
+    "lineHeight": 115,
+    "lines": [
+      "SUB FOR THE",
+      "NEXT APPLE",
+      "LEAK!"
+    ],
+    "width": 715.392,
+    "height": 345,
+    "x": 182,
+    "y": 404,
+    "scalePercent": 100,
+    "overflow": false,
+    "safeZone": "shorts"
+  },
+  {
+    "sceneId": "7",
+    "sceneType": "close",
+    "role": "caption",
+    "priority": 1,
+    "fontSize": 58,
+    "lineHeight": 72.5,
+    "lines": [
+      "for the next APPLE leak!"
+    ],
+    "width": 713.4,
+    "height": 72.5,
+    "x": 183,
+    "y": 1461,
+    "scalePercent": 100,
+    "overflow": false,
+    "safeZone": "shorts"
+  }
+]
