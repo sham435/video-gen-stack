@@ -1,38 +1,11 @@
 import { Router } from 'express'
-import Database from 'better-sqlite3'
-import { randomUUID } from 'crypto'
-import { existsSync, mkdirSync } from 'fs'
+import { getDb as openDb, initSchema } from '../../../packages/database/news-engine.mjs'
 
 const router = Router()
 
 function getDb() {
-  const dir = './data'
-  if (!existsSync(dir)) mkdirSync(dir, { recursive: true })
-  const db = new Database('./data/news-engine.db')
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS cron_jobs (
-      id TEXT PRIMARY KEY,
-      name TEXT UNIQUE NOT NULL,
-      category TEXT NOT NULL DEFAULT 'technology',
-      schedule TEXT DEFAULT '*/30 * * * *',
-      enabled INTEGER DEFAULT 1,
-      last_run TEXT,
-      next_run TEXT,
-      last_status TEXT,
-      created_at TEXT DEFAULT (datetime('now')),
-      updated_at TEXT DEFAULT (datetime('now'))
-    )
-  `)
-
-  // Seed default jobs if empty
-  const count = db.prepare('SELECT COUNT(*) as c FROM cron_jobs').get().c
-  if (count === 0) {
-    const insert = db.prepare('INSERT INTO cron_jobs (id, name, category) VALUES (?, ?, ?)')
-    insert.run(randomUUID(), 'Tech News', 'technology')
-    insert.run(randomUUID(), 'AI News', 'technology')
-    insert.run(randomUUID(), 'Science', 'science')
-    insert.run(randomUUID(), 'Business', 'business')
-  }
+  const db = openDb()
+  initSchema(db)
   return db
 }
 

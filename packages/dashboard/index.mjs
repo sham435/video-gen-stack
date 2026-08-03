@@ -152,12 +152,12 @@ async function getPipelineDb() {
   if (_pipelineDbInit) return _pipelineDbInit
   try {
     const { default: Database } = await import('better-sqlite3')
-    const dbPath = process.env.NEWS_DB_PATH || './data/news-engine.db'
+    const dbPath = process.env.NEWS_DB_PATH || './data/newsroom.db'
     _pipelineDb = new Database(dbPath, { readonly: true })
     _pipelineDbInit = _pipelineDb
     return _pipelineDb
   } catch (e) {
-    console.log(`[pipeline/stages] news-engine.db unavailable: ${e.message}`)
+    console.log(`[pipeline/stages] newsroom.db unavailable: ${e.message}`)
     _pipelineDbInit = null
     return null
   }

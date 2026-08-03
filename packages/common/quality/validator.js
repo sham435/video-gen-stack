@@ -1,6 +1,6 @@
 import { AudioManager } from '../../media/audio/manager.js'
 import { TypographyManager } from '../../branding/templates/typography/manager.js'
-import { getDb } from '../database/schema.js'
+import { getDb } from '../../database/news-engine.mjs'
 
 export class QualityValidator {
   constructor() {

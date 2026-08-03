@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, copyFileSync, writeFileSync, readFileSync } from 'fs'
 import { join } from 'path'
-import { getDb } from '../database/schema.js'
+import { getDb } from '../../database/news-engine.mjs'
 import { randomUUID } from 'crypto'
 
 const SNAPSHOT_ROOT = process.env.SNAPSHOT_PATH || './snapshots'
@@ -14,7 +14,7 @@ export class RollbackManager {
   _init() {
     if (!existsSync(SNAPSHOT_ROOT)) mkdirSync(SNAPSHOT_ROOT, { recursive: true })
     this.db.exec(`
-      CREATE TABLE IF NOT EXISTS snapshots (
+      CREATE TABLE IF NOT EXISTS pipeline_snapshots (
         id TEXT PRIMARY KEY,
         article_id TEXT REFERENCES published_articles(id),
         content_id TEXT NOT NULL,
@@ -55,7 +55,7 @@ export class RollbackManager {
     writeFileSync(join(snapshotDir, 'font.json'), JSON.stringify(font || {}, null, 2))
 
     this.db.prepare(`
-      INSERT INTO snapshots (id, article_id, content_id, version, template_snapshot, audio_snapshot, font_snapshot, render_path, metadata, reason)
+      INSERT INTO pipeline_snapshots (id, article_id, content_id, version, template_snapshot, audio_snapshot, font_snapshot, render_path, metadata, reason)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(id, articleId, contentId, version,
       JSON.stringify(template), JSON.stringify(audio), JSON.stringify(font),
@@ -66,12 +66,12 @@ export class RollbackManager {
 
   getSnapshots(contentId, limit = 5) {
     return this.db.prepare(
-      'SELECT * FROM snapshots WHERE content_id = ? ORDER BY created_at DESC LIMIT ?'
+      'SELECT * FROM pipeline_snapshots WHERE content_id = ? ORDER BY created_at DESC LIMIT ?'
     ).all(contentId, limit)
   }
 
   async rollback(snapshotId) {
-    const snapshot = this.db.prepare('SELECT * FROM snapshots WHERE id = ?').get(snapshotId)
+    const snapshot = this.db.prepare('SELECT * FROM pipeline_snapshots WHERE id = ?').get(snapshotId)
     if (!snapshot) throw new Error('Snapshot not found')
 
     // Restore template

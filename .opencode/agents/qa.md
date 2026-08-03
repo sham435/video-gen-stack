@@ -25,7 +25,7 @@
 - `src/quality/` — Quality checking modules
 - `packages/common/quality/` — Cross-package quality tools
 - `packages/database/schema.mjs` — Primary DB schema
-- `packages/common/database/schema.js` — Pipeline DB schema
+- `packages/database/news-engine.mjs` — Unified legacy pipeline DB schema (getDb/initSchema on newsroom.db)
 
 ## Invocation
 

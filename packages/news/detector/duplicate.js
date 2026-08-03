@@ -1,4 +1,4 @@
-import { getDb, hashHeadline, normalizeHeadline } from '../../common/database/schema.js'
+import { getDb, hashHeadline, normalizeHeadline } from '../../database/news-engine.mjs'
 import { randomUUID } from 'crypto'
 
 export class DuplicateDetector {
@@ -78,7 +78,7 @@ export class DuplicateDetector {
 
     if (existing) {
       this.db.prepare(
-        'UPDATE published_articles SET status = ?, youtube_video_id = ?, quality_score = ?, updated_at = datetime("now") WHERE id = ?'
+        "UPDATE published_articles SET status = ?, youtube_video_id = ?, quality_score = ?, updated_at = datetime('now') WHERE id = ?"
       ).run('published', youtubeVideoId, qualityScore, existing.id)
       return existing.id
     }

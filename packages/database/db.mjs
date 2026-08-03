@@ -323,10 +323,6 @@ export function getAuditLog({ entityType = null, entityId = null, limit = 50 } =
 // PROJECT ASSETS
 // ===================================================================
 
-import { statSync } from 'fs'
-
-// ... rest of imports and code
-
 export function recordAsset(projectId, assetType, filePath) {
   const d = getDB()
   let fileSize = null

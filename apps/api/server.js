@@ -55,7 +55,7 @@ app.get('/api/health', (req, res) => {
   let dbStatus = 'healthy'
   let cronJobs = []
   try {
-    const db = require('better-sqlite3')('./data/news-engine.db')
+    const db = require('better-sqlite3')('./data/newsroom.db')
     db.prepare('SELECT 1').get()
     cronJobs = db.prepare('SELECT * FROM cron_jobs WHERE enabled = 1 ORDER BY name').all()
     db.close()

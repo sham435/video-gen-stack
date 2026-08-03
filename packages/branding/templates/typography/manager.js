@@ -1,4 +1,4 @@
-import { getDb } from '../../../common/database/schema.js'
+import { getDb } from '../../../database/news-engine.mjs'
 import { randomUUID } from 'crypto'
 
 

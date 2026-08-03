@@ -68,7 +68,7 @@ Article → StoryPlan → ScenePlan → VisualPlan →
 
 Two SQLite databases:
 - `data/newsroom.db` — 9 tables (users, articles, projects, templates, renders, publish jobs, assets, audit, snapshots)
-- `data/news-engine.db` — 6 tables (published articles, renders, assets, analytics, branding config, pipeline logs)
+- `data/newsroom.db` — 20 tables (V3: news articles, projects, templates, render/publish jobs; legacy unified: published articles, renders, assets, analytics, branding config, pipeline logs, cron jobs, snapshots, fonts, templates, audio)
 
 Plus runtime schemas for: audio_assets, audio_mix_presets, font_profiles, templates, snapshots, cron_jobs (~6 more tables)
 

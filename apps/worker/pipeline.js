@@ -1,4 +1,4 @@
-import { getDb, initSchema, generateContentId } from '../../packages/common/database/schema.js'
+import { getDb, initSchema, generateContentId } from '../../packages/database/news-engine.mjs'
 import { DuplicateDetector } from '../../packages/news/detector/duplicate.js'
 import { QualityChecker } from '../../packages/common/quality/checker.js'
 import { QualityValidator } from '../../packages/common/quality/validator.js'
