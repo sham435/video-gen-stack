@@ -11,9 +11,28 @@
 import { jobDb, claim, complete, fail, requeueStale, listJobs } from '../../packages/database/jobs.mjs'
 import { getEndpoint } from '../api/services/models.js'
 import { fetchTopHeadlines, searchNews, articlesToSummary } from '../api/services/news.js'
+import { childLogger } from '../../packages/logger.mjs'
+import { startMetricsServer, updateJobGauges, recordJobOutcome, consecutiveFailures } from '../../packages/metrics.mjs'
 
+const log = childLogger('jobs-worker')
 const POLL_MS = 2000
 const STALE_MS = 15 * 60 * 1000
+const CRITICAL_STREAK = 5
+
+let failureStreak = 0
+
+function noteFailure() {
+  failureStreak++
+  consecutiveFailures.set(failureStreak)
+  if (failureStreak >= CRITICAL_STREAK) {
+    log.fatal({ streak: failureStreak }, 'worker failing repeatedly')
+  }
+}
+
+function noteSuccess() {
+  failureStreak = 0
+  consecutiveFailures.set(0)
+}
 
 const PROVIDERS = {
   'local': () => import('../api/services/local.js'),
@@ -93,10 +112,14 @@ async function drainOnce(limit) {
     try {
       const { resultPath, result } = await runJob(job)
       complete(db, job.id, { resultPath, result, durationMs: Date.now() - t0 })
-      console.log(`[worker] done ${job.id} (${job.type}) in ${Date.now() - t0}ms -> ${resultPath || result?.video?.url || 'n/a'}`)
+      recordJobOutcome(job, Date.now() - t0)
+      noteSuccess()
+      log.info({ jobId: job.id, type: job.type, ms: Date.now() - t0, path: resultPath || result?.video?.url || 'n/a' }, 'job done')
     } catch (e) {
       fail(db, job.id, e.message)
-      console.error(`[worker] fail ${job.id} (${job.type}): ${e.message}`)
+      recordJobOutcome(job, Date.now() - t0, e.message)
+      noteFailure()
+      log.error({ jobId: job.id, type: job.type, error: e.message }, 'job failed')
     }
     if (limit && processed >= limit) break
   }
@@ -111,15 +134,19 @@ async function main() {
 
   const db = jobDb()
   requeueStale(db, STALE_MS)
+  updateJobGauges(db)
+
+  startMetricsServer(parseInt(process.env.WORKER_METRICS_PORT) || 9101, { log })
 
   if (once) {
     const n = await drainOnce(limit)
+    updateJobGauges(db)
     const remaining = listJobs(db, { status: 'queued' }).length
-    console.log(`[worker] drained ${n} job(s), ${remaining} queued remaining`)
+    log.info({ drained: n, remaining }, 'worker drained')
     process.exit(0)
   }
 
-  console.log(`[worker] polling every ${POLL_MS}ms (Ctrl-C to stop)`)
+  log.info({ pollMs: POLL_MS }, 'worker polling')
   for (;;) {
     try {
       requeueStale(db, STALE_MS)
@@ -127,15 +154,20 @@ async function main() {
       if (!job) { await sleep(POLL_MS); continue }
       const t0 = Date.now()
       try {
-        const { resultPath, result } = await runJob(job)
-        complete(db, job.id, { resultPath, result, durationMs: Date.now() - t0 })
-        console.log(`[worker] done ${job.id} (${job.type}) in ${Date.now() - t0}ms -> ${resultPath || result?.video?.url || 'n/a'}`)
-      } catch (e) {
-        fail(db, job.id, e.message)
-        console.error(`[worker] fail ${job.id} (${job.type}): ${e.message}`)
-      }
+      const { resultPath, result } = await runJob(job)
+      complete(db, job.id, { resultPath, result, durationMs: Date.now() - t0 })
+      recordJobOutcome(job, Date.now() - t0)
+      noteSuccess()
+      log.info({ jobId: job.id, type: job.type, ms: Date.now() - t0, path: resultPath || result?.video?.url || 'n/a' }, 'job done')
     } catch (e) {
-      console.error('[worker] loop error:', e.message)
+      fail(db, job.id, e.message)
+      recordJobOutcome(job, Date.now() - t0, e.message)
+      noteFailure()
+      log.error({ jobId: job.id, type: job.type, error: e.message }, 'job failed')
+    }
+    updateJobGauges(db)
+    } catch (e) {
+      log.error({ error: e.message }, 'worker loop error')
       await sleep(POLL_MS)
     }
   }

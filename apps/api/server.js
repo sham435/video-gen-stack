@@ -15,6 +15,8 @@ import directRoutes from './routes/direct.js'
 import cronManagerRoutes from './routes/cron-manager.js'
 import aiManagerRoutes from './routes/ai-manager.js'
 import { requireAuth } from '../../packages/auth/requireAuth.js'
+import { logger } from '../../packages/logger.mjs'
+import { startMetricsServer, httpRequestsTotal, httpRequestDurationMs, updateJobGauges } from '../../packages/metrics.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const app = express()
@@ -26,6 +28,31 @@ app.use(express.static(path.join(__dirname, '..', 'dashboard', 'public')))
 
 // Also serve root dashboard path
 app.use(express.static(path.join(__dirname, '..', '..', 'public')))
+
+// Request logging + metrics
+app.use((req, res, next) => {
+  const start = process.hrtime.bigint()
+  res.on('finish', () => {
+    const ms = Number(process.hrtime.bigint() - start) / 1e6
+    const route = req.route?.path || req.path
+    httpRequestsTotal.inc({ method: req.method, route, status: String(res.statusCode) })
+    httpRequestDurationMs.observe({ method: req.method, route }, ms)
+    logger.info({ method: req.method, path: req.path, status: res.statusCode, ms: Math.round(ms) }, 'http')
+  })
+  next()
+})
+
+// Rate limits: renders are expensive — cap by IP
+import rateLimit from 'express-rate-limit'
+const renderLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  limit: 10,
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+  message: { error: 'Rate limit exceeded: max 10 render requests per minute' },
+})
+app.use('/api/generate', renderLimiter)
+app.use('/api/news-video', renderLimiter)
 
 // Read-only catalog routes stay public; every mutating/admin surface is gated.
 app.use('/api', videoRoutes)
@@ -85,6 +112,7 @@ app.get('/api/health', (req, res) => {
 })
 
 app.listen(PORT, () => {
+  logger.info({ port: PORT }, 'api server listening')
   console.log(`🍿 Video Gen Stack running at http://localhost:${PORT}`)
   if (!process.env.GEMINI_API_KEY) {
     console.log('📋 Get a FREE Gemini API key (no CC): https://aistudio.google.com/apikey')
@@ -94,6 +122,16 @@ app.listen(PORT, () => {
     console.log('✅ Gemini free provider ready!')
   }
 })
+
+startMetricsServer(parseInt(process.env.METRICS_PORT) || 9100, { log: logger })
+
+// Keep job gauges fresh in the API process too (worker keeps its own).
+setInterval(() => {
+  try {
+    const { jobDb } = require('../../packages/database/jobs.mjs')
+    updateJobGauges(jobDb())
+  } catch {}
+}, 15000)
 
 // Debug: check deployed file
 app.get('/api/debug/pipeline', (req, res) => {
