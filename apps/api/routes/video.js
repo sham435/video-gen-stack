@@ -72,7 +72,7 @@ router.get('/models', (req, res) => {
 })
 
 router.post('/generate', async (req, res) => {
-  const { modelId, prompt, duration, aspectRatio, imageUrl, provider, segments } = req.body
+  const { modelId, prompt, duration, aspectRatio, imageUrl, provider, segments, segmentDuration } = req.body
   const activeProvider = provider || 'local'
 
   if (!modelId) return res.status(400).json({ error: 'modelId is required' })
@@ -95,6 +95,7 @@ router.post('/generate', async (req, res) => {
       aspectRatio: aspectRatio || '16:9',
       imageUrl,
       segments,
+      segmentDuration,
     })
     res.json(result)
   } catch (e) {
