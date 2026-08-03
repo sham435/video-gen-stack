@@ -2871,13 +2871,14 @@ loadRelease(); scanDebt(); loadHealth()
 app.get('/engineering', (req, res) => res.type('html').send(ENGINE_HTML))
 
 const { default: opencodeRoutes } = await import('./routes/opencode.mjs')
-app.use(opencodeRoutes)
-
 const { default: repoToolsRoutes } = await import('./routes/repo-tools.mjs')
+const { requireAuth } = await import('../../packages/auth/requireAuth.js')
+app.use(requireAuth)
+app.use(opencodeRoutes)
 app.use(repoToolsRoutes)
 
 const PORT = process.env.DASHBOARD_PORT || 3456
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, '127.0.0.1', () => {
   console.log(`\n╔════════════════════════════════════════════╗`)
   console.log(`║  NEWS-MONSTER AI Command Center          ║`)
   console.log(`║──────────────────────────────────────────║`)

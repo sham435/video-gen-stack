@@ -5,7 +5,8 @@ import { QualityValidator } from '../../packages/common/quality/validator.js'
 import { AudioManager } from '../../packages/media/audio/manager.js'
 import { TypographyManager } from '../../packages/branding/templates/typography/manager.js'
 import { RollbackManager } from '../../packages/common/rollback/manager.js'
-import { AssetManager } from '../../packages/storage/manager.js'
+import { initProjectStorage, writeJSON } from '../../packages/storage/manager.mjs'
+import { join } from 'path'
 import { copyFileSync } from 'fs'
 
 export class NewsPipeline {
@@ -64,10 +65,23 @@ export class NewsPipeline {
       return { status: 'quality_failed', score: quality.score, issues: quality.issues }
     }
 
-    // Phase 4: Setup asset storage
+    // Phase 4: Organize assets
     console.log('[PIPELINE] Phase 4: Organizing assets...')
-    const assets = new AssetManager(contentId)
-    assets.save('article', 'article.json', {
+    const storageDirs = initProjectStorage({ ...freshArticle, category })
+    const TYPE_DIR = {
+      article: 'base', script: 'base', storyboard: 'base', prompts: 'base',
+      scene_image: 'images', thumbnail: 'images', thumbnail_metadata: 'base',
+      audio_music: 'audio', audio_narration: 'audio',
+      subtitle: 'subtitle', render_final: 'render', youtube_metadata: 'publish',
+    }
+    const saveTo = (type, filename, data) => {
+      const dir = storageDirs[TYPE_DIR[type] || 'base']
+      writeJSON(dir, filename, data)
+      return join(dir, filename)
+    }
+    const pathFor = (type, filename) => join(storageDirs[TYPE_DIR[type] || 'base'], filename)
+
+    saveTo('article', 'article.json', {
       contentId,
       headline,
       url: freshArticle.url,
@@ -103,10 +117,10 @@ export class NewsPipeline {
         style: 'cinematic',
       })
       thumbnailPath = thumbResult.path
-      const destPath = assets.path('thumbnail', `${contentId}.png`)
+      const destPath = pathFor('thumbnail', `${contentId}.png`)
       const { copyFileSync } = await import('fs')
       copyFileSync(thumbnailPath, destPath)
-      assets.save('thumbnail_metadata', 'thumbnail.json', {
+      saveTo('thumbnail_metadata', 'thumbnail.json', {
         hash: thumbResult.hash,
         cached: thumbResult.cached,
         note: thumbResult.note || null,
@@ -157,11 +171,11 @@ export class NewsPipeline {
       )
 
       // Save final assets
-      const outputPath = assets.path('render_final', `${contentId}.mp4`)
+      const outputPath = pathFor('render_final', `${contentId}.mp4`)
       copyFileSync(videoPath, outputPath)
       unlinkSync(videoPath)
 
-      assets.save('youtube_metadata', 'youtube.json', {
+      saveTo('youtube_metadata', 'youtube.json', {
         videoId: youtubeResult?.id,
         url: `https://youtu.be/${youtubeResult?.id}`,
         title,
