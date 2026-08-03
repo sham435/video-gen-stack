@@ -3,7 +3,6 @@ import { writeFileSync, unlinkSync } from 'fs'
 import { tmpdir } from 'os'
 import { join } from 'path'
 import { detectTheme } from '../../../packages/branding/themes.js'
-
 const MUSIC = [
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
@@ -100,4 +99,68 @@ export async function renderNewsVideo(headlines, options = {}) {
   try { [bgPath, imgPath, overlayPath, renderedPath].forEach(p => { try { unlinkSync(p) } catch {} }) } catch {}
 
   return out
+}
+
+export async function renderPromptVideo(prompt, options = {}) {
+  const tmp = tmpdir()
+  const out = join(tmp, `p_${Date.now()}.mp4`)
+  const duration = Math.min(Math.max(options.duration || 5, 3), 10)
+  const segmentIndex = options.segmentIndex || 0
+  const totalSegments = options.totalSegments || 1
+  const title = (prompt || '')
+    .replace(/['":\\,]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 70)
+  const theme = THEMES[getTheme(title)] || THEMES.default
+  const bg0 = ff(theme.bg0)
+  const bg1 = ff(theme.bg1)
+  const accent = ff(theme.accent)
+
+  const bgPath = join(tmp, `pb_${Date.now()}_${segmentIndex}.mp4`)
+  const renderedPath = join(tmp, `pr_${Date.now()}_${segmentIndex}.mp4`)
+
+  try {
+    execSync(
+      `ffmpeg -y -f lavfi -i "color=c=${bg0}:s=1920x1080:d=${duration}:r=30" -f lavfi -i "color=c=${bg1}:s=1920x1080:d=${duration}:r=30,format=rgba,colorchannelmixer=aa=0.35" -filter_complex "[0][1]overlay=0:0" -c:v libx264 -preset ultrafast -crf 24 "${bgPath}"`,
+      { stdio: 'pipe', timeout: 30000 }
+    )
+
+    const headline = `drawtext=text='${title}':fontcolor=white:fontsize=48:x=100:y=280:box=1:boxcolor=0x000000@0.4:boxborderw=16`
+    const badge = `drawtext=text='AI-GENERATED':fontcolor=${accent}:fontsize=14:x=80:y=80:box=1:boxcolor=0x000000@0.4:boxborderw=8`
+    const footer = `drawtext=text='${totalSegments > 1 ? `SEGMENT ${segmentIndex}/${totalSegments}` : 'NEWS'}':fontcolor=gray:fontsize=16:x=80:y=h-60:box=1:boxcolor=0x000000@0.3:boxborderw=8`
+
+    execSync(
+      `ffmpeg -y -i "${bgPath}" -vf "${headline},${badge},${footer}" -c:v libx264 -preset ultrafast -crf 24 "${renderedPath}"`,
+      { stdio: 'pipe', timeout: 30000 }
+    )
+  } catch (e) {
+    const safeTitle = (title || 'AI Generated').slice(0, 40)
+    execSync(
+      `ffmpeg -y -f lavfi -i "color=c=0x0B1020:s=1920x1080:d=${duration}:r=30" -vf "drawtext=text='${safeTitle}':fontcolor=white:fontsize=48:x=(w-text_w)/2:y=(h-text_h)/2:box=1:boxcolor=black@0.4:boxborderw=16" -c:v libx264 -preset ultrafast -crf 28 -an "${out}"`,
+      { stdio: 'pipe', timeout: 60000 }
+    )
+    try { unlinkSync(renderedPath) } catch {}
+    return out
+  }
+
+  try {
+    execSync(`ffmpeg -y -i "${renderedPath}" -c:v copy -an "${out}"`, { stdio: 'pipe', timeout: 30000 })
+  } catch {
+    try { copyFileSync(renderedPath, out) } catch {}
+  }
+  try { [bgPath, renderedPath].forEach(p => { try { unlinkSync(p) } catch {} }) } catch {}
+
+  return out
+}
+
+export function mergeVideos(paths, outPath = join(tmpdir(), `merged_${Date.now()}.mp4`)) {
+  const listPath = join(tmpdir(), `concat_${Date.now()}.txt`)
+  writeFileSync(listPath, paths.map(p => `file '${p}'`).join('\n') + '\n')
+  execSync(
+    `ffmpeg -y -f concat -safe 0 -i "${listPath}" -c copy "${outPath}"`,
+    { stdio: 'pipe', timeout: 120000 }
+  )
+  unlinkSync(listPath)
+  return outPath
 }

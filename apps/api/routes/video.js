@@ -5,13 +5,17 @@ import { fetchTopHeadlines, searchNews, articlesToSummary } from '../services/ne
 const router = Router()
 
 // Only providers with a real implementation in this deployment are loadable.
-// fal.ai is backed by services/fal.js; everything else is catalog metadata only.
+// local is backed by services/local.js (free ffmpeg renders, default);
+// gemini by services/gemini.js (free-tier image frames); huggingface by
+// services/gradio.js (Pyramid Flow free Space, slow cold start);
+// fal.ai by services/fal.js (paid video, account must have balance).
 const PROVIDERS = {
-  'gemini': null,
+  'local': { import: () => import('../services/local.js') },
+  'gemini': { import: () => import('../services/gemini.js') },
   'colab': null,
   'replicate': null,
   'fal.ai': { import: () => import('../services/fal.js') },
-  'huggingface': null,
+  'huggingface': { import: () => import('../services/gradio.js') },
 }
 
 async function getProvider(name) {
@@ -68,14 +72,14 @@ router.get('/models', (req, res) => {
 })
 
 router.post('/generate', async (req, res) => {
-  const { modelId, prompt, duration, aspectRatio, imageUrl, provider } = req.body
-  const activeProvider = provider || 'gemini'
+  const { modelId, prompt, duration, aspectRatio, imageUrl, provider, segments } = req.body
+  const activeProvider = provider || 'local'
 
   if (!modelId) return res.status(400).json({ error: 'modelId is required' })
   if (!prompt) return res.status(400).json({ error: 'prompt is required' })
 
   const endpoint = getEndpoint(modelId, activeProvider)
-  if (!endpoint) {
+  if (!endpoint && activeProvider !== 'local') {
     return res.status(400).json({
       error: `Model "${modelId}" not available on "${activeProvider}". Try switching providers.`,
     })
@@ -90,6 +94,7 @@ router.post('/generate', async (req, res) => {
       duration: duration || 5,
       aspectRatio: aspectRatio || '16:9',
       imageUrl,
+      segments,
     })
     res.json(result)
   } catch (e) {
@@ -110,9 +115,21 @@ router.post('/news-video', async (req, res) => {
     }
     if (!articles.length) return res.status(404).json({ error: 'No news found' })
 
+    const activeProvider = provider || 'local'
+    if (activeProvider === 'local') {
+      const { renderNewsVideo } = await import('../services/renderer.js')
+      const path = await renderNewsVideo(articles.slice(0, 3))
+      return res.json({
+        articles,
+        video: { url: `file://${path}`, path, contentType: 'video/mp4', duration: 10 },
+        provider: 'local',
+        note: 'local ffmpeg render (free)',
+      })
+    }
+
     const newsText = articlesToSummary(articles)
     const model = VIDEO_MODELS.find(m => m.id === (req.body.modelId || 'gemini-2.0-flash'))
-    const endpoint = getEndpoint(model?.id || 'gemini-2.0-flash', provider || 'gemini')
+    const endpoint = getEndpoint(model?.id || 'gemini-2.0-flash', activeProvider)
 
     if (!endpoint) {
       return res.json({
@@ -122,7 +139,7 @@ router.post('/news-video', async (req, res) => {
       })
     }
 
-    const prov = await getProvider(provider || 'gemini')
+    const prov = await getProvider(activeProvider)
     const prompt = `Create a ${duration || 7}-second news highlights video from these headlines. Style: modern news broadcast, clean, professional.\n\n${newsText}`
     const result = await prov.generateVideo({ endpoint, modelId: model?.id, prompt, duration: duration || 7, aspectRatio: aspectRatio || '9:16' })
 

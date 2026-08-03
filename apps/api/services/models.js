@@ -123,6 +123,36 @@ export const VIDEO_MODELS = [
       'fal.ai': 'fal-ai/xai/grok-imagine-video/text-to-video',
     },
   },
+  {
+    id: 'procedural',
+    name: 'Procedural FFmpeg (local)',
+    provider: 'Local (free)',
+    capabilities: ['text-to-video', 'segment-merge'],
+    speed: 'instant',
+    quality: 'good',
+    duration: { min: 3, max: 10 },
+    supportsAspectRatios: ['16:9', '9:16'],
+    openSource: true,
+    freeTier: true,
+    endpoints: {
+      'local': 'render',
+    },
+  },
+  {
+    id: 'pyramid-flow',
+    name: 'Pyramid Flow (free Space)',
+    provider: 'HuggingFace (free tier)',
+    capabilities: ['text-to-video', 'image-to-video'],
+    speed: 'slow',
+    quality: 'good',
+    duration: { min: 3, max: 5 },
+    supportsAspectRatios: ['16:9'],
+    openSource: true,
+    freeTier: true,
+    endpoints: {
+      'huggingface': 'generate_video',
+    },
+  },
 ]
 
 export function getModel(id) {
