@@ -164,7 +164,7 @@ CREATE TABLE IF NOT EXISTS snapshots (
 
 export const SEED_DATA = `
 INSERT OR IGNORE INTO users (id, username, role, api_key) VALUES
-  (1, 'admin', 'admin', 'admin_default_key_change_me'),
+  (1, 'admin', 'admin', '${process.env.ADMIN_API_KEY || ''}'),
   (2, 'editor', 'editor', NULL),
   (3, 'reviewer', 'reviewer', NULL);
 

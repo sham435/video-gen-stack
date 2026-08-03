@@ -58,13 +58,15 @@ router.patch('/cron-jobs/:id', (req, res) => {
   const db = getDb()
   const { name, category, schedule, enabled } = req.body
   const updates = []
-  if (name !== undefined) updates.push(`name = '${name.replace(/'/g, "''")}'`)
-  if (category !== undefined) updates.push(`category = '${category.replace(/'/g, "''")}'`)
-  if (schedule !== undefined) updates.push(`schedule = '${schedule.replace(/'/g, "''")}'`)
-  if (enabled !== undefined) updates.push(`enabled = ${enabled ? 1 : 0}`)
+  const values = []
+  if (name !== undefined) { updates.push('name = ?'); values.push(name) }
+  if (category !== undefined) { updates.push('category = ?'); values.push(category) }
+  if (schedule !== undefined) { updates.push('schedule = ?'); values.push(schedule) }
+  if (enabled !== undefined) { updates.push('enabled = ?'); values.push(enabled ? 1 : 0) }
   updates.push("updated_at = datetime('now')")
+  values.push(req.params.id)
   if (updates.length > 1) {
-    db.prepare(`UPDATE cron_jobs SET ${updates.join(', ')} WHERE id = ?`).run(req.params.id)
+    db.prepare(`UPDATE cron_jobs SET ${updates.join(', ')} WHERE id = ?`).run(...values)
   }
   const job = db.prepare('SELECT * FROM cron_jobs WHERE id = ?').get(req.params.id)
   db.close()

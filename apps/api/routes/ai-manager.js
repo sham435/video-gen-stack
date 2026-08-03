@@ -8,7 +8,7 @@
  */
 
 import express from 'express'
-import { execSync } from 'child_process'
+import { spawn } from 'child_process'
 import fs from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
@@ -18,6 +18,29 @@ const ROOT = resolve(__dirname, '..', '..', '..')
 const OUTPUT = resolve(ROOT, 'output')
 
 const router = express.Router()
+
+function runHelper(mode) {
+  return new Promise((resolvePromise, rejectPromise) => {
+    const child = spawn('node', [resolve(ROOT, '.github/scripts/ai-helper.mjs'), mode], {
+      cwd: ROOT,
+      stdio: 'pipe',
+    })
+    let stdout = ''
+    let stderr = ''
+    child.stdout.on('data', d => { stdout += d })
+    child.stderr.on('data', d => { stderr += d })
+    const killTimer = setTimeout(() => child.kill('SIGKILL'), 30000)
+    child.on('close', code => {
+      clearTimeout(killTimer)
+      if (code === 0) return resolvePromise(stdout)
+      rejectPromise(new Error(`ai-helper exited ${code}: ${stderr.slice(-400)}`))
+    })
+    child.on('error', err => {
+      clearTimeout(killTimer)
+      rejectPromise(err)
+    })
+  })
+}
 
 /**
  * GET /api/ai/health
@@ -49,7 +72,7 @@ router.get('/health', (req, res) => {
  * Returns latest enhancement suggestions from AI scanner.
  * Runs the scanner on demand if no cached report exists.
  */
-router.get('/suggestions', (req, res) => {
+router.get('/suggestions', async (req, res) => {
   const cachePath = resolve(OUTPUT, 'ai_suggestions.json')
 
   // Re-run if cache is older than 1 hour
@@ -58,9 +81,7 @@ router.get('/suggestions', (req, res) => {
 
   if (needsRefresh) {
     try {
-      execSync(`node ${resolve(ROOT, '.github/scripts/ai-helper.mjs')} enhance`, {
-        cwd: ROOT, stdio: 'pipe', timeout: 15000,
-      })
+      await runHelper('enhance')
     } catch (e) {
       // Use cached if available
       if (!fs.existsSync(cachePath)) {
@@ -99,7 +120,7 @@ router.get('/debug', (req, res) => {
  * Trigger AI helper on demand.
  * Body: { mode: "debug" | "enhance" | "health" | "full" }
  */
-router.post('/run', (req, res) => {
+router.post('/run', async (req, res) => {
   const mode = req.body?.mode || 'health'
   const validModes = ['debug', 'enhance', 'health', 'full']
 
@@ -108,9 +129,7 @@ router.post('/run', (req, res) => {
   }
 
   try {
-    execSync(`node ${resolve(ROOT, '.github/scripts/ai-helper.mjs')} ${mode}`, {
-      cwd: ROOT, stdio: 'pipe', timeout: 30000,
-    })
+    await runHelper(mode)
 
     // Return the relevant report
     const reportPath = resolve(OUTPUT, `ai_${mode === 'full' ? 'debug' : mode}.json`)

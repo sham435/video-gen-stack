@@ -14,6 +14,7 @@ import premiumRoutes from './routes/premium.js'
 import directRoutes from './routes/direct.js'
 import cronManagerRoutes from './routes/cron-manager.js'
 import aiManagerRoutes from './routes/ai-manager.js'
+import { requireAuth } from '../../packages/auth/requireAuth.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const app = express()
@@ -26,8 +27,15 @@ app.use(express.static(path.join(__dirname, '..', 'dashboard', 'public')))
 // Also serve root dashboard path
 app.use(express.static(path.join(__dirname, '..', '..', 'public')))
 
+// Read-only catalog routes stay public; every mutating/admin surface is gated.
 app.use('/api', videoRoutes)
 app.use('/api/news', newsRoutes)
+app.use('/api/render-and-publish', requireAuth)
+app.use('/api/pipeline', requireAuth)
+app.use('/api/premium-render', requireAuth)
+app.use('/api/direct-publish', requireAuth)
+app.use('/api/cron-jobs', requireAuth)
+app.use('/api/ai', requireAuth)
 app.use('/api', publishRoutes)
 app.use('/api', renderRoutes)
 app.use('/api', pipelineRoutes)

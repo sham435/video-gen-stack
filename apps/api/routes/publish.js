@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { requireAuth } from '../../../packages/auth/requireAuth.js'
 
 const router = Router()
 
@@ -62,7 +63,7 @@ router.get('/auth/youtube/callback', async (req, res) => {
 })
 
 // ── Publish Video ──
-router.post('/publish', async (req, res) => {
+router.post('/publish', requireAuth, async (req, res) => {
   const { videoUrl, title, description, platforms } = req.body
   if (!videoUrl) return res.status(400).json({ error: 'videoUrl required' })
 
