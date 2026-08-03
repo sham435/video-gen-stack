@@ -1,6 +1,8 @@
 import { Router } from 'express'
+import { createHash } from 'crypto'
 import { VIDEO_MODELS, getEndpoint } from '../services/models.js'
 import { fetchTopHeadlines, searchNews, articlesToSummary } from '../services/news.js'
+import { jobDb, enqueue, getJob, listJobs } from '../../../packages/database/jobs.mjs'
 
 const router = Router()
 
@@ -16,12 +18,6 @@ const PROVIDERS = {
   'replicate': null,
   'fal.ai': { import: () => import('../services/fal.js') },
   'huggingface': { import: () => import('../services/gradio.js') },
-}
-
-async function getProvider(name) {
-  const p = PROVIDERS[name]
-  if (!p) throw new Error(`Provider not available in this deployment: ${name}`)
-  return await p.import()
 }
 
 function getConfiguredProviders() {
@@ -71,7 +67,7 @@ router.get('/models', (req, res) => {
   })
 })
 
-router.post('/generate', async (req, res) => {
+router.post('/generate', (req, res) => {
   const { modelId, prompt, duration, aspectRatio, imageUrl, provider, segments, segmentDuration } = req.body
   const activeProvider = provider || 'local'
 
@@ -85,69 +81,34 @@ router.post('/generate', async (req, res) => {
     })
   }
 
-  try {
-    const prov = await getProvider(activeProvider)
-    const result = await prov.generateVideo({
-      endpoint,
-      modelId,
-      prompt,
-      duration: duration || 5,
-      aspectRatio: aspectRatio || '16:9',
-      imageUrl,
-      segments,
-      segmentDuration,
-    })
-    res.json(result)
-  } catch (e) {
-    res.status(500).json({ error: e.message })
-  }
+  const payload = { modelId, prompt, duration: duration || 5, aspectRatio: aspectRatio || '16:9', imageUrl, provider: activeProvider, segments, segmentDuration, endpoint }
+  const contentHash = createHash('sha256').update(JSON.stringify(payload)).digest('hex')
+  const job = enqueue(jobDb(), { type: 'video_generate', payload, contentHash })
+  res.json({ jobId: job.id, status: job.status })
 })
 
 // News → Video pipeline
-router.post('/news-video', async (req, res) => {
+router.post('/news-video', (req, res) => {
   const { topic, category, duration, aspectRatio, provider } = req.body
 
-  try {
-    let articles
-    if (topic) {
-      articles = await searchNews(topic, { pageSize: 5 })
-    } else {
-      articles = await fetchTopHeadlines({ category, pageSize: 5 })
-    }
-    if (!articles.length) return res.status(404).json({ error: 'No news found' })
+  const payload = { topic, category: category || 'technology', duration: duration || 10, aspectRatio: aspectRatio || '16:9', provider: provider || 'local' }
+  const contentHash = createHash('sha256').update(JSON.stringify(payload)).digest('hex')
+  const job = enqueue(jobDb(), { type: 'news_video', payload, contentHash })
+  res.json({ jobId: job.id, status: job.status })
+})
 
-    const activeProvider = provider || 'local'
-    if (activeProvider === 'local') {
-      const { renderNewsVideo } = await import('../services/renderer.js')
-      const path = await renderNewsVideo(articles.slice(0, 3))
-      return res.json({
-        articles,
-        video: { url: `file://${path}`, path, contentType: 'video/mp4', duration: 10 },
-        provider: 'local',
-        note: 'local ffmpeg render (free)',
-      })
-    }
+// Job queue — poll for status / results
+router.get('/jobs/:id', (req, res) => {
+  const job = getJob(jobDb(), req.params.id)
+  if (!job) return res.status(404).json({ error: 'Job not found' })
+  const { payload, result, ...meta } = job
+  res.json(meta)
+})
 
-    const newsText = articlesToSummary(articles)
-    const model = VIDEO_MODELS.find(m => m.id === (req.body.modelId || 'gemini-2.0-flash'))
-    const endpoint = getEndpoint(model?.id || 'gemini-2.0-flash', activeProvider)
-
-    if (!endpoint) {
-      return res.json({
-        articles,
-        newsText,
-        note: 'No video provider configured. News fetched — use a video provider to generate.',
-      })
-    }
-
-    const prov = await getProvider(activeProvider)
-    const prompt = `Create a ${duration || 7}-second news highlights video from these headlines. Style: modern news broadcast, clean, professional.\n\n${newsText}`
-    const result = await prov.generateVideo({ endpoint, modelId: model?.id, prompt, duration: duration || 7, aspectRatio: aspectRatio || '9:16' })
-
-    res.json({ articles, prompt, video: result.videos?.[0], provider: result.provider })
-  } catch (e) {
-    res.status(500).json({ error: e.message })
-  }
+router.get('/jobs', (req, res) => {
+  const { status, type, limit } = req.query
+  const jobs = listJobs(jobDb(), { status, type, limit: Math.min(parseInt(limit) || 50, 200) })
+  res.json({ jobs: jobs.map(({ payload, ...meta }) => meta) })
 })
 
 function validateCronToken(req) {

@@ -14,6 +14,8 @@
     "storage": "node packages/storage/manager.mjs",
     "pipeline": "node scripts/composer.mjs",
     "dev:composer": "node --watch scripts/composer.mjs",
+    "worker": "node apps/worker/jobs-worker.mjs",
+    "worker:once": "node apps/worker/jobs-worker.mjs --once",
     "dev:hot": "node scripts/dev.mjs",
     "dev:hot-intro": "node scripts/dev.mjs --intro",
     "broadcast": "node src/index.mjs",

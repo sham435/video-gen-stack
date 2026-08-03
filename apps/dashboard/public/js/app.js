@@ -260,7 +260,26 @@ async function sendMessage() {
       return
     }
 
-    const first = data.videos?.[0] || {}
+    if (!data.jobId) {
+      addMessage('assistant', 'Error: no jobId returned')
+      state.generating = false
+      sendBtn.disabled = false
+      return
+    }
+
+    addMessage('assistant', `⏳ Queued (${data.jobId}) — rendering...`, { toolCall: `${providerName} · ${model ? model.name : state.selectedModel}`, loading: true })
+
+    const job = await pollJob(data.jobId)
+    state.messages.pop()
+
+    if (job.status === 'failed') {
+      addMessage('assistant', `❌ Render failed: ${job.error}`)
+      state.generating = false
+      sendBtn.disabled = false
+      return
+    }
+
+    const first = job.result?.videos?.[0] || {}
     const videoUrl = first.url || first.video_url || first
 
     addMessage('assistant', '✅ Video generated!', {
@@ -274,6 +293,19 @@ async function sendMessage() {
 
   state.generating = false
   sendBtn.disabled = false
+}
+
+async function pollJob(jobId, timeoutMs = 600000) {
+  const deadline = Date.now() + timeoutMs
+  while (Date.now() < deadline) {
+    const res = await fetch(`/api/jobs/${jobId}`)
+    if (res.ok) {
+      const job = await res.json()
+      if (job.status === 'done' || job.status === 'failed' || job.status === 'cancelled') return job
+    }
+    await new Promise(r => setTimeout(r, 2000))
+  }
+  return { status: 'failed', error: 'poll timeout' }
 }
 
 document.querySelectorAll('.nav-item').forEach(item => {

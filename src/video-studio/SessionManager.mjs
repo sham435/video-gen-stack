@@ -1,7 +1,8 @@
 import fs from 'fs'
 import path from 'path'
+import { getDb, initSchema } from '../../packages/database/news-engine.mjs'
 
-const SESSIONS_FILE = 'output/video-sessions.json'
+const LEGACY_SESSIONS_FILE = 'output/video-sessions.json'
 
 const VALID_TRANSITIONS = {
   GENERATED: ['READY_FOR_REVIEW'],
@@ -12,99 +13,158 @@ const VALID_TRANSITIONS = {
   LEARNING_COMPLETE: [],
 }
 
+let _db = null
+
+function sessionDb() {
+  if (!_db) {
+    _db = getDb()
+    initSchema(_db)
+    migrateLegacy(_db)
+  }
+  return _db
+}
+
+function migrateLegacy(db) {
+  const count = db.prepare('SELECT COUNT(*) AS n FROM sessions').get().n
+  if (count > 0) return
+  let legacy = []
+  try { legacy = JSON.parse(fs.readFileSync(LEGACY_SESSIONS_FILE, 'utf-8')) } catch {}
+  if (!Array.isArray(legacy) || legacy.length === 0) return
+  const insert = db.prepare(
+    'INSERT INTO sessions (id, title, category, status, article, source, scores, publish_url, editing_window, published_at, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+  )
+  const insertHistory = db.prepare('INSERT INTO session_history (session_id, action, timestamp) VALUES (?, ?, ?)')
+  const tx = db.transaction(() => {
+    for (const s of legacy) {
+      insert.run(
+        s.id,
+        s.title || 'Untitled',
+        s.category || 'technology',
+        s.status || 'GENERATED',
+        s.article ? JSON.stringify(s.article) : null,
+        s.source || null,
+        s.scores ? JSON.stringify(s.scores) : null,
+        s.publishUrl || null,
+        s.editingWindow ? JSON.stringify(s.editingWindow) : null,
+        s.publishedAt || null,
+        s.createdAt || new Date().toISOString()
+      )
+      for (const h of s.history || []) insertHistory.run(s.id, h.action, h.timestamp || new Date().toISOString())
+    }
+  })
+  tx()
+  console.log(`[SessionManager] migrated ${legacy.length} sessions from ${LEGACY_SESSIONS_FILE}`)
+}
+
+function rowToSession(row) {
+  if (!row) return null
+  const history = _db.prepare('SELECT action, timestamp FROM session_history WHERE session_id = ? ORDER BY id DESC').all(row.id)
+  return {
+    id: row.id,
+    title: row.title,
+    category: row.category,
+    status: row.status,
+    article: row.article ? JSON.parse(row.article) : undefined,
+    source: row.source,
+    scores: row.scores ? JSON.parse(row.scores) : null,
+    publishUrl: row.publish_url,
+    editingWindow: row.editing_window ? JSON.parse(row.editing_window) : null,
+    publishedAt: row.published_at,
+    createdAt: row.created_at,
+    history,
+  }
+}
+
 export class SessionManager {
-  constructor() {
-    this.sessions = this.load()
-  }
-
-  load() {
-    try { return JSON.parse(fs.readFileSync(SESSIONS_FILE, 'utf-8')) } catch { return [] }
-  }
-
-  save() {
-    fs.mkdirSync(path.dirname(SESSIONS_FILE), { recursive: true })
-    fs.writeFileSync(SESSIONS_FILE, JSON.stringify(this.sessions, null, 2))
+  constructor(db = null) {
+    if (db) _db = db
+    sessionDb()
   }
 
   create(title, category) {
-    const id = `nm_${Date.now().toString(36)}`
-    const session = {
-      id,
-      title: title || 'Untitled',
-      category: category || 'technology',
-      status: 'GENERATED',
-      createdAt: new Date().toISOString(),
-      editingWindow: null,
-      scores: null,
-      publishUrl: null,
-      history: [{ timestamp: new Date().toISOString(), action: 'GENERATED' }],
-    }
-    this.sessions.unshift(session)
-    this.save()
-    return session
+    const db = sessionDb()
+    const id = `nm_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 5)}`
+    const tx = db.transaction(() => {
+      db.prepare('INSERT INTO sessions (id, title, category) VALUES (?, ?, ?)').run(id, title || 'Untitled', category || 'technology')
+      db.prepare('INSERT INTO session_history (session_id, action) VALUES (?, ?)').run(id, 'GENERATED')
+    })
+    tx()
+    return rowToSession(db.prepare('SELECT * FROM sessions WHERE id = ?').get(id))
   }
 
   transition(id, newStatus) {
-    const session = this.sessions.find(s => s.id === id)
-    if (!session) throw new Error(`Session ${id} not found`)
-    const allowed = VALID_TRANSITIONS[session.status] || []
+    const db = sessionDb()
+    const row = db.prepare('SELECT * FROM sessions WHERE id = ?').get(id)
+    if (!row) throw new Error(`Session ${id} not found`)
+    const allowed = VALID_TRANSITIONS[row.status] || []
     if (!allowed.includes(newStatus)) {
-      throw new Error(`Cannot transition from ${session.status} to ${newStatus}`)
+      throw new Error(`Cannot transition from ${row.status} to ${newStatus}`)
     }
-    session.status = newStatus
-    session.history.unshift({ timestamp: new Date().toISOString(), action: newStatus })
-
-    if (newStatus === 'READY_FOR_REVIEW') {
-      session.editingWindow = {
-        startedAt: new Date().toISOString(),
-        expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
+    const tx = db.transaction(() => {
+      db.prepare('UPDATE sessions SET status = ?, updated_at = datetime(\'now\') WHERE id = ?').run(newStatus, id)
+      db.prepare('INSERT INTO session_history (session_id, action) VALUES (?, ?)').run(id, newStatus)
+      if (newStatus === 'READY_FOR_REVIEW') {
+        const window = JSON.stringify({
+          startedAt: new Date().toISOString(),
+          expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
+        })
+        db.prepare('UPDATE sessions SET editing_window = ? WHERE id = ?').run(window, id)
       }
-    }
-    if (newStatus === 'PUBLISHED') {
-      session.publishedAt = new Date().toISOString()
-    }
-    this.save()
-    return session
+      if (newStatus === 'PUBLISHED') {
+        db.prepare("UPDATE sessions SET published_at = datetime('now') WHERE id = ?").run(id)
+      }
+    })
+    tx()
+    return rowToSession(db.prepare('SELECT * FROM sessions WHERE id = ?').get(id))
   }
 
-  get(id) { return this.sessions.find(s => s.id === id) }
+  get(id) { return rowToSession(sessionDb().prepare('SELECT * FROM sessions WHERE id = ?').get(id)) }
 
   list(status) {
-    if (status) return this.sessions.filter(s => s.status === status)
-    return this.sessions
+    const db = sessionDb()
+    if (status) {
+      return db.prepare('SELECT * FROM sessions WHERE status = ? ORDER BY created_at DESC').all(status).map(rowToSession)
+    }
+    return db.prepare('SELECT * FROM sessions ORDER BY created_at DESC').all().map(rowToSession)
   }
 
   queue() {
+    const db = sessionDb()
+    const rows = db.prepare('SELECT status, COUNT(*) AS n FROM sessions GROUP BY status').all()
+    const counts = Object.fromEntries(rows.map(r => [r.status, r.n]))
     return {
-      generated: this.sessions.filter(s => s.status === 'GENERATED').length,
-      readyForReview: this.sessions.filter(s => s.status === 'READY_FOR_REVIEW').length,
-      editing: this.sessions.filter(s => s.status === 'EDITING_SESSION_ACTIVE').length,
-      approved: this.sessions.filter(s => s.status === 'APPROVED_FOR_PUBLISH').length,
-      published: this.sessions.filter(s => s.status === 'PUBLISHED').length,
+      generated: counts.GENERATED || 0,
+      readyForReview: counts.READY_FOR_REVIEW || 0,
+      editing: counts.EDITING_SESSION_ACTIVE || 0,
+      approved: counts.APPROVED_FOR_PUBLISH || 0,
+      published: counts.PUBLISHED || 0,
     }
   }
 
   updateScore(id, scores) {
-    const session = this.sessions.find(s => s.id === id)
-    if (session) { session.scores = scores; this.save() }
+    sessionDb().prepare('UPDATE sessions SET scores = ?, updated_at = datetime(\'now\') WHERE id = ?').run(JSON.stringify(scores), id)
   }
 
   setPublishUrl(id, url) {
-    const session = this.sessions.find(s => s.id === id)
-    if (session) { session.publishUrl = url; this.save() }
+    sessionDb().prepare('UPDATE sessions SET publish_url = ?, updated_at = datetime(\'now\') WHERE id = ?').run(url, id)
   }
 
   expireWindows() {
+    const db = sessionDb()
+    const rows = db.prepare("SELECT id FROM sessions WHERE status = 'EDITING_SESSION_ACTIVE' AND editing_window IS NOT NULL").all()
     const now = Date.now()
-    for (const s of this.sessions) {
-      if (s.status === 'EDITING_SESSION_ACTIVE' && s.editingWindow) {
-        const expires = new Date(s.editingWindow.expiresAt).getTime()
-        if (now > expires) {
-          s.status = 'APPROVED_FOR_PUBLISH'
-          s.history.unshift({ timestamp: new Date().toISOString(), action: 'AUTO_APPROVED_TIMEOUT' })
-        }
+    for (const r of rows) {
+      const row = db.prepare('SELECT editing_window FROM sessions WHERE id = ?').get(r.id)
+      let window = {}
+      try { window = JSON.parse(row.editing_window) } catch {}
+      const expires = new Date(window.expiresAt || 0).getTime()
+      if (now > expires) {
+        const tx = db.transaction(() => {
+          db.prepare("UPDATE sessions SET status = 'APPROVED_FOR_PUBLISH', updated_at = datetime('now') WHERE id = ?").run(r.id)
+          db.prepare("INSERT INTO session_history (session_id, action) VALUES (?, 'AUTO_APPROVED_TIMEOUT')").run(r.id)
+        })
+        tx()
       }
     }
-    this.save()
   }
 }

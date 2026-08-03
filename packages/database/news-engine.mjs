@@ -211,6 +211,53 @@ const MIGRATIONS = [
       INSERT OR IGNORE INTO audio_mix_presets (id, name) VALUES ('default', 'Default Professional Mix');
     `,
   },
+  {
+    version: 2,
+    sql: `
+      CREATE TABLE IF NOT EXISTS jobs (
+        id TEXT PRIMARY KEY,
+        type TEXT NOT NULL,
+        payload TEXT NOT NULL DEFAULT '{}',
+        result TEXT,
+        status TEXT NOT NULL DEFAULT 'queued' CHECK(status IN ('queued','running','done','failed','cancelled')),
+        attempts INTEGER NOT NULL DEFAULT 0,
+        max_attempts INTEGER NOT NULL DEFAULT 3,
+        next_retry_at TEXT,
+        error TEXT,
+        content_hash TEXT,
+        result_path TEXT,
+        duration_ms INTEGER,
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        started_at TEXT,
+        finished_at TEXT
+      );
+      CREATE INDEX IF NOT EXISTS idx_jobs_pick ON jobs(status, next_retry_at, created_at);
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_jobs_hash ON jobs(content_hash) WHERE content_hash IS NOT NULL;
+
+      CREATE TABLE IF NOT EXISTS sessions (
+        id TEXT PRIMARY KEY,
+        title TEXT,
+        category TEXT DEFAULT 'technology',
+        status TEXT NOT NULL DEFAULT 'GENERATED',
+        article TEXT,
+        source TEXT,
+        scores TEXT,
+        publish_url TEXT,
+        editing_window TEXT,
+        published_at TEXT,
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+      );
+
+      CREATE TABLE IF NOT EXISTS session_history (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        session_id TEXT NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,
+        action TEXT NOT NULL,
+        timestamp TEXT NOT NULL DEFAULT (datetime('now'))
+      );
+      CREATE INDEX IF NOT EXISTS idx_session_history ON session_history(session_id, id);
+    `,
+  },
 ]
 
 export function getDb() {
