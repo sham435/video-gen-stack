@@ -11,7 +11,6 @@ COPY package*.json ./
 RUN npm install --omit=optional
 COPY apps/ ./apps/
 COPY packages/ ./packages/
-COPY public/ ./public/
 RUN mkdir -p storage/renders storage/news storage/assets storage/thumbnails storage/subtitles storage/audio storage/cache
 
 EXPOSE 3001

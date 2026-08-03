@@ -4,17 +4,19 @@ import { fetchTopHeadlines, searchNews, articlesToSummary } from '../services/ne
 
 const router = Router()
 
+// Only providers with a real implementation in this deployment are loadable.
+// fal.ai is backed by services/fal.js; everything else is catalog metadata only.
 const PROVIDERS = {
-  'gemini': { import: () => import('../providers/gemini.js') },
-  'colab': { import: () => import('../providers/colab.js') },
-  'replicate': { import: () => import('../providers/replicate.js') },
-  'fal.ai': { import: () => import('../providers/fal.js') },
-  'huggingface': { import: () => import('../providers/huggingface.js') },
+  'gemini': null,
+  'colab': null,
+  'replicate': null,
+  'fal.ai': { import: () => import('../services/fal.js') },
+  'huggingface': null,
 }
 
 async function getProvider(name) {
   const p = PROVIDERS[name]
-  if (!p) throw new Error(`Unknown provider: ${name}`)
+  if (!p) throw new Error(`Provider not available in this deployment: ${name}`)
   return await p.import()
 }
 

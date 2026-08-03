@@ -22,9 +22,9 @@ export async function getModelInfo(modelId) {
 }
 
 export async function generateVideo({ modelId, prompt, duration = 5, aspectRatio = '16:9', imageUrl, numVideos = 1 }) {
-  const { getEndpointForModel } = await import('./models.js')
-  const endpoint = getEndpointForModel(modelId)
-  if (!endpoint) throw new Error(`No endpoint for model: ${modelId}`)
+  const { getEndpoint } = await import('./models.js')
+  const endpoint = getEndpoint(modelId, 'fal.ai')
+  if (!endpoint) throw new Error(`No fal.ai endpoint for model: ${modelId}`)
 
   const body = {
     prompt,

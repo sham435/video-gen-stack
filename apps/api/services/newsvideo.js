@@ -1,5 +1,5 @@
 import { fetchTopHeadlines, searchNews, articlesToSummary } from './news.js'
-import { generateVideo } from '../providers/colab.js'
+import { generateVideo } from './fal.js'
 
 export async function generateNewsVideo({ topic, category, duration = 7, aspectRatio = '9:16', style = 'modern news' }) {
   // 1. Fetch news

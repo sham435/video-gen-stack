@@ -1,4 +1,6 @@
 import 'dotenv/config'
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
 import express from 'express'
 import cors from 'cors'
 import path from 'path'

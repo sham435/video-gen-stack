@@ -2,7 +2,7 @@ import { execSync } from 'child_process'
 import { writeFileSync, unlinkSync } from 'fs'
 import { tmpdir } from 'os'
 import { join } from 'path'
-import { detectTheme } from '../../packages/branding/themes.js'
+import { detectTheme } from '../../../packages/branding/themes.js'
 
 const MUSIC = [
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
@@ -39,7 +39,8 @@ export async function renderNewsVideo(headlines, options = {}) {
 
   const article = headlines[0] || {}
   const title = (article.title || '').replace(/['":\\,]/g, '').slice(0, 80)
-  const source = (article.source || '').replace(/['":\\,]/g, '').slice(0, 40)
+  const rawSource = typeof article.source === 'string' ? article.source : article.source?.name || ''
+  const source = rawSource.replace(/['":\\,]/g, '').slice(0, 40)
   const theme = THEMES[getTheme(title)]
   const duration = 10
   const bg0 = ff(theme.bg0)
