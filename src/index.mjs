@@ -34,14 +34,12 @@ import { ProductionJob } from './video-studio/ProductionJob.mjs'
 import { ScriptContract } from './video-studio/ScriptContract.mjs'
 import { VoiceSync } from './audio/VoiceSync.mjs'
 import { SoundFX } from './audio/SoundFX.mjs'
-import { NewsAnalyzer } from './ai/NewsAnalyzer.mjs'
-import { BRollSelector } from './ai/BRollSelector.mjs'
 import { QualityChecker } from './quality/QualityChecker.mjs'
 import { AudioMixer } from './audio/AudioMixer.mjs'
 import { ScenePlanner } from './ai/ScenePlanner.mjs'
 import { StoryDirector } from './ai/StoryDirector.mjs'
 import { VisualReasoner } from './ai/VisualReasoner.mjs'
-import { EmotionalArcAnalyzer, MotionPlanner, TransitionPlanner } from './ai/StoryAnalyzer.mjs'
+import { MotionPlanner, TransitionPlanner } from './ai/StoryAnalyzer.mjs'
 
 const RENDER_FPS = 10
 const OUTPUT_FPS = 30
@@ -54,8 +52,6 @@ export class NewsBroadcastEngine {
     this.timeline = null
     this.voiceSync = new VoiceSync()
     this.soundFX = new SoundFX()
-    this.newsAnalyzer = new NewsAnalyzer()
-    this.bRollSelector = new BRollSelector()
     this.qualityChecker = new QualityChecker()
     this.audioMixer = new AudioMixer()
     this.scenePlanner = new ScenePlanner()
@@ -82,7 +78,6 @@ export class NewsBroadcastEngine {
     this.qualityGuardian = new QualityGuardian()
     this.brandPerformance = new BrandPerformanceMemory()
     this.thumbnailBrandOptimizer = new ThumbnailBrandOptimizer({ brandMemory: this.brandPerformance })
-    this.emotionalArcAnalyzer = new EmotionalArcAnalyzer()
     this.motionPlanner = new MotionPlanner()
     this.transitionPlanner = new TransitionPlanner()
   }
