@@ -74,8 +74,11 @@ export class BroadcastUILayer {
     ctx.fillStyle = 'rgba(255,255,255,0.4)'
     ctx.textAlign = 'right'
     ctx.textBaseline = 'bottom'
-    const now = new Date()
-    const timeStr = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })
+    // Deterministic clock — derived from scene progress, not wall-clock time,
+    // so identical inputs always render identical frames.
+    const elapsed = Math.max(0, Math.floor((scene.duration || 30) * progress))
+    const now = new Date(Date.UTC(1970, 0, 1, 0, Math.floor(elapsed / 60), elapsed % 60))
+    const timeStr = now.toLocaleTimeString('en-US', { hour12: false, timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })
     ctx.fillText(timeStr, W - DesignSystem.spacing.safeArea.right, H - DesignSystem.spacing.safeArea.bottom - 30)
     ctx.restore()
   }

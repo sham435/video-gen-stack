@@ -17,7 +17,6 @@ function readZenConfig() {
   try {
     const candidates = [
       path.join(os.homedir(), '.config/opencode/opencode.json'),
-      path.join(process.cwd(), '.opencode/opencode.json'),
     ]
     for (const f of candidates) {
       if (fs.existsSync(f)) {

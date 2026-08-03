@@ -1,3 +1,5 @@
+import { mulberry32 } from '../style/seeded-random.mjs'
+
 const W = 1080, H = 1920
 const COLORS = {
   red: '#E10600',
@@ -71,12 +73,13 @@ export function drawBreakingBanner(ctx, text, progress, fontSize = 64) {
 }
 
 export function drawGlitchOverlay(ctx, progress) {
-  if (Math.random() > 0.05) return
+  const rand = mulberry32(Math.round(progress * 1e6))
+  if (rand() > 0.05) return
 
-  const intensity = 0.3 + Math.random() * 0.4
-  const sliceH = 2 + Math.random() * 8
-  const sliceY = Math.random() * H
-  const offset = (Math.random() - 0.5) * 20
+  const intensity = 0.3 + rand() * 0.4
+  const sliceH = 2 + rand() * 8
+  const sliceY = rand() * H
+  const offset = (rand() - 0.5) * 20
 
   ctx.save()
   ctx.globalAlpha = intensity

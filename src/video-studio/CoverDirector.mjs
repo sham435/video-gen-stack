@@ -1,4 +1,5 @@
 import { BrandStyleResolver } from '../visual/BrandStyleResolver.mjs'
+import { seededFrom } from '../style/seeded-random.mjs'
 
 const CATEGORY_VISUALS = {
   technology: { hero: 'cinematic close-up of a futuristic smartphone, AI holographic interface, dramatic lighting, dark premium technology background, 8K', style: 'premium tech magazine', mood: 'innovative futuristic' },
@@ -112,7 +113,8 @@ Output ONLY JSON:
     const catVisual = CATEGORY_VISUALS[category] || CATEGORY_VISUALS.default
     const { brand, brandColor } = this.resolver.resolveBrand(article.title || '')
     const subject = brand || (article.title || 'TECH').split(' ').slice(0, 2).join(' ')
-    const idx = Math.floor(Math.random() * OVERLAY_PAIRS.length)
+    // Deterministic overlay pick — seeded by title so identical input → identical cover.
+    const idx = seededFrom(article.title || '') % OVERLAY_PAIRS.length
     const [top, bottom] = OVERLAY_PAIRS[idx]
     const words = (article.title || '').replace(/[^a-zA-Z0-9 ]/g, ' ').split(' ').filter(w => w.length > 3)
     const badge = brand ? brand.toUpperCase() : (words[0] || 'TECH').toUpperCase()

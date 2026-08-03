@@ -2,6 +2,7 @@ import { createCanvas, GlobalFonts } from '@napi-rs/canvas'
 import { execSync } from 'child_process'
 import fs from 'fs'
 import { UIStyleSelector } from '../ai/UIStyleSelector.mjs'
+import { mulberry32 } from '../style/seeded-random.mjs'
 
 try {
   if (fs.existsSync('assets/fonts/Anton-Regular.ttf'))
@@ -64,17 +65,18 @@ export class IntroEngine {
   }
 
   signal(ctx, p) {
+    const rand = mulberry32(Math.round(p * 1e6))
     ctx.fillStyle = '#000'; ctx.fillRect(0,0,W,H)
     const pp = Math.min(1, p*2)
     for (let i = 0; i < 30; i++) {
       const x = (i*37+pp*400)%W, y = (i*73)%H, len = 10+Math.sin(i+pp*20)*15
-      ctx.fillStyle = i%2===0 ? `rgba(255,0,0,${0.05+Math.random()*0.15})` : `rgba(255,255,255,${0.05+Math.random()*0.1})`
+      ctx.fillStyle = i%2===0 ? `rgba(255,0,0,${0.05+rand()*0.15})` : `rgba(255,255,255,${0.05+rand()*0.1})`
       ctx.fillRect(x, y, 2, len)
     }
     for (let i = 0; i < 80; i++) {
       const sx = (i*47.5+pp*600)%W, sy = (i*31.7+pp*300)%H
-      ctx.fillStyle = `rgba(255,255,255,${0.02+Math.random()*0.06})`
-      ctx.beginPath(); ctx.arc(sx, sy, 1+Math.random()*2, 0, Math.PI*2); ctx.fill()
+      ctx.fillStyle = `rgba(255,255,255,${0.02+rand()*0.06})`
+      ctx.beginPath(); ctx.arc(sx, sy, 1+rand()*2, 0, Math.PI*2); ctx.fill()
     }
   }
 
