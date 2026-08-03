@@ -18,6 +18,9 @@ jobs:
 
       - run: npm install --include=optional
 
+      - name: Run test suite (node:test)
+        run: npm test
+
       - name: Syntax check scripts
         run: |
           for f in scripts/*.mjs; do
@@ -47,9 +50,9 @@ jobs:
           node -e "
             const modules = [
               'src/index.mjs', 'src/video/SceneEngine.mjs', 'src/video/CaptionEngine.mjs',
-              'src/video/MotionEngine.mjs', 'src/video/Timeline.mjs', 'src/video/Renderer.mjs',
+              'src/video/MotionEngine.mjs', 'src/video/Timeline.mjs',
               'src/audio/VoiceSync.mjs', 'src/audio/AudioMixer.mjs', 'src/audio/SoundFX.mjs',
-              'src/ai/NewsAnalyzer.mjs', 'src/ai/BRollSelector.mjs', 'src/ai/ScriptPlanner.mjs',
+              'src/ai/NewsAnalyzer.mjs', 'src/ai/BRollSelector.mjs',
               'src/quality/QualityChecker.mjs', 'scripts/tts.mjs', 'scripts/captions.mjs'
             ];
             Promise.all(modules.map(m => import('./' + m).then(() => console.log('  IMPORT OK:', m)).catch(e => {

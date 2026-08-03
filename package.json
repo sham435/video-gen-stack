@@ -27,7 +27,8 @@
     "ai:health": "node .github/scripts/ai-helper.mjs health",
     "ai:enhance": "node .github/scripts/ai-helper.mjs enhance",
     "ai:debug": "node .github/scripts/ai-helper.mjs debug",
-    "ai:full": "node .github/scripts/ai-helper.mjs full"
+    "ai:full": "node .github/scripts/ai-helper.mjs full",
+    "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
     "@napi-rs/canvas": "^1.0.2",
@@ -40,5 +41,8 @@
   },
   "optionalDependencies": {
     "@napi-rs/canvas-linux-x64-gnu": "^1.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.2"
   }
 }
