@@ -1,6 +1,6 @@
 import { getDb } from '../../database/news-engine.mjs'
 import { randomUUID } from 'crypto'
-import { execSync } from 'child_process'
+import { execFileSync } from 'child_process'
 
 const LUFS_TARGET = -14
 
@@ -73,8 +73,9 @@ export class AudioManager {
 
   checkQuality(audioPath) {
     try {
-      const output = execSync(
-        `ffprobe -v quiet -print_format json -show_streams "${audioPath}"`,
+      const output = execFileSync(
+        'ffprobe',
+        ['-v', 'quiet', '-print_format', 'json', '-show_streams', audioPath],
         { stdio: 'pipe', timeout: 10000 }
       ).toString()
       const data = JSON.parse(output)

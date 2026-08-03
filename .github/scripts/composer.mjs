@@ -1,5 +1,5 @@
-import { execSync } from 'child_process'
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
+import { execFileSync } from 'child_process'
+import { existsSync, mkdirSync, readFileSync, writeFileSync, unlinkSync } from 'fs'
 import { tmpdir } from 'os'
 import { join } from 'path'
 
@@ -23,6 +23,12 @@ export function detectTheme(title = '') {
   return 'default'
 }
 
+async function fetchImage(imageUrl, imgPath) {
+  const response = await fetch(imageUrl, { signal: AbortSignal.timeout(15000), redirect: 'follow' })
+  if (!response.ok) throw new Error(`image fetch ${response.status}`)
+  writeFileSync(imgPath, Buffer.from(await response.arrayBuffer()))
+}
+
 // ─── RENDER: Create scene with image + text ──────────
 export async function renderVideo(headline, source, imageUrl, category = 'technology') {
   const tmp = tmpdir()
@@ -39,10 +45,13 @@ export async function renderVideo(headline, source, imageUrl, category = 'techno
   const src = source.replace(/['":\\,]/g, '').slice(0, 40)
 
   // STEP 1: Gradient background
-  execSync(
-    `ffmpeg -y -f lavfi -i "color=c=${theme.bg0}:s=1920x1080:d=${duration}:r=30" ` +
-    `-f lavfi -i "color=c=${theme.bg1}:s=1920x1080:d=${duration}:r=30,format=rgba,colorchannelmixer=aa=0.4" ` +
-    `-filter_complex "[0][1]overlay=0:0" -c:v libx264 -preset ultrafast -crf 24 "${bgPath}"`,
+  execFileSync(
+    'ffmpeg',
+    [
+      '-y', '-f', 'lavfi', '-i', `color=c=${theme.bg0}:s=1920x1080:d=${duration}:r=30`,
+      '-f', 'lavfi', '-i', `color=c=${theme.bg1}:s=1920x1080:d=${duration}:r=30,format=rgba,colorchannelmixer=aa=0.4`,
+      '-filter_complex', '[0][1]overlay=0:0', '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '24', bgPath,
+    ],
     { stdio: 'pipe', timeout: 30000 }
   )
 
@@ -51,12 +60,12 @@ export async function renderVideo(headline, source, imageUrl, category = 'techno
   if (imageUrl) {
     try {
       const imgPath = join(tmp, `img_${id}.jpg`)
-      execSync(`curl -sL "${imageUrl}" -o "${imgPath}" --max-time 10`, { stdio: 'pipe', timeout: 15000 })
+      await fetchImage(imageUrl, imgPath)
 
       // Blurred background layer
-      execSync(
-        `ffmpeg -y -i "${imgPath}" -vf "scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,gblur=sigma=20,colorchannelmixer=aa=0.3" ` +
-        `-c:v libx264 -preset ultrafast -crf 28 -t ${duration} -r 30 "${overlayPath}"`,
+      execFileSync(
+        'ffmpeg',
+        ['-y', '-i', imgPath, '-vf', 'scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,gblur=sigma=20,colorchannelmixer=aa=0.3', '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '28', '-t', String(duration), '-r', '30', overlayPath],
         { stdio: 'pipe', timeout: 30000 }
       )
       hasImage = true
@@ -71,21 +80,19 @@ export async function renderVideo(headline, source, imageUrl, category = 'techno
   const badge = `,drawtext=text='${detectTheme(headline).toUpperCase()}':fontcolor=${accent}:fontsize=14:x=80:y=80:box=1:boxcolor=black@0.4:boxborderw=8`
   const bottomBar = `,drawtext=text='${category.toUpperCase()}  |  1/1':fontcolor=gray:fontsize=16:x=80:y=h-60:box=1:boxcolor=black@0.3:boxborderw=8`
 
-  const input = hasImage ? `-i "${overlayPath}"` : `-i "${bgPath}"`
-  const vf = hasImage
-    ? `[0:v]${accentLine},${headlineTxt}${sourceTxt}${badge}${bottomBar}[out]`
-    : `${accentLine},${headlineTxt}${sourceTxt}${badge}${bottomBar}`
+  const vf = `${accentLine},${headlineTxt}${sourceTxt}${badge}${bottomBar}`
 
   // Overlay text on image bg or use gradient bg
   if (hasImage) {
-    execSync(
-      `ffmpeg -y -i "${overlayPath}" -filter_complex "[0:v]${accentLine},${headlineTxt}${sourceTxt}${badge}${bottomBar}" ` +
-      `-c:v libx264 -preset ultrafast -crf 24 "${textPath}"`,
+    execFileSync(
+      'ffmpeg',
+      ['-y', '-i', overlayPath, '-vf', vf, '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '24', textPath],
       { stdio: 'pipe', timeout: 30000 }
     )
   } else {
-    execSync(
-      `ffmpeg -y -i "${bgPath}" -vf "${vf}" -c:v libx264 -preset ultrafast -crf 24 "${textPath}"`,
+    execFileSync(
+      'ffmpeg',
+      ['-y', '-i', bgPath, '-vf', vf, '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '24', textPath],
       { stdio: 'pipe', timeout: 30000 }
     )
   }
@@ -99,23 +106,23 @@ export async function renderVideo(headline, source, imageUrl, category = 'techno
   const musicUrl = musicFiles[Math.floor(Math.random() * musicFiles.length)]
 
   try {
-    execSync(
-      `ffmpeg -y -i "${textPath}" -i "${musicUrl}" -map 0:v -map 1:a ` +
-      `-filter_complex "[1:a]volume=0.18,afade=t=in:st=0:d=1.5[mu]" ` +
-      `-map "[mu]" -c:v copy -c:a aac -b:a 192k -ac 2 -shortest "${outPath}"`,
+    execFileSync(
+      'ffmpeg',
+      ['-y', '-i', textPath, '-i', musicUrl, '-map', '0:v', '-map', '1:a', '-filter_complex', '[1:a]volume=0.18,afade=t=in:st=0:d=1.5[mu]', '-map', '[mu]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-ac', '2', '-shortest', outPath],
       { stdio: 'pipe', timeout: 60000 }
     )
   } catch {
     // Fallback: video only
-    execSync(
-      `ffmpeg -y -i "${textPath}" -c:v copy -an "${outPath}"`,
+    execFileSync(
+      'ffmpeg',
+      ['-y', '-i', textPath, '-c:v', 'copy', '-an', outPath],
       { stdio: 'pipe', timeout: 30000 }
     )
   }
 
   // Cleanup
   try {
-    ;[bgPath, textPath, overlayPath, musicPath].forEach(p => { try { require('fs').unlinkSync(p) } catch {} })
+    ;[bgPath, textPath, overlayPath, musicPath].forEach(p => { try { unlinkSync(p) } catch {} })
   } catch {}
 
   return outPath

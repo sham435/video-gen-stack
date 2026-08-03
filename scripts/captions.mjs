@@ -30,9 +30,10 @@ export function generateSRT(script, duration) {
 }
 
 export async function burnSubtitles(videoPath, subtitlePath, outputPath) {
-  const { execSync } = await import('child_process')
-  execSync(
-    `ffmpeg -y -i "${videoPath}" -vf "subtitles=${subtitlePath}:force_style='FontName=Inter,FontSize=28,PrimaryColour=&H00FFFFFF,BackColour=&H80000000,Outline=0,Shadow=2,Alignment=2,MarginV=100'" -c:a copy "${outputPath}"`,
+  const { execFileSync } = await import('child_process')
+  execFileSync(
+    'ffmpeg',
+    ['-y', '-i', videoPath, '-vf', `subtitles=${subtitlePath}:force_style='FontName=Inter,FontSize=28,PrimaryColour=&H00FFFFFF,BackColour=&H80000000,Outline=0,Shadow=2,Alignment=2,MarginV=100'`, '-c:a', 'copy', outputPath],
     { stdio: 'pipe', timeout: 120000 }
   )
   return outputPath

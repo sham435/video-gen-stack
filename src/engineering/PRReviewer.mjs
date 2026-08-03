@@ -1,4 +1,4 @@
-import { execSync } from 'child_process'
+import { execFileSync } from 'child_process'
 import fs from 'fs'
 
 export class PRReviewer {
@@ -22,21 +22,34 @@ export class PRReviewer {
   }
 
   getDiff() {
-    try { return execSync('git diff HEAD~1 -- . 2>/dev/null || git diff --cached', { cwd: process.cwd(), timeout: 5000 }).toString() } catch { return '' }
+    const fallback = ['diff', '--cached']
+    try {
+      const base = execFileSync('git', ['diff', 'HEAD~1', '--', '.'], { cwd: process.cwd(), timeout: 5000 }).toString()
+      return base || execFileSync('git', fallback, { cwd: process.cwd(), timeout: 5000 }).toString()
+    } catch {
+      try { return execFileSync('git', fallback, { cwd: process.cwd(), timeout: 5000 }).toString() } catch { return '' }
+    }
   }
 
   getChangedFiles() {
     try {
-      const out = execSync('git diff --name-only HEAD~1 2>/dev/null || git diff --cached --name-only', { cwd: process.cwd(), timeout: 5000 }).toString().trim()
+      const out = execFileSync('git', ['diff', '--name-only', 'HEAD~1'], { cwd: process.cwd(), timeout: 5000 }).toString().trim()
       return out ? out.split('\n').filter(Boolean) : []
-    } catch { return [] }
+    } catch {
+      try {
+        const out = execFileSync('git', ['diff', '--cached', '--name-only'], { cwd: process.cwd(), timeout: 5000 }).toString().trim()
+        return out ? out.split('\n').filter(Boolean) : []
+      } catch { return [] }
+    }
   }
 
   getStats(files) {
     let additions = 0, deletions = 0
     for (const f of files) {
       try {
-        const out = execSync(`git diff HEAD~1 -- "${f}" 2>/dev/null || git diff --cached -- "${f}"`, { cwd: process.cwd(), timeout: 3000 }).toString()
+        let out = ''
+        try { out = execFileSync('git', ['diff', 'HEAD~1', '--', f], { cwd: process.cwd(), timeout: 3000 }).toString() }
+        catch { out = execFileSync('git', ['diff', '--cached', '--', f], { cwd: process.cwd(), timeout: 3000 }).toString() }
         for (const line of out.split('\n')) {
           if (line.startsWith('+') && !line.startsWith('+++')) additions++
           if (line.startsWith('-') && !line.startsWith('---')) deletions++

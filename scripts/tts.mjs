@@ -1,16 +1,16 @@
 
 import fs from 'fs'
-import { execSync } from 'child_process'
+import { execFileSync } from 'child_process'
 
 let edgeTtsChecked = false
 
 function ensureEdgeTts() {
   if (edgeTtsChecked) return
   try {
-    execSync('edge-tts --list-voices 2>/dev/null', { stdio: 'pipe', timeout: 5000 })
+    execFileSync('edge-tts', ['--list-voices'], { stdio: 'pipe', timeout: 5000 })
   } catch {
     console.log('Installing edge-tts...')
-    execSync('pip install edge-tts -q', { stdio: 'pipe', timeout: 30000 })
+    execFileSync('pip', ['install', 'edge-tts', '-q'], { stdio: 'pipe', timeout: 30000 })
   }
   edgeTtsChecked = true
 }
@@ -42,14 +42,15 @@ export async function generateTTS(text, outPath='output/voice.mp3'){
   }
 
   ensureEdgeTts()
-  const escaped = text.replace(/"/g, '\"').replace(/'/g, "'\\''").slice(0, 800)
   try {
-    execSync(`edge-tts --voice en-US-AriaNeural --text "${escaped}" --write-media ${outPath}`, { stdio: 'inherit', timeout: 30000 })
+    execFileSync('edge-tts', ['--voice', 'en-US-AriaNeural', '--text', text.slice(0, 800), '--write-media', outPath], { stdio: 'inherit', timeout: 30000 })
     console.log('TTS (edge-tts):', outPath)
     return outPath
   } catch {
     console.log('edge-tts failed, using espeak fallback')
-    execSync(`espeak "${text.slice(0, 500).replace(/"/g, '\\"')}" --stdout > ${outPath}`, { stdio: 'inherit' })
+    const fd = fs.openSync(outPath, 'w')
+    execFileSync('espeak', [text.slice(0, 500), '--stdout'], { stdio: ['ignore', fd, 'inherit'] })
+    fs.closeSync(fd)
     return outPath
   }
 }

@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { execSync } from 'child_process'
+import { execFileSync } from 'child_process'
 
 export class QualityChecker {
   constructor(config) {
@@ -39,8 +39,9 @@ export class QualityChecker {
     const checks = {}
 
     try {
-      const info = execSync(
-        `ffprobe -v error -select_streams v:0 -show_entries stream=width,height,codec_name,r_frame_rate -of default=noprint_wrappers=1 "${videoPath}"`
+      const info = execFileSync(
+        'ffprobe',
+        ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height,codec_name,r_frame_rate', '-of', 'default=noprint_wrappers=1', videoPath]
       ).toString().trim()
 
       checks.resolution = this.parseResolution(info)

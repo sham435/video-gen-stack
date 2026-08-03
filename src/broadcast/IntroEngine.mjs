@@ -1,5 +1,5 @@
 import { createCanvas, GlobalFonts } from '@napi-rs/canvas'
-import { execSync } from 'child_process'
+import { execFileSync } from 'child_process'
 import fs from 'fs'
 import { UIStyleSelector } from '../ai/UIStyleSelector.mjs'
 import { mulberry32 } from '../style/seeded-random.mjs'
@@ -36,7 +36,11 @@ export class IntroEngine {
     const video = `${outDir}/intro_12s.mp4`
     const audio = `${outDir}/intro_audio.mp3`
     this.genAudio(audio, duration)
-    execSync(`ffmpeg -y -framerate ${FPS} -i "${framesDir}/f%04d.png" -i "${audio}" -c:v libx264 -crf 20 -c:a aac -b:a 192k -shortest -t ${duration} "${video}"`, { stdio: 'inherit' })
+    execFileSync(
+      'ffmpeg',
+      ['-y', '-framerate', String(FPS), '-i', `${framesDir}/f%04d.png`, '-i', audio, '-c:v', 'libx264', '-crf', '20', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-t', String(duration), video],
+      { stdio: 'inherit' }
+    )
     return { video, duration, fps: FPS, scenes: 4, category }
   }
 
@@ -184,16 +188,22 @@ export class IntroEngine {
 
   genAudio(outPath, duration) {
     try {
-      execSync(`ffmpeg -y \
-        -f lavfi -t 0.4 -i "sine=f=80:r=48000,afade=t=out:st=0.3:d=0.1,volume=1.0" \
-        -f lavfi -t 0.6 -i "sine=f=120:r=48000,afade=t=out:st=0.5:d=0.1,volume=0.6" \
-        -f lavfi -t 0.5 -i "sine=f=55:r=48000,afade=t=out:st=0.4:d=0.1,volume=0.9" \
-        -f lavfi -t ${duration} -i "anoisesrc=d=${duration}:c=pink:a=0.06,afade=t=in:st=0:d=0.5,afade=t=out:st=${duration-1}:d=1,volume=0.3" \
-        -f lavfi -t ${duration} -i "sine=f=60:r=48000,afade=t=in:st=0:d=0.5,afade=t=out:st=${duration-0.5}:d=0.5,volume=0.12" \
-        -f lavfi -t 2 -i "sine=f=880:r=48000,afade=t=in:st=0:d=0.02,afade=t=out:st=1.8:d=0.2,volume=0.15" \
-        -f lavfi -t ${duration} -i "sine=f=220:r=48000,afade=t=in:st=0:d=0.3,afade=t=out:st=${duration-0.5}:d=0.5,volume=0.06" \
-        -filter_complex "[0:a]adelay=0|0[hit1];[1:a]adelay=2000|2000[whoosh];[2:a]adelay=4500|4500[alert];[3:a][4:a][5:a][6:a]amix=inputs=4:duration=longest:normalize=0,volume=0.35[bed];[hit1][whoosh][alert][bed]amix=inputs=4:duration=longest:normalize=0,volume=0.6[a]" \
-        -map "[a]" -c:a mp3 -b:a 192k "${outPath}"`, { stdio: 'pipe', timeout: 15000 })
+      execFileSync(
+        'ffmpeg',
+        [
+          '-y',
+          '-f', 'lavfi', '-t', '0.4', '-i', 'sine=f=80:r=48000,afade=t=out:st=0.3:d=0.1,volume=1.0',
+          '-f', 'lavfi', '-t', '0.6', '-i', 'sine=f=120:r=48000,afade=t=out:st=0.5:d=0.1,volume=0.6',
+          '-f', 'lavfi', '-t', '0.5', '-i', 'sine=f=55:r=48000,afade=t=out:st=0.4:d=0.1,volume=0.9',
+          '-f', 'lavfi', '-t', String(duration), '-i', `anoisesrc=d=${duration}:c=pink:a=0.06,afade=t=in:st=0:d=0.5,afade=t=out:st=${duration - 1}:d=1,volume=0.3`,
+          '-f', 'lavfi', '-t', String(duration), '-i', `sine=f=60:r=48000,afade=t=in:st=0:d=0.5,afade=t=out:st=${duration - 0.5}:d=0.5,volume=0.12`,
+          '-f', 'lavfi', '-t', '2', '-i', 'sine=f=880:r=48000,afade=t=in:st=0:d=0.02,afade=t=out:st=1.8:d=0.2,volume=0.15',
+          '-f', 'lavfi', '-t', String(duration), '-i', `sine=f=220:r=48000,afade=t=in:st=0:d=0.3,afade=t=out:st=${duration - 0.5}:d=0.5,volume=0.06`,
+          '-filter_complex', '[0:a]adelay=0|0[hit1];[1:a]adelay=2000|2000[whoosh];[2:a]adelay=4500|4500[alert];[3:a][4:a][5:a][6:a]amix=inputs=4:duration=longest:normalize=0,volume=0.35[bed];[hit1][whoosh][alert][bed]amix=inputs=4:duration=longest:normalize=0,volume=0.6[a]',
+          '-map', '[a]', '-c:a', 'mp3', '-b:a', '192k', outPath,
+        ],
+        { stdio: 'pipe', timeout: 15000 }
+      )
     } catch {}
   }
 }

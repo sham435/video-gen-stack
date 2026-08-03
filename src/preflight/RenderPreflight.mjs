@@ -7,8 +7,8 @@ export class RenderPreflight {
     const errors = []
     const warnings = []
     try {
-      const { execSync } = await import('child_process')
-      execSync('ffmpeg -version', { stdio: 'pipe' })
+      const { execFileSync } = await import('child_process')
+      execFileSync('ffmpeg', ['-version'], { stdio: 'pipe' })
     } catch {
       errors.push('FFMPEG_MISSING')
     }

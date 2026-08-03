@@ -10,7 +10,7 @@
  */
 
 import { createCanvas, GlobalFonts } from '@napi-rs/canvas'
-import { execSync } from 'child_process'
+import { execFileSync } from 'child_process'
 import fs from 'fs'
 
 try {
@@ -324,9 +324,9 @@ export function generateCommonIntro(outDir = 'output') {
   const introVideo = `${outDir}/intro_12s.mp4`
   generateIntroAudio(`${outDir}/intro_audio.mp3`)
 
-  execSync(
-    `ffmpeg -y -framerate ${FPS} -i "${framesDir}/f%04d.png" -i "${outDir}/intro_audio.mp3" ` +
-    `-c:v libx264 -crf 20 -preset medium -pix_fmt yuv420p -c:a aac -b:a 192k -shortest -t 12 "${introVideo}"`,
+  execFileSync(
+    'ffmpeg',
+    ['-y', '-framerate', String(FPS), '-i', `${framesDir}/f%04d.png`, '-i', `${outDir}/intro_audio.mp3`, '-c:v', 'libx264', '-crf', '20', '-preset', 'medium', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-t', '12', introVideo],
     { stdio: 'inherit' }
   )
   console.log('NEWS-MONSTER intro:', introVideo)
@@ -335,21 +335,20 @@ export function generateCommonIntro(outDir = 'output') {
 
 function generateIntroAudio(outPath) {
   try {
-    const parts = [
-      '-f lavfi -t 0.4 -i "sine=f=80:r=48000,afade=t=out:st=0.3:d=0.1,volume=1.0"',
-      '-f lavfi -t 0.6 -i "sine=f=120:r=48000,afade=t=out:st=0.5:d=0.1,volume=0.6"',
-      '-f lavfi -t 0.5 -i "sine=f=55:r=48000,afade=t=out:st=0.4:d=0.1,volume=0.9"',
-      '-f lavfi -t 12 -i "anoisesrc=d=12:c=pink:a=0.06:r=48000,afade=t=in:st=0:d=0.5,afade=t=out:st=11:d=1,volume=0.3"',
-      '-f lavfi -t 12 -i "sine=f=60:r=48000,afade=t=in:st=0:d=0.5,afade=t=out:st=11.5:d=0.5,volume=0.12"',
-      '-f lavfi -t 2 -i "sine=f=880:r=48000,afade=t=in:st=0:d=0.02,afade=t=out:st=1.8:d=0.2,volume=0.15"',
-      '-f lavfi -t 12 -i "sine=f=220:r=48000,afade=t=in:st=0:d=0.3,afade=t=out:st=11.5:d=0.5,volume=0.06"',
+    const args = [
+      '-y',
+      '-f', 'lavfi', '-t', '0.4', '-i', 'sine=f=80:r=48000,afade=t=out:st=0.3:d=0.1,volume=1.0',
+      '-f', 'lavfi', '-t', '0.6', '-i', 'sine=f=120:r=48000,afade=t=out:st=0.5:d=0.1,volume=0.6',
+      '-f', 'lavfi', '-t', '0.5', '-i', 'sine=f=55:r=48000,afade=t=out:st=0.4:d=0.1,volume=0.9',
+      '-f', 'lavfi', '-t', '12', '-i', 'anoisesrc=d=12:c=pink:a=0.06:r=48000,afade=t=in:st=0:d=0.5,afade=t=out:st=11:d=1,volume=0.3',
+      '-f', 'lavfi', '-t', '12', '-i', 'sine=f=60:r=48000,afade=t=in:st=0:d=0.5,afade=t=out:st=11.5:d=0.5,volume=0.12',
+      '-f', 'lavfi', '-t', '2', '-i', 'sine=f=880:r=48000,afade=t=in:st=0:d=0.02,afade=t=out:st=1.8:d=0.2,volume=0.15',
+      '-f', 'lavfi', '-t', '12', '-i', 'sine=f=220:r=48000,afade=t=in:st=0:d=0.3,afade=t=out:st=11.5:d=0.5,volume=0.06',
+      '-filter_complex', '[0:a]adelay=0|0[hit1];[1:a]adelay=2000|2000[whoosh];[2:a]adelay=4500|4500[alert];[3:a][4:a][5:a][6:a]amix=inputs=4:duration=longest:normalize=0,volume=0.35[bed];[hit1][whoosh][alert][bed]amix=inputs=4:duration=longest:normalize=0,volume=0.6,aformat=sample_rates=48000:channel_layouts=stereo,afade=t=out:st=11.5:d=0.5[a]',
+      '-map', '[a]', '-c:a', 'mp3', '-b:a', '192k', outPath,
     ]
 
-    const cmd = `ffmpeg -y ${parts.join(' ')} \
-      -filter_complex "[0:a]adelay=0|0[hit1];[1:a]adelay=2000|2000[whoosh];[2:a]adelay=4500|4500[alert];[3:a][4:a][5:a][6:a]amix=inputs=4:duration=longest:normalize=0,volume=0.35[bed];[hit1][whoosh][alert][bed]amix=inputs=4:duration=longest:normalize=0,volume=0.6,aformat=sample_rates=48000:channel_layouts=stereo,afade=t=out:st=11.5:d=0.5[a]" \
-      -map "[a]" -c:a mp3 -b:a 192k "${outPath}"`
-
-    execSync(cmd, { stdio: 'pipe', timeout: 15000 })
+    execFileSync('ffmpeg', args, { stdio: 'pipe', timeout: 15000 })
     console.log('Intro audio generated')
   } catch { console.log('Intro audio generation skipped') }
 }

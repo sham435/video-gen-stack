@@ -1,8 +1,9 @@
-import { execSync } from 'child_process'
-import { writeFileSync, unlinkSync } from 'fs'
+import { execFileSync } from 'child_process'
+import { writeFileSync, unlinkSync, copyFileSync } from 'fs'
 import { tmpdir } from 'os'
 import { join } from 'path'
 import { detectTheme } from '../../../packages/branding/themes.js'
+
 const MUSIC = [
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
@@ -30,6 +31,16 @@ function getTheme(title) {
 
 function ff(c) { return c.replace('#', '0x') }
 
+function cleanText(s, max = 80) {
+  return (s || '').replace(/['":\\,;`$]/g, '').trim().slice(0, max)
+}
+
+async function fetchImage(imageUrl, imgPath) {
+  const response = await fetch(imageUrl, { signal: AbortSignal.timeout(10000), redirect: 'follow' })
+  if (!response.ok) throw new Error(`image fetch ${response.status}`)
+  writeFileSync(imgPath, Buffer.from(await response.arrayBuffer()))
+}
+
 export async function renderNewsVideo(headlines, options = {}) {
   const tmp = tmpdir()
   const out = join(tmp, `v_${Date.now()}.mp4`)
@@ -37,9 +48,9 @@ export async function renderNewsVideo(headlines, options = {}) {
   const imageUrl = options.imageUrl || (headlines[0] || {}).imageUrl
 
   const article = headlines[0] || {}
-  const title = (article.title || '').replace(/['":\\,]/g, '').slice(0, 80)
+  const title = cleanText(article.title)
   const rawSource = typeof article.source === 'string' ? article.source : article.source?.name || ''
-  const source = rawSource.replace(/['":\\,]/g, '').slice(0, 40)
+  const source = cleanText(rawSource, 40)
   const theme = THEMES[getTheme(title)]
   const duration = 10
   const bg0 = ff(theme.bg0)
@@ -54,14 +65,23 @@ export async function renderNewsVideo(headlines, options = {}) {
 
   try {
     // 1. Gradient background
-    execSync(`ffmpeg -y -f lavfi -i "color=c=${bg0}:s=1920x1080:d=${duration}:r=30" -f lavfi -i "color=c=${bg1}:s=1920x1080:d=${duration}:r=30,format=rgba,colorchannelmixer=aa=0.35" -filter_complex "[0][1]overlay=0:0" -c:v libx264 -preset ultrafast -crf 24 "${bgPath}"`, { stdio: 'pipe', timeout: 30000 })
+    execFileSync('ffmpeg', [
+      '-y', '-f', 'lavfi', '-i', `color=c=${bg0}:s=1920x1080:d=${duration}:r=30`,
+      '-f', 'lavfi', '-i', `color=c=${bg1}:s=1920x1080:d=${duration}:r=30,format=rgba,colorchannelmixer=aa=0.35`,
+      '-filter_complex', '[0][1]overlay=0:0',
+      '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '24', bgPath,
+    ], { stdio: 'pipe', timeout: 30000 })
 
     // 2. Image overlay if available
     let hasImage = false
     if (imageUrl) {
       try {
-        execSync(`curl -sL "${imageUrl}" -o "${imgPath}" --max-time 10`, { stdio: 'pipe', timeout: 15000 })
-        execSync(`ffmpeg -y -i "${imgPath}" -vf "scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,gblur=sigma=25,colorchannelmixer=aa=0.3" -c:v libx264 -preset ultrafast -crf 28 -t ${duration} -r 30 "${overlayPath}"`, { stdio: 'pipe', timeout: 30000 })
+        await fetchImage(imageUrl, imgPath)
+        execFileSync('ffmpeg', [
+          '-y', '-i', imgPath,
+          '-vf', 'scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,gblur=sigma=25,colorchannelmixer=aa=0.3',
+          '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '28', '-t', String(duration), '-r', '30', overlayPath,
+        ], { stdio: 'pipe', timeout: 30000 })
         hasImage = true
       } catch {}
     }
@@ -73,26 +93,32 @@ export async function renderNewsVideo(headlines, options = {}) {
     const badgeText = `,drawtext=text='${getTheme(title).toUpperCase()}':fontcolor=${accent}:fontsize=14:x=80:y=80:box=1:boxcolor=0x000000@0.4:boxborderw=8`
     const bottomText = `,drawtext=text='NEWS  |  1/1':fontcolor=gray:fontsize=16:x=80:y=h-60:box=1:boxcolor=0x000000@0.3:boxborderw=8`
 
-    const inputSource = hasImage ? `-i "${overlayPath}"` : `-i "${bgPath}"`
     const vf = `${accentLine},${headline}${srcText}${badgeText}${bottomText}`
+    const inputArgs = hasImage ? ['-i', overlayPath] : ['-i', bgPath]
 
-    execSync(`ffmpeg -y ${inputSource} -vf "${vf}" -c:v libx264 -preset ultrafast -crf 24 "${renderedPath}"`, { stdio: 'pipe', timeout: 30000 })
+    execFileSync('ffmpeg', [
+      '-y', ...inputArgs, '-vf', vf,
+      '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '24', renderedPath,
+    ], { stdio: 'pipe', timeout: 30000 })
 
     // 4. Add music with loudnorm
     try {
-      execSync(
-        `ffmpeg -y -i "${renderedPath}" -i "${musicUrl}" -map 0:v -map 1:a ` +
-        `-filter_complex "[1:a]volume=0.18,afade=t=in:st=0:d=1.5,afade=t=out:st=${duration-1.5}:d=1.5,loudnorm=I=-16:TP=-1.5:LRA=11[mu]" ` +
-        `-map "[mu]" -c:v copy -c:a aac -b:a 192k -ac 2 -shortest "${out}"`,
-        { stdio: 'pipe', timeout: 60000 }
-      )
+      execFileSync('ffmpeg', [
+        '-y', '-i', renderedPath, '-i', musicUrl,
+        '-map', '0:v', '-map', '1:a',
+        '-filter_complex', `[1:a]volume=0.18,afade=t=in:st=0:d=1.5,afade=t=out:st=${duration - 1.5}:d=1.5,loudnorm=I=-16:TP=-1.5:LRA=11[mu]`,
+        '-map', '[mu]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-ac', '2', '-shortest', out,
+      ], { stdio: 'pipe', timeout: 60000 })
     } catch {
-      execSync(`ffmpeg -y -i "${renderedPath}" -c:v copy -an "${out}"`, { stdio: 'pipe', timeout: 30000 })
+      execFileSync('ffmpeg', ['-y', '-i', renderedPath, '-c:v', 'copy', '-an', out], { stdio: 'pipe', timeout: 30000 })
     }
   } catch (e) {
     // Ultimate fallback: simple text on color
-    const simpleCmd = `ffmpeg -y -f lavfi -i "color=c=0x0B1020:s=1920x1080:d=${duration}:r=30" -vf "drawtext=text='${title}':fontcolor=white:fontsize=48:x=(w-text_w)/2:y=(h-text_h)/2:box=1:boxcolor=black@0.4:boxborderw=16" -c:v libx264 -preset ultrafast -crf 28 -an "${out}"`
-    execSync(simpleCmd, { stdio: 'pipe', timeout: 60000 })
+    execFileSync('ffmpeg', [
+      '-y', '-f', 'lavfi', '-i', `color=c=0x0B1020:s=1920x1080:d=${duration}:r=30`,
+      '-vf', `drawtext=text='${title}':fontcolor=white:fontsize=48:x=(w-text_w)/2:y=(h-text_h)/2:box=1:boxcolor=black@0.4:boxborderw=16`,
+      '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '28', '-an', out,
+    ], { stdio: 'pipe', timeout: 60000 })
   }
 
   // Cleanup temp files
@@ -107,11 +133,7 @@ export async function renderPromptVideo(prompt, options = {}) {
   const duration = Math.min(Math.max(options.duration || 5, 3), 10)
   const segmentIndex = options.segmentIndex || 0
   const totalSegments = options.totalSegments || 1
-  const title = (prompt || '')
-    .replace(/['":\\,]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .slice(0, 70)
+  const title = cleanText(prompt, 70)
   const theme = THEMES[getTheme(title)] || THEMES.default
   const bg0 = ff(theme.bg0)
   const bg1 = ff(theme.bg1)
@@ -121,31 +143,34 @@ export async function renderPromptVideo(prompt, options = {}) {
   const renderedPath = join(tmp, `pr_${Date.now()}_${segmentIndex}.mp4`)
 
   try {
-    execSync(
-      `ffmpeg -y -f lavfi -i "color=c=${bg0}:s=1920x1080:d=${duration}:r=30" -f lavfi -i "color=c=${bg1}:s=1920x1080:d=${duration}:r=30,format=rgba,colorchannelmixer=aa=0.35" -filter_complex "[0][1]overlay=0:0" -c:v libx264 -preset ultrafast -crf 24 "${bgPath}"`,
-      { stdio: 'pipe', timeout: 30000 }
-    )
+    execFileSync('ffmpeg', [
+      '-y', '-f', 'lavfi', '-i', `color=c=${bg0}:s=1920x1080:d=${duration}:r=30`,
+      '-f', 'lavfi', '-i', `color=c=${bg1}:s=1920x1080:d=${duration}:r=30,format=rgba,colorchannelmixer=aa=0.35`,
+      '-filter_complex', '[0][1]overlay=0:0',
+      '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '24', bgPath,
+    ], { stdio: 'pipe', timeout: 30000 })
 
     const headline = `drawtext=text='${title}':fontcolor=white:fontsize=48:x=100:y=280:box=1:boxcolor=0x000000@0.4:boxborderw=16`
     const badge = `drawtext=text='AI-GENERATED':fontcolor=${accent}:fontsize=14:x=80:y=80:box=1:boxcolor=0x000000@0.4:boxborderw=8`
     const footer = `drawtext=text='${totalSegments > 1 ? `SEGMENT ${segmentIndex}/${totalSegments}` : 'NEWS'}':fontcolor=gray:fontsize=16:x=80:y=h-60:box=1:boxcolor=0x000000@0.3:boxborderw=8`
 
-    execSync(
-      `ffmpeg -y -i "${bgPath}" -vf "${headline},${badge},${footer}" -c:v libx264 -preset ultrafast -crf 24 "${renderedPath}"`,
-      { stdio: 'pipe', timeout: 30000 }
-    )
+    execFileSync('ffmpeg', [
+      '-y', '-i', bgPath, '-vf', `${headline},${badge},${footer}`,
+      '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '24', renderedPath,
+    ], { stdio: 'pipe', timeout: 30000 })
   } catch (e) {
     const safeTitle = (title || 'AI Generated').slice(0, 40)
-    execSync(
-      `ffmpeg -y -f lavfi -i "color=c=0x0B1020:s=1920x1080:d=${duration}:r=30" -vf "drawtext=text='${safeTitle}':fontcolor=white:fontsize=48:x=(w-text_w)/2:y=(h-text_h)/2:box=1:boxcolor=black@0.4:boxborderw=16" -c:v libx264 -preset ultrafast -crf 28 -an "${out}"`,
-      { stdio: 'pipe', timeout: 60000 }
-    )
+    execFileSync('ffmpeg', [
+      '-y', '-f', 'lavfi', '-i', `color=c=0x0B1020:s=1920x1080:d=${duration}:r=30`,
+      '-vf', `drawtext=text='${safeTitle}':fontcolor=white:fontsize=48:x=(w-text_w)/2:y=(h-text_h)/2:box=1:boxcolor=black@0.4:boxborderw=16`,
+      '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '28', '-an', out,
+    ], { stdio: 'pipe', timeout: 60000 })
     try { unlinkSync(renderedPath) } catch {}
     return out
   }
 
   try {
-    execSync(`ffmpeg -y -i "${renderedPath}" -c:v copy -an "${out}"`, { stdio: 'pipe', timeout: 30000 })
+    execFileSync('ffmpeg', ['-y', '-i', renderedPath, '-c:v', 'copy', '-an', out], { stdio: 'pipe', timeout: 30000 })
   } catch {
     try { copyFileSync(renderedPath, out) } catch {}
   }
@@ -157,10 +182,7 @@ export async function renderPromptVideo(prompt, options = {}) {
 export function mergeVideos(paths, outPath = join(tmpdir(), `merged_${Date.now()}.mp4`)) {
   const listPath = join(tmpdir(), `concat_${Date.now()}.txt`)
   writeFileSync(listPath, paths.map(p => `file '${p}'`).join('\n') + '\n')
-  execSync(
-    `ffmpeg -y -f concat -safe 0 -i "${listPath}" -c copy "${outPath}"`,
-    { stdio: 'pipe', timeout: 120000 }
-  )
+  execFileSync('ffmpeg', ['-y', '-f', 'concat', '-safe', '0', '-i', listPath, '-c', 'copy', outPath], { stdio: 'pipe', timeout: 120000 })
   unlinkSync(listPath)
   return outPath
 }

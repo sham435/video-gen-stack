@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { execSync } from 'child_process'
+import { execFileSync } from 'child_process'
 import { SceneEngine } from './video/SceneEngine.mjs'
 import { Timeline } from './video/Timeline.mjs'
 import { VisualDirector } from './video/VisualDirector.mjs'
@@ -121,7 +121,7 @@ export class NewsBroadcastEngine {
     fs.mkdirSync(framesDir, { recursive: true })
     if (!job) job = new ProductionJob(article)
 
-    this.audioMixer.ensureMusicExists()
+    await this.audioMixer.ensureMusicExists()
 
     console.log('StoryDirector planning...')
     job.markStart('story')
@@ -420,8 +420,9 @@ export class NewsBroadcastEngine {
       const paddedVoice = `${outDir}/narration_padded.mp3`
       const padSecs = (totalDuration - finalVoiceDur).toFixed(2)
       try {
-        execSync(
-          `ffmpeg -y -i "${voicePath}" -af "apad=pad_dur=${padSecs}" -t ${totalDuration} -c:a libmp3lame -b:a 128k "${paddedVoice}" 2>&1`,
+        execFileSync(
+          'ffmpeg',
+          ['-y', '-i', voicePath, '-af', `apad=pad_dur=${padSecs}`, '-t', String(totalDuration), '-c:a', 'libmp3lame', '-b:a', '128k', paddedVoice],
           { stdio: 'pipe', timeout: 30000 }
         )
         if (fs.existsSync(paddedVoice)) {
@@ -550,8 +551,9 @@ export class NewsBroadcastEngine {
     const silentVideo = `${outDir}/silent_broadcast.mp4`
     console.log('FFmpeg concat frames to video...')
     try {
-      execSync(
-        `ffmpeg -y -f concat -safe 0 -i "${listPath}" -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,format=yuv420p,fps=${this.outputFps}" -pix_fmt yuv420p "${silentVideo}" 2>&1`,
+      execFileSync(
+        'ffmpeg',
+        ['-y', '-f', 'concat', '-safe', '0', '-i', listPath, '-vf', `scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,format=yuv420p,fps=${this.outputFps}`, '-pix_fmt', 'yuv420p', silentVideo],
         { stdio: 'inherit', timeout: 120000 }
       )
     } catch (e) {

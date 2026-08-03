@@ -1,7 +1,24 @@
 import { Router } from 'express'
 import { requireAuth } from '../../../packages/auth/requireAuth.js'
+import { readFileSync, writeFileSync } from 'fs'
+import { resolve } from 'path'
 
 const router = Router()
+
+const ENV_PATH = resolve(process.cwd(), '.env')
+
+function saveEnv(entries) {
+  let content = ''
+  try { content = readFileSync(ENV_PATH, 'utf-8') } catch {}
+  const lines = content.split('\n')
+  for (const [key, value] of Object.entries(entries)) {
+    if (!value) continue
+    const idx = lines.findIndex(l => l.startsWith(`${key}=`))
+    if (idx >= 0) lines[idx] = `${key}=${value}`
+    else lines.push(`${key}=${value}`)
+  }
+  writeFileSync(ENV_PATH, lines.join('\n').replace(/\n+$/, '') + '\n')
+}
 
 // ── TikTok Auth ──
 router.get('/tiktok/auth', (req, res) => {
@@ -24,13 +41,19 @@ router.get('/auth/tiktok/callback', async (req, res) => {
     }),
   })
   const data = await resp.json()
-  res.json({
-    success: !!data.access_token,
-    note: 'Save these to .env:',
-    TIKTOK_ACCESS_TOKEN: data.access_token || '',
-    TIKTOK_OPEN_ID: data.open_id || '',
-    TIKTOK_REFRESH_TOKEN: data.refresh_token || '',
-  })
+  if (!data.access_token) {
+    return res.json({ success: false, error: data.error || 'tiktok auth failed' })
+  }
+  try {
+    saveEnv({
+      TIKTOK_ACCESS_TOKEN: data.access_token,
+      TIKTOK_OPEN_ID: data.open_id || '',
+      TIKTOK_REFRESH_TOKEN: data.refresh_token || '',
+    })
+    res.json({ success: true, saved: 'TikTok credentials written to .env' })
+  } catch {
+    res.json({ success: true, saved: false, error: 'credentials not persisted — add them to .env manually' })
+  }
 })
 
 // ── YouTube Auth ──
@@ -54,12 +77,15 @@ router.get('/auth/youtube/callback', async (req, res) => {
     }),
   })
   const data = await resp.json()
-  res.json({
-    success: !!data.access_token,
-    note: 'Save YOUTUBE_REFRESH_TOKEN to .env:',
-    YOUTUBE_REFRESH_TOKEN: data.refresh_token || '',
-    access_token: data.access_token || '(expires, use refresh token)',
-  })
+  if (!data.refresh_token) {
+    return res.json({ success: false, error: data.error || 'youtube auth failed' })
+  }
+  try {
+    saveEnv({ YOUTUBE_REFRESH_TOKEN: data.refresh_token })
+    res.json({ success: true, saved: 'YouTube refresh token written to .env' })
+  } catch {
+    res.json({ success: true, saved: false, error: 'token not persisted — add YOUTUBE_REFRESH_TOKEN to .env manually' })
+  }
 })
 
 // ── Publish Video ──

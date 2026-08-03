@@ -1,4 +1,4 @@
-import { execSync } from 'child_process'
+import { execFileSync } from 'child_process'
 import fs from 'fs'
 import { SafeZoneManager, SAFE_ZONES } from '../layout/SafeZoneManager.mjs'
 
@@ -67,8 +67,9 @@ export class FrameVisionAnalyzer {
 
   _extractFrame(videoPath, seconds) {
     if (!fs.existsSync(videoPath)) throw new Error('video not found')
-    const out = execSync(
-      `ffmpeg -v error -ss ${seconds} -i "${videoPath}" -frames:v 1 -f rawvideo -pix_fmt rgb24 pipe:1`,
+    const out = execFileSync(
+      'ffmpeg',
+      ['-v', 'error', '-ss', String(seconds), '-i', videoPath, '-frames:v', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', 'pipe:1'],
       { timeout: 20000, maxBuffer: 32 * 1024 * 1024 }
     )
     return Buffer.from(out)

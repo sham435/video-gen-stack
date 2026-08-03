@@ -1,4 +1,4 @@
-import { execSync, execFileSync } from 'child_process'
+import { execFileSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
@@ -21,8 +21,9 @@ export class AudioMixer {
 
     const fallbackPath = path.join(MUSIC_DIR, '_ambient_gen.mp3')
     try {
-      execSync(
-        `ffmpeg -y -f lavfi -i "anoisesrc=d=30:c=pink:a=0.08,afade=t=in:st=0:d=3,afade=t=out:st=27:d=3,loudnorm=I=-24:TP=-2:LRA=7" -c:a aac -b:a 128k "${fallbackPath}"`,
+      execFileSync(
+        'ffmpeg',
+        ['-y', '-f', 'lavfi', '-i', 'anoisesrc=d=30:c=pink:a=0.08,afade=t=in:st=0:d=3,afade=t=out:st=27:d=3,loudnorm=I=-24:TP=-2:LRA=7', '-c:a', 'aac', '-b:a', '128k', fallbackPath],
         { stdio: 'pipe', timeout: 15000 }
       )
       return fallbackPath
@@ -31,7 +32,7 @@ export class AudioMixer {
     }
   }
 
-  ensureMusicExists() {
+  async ensureMusicExists() {
     if (!fs.existsSync(MUSIC_DIR)) fs.mkdirSync(MUSIC_DIR, { recursive: true })
 
     const existing = fs.readdirSync(MUSIC_DIR)
@@ -46,7 +47,9 @@ export class AudioMixer {
 
     for (const track of tracks) {
       try {
-        execSync(`curl -sL --max-time 30 "${track.url}" -o "${MUSIC_DIR}/${track.name}"`, { stdio: 'pipe' })
+        const response = await fetch(track.url, { signal: AbortSignal.timeout(30000), redirect: 'follow' })
+        if (!response.ok) throw new Error(`HTTP ${response.status}`)
+        fs.writeFileSync(path.join(MUSIC_DIR, track.name), Buffer.from(await response.arrayBuffer()))
         const size = fs.statSync(path.join(MUSIC_DIR, track.name)).size
         if (size > 10000) console.log(`  Music: ${track.name} (${(size / 1024).toFixed(0)}KB)`)
         else { fs.unlinkSync(path.join(MUSIC_DIR, track.name)); console.log(`  ${track.name} too small`) }

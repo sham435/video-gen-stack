@@ -1,4 +1,4 @@
-import { execSync } from 'child_process'
+import { execFileSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
@@ -25,8 +25,9 @@ export function getRandomMusic(){
   console.log('No music files found, generating ambient background...')
   const fallbackPath = path.join(MUSIC_DIR, '_ambient_gen.mp3')
   try {
-    execSync(
-      `ffmpeg -y -f lavfi -i "anoisesrc=d=30:c=pink:a=0.08,afade=t=in:st=0:d=3,afade=t=out:st=27:d=3,loudnorm=I=-24:TP=-2:LRA=7" -c:a aac -b:a 128k "${fallbackPath}"`,
+    execFileSync(
+      'ffmpeg',
+      ['-y', '-f', 'lavfi', '-i', 'anoisesrc=d=30:c=pink:a=0.08,afade=t=in:st=0:d=3,afade=t=out:st=27:d=3,loudnorm=I=-24:TP=-2:LRA=7', '-c:a', 'aac', '-b:a', '128k', fallbackPath],
       { stdio: 'pipe', timeout: 15000 }
     )
     return fallbackPath
@@ -48,11 +49,12 @@ export function mixMusicWithVideo(videoIn, musicPath, duration, outPath){
   }
 
   // Stereo, 18% volume, fade in/out, loudnorm -16 LUFS, amix
-  const cmd = `ffmpeg -y -i "${videoIn}" -stream_loop -1 -i "${effectiveMusic}" \
-    -filter_complex "[1:a]aformat=channel_layouts=stereo,volume=0.18,afade=t=in:st=0:d=1.2,afade=t=out:st=${duration-1.2}:d=1.2,loudnorm=I=-16:TP=-1.5:LRA=11[bg];[0:a]aformat=channel_layouts=stereo[orig];[orig][bg]amix=inputs=2:duration=longest:dropout_transition=2:normalize=0,pan=stereo|c0=c0|c1=c1[a]" \
-    -map 0:v -map "[a]" -c:v copy -c:a aac -b:a 192k -shortest "${outPath}"`
-  console.log(cmd)
-  execSync(cmd, {stdio:'inherit'})
+  const args = [
+    '-y', '-i', videoIn, '-stream_loop', '-1', '-i', effectiveMusic,
+    '-filter_complex', `[1:a]aformat=channel_layouts=stereo,volume=0.18,afade=t=in:st=0:d=1.2,afade=t=out:st=${duration - 1.2}:d=1.2,loudnorm=I=-16:TP=-1.5:LRA=11[bg];[0:a]aformat=channel_layouts=stereo[orig];[orig][bg]amix=inputs=2:duration=longest:dropout_transition=2:normalize=0,pan=stereo|c0=c0|c1=c1[a]`,
+    '-map', '0:v', '-map', '[a]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', outPath,
+  ]
+  execFileSync('ffmpeg', args, { stdio: 'inherit' })
   return outPath
 }
 
@@ -60,7 +62,7 @@ export function mixMusicWithVideo(videoIn, musicPath, duration, outPath){
  * Download a free lofi track if no music exists yet.
  * Called at the start of the pipeline to ensure music is available.
  */
-export function ensureMusicExists(){
+export async function ensureMusicExists(){
   if(!fs.existsSync(MUSIC_DIR)) fs.mkdirSync(MUSIC_DIR, {recursive:true})
 
   const existing = fs.readdirSync(MUSIC_DIR)
@@ -76,7 +78,9 @@ export function ensureMusicExists(){
 
   for(const track of tracks){
     try {
-      execSync(`curl -sL --max-time 30 "${track.url}" -o "${MUSIC_DIR}/${track.name}"`, { stdio: 'pipe' })
+      const response = await fetch(track.url, { signal: AbortSignal.timeout(30000), redirect: 'follow' })
+      if (!response.ok) throw new Error(`HTTP ${response.status}`)
+      fs.writeFileSync(path.join(MUSIC_DIR, track.name), Buffer.from(await response.arrayBuffer()))
       const size = fs.statSync(path.join(MUSIC_DIR, track.name)).size
       if(size > 10000) console.log(`  ✅ ${track.name} (${(size/1024).toFixed(0)}KB)`)
       else { fs.unlinkSync(path.join(MUSIC_DIR, track.name)); console.log(`  ❌ ${track.name} too small`) }
@@ -85,5 +89,5 @@ export function ensureMusicExists(){
 }
 
 if(import.meta.url.endsWith('audio.mjs')){
-  ensureMusicExists()
+  await ensureMusicExists()
 }

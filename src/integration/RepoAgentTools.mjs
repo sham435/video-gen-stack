@@ -210,8 +210,8 @@ export class RepoAgentTools {
     if (/\.env/.test(diff)) return { ok: false, approvalRequired: ['modify-secrets'], error: 'patch touches .env — requires approval' }
     const files = [...diff.matchAll(/^\+\+\+\s+b\/(.+)$/gm)].map(m => m[1])
     try {
-      execSync('git apply --check -', { cwd: this.root, input: diff, encoding: 'utf-8' })
-      execSync('git apply -', { cwd: this.root, input: diff, encoding: 'utf-8' })
+      execFileSync('git', ['apply', '--check', '-'], { cwd: this.root, input: diff, encoding: 'utf-8' })
+      execFileSync('git', ['apply', '-'], { cwd: this.root, input: diff, encoding: 'utf-8' })
       return { ok: true, applied: true, files }
     } catch (e) {
       return { ok: false, error: this._cap(e.stderr || e.message) }
@@ -222,7 +222,7 @@ export class RepoAgentTools {
 
   _git(args) {
     try {
-      const out = execSync('git ' + args.join(' '), { cwd: this.root, encoding: 'utf-8', maxBuffer: MAX_OUTPUT * 4 })
+      const out = execFileSync('git', args, { cwd: this.root, encoding: 'utf-8', maxBuffer: MAX_OUTPUT * 4 })
       return { output: this._cap(out) }
     } catch (e) {
       return { error: this._cap(e.stderr || e.message) }

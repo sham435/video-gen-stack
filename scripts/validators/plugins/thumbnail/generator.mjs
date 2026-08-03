@@ -106,12 +106,10 @@ export async function generateFallbackThumbnail(story, width, height, outputPath
   const solidPath = outputPath || path.join(CACHE_DIR, `fallback_${Date.now()}.png`)
 
   try {
-    const { execSync } = await import('node:child_process')
-    execSync(
-      `ffmpeg -y -f lavfi -i "color=c=0x1a1a2e:s=${width}x${height}:d=0.5:r=1" ` +
-      `-vf "drawtext=text='${title}':fontcolor=white:fontsize=${Math.floor(width / 20)}:x=(w-text_w)/2:y=(h-text_h)/2-40:box=1:boxcolor=black@0.5:boxborderw=20,` +
-      `drawtext=text='${category}':fontcolor=#FFD700:fontsize=${Math.floor(width / 40)}:x=(w-text_w)/2:y=(h-text_h)/2+40:box=1:boxcolor=black@0.3:boxborderw=10" ` +
-      `-frames:v 1 "${solidPath}"`,
+    const { execFileSync } = await import('node:child_process')
+    execFileSync(
+      'ffmpeg',
+      ['-y', '-f', 'lavfi', '-i', `color=c=0x1a1a2e:s=${width}x${height}:d=0.5:r=1`, '-vf', `drawtext=text='${title}':fontcolor=white:fontsize=${Math.floor(width / 20)}:x=(w-text_w)/2:y=(h-text_h)/2-40:box=1:boxcolor=black@0.5:boxborderw=20,drawtext=text='${category}':fontcolor=#FFD700:fontsize=${Math.floor(width / 40)}:x=(w-text_w)/2:y=(h-text_h)/2+40:box=1:boxcolor=black@0.3:boxborderw=10`, '-frames:v', '1', solidPath],
       { stdio: 'pipe', timeout: 15000 }
     )
   } catch (e) {

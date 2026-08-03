@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { execSync } from 'child_process'
+import { execFileSync } from 'child_process'
 import { ensureMusicExists } from './audio.mjs'
 import { fetchBestImage } from './pexels.mjs'
 import { NewsBroadcastEngine } from '../src/index.mjs'
@@ -24,9 +24,9 @@ export async function composeVideo(articles, outDir = 'output') {
   const footerPath = 'assets/footer.png'
   if (fs.existsSync(footerPath)) {
     const withFooter = `${outDir}/final_with_footer.mp4`
-    execSync(
-      `ffmpeg -y -i "${finalPath}" -i "${footerPath}" -filter_complex ` +
-      `"[0:v][1:v]overlay=0:main_h-overlay_h:format=auto,format=yuv420p[v]" -map "[v]" -map 0:a -c:a copy "${withFooter}"`,
+    execFileSync(
+      'ffmpeg',
+      ['-y', '-i', finalPath, '-i', footerPath, '-filter_complex', '[0:v][1:v]overlay=0:main_h-overlay_h:format=auto,format=yuv420p[v]', '-map', '[v]', '-map', '0:a', '-c:a', 'copy', withFooter],
       { stdio: 'inherit' }
     )
     fs.copyFileSync(withFooter, finalPath)
@@ -41,7 +41,7 @@ if (import.meta.url.endsWith('composer.mjs')) {
     const outDir = 'output'
     fs.mkdirSync(outDir, { recursive: true })
 
-    ensureMusicExists()
+    await ensureMusicExists()
 
     let articles
     if (process.env.NEWSAPI_KEY) {

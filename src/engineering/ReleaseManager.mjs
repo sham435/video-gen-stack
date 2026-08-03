@@ -1,4 +1,4 @@
-import { execSync } from 'child_process'
+import { execFileSync } from 'child_process'
 import fs from 'fs'
 
 export class ReleaseManager {
@@ -31,11 +31,11 @@ export class ReleaseManager {
 
   getGitLog() {
     try {
-      const tags = execSync('git tag --sort=-creatordate 2>/dev/null', { timeout: 3000 }).toString().trim().split('\n').filter(Boolean)
+      const tags = execFileSync('git', ['tag', '--sort=-creatordate'], { timeout: 3000 }).toString().trim().split('\n').filter(Boolean)
       const range = tags.length > 0 ? `${tags[0]}..HEAD` : '--all'
-      return execSync(`git log ${range} --oneline --format="%h|%s|%an" --no-merges 2>/dev/null`, { timeout: 5000 }).toString().trim()
+      return execFileSync('git', ['log', range, '--oneline', '--format=%h|%s|%an', '--no-merges'], { timeout: 5000 }).toString().trim()
     } catch {
-      try { return execSync('git log --oneline --format="%h|%s|%an" -30 --no-merges 2>/dev/null', { timeout: 5000 }).toString().trim() } catch { return '' }
+      try { return execFileSync('git', ['log', '--oneline', '--format=%h|%s|%an', '-30', '--no-merges'], { timeout: 5000 }).toString().trim() } catch { return '' }
     }
   }
 
@@ -52,9 +52,10 @@ export class ReleaseManager {
 
   repoStats() {
     try {
-      const files = execSync('git ls-files src/ scripts/ packages/ 2>/dev/null | wc -l', { timeout: 3000 }).toString().trim()
-      const lines = execSync("git ls-files src/ scripts/ packages/ 2>/dev/null | xargs wc -l 2>/dev/null | tail -1 | awk '{print $1}'", { timeout: 5000 }).toString().trim()
-      return { files: parseInt(files) || 0, lines: parseInt(lines) || 0 }
+      const list = execFileSync('git', ['ls-files', 'src/', 'scripts/', 'packages/'], { timeout: 3000 }).toString().trim().split('\n').filter(Boolean)
+      const wc = execFileSync('wc', ['-l', ...list], { timeout: 10000, maxBuffer: 16 * 1024 * 1024 }).toString().trim().split('\n')
+      const total = parseInt(wc[wc.length - 1]?.trim().split(/\s+/)[0] || '0')
+      return { files: list.length, lines: total || 0 }
     } catch { return { files: 0, lines: 0 } }
   }
 

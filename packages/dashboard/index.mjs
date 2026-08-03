@@ -4,10 +4,10 @@
  */
 
 import express from 'express'
-import { readFileSync, existsSync, readdirSync, statSync } from 'fs'
+import { readFileSync, existsSync, readdirSync, statSync, unlinkSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
-import { execSync } from 'child_process'
+import { execFileSync } from 'child_process'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(__dirname, '..', '..')
@@ -22,6 +22,9 @@ try {
 
 const app = express()
 app.use(express.json())
+
+const { requireAuth } = await import('../../packages/auth/requireAuth.js')
+app.use(requireAuth)
 
 async function getDB() {
   try { return (await import('../database/db.mjs')).getDB() } catch { return null }
@@ -87,7 +90,7 @@ app.get('/api/ai/status', (req, res) => {
     templates: { count: readdirSync(ROOT + '/src/templates').filter(f => f.endsWith('.json')).length },
     music: { files: readdirSync(ROOT + '/assets/music').filter(f => f.endsWith('.mp3')).length },
     fonts: { anton: existsSync(ROOT + '/assets/fonts/Anton-Regular.ttf'), inter: existsSync(ROOT + '/assets/fonts/Inter-Black.ttf') },
-    lastBuild: (() => { try { return execSync('git log -1 --format=%ci', { cwd: ROOT, stdio: 'pipe', timeout: 3000 }).toString().trim() } catch { return 'unknown' } })(),
+    lastBuild: (() => { try { return execFileSync('git', ['log', '-1', '--format=%ci'], { cwd: ROOT, stdio: 'pipe', timeout: 3000 }).toString().trim() } catch { return 'unknown' } })(),
   }
   checks.allGood = Object.values(checks).every(v => v.status !== 'missing' && v.status !== 'error')
   res.json(checks)
@@ -647,10 +650,13 @@ app.post('/api/ai/execute-action', async (req, res) => {
     },
     'Run GC': async () => {
       try {
-        const { execSync } = await import('child_process')
-        const freed = execSync('find cache output -name "*.tmp" -o -name "*.mutbak_*" 2>/dev/null | wc -l', { cwd: ROOT, timeout: 5000 }).toString().trim()
-        const out = execSync('find cache output -name "*.mutbak_*" -delete 2>/dev/null; echo done', { cwd: ROOT, timeout: 5000 }).toString().trim()
-        return { ok: true, result: `Garbage collection complete: ${freed} stale temp files removed`, detail: out }
+        const { execFileSync } = await import('child_process')
+        const files = readdirSync(ROOT + '/cache').filter(f => f.endsWith('.tmp') || f.includes('.mutbak_'))
+        const cacheCount = files.length
+        execFileSync('find', [ROOT + '/output', '-name', '*.mutbak_*', '-delete'], { timeout: 5000 })
+        const outFiles = []
+        for (const f of files) { try { unlinkSync(ROOT + '/cache/' + f) } catch {} }
+        return { ok: true, result: `Garbage collection complete: ${cacheCount} stale temp files removed`, detail: outFiles.join(', ') || 'done' }
       } catch { return { ok: true, result: 'Garbage collection complete: cache cleaned' } }
     },
     'Balance agent queues': async () => {
@@ -725,7 +731,7 @@ app.post('/api/ai/execute-action', async (req, res) => {
       return { ok: true, result: 'Monitoring view upgraded', detail: 'agent-status, memory-usage, template-selection, pipeline-latency now on dashboard' }
     },
     'Adjust schedule': async () => {
-      try { const { execSync } = await import('child_process'); const out = execSync('grep -r "category.*gaming" apps/worker/pipeline.js --include="*.mjs" -l', { cwd: ROOT, timeout: 5000 }).toString(); return { ok: true, result: 'Schedule adjusted: gaming priority increased', detail: out } }
+      try { const { execFileSync } = await import('child_process'); const out = execFileSync('rg', ['-l', 'category.*gaming', 'apps/worker/pipeline.js'], { cwd: ROOT, timeout: 5000 }).toString(); return { ok: true, result: 'Schedule adjusted: gaming priority increased', detail: out } }
       catch { return { ok: true, result: 'Schedule adjusted: gaming output queued' } }
     },
     'Update prompt': async () => {
@@ -743,7 +749,11 @@ app.post('/api/ai/execute-action', async (req, res) => {
       return { ok: true, result: 'Politics visual theme created: newsroom style', detail: 'dark blue/crimson palette applied' }
     },
     'Review code': async () => {
-      try { const { execSync } = await import('child_process'); const deps = execSync('node -e "const m=require;console.log(JSON.stringify(Object.keys(require(\'./package.json\').devDependencies||{})))" 2>/dev/null', { cwd: ROOT, timeout: 5000 }).toString(); return { ok: true, result: 'Dependency scan complete', circular: deps.slice(0, 200) } }
+      try {
+        const { execFileSync } = await import('child_process')
+        const deps = JSON.parse(execFileSync('node', ['-e', 'console.log(JSON.stringify(Object.keys(require("./package.json").devDependencies||{})))'], { cwd: ROOT, timeout: 5000 }).toString() || '[]')
+        return { ok: true, result: 'Dependency scan complete', circular: JSON.stringify(deps).slice(0, 200) }
+      }
       catch { return { ok: true, result: 'Code review queued', note: 'Run: node scripts/opencode-validate.mjs for full audit' } }
     },
   }
@@ -791,7 +801,7 @@ app.get('/api/pipeline/events', (req, res) => {
       const fp = ROOT + '/output/' + f
       try {
         const size = statSync(fp).size
-        const dur = execSync(`ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${fp}" 2>/dev/null`, { timeout: 3000 }).toString().trim()
+        const dur = execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'default=noprint_wrappers=1:nokey=1', fp], { timeout: 3000 }).toString().trim()
         events.push({ file: f, size: (size / 1024 / 1024).toFixed(1) + 'MB', duration: parseFloat(dur || 0).toFixed(1) + 's', modified: statSync(fp).mtime.toISOString() })
       } catch {}
     })
@@ -2872,8 +2882,6 @@ app.get('/engineering', (req, res) => res.type('html').send(ENGINE_HTML))
 
 const { default: opencodeRoutes } = await import('./routes/opencode.mjs')
 const { default: repoToolsRoutes } = await import('./routes/repo-tools.mjs')
-const { requireAuth } = await import('../../packages/auth/requireAuth.js')
-app.use(requireAuth)
 app.use(opencodeRoutes)
 app.use(repoToolsRoutes)
 
@@ -2899,7 +2907,8 @@ const server = app.listen(PORT, '127.0.0.1', () => {
 server.on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
     // Always run on a single port — check if this dashboard is already running there.
-    fetch(`http://localhost:${PORT}/api/ai/status`)
+    const headers = process.env.ADMIN_API_KEY ? { Authorization: `Bearer ${process.env.ADMIN_API_KEY}` } : {}
+    fetch(`http://localhost:${PORT}/api/ai/status`, { headers })
       .then(r => r.json())
       .then(() => {
         console.log(`\n✅  NEWS-MONSTER AI Command Center is ALREADY RUNNING on port ${PORT}`)

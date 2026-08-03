@@ -105,12 +105,11 @@ export default async function (ctx) {
     const fallbackPath = path.join(fallbackDir, '_validator_test_fallback.png')
 
     const title = "Test Headline for Validator"
-    const { execSync } = await import('node:child_process')
+    const { execFileSync } = await import('node:child_process')
     try {
-      execSync(
-        `ffmpeg -y -f lavfi -i "color=c=0x1a1a2e:s=640x360:d=0.5:r=1" ` +
-        `-vf "drawtext=text='${title}':fontcolor=white:fontsize=32:x=(w-text_w)/2:y=(h-text_h)/2:box=1:boxcolor=black@0.5:boxborderw=10" ` +
-        `-frames:v 1 "${fallbackPath}"`,
+      execFileSync(
+        'ffmpeg',
+        ['-y', '-f', 'lavfi', '-i', 'color=c=0x1a1a2e:s=640x360:d=0.5:r=1', '-vf', `drawtext=text='${title}':fontcolor=white:fontsize=32:x=(w-text_w)/2:y=(h-text_h)/2:box=1:boxcolor=black@0.5:boxborderw=10`, '-frames:v', '1', fallbackPath],
         { stdio: 'pipe', timeout: 15000 }
       )
       if (fs.existsSync(fallbackPath)) {
