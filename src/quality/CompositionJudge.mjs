@@ -91,7 +91,7 @@ export class CompositionJudge {
     if (sig.duration < 1.5) { score -= 5; issues.push('scene_too_short') }
     if (sig.motionClarity === 'static' && sig.type === 'fact') { score -= 5; issues.push('static_motion') }
     if (Array.isArray(sig.compositionFailed) && sig.compositionFailed.includes('duplicateText')) { score -= 20; issues.push('duplicate_text') }
-    if (sig.captionLen > 12 && sig.caption && sig.captionLen > 30) { score -= 3; issues.push('caption_overlap_risk') }
+    if (sig.captionLen > 12 && sig.caption && sig.captionLen > 30) { score -= 3; issues.push('caption_overlap') }
     return { score: Math.max(0, Math.min(99, score)), issues: [...new Set(issues)] }
   }
 

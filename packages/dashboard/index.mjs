@@ -1437,6 +1437,18 @@ body.light-mode .border-white\\/10{border-color:#e5e7eb}
 body.light-mode .border-white\\/5{border-color:#e5e7eb}
 </style>
 <script>
+// Attach the admin key from the URL (?apiKey=...) to every API request.
+// Preserves the server-side auth model: pages still fail closed without a key.
+(() => {
+  const key = new URLSearchParams(location.search).get('apiKey')
+  if (!key) return
+  const original = window.fetch
+  window.fetch = (url, opts = {}) => {
+    const headers = new Headers(opts.headers || {})
+    if (!headers.has('x-api-key')) headers.set('x-api-key', key)
+    return original(url, { ...opts, headers })
+  }
+})()
 function toggleTheme(){
   const b = document.body
   b.classList.toggle('light-mode')
@@ -2592,6 +2604,17 @@ body{background:#000;color:#F8FAFC;font-family:'Inter',system-ui,sans-serif}
 </div>
 
 <script>
+// Attach the admin key from the URL (?apiKey=...) to every API request.
+(() => {
+  const key = new URLSearchParams(location.search).get('apiKey')
+  if (!key) return
+  const original = window.fetch
+  window.fetch = (url, opts = {}) => {
+    const headers = new Headers(opts.headers || {})
+    if (!headers.has('x-api-key')) headers.set('x-api-key', key)
+    return original(url, { ...opts, headers })
+  }
+})()
 const api = async (path, opts) => { try{const r=await fetch(path,opts||{});return await r.json()}catch{return null} }
 
 async function loadQueue(){
@@ -2826,6 +2849,17 @@ const ENGINE_HTML = `<!DOCTYPE html>
 </div>
 
 <script>
+// Attach the admin key from the URL (?apiKey=...) to every API request.
+(() => {
+  const key = new URLSearchParams(location.search).get('apiKey')
+  if (!key) return
+  const original = window.fetch
+  window.fetch = (url, opts = {}) => {
+    const headers = new Headers(opts.headers || {})
+    if (!headers.has('x-api-key')) headers.set('x-api-key', key)
+    return original(url, { ...opts, headers })
+  }
+})()
 const api = async (path) => { try{const r=await fetch(path);return await r.json()}catch{return null} }
 
 async function runReview(){

@@ -107,6 +107,21 @@ test('judge: ProductionMemory remediation truncates known bad patterns', async (
   assert.ok(scene2.caption.length <= 38)
 })
 
+test('judge: caption overlap remediation hides the caption', async () => {
+  const memory = freshMemory()
+  const judge = new CompositionJudge({ aiEnabled: false, memory })
+  // 31-40 chars: no caption_too_long (>40), but over the 30-char overlap budget
+  const scene = { ...CLEAN_SCENE, id: 4, type: 'fact', caption: 'This caption is just over thirty chars' }
+  const out = await judge.evaluate([scene])
+  const r = out.results[0]
+  assert.ok(r.issues.includes('caption_overlap'), `issues: ${r.issues}`)
+  assert.equal(r.appliedFix, 'hide_caption')
+  assert.equal(r.recommendation, 'applied:hide_caption')
+  assert.equal(scene.caption, '', 'caption removed')
+  assert.equal(scene.captionHidden, true)
+  assert.ok(memory.lookup('caption_overlap'), 'overlap pattern learned')
+})
+
 // ---------------------------------------------------------------------------
 // ViewerBehaviorModel contract
 // ---------------------------------------------------------------------------
