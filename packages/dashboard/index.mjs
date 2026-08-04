@@ -8,8 +8,13 @@ import { readFileSync, existsSync, readdirSync, statSync, unlinkSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { execFileSync } from 'child_process'
+import { AgentTaskStore } from './agentTasks.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
+
+// Persistent conversation + task state — makes the chat a resumable agent:
+// "proceed" continues the active task instead of starting a new request.
+const agentTasks = new AgentTaskStore()
 const ROOT = resolve(__dirname, '..', '..')
 
 // Try to init DB but don't crash if unavailable
@@ -390,13 +395,24 @@ function detectIntent(message) {
 }
 
 app.post('/api/ai/chat', async (req, res) => {
-  const { message, context, mode } = req.body
+  const { message, context, mode, conversation_id } = req.body
   if (!message) return res.status(400).json({ error: 'message required' })
 
   try {
     if (!dashboardAI || !dashboardAI.isEnabled) {
       return res.json({ reply: 'AI provider not connected. Set OPENROUTER_API_KEY, OPENAI_API_KEY, or GEMINI_API_KEY in .env to enable chat.', provider: 'none', intent: { intent: 'learn', label: 'Learn' } })
     }
+
+    // ---- Persistent task state: conversation_id + resumable task ----
+    const cid = conversation_id || crypto.randomUUID()
+    let task = agentTasks.get(cid) || agentTasks.create(cid)
+    const resume = AgentTaskStore.resumeIntent(message) && task.status === 'interrupted'
+    agentTasks.update(cid, {
+      status: 'running',
+      stage: resume ? task.stage + 1 : 1,
+      progress: resume ? Math.max(15, task.progress) : 15,
+      current_action: resume ? 'Resuming previous task' : 'Thinking',
+    })
 
     const intent = detectIntent(message)
     const modeHint = { simple: 'Explain simply for a non-technical user.', developer: 'Explain technically with file paths and line numbers.', production: 'Frame as production issues with cause, impact, and recommended action.', debug: 'Focus on debugging details, logs, and root cause.', creative: 'Suggest creative storytelling and visual ideas.', business: 'Frame around impact, cost, and business value.' }
@@ -410,11 +426,15 @@ app.post('/api/ai/chat', async (req, res) => {
       systemContext += `\n\nSystem state:\n- Agents (${ctx.agents.length}): ${ctx.agents.join(', ')}\n- Memory (${ctx.memory.length}): ${ctx.memory.join(', ')}\n- Workflows (${ctx.workflows.length}): ${ctx.workflows.join(', ')}\n- Policies (${ctx.policies.length}): ${ctx.policies.join(', ')}\n- Approval required: ${ctx.approvalRequired.join(', ')}`
     }
     systemContext += `\n\nResponse style (${intent.label} mode): ${modeText}`
+    if (resume) {
+      systemContext += `\n\nThe user said "${message}" — this is a CONTINUATION of the previous task. Continue from where you left off using the conversation history and accumulated tool evidence. Do NOT restart the task: move to the next stage and finish it in this reply. Approved actions below have already been re-executed for you.`
+    }
 
-    const reply = await dashboardAI.aiProvider.generate([
-      { role: 'system', content: systemContext },
-      { role: 'user', content: message },
-    ], { temperature: 0.6 })
+    // Multi-turn history (bounded) — the model sees the whole conversation
+    const history = [...(task.history || [])].slice(-12)
+    const messages = [{ role: 'system', content: systemContext }, ...history, { role: 'user', content: message }]
+
+    const reply = await dashboardAI.aiProvider.generate(messages, { temperature: 0.6 })
 
     // Agentic tool loop — execute ```tool:name {json}``` blocks the model
     // emitted, then synthesize the final answer from the results.
@@ -428,31 +448,50 @@ app.post('/api/ai/chat', async (req, res) => {
       return c
     }
     let finalReply = reply
-    let toolCalls = []
+    let toolCalls = [...(task.tool_calls || [])]
     let resultsText = ''
     const toolCallRe = /```tool:(\w+)[^\n]*\n([\s\S]*?)```/g
     const { RepoAgentTools } = await import('../../src/integration/RepoAgentTools.mjs')
     const repoTools = new RepoAgentTools()
 
+    // Re-execute previously blocked calls whose approvals were granted while
+    // the task was paused (user clicked Approve). Deterministic — no model
+    // re-issue needed.
+    const approvals = task.approvals || []
+    for (const t of toolCalls) {
+      if (t.approvalRequired?.length && !t.executed && t.approvalRequired.every(a => approvals.includes(a))) {
+        const result = repoTools.execute(t.tool, t.args, { approvals })
+        t.result = result.ok ? compactToolResult(result) : { error: result.error || result.blocked || 'failed' }
+        t.approved = true
+        t.executed = true
+      }
+    }
+    const pendingApprovals = toolCalls.filter(t => t.approvalRequired?.length && !t.executed).map(t => ({ tool: t.tool, actions: t.approvalRequired }))
+
     // Iterative agentic loop: execute every tool block, feed results back,
-    // let the model batch more calls or write its final answer (max 3 rounds).
-    for (let round = 0; round < 3; round++) {
+    // let the model batch more calls or write its final answer. Resumed
+    // tasks get double the rounds so a paused audit can finish.
+    const maxRounds = resume ? 6 : 3
+    let hitCap = false
+    for (let round = 0; round < maxRounds; round++) {
       let match
       const calls = []
       while ((match = toolCallRe.exec(finalReply))) {
         const name = match[1]
         let args = {}
         try { args = JSON.parse(match[2]) } catch { /* empty args */ }
-        const result = repoTools.execute(name, args)
+        const result = repoTools.execute(name, args, { approvals })
         calls.push({ tool: name, args, ok: result.ok, approvalRequired: result.approvalRequired || null, result: result.ok ? compactToolResult(result) : { error: result.error || result.blocked || 'failed' } })
       }
       if (!calls.length) break
-      toolCalls.push(...calls)
+      if (round === maxRounds - 1) hitCap = true
+      toolCalls = [...toolCalls, ...calls]
       resultsText = JSON.stringify(toolCalls.map(t => ({ tool: t.tool, args: t.args, ok: t.ok, approvalRequired: t.approvalRequired, result: t.result })), null, 2).slice(0, 12000)
+      agentTasks.update(cid, { stage: 2 + round, progress: 30 + round * 15, current_action: `Running repository tools (round ${round + 1}/${maxRounds})` })
       const sys = systemContext + '\n\nYou just called repository tools. Results:\n' + resultsText +
-        (round < 2
+        (round < maxRounds - 1
           ? '\n\nYou may call MORE tools if you need evidence (batch multiple ```tool: blocks in one reply). Do not repeat calls you already made. When you have enough evidence, write your final answer as plain text only — no tool blocks. Structure: summary, cause, impact, recommended actions. Cite files/lines you verified.'
-          : '\n\nTool-call limit reached. Write your final answer NOW as plain text only — no tool blocks. Structure: summary, cause, impact, recommended actions. Cite files/lines you verified.')
+          : '\n\nTool-call limit reached for this turn. If you need to keep working, finish with a clear status line and note that the task will continue when the user says "proceed".')
       finalReply = await dashboardAI.aiProvider.generate([
         { role: 'system', content: sys },
         { role: 'user', content: message },
@@ -471,6 +510,19 @@ app.post('/api/ai/chat', async (req, res) => {
       cleaned = stripBlocks(retry)
     }
     finalReply = cleaned.length > 40 ? cleaned : ((stripBlocks(reply) || 'Tool call finished — see the tool results panel.') + (toolCalls.length ? '\n\nTool results:\n' + JSON.stringify(toolCalls.map(t => ({ tool: t.tool, ok: t.ok, result: t.result })), null, 2).slice(0, 2500) : ''))
+
+    // ---- Persist task outcome: pause at the round cap so "proceed" resumes ----
+    const finalPending = [...pendingApprovals, ...toolCalls.filter(t => t.approvalRequired?.length && !t.executed).map(t => ({ tool: t.tool, actions: t.approvalRequired }))]
+    agentTasks.update(cid, {
+      status: (hitCap || finalPending.length) ? 'interrupted' : 'completed',
+      stage: (hitCap || finalPending.length) ? task.stage + maxRounds : 4,
+      progress: (hitCap || finalPending.length) ? 85 : 100,
+      current_action: finalPending.length ? `Needs approval: ${finalPending[0].actions.join(', ')}` : (hitCap ? 'Paused — say "proceed" to continue' : 'Done'),
+      partial_result: finalReply,
+      history: [...messages, { role: 'assistant', content: finalReply }].slice(-16),
+      tool_calls: toolCalls,
+    })
+    task = agentTasks.get(cid)
 
     // Confidence heuristic: provider chain health + response length + intent match
     const confidence = Math.min(96, Math.round(72 + (reply?.length > 60 ? 12 : 4) + (intent.intent !== 'learn' ? 6 : 0)))
@@ -516,10 +568,41 @@ app.post('/api/ai/chat', async (req, res) => {
         agents: bridge?.getSystemContext?.().agents?.length ?? 7,
         lastAction: toolCalls.length ? `repo tools executed: ${toolCalls.map(t => t.tool).join(', ')}` : 'HashtagBuilder + quick render',
       },
+      conversation_id: cid,
+      canContinue: task.status === 'interrupted',
+      pendingApprovals: finalPending.length ? finalPending : undefined,
+      task: { task_id: task.task_id, status: task.status, stage: task.stage, progress: task.progress, current_action: task.current_action, updated_at: task.updated_at },
     })
   } catch (e) {
     res.json({ reply: `Error: ${e.message}`, provider: 'error', intent: { intent: 'learn', label: 'Learn' }, confidence: 30 })
   }
+})
+
+// ---- Task control endpoints (resume / stop / approve) ----
+app.get('/api/ai/task/:cid', (req, res) => {
+  const t = agentTasks.get(req.params.cid)
+  if (!t) return res.status(404).json({ error: 'no task for this conversation' })
+  res.json({ task_id: t.task_id, status: t.status, stage: t.stage, progress: t.progress, current_action: t.current_action, approvals: t.approvals || [], pending: (t.tool_calls || []).filter(x => x.approvalRequired?.length && !x.executed).map(x => ({ tool: x.tool, actions: x.approvalRequired })), updated_at: t.updated_at })
+})
+
+app.post('/api/ai/task/:cid/stop', (req, res) => {
+  const t = agentTasks.get(req.params.cid)
+  if (!t) return res.status(404).json({ error: 'no task for this conversation' })
+  agentTasks.update(t.conversation_id, { status: 'interrupted', current_action: 'Stopped by user — say "proceed" to resume' })
+  res.json({ ok: true })
+})
+
+app.post('/api/ai/task/:cid/approve', (req, res) => {
+  const t = agentTasks.get(req.params.cid)
+  if (!t) return res.status(404).json({ error: 'no task for this conversation' })
+  let actions = Array.isArray(req.body?.actions) ? req.body.actions : (req.body?.action ? [req.body.action] : [])
+  if (actions.includes('__all__')) {
+    actions = [...new Set((t.tool_calls || []).filter(x => x.approvalRequired?.length && !x.executed).flatMap(x => x.approvalRequired))]
+  }
+  if (!actions.length) return res.status(400).json({ error: 'actions required' })
+  const granted = [...new Set([...(t.approvals || []), ...actions])]
+  agentTasks.update(t.conversation_id, { approvals: granted, current_action: 'Approved — say "proceed" to execute' })
+  res.json({ ok: true, approvals: granted })
 })
 
 // AI Memory — known fixes learned from production
@@ -1478,11 +1561,13 @@ const HTML = `<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEWS-MONSTER AI Command Center</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
 :root{--bg:#000;--fg:#F8FAFC;--card:rgba(255,255,255,0.03);--card-border:rgba(255,255,255,0.06);--input-bg:rgba(255,255,255,0.05);--muted:#6b7280;--muted2:#9ca3af;--white:#fff}
 body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,sans-serif;min-height:100vh}
 body.light-mode{--bg:#f3f4f6;--fg:#111827;--card:#ffffff;--card-border:#e5e7eb;--input-bg:#f9fafb;--muted:#6b7280;--muted2:#4b5563;--white:#111827}
+.chat-md p{margin:4px 0}.chat-md code{background:rgba(255,255,255,0.08);padding:1px 4px;border-radius:4px;font-size:10px}.chat-md pre{background:rgba(0,0,0,0.45);padding:8px;border-radius:6px;overflow-x:auto;margin:6px 0}.chat-md pre code{background:none;padding:0;font-size:10px}.chat-md table{border-collapse:collapse;width:100%;margin:6px 0}.chat-md th,.chat-md td{border:1px solid rgba(255,255,255,0.15);padding:4px 6px;font-size:10px}.chat-md ul,.chat-md ol{margin:4px 0;padding-left:16px}.chat-md h1,.chat-md h2,.chat-md h3,.chat-md h4{margin:8px 0 4px;font-weight:800}.chat-md blockquote{border-left:2px solid rgba(255,255,255,0.2);margin:4px 0;padding-left:8px;color:var(--muted)}
 .glow-red{box-shadow:0 0 20px rgba(225,6,0,0.3)}
 .glow-cyan{box-shadow:0 0 20px rgba(0,229,255,0.2)}
 .glow-gold{box-shadow:0 0 20px rgba(255,215,0,0.2)}
@@ -2477,10 +2562,10 @@ function addChatMsg(role, text, provider){
   return div
 }
 
-// Render a structured AI assistant card (summary, confidence, intent, context, actions)
+// Render a structured AI assistant card (markdown, activity, task progress)
 function renderAiCard(res){
-  const reply = (res.reply || 'No reply').replace(/</g,'&lt;')
-  const md = reply.replace(/\\*\\*(.*?)\\*\\*/g,'<b>$1</b>').replace(/\\n/g,'<br>')
+  const safe = (res.reply || 'No reply').replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<iframe[\s\S]*?<\/iframe>/gi,'').replace(/javascript:/gi,'')
+  const md = (window.marked ? '<div class="chat-md">'+marked.parse(safe)+'</div>' : esc(safe).replace(/\*\*(.*?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>'))
   const conf = res.confidence || 70
   const intent = res.intent?.label || 'Learn'
   const intentIcon = { Fix:'🔧', Improve:'🚀', Create:'🖼️', Automate:'⚙️', Learn:'💡' }[intent] || '💡'
@@ -2488,6 +2573,32 @@ function renderAiCard(res){
     '<span>🤖 AI Assistant' + (res.provider ? ' <span class="opacity-60">· ' + res.provider + '</span>' : '') + '</span>' +
     '<span class="text-gray-500">'+intentIcon+' '+intent+'</span></div>' +
     md
+  // Agent activity timeline — every repo tool the agent actually ran
+  if (res.toolCalls?.length) {
+    html += '<div class="mt-2 pt-1 border-t border-white/10"><div class="text-gray-500 font-bold text-[10px] mb-1">AGENT ACTIVITY</div>' +
+      res.toolCalls.map(t => '<div class="text-[10px] text-gray-400 flex items-center gap-1">' +
+        '<span class="'+(t.approved?'text-cyan-400':'text-green-400')+'">'+(t.approved?'✓✓':'✓')+'</span>' +
+        ' ran <b>'+esc(t.tool)+'</b>' +
+        (t.approvalRequired ? ' <span class="text-yellow-400">(needs approval: '+esc(t.approvalRequired.join(', '))+')</span>' : '') +
+        '</div>').join('') + '</div>'
+  }
+  // Pending approvals — Approve + Continue buttons
+  if (res.pendingApprovals?.length) {
+    html += '<div class="mt-2 bg-yellow-500/10 rounded p-2 border border-yellow-500/30">' +
+      '<div class="text-yellow-400 font-bold text-[10px] mb-1">⚠️ APPROVAL REQUIRED</div>' +
+      res.pendingApprovals.map(p => '<div class="text-[10px] text-gray-300 mb-1">'+esc(p.tool)+' → <span class="text-yellow-300">'+esc(p.actions.join(', '))+'</span></div>').join('') +
+      '<button onclick="approveActions()" class="w-full bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-300 border border-yellow-500/30 rounded px-2 py-1 text-[10px] font-bold mt-1">Approve & Continue</button></div>'
+  }
+  // Running/paused task — progress + Continue/Stop
+  if (res.canContinue || res.task?.status === 'interrupted') {
+    html += '<div class="mt-2 bg-cyan-500/10 rounded p-2 border border-cyan-500/30">' +
+      '<div class="flex items-center justify-between text-[10px] mb-1"><span class="text-cyan-400 font-bold">'+esc(res.task?.current_action || 'Working')+'</span><span class="text-gray-400">'+(res.task?.progress||0)+'%</span></div>' +
+      '<div class="h-1.5 bg-gray-800 rounded-full overflow-hidden"><div class="h-full bg-cyan-500 transition-all" style="width:'+(res.task?.progress||0)+'%"></div></div>' +
+      '<div class="flex gap-2 mt-2">' +
+      '<button onclick="continueTask()" class="flex-1 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/30 rounded px-2 py-1 text-[10px] font-bold">Continue</button>' +
+      '<button onclick="stopTask()" class="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30 rounded px-2 py-1 text-[10px] font-bold">Stop</button>' +
+      '</div></div>'
+  }
   // Action card — execute buttons
   if (res.actionCard?.actions?.length) {
     html += '<div class="mt-2 bg-white/5 rounded p-2 border border-purple-500/30">' +
@@ -2532,16 +2643,39 @@ async function quickAsk(text){
   sendChat()
 }
 
-async function sendChat(){
+// Persistent conversation id — the chat is a resumable agent session
+function getCid(){
+  let c = localStorage.getItem('nm-cid')
+  if(!c){ c = (window.crypto?.randomUUID ? window.crypto.randomUUID() : 'c-'+Date.now()); localStorage.setItem('nm-cid', c) }
+  return c
+}
+
+async function continueTask(){ await sendChat('proceed') }
+
+async function stopTask(){
+  try {
+    const r = await fetch('/api/ai/task/'+getCid()+'/stop', {method:'POST',headers:{'Content-Type':'application/json'}}).then(r=>r.json())
+    addChatMsg('ai', '<span class="text-gray-500">⏹ Task '+(r.ok?'stopped':'failed')+' — say "proceed" to resume it.</span>')
+  } catch { addChatMsg('ai', '<span class="text-red-400">❌ Could not reach server</span>') }
+}
+
+async function approveActions(){
+  try {
+    const r = await fetch('/api/ai/task/'+getCid()+'/approve', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'__all__'})}).then(r=>r.json())
+    if (r.ok) await continueTask()
+  } catch { /* surface below via continueTask */ }
+}
+
+async function sendChat(text){
   const input = document.getElementById('chatInput')
-  const msg = input.value.trim()
+  const msg = (text ?? input.value).trim()
   if(!msg) return
   input.value = ''
   addChatMsg('user', msg.replace(/</g,'&lt;'))
   const thinking = addChatMsg('ai', '<span class="text-gray-500">Thinking...</span>')
   const mode = document.getElementById('chatMode')?.value || 'simple'
   try {
-    const res = await fetch('/api/ai/chat', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message: msg, mode})}).then(r=>r.json())
+    const res = await fetch('/api/ai/chat', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message: msg, mode, conversation_id: getCid()})}).then(r=>r.json())
     thinking.innerHTML = renderAiCard(res)
     const prov = document.getElementById('chatProvider')
     if(prov && res.provider) prov.textContent = res.provider

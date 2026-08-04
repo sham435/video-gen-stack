@@ -122,9 +122,9 @@ export class RepoAgentTools {
     return { ok: true, path: p, content: this._cap(content) }
   }
 
-  write_file({ path: p, content }) {
+  write_file({ path: p, content }, opts = {}) {
     const full = this._resolve(p)
-    if (this._isSecret(full)) return { ok: false, approvalRequired: ['modify-secrets'], error: 'modifying secret files requires approval' }
+    if (this._isSecret(full) && !opts.approvals?.includes('modify-secrets')) return { ok: false, approvalRequired: ['modify-secrets'], error: 'modifying secret files requires approval' }
     fs.mkdirSync(path.dirname(full), { recursive: true })
     fs.writeFileSync(full, String(content ?? ''))
     return { ok: true, written: path.relative(this.root, full) }
@@ -193,10 +193,10 @@ export class RepoAgentTools {
     return { ok: true, ...this._git(args) }
   }
 
-  bash({ command, timeout = 30000 }) {
+  bash({ command, timeout = 30000 }, opts = {}) {
     if (!command) return { ok: false, error: 'command required' }
     const action = this._approvalFor(command)
-    if (action) return { ok: false, approvalRequired: [action], error: `${action} requires approval` }
+    if (action && !opts.approvals?.includes(action)) return { ok: false, approvalRequired: [action], error: `${action} requires approval` }
     try {
       const out = execSync(command, { cwd: this.root, timeout, encoding: 'utf-8', maxBuffer: MAX_OUTPUT * 4 })
       return { ok: true, exitCode: 0, stdout: this._cap(out) }
@@ -205,9 +205,9 @@ export class RepoAgentTools {
     }
   }
 
-  apply_patch({ diff }) {
+  apply_patch({ diff }, opts = {}) {
     if (!diff) return { ok: false, error: 'diff required' }
-    if (/\.env/.test(diff)) return { ok: false, approvalRequired: ['modify-secrets'], error: 'patch touches .env — requires approval' }
+    if (/\.env/.test(diff) && !opts.approvals?.includes('modify-secrets')) return { ok: false, approvalRequired: ['modify-secrets'], error: 'patch touches .env — requires approval' }
     const files = [...diff.matchAll(/^\+\+\+\s+b\/(.+)$/gm)].map(m => m[1])
     try {
       execFileSync('git', ['apply', '--check', '-'], { cwd: this.root, input: diff, encoding: 'utf-8' })
@@ -236,13 +236,13 @@ export class RepoAgentTools {
     return null
   }
 
-  execute(name, args = {}) {
+  execute(name, args = {}, opts = {}) {
     if (name === 'terminal') name = 'bash' // audit-style alias
     if (typeof this[name] !== 'function' || name.startsWith('_')) {
       return { ok: false, error: `unknown tool: ${name}` }
     }
     try {
-      return this[name](args)
+      return this[name](args, opts)
     } catch (e) {
       return { ok: false, error: e.message }
     }
