@@ -47,8 +47,8 @@ export class BrandingLayer {
     const footer = BROADCAST_TEXT.footer
     const p = Math.min(1, progress * 1.5)
     ctx.save()
-    ctx.globalAlpha = 0.92 * p
-    ctx.fillStyle = 'rgba(5,5,5,0.78)'
+    ctx.globalAlpha = 1
+    ctx.fillStyle = 'rgba(5,5,5,0.85)'
     ctx.fillRect(0, H - footer.height, W, footer.height)
     ctx.fillStyle = 'rgba(255,255,255,0.12)'
     ctx.fillRect(0, H - footer.height, W, 1)
@@ -65,7 +65,7 @@ export class BrandingLayer {
     ctx.shadowBlur = 0
 
     ctx.font = `${footer.weight} ${footer.urlSize}px ${DesignSystem.getTypography('watermark', 'footer').font}, sans-serif`
-    ctx.fillStyle = 'rgba(255,255,255,0.95)'
+    ctx.fillStyle = '#FFFFFF'
     ctx.textAlign = 'right'
     ctx.shadowColor = 'rgba(0,0,0,0.9)'
     ctx.shadowBlur = 4

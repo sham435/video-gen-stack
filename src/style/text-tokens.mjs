@@ -19,10 +19,10 @@ export const BROADCAST_TEXT = {
     borderRadius: 4,
   },
   footer: {
-    size: 34,
+    size: 46,
     height: 100,
     weight: 800,
-    urlSize: 44,
+    urlSize: 56,
     iconSize: 64,
   },
   caption: {
