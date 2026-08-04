@@ -10,22 +10,27 @@ const COLORS = {
 
 // Breaking banner — locked to the top 15% of the frame. Subtext is optional:
 // pass '' when the headline below already carries that text (no duplicate
-// render). Without subtext the bar shrinks to a compact band.
+// render). Without subtext the bar shrinks to a compact band. The BREAKING
+// word is clamped to 48-64px so the banner stays chrome, never competing
+// with the headline, and the red wash never spills past the banner band.
 export function drawBreakingBanner(ctx, text, progress, fontSize = 64) {
   const p = Math.min(1, progress * 2)
   const hasSub = Boolean(text && String(text).trim())
-  const bannerH = hasSub ? 300 : 170
-  const bannerY = H * 0.15
+  const bannerH = hasSub ? 260 : 160
+  const bannerY = H * 0.12
+  const bandFont = Math.max(48, Math.min(64, fontSize))
 
   ctx.save()
 
-  const glow = ctx.createRadialGradient(W / 2, bannerY + bannerH / 2, 0, W / 2, bannerY + bannerH / 2, 400)
-  glow.addColorStop(0, `rgba(225, 6, 0, ${0.3 * (1 - p * 0.5)})`)
+  // Red glow confined to the banner band (max 0.15 alpha) — never a
+  // full-frame tint that washes out the headline below.
+  const glow = ctx.createRadialGradient(W / 2, bannerY + bannerH / 2, 0, W / 2, bannerY + bannerH / 2, 360)
+  glow.addColorStop(0, `rgba(225, 6, 0, ${0.15 * (1 - p * 0.5)})`)
   glow.addColorStop(1, 'rgba(225, 6, 0, 0)')
   ctx.fillStyle = glow
-  ctx.fillRect(0, 0, W, H)
+  ctx.fillRect(0, Math.max(0, bannerY - 120), W, bannerH + 240)
 
-  ctx.fillStyle = `rgba(225, 6, 0, ${0.85 * p})`
+  ctx.fillStyle = `rgba(225, 6, 0, ${0.9 * p})`
   ctx.shadowColor = COLORS.red
   ctx.shadowBlur = 60 * (1 - p * 0.5)
   ctx.beginPath()
@@ -45,19 +50,19 @@ export function drawBreakingBanner(ctx, text, progress, fontSize = 64) {
   ctx.fill()
 
   ctx.globalAlpha = p
-  ctx.font = `900 ${fontSize}px Anton, Impact, sans-serif`
+  ctx.font = `900 ${bandFont}px Anton, Impact, sans-serif`
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
   ctx.fillStyle = COLORS.white
   ctx.shadowColor = COLORS.red
-  ctx.shadowBlur = 50
+  ctx.shadowBlur = 40
   ctx.fillText('BREAKING', W / 2, bannerY + bannerH * (hasSub ? 0.38 : 0.5))
 
   if (hasSub) {
-    ctx.font = `900 ${Math.max(36, fontSize * 0.68)}px Anton, Impact, sans-serif`
+    ctx.font = `900 ${Math.max(32, Math.min(44, bandFont * 0.68))}px Anton, Impact, sans-serif`
     ctx.fillStyle = COLORS.red
     ctx.shadowColor = COLORS.red
-    ctx.shadowBlur = 30
+    ctx.shadowBlur = 24
     ctx.fillText(String(text).toUpperCase(), W / 2, bannerY + bannerH * 0.72)
   }
   ctx.shadowBlur = 0

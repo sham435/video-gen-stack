@@ -115,13 +115,14 @@ export class CoverComposer {
     // 4. Bottom brand strip (FIXED)
     ctx.fillStyle = 'rgba(0,0,0,0.6)'
     ctx.fillRect(0, H - 100, W, 100)
-    ctx.font = '400 28px Inter, sans-serif'
+    ctx.font = '400 36px Inter, sans-serif'
     ctx.fillStyle = 'rgba(255,255,255,0.7)'
     ctx.textAlign = 'left'
+    ctx.textBaseline = 'middle'
     ctx.fillText(`Source: ${brief.source_label || 'NEWS-MONSTER'}`, 40, H - 50)
     ctx.textAlign = 'right'
     ctx.fillStyle = accent
-    ctx.font = '700 28px Inter, sans-serif'
+    ctx.font = '700 36px Inter, sans-serif'
     ctx.fillText((brief.mood || 'BREAKING').toUpperCase(), W - 40, H - 50)
 
     fs.mkdirSync(path.dirname(outPath), { recursive: true })

@@ -23,11 +23,13 @@ export const SAFE_ZONES = {
 }
 
 // --- B) Layout roles ---
+// Anchors mirror the renderers: banner top 12%, headline center (0.62),
+// emphasis/caption lower third (0.78), source above the footer (0.90).
 export const ROLE_CONFIG = {
-  emphasis: { priority: 3, widthRatio: 0.90, heightRatio: 0.35, anchor: 0.78, floor: 30, maxLines: 2 },
-  headline: { priority: 2, widthRatio: 0.85, heightRatio: 0.25, anchor: 0.30, floor: 20, maxLines: 3 },
-  caption:  { priority: 1, widthRatio: 0.85, heightRatio: 0.25, anchor: 0.78, floor: 14, maxLines: 2 },
-  source:   { priority: 0, widthRatio: 0.85, heightRatio: 0.20, anchor: 0.90, floor: 14, maxLines: 1 },
+  emphasis: { priority: 3, widthRatio: 0.90, heightRatio: 0.35, anchor: 0.78, floor: 36, maxLines: 2 },
+  headline: { priority: 2, widthRatio: 0.85, heightRatio: 0.25, anchor: 0.62, floor: 34, maxLines: 2 },
+  caption:  { priority: 1, widthRatio: 0.85, heightRatio: 0.25, anchor: 0.78, floor: 32, maxLines: 2 },
+  source:   { priority: 0, widthRatio: 0.85, heightRatio: 0.20, anchor: 0.90, floor: 28, maxLines: 1 },
 }
 
 export class SafeZoneManager {

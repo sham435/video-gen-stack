@@ -46,7 +46,8 @@ export class InformationLayer {
       ctx.save()
       ctx.globalAlpha = hp
       const hScale = 0.6 + hp * 0.4
-      ctx.translate(W / 2, H * 0.62)
+      const anchorY = scene.headlineLayout?.y || H * 0.62
+      ctx.translate(W / 2, anchorY)
       ctx.scale(hScale, hScale)
       const layoutLines = scene.headlineLayout?.lines?.length ? scene.headlineLayout.lines : []
       const text = (scene.text || '').replace('BREAKING: ', '').toUpperCase()

@@ -40,26 +40,37 @@ export class BrandingLayer {
     ctx.fillRect(0, H - 3, W * 0.3, 3)
   }
 
-  // Footer — 80px bar with the brand URL at broadcast size (32px bold).
-  // Drawn every scene; it is chrome, not content, so it stays subtle but
-  // readable after compression.
+  // Footer — 100px bar with the brand (left, accent) and URL (right, bold
+  // white at broadcast size). Drawn every scene; it is chrome, not content,
+  // so it stays subtle but readable after compression.
   drawFooter(ctx, scene, progress) {
     const footer = BROADCAST_TEXT.footer
     const p = Math.min(1, progress * 1.5)
     ctx.save()
-    ctx.globalAlpha = 0.85 * p
-    ctx.fillStyle = 'rgba(5,5,5,0.72)'
+    ctx.globalAlpha = 0.92 * p
+    ctx.fillStyle = 'rgba(5,5,5,0.78)'
     ctx.fillRect(0, H - footer.height, W, footer.height)
-    ctx.fillStyle = 'rgba(255,255,255,0.08)'
+    ctx.fillStyle = 'rgba(255,255,255,0.12)'
     ctx.fillRect(0, H - footer.height, W, 1)
+    ctx.fillStyle = DesignSystem.brand.primary
+    ctx.fillRect(0, H - footer.height, W * 0.3, 3)
 
-    ctx.font = `${footer.weight} ${footer.urlSize}px ${DesignSystem.getTypography('watermark', 'footer').font}, sans-serif`
-    ctx.fillStyle = 'rgba(255,255,255,0.9)'
-    ctx.textAlign = 'right'
+    ctx.font = `${footer.weight} ${footer.size}px ${DesignSystem.getTypography('watermark', 'footer').font}, sans-serif`
+    ctx.fillStyle = DesignSystem.brand.primary
+    ctx.textAlign = 'left'
     ctx.textBaseline = 'middle'
     ctx.shadowColor = 'rgba(0,0,0,0.9)'
     ctx.shadowBlur = 4
-    ctx.fillText('www.tech-monster.tv', W - 24, H - footer.height / 2)
+    ctx.fillText('NEWS-MONSTER', 28, H - footer.height / 2)
+    ctx.shadowBlur = 0
+
+    ctx.font = `${footer.weight} ${footer.urlSize}px ${DesignSystem.getTypography('watermark', 'footer').font}, sans-serif`
+    ctx.fillStyle = 'rgba(255,255,255,0.95)'
+    ctx.textAlign = 'right'
+    ctx.shadowColor = 'rgba(0,0,0,0.9)'
+    ctx.shadowBlur = 4
+    ctx.fillText('www.tech-monster.tv', W - 28, H - footer.height / 2)
+    ctx.shadowBlur = 0
     ctx.restore()
   }
 

@@ -18,7 +18,7 @@ export class EmphasisLayer {
     const catStyle = DesignSystem.getCategoryStyle(category)
     const accent = catStyle?.colors?.accent || DesignSystem.brand.accent || '#00E5FF'
 
-    const fontSize = layout?.fontSize || 58
+    const fontSize = layout?.fontSize || 72
     const lineH = layout?.lineHeight || fontSize * 1.25
     const lines = layout?.lines?.length ? layout.lines : [word.toUpperCase()]
     const x = layout ? layout.x + layout.width / 2 : DesignSystem.W / 2

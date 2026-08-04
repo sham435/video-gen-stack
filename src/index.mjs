@@ -260,7 +260,9 @@ export class NewsBroadcastEngine {
     // Build a manifest per scene, resolve duplicate emphasis/caption words,
     // then lay out every layer (lines, font size, position) against its safe
     // zone so the renderer never duplicates, wraps by guesswork, or clips.
-    const LAYER_FONT_SIZE = { emphasis: 58, headline: 92, caption: 58, source: 48 }
+    // Emphasis runs 20%+ larger than the caption (72 vs 58) per the
+    // hierarchy: keyword > headline > caption.
+    const LAYER_FONT_SIZE = { emphasis: 72, headline: 84, caption: 58, source: 44 }
     for (const sc of scenes) {
       sc.textManifest = SceneTextManifest.build(sc)
       const resolved = this.textResolver.process(sc.textManifest)

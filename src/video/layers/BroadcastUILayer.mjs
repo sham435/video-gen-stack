@@ -63,7 +63,7 @@ export class BroadcastUILayer {
       ctx.fillStyle = 'rgba(255,255,255,0.5)'
       ctx.textAlign = 'left'
       ctx.textBaseline = 'bottom'
-      ctx.fillText(`Source: ${scene.source}`, DesignSystem.spacing.safeArea.left, H - DesignSystem.spacing.safeArea.bottom - 30)
+      ctx.fillText(`Source: ${scene.source}`, DesignSystem.spacing.safeArea.left, H - BROADCAST_TEXT.footer.height - 32)
       ctx.restore()
     }
 
@@ -79,7 +79,7 @@ export class BroadcastUILayer {
     const elapsed = Math.max(0, Math.floor((scene.duration || 30) * progress))
     const now = new Date(Date.UTC(1970, 0, 1, 0, Math.floor(elapsed / 60), elapsed % 60))
     const timeStr = now.toLocaleTimeString('en-US', { hour12: false, timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })
-    ctx.fillText(timeStr, W - DesignSystem.spacing.safeArea.right, H - DesignSystem.spacing.safeArea.bottom - 30)
+    ctx.fillText(timeStr, W - DesignSystem.spacing.safeArea.right, H - BROADCAST_TEXT.footer.height - 32)
     ctx.restore()
   }
 }

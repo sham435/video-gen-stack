@@ -70,12 +70,15 @@ const cap2 = hidden.text_layers.find(l => l.type === 'caption')
 assert.equal(cap2.visible, false)
 ok('all-emphasis caption hidden (no empty subtitle)')
 
-// 4. End-to-end: the keyword lives only in the emphasis layer, never in caption
-// (the headline layer may restate the title — that is the BREAKING banner design)
+// 4. End-to-end: the keyword must never render twice. When the emphasis
+// duplicates the headline ("SECRET" is in "BREAKING: SECRET APPLE VISION
+// PRO"), the overlap guard drops the emphasis layer — one thought per frame.
 console.log('End-to-end:')
 const capE2E = resolved.text_layers.find(l => l.type === 'caption')
 assert.equal(/\bSECRET\b/i.test(capE2E.text), false, `caption repeats keyword: "${capE2E.text}"`)
-assert.equal(resolved.text_layers.find(l => l.type === 'emphasis').text, 'SECRET')
-ok(`keyword appears in emphasis only; caption "${capE2E.text}" is clean`)
+const emE2E = resolved.text_layers.find(l => l.type === 'emphasis')
+assert.equal(emE2E.visible, false, 'emphasis duplicating the headline must be hidden')
+assert.equal(/\bSECRET\b/i.test(emE2E.text || ''), false)
+ok(`emphasis dropped (keyword already in headline); caption "${capE2E.text}" is clean`)
 
 console.log(`\nAll ${passed} checks passed.`)
