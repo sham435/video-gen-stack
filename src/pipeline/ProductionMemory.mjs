@@ -36,6 +36,7 @@ export class ProductionMemory {
     const existing = this.memory.rules.find(r => r.rule === rule)
     if (existing) {
       existing.frequency = (existing.frequency || 1) + 1
+      if (status) existing.status = status
       if (preferredFix) existing.preferredFix = preferredFix
       if (preventedBy) existing.preventedBy = preventedBy
       if (confidence != null) existing.confidence = confidence
