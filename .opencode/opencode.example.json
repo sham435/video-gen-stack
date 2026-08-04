@@ -1,0 +1,25 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "//": "Sanitized example — copy to .opencode/opencode.json and fill in your own values. Never commit the real file (it is gitignored).",
+  "model": {
+    "//": "Select a provider + model id available to your local opencode install",
+    "provider": "zen",
+    "id": "deepseek-v4-flash-free"
+  },
+  "mcpServers": {
+    "//": "Example only. Provide credentials via environment variables, never inline secrets",
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres"],
+      "env": { "DATABASE_URL": "${DATABASE_URL}" }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/"]
+    }
+  },
+  "permission": {
+    "//": "Optional: restrict tools opencode may run without approval",
+    "deny": ["bash:git push --force"]
+  }
+}

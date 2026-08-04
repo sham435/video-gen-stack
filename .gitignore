@@ -10,3 +10,7 @@ Library/
 .virtualenvs/
 output/
 scripts/get-youtube-token.mjs
+
+# Agent-local config/memory — never commit real files; use the sanitized example
+.opencode/opencode.json
+.opencode-memory.json
