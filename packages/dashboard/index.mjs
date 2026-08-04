@@ -8,13 +8,15 @@ import { readFileSync, existsSync, readdirSync, statSync, unlinkSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { execFileSync } from 'child_process'
-import { AgentTaskStore } from './agentTasks.mjs'
+import { AgentTaskStore, AgentEventBus } from './agentTasks.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 // Persistent conversation + task state — makes the chat a resumable agent:
 // "proceed" continues the active task instead of starting a new request.
 const agentTasks = new AgentTaskStore()
+// Live event stream per conversation → SSE endpoint → EventSource in the chat UI.
+const agentEvents = new AgentEventBus()
 const ROOT = resolve(__dirname, '..', '..')
 
 // Try to init DB but don't crash if unavailable
@@ -413,6 +415,7 @@ app.post('/api/ai/chat', async (req, res) => {
       progress: resume ? Math.max(15, task.progress) : 15,
       current_action: resume ? 'Resuming previous task' : 'Thinking',
     })
+    agentEvents.emit(cid, { type: 'task_started', stage: resume ? 'resuming_task' : 'understanding_request', percent: 15, current_action: resume ? 'Resuming previous task' : 'Thinking' })
 
     const intent = detectIntent(message)
     const modeHint = { simple: 'Explain simply for a non-technical user.', developer: 'Explain technically with file paths and line numbers.', production: 'Frame as production issues with cause, impact, and recommended action.', debug: 'Focus on debugging details, logs, and root cause.', creative: 'Suggest creative storytelling and visual ideas.', business: 'Frame around impact, cost, and business value.' }
@@ -480,7 +483,10 @@ app.post('/api/ai/chat', async (req, res) => {
         const name = match[1]
         let args = {}
         try { args = JSON.parse(match[2]) } catch { /* empty args */ }
+        const started = performance.now()
+        agentEvents.emit(cid, { type: 'tool_started', tool: name, input: JSON.stringify(args).slice(0, 200), percent: 30 + round * 15 })
         const result = repoTools.execute(name, args, { approvals })
+        agentEvents.emit(cid, { type: 'tool_completed', tool: name, ok: result.ok, approvalRequired: result.approvalRequired || null, duration_ms: Math.round(performance.now() - started), percent: 30 + round * 15 })
         calls.push({ tool: name, args, ok: result.ok, approvalRequired: result.approvalRequired || null, result: result.ok ? compactToolResult(result) : { error: result.error || result.blocked || 'failed' } })
       }
       if (!calls.length) break
@@ -488,6 +494,7 @@ app.post('/api/ai/chat', async (req, res) => {
       toolCalls = [...toolCalls, ...calls]
       resultsText = JSON.stringify(toolCalls.map(t => ({ tool: t.tool, args: t.args, ok: t.ok, approvalRequired: t.approvalRequired, result: t.result })), null, 2).slice(0, 12000)
       agentTasks.update(cid, { stage: 2 + round, progress: 30 + round * 15, current_action: `Running repository tools (round ${round + 1}/${maxRounds})` })
+      agentEvents.emit(cid, { type: 'progress', stage: `running_tools_round_${round + 1}`, percent: 30 + round * 15, current_action: `Running repository tools (round ${round + 1}/${maxRounds})` })
       const sys = systemContext + '\n\nYou just called repository tools. Results:\n' + resultsText +
         (round < maxRounds - 1
           ? '\n\nYou may call MORE tools if you need evidence (batch multiple ```tool: blocks in one reply). Do not repeat calls you already made. When you have enough evidence, write your final answer as plain text only — no tool blocks. Structure: summary, cause, impact, recommended actions. Cite files/lines you verified.'
@@ -523,6 +530,7 @@ app.post('/api/ai/chat', async (req, res) => {
       tool_calls: toolCalls,
     })
     task = agentTasks.get(cid)
+    agentEvents.emit(cid, { type: 'task_finished', status: task.status, percent: (hitCap || finalPending.length) ? 85 : 100, canContinue: task.status === 'interrupted' })
 
     // Confidence heuristic: provider chain health + response length + intent match
     const confidence = Math.min(96, Math.round(72 + (reply?.length > 60 ? 12 : 4) + (intent.intent !== 'learn' ? 6 : 0)))
@@ -603,6 +611,41 @@ app.post('/api/ai/task/:cid/approve', (req, res) => {
   const granted = [...new Set([...(t.approvals || []), ...actions])]
   agentTasks.update(t.conversation_id, { approvals: granted, current_action: 'Approved — say "proceed" to execute' })
   res.json({ ok: true, approvals: granted })
+})
+
+// ---- SSE event stream: live agent activity for the chat bubble ----
+app.get('/api/ai/task/:cid/events', (req, res) => {
+  const cid = req.params.cid
+  const lastId = parseInt(req.query.lastId || '0', 10) || 0
+  res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', Connection: 'keep-alive', 'X-Accel-Buffering': 'no' })
+  let lastSent = lastId
+  let closed = false
+  const cleanup = () => {
+    if (closed) return
+    closed = true
+    clearInterval(heartbeat)
+    clearInterval(quiet)
+    clearTimeout(cap)
+    clearTimeout(bootWait)
+    off()
+    res.end()
+  }
+  const send = ev => { res.write(`id: ${ev.id}\ndata: ${JSON.stringify(ev)}\n\n`); lastSent = ev.id }
+  // Live-forward new events, then replay anything emitted before subscribe
+  const off = agentEvents.on(cid, send)
+  for (const ev of agentEvents.events(cid, lastId)) send(ev)
+  const heartbeat = setInterval(() => res.write(': ping\n\n'), 15000)
+  // Close once the task is terminal and no event is still in flight
+  const quiet = setInterval(() => {
+    const t = agentTasks.get(cid)
+    const latest = agentEvents.events(cid, 0).at(-1)?.id || 0
+    if (t && (t.status === 'completed' || t.status === 'interrupted') && lastSent >= latest) cleanup()
+  }, 1500)
+  const cap = setTimeout(cleanup, 120000)
+  // EventSource subscribes BEFORE the chat POST creates the task — give the
+  // record a short grace window, then close for cids that never materialize.
+  const bootWait = setTimeout(() => { if (!agentTasks.get(cid)) cleanup() }, 15000)
+  req.on('close', cleanup)
 })
 
 // AI Memory — known fixes learned from production
@@ -2666,6 +2709,36 @@ async function approveActions(){
   } catch { /* surface below via continueTask */ }
 }
 
+// ---- SSE: live agent activity while the chat request is running ----
+let evtSource = null
+
+function livePanel(state){
+  const label = state.label || 'Working'
+  return '<div class="flex items-center justify-between text-[10px] mb-1"><span class="text-cyan-400 font-bold">'+esc(label)+'</span><span class="text-gray-400">'+state.percent+'%</span></div>' +
+    '<div class="h-1.5 bg-gray-800 rounded-full overflow-hidden"><div class="h-full bg-cyan-500 transition-all" style="width:'+state.percent+'%"></div></div>' +
+    (state.lines.length ? '<div class="mt-1 text-[9px] text-gray-500">'+state.lines.map(l=>'▸ '+esc(l)).join('<br>')+'</div>' : '')
+}
+
+function openStream(cid, bubble){
+  if (evtSource) { evtSource.close(); evtSource = null }
+  const state = { percent: 5, label: 'Connecting to agent…', lines: [] }
+  const key = new URLSearchParams(location.search).get('apiKey') || localStorage.getItem('nm-api-key')
+  const es = new EventSource('/api/ai/task/'+cid+'/events' + (key ? '?apiKey='+encodeURIComponent(key) : ''))
+  evtSource = es
+  es.onmessage = (e) => {
+    let ev
+    try { ev = JSON.parse(e.data) } catch { return }
+    if (ev.percent != null) state.percent = ev.percent
+    if (ev.type === 'task_started' || ev.type === 'progress') state.label = ev.current_action || ev.stage || 'Working'
+    else if (ev.type === 'tool_started') state.label = 'Running '+ev.tool
+    else if (ev.type === 'tool_completed') state.lines.push((ev.ok ? '✓ ' : '⚠ ') + ev.tool + (ev.approvalRequired ? ' (approval needed)' : '') + (ev.duration_ms ? ' · '+ev.duration_ms+'ms' : ''))
+    if (state.lines.length > 6) state.lines.shift()
+    if (ev.type === 'task_finished') { es.close(); evtSource = null }
+    if (bubble) bubble.innerHTML = livePanel(state)
+  }
+  es.onerror = () => { /* browser auto-reconnects; server closes the stream at task_finished */ }
+}
+
 async function sendChat(text){
   const input = document.getElementById('chatInput')
   const msg = (text ?? input.value).trim()
@@ -2674,8 +2747,10 @@ async function sendChat(text){
   addChatMsg('user', msg.replace(/</g,'&lt;'))
   const thinking = addChatMsg('ai', '<span class="text-gray-500">Thinking...</span>')
   const mode = document.getElementById('chatMode')?.value || 'simple'
+  openStream(getCid(), thinking)
   try {
     const res = await fetch('/api/ai/chat', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message: msg, mode, conversation_id: getCid()})}).then(r=>r.json())
+    if (evtSource) { evtSource.close(); evtSource = null }
     thinking.innerHTML = renderAiCard(res)
     const prov = document.getElementById('chatProvider')
     if(prov && res.provider) prov.textContent = res.provider

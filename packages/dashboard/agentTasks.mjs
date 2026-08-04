@@ -72,3 +72,41 @@ export class AgentTaskStore {
     return RESUME_PATTERN.test(String(message || '').trim())
   }
 }
+
+// AgentEventBus — in-memory event stream per conversation, powering the SSE
+// endpoint (GET /api/ai/task/:cid/events). Monotonic per-conversation ids let
+// late/reconnecting EventSource subscribers replay missed events via lastId.
+export class AgentEventBus {
+  constructor() {
+    this._buffers = new Map()
+    this._waiters = new Map()
+  }
+
+  emit(conversationId, event) {
+    const buf = this._buffers.get(conversationId) || []
+    const prev = buf.length ? buf[buf.length - 1].id : 0
+    const ev = { id: prev + 1, time: Date.now(), ...event, conversation_id: conversationId }
+    buf.push(ev)
+    if (buf.length > 200) buf.splice(0, buf.length - 200)
+    this._buffers.set(conversationId, buf)
+    const waiters = this._waiters.get(conversationId) || []
+    for (const fn of waiters) fn(ev)
+  }
+
+  // events after lastId, oldest-first (replay on subscribe)
+  events(conversationId, lastId = 0) {
+    return (this._buffers.get(conversationId) || []).filter(e => e.id > lastId)
+  }
+
+  on(conversationId, fn) {
+    const w = this._waiters.get(conversationId) || []
+    w.push(fn)
+    this._waiters.set(conversationId, w)
+    return () => this.off(conversationId, fn)
+  }
+
+  off(conversationId, fn) {
+    const w = this._waiters.get(conversationId) || []
+    this._waiters.set(conversationId, w.filter(f => f !== fn))
+  }
+}
