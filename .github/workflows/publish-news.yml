@@ -22,8 +22,8 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: 'npm'
@@ -41,16 +41,16 @@ jobs:
     needs: validate
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: 'npm'
 
       - name: Restore production memory + retention snapshots
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: data
           key: newsroom-data-v1
@@ -80,7 +80,7 @@ jobs:
 
       - name: Persist production memory + retention snapshots
         if: always()
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: data
           key: newsroom-data-v1
@@ -90,12 +90,12 @@ jobs:
     if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
       - name: Restore production memory + retention snapshots
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: data
           key: newsroom-data-v1
@@ -109,7 +109,7 @@ jobs:
         run: node scripts/retention-learning.mjs
       - name: Persist calibrated production memory
         if: always()
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: data
           key: newsroom-data-v1
