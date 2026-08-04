@@ -184,6 +184,38 @@ export class RepoAgentTools {
     return { ok: true, count: results.length, results }
   }
 
+  // One-shot repo statistics — total files, LOC, top dirs/extensions. The
+  // cheap, truthful answer to "how big is this repo / file count?" without
+  // the model shelling out to bash and guessing.
+  repo_stats({ path: p = '' } = {}) {
+    const base = this._resolve(p)
+    const files = this._walk(base, () => true)
+    const byDir = {}
+    const byExt = {}
+    let total = 0
+    let code = 0
+    for (const f of files) {
+      const rel = path.relative(this.root, f)
+      const dir = rel.includes(path.sep) ? rel.split(path.sep)[0] : '.'
+      byDir[dir] = (byDir[dir] || 0) + 1
+      const ext = (path.extname(f) || '(none)').slice(1)
+      byExt[ext] = (byExt[ext] || 0) + 1
+      try {
+        if (fs.statSync(f).size > 2 * 1024 * 1024) continue
+        const lines = fs.readFileSync(f, 'utf-8').split('\n').length
+        total += lines
+        if (/\.(mjs|js|ts|py|mts|cts|jsx|tsx|html|css|json|md)$/.test(rel)) code += lines
+      } catch { /* binary/unreadable — skip */ }
+    }
+    return {
+      ok: true,
+      total_files: files.length,
+      lines: { total, code },
+      top_directories: Object.entries(byDir).sort((a, b) => b[1] - a[1]).slice(0, 15),
+      top_extensions: Object.entries(byExt).sort((a, b) => b[1] - a[1]).slice(0, 10),
+    }
+  }
+
   git_status() {
     return { ok: true, ...this._git(['status', '--short', '--branch']) }
   }

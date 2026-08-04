@@ -385,9 +385,12 @@ app.post('/api/visual/cover', async (req, res) => {
 })
 
 // AI Chat — agent-assisted Q&A via ProviderChain
-// Detect user intent: learn / fix / improve / create / automate
+// Detect user intent: audit / learn / fix / improve / create / automate
 function detectIntent(message) {
   const m = (message || '').toLowerCase()
+  // Analysis/audit requests must NOT be classified as fix (they are not
+  // video-production remediation — no action card, deep tool use instead).
+  if (/(audit|blueprint|reverse.?engineer|file.?by.?file|technical (blueprint|document|report)|comprehensive (review|analysis)|review every|analyze (the|this|our|a|your) (system|code|repo|stack|codebase)|architecture review)/.test(m)) return { intent: 'audit', label: 'Audit' }
   if (/(fix|error|bug|issue|broken|fail|crashed)/.test(m)) return { intent: 'fix', label: 'Fix' }
   if (/(improve|optimize|better|speed|faster|quality)/.test(m)) return { intent: 'improve', label: 'Improve' }
   if (/(create|generate|make|build|new)/.test(m)) return { intent: 'create', label: 'Create' }
@@ -422,7 +425,7 @@ app.post('/api/ai/chat', async (req, res) => {
     const modeText = modeHint[mode] || modeHint.simple
 
     let systemContext = 'You are the NEWS-MONSTER AI production assistant — a senior producer + technical director + creative director combined. You answer with structure: summary, cause, impact, recommended actions. Be concise and helpful.'
-    systemContext += '\n\nRepository tools available (call by EXACT name only): read_file, write_file, list_directory, find, grep, rg, search_symbols, git_status, git_diff, bash, terminal, apply_patch. To use one, reply with a fenced block exactly like this:\n```tool:grep\n{"pattern":"class RepoAgentTools","path":"src"}\n```\nThe runtime executes it and returns results for your final answer. Never read .env or files under data/. Mutating or privileged actions will be blocked pending approval. Always verify claims against the code before answering (file paths + line numbers).'
+    systemContext += '\n\nRepository tools available (call by EXACT name only): read_file, write_file, list_directory, find, grep, rg, search_symbols, repo_stats, git_status, git_diff, bash, terminal, apply_patch. To use one, reply with a fenced block exactly like this:\n```tool:grep\n{"pattern":"class RepoAgentTools","path":"src"}\n```\nThe runtime executes it and returns results for your final answer. repo_stats returns total file count, LOC, top directories/extensions — use it for size questions instead of guessing. Never read .env or files under data/. Mutating or privileged actions will be blocked pending approval. Always verify claims against the code before answering (file paths + line numbers).'
     const bridge = await dashboardAI.getBridge()
     if (bridge) {
       const ctx = bridge.getSystemContext()
@@ -518,19 +521,55 @@ app.post('/api/ai/chat', async (req, res) => {
     }
     finalReply = cleaned.length > 40 ? cleaned : ((stripBlocks(reply) || 'Tool call finished — see the tool results panel.') + (toolCalls.length ? '\n\nTool results:\n' + JSON.stringify(toolCalls.map(t => ({ tool: t.tool, ok: t.ok, result: t.result })), null, 2).slice(0, 2500) : ''))
 
+    // Completeness guard: a reply that PROMISES work ("-- scanning now --",
+    // "analyzing now", "file count: --") without delivering it is a stub.
+    // Force one hard round to actually run tools; if it still stubs, pause
+    // for "proceed" instead of silently reporting completion.
+    const looksLikeStub = (t) => /\-\-\s*(scanning|analyzing|auditing|fetching|loading|indexing|processing|checking|working)[^\-]*\-\-/i.test(t)
+      || /\b(scanning|analyzing|auditing|indexing|processing|checking)\s+now\b/i.test(t)
+      || /(file count|files detected|total files)[^:\n]*:\s*\-\-/i.test(t)
+    let stub = looksLikeStub(finalReply)
+    if (stub && !hitCap) {
+      const sys = systemContext + '\n\nYour previous reply was a STATUS STUB, not an answer — it announced "' + finalReply.slice(0, 200) + '" but never delivered results. Execute the repository tools NOW (repo_stats, find, grep, read_file, list_directory, search_symbols — whichever fit the request) and then write the real, complete answer as plain text. No placeholders, no "scanning now", no "-- ... --" markers.'
+      const hard = await dashboardAI.aiProvider.generate([{ role: 'system', content: sys }, { role: 'user', content: message }], { temperature: 0.4 })
+      let m
+      const hardCalls = []
+      const re = /```tool:(\w+)[^\n]*\n([\s\S]*?)```/g
+      while ((m = re.exec(hard))) {
+        const name = m[1]
+        let args = {}
+        try { args = JSON.parse(m[2]) } catch { /* empty args */ }
+        const started = performance.now()
+        agentEvents.emit(cid, { type: 'tool_started', tool: name, input: JSON.stringify(args).slice(0, 200), percent: 90 })
+        const result = repoTools.execute(name, args, { approvals })
+        agentEvents.emit(cid, { type: 'tool_completed', tool: name, ok: result.ok, approvalRequired: result.approvalRequired || null, duration_ms: Math.round(performance.now() - started), percent: 90 })
+        hardCalls.push({ tool: name, args, ok: result.ok, approvalRequired: result.approvalRequired || null, result: result.ok ? compactToolResult(result) : { error: result.error || result.blocked || 'failed' } })
+      }
+      if (hardCalls.length) {
+        toolCalls = [...toolCalls, ...hardCalls]
+        const evidence = JSON.stringify(toolCalls.map(t => ({ tool: t.tool, args: t.args, ok: t.ok, result: t.result })), null, 2).slice(0, 12000)
+        const synth = await dashboardAI.aiProvider.generate([{ role: 'system', content: systemContext + '\n\nFinal synthesis — write the complete answer using ONLY this tool evidence. No tool blocks, no placeholders:\n' + evidence }, { role: 'user', content: message }], { temperature: 0.4 })
+        finalReply = stripBlocks(synth)
+      } else {
+        finalReply = stripBlocks(hard)
+      }
+      stub = looksLikeStub(finalReply)
+    }
+
     // ---- Persist task outcome: pause at the round cap so "proceed" resumes ----
     const finalPending = [...pendingApprovals, ...toolCalls.filter(t => t.approvalRequired?.length && !t.executed).map(t => ({ tool: t.tool, actions: t.approvalRequired }))]
+    const paused = hitCap || finalPending.length || stub
     agentTasks.update(cid, {
-      status: (hitCap || finalPending.length) ? 'interrupted' : 'completed',
-      stage: (hitCap || finalPending.length) ? task.stage + maxRounds : 4,
-      progress: (hitCap || finalPending.length) ? 85 : 100,
-      current_action: finalPending.length ? `Needs approval: ${finalPending[0].actions.join(', ')}` : (hitCap ? 'Paused — say "proceed" to continue' : 'Done'),
+      status: paused ? 'interrupted' : 'completed',
+      stage: paused ? task.stage + maxRounds + (stub ? 1 : 0) : 4,
+      progress: paused ? 85 : 100,
+      current_action: finalPending.length ? `Needs approval: ${finalPending[0].actions.join(', ')}` : (paused ? 'Paused — final answer incomplete; say "proceed" to continue' : 'Done'),
       partial_result: finalReply,
       history: [...messages, { role: 'assistant', content: finalReply }].slice(-16),
       tool_calls: toolCalls,
     })
     task = agentTasks.get(cid)
-    agentEvents.emit(cid, { type: 'task_finished', status: task.status, percent: (hitCap || finalPending.length) ? 85 : 100, canContinue: task.status === 'interrupted' })
+    agentEvents.emit(cid, { type: 'task_finished', status: task.status, percent: paused ? 85 : 100, canContinue: task.status === 'interrupted' })
 
     // Confidence heuristic: provider chain health + response length + intent match
     const confidence = Math.min(96, Math.round(72 + (reply?.length > 60 ? 12 : 4) + (intent.intent !== 'learn' ? 6 : 0)))
@@ -540,9 +579,11 @@ app.post('/api/ai/chat', async (req, res) => {
       'production_memory',
     ].filter(Boolean)
 
-    // Action card for fix/create intents — give the user an Execute button
+    // Action card for fix/create intents — give the user an Execute button.
+    // Only for short remediation-style requests; long analysis prompts that
+    // slip past audit detection must not get video-production quick actions.
     let actionCard = null
-    if (intent.intent === 'fix') {
+    if (intent.intent === 'fix' && (message?.length || 0) < 400) {
       actionCard = {
         type: 'action_card',
         problem: reply.slice(0, 80),
