@@ -47,9 +47,22 @@ if (import.meta.url.endsWith('composer.mjs')) {
     if (process.env.NEWSAPI_KEY) {
       try {
         const newsSvc = await import('../apps/api/services/news.js')
-        articles = category === 'tesla'
-          ? await newsSvc.searchNews('tesla', { pageSize: 3, sortBy: 'publishedAt' })
-          : await newsSvc.fetchTopHeadlines({ category, pageSize: 3 })
+        const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10)
+        const CATEGORY_QUERY = {
+          tesla: ['tesla', { pageSize: 3, sortBy: 'publishedAt' }],
+          apple: ['apple', { pageSize: 3, sortBy: 'popularity', from: yesterday, to: yesterday }],
+        }
+        const preset = CATEGORY_QUERY[category]
+        if (preset) {
+          articles = await newsSvc.searchNews(preset[0], preset[1])
+          if (!articles.length && preset[1].from) {
+            console.log(`[NEWS] ${category}: empty date-filtered result, retrying without date range (free-plan window)`)
+            const { from, to, ...rest } = preset[1]
+            articles = await newsSvc.searchNews(preset[0], rest)
+          }
+        } else {
+          articles = await newsSvc.fetchTopHeadlines({ category, pageSize: 3 })
+        }
       } catch (e) { console.log('NewsAPI error:', e.message) }
     }
 
@@ -66,6 +79,9 @@ if (import.meta.url.endsWith('composer.mjs')) {
     }
 
     if (!articles?.length) {
+      if (process.env.NEWSAPI_KEY && !process.argv[2]) {
+        throw new Error(`No articles returned for category "${category}" (NewsAPI empty or rate-limited) — aborting instead of publishing placeholder content`)
+      }
       articles = [{
         title: process.argv[2] || 'Apple releases groundbreaking AI model that changes everything',
         description: process.argv[3] || 'Apple announced a revolutionary new AI model that can process images and video simultaneously.',

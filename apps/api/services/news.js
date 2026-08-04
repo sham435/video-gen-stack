@@ -19,13 +19,15 @@ export async function fetchTopHeadlines({ category, country = 'us', pageSize = 1
   return data.articles || []
 }
 
-export async function searchNews(query, { pageSize = 10, sortBy = 'publishedAt' } = {}) {
+export async function searchNews(query, { pageSize = 10, sortBy = 'publishedAt', from, to } = {}) {
   const params = new URLSearchParams({
     apiKey: API_KEY,
     q: query,
     pageSize: String(pageSize),
     sortBy,
   })
+  if (from) params.set('from', from)
+  if (to) params.set('to', to)
 
   const res = await fetch(`${BASE}/everything?${params}`)
   if (!res.ok) {
