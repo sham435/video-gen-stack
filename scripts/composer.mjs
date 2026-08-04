@@ -170,7 +170,10 @@ if (import.meta.url.endsWith('composer.mjs')) {
               console.log('Retention snapshot recorded for learning loop')
             } catch (e) { console.log('Retention snapshot skipped:', e.message) }
           }
-        } catch (e) { console.log('Upload failed:', e.message) }
+        } catch (e) {
+          console.log('Upload failed:', e.message)
+          throw new Error(`Upload failed — no video published: ${e.message}`)
+        }
       }
     }
 
