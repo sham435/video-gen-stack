@@ -44,21 +44,29 @@ if (import.meta.url.endsWith('composer.mjs')) {
     await ensureMusicExists()
 
     let articles
+    let preset = null
     if (process.env.NEWSAPI_KEY) {
       try {
         const newsSvc = await import('../apps/api/services/news.js')
         const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10)
         const CATEGORY_QUERY = {
-          tesla: ['tesla', { pageSize: 3, sortBy: 'publishedAt' }],
-          apple: ['apple', { pageSize: 3, sortBy: 'popularity', from: yesterday, to: yesterday }],
+          tesla: ['search', 'tesla', { pageSize: 3, sortBy: 'publishedAt' }],
+          apple: ['search', 'apple', { pageSize: 3, sortBy: 'popularity', from: yesterday, to: yesterday }],
+          wsj: ['search', '', { pageSize: 3, sortBy: 'publishedAt', domains: 'wsj.com' }],
+          techcrunch: ['headlines', { sources: 'techcrunch', pageSize: 3 }],
+          business: ['headlines', { category: 'business', country: 'us', pageSize: 3 }],
         }
-        const preset = CATEGORY_QUERY[category]
+        preset = CATEGORY_QUERY[category]
         if (preset) {
-          articles = await newsSvc.searchNews(preset[0], preset[1])
-          if (!articles.length && preset[1].from) {
-            console.log(`[NEWS] ${category}: empty date-filtered result, retrying without date range (free-plan window)`)
-            const { from, to, ...rest } = preset[1]
-            articles = await newsSvc.searchNews(preset[0], rest)
+          if (preset[0] === 'search') {
+            articles = await newsSvc.searchNews(preset[1], preset[2])
+            if (!articles.length && preset[2].from) {
+              console.log(`[NEWS] ${category}: empty date-filtered result, retrying without date range`)
+              const { from, to, ...rest } = preset[2]
+              articles = await newsSvc.searchNews(preset[1], rest)
+            }
+          } else {
+            articles = await newsSvc.fetchTopHeadlines(preset[1])
           }
         } else {
           articles = await newsSvc.fetchTopHeadlines({ category, pageSize: 3 })
@@ -66,7 +74,7 @@ if (import.meta.url.endsWith('composer.mjs')) {
       } catch (e) { console.log('NewsAPI error:', e.message) }
     }
 
-    if (articles?.length) {
+    if (articles?.length && !preset) {
       const techKeywords = ['ai', 'apple', 'google', 'microsoft', 'meta', 'tesla', 'nvidia', 'openai', 'chatgpt', 'iphone', 'samsung', 'robot', 'chip', 'software', 'update', 'launch', 'cyber', 'quantum', 'space', 'data', 'cloud', 'app', 'digital', 'tech', 'computer', 'phone', 'electric', 'gaming', 'console', 'startup', 'algorithm', 'neural', 'blockchain', 'autonomous', 'drone', 'satellite', 'battery', 'solar', 'ai', 'vr', 'ar', '5g', '6g', 'processor', 'gpu', 'cpu', 'security', 'privacy']
       articles = articles.filter(a => {
         const t = (a.title || '').toLowerCase()

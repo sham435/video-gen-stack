@@ -64,6 +64,19 @@ jobs:
           sudo apt-get install -y -qq ffmpeg python3-pip espeak
           pip3 install edge-tts -q
 
+      - name: Pick category (rotates through selections every 30 min — 6 per 3h cycle, 48 posts/day max)
+        id: pick
+        run: |
+          if [ -n "${{ github.event.inputs.category }}" ]; then
+            cat="${{ github.event.inputs.category }}"
+          else
+            cats=(technology tesla apple wsj techcrunch business)
+            idx=$(( ($(date +%H) * 2 + $(date +%M) / 30) % ${#cats[@]} ))
+            cat="${cats[$idx]}"
+          fi
+          echo "category=$cat" >> "$GITHUB_OUTPUT"
+          echo "Selected: $cat"
+
       - name: Generate NEWS-MONSTER Broadcast
         env:
           NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
@@ -75,7 +88,7 @@ jobs:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
           QUICK_RENDER: 'true'
-          INPUT_CATEGORY: ${{ github.event.inputs.category || 'technology' }}
+          INPUT_CATEGORY: ${{ steps.pick.outputs.category }}
         run: node scripts/composer.mjs '${{ github.event.inputs.title || '' }}'
 
       - name: Persist production memory + retention snapshots
