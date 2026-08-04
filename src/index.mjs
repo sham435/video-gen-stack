@@ -12,6 +12,7 @@ import { ProductionGuardian } from './ai/ProductionGuardian.mjs'
 import { ProductionPreflight } from './ai/ProductionPreflight.mjs'
 import { SceneTextManifest } from './pipeline/SceneTextManifest.mjs'
 import { TextConflictResolver } from './pipeline/TextConflictResolver.mjs'
+import { resolveRenderManifest, resolveRenderGates } from './pipeline/RenderManifest.mjs'
 import { TextLayoutEngine } from './layout/TextLayoutEngine.mjs'
 import { TextLayoutPreflight } from './layout/TextLayoutPreflight.mjs'
 import { LayoutPolicy } from './layout/LayoutPolicy.mjs'
@@ -446,6 +447,12 @@ export class NewsBroadcastEngine {
     if (!renderPreflight.ready) {
       throw new Error(`Render preflight failed: ${renderPreflight.errors.join(', ')}`)
     }
+
+    // RenderManifest: the canvas pipeline is the single text authority.
+    // FFmpeg-level compositing (SRT burn, footer.png) is opt-in and
+    // mutually exclusive with the canvas layer that owns the same element.
+    const renderManifest = resolveRenderManifest(options)
+    const renderGates = resolveRenderGates(options, renderManifest)
     console.log(`Rendering ${totalFrames} frames at ${this.renderFps}fps (output: ${this.outputFps}fps)...`)
     job.markStart('render')
 
@@ -457,7 +464,7 @@ export class NewsBroadcastEngine {
       const wordTimings = this.timeline.getActiveWordTimings(scene.caption || '', sceneDuration)
       const wordIndex = this.timeline.getActiveWordIndex(wordTimings, sceneTime)
 
-      const png = await this.sceneEngine.renderSceneFrame({ ...scene, quickRender: options.quick }, progress, wordTimings, wordIndex)
+      const png = await this.sceneEngine.renderSceneFrame({ ...scene, quickRender: options.quick }, progress, wordTimings, wordIndex, renderManifest)
 
       const framePath = `${framesDir}/f${String(frame).padStart(5, '0')}.png`
       fs.writeFileSync(framePath, png)
@@ -469,7 +476,7 @@ export class NewsBroadcastEngine {
     process.stdout.write('\n')
 
     const videoPath = await this.executor.execute(
-      () => this.assembleVideo(framesDir, voicePath, timedScenes, totalDuration, outDir),
+      () => this.assembleVideo(framesDir, voicePath, timedScenes, totalDuration, outDir, renderManifest, renderGates),
       { jobId: job?.id, category: article?.category }
     )
     job.markDone('render', { detail: `${totalFrames} frames → ${path.basename(videoPath)}`, score: 88 })
@@ -532,7 +539,8 @@ export class NewsBroadcastEngine {
     }
   }
 
-  async assembleVideo(framesDir, voicePath, scenes, totalDuration, outDir) {
+  async assembleVideo(framesDir, voicePath, scenes, totalDuration, outDir, renderManifest = null, renderGates = null) {
+    const gates = renderGates ?? resolveRenderGates({}, renderManifest ?? resolveRenderManifest())
     const videoPath = `${outDir}/broadcast.mp4`
     const listPath = `${outDir}/scene_list.txt`
     let listContent = ''
@@ -573,34 +581,43 @@ export class NewsBroadcastEngine {
     this.audioMixer.mixAudio(silentVideo, voicePath, musicPath, totalDuration, videoPath)
     console.log('Broadcast video:', videoPath)
 
-    // Burn subtitles from narration beat timings (SRT)
-    try {
-      const { generateSRT, burnSubtitles } = await import('../scripts/captions.mjs')
-      const narrationScript = scenes.map(s => s.caption || s.narration || '').filter(Boolean).join(' ')
-      if (narrationScript.trim()) {
-        const srt = generateSRT(narrationScript, totalDuration)
-        const srtPath = `${outDir}/captions.srt`
-        fs.writeFileSync(srtPath, srt)
-        const subbed = `${outDir}/broadcast_subbed.mp4`
-        try {
-          await burnSubtitles(videoPath, srtPath, subbed)
-          if (fs.existsSync(subbed)) {
-            fs.copyFileSync(subbed, videoPath)
-            fs.unlinkSync(subbed)
-            console.log('Subtitles burned:', srtPath)
+    // Burn subtitles from narration beat timings (SRT).
+    // Single-owner rule: only when the manifest hands the subtitle layer to
+    // ffmpeg (options.burnSubtitles: true). Off by default — the canvas
+    // CaptionLayer is the narration authority.
+    if (gates.burnSubtitles) {
+      try {
+        const { generateSRT, burnSubtitles } = await import('../scripts/captions.mjs')
+        const narrationScript = scenes.map(s => s.caption || s.narration || '').filter(Boolean).join(' ')
+        if (narrationScript.trim()) {
+          const srt = generateSRT(narrationScript, totalDuration)
+          const srtPath = `${outDir}/captions.srt`
+          fs.writeFileSync(srtPath, srt)
+          const subbed = `${outDir}/broadcast_subbed.mp4`
+          try {
+            await burnSubtitles(videoPath, srtPath, subbed)
+            if (fs.existsSync(subbed)) {
+              fs.copyFileSync(subbed, videoPath)
+              fs.unlinkSync(subbed)
+              console.log('Subtitles burned:', srtPath)
+            }
+          } catch (e) {
+            console.warn(`Subtitle burn skipped: ${e.message}`)
           }
-        } catch (e) {
-          console.warn(`Subtitle burn skipped: ${e.message}`)
         }
+      } catch (e) {
+        console.warn(`Subtitle generation skipped: ${e.message}`)
       }
-    } catch (e) {
-      console.warn(`Subtitle generation skipped: ${e.message}`)
     }
 
-    const footerWith = `${outDir}/broadcast_final.mp4`
-    this.audioMixer.overlayFooter(videoPath, 'assets/footer.png', footerWith)
-    if (fs.existsSync(footerWith)) {
-      fs.copyFileSync(footerWith, videoPath)
+    // Footer composite: only when explicitly requested AND the canvas
+    // BrandingLayer footer is disabled — mutual exclusion (one owner).
+    if (gates.overlayFooter) {
+      const footerWith = `${outDir}/broadcast_final.mp4`
+      this.audioMixer.overlayFooter(videoPath, 'assets/footer.png', footerWith)
+      if (fs.existsSync(footerWith)) {
+        fs.copyFileSync(footerWith, videoPath)
+      }
     }
     return videoPath
   }

@@ -8,7 +8,7 @@
     "dev": "node --watch server/index.js",
     "start": "node server/index.js",
     "newsroom": "node packages/editorial/pipeline.mjs",
-    "dashboard": "node packages/dashboard/index.mjs",
+    "dashboard": "node --env-file=.env packages/dashboard/index.mjs",
     "db:init": "node packages/database/db.mjs",
     "templates": "node packages/editorial/templates.mjs",
     "storage": "node packages/storage/manager.mjs",

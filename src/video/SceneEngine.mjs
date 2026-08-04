@@ -9,7 +9,7 @@ export class SceneEngine {
     this.compositor = new Compositor()
   }
 
-  async renderSceneFrame(scene, progress, wordTimings, wordIndex) {
+  async renderSceneFrame(scene, progress, wordTimings, wordIndex, renderManifest = null) {
     const canvas = createCanvas(DesignSystem.W, DesignSystem.H)
     const ctx = canvas.getContext('2d')
 
@@ -17,7 +17,7 @@ export class SceneEngine {
 
     const category = scene.category || this.config.category || 'technology'
 
-    await this.compositor.compose(ctx, scene, progress, wordIndex, category)
+    await this.compositor.compose(ctx, scene, progress, wordIndex, category, renderManifest)
 
     return canvas.toBuffer('image/png')
   }

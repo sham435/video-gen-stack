@@ -23,10 +23,14 @@ export class Compositor {
     this.post = new PostProcessLayer()
   }
 
-  async compose(ctx, scene, progress, wordIndex, category) {
+  async compose(ctx, scene, progress, wordIndex, category, renderManifest = null) {
     const director = getDirector(category)
     const layout = director.getLayout(scene.type)
     const duration = scene.duration || 4
+
+    // RenderManifest: no layer renders unless the manifest grants ownership.
+    // Compositor is the RenderDirector — renderers draw only when instructed.
+    const owned = (layer) => renderManifest === null || renderManifest.canRender(layer, 'canvas')
 
     // Text timeline: resolve visibility windows, then render only the active
     // layer. A violation of the zero-overlap policy fails the render.
@@ -51,15 +55,15 @@ export class Compositor {
       })
     }
 
-    await this.info.draw(ctx, scene, progress, category, timeline, time)
-    this.emphasis.draw(ctx, scene, progress, category, env('ai'))
-    this.captions.draw(ctx, scene, progress, wordIndex, env('caption'))
+    if (owned('headline')) await this.info.draw(ctx, scene, progress, category, timeline, time)
+    if (owned('emphasis')) this.emphasis.draw(ctx, scene, progress, category, env('ai'))
+    if (owned('caption')) this.captions.draw(ctx, scene, progress, wordIndex, env('caption'))
 
     if (director.getOverlays().liveBadge) {
       this.broadcast.draw(ctx, scene, progress, category)
     }
 
-    this.branding.draw(ctx, scene, progress)
+    if (owned('footer')) this.branding.draw(ctx, scene, progress)
     this.post.draw(ctx, scene, progress, category)
   }
 }
