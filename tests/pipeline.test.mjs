@@ -107,6 +107,13 @@ test('pipeline: end-to-end render produces mp4', { timeout: 240000 }, async () =
     assert.ok(videoPath, 'videoPath returned')
     assert.ok(existsSync(videoPath), `mp4 exists: ${videoPath}`)
     assert.ok(existsSync(join(outDir, 'final.mp4')) || existsSync(videoPath), 'final output present')
+
+    // RenderManifest single-owner contract: default render must NOT produce
+    // FFmpeg-level text layers (SRT burn, footer.png composite). The canvas
+    // pipeline owns caption + footer — no duplicate rendering.
+    assert.ok(!existsSync(join(outDir, 'captions.srt')), 'no SRT burn by default')
+    assert.ok(!existsSync(join(outDir, 'broadcast_subbed.mp4')), 'no subtitled intermediate by default')
+    assert.ok(!existsSync(join(outDir, 'broadcast_final.mp4')), 'no footer.png composite by default')
   } finally {
     rmSync(outDir, { recursive: true, force: true })
   }

@@ -19,7 +19,10 @@
 export const PRIORITY = { banner: 1, hero: 2, secondary: 3, ai: 4, caption: 5, footer: 6 }
 
 const HOOK_FADE_IN = 0.10
-const HOOK_FADE_OUT = 0.30
+// Fade-out must fit inside the hero window (0.35 → 0.7075 of duration). A
+// fade-out ≥ 0.30 of duration starts before the fade-in completes and the
+// headline never reaches full opacity.
+const HOOK_FADE_OUT = 0.12
 const SECONDARY_STAGGER = 0.06
 
 export class TextTimelineScheduler {
