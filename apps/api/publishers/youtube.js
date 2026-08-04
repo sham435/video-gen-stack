@@ -141,26 +141,57 @@ export async function setThumbnail(token, videoId, coverPath) {
   }
 }
 
-// Post a comment on a published video (best-effort — the public API can
-// create a top-level comment; pinning still requires the Studio UI).
+// Find the channel's own top-level comment on a video (e.g. manually pinned
+// in Studio) — used as the parent for API comment replies.
+async function findOwnTopLevelComment(token, videoId) {
+  const vres = await fetch(`${BASE}/youtube/v3/videos?part=snippet&id=${videoId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  const vdata = await vres.json()
+  const channelId = vdata.items?.[0]?.snippet?.channelId
+  if (!channelId) return null
+
+  const tres = await fetch(`${BASE}/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&maxResults=20`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  const tdata = await tres.json()
+  const own = (tdata.items || []).find(
+    (t) => t.snippet?.topLevelComment?.snippet?.authorChannelId?.value === channelId
+  )
+  return own?.snippet?.topLevelComment?.id || null
+}
+
+// Post a comment on a published video (best-effort). YouTube's public API no
+// longer creates top-level comments, so the CTA is posted as a REPLY to the
+// channel's own comment — discovered automatically, or via
+// YOUTUBE_PARENT_COMMENT_ID (the pinned comment's ID in Studio).
 export async function postComment(videoId, text) {
   if (!videoId || !text) return null
   const token = await getAccessToken()
+  let parentId = process.env.YOUTUBE_PARENT_COMMENT_ID
+  if (!parentId) {
+    try { parentId = await findOwnTopLevelComment(token, videoId) } catch { parentId = null }
+  }
+  const snippet = { videoId, textOriginal: text.slice(0, 500) }
+  if (parentId) snippet.parentId = parentId
+
   const res = await fetch(`${BASE}/youtube/v3/comments?part=snippet`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      snippet: { videoId, textOriginal: text.slice(0, 500) },
-    }),
+    body: JSON.stringify({ snippet }),
   })
   const data = await res.json()
   if (data.error) {
-    console.warn(`⚠️  Comment post failed: ${data.error.message}`)
+    if (String(data.error.message).includes('parentId')) {
+      console.warn('⚠️  Comment post failed: YouTube no longer allows API top-level comments. Post one manually in Studio and pin it, then set YOUTUBE_PARENT_COMMENT_ID to that comment\'s ID so the pipeline replies to it.')
+    } else {
+      console.warn(`⚠️  Comment post failed: ${data.error.message}`)
+    }
     return null
   }
-  console.log(`✅ Comment posted: ${data.snippet?.textOriginal?.slice(0, 60)}...`)
+  console.log(`${parentId ? '✅ Comment reply posted' : '✅ Comment posted'}: ${data.snippet?.textOriginal?.slice(0, 60)}...`)
   return data
 }

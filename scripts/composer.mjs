@@ -162,7 +162,7 @@ if (import.meta.url.endsWith('composer.mjs')) {
               console.log(`[CTA] topic=${cta.topic} mode=${cta.mode} "${cta.narration}"`)
               console.log(`[PIN COMMENT] "${comment.question}"`)
               const posted = await postComment(result.id, comment.question)
-              console.log(`[COMMENT INSERT] ${posted?.id ? `success commentId=${posted.id}` : 'failed — post it manually in Studio and pin it'}`)
+              console.log(`[COMMENT INSERT] ${posted?.id ? `success commentId=${posted.id}` : 'failed — post it manually in Studio and pin it, then set YOUTUBE_PARENT_COMMENT_ID to its ID'}`)
               commentEvent = {
                 text: comment.question,
                 status: posted?.id ? 'published' : 'failed',
