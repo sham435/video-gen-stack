@@ -46,8 +46,10 @@ if (import.meta.url.endsWith('composer.mjs')) {
     let articles
     if (process.env.NEWSAPI_KEY) {
       try {
-        const { fetchTopHeadlines } = await import('../apps/api/services/news.js')
-        articles = await fetchTopHeadlines({ category, pageSize: 3 })
+        const newsSvc = await import('../apps/api/services/news.js')
+        articles = category === 'tesla'
+          ? await newsSvc.searchNews('tesla', { pageSize: 3, sortBy: 'publishedAt' })
+          : await newsSvc.fetchTopHeadlines({ category, pageSize: 3 })
       } catch (e) { console.log('NewsAPI error:', e.message) }
     }
 
