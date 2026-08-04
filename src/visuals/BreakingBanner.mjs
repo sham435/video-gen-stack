@@ -8,16 +8,15 @@ const COLORS = {
   bg: '#050505',
 }
 
-// Breaking banner — locked to the top 15% of the frame. Subtext is optional:
-// pass '' when the headline below already carries that text (no duplicate
-// render). Without subtext the bar shrinks to a compact band. The BREAKING
-// word is clamped to 48-64px so the banner stays chrome, never competing
-// with the headline, and the red wash never spills past the banner band.
+// Breaking banner — locked to the very top of the frame (top 100px band).
+// Subtext is optional: pass '' when the headline below already carries that
+// text (no duplicate render). The BREAKING word is clamped to 48-64px so the
+// banner stays chrome, and the red wash never spills past the banner band.
 export function drawBreakingBanner(ctx, text, progress, fontSize = 64) {
   const p = Math.min(1, progress * 2)
   const hasSub = Boolean(text && String(text).trim())
-  const bannerH = hasSub ? 260 : 160
-  const bannerY = H * 0.12
+  const bannerH = hasSub ? 150 : 100
+  const bannerY = 0
   const bandFont = Math.max(48, Math.min(64, fontSize))
 
   ctx.save()
@@ -28,25 +27,25 @@ export function drawBreakingBanner(ctx, text, progress, fontSize = 64) {
   glow.addColorStop(0, `rgba(225, 6, 0, ${0.15 * (1 - p * 0.5)})`)
   glow.addColorStop(1, 'rgba(225, 6, 0, 0)')
   ctx.fillStyle = glow
-  ctx.fillRect(0, Math.max(0, bannerY - 120), W, bannerH + 240)
+  ctx.fillRect(0, Math.max(0, bannerY - 60), W, bannerH + 140)
 
   ctx.fillStyle = `rgba(225, 6, 0, ${0.9 * p})`
   ctx.shadowColor = COLORS.red
   ctx.shadowBlur = 60 * (1 - p * 0.5)
   ctx.beginPath()
-  ctx.roundRect(W * 0.05, bannerY, W * 0.9, bannerH, 8)
+  ctx.roundRect(0, bannerY, W, bannerH, [0, 0, 8, 8])
   ctx.fill()
   ctx.shadowBlur = 0
 
   ctx.strokeStyle = `rgba(0, 229, 255, ${0.2 * p})`
   ctx.lineWidth = 1
   ctx.beginPath()
-  ctx.roundRect(W * 0.05, bannerY, W * 0.9, bannerH, 8)
+  ctx.roundRect(0, bannerY, W, bannerH, [0, 0, 8, 8])
   ctx.stroke()
 
   ctx.fillStyle = `rgba(255, 255, 255, ${0.03 * p})`
   ctx.beginPath()
-  ctx.roundRect(W * 0.05, bannerY, W * 0.9, bannerH / 2, [8, 8, 0, 0])
+  ctx.roundRect(0, bannerY, W, bannerH / 2, [0, 0, 0, 0])
   ctx.fill()
 
   ctx.globalAlpha = p

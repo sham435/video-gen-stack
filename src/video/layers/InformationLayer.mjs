@@ -3,14 +3,21 @@ import { drawBreakingBanner, drawGlitchOverlay } from '../../visuals/BreakingBan
 import { drawHeadlineCard } from '../../visuals/HeadlineCard.mjs'
 import { drawLogoAnimation } from '../../visuals/LogoAnimation.mjs'
 import { drawAnchorBadge } from '../../visuals/AnchorBadge.mjs'
+import { TextTimelineScheduler } from '../TextTimelineScheduler.mjs'
 
 const { W, H } = DesignSystem
 
 export class InformationLayer {
-  async draw(ctx, scene, progress, category) {
+  async draw(ctx, scene, progress, category, timeline = null, time = 0) {
+    const envelope = timeline ? (id) => {
+      const layer = timeline.layers.find(l => l.id === id)
+      return layer && TextTimelineScheduler.envelope(layer, time)
+    } : () => 1
     switch (scene.type) {
       case 'hook':
-        this.renderHook(ctx, scene, progress, category)
+        this.renderBanner(ctx, scene, progress, category, envelope('banner'))
+        this.renderHero(ctx, scene, progress, category, envelope('hero'))
+        this.renderSecondary(ctx, scene, progress, category, envelope('secondary'), time, timeline?.layers.find(l => l.id === 'secondary')?.start || 0)
         break
       case 'fact':
         this.renderFact(ctx, scene, progress)
@@ -27,56 +34,115 @@ export class InformationLayer {
     }
   }
 
-  renderHook(ctx, scene, progress, category) {
-    const catStyle = DesignSystem.getCategoryStyle(category)
-    const primary = catStyle.colors.primary || DesignSystem.brand.primary
-
-    // Breaking banner locked to the top 15% of the frame. The subtext must
-    // never duplicate the headline below — pass it only when it is a short,
-    // distinct tagline (the full narration is rendered by the hook headline).
+  renderBanner(ctx, scene, progress, category, alpha) {
+    if (alpha <= 0.01) return
     const bannerText = scene.subheadline && scene.subheadline !== scene.text && scene.subheadline.split(' ').length <= 6
       ? scene.subheadline
       : ''
+    ctx.save()
+    ctx.globalAlpha = alpha
     drawBreakingBanner(ctx, bannerText, progress, scene.headlineLayout?.fontSize || scene.headlineFontSize || 64)
+    ctx.restore()
+  }
 
-    // Hook headline — big, punchy, center of frame, max 2 lines from the
-    // validated layout; 4px outline so it cuts through any background
-    if (progress > 0.45) {
-      const hp = Math.min(1, (progress - 0.45) / 0.2)
-      ctx.save()
-      ctx.globalAlpha = hp
-      const hScale = 0.6 + hp * 0.4
-      const anchorY = scene.headlineLayout?.y || H * 0.62
-      ctx.translate(W / 2, anchorY)
-      ctx.scale(hScale, hScale)
-      const layoutLines = scene.headlineLayout?.lines?.length ? scene.headlineLayout.lines : []
-      const text = (scene.text || '').replace('BREAKING: ', '').toUpperCase()
-      const words = text.split(' ')
-      const mid = Math.ceil(words.length / 2)
-      const lines = layoutLines.length ? layoutLines : [words.slice(0, mid).join(' '), words.slice(mid).join(' ')]
-      const fontSize = scene.headlineLayout?.fontSize || scene.headlineFontSize || 92
-      ctx.font = `900 ${fontSize}px Anton, Impact, sans-serif`
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'middle'
-      ctx.lineWidth = 4
-      ctx.strokeStyle = 'rgba(0,0,0,0.85)'
-      ctx.lineJoin = 'round'
-      ctx.shadowColor = 'rgba(0,0,0,0.9)'
-      ctx.shadowBlur = 16
-      const lineH = scene.headlineLayout?.lineHeight || fontSize * 1.25
-      const offset = ((lines.length - 1) * lineH) / 2
-      lines.forEach((line, i) => {
-        ctx.fillStyle = '#FFFFFF'
-        ctx.strokeText(line, 0, -offset + i * lineH)
-        ctx.fillText(line, 0, -offset + i * lineH)
-      })
-      if (lines.length > 1) {
-        ctx.fillStyle = primary
-        ctx.fillText(lines[1], 0, -offset + lineH)
+  // Hero headline — gold gradient, heavy shadow, slight glow, largest font,
+  // center of frame, max 2 lines, scale-in with the timeline envelope.
+  renderHero(ctx, scene, progress, category, alpha) {
+    if (alpha <= 0.01 || !scene.text) return
+    const hp = alpha
+    ctx.save()
+    ctx.globalAlpha = hp
+    const hScale = 0.6 + hp * 0.4
+    const anchorY = scene.headlineLayout?.y || H * 0.62
+    ctx.translate(W / 2, anchorY)
+    ctx.scale(hScale, hScale)
+    const layoutLines = scene.headlineLayout?.lines?.length ? scene.headlineLayout.lines : []
+    const text = (scene.text || '').replace('BREAKING: ', '').toUpperCase()
+    const words = text.split(' ')
+    const mid = Math.ceil(words.length / 2)
+    const lines = layoutLines.length ? layoutLines : [words.slice(0, mid).join(' '), words.slice(mid).join(' ')]
+    const fontSize = scene.headlineLayout?.fontSize || scene.headlineFontSize || 92
+    ctx.font = `900 ${fontSize}px Anton, Impact, sans-serif`
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.lineWidth = 4
+    ctx.strokeStyle = 'rgba(0,0,0,0.85)'
+    ctx.lineJoin = 'round'
+    ctx.shadowColor = 'rgba(0,0,0,0.9)'
+    ctx.shadowBlur = 24
+    ctx.shadowOffsetY = 6
+    const lineH = scene.headlineLayout?.lineHeight || fontSize * 1.25
+    const offset = ((lines.length - 1) * lineH) / 2
+    const gold = ctx.createLinearGradient(0, -offset - fontSize, 0, offset + fontSize)
+    gold.addColorStop(0, '#FFD700')
+    gold.addColorStop(1, '#FFEB3B')
+    lines.forEach((line, i) => {
+      ctx.strokeStyle = 'rgba(0,0,0,0.9)'
+      ctx.strokeText(line, 0, -offset + i * lineH)
+      ctx.fillStyle = gold
+      ctx.fillText(line, 0, -offset + i * lineH)
+    })
+    ctx.shadowBlur = 0
+    ctx.shadowOffsetY = 0
+    ctx.restore()
+  }
+
+  // Secondary headline — white, keyword in accent red only, 70% of hero size,
+  // word-stagger fade-up. Renders only in its own timeline window.
+  renderSecondary(ctx, scene, progress, category, alpha, time, layerStart = 0) {
+    if (alpha <= 0.01 || !scene.text) return
+    const layout = scene.headlineLayout
+    const heroSize = layout?.fontSize || scene.headlineFontSize || 92
+    const fontSize = Math.max(40, Math.round(heroSize * 0.7))
+    const anchorY = layout?.y || H * 0.62
+    const text = (scene.text || '').replace('BREAKING: ', '').toUpperCase()
+    const words = text.split(' ')
+    const mid = Math.ceil(words.length / 2)
+    const lines = layout?.lines?.length ? layout.lines : [words.slice(0, mid).join(' '), words.slice(mid).join(' ')]
+    const keyword = (scene.caption_focus || '').toUpperCase()
+    const lineH = fontSize * 1.3
+    const offset = ((lines.length - 1) * lineH) / 2
+    const maxChars = 24
+
+    ctx.save()
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.font = `900 ${fontSize}px Anton, Impact, sans-serif`
+
+    let wordCounter = 0
+    lines.forEach((line, i) => {
+      // hard wrap long lines
+      const pieces = []
+      let cur = []
+      for (const w of line.split(' ')) {
+        cur.push(w)
+        if (cur.join(' ').length > maxChars) { pieces.push(cur.slice(0, -1).join(' ')); cur = [w] }
       }
-      ctx.shadowBlur = 0
-      ctx.restore()
-    }
+      if (cur.length) pieces.push(cur.join(' '))
+      const pieceOffset = ((pieces.length - 1) * lineH) / 2
+      pieces.forEach((piece, pi) => {
+        const py = -offset + i * lineH - pieceOffset + pi * lineH
+        for (const w of piece.split(' ')) {
+          const isKeyword = keyword && w.includes(keyword)
+          // word stagger: each word enters 0.06s after the previous, fade-up
+          const wordT = Math.min(1, Math.max(0, (time - layerStart - wordCounter * 0.06) / 0.12))
+          ctx.save()
+          ctx.globalAlpha = Math.min(alpha, wordT) * (isKeyword ? 1 : 0.95)
+          ctx.translate(0, (1 - wordT) * 28)
+          ctx.shadowColor = 'rgba(0,0,0,0.9)'
+          ctx.shadowBlur = 12
+          ctx.lineWidth = 3
+          ctx.strokeStyle = 'rgba(0,0,0,0.8)'
+          ctx.strokeText(w, 0, py)
+          ctx.fillStyle = isKeyword ? '#E10600' : '#FFFFFF'
+          ctx.fillText(w, 0, py)
+          ctx.restore()
+          wordCounter++
+        }
+      })
+    })
+    ctx.shadowBlur = 0
+    ctx.restore()
   }
 
   renderFact(ctx, scene, progress) {
