@@ -23,6 +23,73 @@ try {
 const app = express()
 app.use(express.json())
 
+// Public auth routes — registered BEFORE requireAuth so the login flow works
+// without a key. Everything else fails closed.
+app.get('/api/auth/check', (req, res) => {
+  if (!process.env.ADMIN_API_KEY) return res.status(503).json({ ok: false, error: 'ADMIN_API_KEY not configured on server' })
+  const key = req.headers['x-api-key'] || req.query.apiKey
+  if (!key || key !== process.env.ADMIN_API_KEY) return res.status(401).json({ ok: false, error: 'Unauthorized: invalid or missing x-api-key' })
+  return res.json({ ok: true })
+})
+
+const LOGIN_HTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEWS-MONSTER — Access</title>
+<style>
+body{background:#000;color:#F8FAFC;font-family:'Inter',system-ui,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;margin:0}
+.card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:40px;width:360px;text-align:center}
+h1{font-size:20px;font-weight:900;letter-spacing:1px;margin:0 0 6px}
+.brand{color:#E10600}
+p{color:#9ca3af;font-size:13px;margin:0 0 20px}
+input{width:100%;box-sizing:border-box;padding:12px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#fff;font-size:14px;margin-bottom:14px}
+input:focus{outline:none;border-color:#E10600}
+button{width:100%;padding:12px;background:#E10600;border:none;border-radius:8px;color:#fff;font-weight:700;font-size:14px;cursor:pointer}
+button:disabled{opacity:0.5}
+#msg{color:#f87171;font-size:12px;margin-top:12px;min-height:16px}
+.hint{color:#6b7280;font-size:11px;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>NEWS-MONSTER <span class="brand">AI</span> COMMAND CENTER</h1>
+<p>Enter the admin key to unlock the dashboard</p>
+<input id="key" type="password" placeholder="Admin key" autocomplete="off">
+<button id="go">Enter</button>
+<div id="msg"></div>
+<div class="hint">Key is stored locally and sent as x-api-key</div>
+</div>
+<script>
+const input = document.getElementById('key')
+const button = document.getElementById('go')
+const msg = document.getElementById('msg')
+input.addEventListener('keydown', (e) => { if (e.key === 'Enter') go() })
+button.addEventListener('click', go)
+async function go() {
+  const key = input.value.trim()
+  if (!key) return
+  button.disabled = true
+  msg.textContent = ''
+  try {
+    const r = await fetch('/api/auth/check', { headers: { 'x-api-key': key } })
+    if (r.status === 503) { msg.textContent = 'ADMIN_API_KEY not configured on server'; button.disabled = false; return }
+    if (!r.ok) { msg.textContent = 'Invalid key'; button.disabled = false; return }
+    localStorage.setItem('nm-api-key', key)
+    location.href = '/?apiKey=' + encodeURIComponent(key)
+  } catch {
+    msg.textContent = 'Server unreachable'
+    button.disabled = false
+  }
+}
+if (localStorage.getItem('nm-api-key')) { input.value = localStorage.getItem('nm-api-key'); go() }
+</script>
+</body>
+</html>`
+
+app.get('/login', (req, res) => res.type('html').send(LOGIN_HTML))
+
 const { requireAuth } = await import('../../packages/auth/requireAuth.js')
 app.use(requireAuth)
 
@@ -1440,7 +1507,7 @@ body.light-mode .border-white\\/5{border-color:#e5e7eb}
 // Attach the admin key from the URL (?apiKey=...) to every API request.
 // Preserves the server-side auth model: pages still fail closed without a key.
 (() => {
-  const key = new URLSearchParams(location.search).get('apiKey')
+  const key = new URLSearchParams(location.search).get('apiKey') || localStorage.getItem('nm-api-key')
   if (!key) return
   const original = window.fetch
   window.fetch = (url, opts = {}) => {
@@ -2606,7 +2673,7 @@ body{background:#000;color:#F8FAFC;font-family:'Inter',system-ui,sans-serif}
 <script>
 // Attach the admin key from the URL (?apiKey=...) to every API request.
 (() => {
-  const key = new URLSearchParams(location.search).get('apiKey')
+  const key = new URLSearchParams(location.search).get('apiKey') || localStorage.getItem('nm-api-key')
   if (!key) return
   const original = window.fetch
   window.fetch = (url, opts = {}) => {
@@ -2851,7 +2918,7 @@ const ENGINE_HTML = `<!DOCTYPE html>
 <script>
 // Attach the admin key from the URL (?apiKey=...) to every API request.
 (() => {
-  const key = new URLSearchParams(location.search).get('apiKey')
+  const key = new URLSearchParams(location.search).get('apiKey') || localStorage.getItem('nm-api-key')
   if (!key) return
   const original = window.fetch
   window.fetch = (url, opts = {}) => {
