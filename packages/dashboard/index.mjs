@@ -2607,8 +2607,8 @@ function addChatMsg(role, text, provider){
 
 // Render a structured AI assistant card (markdown, activity, task progress)
 function renderAiCard(res){
-  const safe = (res.reply || 'No reply').replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<iframe[\s\S]*?<\/iframe>/gi,'').replace(/javascript:/gi,'')
-  const md = (window.marked ? '<div class="chat-md">'+marked.parse(safe)+'</div>' : esc(safe).replace(/\*\*(.*?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>'))
+  const safe = (res.reply || 'No reply').replace(/<script[\\s\\S]*?<\\/script>/gi,'').replace(/<iframe[\\s\\S]*?<\\/iframe>/gi,'').replace(/javascript:/gi,'')
+  const md = (window.marked ? '<div class="chat-md">'+marked.parse(safe)+'</div>' : esc(safe).replace(/\\*\\*(.*?)\\*\\*/g,'<b>$1</b>').replace(/\\n/g,'<br>'))
   const conf = res.confidence || 70
   const intent = res.intent?.label || 'Learn'
   const intentIcon = { Fix:'🔧', Improve:'🚀', Create:'🖼️', Automate:'⚙️', Learn:'💡' }[intent] || '💡'
