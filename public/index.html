@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEWS-MONSTER — Breaking News, Every 30 Minutes</title>
+<meta name="description" content="NEWS-MONSTER — automated breaking news shorts. AI video news on technology, Tesla, Apple, business and more. Subscribe for updates every 30 minutes.">
+<style>
+:root {
+  --red: #E10600;
+  --cyan: #00E5FF;
+  --bg: #050505;
+  --panel: #101014;
+  --border: #24242c;
+  --text: #FFFFFF;
+  --muted: #9a9aa6;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  min-height: 100vh;
+}
+.veil {
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(225,6,0,0.18), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(0,229,255,0.08), transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+.wrap { position: relative; z-index: 1; max-width: 1040px; margin: 0 auto; padding: 28px 20px 60px; }
+
+header {
+  display: flex; align-items: center; gap: 16px; padding: 8px 0 32px;
+}
+.logo {
+  width: 58px; height: 58px; border-radius: 10px;
+  background: var(--red);
+  display: grid; place-items: center;
+  font-family: 'Anton', Impact, sans-serif; font-size: 22px; font-weight: 900;
+  box-shadow: 0 0 28px rgba(225,6,0,0.55);
+}
+header h1 { font-family: 'Anton', Impact, sans-serif; font-size: 26px; letter-spacing: 1px; font-weight: 900; }
+header .tag { color: var(--muted); font-size: 13px; margin-top: 2px; }
+
+.hero { text-align: center; padding: 42px 0 48px; }
+.hero .badge {
+  display: inline-block; padding: 6px 16px; border: 1px solid var(--cyan);
+  color: var(--cyan); border-radius: 999px; font-size: 13px; font-weight: 700;
+  letter-spacing: 2px; margin-bottom: 22px;
+}
+.hero h2 {
+  font-family: 'Anton', Impact, sans-serif; font-weight: 900;
+  font-size: clamp(40px, 8vw, 72px); line-height: 1.05;
+}
+.hero h2 span { color: var(--red); }
+.hero p { color: var(--muted); font-size: 17px; max-width: 560px; margin: 18px auto 0; }
+
+.sub-row { margin-top: 34px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+#subBtn {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--red); color: #fff; border: none;
+  font-size: 20px; font-weight: 800; letter-spacing: 0.5px;
+  padding: 16px 44px; border-radius: 999px; cursor: pointer;
+  box-shadow: 0 8px 34px rgba(225,6,0,0.45);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+#subBtn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(225,6,0,0.6); }
+#subBtn .icon { font-size: 24px; }
+.sub-note { color: var(--muted); font-size: 13px; }
+.official-wrap { margin-top: 6px; opacity: .92; }
+
+.stats { display: flex; gap: 40px; justify-content: center; margin-top: 40px; }
+.stat { text-align: center; }
+.stat b { display: block; font-family: 'Anton', Impact, sans-serif; font-size: 30px; }
+.stat small { color: var(--muted); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+
+.section-title {
+  font-family: 'Anton', Impact, sans-serif; font-weight: 900; font-size: 32px;
+  margin: 56px 0 6px; display: flex; align-items: center; gap: 12px;
+}
+.section-title .live {
+  display: inline-block; font-family: 'Inter', sans-serif; font-weight: 800;
+  font-size: 13px; color: #fff; background: var(--red);
+  padding: 4px 12px; border-radius: 999px; letter-spacing: 1px;
+  animation: pulse 1.6s infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .45 } }
+.section-sub { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 18px; }
+.vid {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+  overflow: hidden; transition: transform .15s ease;
+}
+.vid:hover { transform: translateY(-3px); }
+.vid iframe { width: 100%; aspect-ratio: 9 / 16; border: 0; display: block; }
+.vid .meta { padding: 10px 12px; }
+.vid .t { font-size: 13px; font-weight: 600; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.vid .d { color: var(--muted); font-size: 11px; margin-top: 6px; }
+.loading, .empty { color: var(--muted); text-align: center; padding: 40px 0; }
+
+footer { margin-top: 72px; padding-top: 26px; border-top: 1px solid var(--border); text-align: center; color: var(--muted); font-size: 13px; }
+footer b { color: var(--text); }
+
+#thanks {
+  position: fixed; inset: 0; z-index: 10; display: none;
+  align-items: center; justify-content: center; padding: 20px;
+  background: rgba(5,5,5,0.82); backdrop-filter: blur(4px);
+}
+#thanks.show { display: flex; }
+.card {
+  max-width: 420px; width: 100%; background: var(--panel);
+  border: 1px solid var(--border); border-radius: 20px; padding: 40px 32px;
+  text-align: center; animation: pop .28s ease;
+}
+@keyframes pop { from { transform: scale(.92); opacity: 0 } to { transform: scale(1); opacity: 1 } }
+.card .emoji { font-size: 54px; }
+.card h3 { font-family: 'Anton', Impact, sans-serif; font-size: 30px; margin: 14px 0 8px; }
+.card p { color: var(--muted); font-size: 15px; line-height: 1.5; }
+.card button {
+  margin-top: 24px; background: var(--cyan); color: #000; border: none;
+  font-weight: 800; font-size: 14px; padding: 12px 34px; border-radius: 999px; cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div class="veil"></div>
+
+<div id="thanks">
+  <div class="card">
+    <div class="emoji">🎉</div>
+    <h3>Thanks for subscribing!</h3>
+    <p>You're now part of NEWS-MONSTER. New video news drops here every 30 minutes — hit the bell 🔔 on our channel so you never miss one.</p>
+    <button onclick="document.getElementById('thanks').classList.remove('show')">Awesome!</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <header>
+    <div class="logo">NM</div>
+    <div>
+      <h1>NEWS-MONSTER</h1>
+      <div class="tag">Automated Breaking News Network · AI video news</div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="badge">⚡ NEW VIDEO EVERY 30 MINUTES</div>
+    <h2>BREAKING NEWS,<br><span>AROUND THE CLOCK</span></h2>
+    <p>AI-powered video news shorts — technology, Tesla, Apple, Wall Street & more. The world moves fast. NEWS-MONSTER keeps up for you.</p>
+
+    <div class="sub-row">
+      <button id="subBtn"><span class="icon">▶</span> SUBSCRIBE</button>
+      <div class="official-wrap" id="officialBtn"></div>
+      <div class="sub-note">Tap subscribe — you'll get a shout-out next upload 🚀</div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b>48</b><small>Videos / day</small></div>
+      <div class="stat"><b>6</b><small>Categories</small></div>
+      <div class="stat"><b>24/7</b><small>Automation</small></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title">LATEST DROPS <span class="live">LIVE</span></div>
+    <div class="section-sub">Fresh uploads, straight from the automated pipeline.</div>
+    <div id="videos"><div class="loading">Loading latest videos…</div></div>
+  </section>
+
+  <footer>
+    <div><b>NEWS-MONSTER</b> · <a href="https://www.youtube.com/channel/UC4UC7z16EtqtI-TJzeGZKjQ" style="color:var(--cyan);text-decoration:none">YouTube Channel</a></div>
+    <div style="margin-top:6px">Breaking News, AI, Science, Sports, Politics & Future Tech</div>
+  </footer>
+</div>
+
+<script>
+const CHANNEL_ID = 'UC4UC7z16EtqtI-TJzeGZKjQ'
+const CHANNEL_URL = 'https://www.youtube.com/channel/' + CHANNEL_ID
+
+const subBtn = document.getElementById('subBtn')
+let openedSub = false
+
+function thanks() {
+  document.getElementById('thanks').classList.add('show')
+}
+
+subBtn.addEventListener('click', () => {
+  openedSub = true
+  window.open(CHANNEL_URL + '?sub_confirmation=1', '_blank')
+  setTimeout(thanks, 9000)
+})
+
+// Once the user comes back after confirming, thank them immediately.
+window.addEventListener('focus', () => {
+  if (openedSub) { openedSub = false; thanks() }
+})
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && openedSub) { openedSub = false; thanks() }
+})
+
+// Official YouTube subscribe button
+const off = document.createElement('iframe')
+off.src = 'https://www.youtube.com/subscribe_widget?app=desktop&channel=' + CHANNEL_ID + '&layout=full&theme=dark'
+off.title = 'Subscribe on YouTube'
+off.width = '100%'
+off.height = '56'
+off.style.border = 'none'
+off.style.maxWidth = '360px'
+document.getElementById('officialBtn').appendChild(off)
+
+// Latest videos via server RSS proxy
+async function loadVideos() {
+  try {
+    const res = await fetch('/api/channel/videos')
+    if (!res.ok) throw new Error(res.status)
+    const data = await res.json()
+    const box = document.getElementById('videos')
+    if (!data.videos || !data.videos.length) {
+      box.innerHTML = '<div class="empty">No videos yet — first drop is coming 🚀</div>'
+      return
+    }
+    box.classList.add('grid')
+    box.innerHTML = data.videos.map(v => `
+      <div class="vid">
+        <iframe src="https://www.youtube-nocookie.com/embed/${v.id}" title="${v.title}" loading="lazy" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        <div class="meta">
+          <div class="t"></div>
+          <div class="d">${v.published}</div>
+        </div>
+      </div>`).join('')
+    box.querySelectorAll('.vid .t').forEach((el, i) => {
+      el.textContent = data.videos[i].title
+    })
+    document.title = 'NEWS-MONSTER — ' + data.videos.length + ' recent videos'
+  } catch (e) {
+    document.getElementById('videos').innerHTML =
+      '<div class="empty">Could not load videos right now.</div>'
+  }
+}
+loadVideos()
+</script>
+</body>
+</html>

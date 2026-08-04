@@ -24,10 +24,10 @@ const PORT = process.env.PORT || 3001
 
 app.use(cors())
 app.use(express.json({ limit: '10mb' }))
-app.use(express.static(path.join(__dirname, '..', 'dashboard', 'public')))
-
-// Also serve root dashboard path
+// Public NEWS-MONSTER landing page first (root /) — the legacy dashboard home
+// remains reachable at /dashboard.html.
 app.use(express.static(path.join(__dirname, '..', '..', 'public')))
+app.use(express.static(path.join(__dirname, '..', 'dashboard', 'public')))
 
 // Request logging + metrics
 app.use((req, res, next) => {
@@ -150,4 +150,46 @@ app.get('/api/debug/pipeline', (req, res) => {
       relevantLines: relevant.slice(0, 20)
     });
   });
+});
+
+// Latest uploads for the public landing page — proxied from the channel RSS
+// feed (no API key required, cached 60s so the feed isn't hammered).
+const channelFeedCache = { at: 0, json: null }
+const decodeHtml = (s = '') => s
+  .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+  .replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+
+app.get('/api/channel/videos', async (req, res) => {
+  if (Date.now() - channelFeedCache.at < 60_000 && channelFeedCache.json) {
+    return res.json(channelFeedCache.json)
+  }
+  try {
+    const channelId = process.env.YOUTUBE_CHANNEL_ID || 'UC4UC7z16EtqtI-TJzeGZKjQ'
+    const feed = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`, {
+      headers: { 'user-agent': 'Mozilla/5.0 (compatible; NEWS-MONSTER/1.0)' },
+      signal: AbortSignal.timeout(8000),
+    })
+    if (!feed.ok) return res.status(feed.status).json({ error: 'feed unavailable' })
+    const xml = await feed.text()
+    const entries = [...xml.matchAll(/<entry>([\s\S]*?)<\/entry>/g)]
+    const videos = entries.map(m => {
+      const e = m[1] || ''
+      const id = /yt:video:([A-Za-z0-9_-]+)/.exec(e)?.[1] || null
+      const title = decodeHtml(/<title>([\s\S]*?)<\/title>/.exec(e)?.[1] || '')
+      const published = /<published>([\s\S]*?)<\/published>/.exec(e)?.[1] || null
+      const thumb = /<media:thumbnail[^>]*url="([^"]+)"/.exec(e)?.[1] || null
+      return {
+        id,
+        title,
+        published: published ? new Date(published).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '',
+        thumbnail: thumb || (id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : null),
+      }
+    }).filter(v => v.id)
+    const json = { channelId, videos }
+    channelFeedCache.at = Date.now()
+    channelFeedCache.json = json
+    res.json(json)
+  } catch (e) {
+    res.status(502).json({ error: e.message })
+  }
 });
