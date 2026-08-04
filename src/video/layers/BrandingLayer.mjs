@@ -28,7 +28,7 @@ export class BrandingLayer {
     ctx.fill()
     ctx.fillStyle = DesignSystem.brand.primary
     ctx.fillRect(14, 12, 6, bug.size + padY * 2)
-    ctx.fillStyle = 'rgba(255,255,255,0.95)'
+    ctx.fillStyle = '#FFFFFF'
     ctx.textAlign = 'left'
     ctx.textBaseline = 'middle'
     ctx.fillText(label, 14 + 6 + padX, 12 + (bug.size + padY * 2) / 2)

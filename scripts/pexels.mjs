@@ -22,7 +22,7 @@ export async function fetchPexelsImage(title, keywords = []) {
   const query = encodeURIComponent(searchTerms)
 
   try {
-    const resp = await fetch(`${PEXELS_BASE}/search?query=${query}&per_page=1&orientation=landscape`, {
+    const resp = await fetch(`${PEXELS_BASE}/search?query=${query}&per_page=5&orientation=landscape`, {
       headers: { 'Authorization': apiKey },
       signal: AbortSignal.timeout(8000),
     })
@@ -31,9 +31,13 @@ export async function fetchPexelsImage(title, keywords = []) {
       return null
     }
     const data = await resp.json()
-    if (data.photos?.[0]) {
-      const photo = data.photos[0]
-      console.log(`📸 Pexels: "${searchTerms}" → ${photo.src.large2x || photo.src.large}`)
+    const photos = data.photos || []
+    if (photos.length) {
+      // Rotate through the top-5 results so consecutive videos get fresh
+      // images — index derived from the 30-minute publish slot.
+      const slot = Math.floor(Date.now() / (30 * 60 * 1000))
+      const photo = photos[slot % photos.length]
+      console.log(`📸 Pexels: "${searchTerms}" → ${photo.src.large2x || photo.src.large} (rotation ${slot % photos.length}/${photos.length})`)
       return {
         imageUrl: photo.src.large2x || photo.src.large,
         photographer: photo.photographer,

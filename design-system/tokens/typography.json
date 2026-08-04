@@ -22,9 +22,9 @@
     "font": "Inter",
     "weight": 600,
     "sizes": {
-      "default": 42,
-      "small": 36,
-      "detail": 32
+      "default": 52,
+      "small": 42,
+      "detail": 36
     }
   },
   "badge": {

@@ -155,19 +155,19 @@ export class InformationLayer {
 
     const heading = scene.text.split('.')[0]
     ctx.save()
-    ctx.globalAlpha = Math.min(1, progress * 2)
+    ctx.globalAlpha = Math.min(1, progress * 1.2)
     ctx.font = `${DesignSystem.getTypography('body', 'default').weight} ${DesignSystem.getTypography('body', 'default').size}px ${DesignSystem.getTypography('body', 'default').font}, sans-serif`
     ctx.fillStyle = DesignSystem.getSemantic('info')
     ctx.textAlign = 'left'
     ctx.textBaseline = 'top'
     ctx.shadowColor = 'rgba(0,0,0,0.8)'
     ctx.shadowBlur = 6
-    const hp = Math.min(1, progress * 2)
+    const hp = Math.min(1, progress * 1.2)
     ctx.globalAlpha = hp
     ctx.fillText('WHY IT MATTERS', startX, H * 0.15)
     ctx.shadowBlur = 0
     ctx.fillStyle = DesignSystem.brand.primary
-    ctx.fillRect(startX, H * 0.15 + 60, 80, 5)
+    ctx.fillRect(startX, H * 0.15 + 72, 96, 6)
     ctx.restore()
 
     ctx.save()
@@ -177,7 +177,7 @@ export class InformationLayer {
     const body = scene.text.replace(heading + '. ', '')
     const bodyToken = DesignSystem.getTypography('body', 'small')
     ctx.font = `${bodyToken.weight} ${bodyToken.size}px ${bodyToken.font}, sans-serif`
-    ctx.fillStyle = 'rgba(255,255,255,0.95)'
+    ctx.fillStyle = '#FFFFFF'
     ctx.textAlign = 'left'
     ctx.textBaseline = 'top'
     ctx.shadowColor = 'rgba(0,0,0,0.9)'
@@ -186,13 +186,13 @@ export class InformationLayer {
     const maxChars = DesignSystem.getMaxChars('body')
     const words = body.split(' ')
     let line = ''
-    let lineY = H * 0.18 + 80
+    let lineY = H * 0.18 + 92
     for (const w of words) {
       if ((line + ' ' + w).trim().length <= maxChars) line += (line ? ' ' : '') + w
       else {
         ctx.fillText(line, startX, lineY)
         line = w
-        lineY += 48
+        lineY += 56
       }
     }
     if (line) ctx.fillText(line, startX, lineY)

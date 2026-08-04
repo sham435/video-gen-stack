@@ -5,14 +5,14 @@
 
 export const BROADCAST_TEXT = {
   bug: {
-    size: 32,
+    size: 38,
     weight: 700,
-    bg: 'rgba(0,0,0,0.6)',
+    bg: 'rgba(0,0,0,0.88)',
     padding: [8, 16],
     borderRadius: 4,
   },
   live: {
-    size: 36,
+    size: 40,
     weight: 700,
     bg: '#D0021B',
     padding: [8, 16],

@@ -12,7 +12,7 @@ export class BroadcastUILayer {
 
     // LIVE indicator — 36px bold on a red pill with padding; never text-only
     const live = BROADCAST_TEXT.live
-    const liveAlpha = (0.7 + Math.sin(progress * 6) * 0.3) * p
+    const liveAlpha = (0.9 + Math.sin(progress * 6) * 0.1) * p
     ctx.save()
     ctx.globalAlpha = Math.max(0, liveAlpha)
 
