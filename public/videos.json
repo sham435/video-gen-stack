@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-05T15:35:11.911Z",
+  "updatedAt": "2026-08-05T17:13:26.422Z",
   "videos": [
+    {
+      "id": "nWGatmEKjWo",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-05T17:05:48+00:00",
+      "publishedLabel": "Aug 5, 05:05 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/nWGatmEKjWo/hqdefault.jpg"
+    },
     {
       "id": "FnnasuwhYDE",
       "title": "iPhone 18 Pro will have three upgrades that have been rumored for years - 9to5Mac | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-07-20T23:00:08+00:00",
       "publishedLabel": "Jul 20, 11:00 PM",
       "thumbnail": "https://i2.ytimg.com/vi/q_SmDuS19BM/hqdefault.jpg"
-    },
-    {
-      "id": "Fsb-z0SdOpU",
-      "title": "Test Short - AI News via vedio_genspark",
-      "publishedAt": "2026-07-20T07:18:05+00:00",
-      "publishedLabel": "Jul 20, 07:18 AM",
-      "thumbnail": "https://i3.ytimg.com/vi/Fsb-z0SdOpU/hqdefault.jpg"
     }
   ]
 }
