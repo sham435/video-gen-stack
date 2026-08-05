@@ -23,11 +23,11 @@ export function drawLogoAnimation(ctx, progress, brand = 'NEWS-MONSTER') {
   ctx.fill()
   ctx.shadowBlur = 0
 
-  ctx.font = '900 50px Anton, Impact, sans-serif'
+  ctx.font = '900 42px Anton, Impact, sans-serif'
   ctx.fillStyle = '#FFFFFF'
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
-  ctx.fillText('T', W / 2, logoY + logoSize / 2 + 4)
+  ctx.fillText('NM', W / 2, logoY + logoSize / 2 + 4)
 
   ctx.restore()
 
@@ -43,7 +43,7 @@ export function drawLogoAnimation(ctx, progress, brand = 'NEWS-MONSTER') {
 
     ctx.font = '400 28px Inter, sans-serif'
     ctx.fillStyle = 'rgba(0, 229, 255, 0.7)'
-    ctx.fillText('TECH NEWS NETWORK', W / 2, logoY + logoSize + 54)
+    ctx.fillText('UNFILTERED BREAKING NEWS FROM THE FUTURE', W / 2, logoY + logoSize + 54)
     ctx.restore()
   }
 }

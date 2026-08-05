@@ -1,12 +1,12 @@
 {
   "name": "vedio-genspark",
   "version": "2.0.0",
-  "description": "TECH-MONSTER | Premium AI News Broadcasting Platform",
+  "description": "NEWS-MONSTER | Premium AI News Broadcasting Platform",
   "main": "src/index.mjs",
   "type": "module",
   "scripts": {
-    "dev": "node --watch server/index.js",
-    "start": "node server/index.js",
+    "dev": "node --watch apps/api/server.js",
+    "start": "node apps/api/server.js",
     "newsroom": "node packages/editorial/pipeline.mjs",
     "dashboard": "node --env-file=.env packages/dashboard/index.mjs",
     "db:init": "node packages/database/db.mjs",

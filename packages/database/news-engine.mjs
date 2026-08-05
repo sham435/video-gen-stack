@@ -258,6 +258,45 @@ const MIGRATIONS = [
       CREATE INDEX IF NOT EXISTS idx_session_history ON session_history(session_id, id);
     `,
   },
+  {
+    // v3 — agent workspace persistence (dashboard chat): task state, event
+    // stream, and approval grants live in the same SQLite file as production
+    // data so long-running audits survive restarts and multi-process reads.
+    version: 3,
+    sql: `
+      CREATE TABLE IF NOT EXISTS agent_tasks (
+        conversation_id TEXT PRIMARY KEY,
+        task_id TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'idle',
+        stage INTEGER NOT NULL DEFAULT 0,
+        progress INTEGER NOT NULL DEFAULT 0,
+        current_action TEXT NOT NULL DEFAULT '',
+        payload TEXT NOT NULL DEFAULT '{}',
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+      );
+      CREATE INDEX IF NOT EXISTS idx_agent_tasks_status ON agent_tasks(status);
+
+      CREATE TABLE IF NOT EXISTS agent_events (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        conversation_id TEXT NOT NULL,
+        event_type TEXT NOT NULL,
+        payload TEXT NOT NULL DEFAULT '{}',
+        created_at TEXT NOT NULL DEFAULT (datetime('now'))
+      );
+      CREATE INDEX IF NOT EXISTS idx_agent_events_cid ON agent_events(conversation_id, id);
+
+      CREATE TABLE IF NOT EXISTS approvals (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        conversation_id TEXT NOT NULL,
+        tool TEXT NOT NULL,
+        action TEXT NOT NULL,
+        approved INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL DEFAULT (datetime('now'))
+      );
+      CREATE INDEX IF NOT EXISTS idx_approvals_cid ON approvals(conversation_id, tool);
+    `,
+  },
 ]
 
 export function getDb() {
