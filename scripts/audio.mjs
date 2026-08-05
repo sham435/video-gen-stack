@@ -5,19 +5,23 @@ import path from 'path'
 const MUSIC_DIR = 'assets/music'
 
 /**
- * Pick a random background music file.
- * NEVER returns null — if no music files exist, generates an ambient track.
+ * Pick the background music file for a video. Deterministic: hash the seed
+ * (article title) → index into the original 48-track collection, so each
+ * video uses a different track from the loop.
  */
-export function getRandomMusic(){
+export function getRandomMusic(seed){
   if(!fs.existsSync(MUSIC_DIR)) fs.mkdirSync(MUSIC_DIR, {recursive:true})
 
-  // Find all non-intro music files (exclude intro_*)
   const files = fs.readdirSync(MUSIC_DIR)
-    .filter(f => (f.endsWith('.mp3') || f.endsWith('.wav') || f.endsWith('.m4a')) && !f.startsWith('intro_'))
+    .filter(f => (f.endsWith('.mp3') || f.endsWith('.wav') || f.endsWith('.m4a')) && !f.startsWith('intro_') && f.startsWith('nm-track-'))
+    .sort()
 
   if(files.length > 0){
-    const chosen = path.join(MUSIC_DIR, files[Math.floor(Math.random() * files.length)])
-    console.log('🎵 Background music:', chosen)
+    const s = String(seed || '')
+    let h = 0
+    for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0
+    const chosen = path.join(MUSIC_DIR, files[h % files.length])
+    console.log('🎵 Background music:', chosen, seed ? `(seed "${String(seed).slice(0, 40)}")` : '')
     return chosen
   }
 
@@ -39,8 +43,8 @@ export function getRandomMusic(){
 /**
  * Mix background music into a video with ducking under voice.
  */
-export function mixMusicWithVideo(videoIn, musicPath, duration, outPath){
-  const effectiveMusic = musicPath || getRandomMusic()
+export function mixMusicWithVideo(videoIn, musicPath, duration, outPath, seed){
+  const effectiveMusic = musicPath || getRandomMusic(seed)
 
   if(!effectiveMusic || !fs.existsSync(effectiveMusic)){
     console.log('No music available, outputting video without background music')
@@ -59,23 +63,19 @@ export function mixMusicWithVideo(videoIn, musicPath, duration, outPath){
 }
 
 /**
- * Ensure a background music track exists — NEVER from stock-music downloads.
- * The Pixabay lofi track got content-ID claimed (HAAWK/FASSounds), so the
- * channel generates its own original bed (scripts/gen-music.mjs): 100% own
- * audio, nothing third parties can claim.
+ * Ensure the original 48-track music collection exists. NEVER from stock
+ * downloads — the Pixabay lofi track got content-ID claimed (HAAWK/FASSounds).
  */
 export async function ensureMusicExists(){
   if(!fs.existsSync(MUSIC_DIR)) fs.mkdirSync(MUSIC_DIR, {recursive:true})
 
-  const existing = fs.readdirSync(MUSIC_DIR)
-    .filter(f => (f.endsWith('.mp3') || f.endsWith('.wav')) && !f.startsWith('intro_') && !f.startsWith('_'))
+  const tracks = fs.readdirSync(MUSIC_DIR).filter(f => f.startsWith('nm-track-') && f.endsWith('.mp3'))
+  const target = parseInt(process.env.MUSIC_TRACK_COUNT || '48', 10)
+  if(tracks.length >= target) return
 
-  if(existing.length > 0) return // already has music
-
-  console.log('Generating original NEWS-MONSTER music bed...')
-  const { execFileSync: run } = await import('child_process')
+  console.log('Generating original NEWS-MONSTER music collection...')
   try {
-    run('node', ['scripts/gen-music.mjs'], { cwd: process.cwd(), stdio: 'inherit', timeout: 180000 })
+    execFileSync('node', ['scripts/gen-music.mjs', String(target)], { cwd: process.cwd(), stdio: 'inherit', timeout: 600000 })
   } catch(e) {
     console.log(`  ❌ music generation failed: ${e.message}`)
   }
