@@ -1,7 +1,28 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-05T08:12:51.624Z",
+  "updatedAt": "2026-08-05T11:12:40.192Z",
   "videos": [
+    {
+      "id": "6AUXNRqZUw0",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-05T11:05:05+00:00",
+      "publishedLabel": "Aug 5, 11:05 AM",
+      "thumbnail": "https://i3.ytimg.com/vi/6AUXNRqZUw0/hqdefault.jpg"
+    },
+    {
+      "id": "zYiVoumcNiw",
+      "title": "This 1979 Mercedes-Benz 280TE Was Trapped Inside An Italian Garage For 38 Years, Now It's | NEWS-MON",
+      "publishedAt": "2026-08-05T09:53:17+00:00",
+      "publishedLabel": "Aug 5, 09:53 AM",
+      "thumbnail": "https://i3.ytimg.com/vi/zYiVoumcNiw/hqdefault.jpg"
+    },
+    {
+      "id": "2WWm3NiMyYo",
+      "title": "'Sandwich generation' is getting younger and not any better prepared - USA Today | NEWS-MONSTER",
+      "publishedAt": "2026-08-05T09:50:14+00:00",
+      "publishedLabel": "Aug 5, 09:50 AM",
+      "thumbnail": "https://i3.ytimg.com/vi/2WWm3NiMyYo/hqdefault.jpg"
+    },
     {
       "id": "MsIyy56-mSc",
       "title": "6 Mini Gadgets To Add To Your Wishlist In 2026 - SlashGear | NEWS-MONSTER",
@@ -85,27 +106,6 @@
       "publishedAt": "2026-07-04T10:55:17+00:00",
       "publishedLabel": "Jul 4, 10:55 AM",
       "thumbnail": "https://i1.ytimg.com/vi/DyCAwAEXR0k/hqdefault.jpg"
-    },
-    {
-      "id": "Fwwt1TWoy-k",
-      "title": "Tech news updates in just 20 seconds. — July 04, 2026",
-      "publishedAt": "2026-07-04T02:36:29+00:00",
-      "publishedLabel": "Jul 4, 02:36 AM",
-      "thumbnail": "https://i3.ytimg.com/vi/Fwwt1TWoy-k/hqdefault.jpg"
-    },
-    {
-      "id": "7TMRgJeICcE",
-      "title": "Entertainment Buzz — July 03, 2026",
-      "publishedAt": "2026-07-02T20:58:33+00:00",
-      "publishedLabel": "Jul 2, 08:58 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/7TMRgJeICcE/hqdefault.jpg"
-    },
-    {
-      "id": "qEqTB4l8mgo",
-      "title": "Tech News - July 3, 2026",
-      "publishedAt": "2026-07-02T19:58:57+00:00",
-      "publishedLabel": "Jul 2, 07:58 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/qEqTB4l8mgo/hqdefault.jpg"
     }
   ]
 }
