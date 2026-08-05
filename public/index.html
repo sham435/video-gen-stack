@@ -202,20 +202,24 @@ document.addEventListener('visibilitychange', () => {
   if (!document.hidden && openedSub) { openedSub = false; thanks() }
 })
 
-// Official YouTube subscribe button
+// Official YouTube subscribe button (subscribe_embed — the deprecated
+// subscribe_widget endpoint returns 410 + SAMEORIGIN and cannot be framed)
 const off = document.createElement('iframe')
-off.src = 'https://www.youtube.com/subscribe_widget?app=desktop&channel=' + CHANNEL_ID + '&layout=full&theme=dark'
+off.src = 'https://www.youtube.com/subscribe_embed?my_channel=' + CHANNEL_ID + '&layout=full&theme=dark'
 off.title = 'Subscribe on YouTube'
 off.width = '100%'
 off.height = '56'
 off.style.border = 'none'
 off.style.maxWidth = '360px'
+off.style.overflow = 'hidden'
+off.setAttribute('scrolling', 'no')
 document.getElementById('officialBtn').appendChild(off)
 
-// Latest videos via server RSS proxy
+// Latest videos — served statically as videos.json (refreshed by the publish
+// workflow + GitHub Pages deploy; no backend needed).
 async function loadVideos() {
   try {
-    const res = await fetch('/api/channel/videos')
+    const res = await fetch('videos.json?ts=' + Date.now())
     if (!res.ok) throw new Error(res.status)
     const data = await res.json()
     const box = document.getElementById('videos')
@@ -229,7 +233,7 @@ async function loadVideos() {
         <iframe src="https://www.youtube-nocookie.com/embed/${v.id}" title="${v.title}" loading="lazy" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin"></iframe>
         <div class="meta">
           <div class="t"></div>
-          <div class="d">${v.published}</div>
+          <div class="d">${v.publishedLabel || ''}</div>
         </div>
       </div>`).join('')
     box.querySelectorAll('.vid .t').forEach((el, i) => {

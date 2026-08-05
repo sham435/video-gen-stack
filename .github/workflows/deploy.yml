@@ -1,37 +1,38 @@
-name: Deploy to Railway
+name: Deploy Landing Page — GitHub Pages
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'public/**'
   workflow_dispatch:
-    inputs:
-      reason:
-        description: 'Why deploy?'
-        required: false
-        default: 'manual deploy'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout
+        uses: actions/checkout@v5
 
-      - name: Install Railway CLI
-        run: npm i -g @railway/cli
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
 
-      - name: Check Railway availability
-        id: check
-        run: |
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 \
-            "https://video-gen-stack-production.up.railway.app/api/health" 2>&1)
-          echo "railway_up=$([ "$STATUS" = "200" ] && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
-          echo "Status: $STATUS"
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
 
-      - name: Deploy to Railway
-        if: steps.check.outputs.railway_up == 'true'
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          railway login --token "$RAILWAY_TOKEN"
-          railway up --service video-gen-stack
-
-      - name: Skip
-        if: steps.check.outputs.railway_up != 'true'
-        run: echo "⏳ Railway unavailable (free tier sleep). Manual deploy needed when awake."
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
