@@ -2,9 +2,80 @@
  * Pexels free stock photo integration for video backgrounds.
  * API docs: https://www.pexels.com/api/documentation/
  * Free tier: 200 requests/hour, 20k images/month.
+ *
+ * Visual Diversity — every upload should get a distinct look:
+ *  - 20 candidates per query (up from 5)
+ *  - candidates are shuffled with a slot-seeded PRNG so consecutive
+ *    30-minute windows walk the result set in different orders
+ *  - a persistent recently-used memory (data/pexels-used.json, cached across
+ *    CI runs) rejects photos used in the last 48h, so no two videos within a
+ *    day reuse the same hero image even for identical search terms
+ *  - generic headlines rotate through themed fallback queries instead of all
+ *    hitting the same "technology news abstract" result set
  */
 
+import { readFileSync, writeFileSync, existsSync } from 'fs'
+import path from 'path'
+
 const PEXELS_BASE = 'https://api.pexels.com/v1'
+const USED_FILE = path.resolve(process.cwd(), 'data', 'pexels-used.json')
+const USED_TTL_MS = 48 * 60 * 60 * 1000
+const USED_MAX = 400
+const FALLBACK_QUERIES = [
+  'technology news abstract',
+  'futuristic technology city skyline',
+  'artificial intelligence robot concept',
+  'digital data network innovation',
+  'science laboratory research',
+  'business finance stock market graph',
+]
+
+function loadUsed() {
+  try {
+    if (existsSync(USED_FILE)) return JSON.parse(readFileSync(USED_FILE, 'utf-8'))
+  } catch { /* first run */ }
+  return {}
+}
+
+function saveUsed(used) {
+  try { writeFileSync(USED_FILE, JSON.stringify(used, null, 2)) } catch { /* best-effort */ }
+}
+
+function pruneUsed(used) {
+  const now = Date.now()
+  for (const [url, ts] of Object.entries(used)) {
+    if (now - ts > USED_TTL_MS) delete used[url]
+  }
+  const urls = Object.keys(used)
+  if (urls.length > USED_MAX) {
+    for (const url of urls.slice(0, urls.length - USED_MAX)) delete used[url]
+  }
+  return used
+}
+
+// Deterministic shuffle (mulberry32 seeded PRNG) — same slot always yields the
+// same order, different slots yield different orders. This breaks the old
+// `slot % length` pattern where consecutive videos stepped predictably.
+function seededShuffle(arr, seed) {
+  let s = (seed >>> 0) || 1
+  const rnd = () => {
+    s = (s + 0x6D2B79F5) >>> 0
+    let t = s
+    t = Math.imul(t ^ (t >>> 15), t | 1)
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61)
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rnd() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+function photoUrl(photo) {
+  return photo?.src?.large2x || photo?.src?.large || photo?.src?.original || photo?.url || ''
+}
 
 /**
  * Fetch a relevant stock photo based on article title keywords.
@@ -18,11 +89,12 @@ export async function fetchPexelsImage(title, keywords = []) {
   }
 
   // Build search query from title keywords + fallback terms
-  const searchTerms = buildSearchQuery(title, keywords)
+  const slot = Math.floor(Date.now() / (30 * 60 * 1000))
+  const searchTerms = buildSearchQuery(title, keywords, slot)
   const query = encodeURIComponent(searchTerms)
 
   try {
-    const resp = await fetch(`${PEXELS_BASE}/search?query=${query}&per_page=5&orientation=landscape`, {
+    const resp = await fetch(`${PEXELS_BASE}/search?query=${query}&per_page=20&orientation=landscape`, {
       headers: { 'Authorization': apiKey },
       signal: AbortSignal.timeout(8000),
     })
@@ -33,13 +105,19 @@ export async function fetchPexelsImage(title, keywords = []) {
     const data = await resp.json()
     const photos = data.photos || []
     if (photos.length) {
-      // Rotate through the top-5 results so consecutive videos get fresh
-      // images — index derived from the 30-minute publish slot.
-      const slot = Math.floor(Date.now() / (30 * 60 * 1000))
-      const photo = photos[slot % photos.length]
-      console.log(`📸 Pexels: "${searchTerms}" → ${photo.src.large2x || photo.src.large} (rotation ${slot % photos.length}/${photos.length})`)
+      // Slot-shuffled order, then reject anything used in the last 48h so
+      // consecutive videos (even in the same slot) always get a fresh hero.
+      const ordered = seededShuffle(photos, slot)
+      const used = loadUsed()
+      const pool = ordered.filter(p => !used[photoUrl(p)])
+      const photo = (pool.length ? pool : ordered)[0]
+      const url = photoUrl(photo)
+      console.log(`📸 Pexels: "${searchTerms}" → ${url} (shuffle ${slot % 7}/${photos.length}, skipped ${photos.length - pool.length} recently used)`)
+      pruneUsed(used)
+      used[url] = Date.now()
+      saveUsed(used)
       return {
-        imageUrl: photo.src.large2x || photo.src.large,
+        imageUrl: url,
         photographer: photo.photographer,
         pexelsUrl: photo.url,
       }
@@ -55,8 +133,10 @@ export async function fetchPexelsImage(title, keywords = []) {
 /**
  * Extract meaningful search keywords from article title.
  * Strips stop words, keeps brand names and key terms.
+ * Fallback queries rotate by 30-minute slot so generic headlines don't all
+ * reuse the identical "technology news abstract" result set.
  */
-function buildSearchQuery(title, extraKeywords = []) {
+function buildSearchQuery(title, extraKeywords = [], slot = 0) {
   const stopWords = new Set([
     'the', 'a', 'an', 'is', 'are', 'was', 'were', 'to', 'of', 'in',
     'for', 'on', 'and', 'or', 'but', 'this', 'that', 'with', 'from',
@@ -104,7 +184,7 @@ function buildSearchQuery(title, extraKeywords = []) {
   const allKeywords = [...new Set([...words, ...extraKeywords])]
   const bestTerms = allKeywords.slice(0, 4)
 
-  if (bestTerms.length === 0) return 'technology news abstract'
+  if (bestTerms.length === 0) return FALLBACK_QUERIES[slot % FALLBACK_QUERIES.length]
   return bestTerms.join(' ')
 }
 
