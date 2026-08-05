@@ -24,10 +24,6 @@ const PORT = process.env.PORT || 3001
 
 app.use(cors())
 app.use(express.json({ limit: '10mb' }))
-// Public NEWS-MONSTER landing page first (root /) — the legacy dashboard home
-// remains reachable at /dashboard.html.
-app.use(express.static(path.join(__dirname, '..', '..', 'public')))
-app.use(express.static(path.join(__dirname, '..', 'dashboard', 'public')))
 
 // Request logging + metrics
 app.use((req, res, next) => {
@@ -193,3 +189,14 @@ app.get('/api/channel/videos', async (req, res) => {
     res.status(502).json({ error: e.message })
   }
 });
+
+// Admin console (packages/dashboard) mounted LAST so the core API routes above
+// (incl. /api/health) stay public. Non-authed visitors to / get sent to
+// /login; with ?apiKey=KEY they get the full control center. The public
+// landing page lives on GitHub Pages (sham435.github.io/video-gen-stack).
+import dashboardApp from '../../packages/dashboard/index.mjs'
+app.get('/', (req, res, next) => {
+  if (req.query.apiKey || req.headers['x-api-key']) return next()
+  return res.redirect('/login')
+})
+app.use(dashboardApp)

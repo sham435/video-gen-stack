@@ -3236,6 +3236,14 @@ const { default: repoToolsRoutes } = await import('./routes/repo-tools.mjs')
 app.use(opencodeRoutes)
 app.use(repoToolsRoutes)
 
+export default app
+
+const RUNNING_DIRECTLY = process.argv[1] && (
+  process.argv[1].endsWith('/index.mjs') ||
+  process.argv[1].endsWith('dashboard/index.mjs')
+)
+
+if (RUNNING_DIRECTLY) {
 const PORT = process.env.DASHBOARD_PORT || 3456
 const server = app.listen(PORT, '127.0.0.1', () => {
   console.log(`\n╔════════════════════════════════════════════╗`)
@@ -3278,3 +3286,4 @@ server.on('error', (err) => {
     process.exit(1)
   }
 })
+}
