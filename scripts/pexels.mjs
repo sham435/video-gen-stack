@@ -78,6 +78,26 @@ function photoUrl(photo) {
 }
 
 /**
+ * Shared visual-diversity selector — used by the video hero AND the cover
+ * generator so every upload gets a distinct photo:
+ *  1. candidates are shuffled with a slot-seeded PRNG
+ *  2. any photo used in the last 48h (data/pexels-used.json) is rejected
+ *  3. the pick is recorded so the NEXT upload skips it too
+ * Returns the selected photo object or null when the pool is empty.
+ */
+export function pickDistinctPhoto(photos, slot = Math.floor(Date.now() / (30 * 60 * 1000))) {
+  if (!photos?.length) return null
+  const ordered = seededShuffle(photos, slot)
+  const used = loadUsed()
+  const pool = ordered.filter(p => !used[photoUrl(p)])
+  const photo = (pool.length ? pool : ordered)[0]
+  pruneUsed(used)
+  used[photoUrl(photo)] = Date.now()
+  saveUsed(used)
+  return photo
+}
+
+/**
  * Fetch a relevant stock photo based on article title keywords.
  * Returns { imageUrl, photographer, pexelsUrl } or null.
  */
@@ -105,17 +125,13 @@ export async function fetchPexelsImage(title, keywords = []) {
     const data = await resp.json()
     const photos = data.photos || []
     if (photos.length) {
-      // Slot-shuffled order, then reject anything used in the last 48h so
-      // consecutive videos (even in the same slot) always get a fresh hero.
-      const ordered = seededShuffle(photos, slot)
-      const used = loadUsed()
-      const pool = ordered.filter(p => !used[photoUrl(p)])
-      const photo = (pool.length ? pool : ordered)[0]
+      const photo = pickDistinctPhoto(photos)
+      if (!photo) {
+        console.log(`📭 No Pexels result for: "${searchTerms}"`)
+        return null
+      }
       const url = photoUrl(photo)
-      console.log(`📸 Pexels: "${searchTerms}" → ${url} (shuffle ${slot % 7}/${photos.length}, skipped ${photos.length - pool.length} recently used)`)
-      pruneUsed(used)
-      used[url] = Date.now()
-      saveUsed(used)
+      console.log(`📸 Pexels: "${searchTerms}" → ${url} (shuffle ${slot % 7}/${photos.length})`)
       return {
         imageUrl: url,
         photographer: photo.photographer,

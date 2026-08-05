@@ -13,10 +13,13 @@ export class ProductionGuardian {
   }
 
   _loadMemory() {
+    let parsed = null
     try {
-      if (fs.existsSync(MEMORY_FILE)) return JSON.parse(fs.readFileSync(MEMORY_FILE, 'utf-8'))
+      if (fs.existsSync(MEMORY_FILE)) parsed = JSON.parse(fs.readFileSync(MEMORY_FILE, 'utf-8'))
     } catch { /* ignore */ }
-    return { errors: [] }
+    // Normalize: memory files may predate the errors key — always guarantee the
+    // arrays the guardian relies on exist (a missing key crashed `.find`).
+    return { errors: [], ...(parsed || {}), errors: Array.isArray(parsed?.errors) ? parsed.errors : [] }
   }
 
   _persistMemory() {

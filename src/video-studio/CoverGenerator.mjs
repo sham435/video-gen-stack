@@ -1,6 +1,7 @@
 import { CoverDirector } from './CoverDirector.mjs'
 import { CoverComposer } from './CoverComposer.mjs'
 import { CoverValidator } from './CoverValidator.mjs'
+import { pickDistinctPhoto } from '../../scripts/pexels.mjs'
 
 const PEXELS = 'https://api.pexels.com/v1/search'
 
@@ -132,13 +133,17 @@ export class CoverGenerator {
     const key = process.env.PEXELS_API_KEY
     if (!key) return null
     try {
-      const res = await fetch(`${PEXELS}?query=${encodeURIComponent(query)}&per_page=3&orientation=portrait`, {
+      // Visual diversity: 20 candidates, slot-shuffled, rejects photos used in
+      // the last 48h via the shared pickDistinctPhoto — covers used to take
+      // photos[0] of the first keyword, so similar stories got identical covers.
+      const res = await fetch(`${PEXELS}?query=${encodeURIComponent(query)}&per_page=20&orientation=portrait`, {
         headers: { Authorization: key },
         signal: AbortSignal.timeout(5000),
       })
       if (!res.ok) return null
       const data = await res.json()
-      return data.photos?.[0]?.src?.large2x || data.photos?.[0]?.src?.large || null
+      const photo = pickDistinctPhoto(data.photos || [])
+      return photo?.src?.large2x || photo?.src?.large || null
     } catch { return null }
   }
 }

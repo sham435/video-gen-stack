@@ -35,7 +35,10 @@ export async function composeVideo(articles, outDir = 'output') {
   return { finalPath, hooks: [], retention: engine.lastRetention || null }
 }
 
-if (import.meta.url.endsWith('composer.mjs')) {
+// Guard: only self-execute when run directly (`node scripts/composer.mjs`),
+// never when imported by another script/tool (import.meta.url always ends
+// with the module filename, so a filename check alone is wrong).
+if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
   const runFull = async () => {
     const category = process.env.INPUT_CATEGORY || process.argv[2] || 'technology'
     const outDir = 'output'
