@@ -6,38 +6,52 @@ const { W, H } = DesignSystem
 
 export class BrandingLayer {
   draw(ctx, scene, progress) {
-    this.drawWatermark(ctx)
     if (scene.type === 'brand_close') {
       this.drawTicker(ctx, scene, progress)
     }
     this.drawFooter(ctx, scene, progress)
-  }
-
-  drawWatermark(ctx) {
-    // Top-left brand chip (bug) — broadcast minimum 32px bold on a dark pill
-    const bug = BROADCAST_TEXT.bug
-    ctx.save()
-    ctx.font = `${bug.weight} ${bug.size}px ${DesignSystem.getTypography('watermark', 'default').font}, sans-serif`
-    const label = 'NEWS-MONSTER'
-    const textW = ctx.measureText(label).width
-    const padX = bug.padding[1]
-    const padY = bug.padding[0]
-    ctx.fillStyle = bug.bg
-    ctx.beginPath()
-    ctx.roundRect(14, 12, textW + padX * 2, bug.size + padY * 2, bug.borderRadius)
-    ctx.fill()
-    ctx.fillStyle = DesignSystem.brand.primary
-    ctx.fillRect(14, 12, 6, bug.size + padY * 2)
-    ctx.fillStyle = '#FFFFFF'
-    ctx.textAlign = 'left'
-    ctx.textBaseline = 'middle'
-    ctx.fillText(label, 14 + 6 + padX, 12 + (bug.size + padY * 2) / 2)
-    ctx.restore()
 
     ctx.fillStyle = 'rgba(255,255,255,0.06)'
     ctx.fillRect(0, H - 3, W, 3)
     ctx.fillStyle = DesignSystem.brand.primary
     ctx.fillRect(0, H - 3, W * 0.3, 3)
+  }
+
+  // Top-left broadcast bug — rendered AFTER post-processing (Compositor) so
+  // the vignette and category grade can never dim it. Solid near-black pill,
+  // 900-weight brand wordmark, red accent — readable on any hero plate.
+  drawBug(ctx) {
+    const bug = BROADCAST_TEXT.bug
+    const font = DesignSystem.getTypography('watermark', 'default').font
+    const label = 'NEWS-MONSTER'
+    const x = 14
+    const y = 12
+    const padX = bug.padding[1]
+    const padY = bug.padding[0]
+
+    ctx.save()
+    ctx.font = `${bug.weight} ${bug.size}px Anton, ${font}, sans-serif`
+    const textW = ctx.measureText(label).width
+    const pillW = textW + padX * 2
+    const pillH = bug.size + padY * 2
+
+    ctx.shadowColor = 'rgba(0,0,0,0.7)'
+    ctx.shadowBlur = 10
+    ctx.fillStyle = bug.bg
+    ctx.beginPath()
+    ctx.roundRect(x, y, pillW, pillH, bug.borderRadius)
+    ctx.fill()
+    ctx.shadowBlur = 0
+
+    ctx.fillStyle = DesignSystem.brand.primary
+    ctx.fillRect(x, y, 8, pillH)
+    ctx.fillRect(x + 8, y + pillH - 4, pillW - 8, 4)
+
+    ctx.fillStyle = '#FFFFFF'
+    ctx.textAlign = 'left'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(label, x + 8 + padX, y + pillH / 2)
+    ctx.restore()
   }
 
   // Footer — 100px bar with the brand (left, accent) and URL (right, bold

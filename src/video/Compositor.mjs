@@ -65,5 +65,9 @@ export class Compositor {
 
     if (owned('footer')) this.branding.draw(ctx, scene, progress)
     this.post.draw(ctx, scene, progress, category)
+
+    // Watermark sits ABOVE post (vignette + grade) so it stays crisp/visible.
+    // Always on — every scene, every frame.
+    this.branding.drawBug(ctx)
   }
 }

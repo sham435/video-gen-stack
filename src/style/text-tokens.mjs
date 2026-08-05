@@ -5,11 +5,11 @@
 
 export const BROADCAST_TEXT = {
   bug: {
-    size: 38,
-    weight: 700,
-    bg: 'rgba(0,0,0,0.88)',
-    padding: [8, 16],
-    borderRadius: 4,
+    size: 54,
+    weight: 900,
+    bg: 'rgba(5,5,5,0.96)',
+    padding: [10, 20],
+    borderRadius: 8,
   },
   live: {
     size: 40,
