@@ -70,7 +70,12 @@ header .tag { color: var(--muted); font-size: 13px; margin-top: 2px; }
 #subBtn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(225,6,0,0.6); }
 #subBtn .icon { font-size: 24px; }
 .sub-note { color: var(--muted); font-size: 13px; }
-.official-wrap { margin-top: 6px; opacity: .92; }
+.official-wrap {
+  margin-top: 4px; color: var(--cyan); font-size: 14px; font-weight: 600;
+  text-decoration: none; border: 1px solid rgba(0,229,255,0.35);
+  padding: 8px 20px; border-radius: 999px; transition: background .15s ease;
+}
+.official-wrap:hover { background: rgba(0,229,255,0.12); }
 
 .stats { display: flex; gap: 40px; justify-content: center; margin-top: 40px; }
 .stat { text-align: center; }
@@ -154,7 +159,7 @@ footer b { color: var(--text); }
 
     <div class="sub-row">
       <button id="subBtn"><span class="icon">▶</span> SUBSCRIBE</button>
-      <div class="official-wrap" id="officialBtn"></div>
+      <a class="official-wrap" href="https://www.youtube.com/channel/UC4UC7z16EtqtI-TJzeGZKjQ" target="_blank" rel="noopener">Open on YouTube</a>
       <div class="sub-note">Tap subscribe — you'll get a shout-out next upload 🚀</div>
     </div>
 
@@ -202,18 +207,9 @@ document.addEventListener('visibilitychange', () => {
   if (!document.hidden && openedSub) { openedSub = false; thanks() }
 })
 
-// Official YouTube subscribe button (subscribe_embed — the deprecated
-// subscribe_widget endpoint returns 410 + SAMEORIGIN and cannot be framed)
-const off = document.createElement('iframe')
-off.src = 'https://www.youtube.com/subscribe_embed?my_channel=' + CHANNEL_ID + '&layout=full&theme=dark'
-off.title = 'Subscribe on YouTube'
-off.width = '100%'
-off.height = '56'
-off.style.border = 'none'
-off.style.maxWidth = '360px'
-off.style.overflow = 'hidden'
-off.setAttribute('scrolling', 'no')
-document.getElementById('officialBtn').appendChild(off)
+// Official subscribe widgets (subscribe_widget/subscribe_embed) render a
+// server-side error page for logged-out/3P-cookie contexts — the link-based
+// SUBSCRIBE button above is the reliable path (sub_confirmation=1 + thanks).
 
 // Latest videos — served statically as videos.json (refreshed by the publish
 // workflow + GitHub Pages deploy; no backend needed).
