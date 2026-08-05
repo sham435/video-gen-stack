@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-05T22:11:12.478Z",
+  "updatedAt": "2026-08-05T23:40:18.941Z",
   "videos": [
+    {
+      "id": "nQNRW4b3PoY",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-05T23:33:17+00:00",
+      "publishedLabel": "Aug 5, 11:33 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/nQNRW4b3PoY/hqdefault.jpg"
+    },
     {
       "id": "gmm4QcSId_8",
       "title": "Experts Disagree On AMD | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-07-27T13:58:22+00:00",
       "publishedLabel": "Jul 27, 01:58 PM",
       "thumbnail": "https://i2.ytimg.com/vi/-WTcsTlte2o/hqdefault.jpg"
-    },
-    {
-      "id": "Oa2zRm44pa4",
-      "title": "Garmin just launched the screen-free Cirqa Smart Band, and it looks a lot like Whoop - Mas",
-      "publishedAt": "2026-07-23T11:26:13+00:00",
-      "publishedLabel": "Jul 23, 11:26 AM",
-      "thumbnail": "https://i4.ytimg.com/vi/Oa2zRm44pa4/hqdefault.jpg"
     }
   ]
 }
