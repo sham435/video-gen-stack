@@ -1,7 +1,8 @@
 node_modules/
 .env
 data/
-storage/
+# Root runtime storage (renders/news/audio) — packages/storage sources stay tracked
+/storage/
 snapshots/
 !snapshots/layout-snapshots.json
 .DS_Store
