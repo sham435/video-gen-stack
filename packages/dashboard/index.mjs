@@ -1496,6 +1496,135 @@ app.get('/api/production/events', async (req, res) => {
   } catch (e) { res.json({ error: e.message }) }
 })
 
+// ========== LIVE STREAM (SSE) ==========
+// One EventSource replaces the dashboard's 5-10s polling for the live panels
+// (autonomous queue, production jobs, pipeline events, ops status, pipeline
+// stages). The server samples each source at ~1.5s and only pushes when the
+// payload actually changed, so any number of clients costs constant request
+// volume. Monotonic ids + Last-Event-ID replay keep reconnecting clients in
+// sync (EventSource reconnects automatically on drops).
+const liveClients = new Set()
+const liveBuffer = []
+const LIVE_BUFFER_MAX = 300
+const liveSent = new Map()
+let liveSeq = 0
+let liveSampling = false
+
+function livePublish(type, payload) {
+  const data = JSON.stringify(payload)
+  if (liveSent.get(type) === data) return
+  liveSent.set(type, data)
+  liveSeq++
+  const ev = { id: liveSeq, type, data }
+  liveBuffer.push(ev)
+  if (liveBuffer.length > LIVE_BUFFER_MAX) liveBuffer.splice(0, liveBuffer.length - LIVE_BUFFER_MAX)
+  for (const c of [...liveClients]) {
+    try { c.res.write(`id: ${ev.id}\nevent: ${type}\ndata: ${data}\n\n`); c.lastId = ev.id }
+    catch { liveClients.delete(c) }
+  }
+}
+
+// Snapshot readers — same sources as the /api handlers above; JSON diffing in
+// livePublish means nothing is pushed until something actually changed.
+const snapshotOps = () => _ops.status()
+const snapshotQueue = () => ({ queue: _scheduler.list(), userWindowMs: AutonomousScheduler.USER_WINDOW_MS, autoStartMs: AutonomousScheduler.AUTO_START_MS })
+
+async function snapshotJobs() {
+  const dir = ROOT + '/data/production-jobs'
+  let files = []
+  try { files = readdirSync(dir).filter(f => f.endsWith('.json')) } catch {}
+  return files.map(f => {
+    try { return JSON.parse(readFileSync(dir + '/' + f, 'utf-8')) } catch { return null }
+  }).filter(Boolean).sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || '')).slice(0, 20)
+}
+
+async function snapshotEvents() {
+  const file = ROOT + '/data/pipeline-events.jsonl'
+  try {
+    if (!existsSync(file)) return []
+    return readFileSync(file, 'utf-8').split('\n').filter(Boolean).map(l => {
+      try { return JSON.parse(l) } catch { return null }
+    }).filter(Boolean).slice(-30).reverse()
+  } catch { return [] }
+}
+
+async function snapshotStages() {
+  const db = await getPipelineDb()
+  const stages = []
+  for (const s of STAGE_MAP) {
+    let state = 'waiting'
+    let detail = 'No runs yet'
+    let durationMs = null
+    let lastAt = null
+    let jobs = 0
+    let failed = 0
+    try {
+      if (db) {
+        const row = db.prepare(
+          `SELECT stage, status, message, duration_ms, created_at FROM pipeline_logs
+           WHERE stage = ? ORDER BY created_at DESC, id DESC LIMIT 1`
+        ).get(s.dbStage)
+        if (row) {
+          state = row.status === 'success' ? 'success' : row.status === 'running' ? 'running' : 'failed'
+          detail = row.message || row.status
+          durationMs = row.duration_ms
+          lastAt = row.created_at
+        }
+        const stats = db.prepare(
+          `SELECT COUNT(*) as total, SUM(CASE WHEN status != 'success' THEN 1 ELSE 0 END) as failed
+           FROM pipeline_logs WHERE stage = ?`
+        ).get(s.dbStage)
+        jobs = stats?.total || 0
+        failed = stats?.failed || 0
+      } else {
+        detail = 'pipeline DB unavailable'
+      }
+    } catch (e) { detail = e.message }
+    stages.push({ id: s.id, label: s.label, desc: s.desc, state, detail, durationMs, lastAt, jobs, failed })
+  }
+  return { updatedAt: new Date().toISOString(), stages }
+}
+
+const LIVE_SOURCES = [
+  ['queue', () => snapshotQueue()],
+  ['ops', () => snapshotOps()],
+  ['stages', () => snapshotStages()],
+  ['jobs', () => snapshotJobs()],
+  ['events', () => snapshotEvents()],
+]
+
+setInterval(async () => {
+  if (liveSampling) return
+  liveSampling = true
+  try {
+    for (const [type, fn] of LIVE_SOURCES) {
+      try { livePublish(type, await fn()) } catch { /* keep the stream alive */ }
+    }
+  } finally { liveSampling = false }
+}, 1500)
+
+app.get('/api/live/stream', (req, res) => {
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache, no-transform',
+    Connection: 'keep-alive',
+    'X-Accel-Buffering': 'no',
+  })
+  res.write(': connected\n\n')
+  const client = { res, lastId: 0 }
+  const afterId = parseInt(req.headers['last-event-id'] || '0', 10) || 0
+  for (const ev of liveBuffer) {
+    if (ev.id <= afterId) continue
+    try { client.res.write(`id: ${ev.id}\nevent: ${ev.type}\ndata: ${ev.data}\n\n`); client.lastId = ev.id } catch {}
+  }
+  liveClients.add(client)
+  client.res.on('error', () => liveClients.delete(client))
+  const heartbeat = setInterval(() => {
+    try { client.res.write(': ping\n\n') } catch { clearInterval(heartbeat); liveClients.delete(client) }
+  }, 15000)
+  req.on('close', () => { clearInterval(heartbeat); liveClients.delete(client) })
+})
+
 app.post('/api/production/:id/approve', (req, res) => {
   const job = _activeJobs.get(req.params.id)
   if (!job) return res.status(404).json({ error: 'job not found' })
@@ -2110,8 +2239,8 @@ document.addEventListener('click', async (e) => {
 const STATE_COLORS = { waiting: 'text-gray-500', running: 'text-yellow-400', success: 'text-green-400', failed: 'text-red-400' }
 const STATE_DOTS = { waiting: '⚪', running: '🟡', success: '🟢', failed: '🔴' }
 
-async function loadStages(){
-  const data = await fetch('/api/pipeline/stages').then(r=>r.json()).catch(()=>null)
+async function loadStages(payload){
+  const data = payload ?? await fetch('/api/pipeline/stages').then(r=>r.json()).catch(()=>null)
   if(!data || !data.stages) return
   const dots = document.getElementById('stageStatus')
   if(dots){
@@ -2281,17 +2410,17 @@ function renderProductionJob(job){
   }
 }
 
-async function loadActiveJob(){
+async function loadActiveJob(payload){
   if(!activeJobId) return
-  const jobs = await fetch('/api/production/jobs').then(r=>r.json()).catch(()=>[])
+  const jobs = payload ?? await fetch('/api/production/jobs').then(r=>r.json()).catch(()=>[])
   const j = jobs.find(x => x.id === activeJobId)
   if(j) renderProductionJob(j)
 }
 
 const EVENT_GLYPH = { success: '🟢', failed: '🔴', running: '🟡', approved: '✅', rejected: '⛔' }
 
-async function loadEvents(){
-  const events = await fetch('/api/production/events').then(r=>r.json()).catch(()=>[])
+async function loadEvents(payload){
+  const events = payload ?? await fetch('/api/production/events').then(r=>r.json()).catch(()=>[])
   const el = document.getElementById('auditEvents')
   if(!el) return
   if(!events.length){ el.innerHTML = '<div class="text-gray-500">No pipeline events yet</div>'; return }
@@ -2503,8 +2632,8 @@ async function autoFlow(){
   loadAutoQueue()
 }
 
-async function loadAutoQueue(){
-  const d = await fetch('/api/autonomous/queue').then(r=>r.json()).catch(()=>null)
+async function loadAutoQueue(payload){
+  const d = payload ?? await fetch('/api/autonomous/queue').then(r=>r.json()).catch(()=>null)
   const el = document.getElementById('autoQueue')
   if(!el || !d) return
   const q = d.queue || []
@@ -2569,8 +2698,8 @@ async function loadHealthScore(){
     bar('Agents Health', d.agentsHealth, 'bg-green-500')
 }
 
-async function loadOps(){
-  const d = await fetch('/api/ops/status').then(r=>r.json()).catch(()=>null)
+async function loadOps(payload){
+  const d = payload ?? await fetch('/api/ops/status').then(r=>r.json()).catch(()=>null)
   if(!d) return
   // Status widgets
   const widgets = document.getElementById('opsWidgets')
@@ -2801,6 +2930,34 @@ async function sendChat(text){
   thinking.scrollIntoView()
 }
 
+// ---- SSE: one live stream replaces the 5-10s polling for the live panels ----
+let liveSource = null
+
+function openLive(){
+  if (liveSource) return
+  const key = new URLSearchParams(location.search).get('apiKey') || localStorage.getItem('nm-api-key')
+  const es = new EventSource('/api/live/stream' + (key ? '?apiKey='+encodeURIComponent(key) : ''))
+  liveSource = es
+  const handlers = {
+    queue:  (d) => loadAutoQueue(JSON.parse(d)),
+    ops:    (d) => loadOps(JSON.parse(d)),
+    stages: (d) => loadStages(JSON.parse(d)),
+    jobs:   (d) => loadActiveJob(JSON.parse(d)),
+    events: (d) => loadEvents(JSON.parse(d)),
+  }
+  for (const [type, fn] of Object.entries(handlers)) {
+    es.addEventListener(type, (e) => { try { fn(e.data) } catch {} })
+  }
+  es.onerror = () => { /* EventSource auto-reconnects; Last-Event-ID replays missed events */ }
+}
+
+function liveFallback(){
+  // Only when the stream is down — normally SSE carries the live panels
+  if (!liveSource || liveSource.readyState === EventSource.CLOSED) {
+    loadAutoQueue(); loadStages(); loadActiveJob(); loadEvents(); loadOps()
+  }
+}
+
 load()
 loadProdStatus()
 loadOps()
@@ -2813,14 +2970,11 @@ loadAiMemory()
 loadHealthScore()
 loadGuardian()
 viLoadNews()
+openLive()
 setInterval(load, 30000)
 setInterval(loadProdStatus, 30000)
-setInterval(loadOps, 10000)
 setInterval(loadHealthScore, 15000)
-setInterval(loadAutoQueue, 5000)
-setInterval(loadStages, 10000)
-setInterval(loadActiveJob, 5000)
-setInterval(loadEvents, 5000)
+setInterval(liveFallback, 30000)
 </script>
 </body>
 </html>`
