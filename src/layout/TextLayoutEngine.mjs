@@ -23,15 +23,30 @@ export class TextLayoutEngine {
     const lineCap = maxLines || cfg.maxLines
     const font = fontFamily === 'Inter' && role !== 'source' ? 'Inter' : fontFamily
 
-    const fitted = ResponsiveTextScaler.fit({
-      text,
+    const fit = (t, ml) => ResponsiveTextScaler.fit({
+      text: t,
       maxWidth: zone.width,
       maxHeight: zone.height,
       fontSize: preferred,
       minFontSize: cfg.floor,
       fontFamily: font,
-      maxLines: lineCap,
+      maxLines: ml,
     })
+
+    let finalText = String(text ?? '')
+    let fitted = fit(finalText, lineCap)
+    if (fitted.overflow && role !== 'emphasis' && finalText.length > 12) {
+      // Graceful degrade for autonomous pipelines: trim trailing words until
+      // the text fits its safe zone. Previously this crashed the whole render
+      // (TEXT_OVERFLOW_BLOCKED_RENDER); truncated text still fully fits, so
+      // nothing ships clipped.
+      let words = finalText.split(/\s+/)
+      while (fitted.overflow && words.length > 1) {
+        words = words.slice(0, -1)
+        finalText = words.join(' ') + '…'
+        fitted = fit(finalText, lineCap)
+      }
+    }
 
     const lines = fitted.wrap.lines
     const lineHeight = FontMetrics.lineHeight(fitted.fontSize)
@@ -39,7 +54,7 @@ export class TextLayoutEngine {
     const height = lines.length * lineHeight
 
     return {
-      text: String(text ?? ''),
+      text: finalText,
       role,
       priority: cfg.priority,
       lines,

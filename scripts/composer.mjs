@@ -86,6 +86,29 @@ if (import.meta.url.endsWith('composer.mjs')) {
       }
     }
 
+    // Dedup: skip articles already published in the last 24h (stale free-plan
+    // feeds like TechCrunch keep returning the same headlines — the channel
+    // should not repost the identical story every 30 minutes).
+    try {
+      const { PublishEventsStore } = await import('../src/publishing/PublishEventsStore.mjs')
+      const cutoff = Date.now() - 864e5
+      const used = new Set()
+      for (const ev of new PublishEventsStore().events) {
+        const ts = ev.publishedAt ? new Date(ev.publishedAt).getTime() : 0
+        if (ts > cutoff && ev.title) used.add(String(ev.title).trim().toLowerCase())
+      }
+      if (used.size) {
+        const fresh = (articles || []).filter(a => !used.has(String(a.title || '').trim().toLowerCase()))
+        if (fresh.length) {
+          console.log(`[DEDUP] skipped ${articles.length - fresh.length} already-published article(s)`)
+          articles = fresh
+        } else {
+          console.log('[DEDUP] all fetched articles were published in the last 24h — taking the newest anyway')
+          articles = articles.slice(0, 1)
+        }
+      }
+    } catch { /* dedup is best-effort */ }
+
     if (!articles?.length) {
       if (process.env.NEWSAPI_KEY && !process.argv[2]) {
         throw new Error(`No articles returned for category "${category}" (NewsAPI empty or rate-limited) — aborting instead of publishing placeholder content`)
