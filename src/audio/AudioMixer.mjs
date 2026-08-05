@@ -40,20 +40,13 @@ export class AudioMixer {
 
     if (existing.length > 0) return
 
-    console.log('Downloading free background music...')
-    const tracks = [
-      { name: 'lofi-study.mp3', url: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3' },
-    ]
-
-    for (const track of tracks) {
-      try {
-        const response = await fetch(track.url, { signal: AbortSignal.timeout(30000), redirect: 'follow' })
-        if (!response.ok) throw new Error(`HTTP ${response.status}`)
-        fs.writeFileSync(path.join(MUSIC_DIR, track.name), Buffer.from(await response.arrayBuffer()))
-        const size = fs.statSync(path.join(MUSIC_DIR, track.name)).size
-        if (size > 10000) console.log(`  Music: ${track.name} (${(size / 1024).toFixed(0)}KB)`)
-        else { fs.unlinkSync(path.join(MUSIC_DIR, track.name)); console.log(`  ${track.name} too small`) }
-      } catch (e) { console.log(`  Music download failed: ${e.message}`) }
+    // NEVER download stock music — the Pixabay lofi track got content-ID
+    // claimed (HAAWK/FASSounds). Generate the original in-house bed instead.
+    console.log('Generating original NEWS-MONSTER music bed...')
+    try {
+      execFileSync('node', ['scripts/gen-music.mjs'], { cwd: process.cwd(), stdio: 'inherit', timeout: 180000 })
+    } catch (e) {
+      console.log(`  Music generation failed: ${e.message}`)
     }
   }
 

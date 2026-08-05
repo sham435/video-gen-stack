@@ -59,8 +59,10 @@ export function mixMusicWithVideo(videoIn, musicPath, duration, outPath){
 }
 
 /**
- * Download a free lofi track if no music exists yet.
- * Called at the start of the pipeline to ensure music is available.
+ * Ensure a background music track exists — NEVER from stock-music downloads.
+ * The Pixabay lofi track got content-ID claimed (HAAWK/FASSounds), so the
+ * channel generates its own original bed (scripts/gen-music.mjs): 100% own
+ * audio, nothing third parties can claim.
  */
 export async function ensureMusicExists(){
   if(!fs.existsSync(MUSIC_DIR)) fs.mkdirSync(MUSIC_DIR, {recursive:true})
@@ -70,21 +72,12 @@ export async function ensureMusicExists(){
 
   if(existing.length > 0) return // already has music
 
-  console.log('Downloading cinematic news background music...')
-  const tracks = [
-    { name: 'lofi-study.mp3', url: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3' },
-    { name: 'tech-drive.mp3', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
-  ]
-
-  for(const track of tracks){
-    try {
-      const response = await fetch(track.url, { signal: AbortSignal.timeout(30000), redirect: 'follow' })
-      if (!response.ok) throw new Error(`HTTP ${response.status}`)
-      fs.writeFileSync(path.join(MUSIC_DIR, track.name), Buffer.from(await response.arrayBuffer()))
-      const size = fs.statSync(path.join(MUSIC_DIR, track.name)).size
-      if(size > 10000) console.log(`  ✅ ${track.name} (${(size/1024).toFixed(0)}KB)`)
-      else { fs.unlinkSync(path.join(MUSIC_DIR, track.name)); console.log(`  ❌ ${track.name} too small`) }
-    } catch(e) { console.log(`  ❌ ${track.name}: ${e.message}`) }
+  console.log('Generating original NEWS-MONSTER music bed...')
+  const { execFileSync: run } = await import('child_process')
+  try {
+    run('node', ['scripts/gen-music.mjs'], { cwd: process.cwd(), stdio: 'inherit', timeout: 180000 })
+  } catch(e) {
+    console.log(`  ❌ music generation failed: ${e.message}`)
   }
 }
 
