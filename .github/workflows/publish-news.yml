@@ -92,7 +92,9 @@ jobs:
           ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
           QUICK_RENDER: 'true'
           INPUT_CATEGORY: ${{ steps.pick.outputs.category }}
-        run: node scripts/composer.mjs '${{ github.event.inputs.title || '' }}'
+        run: |
+          python3 -m pip install --user edge-tts -q
+          PATH="$HOME/.local/bin:$PATH" node scripts/composer.mjs '${{ github.event.inputs.title || '' }}'
 
       - name: Persist production memory + retention snapshots
         if: always()

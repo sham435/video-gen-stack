@@ -406,15 +406,25 @@ export class NewsBroadcastEngine {
     const totalDuration = (!rawDuration || isNaN(rawDuration) || Number(rawDuration) < 15) ? 30 : Number(rawDuration)
     job.markStart('voice')
     const voicePath = `${outDir}/narration.mp3`
-    await this.voiceSync.generateTTS(captionScript, voicePath)
+    // Premium narration or FAIL. generateTTS refuses espeak — a robotic voice
+    // must never reach the render/publish stage (see src/audio/VoiceSync.mjs).
+    try {
+      await this.voiceSync.generateTTS(captionScript, voicePath)
+    } catch (e) {
+      console.error(`[VOICE] narration failed: ${e.message}`)
+      throw new Error(`Voice generation failed — ${e.message}`)
+    }
 
     const voiceDur = this.voiceSync.getDuration(voicePath)
     const voiceSize = fs.existsSync(voicePath) ? fs.statSync(voicePath).size : 0
-    console.log(`Narration: ${voiceDur.toFixed(1)}s, ${(voiceSize / 1024).toFixed(0)}KB (template: ${totalDuration}s)`)
+    const voiceReport = this.voiceSync.lastReport || {}
+    if (voiceReport.provider === 'espeak') {
+      throw new Error('Voice QA gate: espeak narration produced — refusing to render robotic audio')
+    }
+    console.log(`Narration: ${voiceDur.toFixed(1)}s, ${(voiceSize / 1024).toFixed(0)}KB via ${voiceReport.provider || 'tts'} (template: ${totalDuration}s)`)
 
     if (voiceSize < 1024 || voiceDur < 1) {
-      console.warn('Voice file too small or empty, falling back to espeak')
-      await this.voiceSync.fallbackTTS(captionScript, voicePath)
+      throw new Error('Voice QA: narration file is empty/invalid — refusing to publish')
     }
 
     // Pad short narration with silence so platforms don't reject the video
@@ -437,7 +447,7 @@ export class NewsBroadcastEngine {
         console.warn(`Narration padding skipped: ${e.message}`)
       }
     }
-    job.markDone('voice', { detail: `${totalDuration.toFixed(1)}s narration`, score: finalVoiceDur >= 1 ? 85 : 40 })
+    job.markDone('voice', { detail: `${totalDuration.toFixed(1)}s narration (${voiceReport.provider || 'tts'})`, score: finalVoiceDur >= 1 ? 85 : 40 })
 
     const totalFrames = Math.ceil(totalDuration * this.renderFps)
     const reportEvery = Math.max(1, Math.floor(totalFrames / 20))

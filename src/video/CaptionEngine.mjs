@@ -43,7 +43,7 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
     }
   }
 
-  const lineH = layout ? layout.lineHeight : fontSize * 1.6
+  const lineH = layout ? layout.lineHeight : fontSize * 1.45
   const totalH = lines.length * lineH
   const startY = layout ? layout.y : H * 0.78 - totalH / 2
   const centerX = layout ? layout.x + layout.width / 2 : W / 2
@@ -53,7 +53,7 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
 
   for (const line of lines) {
     const lineText = line.join(' ')
-    ctx.font = `900 ${fontSize}px Inter, sans-serif`
+    ctx.font = `900 ${fontSize}px 'Montserrat ExtraBold', Inter, sans-serif`
     const lineW = ctx.measureText(lineText.toUpperCase()).width
     const startX = layout ? centerX - lineW / 2 : W / 2 - lineW / 2 - 30
 
@@ -81,17 +81,24 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
         ctx.shadowColor = isFocus ? accentColor : '#00E5FF'
         ctx.shadowBlur = 20 * lp
         ctx.fillStyle = isFocus ? accentColor : '#FFFFFF'
-        ctx.font = `900 ${fontSize}px Inter, sans-serif`
+        ctx.font = `900 ${fontSize}px 'Montserrat ExtraBold', Inter, sans-serif`
       } else if (isPast) {
         ctx.fillStyle = isFocus ? accentColor : 'rgba(255,255,255,0.65)'
-        ctx.font = `800 ${fontSize}px Inter, sans-serif`
+        ctx.font = `800 ${fontSize}px 'Montserrat ExtraBold', Inter, sans-serif`
       } else {
         ctx.fillStyle = isFocus ? accentColor : 'rgba(255,255,255,0.25)'
-        ctx.font = `800 ${fontSize}px Inter, sans-serif`
+        ctx.font = `800 ${fontSize}px 'Montserrat ExtraBold', Inter, sans-serif`
       }
 
+      // NEWS-MONSTER caption standard: white/700 weight face + 3-5px black
+      // stroke + soft shadow so reading text survives YouTube compression.
+      ctx.lineWidth = Math.max(3, fontSize * 0.07)
+      ctx.strokeStyle = 'rgba(0,0,0,0.9)'
+      ctx.lineJoin = 'round'
+      ctx.miterLimit = 2
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
+      ctx.strokeText(w.toUpperCase(), 0, 0)
       ctx.fillText(w.toUpperCase(), 0, 0)
       ctx.restore()
 
