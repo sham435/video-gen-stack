@@ -306,7 +306,7 @@ export class InformationLayer {
       ctx.save()
       ctx.globalAlpha = stayP
       ctx.translate(0, (1 - stayP) * 40)
-      ctx.font = '900 108px "Montserrat ExtraBold", sans-serif'
+      ctx.font = '900 98px "Montserrat ExtraBold", sans-serif'
       ctx.fillStyle = '#FFC107'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
@@ -323,7 +323,11 @@ export class InformationLayer {
       ctx.globalAlpha = brandP
       ctx.translate(W / 2, H * 0.50)
       ctx.scale(scale, scale)
-      ctx.font = '900 150px "Montserrat ExtraBold", sans-serif'
+      // Fit-to-width so the brand headline always stays inside the layout.
+      const brandFont = '900 140px "Montserrat ExtraBold", sans-serif'
+      ctx.font = brandFont
+      const fit = Math.min(1, (W - 160) / Math.max(ctx.measureText('NEWS-MONSTER').width, 1))
+      ctx.font = `900 ${Math.floor(140 * fit)}px "Montserrat ExtraBold", sans-serif`
       ctx.fillStyle = '#FFFFFF'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'

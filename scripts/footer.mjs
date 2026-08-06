@@ -80,14 +80,15 @@ export async function generateFooter(outPath = 'assets/footer.png') {
 
   // ── Section 2: Website ──
   const siteUrl = 'https://sham435.github.io/video-gen-stack/'
-  // Fit-to-width: the site string is long, shrink so it stays on one line
+  // Fit-to-width: the site string is long, shrink so it stays on one line.
+  // Baseline aligned with the "AVAILABLE ON" label (+10px text size).
   const urlAvail = 176 // space before the YouTube pill (x=310)
-  ctx.font = '800 20px Inter, sans-serif'
+  ctx.font = '800 30px Inter, sans-serif'
   const urlW = ctx.measureText(siteUrl).width
-  ctx.font = `800 ${Math.max(8, 20 * (urlAvail / urlW))}px Inter, sans-serif`
+  ctx.font = `800 ${Math.max(8, 30 * (urlAvail / urlW))}px Inter, sans-serif`
   ctx.fillStyle = '#D32F2F'
   ctx.textAlign = 'left'
-  ctx.fillText(siteUrl, 130, 38)
+  ctx.fillText(siteUrl, 130, 32)
 
   ctx.font = '500 12px Inter, sans-serif'
   ctx.fillStyle = '#666666'

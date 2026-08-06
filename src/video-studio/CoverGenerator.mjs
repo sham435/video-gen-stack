@@ -2,7 +2,9 @@ import { CoverDirector } from './CoverDirector.mjs'
 import { CoverComposer } from './CoverComposer.mjs'
 import { CoverValidator } from './CoverValidator.mjs'
 import { ThumbnailIntelligence } from '../analytics/ThumbnailIntelligence.mjs'
+import { SDCPPProvider } from '../thumbnail/SDCPPProvider.mjs'
 import { pickDistinctPhoto } from '../../scripts/pexels.mjs'
+import path from 'node:path'
 
 const PEXELS = 'https://api.pexels.com/v1/search'
 
@@ -18,6 +20,7 @@ export class CoverGenerator {
     this.intel = options.intelligence === undefined
       ? new ThumbnailIntelligence()
       : options.intelligence
+    this.sdcpp = options.sdcpp === undefined ? new SDCPPProvider() : options.sdcpp
   }
 
   /**
@@ -111,16 +114,36 @@ export class CoverGenerator {
       const url = await this.searchPexels(term)
       if (url) return url
     }
-    // Fallback 2: use the article's own image if NewsAPI provided one
+    // Fallback 2: local AI hero via stable-diffusion.cpp (free, offline)
+    const sdHero = article?.sdcpp === false ? null : await this.resolveSDCPP(article, brief)
+    if (sdHero) return sdHero
+    // Fallback 3: use the article's own image if NewsAPI provided one
     if (article?.imageUrl || article?.urlToImage) {
       return article.imageUrl || article.urlToImage
     }
-    // Fallback 3: generate a hero image with FAL_KEY when Pexels unavailable
+    // Fallback 4: generate a hero image with FAL_KEY when Pexels unavailable
     if (process.env.FAL_KEY && brief.hero_prompt) {
       const url = await this.generateWithFal(brief.hero_prompt)
       if (url) return url
     }
     return null
+  }
+
+  /** Local SD hero (deterministic seed from title) when sd-cli + model exist. */
+  resolveSDCPP(article, brief) {
+    try {
+      if (!this.sdcpp?.available()) return null
+      const prompt = brief.hero_prompt || brief.visual_style || (brief.subject ? `cinematic news scene about ${brief.subject}` : '')
+      if (!prompt) return null
+      const seed = (() => { let h = 0; const s = article.title || 'newsm'; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return Math.abs(h) })()
+      const result = this.sdcpp.generate({
+        prompt: `${prompt}, cinematic editorial photography, dramatic lighting, high detail, 8k`,
+        negative: 'blurry, low quality, watermark, text, logo, deformed, extra fingers, duplicate',
+        width: 832, height: 1216, steps: 20, cfg: 7.0, seed,
+        outPath: path.join(this.cacheDir, `sd-hero-${seed}.png`),
+      })
+      return result?.path || null
+    } catch { return null }
   }
 
   async generateWithFal(prompt) {
