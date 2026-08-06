@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-06T10:17:52.269Z",
+  "updatedAt": "2026-08-06T12:34:08.262Z",
   "videos": [
+    {
+      "id": "-Vi1Fer2QKk",
+      "title": "Google Assistant will disappear from your phone next month - The Verge | NEWS-MONSTER",
+      "publishedAt": "2026-08-06T12:30:22+00:00",
+      "publishedLabel": "Aug 6, 12:30 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/-Vi1Fer2QKk/hqdefault.jpg"
+    },
     {
       "id": "BmYrPVavxtc",
       "title": "Pokémon Pokopia Updated To Version 2.0.0, Here Are The Full Patch Notes - Nintendo Life | NEWS-MONST",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-06T06:42:17+00:00",
       "publishedLabel": "Aug 6, 06:42 AM",
       "thumbnail": "https://i3.ytimg.com/vi/ZVFWm2xOFyg/hqdefault.jpg"
-    },
-    {
-      "id": "BbG5GVeYO1s",
-      "title": "iPhone 18 Pro will have three upgrades that have been rumored for years | NEWS-MONSTER",
-      "publishedAt": "2026-08-06T06:39:43+00:00",
-      "publishedLabel": "Aug 6, 06:39 AM",
-      "thumbnail": "https://i3.ytimg.com/vi/BbG5GVeYO1s/hqdefault.jpg"
     }
   ]
 }
