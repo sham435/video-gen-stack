@@ -1,4 +1,4 @@
-// update-image-performance — Milestone B daily learning job.
+// update-image-performance — Milestone B/C daily learning job.
 //
 // Workflow:
 //   1. Load published videos (data/publish-events.json).
@@ -6,8 +6,10 @@
 //      engagement) via AnalyticsCollector.
 //   3. Match the video to its scene→asset mapping (output/<batch>/scene-assets.json).
 //   4. Record video_performance + scene_assets rows.
-//   5. Recompute learned image/entity scores in ImagePerformanceMemory.
-//   6. Print the report.
+//   5. Record the video's cover.png as a thumbnail sample (hash + accent
+//      family + style) with its impressions/CTR (Milestone C).
+//   6. Recompute learned image/entity/thumbnail scores.
+//   7. Print the report.
 //
 // Usage:
 //   node scripts/update-image-performance.mjs            # all published
@@ -18,6 +20,7 @@
 
 import fs from 'fs'
 import path from 'path'
+import { createHash } from 'node:crypto'
 import { fileURLToPath } from 'url'
 import 'dotenv/config'
 
@@ -28,6 +31,7 @@ const DAYS = DAYS_FLAG ? parseInt(DAYS_FLAG.split('=')[1], 10) : null
 
 const { AnalyticsCollector } = await import(path.join(ROOT, 'src', 'analytics', 'AnalyticsCollector.mjs'))
 const { ImagePerformanceMemory } = await import(path.join(ROOT, 'src', 'analytics', 'ImagePerformanceMemory.mjs'))
+const { ThumbnailIntelligence } = await import(path.join(ROOT, 'src', 'analytics', 'ThumbnailIntelligence.mjs'))
 const { PublishEventsStore, PUBLISH_EVENTS_FILE } = await import(path.join(ROOT, 'src', 'publishing', 'PublishEventsStore.mjs'))
 
 function publishedSince(events, days) {
@@ -49,6 +53,27 @@ function findSceneAssets(videoEvent) {
   return null
 }
 
+/** Cover of a published video + the style variant that was promoted to it. */
+function findThumbnail(videoEvent) {
+  const idx = videoEvent.metadata?.index
+  const dir = idx
+    ? path.join(ROOT, 'output', `batch-${String(idx).padStart(2, '0')}`)
+    : path.join(ROOT, 'output', videoEvent.videoId)
+  const cover = path.join(dir, 'cover.png')
+  if (!fs.existsSync(cover)) return null
+  // The promoted style: the cover_<style>.png whose bytes match cover.png.
+  let style = null
+  try {
+    const coverHash = createHash('sha256').update(fs.readFileSync(cover)).digest('hex')
+    const variants = fs.readdirSync(dir).filter(f => /^cover_([a-z]+)\.png$/.test(f))
+    for (const f of variants) {
+      const h = createHash('sha256').update(fs.readFileSync(path.join(dir, f))).digest('hex')
+      if (h === coverHash) { style = /^cover_([a-z]+)\.png$/.exec(f)[1]; break }
+    }
+  } catch { /* best-effort */ }
+  return { coverPath: cover, style }
+}
+
 const store = new PublishEventsStore()
 let events = store.recent(500)
 if (DAYS) events = publishedSince(events, DAYS)
@@ -56,9 +81,11 @@ console.log(`Scanning ${events.length} published videos${DAYS ? ` (last ${DAYS}d
 
 const collector = new AnalyticsCollector()
 const memory = new ImagePerformanceMemory()
+const intel = new ThumbnailIntelligence({ memory })
 
 let ingested = 0
 let linked = 0
+let thumbs = 0
 const failures = []
 
 for (const ev of events) {
@@ -84,7 +111,18 @@ for (const ev of events) {
       })))
       linked += sceneAssets.filter(s => s.assetId).length
     }
-    console.log(`  ✓ ${videoId}: views=${metrics.views} ctr=${metrics.ctr}% retention=${metrics.retention}% watch=${metrics.avgViewDurationSec}s`)
+
+    // Milestone C: thumbnail sample (hash + accent family + promoted style)
+    const thumb = findThumbnail(ev)
+    if (thumb) {
+      const recorded = await intel.learn(metrics, thumb.coverPath, {
+        style: thumb.style,
+        entity: metrics.category,
+        headline: metrics.title,
+      })
+      if (recorded) thumbs++
+    }
+    console.log(`  ✓ ${videoId}: views=${metrics.views} ctr=${metrics.ctr}% retention=${metrics.retention}% watch=${metrics.avgViewDurationSec}s${thumb ? ` thumb=${thumb.style || '?'}` : ''}`)
     // gentle pacing — the Analytics API is quota-limited
     await new Promise(r => setTimeout(r, 400))
   } catch (e) {
@@ -93,13 +131,22 @@ for (const ev of events) {
 }
 
 const result = memory.recomputeAll()
-console.log(`\nIngested: ${ingested} videos, ${linked} scene-asset links, ${failures.length} skipped`)
+console.log(`\nIngested: ${ingested} videos, ${linked} scene-asset links, ${thumbs} thumbnail samples, ${failures.length} skipped`)
 console.log(`Learned scores: ${result.images.length} images, ${result.entities.length} entities`)
 
 console.log('\nTop 5 images by learned score:')
 for (const img of result.images.slice(0, 5)) {
   console.log(`  ${img.score.toFixed(2)} conf=${img.confidence.toFixed(2)} uses=${img.videos_used} ret=${img.avg_retention ?? '-'}% ctr=${img.avg_ctr ?? '-'}% ${img.sha256.slice(0, 10)} (${img.entity || 'no entity'})`)
 }
+
+console.log('\nThumbnail learning (CTR by attribute):')
+const base = intel.baseline()
+console.log(`  channel CTR baseline: ${base ?? 'n/a'}%`)
+for (const s of intel.styles()) console.log(`  style "${s.style}": ${s.ctr}% ctr, ${s.impressions} imp, ${s.samples} samples (lift ${s.lift > 0 ? '+' : ''}${s.lift})`)
+for (const c of intel.colorFamilies()) console.log(`  accent ${c.family}: ${c.ctr}% ctr, ${c.impressions} imp, ${c.samples} samples (lift ${c.lift > 0 ? '+' : ''}${c.lift})`)
+const advice = intel.styleOrder([]) || null
+if (advice) console.log(`  → recommended style order: ${advice.join(', ')}`)
+if (!intel.styles().length && !intel.colorFamilies().length) console.log('  (no confident samples yet — cold start, generation unchanged)')
 
 if (failures.length) {
   console.log(`\nSkipped (${failures.length}):`)

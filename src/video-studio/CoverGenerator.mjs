@@ -1,6 +1,7 @@
 import { CoverDirector } from './CoverDirector.mjs'
 import { CoverComposer } from './CoverComposer.mjs'
 import { CoverValidator } from './CoverValidator.mjs'
+import { ThumbnailIntelligence } from '../analytics/ThumbnailIntelligence.mjs'
 import { pickDistinctPhoto } from '../../scripts/pexels.mjs'
 
 const PEXELS = 'https://api.pexels.com/v1/search'
@@ -12,14 +13,20 @@ export class CoverGenerator {
     this.composer = new CoverComposer()
     this.validator = new CoverValidator()
     this.cacheDir = options.cacheDir || 'cache/covers'
+    // Milestone C: thumbnail performance learning. Cold start (no analytics
+    // yet) is a strict no-op — every brief/variant stays byte-identical.
+    this.intel = options.intelligence === undefined
+      ? new ThumbnailIntelligence()
+      : options.intelligence
   }
 
   async generate(article, outPath, options = {}) {
-    const brief = await this.director.analyzeStory(article)
-    const hero = await this.resolveHero(article, brief)
-    await this.composer.compose(brief, hero, outPath)
-    const validation = await this.validator.validate(outPath, brief)
-    return { brief, hero, path: outPath, validation }
+    const brief = await this.director.analyzeStory(article, options.style ? { style: options.style } : {})
+    const tuned = this.intel?.tuneBrief(brief) || brief
+    const hero = await this.resolveHero(article, tuned)
+    await this.composer.compose(tuned, hero, outPath)
+    const validation = await this.validator.validate(outPath, tuned)
+    return { brief: tuned, hero, path: outPath, validation }
   }
 
   async generateBest(article, outDir, options = {}) {
@@ -50,7 +57,8 @@ export class CoverGenerator {
   }
 
   async generateTournament(article, outDir, options = {}) {
-    const styles = options.styles || ['breaking', 'cinematic', 'minimal', 'reaction', 'data']
+    const preferred = this.intel?.styleOrder(options.styles || ['breaking', 'cinematic', 'minimal', 'reaction', 'data'])
+    const styles = preferred || options.styles || ['breaking', 'cinematic', 'minimal', 'reaction', 'data']
     const variants = []
     let winner = null
 
