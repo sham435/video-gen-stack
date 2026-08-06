@@ -25,7 +25,7 @@ const H = 160    // bottom ~8% of 1920h
 /**
  * Generate the footer taskbar PNG overlay.
  * This is a permanent bar at the bottom of every video showing:
- *   [AVAILABLE ON] [Apple] [Android]  |  www.tech-monster.tv  |  [YouTube]  SUBSCRIBED 🔔  |  [T-logo]
+ *   [AVAILABLE ON] [Apple] [Android]  |  site URL  |  [YouTube]  SUBSCRIBED 🔔  |  [NM logo]
  */
 export async function generateFooter(outPath = 'assets/footer.png') {
   const canvas = createCanvas(W, H)
@@ -79,10 +79,15 @@ export async function generateFooter(outPath = 'assets/footer.png') {
   } catch { ctx.font = '36px sans-serif'; ctx.fillText('🤖', androidX, 80) }
 
   // ── Section 2: Website ──
+  const siteUrl = 'https://sham435.github.io/video-gen-stack/'
+  // Fit-to-width: the site string is long, shrink so it stays on one line
+  const urlAvail = 176 // space before the YouTube pill (x=310)
   ctx.font = '800 20px Inter, sans-serif'
+  const urlW = ctx.measureText(siteUrl).width
+  ctx.font = `800 ${Math.max(8, 20 * (urlAvail / urlW))}px Inter, sans-serif`
   ctx.fillStyle = '#D32F2F'
   ctx.textAlign = 'left'
-  ctx.fillText('www.tech-monster.tv', 130, 38)
+  ctx.fillText(siteUrl, 130, 38)
 
   ctx.font = '500 12px Inter, sans-serif'
   ctx.fillStyle = '#666666'

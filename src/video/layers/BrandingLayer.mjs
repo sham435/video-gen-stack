@@ -97,12 +97,21 @@ export class BrandingLayer {
     ctx.fillText('NEWS-MONSTER', boxX + box + 20, H - footer.height / 2)
     ctx.shadowBlur = 0
 
+    // URL — fit-to-width so the full site string stays readable without
+    // bleeding over the monogram on short sides.
+    const siteUrl = 'https://sham435.github.io/video-gen-stack/'
     ctx.font = `${footer.weight} ${footer.urlSize}px ${DesignSystem.getTypography('watermark', 'footer').font}, sans-serif`
+    const urlW = ctx.measureText(siteUrl).width
+    const avail = W - 28 - (boxX + box + 20 + ctx.measureText('NEWS-MONSTER').width + 24)
+    if (urlW > avail) {
+      const fit = Math.max(24, footer.urlSize * (avail / urlW))
+      ctx.font = `${footer.weight} ${fit}px ${DesignSystem.getTypography('watermark', 'footer').font}, sans-serif`
+    }
     ctx.fillStyle = '#FFFFFF'
     ctx.textAlign = 'right'
     ctx.shadowColor = 'rgba(0,0,0,0.9)'
     ctx.shadowBlur = 4
-    ctx.fillText('www.tech-monster.tv', W - 28, H - footer.height / 2)
+    ctx.fillText(siteUrl, W - 28, H - footer.height / 2)
     ctx.shadowBlur = 0
     ctx.restore()
   }
