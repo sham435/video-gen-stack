@@ -22,7 +22,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
 
 const COUNT = Math.max(1, parseInt(process.argv[2] || '48', 10))
-const FIXED_CATEGORY = process.argv[3] || null
+const FIXED_CATEGORY = process.argv[3] && !process.argv[3].startsWith('--') ? process.argv[3] : null
 const RESUME_ARG = process.argv.find(a => a.startsWith('--resume='))
 const START_INDEX = RESUME_ARG ? Math.max(1, parseInt(RESUME_ARG.split('=')[1], 10)) : 1
 const CATEGORIES = ['technology', 'business', 'science', 'health', 'entertainment', 'sports']
