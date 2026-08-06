@@ -263,3 +263,24 @@ test('CoverGenerator wiring shape — intel exposes the methods the generator ca
   assert.equal(cold.intel.styleOrder(['breaking', 'data']), null, 'cold generator keeps original order')
   assert.ok(gen2.director, 'composer pipeline intact')
 })
+
+// ---------------------------------------------------------------------------
+// 16:9 thumbnail renderer (Milestone C local cover path)
+// ---------------------------------------------------------------------------
+
+test('generateThumbnail — renders 1280x720 PNG, deterministic for same input', async () => {
+  const { CoverGenerator } = await import('../src/video-studio/CoverGenerator.mjs')
+  const g = new CoverGenerator(null, { intelligence: null }) // no dotenv → no Pexels → gradient hero
+  const article = { title: 'Apple Unveils M4 MacBook Pro With A Big Surprise', category: 'technology', source: 'The Verge' }
+  const p1 = path.join(TMP, 'thumb-a.png')
+  const p2 = path.join(TMP, 'thumb-b.png')
+  const r1 = await g.generateThumbnail(article, p1, { style: 'breaking' })
+  const r2 = await g.generateThumbnail(article, p2, { style: 'breaking' })
+  const { loadImage } = await import('@napi-rs/canvas')
+  const img = await loadImage(p1)
+  assert.equal(img.width, 1280)
+  assert.equal(img.height, 720)
+  assert.ok(fs.readFileSync(p1).equals(fs.readFileSync(p2)), 'identical bytes for identical input')
+  assert.equal(r1.brief.accent_color, '#E10600')
+  assert.equal(r1.path, p1)
+})

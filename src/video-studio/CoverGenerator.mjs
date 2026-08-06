@@ -20,6 +20,18 @@ export class CoverGenerator {
       : options.intelligence
   }
 
+  /**
+   * 16:9 YouTube thumbnail (1280x720) — same brand system as the portrait
+   * cover but laid out landscape. Deterministic for identical input.
+   */
+  async generateThumbnail(article, outPath, options = {}) {
+    const brief = await this.director.analyzeStory(article, options.style ? { style: options.style } : {})
+    const tuned = this.intel?.tuneBrief(brief) || brief
+    const hero = await this.resolveHero(article, tuned)
+    await this.composer.composeThumbnail(tuned, hero, outPath)
+    return { brief: tuned, hero, path: outPath }
+  }
+
   async generate(article, outPath, options = {}) {
     const brief = await this.director.analyzeStory(article, options.style ? { style: options.style } : {})
     const tuned = this.intel?.tuneBrief(brief) || brief

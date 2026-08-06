@@ -93,6 +93,7 @@ export class NewsBroadcastEngine {
     this.assetUsage = null
     this.performanceMemory = null
     this.sceneVisualPlanner = new SceneVisualPlanner()
+    this.thumbnailPath = null
   }
 
   _ensureVisualIntelligence() {
@@ -469,6 +470,15 @@ export class NewsBroadcastEngine {
       const coverPath = coverResult.path
       this.coverPath = coverPath
       this.coverBrief = coverResult.brief
+      // 16:9 YouTube thumbnail (1280x720) — landscape variant for uploads
+      try {
+        const thumbPath = `${outDir}/thumbnail.png`
+        await this.coverGenerator.generateThumbnail(coverArticle, thumbPath, { style: coverResult.winner || 'breaking' })
+        this.thumbnailPath = thumbPath
+      } catch (e) {
+        console.warn(`Thumbnail variant skipped: ${e.message}`)
+        this.thumbnailPath = null
+      }
       if (coverResult.winner) {
         console.log(`Cover tournament: winner "${coverResult.winner}" (CTR ${coverResult.winnerCtr})`)
         job.markDone('cover', { detail: `winner "${coverResult.winner}" CTR ${coverResult.winnerCtr}`, score: coverResult.winnerCtr })

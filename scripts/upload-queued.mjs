@@ -48,7 +48,12 @@ for (const index of indexes) {
     continue
   }
   const title = `${titleFor(index).slice(0, 90)} | NEWS-MONSTER`
-  const coverPath = fs.existsSync(path.join(outDir, 'cover.png')) ? path.join(outDir, 'cover.png') : null
+  // Prefer the 16:9 thumbnail (1280x720) — that's what YouTube shows in
+  // feed/suggestions; fall back to the portrait cover.
+  const thumbPath = path.join(outDir, 'thumbnail.png')
+  let coverPath = null
+  if (fs.existsSync(thumbPath)) coverPath = thumbPath
+  else if (fs.existsSync(path.join(outDir, 'cover.png'))) coverPath = path.join(outDir, 'cover.png')
   const { HashtagBuilder } = await import(path.join(ROOT, 'src', 'publishing', 'HashtagBuilder.mjs'))
   const hashtags = HashtagBuilder.build({
     topic: HashtagBuilder.topicFromHeadline(title),

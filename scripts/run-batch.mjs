@@ -71,7 +71,9 @@ async function publishOne(article, index) {
   const { uploadShort } = await import(path.join(ROOT, 'apps', 'api', 'publishers', 'youtube.js'))
   const buffer = fs.readFileSync(finalPath)
   const title = `${article.title.slice(0, 90)} | NEWS-MONSTER`
-  const coverPath = fs.existsSync(path.join(outDir, 'cover.png')) ? path.join(outDir, 'cover.png') : null
+  // Prefer the 16:9 thumbnail (1280x720) for the YouTube custom thumbnail
+  const thumbPath = path.join(outDir, 'thumbnail.png')
+  const coverPath = fs.existsSync(thumbPath) ? thumbPath : (fs.existsSync(path.join(outDir, 'cover.png')) ? path.join(outDir, 'cover.png') : null)
   const { HashtagBuilder } = await import(path.join(ROOT, 'src', 'publishing', 'HashtagBuilder.mjs'))
   const hashtags = HashtagBuilder.build({
     topic: HashtagBuilder.topicFromHeadline(article.title),
