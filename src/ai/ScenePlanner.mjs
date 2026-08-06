@@ -42,6 +42,9 @@ export class ScenePlanner {
       sfx: sceneDef.sfx || 'none',
       visual: {
         type: this.inferVisualType(sceneDef.type),
+        subject: sceneDef.visual_subject || sceneDef.visual?.subject || '',
+        style: sceneDef.visual_style || sceneDef.visual?.style || 'cinematic',
+        composition: sceneDef.visual_composition || sceneDef.visual?.composition || 'wide',
         prompt: sceneDef.visual_prompt || '',
         motion: sceneDef.camera || 'push_in',
       },

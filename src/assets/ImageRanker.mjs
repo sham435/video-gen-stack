@@ -18,14 +18,16 @@ export const RANK_WEIGHTS = {
   entity: 0.15,
   freshness: 0.08,   // applied as penalty
   reuse: 0.07,       // applied as penalty
+  learned: 0.10,     // applied as bonus (0 when no performance data)
 }
 
 export const TARGET_ASPECT = 9 / 16 // portrait Shorts frame
 
 export class ImageRanker {
-  constructor({ weights = RANK_WEIGHTS, usageTracker = null } = {}) {
+  constructor({ weights = RANK_WEIGHTS, usageTracker = null, performanceMemory = null } = {}) {
     this.w = weights
     this.usageTracker = usageTracker
+    this.performanceMemory = performanceMemory
   }
 
   /**
@@ -45,16 +47,36 @@ export class ImageRanker {
       const usage = this.usageTracker ? this.usageTracker.status(c, opts) : { hot: false, useCount: 0, usedInDays: null }
       const freshnessPenalty = usage.hot ? 1 : 0
       const reusePenalty = Math.min(1, usage.useCount / 6)
+
+      // Milestone B: learned-performance bonus (0 on cold start → the
+      // ranking is byte-identical to the deterministic heuristic ranking).
+      const learned = this._learnedBonus(c, entitySet)
       const score =
         this.w.relevance * relevance +
         this.w.quality * quality +
         this.w.entity * entity -
         this.w.freshness * freshnessPenalty -
-        this.w.reuse * reusePenalty
-      return { ...c, rankScore: +score.toFixed(4), _usage: usage }
+        this.w.reuse * reusePenalty +
+        this.w.learned * learned
+      return { ...c, rankScore: +score.toFixed(4), _usage: usage, _learned: learned }
     })
 
     return scored.sort((a, b) => b.rankScore - a.rankScore)
+  }
+
+  /**
+   * Learned bonus in [0,1]: blend asset-level performance with entity-level
+   * performance, gated by confidence. 0 when no analytics exist.
+   */
+  _learnedBonus(c, entitySet) {
+    if (!this.performanceMemory) return 0
+    const asset = c.sha256 ? this.performanceMemory.asset(c.sha256) : null
+    const entityName = c.entity || (entitySet.size ? [...entitySet][0] : null)
+    const entity = entityName ? this.performanceMemory.entity(entityName) : null
+    let bonus = 0
+    if (asset) bonus += asset.score * asset.confidence
+    if (entity && entity.confidence > 0) bonus += entity.score * entity.confidence * 0.5
+    return +Math.min(1, bonus).toFixed(4)
   }
 
   _keywords(intent) {

@@ -111,6 +111,30 @@ export class RetentionAnalyticsAdapter {
     }
   }
 
+  // Impressions + click-through from the Shorts impressions report.
+  // Best-effort; null when unavailable.
+  async fetchImpressions(videoId, { sinceDays = 60 } = {}) {
+    const token = await this._accessToken()
+    if (!token) return null
+    const url = `${ANALYTICS}?ids=channel%3D%3DMINE&startDate=${this._sinceDate(sinceDays)}&endDate=${this._sinceDate(0)}&metrics=shortsImpressions%2CshortsCtr&filters=video%3D%3D${videoId}`
+    try {
+      const res = await fetch(url, {
+        headers: { 'Authorization': `Bearer ${token}` },
+        signal: AbortSignal.timeout(this.timeoutMs),
+      })
+      if (!res.ok) return null
+      const data = await res.json()
+      const row = data.rows?.[0]
+      if (!row) return null
+      return {
+        impressions: Math.round(row[0] || 0),
+        ctr: row[1] == null ? null : Math.round(row[1] * 100) / 100,
+      }
+    } catch {
+      return null
+    }
+  }
+
   // Engagement counters — comments/likes/shares per video (YouTube Data API
   // statistics). The interaction quality signal behind EngagementScore.
   async fetchEngagement(videoId) {

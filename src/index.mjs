@@ -41,6 +41,12 @@ import { ScenePlanner } from './ai/ScenePlanner.mjs'
 import { StoryDirector } from './ai/StoryDirector.mjs'
 import { VisualReasoner } from './ai/VisualReasoner.mjs'
 import { MotionPlanner, TransitionPlanner } from './ai/StoryAnalyzer.mjs'
+import { VisualSearchEngine, ENTITY_EXPANSIONS } from './assets/VisualSearchEngine.mjs'
+import { ImageDatabase } from './assets/ImageDatabase.mjs'
+import { ImageRanker } from './assets/ImageRanker.mjs'
+import { AssetUsageTracker } from './assets/AssetUsageTracker.mjs'
+import { ImagePerformanceMemory } from './analytics/ImagePerformanceMemory.mjs'
+import { SceneVisualPlanner } from './assets/SceneVisualPlanner.mjs'
 
 const RENDER_FPS = 10
 const OUTPUT_FPS = 30
@@ -81,6 +87,28 @@ export class NewsBroadcastEngine {
     this.thumbnailBrandOptimizer = new ThumbnailBrandOptimizer({ brandMemory: this.brandPerformance })
     this.motionPlanner = new MotionPlanner()
     this.transitionPlanner = new TransitionPlanner()
+    this.imageDb = null
+    this.visualSearchEngine = null
+    this.imageRanker = null
+    this.assetUsage = null
+    this.performanceMemory = null
+    this.sceneVisualPlanner = new SceneVisualPlanner()
+  }
+
+  _ensureVisualIntelligence() {
+    if (this.imageDb) return true
+    try {
+      this.imageDb = new ImageDatabase()
+      this.assetUsage = new AssetUsageTracker(this.imageDb)
+      this.performanceMemory = new ImagePerformanceMemory(this.imageDb.dbPath)
+      this.imageRanker = new ImageRanker({ usageTracker: this.assetUsage, performanceMemory: this.performanceMemory })
+      this.visualSearchEngine = new VisualSearchEngine({ database: this.imageDb })
+      return true
+    } catch (e) {
+      console.warn(`[VisualIntelligence] disabled: ${e.message}`)
+      this.imageDb = null
+      return false
+    }
   }
 
   getCategoryConfig(category) {
@@ -190,6 +218,9 @@ export class NewsBroadcastEngine {
       duration: s.duration,
       narration: s.narration,
       visual_prompt: `${s.visual?.subject || ''}, ${s.visual?.style || 'cinematic'}, ${s.visual?.composition || 'wide'}`,
+      visual_subject: s.visual?.subject || '',
+      visual_style: s.visual?.style || 'cinematic',
+      visual_composition: s.visual?.composition || 'wide',
       camera: s.camera,
       transition: s.transition,
       emotion: s.emotion,
@@ -214,18 +245,64 @@ export class NewsBroadcastEngine {
     this.transitionPlanner.enrich(rawScenes, emotionalArc)
 
     const scenes = []
+    const usedAssets = []
+    const entityCounts = new Map()
     for (const scene of rawScenes) {
       const visualPlan = await this.visualReasoner.select(scene, article, article.category) || { primary: null, images: [], colors: {}, category: article.category }
       // V4 Visual Intent — build scene meaning, score candidates by relevance
       const visualIntent = this.visualIntentEngine.buildIntent(scene, article)
       const intentRanked = this.visualIntentEngine.rankCandidates(visualPlan.images || [], visualIntent)
       const topScore = intentRanked[0]?.score ?? null
+
+      // Visual Intelligence: entity-aware search + DB-first cache + ranker +
+      // cross-scene diversity. Falls back to visualPlan when unavailable.
+      let chosenUrls = []
+      let chosenMeta = null
+      const viaVisualIntel = this._ensureVisualIntelligence() && this.sceneVisualPlanner && scene.visual?.subject
+      if (viaVisualIntel) {
+        try {
+          const intent = {
+            subject: scene.visual.subject,
+            entity: visualIntent.brand || article.category === 'technology' ? (visualIntent.brand || null) : null,
+            entities: visualIntent.brand ? [visualIntent.brand] : [],
+            keywords: visualPlan.keywords || [],
+            sceneType: scene.type,
+            emotion: scene.emotion,
+          }
+          const candidates = await this.visualSearchEngine.search(intent)
+          if (candidates?.length) {
+            const ranked = this.imageRanker.rank(candidates, { subject: scene.visual.subject, entities: intent.entities, keywords: intent.keywords }, { cooldownDays: 7 })
+            const diversity = this.sceneVisualPlanner.pick(
+              { index: scene.id, entity: visualIntent.brand, images: ranked },
+              { usedScenes: usedAssets, entityCounts }
+            )
+            chosenMeta = diversity.asset || null
+            chosenUrls = chosenMeta ? [chosenMeta.url] : []
+            if (chosenMeta?.sha256) {
+              this.imageDb.recordUsage(chosenMeta.sha256, { videoId: null, sceneIndex: scene.id })
+              usedAssets.push(chosenMeta)
+            } else if (chosenMeta?.url) {
+              usedAssets.push({ url: chosenMeta.url })
+            }
+            const ent = visualIntent.brand
+            if (ent && entityCounts) entityCounts.set(ent, (entityCounts.get(ent) || 0) + 1)
+            // Milestone B: carry the asset identity onto the scene so the
+            // learning layer can map scene→asset → performance attribution.
+            chosenMeta && (chosenMeta.assetId = chosenMeta.sha256)
+            chosenMeta && (chosenMeta.entity = chosenMeta.entity || ent || null)
+            console.log(`[VisualIntelligence] scene ${scene.id}: ${chosenUrls[0] || 'none'} (${candidates.length} candidates)${chosenMeta?.sha256 ? ' ✓indexed' : ''}`)
+          }
+        } catch (e) {
+          console.warn(`[VisualIntelligence] scene ${scene.id} skipped: ${e.message}`)
+        }
+      }
+
       // Cinematic Visual Director: rank images, drop near-duplicates, assign camera
       const ranked = this.visualDirector.rank(intentRanked.map(r => r.url), article)
       const categoryCamera = this.categoryProfiles.getCamera(article.category, scene.type)
       const cameraPlan = { ...this.visualDirector.getCameraPlan(scene.type), motion: scene.camera || categoryCamera }
       const effects = this.effectEngine.buildSceneEffects(scene, article.category)
-      const rankedUrls = ranked.map(r => r.url).filter(Boolean)
+      const rankedUrls = chosenUrls.length ? chosenUrls : ranked.map(r => r.url).filter(Boolean)
       const fallbackUrls = visualPlan.primary?.url ? [visualPlan.primary.url] : []
       scenes.push({
         ...scene,
@@ -233,6 +310,8 @@ export class NewsBroadcastEngine {
         image: rankedUrls[0] || visualPlan.primary?.url || null,
         bRoll: rankedUrls[0] || visualPlan.primary?.url || null,
         images: rankedUrls.length ? rankedUrls : fallbackUrls,
+        assetId: chosenMeta?.sha256 || null,
+        assetEntity: chosenMeta?.entity || visualIntent.brand || null,
         camera: cameraPlan.motion,
         cameraPlan,
         layoutStyle: this.categoryProfiles.getLayout(article.category),
@@ -634,6 +713,18 @@ export class NewsBroadcastEngine {
         fs.copyFileSync(footerWith, videoPath)
       }
     }
+    // Milestone B: persist the scene→asset mapping so the analytics job can
+    // attribute performance to the exact images used (scene_assets table).
+    try {
+      const sceneAssets = scenes.map((s, i) => ({
+        sceneIndex: i,
+        assetId: s.assetId || null,
+        entity: s.assetEntity || null,
+        url: s.image || null,
+      })).filter(s => s.assetId || s.url)
+      fs.writeFileSync(path.join(outDir, 'scene-assets.json'), JSON.stringify(sceneAssets, null, 2))
+    } catch { /* best-effort */ }
+
     return videoPath
   }
 

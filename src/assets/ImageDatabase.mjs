@@ -63,6 +63,81 @@ export class ImageDatabase {
       CREATE INDEX IF NOT EXISTS idx_usage_hash ON usage(sha256);
       CREATE INDEX IF NOT EXISTS idx_usage_video ON usage(video_id);
       CREATE INDEX IF NOT EXISTS idx_usage_time ON usage(used_at);
+
+      -- Milestone B: analytics-driven learning tables
+      CREATE TABLE IF NOT EXISTS video_performance (
+        video_id          TEXT PRIMARY KEY,
+        title             TEXT,
+        category          TEXT,
+        published_at      TEXT,
+        impressions       INTEGER DEFAULT 0,
+        ctr               REAL,
+        avg_view_duration REAL,
+        retention         REAL,
+        watch_time        REAL,
+        views             INTEGER DEFAULT 0,
+        likes             INTEGER DEFAULT 0,
+        comments          INTEGER DEFAULT 0,
+        shares            INTEGER DEFAULT 0,
+        collected_at      TEXT DEFAULT (datetime('now'))
+      );
+      CREATE INDEX IF NOT EXISTS idx_video_perf_cat ON video_performance(category);
+
+      CREATE TABLE IF NOT EXISTS scene_assets (
+        id          INTEGER PRIMARY KEY AUTOINCREMENT,
+        video_id    TEXT,
+        scene_index INTEGER,
+        entity      TEXT,
+        asset_id    TEXT,
+        url         TEXT,
+        headline    TEXT,
+        retention   REAL,
+        UNIQUE(video_id, scene_index)
+      );
+      CREATE INDEX IF NOT EXISTS idx_scene_assets_video ON scene_assets(video_id);
+      CREATE INDEX IF NOT EXISTS idx_scene_assets_asset ON scene_assets(asset_id);
+
+      CREATE TABLE IF NOT EXISTS image_performance (
+        sha256         TEXT PRIMARY KEY,
+        entity         TEXT,
+        category       TEXT,
+        videos_used    INTEGER DEFAULT 0,
+        avg_ctr        REAL DEFAULT 0,
+        avg_retention  REAL DEFAULT 0,
+        avg_watch_time REAL DEFAULT 0,
+        likes          INTEGER DEFAULT 0,
+        comments       INTEGER DEFAULT 0,
+        shares         INTEGER DEFAULT 0,
+        last_used      TEXT,
+        score          REAL DEFAULT 0,
+        confidence     REAL DEFAULT 0
+      );
+
+      CREATE TABLE IF NOT EXISTS thumbnail_performance (
+        thumbnail_hash  TEXT PRIMARY KEY,
+        ctr             REAL DEFAULT 0,
+        impressions     INTEGER DEFAULT 0,
+        clicks          INTEGER DEFAULT 0,
+        entity          TEXT,
+        style           TEXT,
+        dominant_color  TEXT,
+        headline_style  TEXT,
+        sample_size     INTEGER DEFAULT 0,
+        updated_at      TEXT DEFAULT (datetime('now'))
+      );
+
+      CREATE TABLE IF NOT EXISTS entity_performance (
+        entity         TEXT PRIMARY KEY,
+        category       TEXT,
+        videos         INTEGER DEFAULT 0,
+        avg_ctr        REAL DEFAULT 0,
+        avg_retention  REAL DEFAULT 0,
+        avg_watch_time REAL DEFAULT 0,
+        score          REAL DEFAULT 0,
+        confidence     REAL DEFAULT 0,
+        updated_at     TEXT DEFAULT (datetime('now'))
+      );
+      CREATE INDEX IF NOT EXISTS idx_entity_perf_cat ON entity_performance(category);
     `)
   }
 
