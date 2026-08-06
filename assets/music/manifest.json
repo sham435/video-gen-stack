@@ -1,0 +1,437 @@
+{
+  "engine": "newsmonster-musicgen-v2",
+  "total": 48,
+  "normalization": "I=-14:TP=-1.5:LRA=11",
+  "families": {
+    "cinematic-tech-reveal": {
+      "bpm": [
+        112,
+        118,
+        124
+      ],
+      "emotion": "wonder",
+      "mood": "curiosity",
+      "energy": 0.75,
+      "tracks": 12
+    },
+    "emotional-story": {
+      "bpm": [
+        72,
+        80,
+        88
+      ],
+      "emotion": "nostalgia",
+      "mood": "warm",
+      "energy": 0.3,
+      "tracks": 12
+    },
+    "action-energy": {
+      "bpm": [
+        142,
+        150,
+        158
+      ],
+      "emotion": "tension",
+      "mood": "urgent",
+      "energy": 1,
+      "tracks": 12
+    },
+    "luxury-future": {
+      "bpm": [
+        84,
+        92,
+        100
+      ],
+      "emotion": "premium",
+      "mood": "epic",
+      "energy": 0.45,
+      "tracks": 12
+    }
+  },
+  "tracks": [
+    {
+      "index": 1,
+      "family": "cinematic-tech-reveal",
+      "bpm": 112,
+      "root": 40,
+      "file": "nm-track-01-cinematic-tech-reveal-112.mp3",
+      "duration": 17.3
+    },
+    {
+      "index": 2,
+      "family": "emotional-story",
+      "bpm": 72,
+      "root": 38,
+      "file": "nm-track-02-emotional-story-72.mp3",
+      "duration": 26.9
+    },
+    {
+      "index": 3,
+      "family": "action-energy",
+      "bpm": 158,
+      "root": 40,
+      "file": "nm-track-03-action-energy-158.mp3",
+      "duration": 12.3
+    },
+    {
+      "index": 4,
+      "family": "luxury-future",
+      "bpm": 92,
+      "root": 43,
+      "file": "nm-track-04-luxury-future-92.mp3",
+      "duration": 21.1
+    },
+    {
+      "index": 5,
+      "family": "cinematic-tech-reveal",
+      "bpm": 124,
+      "root": 41,
+      "file": "nm-track-05-cinematic-tech-reveal-124.mp3",
+      "duration": 15.7
+    },
+    {
+      "index": 6,
+      "family": "emotional-story",
+      "bpm": 88,
+      "root": 41,
+      "file": "nm-track-06-emotional-story-88.mp3",
+      "duration": 22
+    },
+    {
+      "index": 7,
+      "family": "action-energy",
+      "bpm": 150,
+      "root": 38,
+      "file": "nm-track-07-action-energy-150.mp3",
+      "duration": 13
+    },
+    {
+      "index": 8,
+      "family": "luxury-future",
+      "bpm": 100,
+      "root": 43,
+      "file": "nm-track-08-luxury-future-100.mp3",
+      "duration": 19.4
+    },
+    {
+      "index": 9,
+      "family": "cinematic-tech-reveal",
+      "bpm": 124,
+      "root": 40,
+      "file": "nm-track-09-cinematic-tech-reveal-124.mp3",
+      "duration": 15.7
+    },
+    {
+      "index": 10,
+      "family": "emotional-story",
+      "bpm": 80,
+      "root": 40,
+      "file": "nm-track-10-emotional-story-80.mp3",
+      "duration": 24.2
+    },
+    {
+      "index": 11,
+      "family": "action-energy",
+      "bpm": 150,
+      "root": 41,
+      "file": "nm-track-11-action-energy-150.mp3",
+      "duration": 13
+    },
+    {
+      "index": 12,
+      "family": "luxury-future",
+      "bpm": 100,
+      "root": 36,
+      "file": "nm-track-12-luxury-future-100.mp3",
+      "duration": 19.4
+    },
+    {
+      "index": 13,
+      "family": "cinematic-tech-reveal",
+      "bpm": 118,
+      "root": 40,
+      "file": "nm-track-13-cinematic-tech-reveal-118.mp3",
+      "duration": 16.5
+    },
+    {
+      "index": 14,
+      "family": "emotional-story",
+      "bpm": 80,
+      "root": 41,
+      "file": "nm-track-14-emotional-story-80.mp3",
+      "duration": 24.2
+    },
+    {
+      "index": 15,
+      "family": "action-energy",
+      "bpm": 158,
+      "root": 40,
+      "file": "nm-track-15-action-energy-158.mp3",
+      "duration": 12.3
+    },
+    {
+      "index": 16,
+      "family": "luxury-future",
+      "bpm": 100,
+      "root": 43,
+      "file": "nm-track-16-luxury-future-100.mp3",
+      "duration": 19.4
+    },
+    {
+      "index": 17,
+      "family": "cinematic-tech-reveal",
+      "bpm": 112,
+      "root": 38,
+      "file": "nm-track-17-cinematic-tech-reveal-112.mp3",
+      "duration": 17.3
+    },
+    {
+      "index": 18,
+      "family": "emotional-story",
+      "bpm": 72,
+      "root": 45,
+      "file": "nm-track-18-emotional-story-72.mp3",
+      "duration": 26.9
+    },
+    {
+      "index": 19,
+      "family": "action-energy",
+      "bpm": 150,
+      "root": 36,
+      "file": "nm-track-19-action-energy-150.mp3",
+      "duration": 13
+    },
+    {
+      "index": 20,
+      "family": "luxury-future",
+      "bpm": 100,
+      "root": 38,
+      "file": "nm-track-20-luxury-future-100.mp3",
+      "duration": 19.4
+    },
+    {
+      "index": 21,
+      "family": "cinematic-tech-reveal",
+      "bpm": 112,
+      "root": 41,
+      "file": "nm-track-21-cinematic-tech-reveal-112.mp3",
+      "duration": 17.3
+    },
+    {
+      "index": 22,
+      "family": "emotional-story",
+      "bpm": 72,
+      "root": 43,
+      "file": "nm-track-22-emotional-story-72.mp3",
+      "duration": 26.9
+    },
+    {
+      "index": 23,
+      "family": "action-energy",
+      "bpm": 158,
+      "root": 36,
+      "file": "nm-track-23-action-energy-158.mp3",
+      "duration": 12.3
+    },
+    {
+      "index": 24,
+      "family": "luxury-future",
+      "bpm": 100,
+      "root": 40,
+      "file": "nm-track-24-luxury-future-100.mp3",
+      "duration": 19.4
+    },
+    {
+      "index": 25,
+      "family": "cinematic-tech-reveal",
+      "bpm": 124,
+      "root": 40,
+      "file": "nm-track-25-cinematic-tech-reveal-124.mp3",
+      "duration": 15.7
+    },
+    {
+      "index": 26,
+      "family": "emotional-story",
+      "bpm": 72,
+      "root": 41,
+      "file": "nm-track-26-emotional-story-72.mp3",
+      "duration": 26.9
+    },
+    {
+      "index": 27,
+      "family": "action-energy",
+      "bpm": 142,
+      "root": 40,
+      "file": "nm-track-27-action-energy-142.mp3",
+      "duration": 13.7
+    },
+    {
+      "index": 28,
+      "family": "luxury-future",
+      "bpm": 84,
+      "root": 43,
+      "file": "nm-track-28-luxury-future-84.mp3",
+      "duration": 23
+    },
+    {
+      "index": 29,
+      "family": "cinematic-tech-reveal",
+      "bpm": 124,
+      "root": 38,
+      "file": "nm-track-29-cinematic-tech-reveal-124.mp3",
+      "duration": 15.7
+    },
+    {
+      "index": 30,
+      "family": "emotional-story",
+      "bpm": 72,
+      "root": 41,
+      "file": "nm-track-30-emotional-story-72.mp3",
+      "duration": 26.9
+    },
+    {
+      "index": 31,
+      "family": "action-energy",
+      "bpm": 150,
+      "root": 43,
+      "file": "nm-track-31-action-energy-150.mp3",
+      "duration": 13
+    },
+    {
+      "index": 32,
+      "family": "luxury-future",
+      "bpm": 84,
+      "root": 45,
+      "file": "nm-track-32-luxury-future-84.mp3",
+      "duration": 23
+    },
+    {
+      "index": 33,
+      "family": "cinematic-tech-reveal",
+      "bpm": 112,
+      "root": 45,
+      "file": "nm-track-33-cinematic-tech-reveal-112.mp3",
+      "duration": 17.3
+    },
+    {
+      "index": 34,
+      "family": "emotional-story",
+      "bpm": 72,
+      "root": 45,
+      "file": "nm-track-34-emotional-story-72.mp3",
+      "duration": 26.9
+    },
+    {
+      "index": 35,
+      "family": "action-energy",
+      "bpm": 158,
+      "root": 36,
+      "file": "nm-track-35-action-energy-158.mp3",
+      "duration": 12.3
+    },
+    {
+      "index": 36,
+      "family": "luxury-future",
+      "bpm": 84,
+      "root": 36,
+      "file": "nm-track-36-luxury-future-84.mp3",
+      "duration": 23
+    },
+    {
+      "index": 37,
+      "family": "cinematic-tech-reveal",
+      "bpm": 112,
+      "root": 41,
+      "file": "nm-track-37-cinematic-tech-reveal-112.mp3",
+      "duration": 17.3
+    },
+    {
+      "index": 38,
+      "family": "emotional-story",
+      "bpm": 72,
+      "root": 43,
+      "file": "nm-track-38-emotional-story-72.mp3",
+      "duration": 26.9
+    },
+    {
+      "index": 39,
+      "family": "action-energy",
+      "bpm": 142,
+      "root": 43,
+      "file": "nm-track-39-action-energy-142.mp3",
+      "duration": 13.7
+    },
+    {
+      "index": 40,
+      "family": "luxury-future",
+      "bpm": 84,
+      "root": 36,
+      "file": "nm-track-40-luxury-future-84.mp3",
+      "duration": 23
+    },
+    {
+      "index": 41,
+      "family": "cinematic-tech-reveal",
+      "bpm": 124,
+      "root": 38,
+      "file": "nm-track-41-cinematic-tech-reveal-124.mp3",
+      "duration": 15.7
+    },
+    {
+      "index": 42,
+      "family": "emotional-story",
+      "bpm": 88,
+      "root": 43,
+      "file": "nm-track-42-emotional-story-88.mp3",
+      "duration": 22
+    },
+    {
+      "index": 43,
+      "family": "action-energy",
+      "bpm": 150,
+      "root": 38,
+      "file": "nm-track-43-action-energy-150.mp3",
+      "duration": 13
+    },
+    {
+      "index": 44,
+      "family": "luxury-future",
+      "bpm": 100,
+      "root": 36,
+      "file": "nm-track-44-luxury-future-100.mp3",
+      "duration": 19.4
+    },
+    {
+      "index": 45,
+      "family": "cinematic-tech-reveal",
+      "bpm": 118,
+      "root": 38,
+      "file": "nm-track-45-cinematic-tech-reveal-118.mp3",
+      "duration": 16.5
+    },
+    {
+      "index": 46,
+      "family": "emotional-story",
+      "bpm": 72,
+      "root": 43,
+      "file": "nm-track-46-emotional-story-72.mp3",
+      "duration": 26.9
+    },
+    {
+      "index": 47,
+      "family": "action-energy",
+      "bpm": 158,
+      "root": 38,
+      "file": "nm-track-47-action-energy-158.mp3",
+      "duration": 12.3
+    },
+    {
+      "index": 48,
+      "family": "luxury-future",
+      "bpm": 92,
+      "root": 36,
+      "file": "nm-track-48-luxury-future-92.mp3",
+      "duration": 21.1
+    }
+  ]
+}

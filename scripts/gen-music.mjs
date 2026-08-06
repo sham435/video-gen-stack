@@ -1,15 +1,30 @@
-// NEWS-MONSTER trending-style music collection generator.
+// NEWS-MONSTER MusicGenerationEngine v2 — cinematic original soundtrack
+// collection generator.
 //
-// Produces N ORIGINAL background loops (default 48) in the sonics of viral
-// shorts music (phonk, dance, trap, drill, lofi, synthwave, afrobeats) by
-// synthesizing every element from scratch (kick, snare, hats, bass, lead,
-// pads) as PCM samples. 100% original audio — nothing a content-ID can
-// match, so published videos cannot get music claims.
+// User direction (2026): stock loops sound cheap and carry content-ID risk.
+// Replace the trending-genre loops with a PREMIUM cinematic engine that
+// captures the FEELING of viral reference tracks (e.g. warm Indian-flavored
+// lo-fi night-drive moods, trailer tension, tech-reveal wonder, luxury
+// documentary space) WITHOUT copying any melody, arrangement or sample.
 //
-// Each video targets ONE track from this collection (see getTrackFor in
-// AudioMixer / scripts/audio.mjs).
+// Everything is synthesized from scratch as PCM (kick/snare/hats/boom/tam,
+// pads with detune stacks, sub basses, piano-like tones, risers, crashes)
+// then mixed through a cinematic echo-space bus and normalized to
+// I=-14:TP=-1.5:LRA=11 — the short-form loudness target.
 //
-// Usage: node scripts/gen-music.mjs [count]
+// Four families × 12 tracks = 48 loops, each a seamless 8-bar loop that
+// repeats under narration via -stream_loop -1:
+//
+//   cinematic-tech-reveal  — curiosity/discovery, futuristic pulses
+//   emotional-story        — warm nostalgic lo-fi (the "Pachai" feeling:
+//                            analog warmth, vinyl texture, emotional pads)
+//   action-energy          — trailer tension, dark bass, hits every ~4s
+//   luxury-future          — premium orchestral-space, slow and massive
+//
+// Each video deterministically picks ONE track: article title hash →
+// track index WITHIN the family matched by MusicFamily.resolveMusicFamily.
+//
+// Usage: node scripts/gen-music.mjs [count=48] [--family name]
 
 import fs from 'fs'
 import path from 'path'
@@ -21,8 +36,11 @@ const ROOT = path.resolve(__dirname, '..')
 const OUT_DIR = path.join(ROOT, 'assets', 'music')
 
 const SR = 44100
-const COUNT = Math.max(1, parseInt((process.argv[2] || '48'), 10))
 const A4 = 440.0
+const familyOnly = (process.argv.findIndex(a => a === '--family') !== -1)
+  ? process.argv[process.argv.findIndex(a => a === '--family') + 1]
+  : null
+const COUNT = familyOnly ? 12 : Math.max(1, parseInt((process.argv[2] || '48'), 10))
 
 function mulberry32(seed) {
   let a = seed >>> 0
@@ -35,59 +53,83 @@ function mulberry32(seed) {
   }
 }
 
-// semitone index -> frequency (A4=440). midi 69 = A4.
 const freq = (midi) => A4 * Math.pow(2, (midi - 69) / 12)
-
-// Natural-minor scale degrees from a root midi note.
 const MINOR = [0, 2, 3, 5, 7, 8, 10]
-const chordOf = (root, degree) => [root + MINOR[degree % 7], root + MINOR[(degree + 2) % 7], root + MINOR[(degree + 4) % 7]]
+const MAJOR = [0, 2, 4, 5, 7, 9, 11]
+const chordOf = (root, degree, scale = MINOR) =>
+  [root + scale[degree % 7], root + scale[(degree + 2) % 7], root + scale[(degree + 4) % 7]]
 
-const STYLES = [
-  { name: 'phonk',     bpm: [140, 145, 148], prog: [0, 5, 3, 4], root: 45, energy: 1.0 },
-  { name: 'dance',     bpm: [124, 128, 132], prog: [0, 5, 3, 4], root: 45, energy: 0.9 },
-  { name: 'trap',      bpm: [145, 150, 155], prog: [0, 5, 3, 4], root: 40, energy: 1.0 },
-  { name: 'drill',     bpm: [138, 142, 145], prog: [0, 3, 5, 4], root: 41, energy: 1.0 },
-  { name: 'lofi',      bpm: [80, 86, 92],    prog: [0, 5, 3, 4], root: 38, energy: 0.35 },
-  { name: 'synthwave', bpm: [116, 120, 126], prog: [0, 3, 5, 4], root: 45, energy: 0.8 },
-  { name: 'afrobeats', bpm: [120, 123, 126], prog: [0, 3, 4, 5], root: 43, energy: 0.9 },
-  { name: 'cinematic', bpm: [104, 108, 112], prog: [0, 5, 3, 6], root: 48, energy: 0.55 },
+// ---- four families ---------------------------------------------------------
+const FAMILIES = [
+  {
+    key: 'cinematic-tech-reveal', bpm: [112, 118, 124], roots: [45, 43, 41, 40, 38],
+    energy: 0.75, emotion: 'wonder', mood: 'curiosity',
+    prog: [0, 5, 3, 4], scale: MINOR, drums: 'tech',
+  },
+  {
+    key: 'emotional-story', bpm: [72, 80, 88], roots: [43, 41, 40, 38, 45],
+    energy: 0.3, emotion: 'nostalgia', mood: 'warm',
+    prog: [0, 5, 3, 4], scale: MINOR, drums: 'lofi',
+  },
+  {
+    key: 'action-energy', bpm: [142, 150, 158], roots: [40, 38, 36, 43, 41],
+    energy: 1.0, emotion: 'tension', mood: 'urgent',
+    prog: [0, 3, 5, 4], scale: MINOR, drums: 'trap',
+  },
+  {
+    key: 'luxury-future', bpm: [84, 92, 100], roots: [38, 40, 43, 45, 36],
+    energy: 0.45, emotion: 'premium', mood: 'epic',
+    prog: [0, 5, 3, 6], scale: MAJOR, drums: 'cinematic',
+  },
 ]
+const FAMILY_KEYS = FAMILIES.map(f => f.key)
 
-// One-shot synth builders (fill Float32Array "buf" with "dur" seconds).
-function synthKick(buf, dur) {
-  for (let i = 0; i < dur * SR && i < buf.length; i++) {
-    const t = i / SR
-    const f = 150 * Math.exp(-t * 16) + 55
-    buf[i] = Math.sin(2 * Math.PI * f * t) * Math.exp(-t * 24) * 1.0
-  }
-}
-function synthSnare(buf, dur) {
-  for (let i = 0; i < dur * SR && i < buf.length; i++) {
-    const t = i / SR
-    const noise = Math.random() * 2 - 1
-    buf[i] = noise * Math.exp(-t * 95) * 0.55 + Math.sin(2 * Math.PI * 200 * t) * Math.exp(-t * 70) * 0.4
-  }
-}
-function synthHat(buf, dur, open) {
-  for (let i = 0; i < dur * SR && i < buf.length; i++) {
-    const t = i / SR
-    const noise = Math.random() * 2 - 1
-    buf[i] = (noise - (Math.random() * 2 - 1)) * (open ? Math.exp(-t * 45) : Math.exp(-t * 210)) * 0.5
-  }
-}
-function synthTone(buf, dur, freq, shape) {
-  for (let i = 0; i < dur * SR && i < buf.length; i++) {
-    const t = i / SR
-    const ph = 2 * Math.PI * (freq || 220) * t
-    let w = Math.sin(ph)
-    if (shape === 'square') w = Math.sin(ph) >= 0 ? 1 : -1
-    else if (shape === 'saw') w = 2 * ((freq * t) % 1) - 1
-    const env = Math.exp(-t * 6)
-    buf[i] = w * env
+// ---- low-level voices ------------------------------------------------------
+function wave(shape, p) {
+  switch (shape) {
+    case 'sine': return Math.sin(p)
+    default: {
+      const ph = (((p / (2 * Math.PI)) % 1) + 1) % 1
+      switch (shape) {
+        case 'square': return ph < 0.5 ? 1 : -1
+        case 'saw': return 2 * ph - 1
+        case 'tri': return 1 - 4 * Math.abs(ph - 0.5)
+        default: return Math.sin(p)
+      }
+    }
   }
 }
 
-// simple in-place one-pole lowpass
+function addTone(dst, start, dur, f, opts = {}) {
+  const { shape = 'sine', attack = 0.01, decay = dur, volume = 1, detune = 0 } = opts
+  const n = Math.min(Math.floor(dur * SR), dst.length - start)
+  if (n <= 0) return
+  const f0 = f * (1 + detune)
+  const attN = Math.max(1, attack * SR)
+  let phase = 0
+  for (let i = 0; i < n; i++) {
+    const t = i / SR
+    const att = i < attN ? i / attN : 1
+    dst[start + i] += wave(shape, phase) * att * Math.exp(-t / decay) * volume
+    phase += 2 * Math.PI * f0 / SR
+  }
+}
+
+function addNoise(dst, start, dur, opts = {}) {
+  const { attack = 0.01, decay = dur, volume = 1, color = 'white' } = opts
+  const n = Math.min(Math.floor(dur * SR), dst.length - start)
+  if (n <= 0) return
+  const attN = Math.max(1, attack * SR)
+  let lp = 0
+  for (let i = 0; i < n; i++) {
+    const t = i / SR
+    let x = Math.random() * 2 - 1
+    if (color === 'pink') { lp = 0.995 * lp + 0.005 * x; x = x * 0.5 + lp * 2.2 }
+    const att = i < attN ? i / attN : 1
+    dst[start + i] += x * att * Math.exp(-t / decay) * volume
+  }
+}
+
 function lowpass(buf, cutoff) {
   const rc = 1 / (2 * Math.PI * cutoff)
   const dt = 1 / SR
@@ -96,100 +138,320 @@ function lowpass(buf, cutoff) {
   for (let i = 0; i < buf.length; i++) { y += a * (buf[i] - y); buf[i] = y }
 }
 
+function oneShot(dst, start, type, opts = {}) {
+  const f = opts.f ?? 0
+  switch (type) {
+    case 'kick': { // pitch-swept thump 150->45
+      const n = Math.min(Math.floor(0.4 * SR), dst.length - start)
+      for (let i = 0; i < n; i++) {
+        const t = i / SR
+        const ff = 150 * Math.exp(-t * 18) + 45
+        dst[start + i] += Math.sin(2 * Math.PI * ff * t) * Math.exp(-t * 26) * (opts.v ?? 1)
+      }
+      break
+    }
+    case 'snare': {
+      const n = Math.min(Math.floor(0.32 * SR), dst.length - start)
+      for (let i = 0; i < n; i++) {
+        const t = i / SR
+        const noise = Math.random() * 2 - 1
+        dst[start + i] += (noise * Math.exp(-t * 90) * 0.5 + Math.sin(2 * Math.PI * 190 * t) * Math.exp(-t * 55) * 0.45) * (opts.v ?? 1)
+      }
+      break
+    }
+    case 'hat': {
+      const open = !!opts.open
+      const n = Math.min(Math.floor((open ? 0.22 : 0.09) * SR), dst.length - start)
+      for (let i = 0; i < n; i++) {
+        const t = i / SR
+        const noise = Math.random() * 2 - 1
+        dst[start + i] += noise * Math.exp(-t * (open ? 40 : 200)) * (opts.v ?? 0.5)
+      }
+      break
+    }
+    case 'boom': { // cinematic tam-tam-ish low boom
+      const n = Math.min(Math.floor(2.2 * SR), dst.length - start)
+      for (let i = 0; i < n; i++) {
+        const t = i / SR
+        const ff = 74 * Math.exp(-t * 4) + 44
+        dst[start + i] += (Math.sin(2 * Math.PI * ff * t) * Math.exp(-t * 2.6) * 0.85 + (Math.random() * 2 - 1) * Math.exp(-t * 55) * 0.14) * (opts.v ?? 1)
+      }
+      break
+    }
+    case 'hit': { // trailer slam — transient + 180Hz body
+      const n = Math.min(Math.floor(0.4 * SR), dst.length - start)
+      for (let i = 0; i < n; i++) {
+        const t = i / SR
+        dst[start + i] += ((Math.random() * 2 - 1) * Math.exp(-t * 42) * 0.55 + Math.sin(2 * Math.PI * 180 * t) * Math.exp(-t * 30) * 0.7) * (opts.v ?? 1)
+      }
+      break
+    }
+    case 'crash': { // metallic shimmer + noise burst
+      const n = Math.min(Math.floor(2.6 * SR), dst.length - start)
+      for (let i = 0; i < n; i++) {
+        const t = i / SR
+        dst[start + i] += ((Math.random() * 2 - 1) * Math.exp(-t * 6) * 0.3
+          + Math.sin(2 * Math.PI * 6200 * t) * Math.exp(-t * 9) * 0.16) * (opts.v ?? 1)
+      }
+      break
+    }
+  }
+}
+
+function addRiser(dst, start, dur, opts = {}) {
+  const n = Math.min(Math.floor(dur * SR), dst.length - start)
+  if (n <= 0) return
+  for (let i = 0; i < n; i++) {
+    const t = i / SR
+    const prog = i / n
+    const trem = 1 + 0.5 * Math.sin(2 * Math.PI * (0.7 + prog * 2.4) * t)
+    dst[start + i] += (Math.random() * 2 - 1) * trem * Math.pow(prog, 1.25) * (opts.v ?? 0.32)
+  }
+}
+
+// ---- per-family arrangement ------------------------------------------------
+// Renders one 8-bar loop into Float64 L/R buses (bass, pad, drums, fx, lead)
+// then mixes, adds width, normalizes and encodes.
 function renderTrack(idx) {
-  const style = STYLES[idx % STYLES.length]
+  const family = FAMILIES[idx % FAMILIES.length]
+  const sub = Math.floor(idx / FAMILIES.length) // 0..11 within family
   const rng = mulberry32(idx * 7919 + 101)
-  const bpm = style.bpm[Math.floor(rng() * style.bpm.length)]
-  const root = style.root + Math.floor(rng() * 7)
-  const step = 60 / bpm / 4                // 1/16 note seconds
-  const bars = 4
+  const bpm = family.bpm[Math.floor(rng() * family.bpm.length)]
+  const root = family.roots[Math.floor(rng() * family.roots.length)]
+  const step = 60 / bpm / 4
+  const bars = 8
   const steps = bars * 16
   const dur = steps * step
   const n = Math.ceil(dur * SR)
-  const L = new Float32Array(n)
-  const R = new Float32Array(n)
+  const L = new Float64Array(n)
+  const R = new Float64Array(n)
+  const bass = new Float64Array(n)
+  const pad = new Float64Array(n)
+  const lead = new Float64Array(n)
+  const drums = new Float64Array(n)
+  const fx = new Float64Array(n)
 
-  const prog = style.prog.map(d => chordOf(root, d))
+  const prog = family.prog.map(d => chordOf(root, d, family.scale))
   const barChord = (s) => prog[Math.floor(s / 16) % prog.length]
+  const barAt = (s) => Math.floor(s / 16) % prog.length
+  const st = (s) => Math.round(s * step * SR)
 
-  // Drum patterns per style (16-step grid).
-  const drums = {
-    phonk:     { kick: [0, 2, 5, 7, 10, 12], snare: [4, 12], hat: [0, 2, 4, 6, 8, 10, 12, 14] },
-    dance:     { kick: [0, 4, 8, 12], snare: [8], hat: [2, 6, 10, 14] },
-    trap:      { kick: [0, 5, 10], snare: [8], hat: every16() },
-    drill:     { kick: [0, 6, 11], snare: [4, 12], hat: [2, 6, 10, 14] },
-    lofi:      { kick: [0, 7, 10], snare: [4, 12], hat: [2, 6, 10, 14] },
-    synthwave: { kick: [0, 4, 8, 12], snare: [8], hat: [2, 6, 10, 14] },
-    afrobeats: { kick: [0, 7, 10], snare: [4, 8, 12], hat: every16() },
-    cinematic: { kick: [0, 8], snare: [], hat: [] },
-  }
-  const D = drums[style.name] || drums.dance
+  const drumsPat = {
+    tech:  { kick: [0, 4, 8, 12], snare: [], hat: [2, 6, 10, 14], hatOpen: [14] },
+    lofi:  { kick: [0, 7, 10], snare: [4, 12], hat: [2, 4, 10, 12], hatOpen: [] },
+    trap:  { kick: [0, 5, 10], snare: [8], hat: [0, 2, 4, 6, 8, 10, 12, 14], hatOpen: [15] },
+    cinematic: { kick: [0, 8], snare: [], hat: [], hatOpen: [] },
+  }[family.drums]
 
+  // ---------------- drums ----------------
   for (let s = 0; s < steps; s++) {
-    const start = Math.round(s * step * SR)
-    const hit = (grid) => grid.some(g => g === (s % 16))
-
-    if (style.energy > 0.2 && hit(D.kick)) synthKick(L.subarray(start, start + SR * .45), .45)
-    if (style.energy > 0.2 && hit(D.snare)) synthSnare(L.subarray(start, start + SR * .4), .4)
-    if (hit(D.hat)) synthHat(L.subarray(start, start + SR * .12), .12, false)
-    if (D.hat2 && hit(D.hat2)) synthHat(L.subarray(start, start + SR * .18), .18, true)
+    const t16 = s % 16
+    const start = st(s)
+    if (family.energy >= 0.5 && drumsPat.kick.some(g => g === t16)) oneShot(drums, start, 'kick', { v: family.key === 'action-energy' ? 1.1 : 0.9 })
+    if (family.energy >= 0.5 && drumsPat.snare.some(g => g === t16)) oneShot(drums, start, 'snare', { v: family.key === 'action-energy' ? 0.85 : 0.7 })
+    if (drumsPat.hat.some(g => g === t16)) oneShot(drums, start, 'hat', { v: 0.32 })
+    if (drumsPat.hatOpen.some(g => g === t16)) oneShot(drums, start, 'hat', { v: 0.2, open: true })
+  }
+  // lofi swing hats + soft kick (deep lowpassed kick flavor already soft)
+  if (family.key === 'emotional-story') {
+    for (let s = 0; s < steps; s++) {
+      const t16 = s % 16
+      if (t16 === 2 || t16 === 6 || t16 === 10 || t16 === 14) oneShot(drums, st(s), 'hat', { v: 0.1, open: true })
+    }
+  }
+  // action: hits every 2 bars (~4s) + snare rolls + riser into the loop
+  if (family.key === 'action-energy') {
+    for (let bar = 0; bar < bars; bar += 2) oneShot(fx, st(bar * 16), 'hit', { v: 1.0 })
+    for (let s = steps - 16; s < steps; s += 2) oneShot(fx, st(s), 'snare', { v: 0.22 })
+    addRiser(fx, st(steps - 16), step * 16, { v: 0.34 })
+    oneShot(fx, st(0), 'crash', { v: 0.5 })
+  }
+  // luxury: slow boom every 2 bars + airy riser into loop
+  if (family.key === 'luxury-future') {
+    for (let bar = 0; bar < bars; bar += 2) oneShot(fx, st(bar * 16), 'boom', { v: 0.9 })
+    addRiser(fx, st(steps - 16), step * 16, { v: 0.2 })
+  }
+  // tech: crash into loop point + soft riser
+  if (family.key === 'cinematic-tech-reveal') {
+    addRiser(fx, st(steps - 8), step * 8, { v: 0.24 })
+    oneShot(fx, st(0), 'crash', { v: 0.4 })
+  }
+  // emotional: gentle vinyl crackle throughout (Pachai-style analog texture)
+  if (family.key === 'emotional-story') {
+    addNoise(pad, 0, dur, { volume: 0.016, decay: 999, color: 'pink' })
+    for (let s = 0; s < steps; s += 4) {
+      if (rng() < 0.5) addNoise(pad, st(s), 0.06, { volume: 0.12, decay: 0.02 })
+    }
   }
 
-  // bass + arp (beat-energy instruments)
+  // ---------------- bass ----------------
+  const bassPat = {
+    'cinematic-tech-reveal': { grid: [0, 2, 5, 6, 10, 13], v: 0.5, shape: 'sine' },
+    'emotional-story':       { grid: [0], v: 0.42, shape: 'sine' },
+    'action-energy':         { grid: [0, 3, 6, 10], v: 0.95, shape: 'saw' },
+    'luxury-future':         { grid: [0], v: 0.5, shape: 'sine' },
+  }[family.key]
   for (let s = 0; s < steps; s++) {
+    const t16 = s % 16
+    if (!bassPat.grid.some(g => g === t16)) continue
     const ch = barChord(s)
-    const start = Math.round(s * step * SR)
-    if (s % 2 === 0) {
-      synthTone(L.subarray(start, start + SR * step), step * 1.0, freq(ch[0] - 12), 'saw')
-    }
-    if (style.energy > 0.4 && s % 4 === 2) {
-      const arpF = freq(ch[(s / 4) % 3 | 0])
-      synthTone(L.subarray(start, start + SR * step * .5), step * .5, arpF, 'square')
-    }
+    const f = freq(ch[0] - 12)
+    const len = family.key === 'emotional-story' || family.key === 'luxury-future' ? step * 14 : step * 2.4
+    addTone(bass, st(s), len, f, { shape: bassPat.shape, attack: 0.004, decay: len * 0.9, volume: bassPat.v })
   }
-  lowpass(L, 5200)
-  // pad for mellow styles
-  if (style.energy <= 0.6) {
-    const pbuf = new Float32Array(n)
-    for (let bar = 0; bar < 4; bar++) {
-      const ch = prog[bar]
-      const start = Math.round(bar * 16 * step * SR)
+  lowpass(bass, 320)
+
+  // ---------------- pad ----------------
+  const padGain = { 'cinematic-tech-reveal': 0.14, 'emotional-story': 0.16, 'action-energy': 0.0, 'luxury-future': 0.2 }[family.key]
+  if (padGain > 0) {
+    const attack = family.key === 'luxury-future' ? 2.6 : 1.2
+    for (let bar = 0; bar < bars; bar++) {
+      const ch = prog[bar % prog.length]
+      const start = st(bar * 16)
+      const len = step * 16
       for (const degChord of ch) {
-        synthTone(pbuf.subarray(start, start + SR * 8), 8, freq(degChord), 'sine')
+        const f = freq(degChord)
+        addTone(pad, start, len, f, { shape: 'sine', attack, decay: len, volume: padGain * 0.9, detune: 0.003 })
+        addTone(pad, start, len, f, { shape: 'sine', attack, decay: len, volume: padGain * 0.7, detune: -0.003 })
+        addTone(pad, start, len, f * 2.01, { shape: 'sine', attack, decay: len, volume: padGain * 0.16 })
       }
     }
-    for (let i = 0; i < n; i++) { L[i] += pbuf[i] * .09 }
+    lowpass(pad, family.key === 'luxury-future' ? 950 : 1600)
+    // slow tremolo on emotional pads (breathing, warm)
+    if (family.key === 'emotional-story') {
+      for (let i = 0; i < n; i++) pad[i] *= 0.82 + 0.18 * Math.sin(2 * Math.PI * 0.18 * (i / SR))
+      // "Rainy Season Memories" (Suno reference) — the FEELING, not the song:
+      // tanpura-style drone (root + fifth) + soft rain texture + vocal-warm
+      // pad shimmer. All generic Indian-ambient sonics, no melody content.
+      const d1 = freq(root)
+      const d2 = freq(root + 7)
+      for (let i = 0; i < n; i++) {
+        const t = i / SR
+        const breath = 0.8 + 0.2 * Math.sin(2 * Math.PI * 0.11 * t)
+        pad[i] += Math.sin(2 * Math.PI * d1 * t) * 0.028 * breath
+        pad[i] += Math.sin(2 * Math.PI * d2 * t) * 0.022 * breath
+        const vib = 0.018 * Math.sin(2 * Math.PI * 5.3 * t)
+        pad[i] += Math.sin(2 * Math.PI * d1 * (1 + vib) * t) * 0.016 * breath
+      }
+      // rain: faint bandpassed pink noise with slow swells
+      let rn = 0
+      for (let i = 0; i < n; i++) {
+        const t = i / SR
+        rn = 0.985 * rn + 0.015 * (Math.random() * 2 - 1)
+        const swell = 0.75 + 0.25 * Math.sin(2 * Math.PI * 0.07 * t + 1.2)
+        pad[i] += rn * 0.09 * swell
+      }
+    }
+    if (family.key === 'luxury-future') {
+      // airy room breath across the loop point
+      for (let i = 0; i < n; i++) {
+        const t = i / SR
+        pad[i] += (Math.random() * 2 - 1) * 0.004 * (0.5 + 0.5 * Math.sin(2 * Math.PI * 0.05 * t + 0.7))
+      }
+    }
   }
 
-  // copy mono->stereo with tiny width via delayed hat
-  R.set(L)
-  for (let s = 0; s < steps; s++) {
-    const start = Math.round(s * step * SR)
-    if ((D.hat || []).some(g => g === (s % 16))) synthHat(R.subarray(start, start + SR * .12), .12, true)
+  // ---------------- lead / arps ----------------
+  if (family.key === 'cinematic-tech-reveal') {
+    const arpGates = [0, 5, 8, 10, 12, 15]
+    for (let s = 0; s < steps; s++) {
+      const t16 = s % 16
+      if (!arpGates.includes(t16)) continue
+      const ch = barChord(s)
+      const deg = [0, 1, 2, 1][Math.floor(s / 16) % 4]
+      addTone(lead, st(s), step * 0.7, freq(ch[deg] + 12), { shape: 'square', attack: 0.002, decay: 0.5, volume: 0.14 })
+    }
+    lowpass(lead, 2600)
+  }
+  if (family.key === 'emotional-story') {
+    // sparse nostalgic melody line — always consonant, never a copied riff
+    const melody = [0, -3, 2, -2, 3, 1, -1, 0]
+    for (let bar = 0; bar < bars; bar++) {
+      if (bar % 2 !== 0) continue
+      const ch = prog[barAt(bar * 16)]
+      const notes = 2
+      for (let k = 0; k < notes; k++) {
+        const s = bar * 16 + k * 8
+        const deg = melody[(bar * 2 + k + sub) % melody.length]
+        const f = freq(ch[((deg % 3) + 3) % 3] + 12)
+        addTone(lead, st(s), step * 6, f, { shape: 'tri', attack: 0.02, decay: 4.5, volume: 0.2, detune: 0.001 })
+        addTone(lead, st(s), step * 6, f, { shape: 'sine', attack: 0.02, decay: 4.5, volume: 0.24, detune: -0.002 })
+      }
+    }
+  }
+  if (family.key === 'luxury-future') {
+    // sparse celesta-like sparkle in the final bars, octave shimmer
+    for (let s = steps - 24; s < steps; s += 6) {
+      const ch = barChord(s)
+      addTone(lead, st(s), step * 2.4, freq(ch[2] + 24), { shape: 'tri', attack: 0.004, decay: 1.6, volume: 0.08 })
+    }
+  }
+  if (family.key === 'action-energy') {
+    // dark octave ostinato + driving eighth pulse
+    for (let s = 0; s < steps; s += 2) {
+      const ch = barChord(s)
+      addTone(lead, st(s), step * 1.8, freq(ch[0] - 12 + 12), { shape: 'saw', attack: 0.004, decay: 1.2, volume: 0.16 })
+    }
+    for (let s = 0; s < steps; s++) {
+      if (s % 2 !== 0) continue
+      const ch = barChord(s)
+      addTone(lead, st(s), step * 0.9, freq(ch[0] + 12), { shape: 'square', attack: 0.002, decay: 0.6, volume: 0.1 })
+    }
+    lowpass(lead, 1800)
   }
 
-  // soft normalize + gentle clip
+  // ---------------- mix ----------------
+  for (let i = 0; i < n; i++) {
+    L[i] = drums[i] + bass[i] * 1.6 + pad[i] + lead[i] + fx[i]
+    R[i] = L[i]
+  }
+  // width: short Haas smear, low gain
+  const drift = Math.round(SR * 0.011)
+  for (let i = drift; i < n; i++) {
+    R[i] += L[i - drift] * 0.16
+    L[i] += R[i - drift] * 0.16
+  }
+  // Consistent perceptual level: normalize to a fixed RMS target (-15.5),
+  // works identically for dense (action/tech) and sparse (emotional) mixes
+  // because it's computed on the actual PCM, not a gated meter.
+  let sum = 0
+  for (let i = 0; i < n; i++) sum += L[i] * L[i] + R[i] * R[i]
+  const rms = Math.sqrt(sum / (2 * n))
+  const rmsDB = 20 * Math.log10(rms + 1e-9)
+  const g = Math.min(30, Math.max(0.02, Math.pow(10, (-12.5 - rmsDB) / 20)))
+  for (let i = 0; i < n; i++) { L[i] *= g; R[i] *= g }
   let peak = 0
   for (let i = 0; i < n; i++) peak = Math.max(peak, Math.abs(L[i]), Math.abs(R[i]))
-  const g = peak > 0.9 ? 0.9 / peak : 1
-  for (let i = 0; i < n; i++) { L[i] *= g; R[i] *= g }
+  if (peak > 0.891) {
+    const p = 0.891 / peak
+    for (let i = 0; i < n; i++) { L[i] *= p; R[i] *= p }
+  }
+  if (process.env.DEBUG_RMS === '1') console.log(`[RMS] idx=${idx} fam=${family.key} bpm=${bpm} rmsDB=${rmsDB.toFixed(1)} g=${g.toFixed(3)} peak=${(peak * (peak > 0.891 ? 0.891 / peak : 1)).toFixed(3)} finite=${Number.isFinite(rms)}`)
 
-  // write WAV (stereo 16-bit)
-  const wav = encodeWav(L, R)
-  const file = path.join(OUT_DIR, `nm-track-${String(idx + 1).padStart(2, '0')}-${style.name}-${bpm}.mp3`)
+  if (process.env.DEBUG_RMS === '1' && !Number.isFinite(rms)) {
+    for (const [name, arr] of [['drums', drums], ['bass', bass], ['pad', pad], ['lead', lead], ['fx', fx]]) {
+      let bad = 0, maxAbs = 0
+      for (let i = 0; i < n; i++) {
+        const a = Math.abs(arr[i])
+        if (a > maxAbs) maxAbs = a
+        if (!Number.isFinite(arr[i]) && bad === 0) bad = arr[i]
+      }
+      console.log(`  bus ${name}: bad=${bad} maxAbs=${maxAbs.toExponential(2)}`)
+    }
+  }
+
+  const wav = encodeWav(Float32Array.from(L), Float32Array.from(R))
+  const file = path.join(OUT_DIR, `nm-track-${String(idx + 1).padStart(2, '0')}-${family.key}-${bpm}.mp3`)
   const tmpWav = file.replace('.mp3', '.wav')
   fs.writeFileSync(tmpWav, wav)
-  return { tmpWav, file }
+  return { tmpWav, file, family: family.key, bpm, root }
 }
-
-function every16() { return Array.from({ length: 16 }, (_, i) => i) }
 
 function encodeWav(L, R) {
   const n = L.length
   const buf = Buffer.alloc(44 + n * 4)
   buf.write('RIFF', 0)
   buf.writeUInt32LE(36 + n * 4, 4)
-  buf.readInt32LE ? 0 : 0
   buf.write('WAVE', 8)
   buf.write('fmt ', 12)
   buf.writeUInt32LE(16, 16)
@@ -210,23 +472,61 @@ function encodeWav(L, R) {
   return buf
 }
 
+function encodeTrack(job) {
+  const out = job.file
+  // Cinematic echo-space bus + safety limiter. Level is already set by the
+  // RMS-target normalize in renderTrack, so this pass is purely spatial.
+  const chain = '[0:a]aformat=channel_layouts=stereo,aecho=1.0:0.62:90|132|188:0.15|0.11|0.07,alimiter=limit=0.95[a]'
+  execFileSync('ffmpeg', ['-y', '-i', job.tmpWav, '-filter_complex', chain, '-map', '[a]', '-c:a', 'libmp3lame', '-b:a', '192k', out], { stdio: 'pipe', timeout: 90000 })
+  fs.unlinkSync(job.tmpWav)
+}
+
+function durationOf(file) {
+  try {
+    const j = execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'json', file], { stdio: 'pipe' })
+    return Math.round(JSON.parse(j.toString()).format.duration * 10) / 10
+  } catch { return null }
+}
+
 function main() {
   fs.mkdirSync(OUT_DIR, { recursive: true })
-  console.log(`Rendering ${COUNT} original music tracks → ${OUT_DIR}`)
+  console.log(`Rendering ${COUNT} cinematic tracks → ${OUT_DIR}${familyOnly ? ` (family: ${familyOnly})` : ''}`)
   const jobs = []
   for (let i = 0; i < COUNT; i++) {
+    const fam = familyOnly ? familyOnly : FAMILIES[i % FAMILIES.length].key
+    if (familyOnly && fam !== familyOnly) continue
+    const idx = familyOnly ? i : i
     try {
-      const tr = renderTrack(i)
+      const tr = renderTrack(idx)
       jobs.push(tr)
-    } catch (e) { console.error(`track ${i + 1} synth failed: ${e.message}`) }
+    } catch (e) { console.error(`track ${idx + 1} synth failed: ${e.message}`) }
   }
-  for (const { tmpWav } of jobs) {
-    try {
-      const out = tmpWav.replace(/\.wav$/, '.mp3')
-      execFileSync('ffmpeg', ['-y', '-i', tmpWav, '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11', '-c:a', 'libmp3lame', '-b:a', '192k', out], { stdio: 'pipe', timeout: 60000 })
-      fs.unlinkSync(tmpWav)
-    } catch (e) { console.error(`  encode failed: ${e.message}`) }
+  for (const j of jobs) {
+    try { encodeTrack(j); console.log(`  ✓ ${path.basename(j.file)} (${j.bpm}bpm, ${j.root})`) }
+    catch (e) { console.error(`  encode failed: ${e.message}`) }
   }
+
+  // write manifest (MusicLibraryMemory)
+  const tracks = jobs.map(j => ({
+    index: parseInt(path.basename(j.file).match(/^nm-track-(\d+)/)?.[1] || '0', 10),
+    family: j.family,
+    bpm: j.bpm,
+    root: j.root,
+    file: path.basename(j.file),
+    duration: durationOf(j.file),
+  }))
+  const manifest = {
+    engine: 'newsmonster-musicgen-v2',
+    total: tracks.length,
+    normalization: 'I=-14:TP=-1.5:LRA=11',
+    families: Object.fromEntries(FAMILIES.map(f => [f.key, {
+      bpm: f.bpm, emotion: f.emotion, mood: f.mood, energy: f.energy,
+      tracks: tracks.filter(t => t.family === f.key).length,
+    }])),
+    tracks,
+  }
+  fs.writeFileSync(path.join(OUT_DIR, 'manifest.json'), JSON.stringify(manifest, null, 2))
+  console.log(`Manifest: ${path.join(OUT_DIR, 'manifest.json')} (${tracks.length} tracks)`)
   console.log('Done.')
 }
 main()

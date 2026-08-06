@@ -1,28 +1,38 @@
 import { execFileSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
+import { pickMusicTrack, resolveMusicFamily, trackIndexFor } from './MusicFamily.mjs'
 
 const MUSIC_DIR = 'assets/music'
 
-// 48-track original collection (scripts/gen-music.mjs). Every video picks a
-// DIFFERENT track: deterministic hash of the article title → track index,
-// so a story always keeps its music and consecutive uploads rotate through
-// the loop instead of randomly repeating.
-export function trackIndexFor(seed, count = 48) {
-  const s = String(seed || '')
-  let h = 0
-  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0
-  return h % count
-}
+// 48-track original cinematic collection (scripts/gen-music.mjs). Every video
+// picks a DIFFERENT track inside a mood-matched family: deterministic hash of
+// the article title → track index, so a story always keeps its music and
+// consecutive uploads rotate through the loop instead of randomly repeating.
+export { trackIndexFor }
 
 export class AudioMixer {
   constructor() {
     this.musicSeed = null
+    this.musicFamily = 'cinematic-tech-reveal'
+    this.lastTrack = null
     fs.mkdirSync(MUSIC_DIR, { recursive: true })
+  }
+
+  /** Bind the article to the mixer: title seeds the track, mood maps the family. */
+  setMusicContext(article) {
+    this.musicSeed = article?.title || null
+    this.musicFamily = article ? resolveMusicFamily(article) : 'cinematic-tech-reveal'
+    return this.musicFamily
   }
 
   getRandomMusic() {
     if (!fs.existsSync(MUSIC_DIR)) fs.mkdirSync(MUSIC_DIR, { recursive: true })
+
+    if (this.musicSeed) {
+      const pick = pickMusicTrack({ title: this.musicSeed }, { family: this.musicFamily, verbose: true })
+      if (pick) { this.lastTrack = pick; return pick.file }
+    }
 
     const files = fs.readdirSync(MUSIC_DIR)
       .filter(f => (f.endsWith('.mp3') || f.endsWith('.wav') || f.endsWith('.m4a')) && !f.startsWith('intro_') && f.startsWith('nm-track-'))

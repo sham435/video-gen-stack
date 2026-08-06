@@ -1,16 +1,24 @@
 import { execFileSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
+import { pickMusicTrack, resolveMusicFamily, trackIndexFor } from '../src/audio/MusicFamily.mjs'
 
 const MUSIC_DIR = 'assets/music'
 
 /**
  * Pick the background music file for a video. Deterministic: hash the seed
- * (article title) → index into the original 48-track collection, so each
- * video uses a different track from the loop.
+ * (article title) → index into the ORIGINAL cinematic 48-track collection,
+ * scoped to the mood family of the article — so each video uses a different
+ * track from the right family.
  */
-export function getRandomMusic(seed){
+export function getRandomMusic(seed, article = null){
   if(!fs.existsSync(MUSIC_DIR)) fs.mkdirSync(MUSIC_DIR, {recursive:true})
+
+  if (seed) {
+    const ctx = article || { title: seed }
+    const pick = pickMusicTrack(ctx, { verbose: true })
+    if (pick) return pick.file
+  }
 
   const files = fs.readdirSync(MUSIC_DIR)
     .filter(f => (f.endsWith('.mp3') || f.endsWith('.wav') || f.endsWith('.m4a')) && !f.startsWith('intro_') && f.startsWith('nm-track-'))
@@ -18,9 +26,7 @@ export function getRandomMusic(seed){
 
   if(files.length > 0){
     const s = String(seed || '')
-    let h = 0
-    for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0
-    const chosen = path.join(MUSIC_DIR, files[h % files.length])
+    const chosen = path.join(MUSIC_DIR, files[trackIndexFor(s, files.length)])
     console.log('🎵 Background music:', chosen, seed ? `(seed "${String(seed).slice(0, 40)}")` : '')
     return chosen
   }

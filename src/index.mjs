@@ -122,9 +122,10 @@ export class NewsBroadcastEngine {
     fs.mkdirSync(framesDir, { recursive: true })
     if (!job) job = new ProductionJob(article)
 
-    // Deterministic music pick: the article title seeds the track index into
-    // the original 48-track collection — every video gets a DIFFERENT track.
-    this.audioMixer.musicSeed = article?.title || null
+    // Deterministic music pick: the article title seeds the track index and
+    // the article mood maps the cinematic family — every video gets a
+    // DIFFERENT track from the right mood family (see MusicFamily).
+    this.audioMixer.setMusicContext(article)
 
     await this.audioMixer.ensureMusicExists()
 
