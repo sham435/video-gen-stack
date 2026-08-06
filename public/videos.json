@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-06T12:34:08.262Z",
+  "updatedAt": "2026-08-06T15:05:47.016Z",
   "videos": [
+    {
+      "id": "bq6atV_wL-4",
+      "title": "SpaceX Needs to Make Its Bigger Rockets Work - WSJ | NEWS-MONSTER",
+      "publishedAt": "2026-08-06T14:57:42+00:00",
+      "publishedLabel": "Aug 6, 02:57 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/bq6atV_wL-4/hqdefault.jpg"
+    },
     {
       "id": "-Vi1Fer2QKk",
       "title": "Google Assistant will disappear from your phone next month - The Verge | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-06T06:44:39+00:00",
       "publishedLabel": "Aug 6, 06:44 AM",
       "thumbnail": "https://i1.ytimg.com/vi/d6a9ePcxKe4/hqdefault.jpg"
-    },
-    {
-      "id": "ZVFWm2xOFyg",
-      "title": "Fire Emblem: Fortune's Weave Direct Reveals True Protagonist And Plot, Details Gameplay Sy | NEWS-MO",
-      "publishedAt": "2026-08-06T06:42:17+00:00",
-      "publishedLabel": "Aug 6, 06:42 AM",
-      "thumbnail": "https://i3.ytimg.com/vi/ZVFWm2xOFyg/hqdefault.jpg"
     }
   ]
 }
