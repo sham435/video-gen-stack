@@ -5,10 +5,13 @@
 // Usage:
 //   node scripts/run-batch.mjs [count=48]        # round-robin categories
 //   node scripts/run-batch.mjs [count] technology # one category
+//   node scripts/run-batch.mjs [count] [category] --resume=N  # start at index N
 //
 // Articles come from NewsAPI top-headlines (key in .env). Each video is
 // composed, uploaded public, and recorded in data/publish-events.json —
 // same pipeline as scripts/composer.mjs / scripts/regenerate.mjs.
+// After each upload the render intermediates (frames/) are deleted to keep
+// the disk from filling up (each batch dir is ~420MB).
 
 import fs from 'fs'
 import path from 'path'
@@ -20,6 +23,8 @@ const ROOT = path.resolve(__dirname, '..')
 
 const COUNT = Math.max(1, parseInt(process.argv[2] || '48', 10))
 const FIXED_CATEGORY = process.argv[3] || null
+const RESUME_ARG = process.argv.find(a => a.startsWith('--resume='))
+const START_INDEX = RESUME_ARG ? Math.max(1, parseInt(RESUME_ARG.split('=')[1], 10)) : 1
 const CATEGORIES = ['technology', 'business', 'science', 'health', 'entertainment', 'sports']
 const PAGE_SIZE = 100
 
@@ -93,13 +98,28 @@ async function publishOne(article, index) {
       metadata: { batch: true, index },
     })
   } catch (e) { /* artifact best-effort */ }
+  if (result?.id) {
+    try {
+      const framesDir = path.join(outDir, 'frames')
+      if (fs.existsSync(framesDir)) {
+        fs.rmSync(framesDir, { recursive: true, force: true })
+        console.log(`[CLEANUP] removed ${framesDir} (~384MB)`)
+      }
+    } catch (e) { console.warn(`  cleanup: ${e.message}`) }
+  }
   return result?.id
 }
 
 const articles = await fetchHeadlines(COUNT, FIXED_CATEGORY)
 if (!articles.length) { console.error('No articles fetched'); process.exit(1) }
-console.log(`Fetched ${articles.length} headlines — starting ${articles.length}-video batch`)
-for (let i = 0; i < articles.length; i++) {
-  await publishOne(articles[i], i + 1)
+console.log(`Fetched ${articles.length} headlines — starting ${articles.length}-video batch from index ${START_INDEX}`)
+for (let i = START_INDEX; i <= articles.length; i++) {
+  const headline = articles[i - 1]
+  if (!headline) continue
+  try {
+    await publishOne(headline, i)
+  } catch (e) {
+    console.error(`[FAILED] index=${i}: ${e.message}`)
+  }
 }
 console.log('\nBatch complete')
