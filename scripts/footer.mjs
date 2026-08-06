@@ -118,7 +118,7 @@ export async function generateFooter(outPath = 'assets/footer.png') {
   ctx.roundRect(logoX, logoY, logoSize, logoSize, 10)
   ctx.fill()
 
-  // T letter
+  // NM monogram (replaced the old 'T' mark)
   ctx.font = '800 34px Inter, sans-serif'
   ctx.fillStyle = '#FFFFFF'
   ctx.textAlign = 'center'
