@@ -1,5 +1,6 @@
 import { PromptEngine } from './PromptEngine.mjs'
 import { TopicCtaBuilder } from '../publishing/TopicCtaBuilder.mjs'
+import { brandOutroScene, BRAND_OUTRO } from '../publishing/BrandOutro.mjs'
 
 const HOOK_STRATEGIES = ['mystery', 'shock', 'question', 'stat']
 const SCENE_TYPES = ['hook', 'fact', 'reveal', 'explanation', 'reaction', 'close']
@@ -18,6 +19,15 @@ export class StoryDirector {
     const messages = this.buildPrompt(article, targetFormat)
     const story = await this.queryLLM(messages, article)
     return this.validate(story, article, targetFormat)
+  }
+
+  // The last scene is ALWAYS the fixed brand outro — the LLM is told not to
+  // invent close text, and this overwrites whatever it returned anyway, so
+  // article words can never leak into the ending.
+  applyBrandOutro(story) {
+    const scenePlan = Array.isArray(story.scenePlan) ? story.scenePlan.slice(0, -1) : []
+    scenePlan.push(brandOutroScene())
+    return { ...story, scenePlan, brandMoment: { type: 'cta', sceneIndex: scenePlan.length - 1 } }
   }
 
   buildPrompt(article, targetFormat) {
@@ -41,7 +51,11 @@ Pick one (avoid "hidden/revealed/secret/shocking" phrasing — the channel uses 
 - reveal (3-5s): the big reveal moment
 - explanation (4-8s): why it matters
 - reaction (3-5s): create tension/impact
-- close (2-4s): CTA + brand
+- close: THE FIXED BRAND OUTRO. NEVER invent close text. The last scene MUST
+  be the fixed NEWS-MONSTER outro card:
+  headline "STAY WITH" / brand "NEWS-MONSTER" (visual subject: NEWS-MONSTER
+  brand logo) / narration "${BRAND_OUTRO.narration}". Article content must
+  never appear in the close scene.
 
 ## Output Schema
 {
@@ -135,7 +149,7 @@ Target Format: ${targetFormat}`
   validate(story, article, targetFormat) {
     if (!story.scenePlan || !Array.isArray(story.scenePlan) || story.scenePlan.length < 2) {
       console.log('StoryDirector: invalid scenePlan, using fallback')
-      return this.fallbackPlan(article)
+      return this.applyBrandOutro(this.fallbackPlan(article))
     }
     story.scenePlan.forEach((s, i) => {
       s.type = SCENE_TYPES.includes(s.type) ? s.type : 'fact'
@@ -148,8 +162,8 @@ Target Format: ${targetFormat}`
     const total = story.scenePlan.reduce((sum, s) => sum + s.duration, 0)
     if (total < 15 || total > 60) {
       console.log(`StoryDirector: total duration ${total}s out of range, falling back`)
-      return this.fallbackPlan(article)
+      return this.applyBrandOutro(this.fallbackPlan(article))
     }
-    return story
+    return this.applyBrandOutro(story)
   }
 }

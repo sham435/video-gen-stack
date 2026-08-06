@@ -1,7 +1,6 @@
 import { DesignSystem } from '../../visuals/DesignSystem.mjs'
 import { drawBreakingBanner, drawGlitchOverlay } from '../../visuals/BreakingBanner.mjs'
 import { drawHeadlineCard } from '../../visuals/HeadlineCard.mjs'
-import { drawLogoAnimation } from '../../visuals/LogoAnimation.mjs'
 import { drawAnchorBadge } from '../../visuals/AnchorBadge.mjs'
 import { TextTimelineScheduler } from '../TextTimelineScheduler.mjs'
 
@@ -29,6 +28,7 @@ export class InformationLayer {
         this.renderRetention(ctx, scene, progress)
         break
       case 'brand_close':
+      case 'close':
         this.renderBrandClose(ctx, scene, progress)
         break
     }
@@ -262,25 +262,92 @@ export class InformationLayer {
   }
 
   renderBrandClose(ctx, scene, progress) {
-    const p = Math.min(1, progress * 1.5)
-    drawLogoAnimation(ctx, p)
+    const W = 1080, H = 1920
+    const p = Math.min(1, Math.max(0, progress))
+    const DUR = scene.duration || 3
+    const t = p * DUR
 
-    const ctaP = Math.min(1, Math.max(0, (p - 0.2) / 0.3))
-    if (ctaP > 0) {
+    const bgP = Math.min(1, t / 0.4)
+    const stayP = Math.min(1, Math.max(0, (t - 0.4) / 0.4))
+    const brandP = Math.min(1, Math.max(0, (t - 0.8) / 0.6))
+    const tagP = Math.min(1, Math.max(0, (t - 1.4) / 0.6))
+    const anchorP = Math.min(1, Math.max(0, (t - 2.0) / 0.4))
+
+    ctx.save()
+
+    if (bgP > 0) {
       ctx.save()
-      ctx.globalAlpha = ctaP
-      const ctaToken = DesignSystem.getTypography('badge', 'cta')
-      ctx.font = `${ctaToken.weight} ${ctaToken.size}px ${ctaToken.font}, sans-serif`
-      ctx.fillStyle = 'rgba(255,255,255,0.9)'
+      ctx.globalAlpha = bgP
+      const grad = ctx.createLinearGradient(0, 0, 0, H)
+      grad.addColorStop(0, '#0A0E1A')
+      grad.addColorStop(1, '#05060A')
+      ctx.fillStyle = grad
+      ctx.fillRect(0, 0, W, H)
+      ctx.restore()
+    }
+
+    if (bgP > 0.2) {
+      ctx.save()
+      ctx.globalAlpha = 0.12 * bgP
+      const wmSize = 420
+      ctx.fillStyle = '#E10600'
+      ctx.beginPath()
+      ctx.roundRect(W / 2 - wmSize / 2, H / 2 - wmSize / 2, wmSize, wmSize, 64)
+      ctx.fill()
+      ctx.font = '900 240px Anton, Impact, sans-serif'
+      ctx.fillStyle = '#FFFFFF'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
-      ctx.shadowColor = 'rgba(0,0,0,0.8)'
-      ctx.shadowBlur = 10
-      ctx.fillText(scene.caption || 'Follow NEWS-MONSTER — Breaking News, AI, Science, Sports, Politics & Future Tech', W / 2, H * 0.50)
+      ctx.fillText('NM', W / 2, H / 2 + 10)
+      ctx.restore()
+    }
+
+    if (stayP > 0) {
+      ctx.save()
+      ctx.globalAlpha = stayP
+      ctx.translate(0, (1 - stayP) * 40)
+      ctx.font = '900 108px "Montserrat ExtraBold", sans-serif'
+      ctx.fillStyle = '#FFC107'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.shadowColor = 'rgba(255,193,7,0.5)'
+      ctx.shadowBlur = 18
+      ctx.fillText('STAY WITH', W / 2, H * 0.37)
       ctx.shadowBlur = 0
       ctx.restore()
     }
 
-    drawAnchorBadge(ctx, 'sham435', Math.max(0, p - 0.35))
+    if (brandP > 0) {
+      const scale = 0.6 + brandP * 0.4
+      ctx.save()
+      ctx.globalAlpha = brandP
+      ctx.translate(W / 2, H * 0.50)
+      ctx.scale(scale, scale)
+      ctx.font = '900 150px "Montserrat ExtraBold", sans-serif'
+      ctx.fillStyle = '#FFFFFF'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.shadowColor = 'rgba(255,255,255,0.8)'
+      ctx.shadowBlur = 40 * brandP
+      ctx.fillText('NEWS-MONSTER', 0, 0)
+      ctx.shadowBlur = 0
+      ctx.restore()
+    }
+
+    if (tagP > 0) {
+      ctx.save()
+      ctx.globalAlpha = tagP
+      ctx.font = '900 40px "Montserrat ExtraBold", sans-serif'
+      ctx.fillStyle = 'rgba(255,255,255,0.92)'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.fillText('UNFILTERED BREAKING NEWS', W / 2, H * 0.62)
+      ctx.fillText('FROM THE FUTURE', W / 2, H * 0.62 + 58)
+      ctx.restore()
+    }
+
+    ctx.restore()
+
+    drawAnchorBadge(ctx, 'sham435', anchorP)
   }
 }
