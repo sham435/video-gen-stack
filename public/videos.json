@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-07T17:36:42.494Z",
+  "updatedAt": "2026-08-07T18:25:06.070Z",
   "videos": [
+    {
+      "id": "MddVV64oxJk",
+      "title": "Google reveals who is hosting Pixel 11 launch event and other guests - 9to5Google | NEWS-MONSTER",
+      "publishedAt": "2026-08-07T18:16:11+00:00",
+      "publishedLabel": "Aug 7, 06:16 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/MddVV64oxJk/hqdefault.jpg"
+    },
     {
       "id": "BZrbGUUIB44",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-07T00:27:55+00:00",
       "publishedLabel": "Aug 7, 12:27 AM",
       "thumbnail": "https://i2.ytimg.com/vi/A8z0fImQ3Mk/hqdefault.jpg"
-    },
-    {
-      "id": "bq6atV_wL-4",
-      "title": "SpaceX Needs to Make Its Bigger Rockets Work - WSJ | NEWS-MONSTER",
-      "publishedAt": "2026-08-06T14:57:42+00:00",
-      "publishedLabel": "Aug 6, 02:57 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/bq6atV_wL-4/hqdefault.jpg"
     }
   ]
 }
