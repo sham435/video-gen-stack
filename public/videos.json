@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-07T22:10:42.871Z",
+  "updatedAt": "2026-08-07T23:20:00.621Z",
   "videos": [
+    {
+      "id": "XWJineuOT0s",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-07T23:11:36+00:00",
+      "publishedLabel": "Aug 7, 11:11 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/XWJineuOT0s/hqdefault.jpg"
+    },
+    {
+      "id": "s9fw6AJ_24o",
+      "title": "Why does Apple keep banning Telegram, but never X? | NEWS-MONSTER",
+      "publishedAt": "2026-08-07T22:11:07+00:00",
+      "publishedLabel": "Aug 7, 10:11 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/s9fw6AJ_24o/hqdefault.jpg"
+    },
     {
       "id": "IAeqgfMgVRg",
       "title": "Quake remaster ‘Dawn of the Machine’ update now available - Gematsu | NEWS-MONSTER",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-07T06:49:40+00:00",
       "publishedLabel": "Aug 7, 06:49 AM",
       "thumbnail": "https://i2.ytimg.com/vi/m1v-P2ilIN4/hqdefault.jpg"
-    },
-    {
-      "id": "mFn4y2UToWI",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-07T05:26:02+00:00",
-      "publishedLabel": "Aug 7, 05:26 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/mFn4y2UToWI/hqdefault.jpg"
-    },
-    {
-      "id": "YNT_yrSMHeg",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-07T05:12:31+00:00",
-      "publishedLabel": "Aug 7, 05:12 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/YNT_yrSMHeg/hqdefault.jpg"
     }
   ]
 }
