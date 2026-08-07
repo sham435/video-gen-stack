@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-07T09:39:10.299Z",
+  "updatedAt": "2026-08-07T11:03:11.350Z",
   "videos": [
+    {
+      "id": "qFtyHNYDun0",
+      "title": "Theme Parks and ‘Toy Story 5’ Boost Disney Results | NEWS-MONSTER",
+      "publishedAt": "2026-08-07T10:55:40+00:00",
+      "publishedLabel": "Aug 7, 10:55 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/qFtyHNYDun0/hqdefault.jpg"
+    },
     {
       "id": "BLelvkofBsU",
       "title": "Samsung Galaxy Z series is breaking pre-order records - Mashable | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-06T07:04:11+00:00",
       "publishedLabel": "Aug 6, 07:04 AM",
       "thumbnail": "https://i4.ytimg.com/vi/ox3JqzwO93w/hqdefault.jpg"
-    },
-    {
-      "id": "SJFVUwxRrzE",
-      "title": "CEO Defends Stellar Blade 2 Slop Video And Makes Fans Angrier | NEWS-MONSTER",
-      "publishedAt": "2026-08-06T07:01:38+00:00",
-      "publishedLabel": "Aug 6, 07:01 AM",
-      "thumbnail": "https://i4.ytimg.com/vi/SJFVUwxRrzE/hqdefault.jpg"
     }
   ]
 }
