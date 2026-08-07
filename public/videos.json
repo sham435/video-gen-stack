@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-07T19:33:20.269Z",
+  "updatedAt": "2026-08-07T20:13:22.099Z",
   "videos": [
+    {
+      "id": "EZN5bQkTvFM",
+      "title": "Why does Apple keep banning Telegram, but never X? | NEWS-MONSTER",
+      "publishedAt": "2026-08-07T19:33:49+00:00",
+      "publishedLabel": "Aug 7, 07:33 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/EZN5bQkTvFM/hqdefault.jpg"
+    },
     {
       "id": "MddVV64oxJk",
       "title": "Google reveals who is hosting Pixel 11 launch event and other guests - 9to5Google | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-07T03:32:10+00:00",
       "publishedLabel": "Aug 7, 03:32 AM",
       "thumbnail": "https://i3.ytimg.com/vi/zTZoMwh4vXQ/hqdefault.jpg"
-    },
-    {
-      "id": "A8z0fImQ3Mk",
-      "title": "Disc-Based PS5s Now Warn Buyers About the Impending Death of Physical Games - Push Square | NEWS-MON",
-      "publishedAt": "2026-08-07T00:27:55+00:00",
-      "publishedLabel": "Aug 7, 12:27 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/A8z0fImQ3Mk/hqdefault.jpg"
     }
   ]
 }
