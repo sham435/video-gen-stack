@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-07T08:19:59.981Z",
+  "updatedAt": "2026-08-07T09:39:10.299Z",
   "videos": [
+    {
+      "id": "BLelvkofBsU",
+      "title": "Samsung Galaxy Z series is breaking pre-order records - Mashable | NEWS-MONSTER",
+      "publishedAt": "2026-08-07T09:35:34+00:00",
+      "publishedLabel": "Aug 7, 09:35 AM",
+      "thumbnail": "https://i3.ytimg.com/vi/BLelvkofBsU/hqdefault.jpg"
+    },
     {
       "id": "ESp9hf5VhJs",
       "title": "Fire Emblem: Fortune's Weave Is Getting A Manga Series, Here's The Key Art - Nintendo Life | NEWS-MO",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-06T07:01:38+00:00",
       "publishedLabel": "Aug 6, 07:01 AM",
       "thumbnail": "https://i4.ytimg.com/vi/SJFVUwxRrzE/hqdefault.jpg"
-    },
-    {
-      "id": "Nyevitf-a7o",
-      "title": "You can try the newly-launched Switch 2 port of Final Fantasy 14 for free, right now, if y | NEWS-MO",
-      "publishedAt": "2026-08-06T06:59:09+00:00",
-      "publishedLabel": "Aug 6, 06:59 AM",
-      "thumbnail": "https://i3.ytimg.com/vi/Nyevitf-a7o/hqdefault.jpg"
     }
   ]
 }
