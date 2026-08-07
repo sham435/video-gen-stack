@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-07T11:57:35.766Z",
+  "updatedAt": "2026-08-07T13:11:35.880Z",
   "videos": [
+    {
+      "id": "NmKOt1cYPuA",
+      "title": "AI’s volatile power demand is damaging its own data centers | NEWS-MONSTER",
+      "publishedAt": "2026-08-07T13:01:49+00:00",
+      "publishedLabel": "Aug 7, 01:01 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/NmKOt1cYPuA/hqdefault.jpg"
+    },
     {
       "id": "02hcou67pes",
       "title": "World shares are mixed and Kospi falls 4.6% after tech giants decline on Wall Street - AP  | NEWS-MO",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-06T07:09:07+00:00",
       "publishedLabel": "Aug 6, 07:09 AM",
       "thumbnail": "https://i3.ytimg.com/vi/Nt9PdpbCp88/hqdefault.jpg"
-    },
-    {
-      "id": "RaKGU_m8NPQ",
-      "title": "Nothing CMF is launching its first open earbuds | NEWS-MONSTER",
-      "publishedAt": "2026-08-06T07:06:30+00:00",
-      "publishedLabel": "Aug 6, 07:06 AM",
-      "thumbnail": "https://i3.ytimg.com/vi/RaKGU_m8NPQ/hqdefault.jpg"
     }
   ]
 }
