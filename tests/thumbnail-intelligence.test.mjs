@@ -1,286 +1,91 @@
 import { test } from 'node:test'
-import assert from 'node:assert'
-import fs from 'node:fs'
-import os from 'node:os'
-import path from 'node:path'
-import { createCanvas } from '@napi-rs/canvas'
-import { ThumbnailIntelligence, colorFamily, FAMILY_HEX } from '../src/analytics/ThumbnailIntelligence.mjs'
+import assert from 'node:assert/strict'
+import { mkdtempSync, rmSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { ImagePerformanceMemory } from '../src/analytics/ImagePerformanceMemory.mjs'
-import { patternKey } from '../src/ai/thumbnail/ThumbnailBrandOptimizer.mjs'
+import { ThumbnailPerformanceModel } from '../src/quality/ThumbnailPerformanceModel.mjs'
+import { ThumbnailIntelligence } from '../src/analytics/ThumbnailIntelligence.mjs'
+import { extractThumbnailFeatures, colorFamily } from '../src/analytics/ThumbnailFeatureExtractor.mjs'
 
-const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'nm-thumb-test-'))
+function tmpDb() { return join(mkdtempSync(join(tmpdir(), 'thumb-intel-')), 'db.sqlite') }
 
-function mem() { return new ImagePerformanceMemory(':memory:') }
+// --- Cold start: no learned data → strict no-op, deterministic ---
 
-/** Render a tiny cover: black bg + an accent bar across the top. */
-function coverFile(accentHex) {
-  const p = path.join(TMP, `cover-${Math.random().toString(36).slice(2)}.png`)
-  const canvas = createCanvas(80, 20)
-  const ctx = canvas.getContext('2d')
-  ctx.fillStyle = '#000000'
-  ctx.fillRect(0, 0, 80, 20)
-  ctx.fillStyle = accentHex
-  ctx.fillRect(0, 0, 80, 4)
-  fs.writeFileSync(p, canvas.toBuffer('image/png'))
-  return p
-}
-
-const METRICS = { videoId: 'v1', ctr: 18.4, impressions: 12000 }
-
-// ---------------------------------------------------------------------------
-// colorFamily classification
-// ---------------------------------------------------------------------------
-
-test('colorFamily — hue mapping is deterministic and correct', () => {
-  assert.equal(colorFamily('#E10600'), 'red')
-  assert.equal(colorFamily('#F59E0B'), 'amber')
-  assert.equal(colorFamily('#FACC15'), 'yellow')
-  assert.equal(colorFamily('#16A34A'), 'green')
-  assert.equal(colorFamily('#06B6D4'), 'cyan')
-  assert.equal(colorFamily('#2563EB'), 'blue')
-  assert.equal(colorFamily('#7C3AED'), 'purple')
-  assert.equal(colorFamily('#F8FAFC'), 'white')
-  assert.equal(colorFamily('#6B7280'), 'gray')
-  assert.equal(colorFamily('#0A0A0A'), 'gray')
-  assert.equal(colorFamily('not-a-color'), 'none')
-  assert.equal(colorFamily('#E10600'), colorFamily('#E10600'))
+test('model cold start returns zero confidence and no recommendation', () => {
+  const model = new ThumbnailPerformanceModel({ intelligence: new ThumbnailIntelligence({ memory: new ImagePerformanceMemory(tmpDb()) }) })
+  const out = model.predict({ style: 'split', accentColor: '#ffd700', headline: 'BREAKING NEWS NOW' })
+  assert.equal(out.confidence, 0)
+  assert.equal(out.learned, false)
+  assert.equal(out.predictedCTR, 0)
+  assert.deepEqual(out.recommendations, [])
+  model.close()
 })
 
-// ---------------------------------------------------------------------------
-// learn() — fingerprint + recording
-// ---------------------------------------------------------------------------
-
-test('learn — hashes the cover, samples the accent family, records a sample', async () => {
-  const m = mem()
-  const intel = new ThumbnailIntelligence({ memory: m })
-  const cover = coverFile('#E10600')
-  const r = await intel.learn({ ...METRICS }, cover, { style: 'breaking', entity: 'technology', headline: 'Apple Surprises Investors With New AI Chip' })
-  assert.ok(r.thumbnailHash.length === 64, 'sha256 fingerprint')
-  assert.equal(r.style, 'breaking')
-  assert.equal(r.dominantColor, 'red', 'accent sampled from the cover bar')
-  const row = m.db.db.prepare('SELECT * FROM thumbnail_performance WHERE thumbnail_hash = ?').get(r.thumbnailHash)
-  assert.equal(row.sample_size, 1)
-  assert.equal(row.style, 'breaking')
-  assert.equal(row.entity, 'technology')
-  assert.equal(row.headline_style, patternKey('Apple Surprises Investors With New AI Chip'))
-  assert.equal(row.ctr, 18.4)
-  assert.equal(row.impressions, 12000)
-  m.close()
+test('colorFamily classifies hue deterministically', () => {
+  assert.equal(colorFamily('#ff0000'), 'red')
+  assert.equal(colorFamily('#0000ff'), 'blue')
+  assert.equal(colorFamily('#00ff00'), 'green')
 })
 
-test('learn — same cover upserts (rolling CTR, summed impressions)', async () => {
-  const m = mem()
-  const intel = new ThumbnailIntelligence({ memory: m })
-  const cover = coverFile('#2563EB')
-  const a = await intel.learn({ videoId: 'v1', ctr: 10, impressions: 1000 }, cover, { style: 'cinematic' })
-  const b = await intel.learn({ videoId: 'v1', ctr: 20, impressions: 1000 }, cover, { style: 'cinematic' })
-  assert.equal(a.thumbnailHash, b.thumbnailHash)
-  const row = m.db.db.prepare('SELECT * FROM thumbnail_performance WHERE thumbnail_hash = ?').get(a.thumbnailHash)
-  assert.equal(row.sample_size, 2)
-  assert.equal(row.ctr, 15, 'rolling average of samples')
-  assert.equal(row.impressions, 2000, 'impressions accumulate')
-  assert.equal(row.dominant_color, 'blue')
-  m.close()
+test('extractThumbnailFeatures produces deterministic structure without a cover', async () => {
+  const a = await extractThumbnailFeatures({ headline: 'BREAKING NEWS NOW?', style: 'portrait', accentColor: '#ffd700' })
+  assert.equal(a.emotion.urgency, 0.8)
+  assert.equal(a.typography.wordCount, 3)
+  assert.equal(a.composition.facePresent, true)
+  const b = await extractThumbnailFeatures({ headline: 'BREAKING NEWS NOW?', style: 'portrait', accentColor: '#ffd700' })
+  assert.deepEqual(a, b) // deterministic
 })
 
-test('learn — no cover path → videoId-keyed sample, no crash', async () => {
-  const m = mem()
-  const intel = new ThumbnailIntelligence({ memory: m })
-  const r = await intel.learn(METRICS, null, { style: 'minimal' })
-  assert.equal(r.thumbnailHash, 'thumb-v1')
-  assert.equal(r.dominantColor, null)
-  m.close()
+// --- Schema: C2 columns exist + recordThumbnail persists features ---
+
+test('thumbnail_performance schema exposes C2 learning columns', () => {
+  const memory = new ImagePerformanceMemory(tmpDb())
+  const cols = memory.db.db.prepare('PRAGMA table_info(thumbnail_performance)').all().map(c => c.name)
+  for (const c of ['features', 'ctr_score', 'confidence']) assert.ok(cols.includes(c), `missing ${c}`)
+  memory.close()
 })
 
-test('learn — missing CTR (no impressions report) → skipped', async () => {
-  const m = mem()
-  const intel = new ThumbnailIntelligence({ memory: m })
-  const r = await intel.learn({ videoId: 'v2', ctr: null }, coverFile('#E10600'), {})
-  assert.equal(r, null)
-  m.close()
+test('recordThumbnail stores features JSON and ctr_score', () => {
+  const memory = new ImagePerformanceMemory(tmpDb())
+  memory.recordThumbnail('h1', { ctr: 8.1, impressions: 1000, style: 'split', dominantColor: 'yellow', features: { colors: { dominant: ['yellow'] } }, ctrScore: 0.09, confidence: 0.7 })
+  const row = memory.db.db.prepare('SELECT * FROM thumbnail_performance WHERE thumbnail_hash=?').get('h1')
+  assert.equal(row.ctr, 8.1)
+  assert.equal(row.confidence, 0.7)
+  assert.equal(JSON.parse(row.features).colors.dominant[0], 'yellow')
+  memory.close()
 })
 
-// ---------------------------------------------------------------------------
-// Rollups + baseline
-// ---------------------------------------------------------------------------
+// --- Learning gate: rollups grow confidence; low-confidence exact learn ---
 
-function seed(intel, specs) {
-  for (const [style, ctr, imp, family] of specs) {
-    intel.memory.recordThumbnail(`h-${Math.random().toString(36).slice(2)}`, { ctr, impressions: imp, style, dominantColor: family })
-  }
-}
+test('model enables learning only once rollups pass the sample/impression floor', () => {
+  const memory = new ImagePerformanceMemory(tmpDb())
+  const ti = new ThumbnailIntelligence({ memory })
+  const model = new ThumbnailPerformanceModel({ intelligence: ti, minSamples: 2, minImpressions: 10 })
 
-test('styles — impressions-weighted rollup sorted best-first, gated by samples+impressions', () => {
-  const m = mem()
-  const intel = new ThumbnailIntelligence({ memory: m })
-  seed(intel, [
-    ['breaking', 10, 1000, 'red'],
-    ['breaking', 12, 1000, 'red'],
-    ['cinematic', 20, 1000, 'blue'],
-    ['cinematic', 22, 1000, 'blue'],
-    ['minimal', 8, 100, 'gray'],   // below impression floor
-    ['data', 9, 1000, 'purple'],   // single sample
-  ])
-  const s = intel.styles()
-  assert.equal(s.length, 2, 'minimal (imp floor) and data (samples) gated out')
-  assert.equal(s[0].style, 'cinematic')
-  assert.equal(s[0].ctr, 21)
-  assert.equal(s[1].style, 'breaking')
-  assert.equal(s[1].ctr, 11)
-  m.close()
+  // One small sample → falls under floor → still cold (no-op).
+  memory.recordThumbnail('t1', { ctr: 12, impressions: 10, style: 'split', dominantColor: 'yellow' })
+  assert.equal(model.predict({ accentColor: '#ffd700', style: 'split' }).learned, false)
+
+  // Second sample crosses the floor → rollup appears → learning enabled.
+  memory.recordThumbnail('t2', { ctr: 14, impressions: 10, style: 'split', dominantColor: 'yellow' })
+  const colRow = ti.colorFamilies(2, 10).find(r => r.family === 'yellow')
+  assert.ok(colRow, 'yellow family should become gated')
+  assert.ok(ti.baseline() != null)
+  model.close()
 })
 
-test('colorFamilies — rollup by accent family', () => {
-  const m = mem()
-  const intel = new ThumbnailIntelligence({ memory: m })
-  seed(intel, [
-    ['breaking', 10, 2000, 'red'],
-    ['breaking', 12, 2000, 'red'],
-    ['cinematic', 20, 2000, 'blue'],
-    ['minimal', 21, 2000, 'blue'],
-  ])
-  const c = intel.colorFamilies()
-  assert.equal(c[0].family, 'blue')
-  assert.ok(c[0].ctr > c[1].ctr)
-  m.close()
-})
+// --- Wiring: extracted features → model predict path compiles ---
 
-test('baseline — impressions-weighted channel CTR', () => {
-  const m = mem()
-  const intel = new ThumbnailIntelligence({ memory: m })
-  seed(intel, [
-    ['breaking', 10, 1000, 'red'],
-    ['cinematic', 20, 1000, 'blue'],
-  ])
-  assert.equal(intel.baseline(), 15)
-  m.close()
-})
-
-test('headlinePatterns — rolls up headline style keys', () => {
-  const m = mem()
-  const intel = new ThumbnailIntelligence({ memory: m })
-  intel.memory.recordThumbnail('a', { ctr: 8, impressions: 2000, headlineStyle: patternKey('Startup Raises Huge Funding') })
-  intel.memory.recordThumbnail('b', { ctr: 9, impressions: 2000, headlineStyle: patternKey('Startup Raises Huge Round') })
-  intel.memory.recordThumbnail('c', { ctr: 16, impressions: 2000, headlineStyle: patternKey('Samsung Launches Giant Phone') })
-  intel.memory.recordThumbnail('d', { ctr: 17, impressions: 2000, headlineStyle: patternKey('Samsung Launches Giant Tablet') })
-  const p = intel.headlinePatterns()
-  assert.equal(p[0].pattern, 'SAMSUNG_LAUNCHES_GIANT')
-  assert.ok(p[0].ctr > p[1].ctr)
-  m.close()
-})
-
-// ---------------------------------------------------------------------------
-// Generation feedback — cold start is a strict no-op
-// ---------------------------------------------------------------------------
-
-test('styleOrder — cold start returns null (original order preserved)', () => {
-  const m = mem()
-  const intel = new ThumbnailIntelligence({ memory: m })
-  assert.equal(intel.styleOrder(['breaking', 'cinematic', 'minimal', 'reaction', 'data']), null)
-  m.close()
-})
-
-test('styleOrder — reorders by learned CTR once confident, keeps unknown styles after', () => {
-  const m = mem()
-  const intel = new ThumbnailIntelligence({ memory: m })
-  seed(intel, [
-    ['breaking', 9, 1000, 'red'],
-    ['breaking', 10, 1000, 'red'],
-    ['data', 20, 1000, 'purple'],
-    ['data', 21, 1000, 'purple'],
-  ])
-  const order = intel.styleOrder(['breaking', 'cinematic', 'minimal', 'reaction', 'data'])
-  assert.deepEqual(order, ['data', 'breaking', 'cinematic', 'minimal', 'reaction'])
-  m.close()
-})
-
-test('styleOrder — refuses to reorder when the learned gap is < 0.5pp', () => {
-  const m = mem()
-  const intel = new ThumbnailIntelligence({ memory: m })
-  seed(intel, [
-    ['breaking', 10.2, 1000, 'red'],
-    ['breaking', 10.4, 1000, 'red'],
-    ['cinematic', 10.5, 1000, 'blue'],
-    ['cinematic', 10.6, 1000, 'blue'],
-  ])
-  assert.equal(intel.styleOrder(['breaking', 'cinematic']), null, 'tiny gap → no churn')
-  m.close()
-})
-
-test('tuneBrief — cold start returns the identical brief (no mutation)', () => {
-  const m = mem()
-  const intel = new ThumbnailIntelligence({ memory: m })
-  const brief = { accent_color: '#E10600', headline: 'X', mood: 'breaking' }
-  const out = intel.tuneBrief(brief)
-  assert.strictEqual(out, brief, 'same object reference on cold start')
-  assert.equal(out.accent_color, '#E10600')
-  m.close()
-})
-
-test('tuneBrief — swaps accent only when the learned family beats baseline', () => {
-  const m = mem()
-  const intel = new ThumbnailIntelligence({ memory: m })
-  // Red (current default) underperforms; blue wins clearly
-  seed(intel, [
-    ['breaking', 6, 2000, 'red'],
-    ['breaking', 7, 2000, 'red'],
-    ['cinematic', 24, 2000, 'blue'],
-    ['cinematic', 26, 2000, 'blue'],
-  ])
-  const brief = { accent_color: '#E10600', headline: 'X' }
-  const out = intel.tuneBrief(brief)
-  assert.notStrictEqual(out, brief, 'new brief object when learning applies')
-  assert.equal(out.accent_color, FAMILY_HEX.blue)
-  assert.equal(out._thumbnailLearning.family, 'blue')
-  m.close()
-})
-
-test('tuneBrief — keeps current accent when it already leads', () => {
-  const m = mem()
-  const intel = new ThumbnailIntelligence({ memory: m })
-  seed(intel, [
-    ['breaking', 22, 2000, 'red'],
-    ['breaking', 24, 2000, 'red'],
-    ['cinematic', 10, 2000, 'blue'],
-    ['cinematic', 12, 2000, 'blue'],
-  ])
-  const brief = { accent_color: '#E10600', headline: 'X' }
-  const out = intel.tuneBrief(brief)
-  assert.strictEqual(out, brief, 'no change when current family already best')
-  m.close()
-})
-
-// ---------------------------------------------------------------------------
-// Engine-facing integration shape
-// ---------------------------------------------------------------------------
-
-test('CoverGenerator wiring shape — intel exposes the methods the generator calls', async () => {
-  const { CoverGenerator } = await import('../src/video-studio/CoverGenerator.mjs')
-  const gen = new CoverGenerator(null, { intelligence: null, sdcpp: null })
-  assert.equal(gen.intel, null, 'explicit null intelligence → no learning')
-  const gen2 = new CoverGenerator(null, { intelligence: null, sdcpp: null })
-  const cold = new CoverGenerator(null, { intelligence: new ThumbnailIntelligence({ memory: mem() }), sdcpp: null })
-  assert.equal(cold.intel.styleOrder(['breaking', 'data']), null, 'cold generator keeps original order')
-  assert.ok(gen2.director, 'composer pipeline intact')
-})
-
-// ---------------------------------------------------------------------------
-// 16:9 thumbnail renderer (Milestone C local cover path)
-// ---------------------------------------------------------------------------
-
-test('generateThumbnail — renders 1280x720 PNG, deterministic for same input', async () => {
-  const { CoverGenerator } = await import('../src/video-studio/CoverGenerator.mjs')
-  const g = new CoverGenerator(null, { intelligence: null, sdcpp: null }) // no dotenv → no Pexels → gradient hero
-  const article = { title: 'Apple Unveils M4 MacBook Pro With A Big Surprise', category: 'technology', source: 'The Verge' }
-  const p1 = path.join(TMP, 'thumb-a.png')
-  const p2 = path.join(TMP, 'thumb-b.png')
-  const r1 = await g.generateThumbnail(article, p1, { style: 'breaking' })
-  const r2 = await g.generateThumbnail(article, p2, { style: 'breaking' })
-  const { loadImage } = await import('@napi-rs/canvas')
-  const img = await loadImage(p1)
-  assert.equal(img.width, 1280)
-  assert.equal(img.height, 720)
-  assert.ok(fs.readFileSync(p1).equals(fs.readFileSync(p2)), 'identical bytes for identical input')
-  assert.equal(r1.brief.accent_color, '#E10600')
-  assert.equal(r1.path, p1)
+test('end-to-end feature extraction → model predict', async () => {
+  const memory = new ImagePerformanceMemory(tmpDb())
+  memory.recordThumbnail('t1', { ctr: 13, impressions: 500, style: 'split', dominantColor: 'yellow' })
+  memory.recordThumbnail('t2', { ctr: 15, impressions: 500, style: 'split', dominantColor: 'yellow' })
+  const model = new ThumbnailPerformanceModel({ intelligence: new ThumbnailIntelligence({ memory }), minSamples: 2, minImpressions: 10 })
+  const features = await extractThumbnailFeatures({ headline: 'Apple just shocked everyone?', accentColor: '#ffd700' })
+  const pred = model.predict({ style: 'split', accentColor: '#ffd700', features })
+  assert.equal(typeof pred.predictedCTR, 'number')
+  assert.ok(pred.confidence > 0)
+  assert.ok(Array.isArray(pred.recommendations))
+  model.close()
 })

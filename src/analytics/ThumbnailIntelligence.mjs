@@ -113,7 +113,7 @@ export class ThumbnailIntelligence {
    * (needs ctr + impressions). coverPath hashed for identity; style passed by
    * the caller (batch metadata); dominant_color sampled from the image.
    */
-  async learn(metrics, coverPath, { style = null, entity = null, headline = null } = {}) {
+  async learn(metrics, coverPath, { style = null, entity = null, headline = null, features = null } = {}) {
     if (!metrics?.videoId || metrics.ctr == null) return null
     const thumbnailHash = coverPath ? this.fileHash(coverPath) : `thumb-${metrics.videoId}`
     const dominantColor = coverPath ? await this.accentFamily(coverPath) : null
@@ -124,6 +124,7 @@ export class ThumbnailIntelligence {
       style: style || null,
       dominantColor,
       headlineStyle: headline ? patternKey(headline) : null,
+      features: features || null,
     })
     return { thumbnailHash, style, dominantColor, ctr: metrics.ctr, impressions: metrics.impressions ?? 0 }
   }

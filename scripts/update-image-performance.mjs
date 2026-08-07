@@ -32,6 +32,8 @@ const DAYS = DAYS_FLAG ? parseInt(DAYS_FLAG.split('=')[1], 10) : null
 const { AnalyticsCollector } = await import(path.join(ROOT, 'src', 'analytics', 'AnalyticsCollector.mjs'))
 const { ImagePerformanceMemory } = await import(path.join(ROOT, 'src', 'analytics', 'ImagePerformanceMemory.mjs'))
 const { ThumbnailIntelligence } = await import(path.join(ROOT, 'src', 'analytics', 'ThumbnailIntelligence.mjs'))
+const { extractThumbnailFeatures } = await import(path.join(ROOT, 'src', 'analytics', 'ThumbnailFeatureExtractor.mjs'))
+const { ThumbnailPerformanceModel } = await import(path.join(ROOT, 'src', 'quality', 'ThumbnailPerformanceModel.mjs'))
 const { PublishEventsStore, PUBLISH_EVENTS_FILE } = await import(path.join(ROOT, 'src', 'publishing', 'PublishEventsStore.mjs'))
 
 function publishedSince(events, days) {
@@ -115,10 +117,20 @@ for (const ev of events) {
     // Milestone C: thumbnail sample (hash + accent family + promoted style)
     const thumb = findThumbnail(ev)
     if (thumb) {
+      let features = null
+      try {
+        features = await extractThumbnailFeatures({
+          coverPath: thumb.coverPath,
+          headline: metrics.title,
+          style: thumb.style,
+          accentColor: null,
+        })
+      } catch { /* best-effort */ }
       const recorded = await intel.learn(metrics, thumb.coverPath, {
         style: thumb.style,
         entity: metrics.category,
         headline: metrics.title,
+        features,
       })
       if (recorded) thumbs++
     }
@@ -147,6 +159,17 @@ for (const c of intel.colorFamilies()) console.log(`  accent ${c.family}: ${c.ct
 const advice = intel.styleOrder([]) || null
 if (advice) console.log(`  → recommended style order: ${advice.join(', ')}`)
 if (!intel.styles().length && !intel.colorFamilies().length) console.log('  (no confident samples yet — cold start, generation unchanged)')
+
+// Milestone C: predicted-CTR model recap (what the next render would pick)
+const model = new ThumbnailPerformanceModel({ intelligence: intel })
+const nowStyle = advice?.[0] || null
+if (model.predict({ style: nowStyle }).learned) {
+  console.log(`\nThumbnail model (learned):`)
+  for (const s of advice || []) {
+    const pred = model.predict({ style: s })
+    console.log(`  ${s}: predictedCTR ${(pred.predictedCTR * 100).toFixed(2)}% conf=${pred.confidence} ${pred.recommendations.length ? '→ ' + pred.recommendations[0] : ''}`)
+  }
+}
 
 if (failures.length) {
   console.log(`\nSkipped (${failures.length}):`)

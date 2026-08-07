@@ -125,6 +125,8 @@ export class ImageDatabase {
         sample_size     INTEGER DEFAULT 0,
         updated_at      TEXT DEFAULT (datetime('now'))
       );
+      CREATE INDEX IF NOT EXISTS idx_thumb_perf_style ON thumbnail_performance(style);
+      CREATE INDEX IF NOT EXISTS idx_thumb_perf_color ON thumbnail_performance(dominant_color);
 
       CREATE TABLE IF NOT EXISTS entity_performance (
         entity         TEXT PRIMARY KEY,
@@ -165,6 +167,21 @@ export class ImageDatabase {
       );
       CREATE INDEX IF NOT EXISTS idx_thumb_versions_video ON thumbnail_versions(video_id);
     `)
+
+    this._addColumn('thumbnail_performance', 'features', 'TEXT')
+    this._addColumn('thumbnail_performance', 'ctr_score', 'REAL DEFAULT 0')
+    this._addColumn('thumbnail_performance', 'confidence', 'REAL DEFAULT 0')
+    this._addColumn('image_performance', 'features', 'TEXT')
+  }
+
+  /** Idempotent ADD COLUMN (SQLite lacks IF NOT EXISTS for columns). */
+  _addColumn(table, column, type) {
+    try {
+      const cols = this.db.prepare(`PRAGMA table_info(${table})`).all().map(c => c.name)
+      if (!cols.includes(column)) {
+        this.db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${type}`)
+      }
+    } catch { /* table may not exist yet — non-fatal */ }
   }
 
   /** Upsert an image record. Returns the row. */

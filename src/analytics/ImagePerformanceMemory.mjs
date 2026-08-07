@@ -103,11 +103,11 @@ export class ImagePerformanceMemory {
   }
 
   /** Record a thumbnail measurement (packaging, not in-video). */
-  recordThumbnail(thumbnailHash, { ctr, impressions, clicks, entity, style, dominantColor, headlineStyle } = {}) {
+  recordThumbnail(thumbnailHash, { ctr, impressions, clicks, entity, style, dominantColor, headlineStyle, features = null, ctrScore = null, confidence = null } = {}) {
     this.db.db.prepare(`
       INSERT INTO thumbnail_performance
-        (thumbnail_hash, ctr, impressions, clicks, entity, style, dominant_color, headline_style, sample_size, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, datetime('now'))
+        (thumbnail_hash, ctr, impressions, clicks, entity, style, dominant_color, headline_style, features, ctr_score, confidence, sample_size, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, datetime('now'))
       ON CONFLICT(thumbnail_hash) DO UPDATE SET
         ctr             = CASE WHEN thumbnail_performance.sample_size >= 1
                                THEN (thumbnail_performance.ctr * thumbnail_performance.sample_size + excluded.ctr) / (thumbnail_performance.sample_size + 1)
@@ -118,9 +118,24 @@ export class ImagePerformanceMemory {
         style           = COALESCE(excluded.style, thumbnail_performance.style),
         dominant_color  = COALESCE(excluded.dominant_color, thumbnail_performance.dominant_color),
         headline_style  = COALESCE(excluded.headline_style, thumbnail_performance.headline_style),
+        features        = COALESCE(excluded.features, thumbnail_performance.features),
+        ctr_score       = COALESCE(excluded.ctr_score, thumbnail_performance.ctr_score),
+        confidence      = COALESCE(excluded.confidence, thumbnail_performance.confidence),
         sample_size     = thumbnail_performance.sample_size + 1,
         updated_at      = datetime('now')
-    `).run(thumbnailHash, ctr ?? null, impressions ?? 0, clicks ?? 0, entity || null, style || null, dominantColor || null, headlineStyle || null)
+    `).run(
+      thumbnailHash,
+      ctr ?? null,
+      impressions ?? 0,
+      clicks ?? 0,
+      entity || null,
+      style || null,
+      dominantColor || null,
+      headlineStyle || null,
+      features ? JSON.stringify(features) : null,
+      ctrScore,
+      confidence,
+    )
   }
 
   // ------------------------------------------------------------------

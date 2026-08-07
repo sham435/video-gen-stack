@@ -35,6 +35,7 @@ import path from 'node:path'
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector.mjs'
 import { ImagePerformanceMemory } from '../analytics/ImagePerformanceMemory.mjs'
 import { ThumbnailIntelligence } from '../analytics/ThumbnailIntelligence.mjs'
+import { ThumbnailPerformanceModel } from '../quality/ThumbnailPerformanceModel.mjs'
 import { BrandPerformanceMemory } from '../pipeline/BrandPerformanceMemory.mjs'
 import { PublishEventsStore } from '../publishing/PublishEventsStore.mjs'
 
@@ -66,6 +67,7 @@ export class ThumbnailLifecycleManager {
     this.events = options.events || new PublishEventsStore()
     this.generator = options.generator || null // CoverGenerator
     this.publisher = options.publisher || null // { setThumbnail(token, videoId, coverPath) }
+    this.model = options.model || new ThumbnailPerformanceModel({ intelligence: this.intel })
     this.policy = { ...REFRESH_POLICY, ...(options.policy || {}) }
     this.now = options.now || (() => Date.now())
     this.dryRun = options.dryRun ?? false
@@ -190,8 +192,18 @@ export class ThumbnailLifecycleManager {
   rankCandidates(candidates) {
     const order = this.intel?.styleOrder([]) || []
     const rank = new Map(order.map((s, i) => [s, i]))
+    // Milestone C: when the CTR model is learned, prefer styles the analytics
+    // say convert; validator CTR still wins outright. Cold start → no change.
+    const modelLearned = this.model?.predict?.({ style: null }).learned
+    const preds = modelLearned
+      ? Object.fromEntries([...new Set(candidates.map(c => c.style).filter(Boolean))]
+          .map(s => [s, this.model.predict({ style: s }).predictedCTR]))
+      : {}
     return [...candidates].sort((a, b) => {
       if (a.ctr !== b.ctr) return (b.ctr ?? 0) - (a.ctr ?? 0)
+      const pa = preds[a.style] ?? 0
+      const pb = preds[b.style] ?? 0
+      if (pa !== pb) return pb - pa
       const ka = rank.get(a.style) ?? 9
       const kb = rank.get(b.style) ?? 9
       return ka - kb
