@@ -96,6 +96,9 @@ test('pipeline: end-to-end render produces mp4', { timeout: 240000 }, async () =
 
   engine.visualReasoner.select = async () => null
   engine.audioMixer.ensureMusicExists = async () => {}
+  // No real cover assets in tests — skip the cover tournament (and the local
+  // stable-diffusion.cpp path entirely) so the E2E test stays offline/fast.
+  engine.coverGenerator = null
   engine.voiceSync.generateTTS = async (_script, voicePath) => {
     execFileSync('ffmpeg', ['-y', '-f', 'lavfi', '-i', 'anullsrc=r=44100:cl=mono', '-t', '2', voicePath], { stdio: 'pipe' })
   }

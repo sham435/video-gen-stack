@@ -256,10 +256,10 @@ test('tuneBrief — keeps current accent when it already leads', () => {
 
 test('CoverGenerator wiring shape — intel exposes the methods the generator calls', async () => {
   const { CoverGenerator } = await import('../src/video-studio/CoverGenerator.mjs')
-  const gen = new CoverGenerator(null, { intelligence: null })
+  const gen = new CoverGenerator(null, { intelligence: null, sdcpp: null })
   assert.equal(gen.intel, null, 'explicit null intelligence → no learning')
-  const gen2 = new CoverGenerator(null, { intelligence: null })
-  const cold = new CoverGenerator(null, { intelligence: new ThumbnailIntelligence({ memory: mem() }) })
+  const gen2 = new CoverGenerator(null, { intelligence: null, sdcpp: null })
+  const cold = new CoverGenerator(null, { intelligence: new ThumbnailIntelligence({ memory: mem() }), sdcpp: null })
   assert.equal(cold.intel.styleOrder(['breaking', 'data']), null, 'cold generator keeps original order')
   assert.ok(gen2.director, 'composer pipeline intact')
 })
@@ -270,7 +270,7 @@ test('CoverGenerator wiring shape — intel exposes the methods the generator ca
 
 test('generateThumbnail — renders 1280x720 PNG, deterministic for same input', async () => {
   const { CoverGenerator } = await import('../src/video-studio/CoverGenerator.mjs')
-  const g = new CoverGenerator(null, { intelligence: null }) // no dotenv → no Pexels → gradient hero
+  const g = new CoverGenerator(null, { intelligence: null, sdcpp: null }) // no dotenv → no Pexels → gradient hero
   const article = { title: 'Apple Unveils M4 MacBook Pro With A Big Surprise', category: 'technology', source: 'The Verge' }
   const p1 = path.join(TMP, 'thumb-a.png')
   const p2 = path.join(TMP, 'thumb-b.png')

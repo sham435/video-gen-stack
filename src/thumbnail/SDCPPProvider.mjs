@@ -26,7 +26,7 @@ export class SDCPPProvider {
   constructor(options = {}) {
     this.bin = options.bin || process.env.SDCPP_BIN || DEFAULT_BIN
     this.model = options.model || process.env.SDCPP_MODEL || DEFAULT_MODEL
-    this.timeoutMs = options.timeoutMs || 240000
+    this.timeoutMs = options.timeoutMs || 300000
   }
 
   available() {
@@ -34,7 +34,7 @@ export class SDCPPProvider {
   }
 
   /** argv for sd-cli given a spec — pure for testing. */
-  buildArgs({ prompt, negative = '', width = 768, height = 768, seed = 42, steps = 20, cfg = 7.0, outPath }) {
+  buildArgs({ prompt, negative = '', width = 768, height = 768, seed = 42, steps = 20, cfg = 7.0, vaeTiling = true, outPath }) {
     return [
       '-m', this.model,
       '-p', prompt,
@@ -45,6 +45,7 @@ export class SDCPPProvider {
       '--cfg-scale', String(cfg),
       '-s', String(seed),
       '--sampling-method', 'euler_a',
+      ...(vaeTiling ? ['--vae-tiling'] : []),
       '-o', outPath,
     ]
   }
@@ -53,9 +54,9 @@ export class SDCPPProvider {
    * Render one image. Returns {path, width, height, seed} or null when the
    * binary/model are unavailable or the process fails (never throws).
    */
-  generate({ prompt, negative = '', width = 768, height = 768, seed = 42, steps = 20, cfg = 7.0, outPath = path.join(os.tmpdir(), `sd-hero-${Date.now()}.png`) } = {}) {
+  generate({ prompt, negative = '', width = 768, height = 768, seed = 42, steps = 20, cfg = 7.0, vaeTiling = true, outPath = path.join(os.tmpdir(), `sd-hero-${Date.now()}.png`) } = {}) {
     if (!prompt || !this.available()) return null
-    const args = this.buildArgs({ prompt, negative, width, height, steps, cfg, seed, outPath })
+    const args = this.buildArgs({ prompt, negative, width, height, steps, cfg, seed, vaeTiling, outPath })
     try {
       execFileSync(this.bin, args, { stdio: 'pipe', timeout: this.timeoutMs })
     } catch { return null }

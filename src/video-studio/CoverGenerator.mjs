@@ -139,7 +139,7 @@ export class CoverGenerator {
       const result = this.sdcpp.generate({
         prompt: `${prompt}, cinematic editorial photography, dramatic lighting, high detail, 8k`,
         negative: 'blurry, low quality, watermark, text, logo, deformed, extra fingers, duplicate',
-        width: 832, height: 1216, steps: 20, cfg: 7.0, seed,
+        width: 576, height: 1024, steps: 20, cfg: 7.0, seed,
         outPath: path.join(this.cacheDir, `sd-hero-${seed}.png`),
       })
       return result?.path || null

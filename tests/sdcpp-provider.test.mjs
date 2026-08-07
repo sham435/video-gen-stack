@@ -22,8 +22,15 @@ test('buildArgs — full flag set, ordered', () => {
     '--cfg-scale', '7',
     '-s', '999',
     '--sampling-method', 'euler_a',
+    '--vae-tiling',
     '-o', '/tmp/o.png',
   ])
+})
+
+test('buildArgs — vae-tiling can be disabled', () => {
+  const p = new SDCPPProvider({ bin: '/x/bin', model: '/x/model.gguf' })
+  const args = p.buildArgs({ prompt: 'p', outPath: '/o.png', vaeTiling: false })
+  assert.equal(args.includes('--vae-tiling'), false)
 })
 
 test('buildArgs — defaults applied', () => {

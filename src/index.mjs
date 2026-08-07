@@ -497,7 +497,7 @@ export class NewsBroadcastEngine {
 
     const captionScript = this.scenePlanner.buildNarrationScript(timedScenes)
     const rawDuration = timedScenes.length > 0 ? timedScenes[timedScenes.length - 1].end : 30
-    const totalDuration = (!rawDuration || isNaN(rawDuration) || Number(rawDuration) < 15) ? 30 : Number(rawDuration)
+    let totalDuration = (!rawDuration || isNaN(rawDuration) || Number(rawDuration) < 15) ? 30 : Number(rawDuration)
     job.markStart('voice')
     const voicePath = `${outDir}/narration.mp3`
     // Premium narration or FAIL. generateTTS refuses espeak — a robotic voice
@@ -519,6 +519,16 @@ export class NewsBroadcastEngine {
 
     if (voiceSize < 1024 || voiceDur < 1) {
       throw new Error('Voice QA: narration file is empty/invalid — refusing to publish')
+    }
+
+    // The closing tagline is the LAST words of the narration track. If the
+    // narrator runs longer than the scene timeline, mixAudio's `-t totalDuration`
+    // would slice them off — the outro would never be read. Extend the video
+    // timeline to cover the full narration so the brand outro is always spoken.
+    if (voiceDur > totalDuration) {
+      const templateDur = totalDuration
+      totalDuration = Math.ceil(voiceDur) + 0.5
+      console.log(`Narration ${voiceDur.toFixed(1)}s > template ${templateDur}s — extending video to ${totalDuration.toFixed(1)}s so the closing tagline is fully read`)
     }
 
     // Pad short narration with silence so platforms don't reject the video
