@@ -1035,7 +1035,8 @@ app.get('/api/pipeline/events', (req, res) => {
       const fp = ROOT + '/output/' + f
       try {
         const size = statSync(fp).size
-        const dur = execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'default=noprint_wrappers=1:nokey=1', fp], { timeout: 3000 }).toString().trim()
+        if (size < 1024 * 100) return // skip corrupt/truncated renders (no moov)
+        const dur = execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'default=noprint_wrappers=1:nokey=1', fp], { timeout: 3000, stdio: ['ignore', 'pipe', 'pipe'] }).toString().trim()
         events.push({ file: f, size: (size / 1024 / 1024).toFixed(1) + 'MB', duration: parseFloat(dur || 0).toFixed(1) + 's', modified: statSync(fp).mtime.toISOString() })
       } catch {}
     })
