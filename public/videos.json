@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-07T16:28:32.988Z",
+  "updatedAt": "2026-08-07T17:36:42.494Z",
   "videos": [
+    {
+      "id": "BZrbGUUIB44",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-07T17:28:05+00:00",
+      "publishedLabel": "Aug 7, 05:28 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/BZrbGUUIB44/hqdefault.jpg"
+    },
+    {
+      "id": "aAUh_htGr-g",
+      "title": "Why does Apple keep banning Telegram, but never X? | NEWS-MONSTER",
+      "publishedAt": "2026-08-07T16:28:52+00:00",
+      "publishedLabel": "Aug 7, 04:28 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/aAUh_htGr-g/hqdefault.jpg"
+    },
     {
       "id": "b2zWJEttBxs",
       "title": "Pokémon Pokopia's free 2.0 update is here, and it's making a splash with new underwater fe | NEWS-MO",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-06T14:57:42+00:00",
       "publishedLabel": "Aug 6, 02:57 PM",
       "thumbnail": "https://i3.ytimg.com/vi/bq6atV_wL-4/hqdefault.jpg"
-    },
-    {
-      "id": "-Vi1Fer2QKk",
-      "title": "Google Assistant will disappear from your phone next month - The Verge | NEWS-MONSTER",
-      "publishedAt": "2026-08-06T12:30:22+00:00",
-      "publishedLabel": "Aug 6, 12:30 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/-Vi1Fer2QKk/hqdefault.jpg"
-    },
-    {
-      "id": "BmYrPVavxtc",
-      "title": "Pokémon Pokopia Updated To Version 2.0.0, Here Are The Full Patch Notes - Nintendo Life | NEWS-MONST",
-      "publishedAt": "2026-08-06T10:14:12+00:00",
-      "publishedLabel": "Aug 6, 10:14 AM",
-      "thumbnail": "https://i3.ytimg.com/vi/BmYrPVavxtc/hqdefault.jpg"
     }
   ]
 }
