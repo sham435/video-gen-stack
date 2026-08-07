@@ -11,7 +11,28 @@
  */
 
 import fs from 'fs'
+import path from 'path'
+import { createRequire } from 'module'
+import { fileURLToPath } from 'url'
 import { execFileSync } from 'child_process'
+import 'dotenv/config'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const PROJECT_ROOT = path.resolve(__dirname, '..', '..')
+const require = createRequire(import.meta.url)
+dotenvFallbackLoad()
+
+// dotenv loads from process.cwd(); when run via an npm script the cwd is the
+// project root already, but guard against invocations from elsewhere.
+function dotenvFallbackLoad() {
+  try {
+    const local = path.join(PROJECT_ROOT, '.env')
+    if (!process.env.PEXELS_API_KEY && fs.existsSync(local)) {
+      const parsed = require('dotenv').parse(fs.readFileSync(local))
+      Object.assign(process.env, parsed)
+    }
+  } catch { /* non-fatal */ }
+}
 
 const KNOWN_FIXES = {
   sidechaincompress: {
@@ -262,6 +283,16 @@ if (mode === 'enhance' || mode === 'full') {
 }
 
 // — HEALTH MODE —
+function musicTrackCount() {
+  try {
+    const dir = path.resolve(PROJECT_ROOT, 'assets', 'music')
+    if (!fs.existsSync(dir)) return 0
+    return fs.readdirSync(dir).filter((f) => /^nm-track-.+\.mp3$/.test(f)).length
+  } catch {
+    return 0
+  }
+}
+
 if (mode === 'health' || mode === 'full') {
   const checks = [
     { n: 'PEXELS_API_KEY', ok: !!process.env.PEXELS_API_KEY },
@@ -271,8 +302,8 @@ if (mode === 'health' || mode === 'full') {
     { n: 'YOUTUBE_CLIENT_SECRET', ok: !!process.env.YOUTUBE_CLIENT_SECRET },
     { n: 'CRON_SECRET', ok: !!process.env.CRON_SECRET },
     { n: 'node_modules', ok: fs.existsSync('node_modules/@napi-rs/canvas') },
-    { n: 'Intro audio', ok: fs.existsSync('assets/music/intro_whoosh.mp3') },
-    { n: 'Background music', ok: fs.existsSync('assets/music/lofi1.mp3') },
+    { n: 'Music engine', ok: fs.existsSync('scripts/gen-music.mjs') },
+    { n: 'Background music', ok: musicTrackCount() > 0 },
     { n: 'Anton font', ok: fs.existsSync('assets/fonts/Anton-Regular.ttf') },
     { n: 'composer.mjs', ok: fs.existsSync('scripts/composer.mjs') },
     { n: 'intro.mjs', ok: fs.existsSync('scripts/intro.mjs') },

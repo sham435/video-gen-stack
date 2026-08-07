@@ -11,11 +11,13 @@
 
 import fs from 'fs'
 import path from 'path'
+import os from 'os'
 import { fileURLToPath } from 'url'
 import 'dotenv/config'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
+const TITLE_LOG = path.join(os.tmpdir(), 'batch48b.log')
 const indexes = process.argv.slice(2).map(Number).filter(Boolean)
 
 if (!indexes.length) {
@@ -23,8 +25,8 @@ if (!indexes.length) {
   process.exit(1)
 }
 
-const TITLE_HINTS = fs.existsSync('/tmp/batch48b.log')
-  ? fs.readFileSync('/tmp/batch48b.log', 'utf8').split('\n')
+const TITLE_HINTS = fs.existsSync(TITLE_LOG)
+  ? fs.readFileSync(TITLE_LOG, 'utf8').split('\n')
       .filter(l => l.startsWith('=== ['))
       .map(l => l.replace(/^=== \[(\d+)\] /, '$1|'))
       .map(l => l.split('|'))

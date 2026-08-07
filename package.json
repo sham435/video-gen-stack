@@ -25,6 +25,7 @@
     "intro:4k": "node scripts/intro.mjs output --4k",
     "scene:engine": "node src/video/SceneEngine.mjs",
     "quality": "node src/quality/QualityChecker.mjs",
+    "gc": "node scripts/gc-artifacts.mjs",
     "ai": "node .github/scripts/ai-helper.mjs",
     "ai:health": "node .github/scripts/ai-helper.mjs health",
     "ai:enhance": "node .github/scripts/ai-helper.mjs enhance",

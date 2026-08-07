@@ -3,7 +3,7 @@
 // brands are never chosen, memory lessons bias selection, and the preflight
 // warning code fires for residual duplicates.
 // Run: node scripts/test-emphasis-resolver.mjs
-process.env.BRAND_MEMORY_FILE = '/tmp/nm-test-brand-memory.json'
+process.env.BRAND_MEMORY_FILE = `${(await import('os')).tmpdir()}/nm-test-brand-memory.json`
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import { HeadlineEmphasisResolver } from '../src/pipeline/HeadlineEmphasisResolver.mjs'
@@ -88,4 +88,4 @@ assert.equal(closeScene.caption_focus, 'SUB', `expected SUB, got ${closeScene.ca
 ok('close scene CTA focus preserved: SUB')
 
 console.log(`\nAll ${passed} checks passed.`)
-try { fs.unlinkSync('/tmp/nm-test-brand-memory.json') } catch { /* temp file already gone */ }
+try { fs.unlinkSync(process.env.BRAND_MEMORY_FILE) } catch { /* temp file already gone */ }

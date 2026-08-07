@@ -1,4 +1,5 @@
 import { AIProvider } from './AIProvider.mjs'
+import { withRetry } from './retry.mjs'
 
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions'
 
@@ -33,20 +34,24 @@ export class OpenRouterProvider extends AIProvider {
     }
 
     try {
-      const res = await fetch(OPENROUTER_URL, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': this.referer,
-        },
-        body: JSON.stringify(payload),
-        signal: AbortSignal.timeout(options.timeout || this.timeout),
-      })
-
-      if (!res.ok) {
-        throw new Error(`OpenRouter API error (${res.status}): ${res.statusText}`)
-      }
+      const res = await withRetry(async () => {
+        const r = await fetch(OPENROUTER_URL, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${this.apiKey}`,
+            'Content-Type': 'application/json',
+            'HTTP-Referer': this.referer,
+          },
+          body: JSON.stringify(payload),
+          signal: AbortSignal.timeout(options.timeout || this.timeout),
+        })
+        if (!r.ok) {
+          const err = new Error(`OpenRouter API error (${r.status}): ${r.statusText}`)
+          err.status = r.status
+          throw err
+        }
+        return r
+      }, options)
 
       const data = await res.json()
       const content = data.choices?.[0]?.message?.content

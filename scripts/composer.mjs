@@ -48,7 +48,19 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
 
     let articles
     let preset = null
-    if (process.env.NEWSAPI_KEY) {
+
+    // NewsData.io is the primary source (enforces a 3-hour fetch gap); NewsAPI
+    // remains the fallback when NewsData is unconfigured or returns nothing.
+    if (!articles) {
+      try {
+        const newsDataSvc = await import('../src/news/NewsDataProvider.mjs')
+        if (newsDataSvc.isConfigured()) {
+          articles = await newsDataSvc.fetchTopHeadlines({ category })
+        }
+      } catch (e) { console.log('NewsData error:', e.message) }
+    }
+
+    if (!articles && process.env.NEWSAPI_KEY) {
       try {
         const newsSvc = await import('../apps/api/services/news.js')
         const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10)

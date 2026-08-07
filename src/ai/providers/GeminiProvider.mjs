@@ -1,4 +1,5 @@
 import { AIProvider } from './AIProvider.mjs'
+import { withRetry } from './retry.mjs'
 
 export class GeminiProvider extends AIProvider {
   constructor(apiKey, options = {}) {
@@ -51,17 +52,21 @@ export class GeminiProvider extends AIProvider {
     }
 
     try {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        signal: AbortSignal.timeout(options.timeout || this.timeout),
-      })
-
-      if (!res.ok) {
-        const err = await res.text()
-        throw new Error(`Gemini API error (${res.status}): ${err.slice(0, 200)}`)
-      }
+      const res = await withRetry(async () => {
+        const r = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          signal: AbortSignal.timeout(options.timeout || this.timeout),
+        })
+        if (!r.ok) {
+          const body = await r.text()
+          const err = new Error(`Gemini API error (${r.status}): ${body.slice(0, 200)}`)
+          err.status = r.status
+          throw err
+        }
+        return r
+      }, options)
 
       const data = await res.json()
       const content = data.candidates?.[0]?.content?.parts?.[0]?.text

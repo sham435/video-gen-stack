@@ -373,7 +373,7 @@ app.post('/api/visual/cover', async (req, res) => {
   try {
     const { CoverGenerator } = await import('../../src/video-studio/CoverGenerator.mjs')
     const gen = new CoverGenerator(dashboardAI?.isEnabled ? dashboardAI.aiProvider : null)
-    const out = `/tmp/cover_${Date.now()}.png`
+    const out = path.join(await import('os').then(m => m.tmpdir()), `cover_${Date.now()}.png`)
     const result = await gen.generate({ title, category: category || 'technology', description: description || '', imageUrl: imageUrl || '' }, out)
     const fs = await import('fs')
     const buf = fs.readFileSync(out).toString('base64')

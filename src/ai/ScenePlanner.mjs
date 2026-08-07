@@ -19,9 +19,7 @@ export class ScenePlanner {
       purpose: sceneDef.purpose || '',
       start: 0,
       end: 0,
-      duration: Math.max(2, Math.min(8, sceneDef.duration || 3)),
-      end: 0,
-      duration: sceneDef.duration || 3,
+      duration: this._clampDuration(sceneDef.duration),
       narration: this.cleanNarration(sceneDef.narration),
       text: this.cleanNarration(sceneDef.narration) || (article.title || '').slice(0, 60),
       subheadline: this.cleanNarration(sceneDef.narration) || (article.title || '').slice(0, 60),
@@ -59,6 +57,14 @@ export class ScenePlanner {
       .replace(/\*\*/g, '')
       .replace(/[«»""]/g, '"')
       .trim()
+  }
+
+  // Single duration clamp. An explicit numeric value is clamped into [2, 8];
+  // a missing or non-numeric value falls back to the 3s default.
+  _clampDuration(value) {
+    const n = Number(value)
+    const base = Number.isFinite(n) ? n : 3
+    return Math.max(2, Math.min(8, base))
   }
 
   cameraSpeed(cameraType) {
