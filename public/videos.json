@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-07T20:13:22.099Z",
+  "updatedAt": "2026-08-07T21:22:14.092Z",
   "videos": [
+    {
+      "id": "IAeqgfMgVRg",
+      "title": "Quake remaster ‘Dawn of the Machine’ update now available - Gematsu | NEWS-MONSTER",
+      "publishedAt": "2026-08-07T21:15:16+00:00",
+      "publishedLabel": "Aug 7, 09:15 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/IAeqgfMgVRg/hqdefault.jpg"
+    },
     {
       "id": "EZN5bQkTvFM",
       "title": "Why does Apple keep banning Telegram, but never X? | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-07T05:12:31+00:00",
       "publishedLabel": "Aug 7, 05:12 AM",
       "thumbnail": "https://i2.ytimg.com/vi/YNT_yrSMHeg/hqdefault.jpg"
-    },
-    {
-      "id": "zTZoMwh4vXQ",
-      "title": "Experts Disagree On GTA | NEWS-MONSTER",
-      "publishedAt": "2026-08-07T03:32:10+00:00",
-      "publishedLabel": "Aug 7, 03:32 AM",
-      "thumbnail": "https://i3.ytimg.com/vi/zTZoMwh4vXQ/hqdefault.jpg"
     }
   ]
 }
