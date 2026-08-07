@@ -57,10 +57,10 @@ export class BroadcastUILayer {
 
     if (scene.source) {
       ctx.save()
-      ctx.globalAlpha = 0.6 * p
+      ctx.globalAlpha = 0.72 * p
       const srcFont = DesignSystem.getTypography('overlay', 'source')
       ctx.font = `${srcFont.weight} ${srcFont.size}px ${srcFont.font}, sans-serif`
-      ctx.fillStyle = 'rgba(255,255,255,0.5)'
+      ctx.fillStyle = 'rgb(245,245,245)'
       ctx.textAlign = 'left'
       ctx.textBaseline = 'bottom'
       ctx.fillText(`Source: ${scene.source}`, DesignSystem.spacing.safeArea.left, H - BROADCAST_TEXT.footer.height - 32)
@@ -68,10 +68,10 @@ export class BroadcastUILayer {
     }
 
     ctx.save()
-    ctx.globalAlpha = 0.3 * p
+    ctx.globalAlpha = 0.7 * p
     const timeFont = DesignSystem.getTypography('overlay', 'timestamp')
     ctx.font = `${timeFont.weight} ${timeFont.size}px ${timeFont.font}, sans-serif`
-    ctx.fillStyle = 'rgba(255,255,255,0.4)'
+    ctx.fillStyle = 'rgb(235,235,235)'
     ctx.textAlign = 'right'
     ctx.textBaseline = 'bottom'
     // Deterministic clock — derived from scene progress, not wall-clock time,

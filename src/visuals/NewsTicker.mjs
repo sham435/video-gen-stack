@@ -1,8 +1,12 @@
 const W = 1080, H = 1920
+import { BROADCAST_TEXT } from '../style/text-tokens.mjs'
 
 export function drawNewsTicker(ctx, items, progress) {
   const tickerH = 50
-  const tickerY = H - tickerH - 20
+  // The footer owns the bottom safe zone (footer.height). The ticker docks
+  // just above it so captions/ticker never enter the reserved footer area.
+  const margin = 14
+  const tickerY = H - BROADCAST_TEXT.footer.height - tickerH - margin
   const itemW = W / 4
 
   ctx.fillStyle = 'rgba(0,0,0,0.8)'

@@ -1,13 +1,13 @@
 const W = 1080, H = 1920
 
-export function drawAnchorBadge(ctx, name, progress) {
+export function drawAnchorBadge(ctx, name, progress, offsetY = 0) {
   const p = Math.min(1, progress * 2)
   if (p <= 0) return
 
   const badgeW = 420
   const badgeH = 60
   const badgeX = W / 2 - badgeW / 2
-  const badgeY = H * 0.65
+  const badgeY = H * 0.65 + offsetY
 
   ctx.save()
   ctx.globalAlpha = p

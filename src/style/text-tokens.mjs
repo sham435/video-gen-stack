@@ -19,11 +19,46 @@ export const BROADCAST_TEXT = {
     borderRadius: 4,
   },
   footer: {
-    size: 52,
-    height: 120,
-    weight: 900,
-    urlSize: 60,
-    iconSize: 64,
+    // Layout chrome (bar): 180px bottom safe zone owned exclusively by the
+    // footer — captions never render inside it.
+    height: 180,
+    padding: { x: 18, y: 12 },
+    bg: 'rgba(5,5,5,0.96)',
+    border: 'rgba(255,255,255,0.22)',
+    accent: '#E10600',
+    text: '#FFFFFF',
+    muted: 'rgba(255,255,255,0.72)',
+
+    // Broadcast grid: 25% | 50% | 25% — left logo+AVAILABLE, empty center,
+    // right subscribe + URL/tagline group. Logo keeps its exact current size.
+    grid: { left: 0.25, center: 0.5, right: 0.25 },
+
+    // Brand + tagline stack (left zone)
+    logoSize: 48,
+    brand: { size: 38, weight: 900 },
+    tagline: { size: 18, weight: 600, gap: 6 },
+
+    // AVAILABLE ON + platform badges (left zone, below the logo)
+    available: { size: 20, weight: 800 },
+    platformIcon: 34,
+    platformGap: 10,
+
+    // URL + URL tagline group (right zone, below the pill)
+    url: { size: 30, weight: 900 },
+    urlTagline: { size: 25, weight: 600 },
+
+    // YouTube subscribe pill — strongest CTA in the footer:
+    // 50px hier / 25px radius / 26px icon / 24px bold label.
+    pill: { height: 50, radius: 25, icon: 26, labelSize: 24, weight: 800 },
+
+    // Responsive: font scale relative to the 1080px design width.
+    baseWidth: 1080,
+    minScale: 0.5,
+    maxScale: 1.5,
+
+    // Back-compat aliases (legacy chrome consumers).
+    urlSize: 30,
+    iconSize: 34,
   },
   caption: {
     minSize: 32,

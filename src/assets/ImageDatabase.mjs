@@ -138,6 +138,32 @@ export class ImageDatabase {
         updated_at     TEXT DEFAULT (datetime('now'))
       );
       CREATE INDEX IF NOT EXISTS idx_entity_perf_cat ON entity_performance(category);
+
+      -- Milestone C3: autonomous thumbnail refresh history. One row per
+      -- replacement event, so the lifecycle loop knows when a video's
+      -- thumbnail last changed (anti-churn gate) and can audit whether a
+      -- refresh actually moved CTR.
+      CREATE TABLE IF NOT EXISTS thumbnail_versions (
+        id              INTEGER PRIMARY KEY AUTOINCREMENT,
+        video_id        TEXT NOT NULL,
+        old_hash        TEXT,
+        new_hash        TEXT,
+        style           TEXT,
+        category        TEXT,
+        entity          TEXT,
+        headline_style  TEXT,
+        ctr_before      REAL,
+        ctr_after       REAL,
+        impressions     INTEGER DEFAULT 0,
+        watch_time      REAL,
+        retention       REAL,
+        refresh_policy  TEXT,
+        status          TEXT DEFAULT 'attempted',
+        attempted_at    TEXT DEFAULT (datetime('now')),
+        replaced        INTEGER DEFAULT 0,
+        result          TEXT
+      );
+      CREATE INDEX IF NOT EXISTS idx_thumb_versions_video ON thumbnail_versions(video_id);
     `)
   }
 

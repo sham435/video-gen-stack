@@ -352,6 +352,6 @@ export class InformationLayer {
 
     ctx.restore()
 
-    drawAnchorBadge(ctx, 'sham435', anchorP)
+    drawAnchorBadge(ctx, 'sham435', anchorP, 20)
   }
 }

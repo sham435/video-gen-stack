@@ -1,6 +1,7 @@
 import { DesignSystem } from '../../visuals/DesignSystem.mjs'
 import { drawNewsTicker } from '../../visuals/NewsTicker.mjs'
 import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
+import { FooterLayout, loadPlatformIcons } from '../footer/FooterLayout.mjs'
 
 const { W, H } = DesignSystem
 
@@ -10,11 +11,6 @@ export class BrandingLayer {
       this.drawTicker(ctx, scene, progress)
     }
     this.drawFooter(ctx, scene, progress)
-
-    ctx.fillStyle = 'rgba(255,255,255,0.06)'
-    ctx.fillRect(0, H - 3, W, 3)
-    ctx.fillStyle = DesignSystem.brand.primary
-    ctx.fillRect(0, H - 3, W * 0.3, 3)
   }
 
   // Top-left broadcast bug — rendered AFTER post-processing (Compositor) so
@@ -54,65 +50,18 @@ export class BrandingLayer {
     ctx.restore()
   }
 
-  // Footer — 120px bar: NM monogram + brand (left, accent) and URL (right,
-  // bold white at broadcast size). Drawn every scene; it is chrome, not
-  // content, so it stays on-brand and readable after compression.
+  // Footer — rendered by the shared FooterLayout engine so the in-canvas bar
+  // and the standalone footer.png composite are always identical. Layout:
+  //   Left(25%): Logo + AVAILABLE ON + badges | Center(50%): whitespace |
+  //   Right(25%): YouTube Pill + URL/tagline (right-aligned group)
+  // Drawn every scene; it is chrome, not content, so it stays on-brand and
+  // readable after compression.
   drawFooter(ctx, scene, progress) {
-    const footer = BROADCAST_TEXT.footer
-    const p = Math.min(1, progress * 1.5)
     ctx.save()
     ctx.globalAlpha = 1
-    const fTop = H - footer.height
-    ctx.fillStyle = 'rgba(5,5,5,0.96)'
-    ctx.fillRect(0, fTop, W, footer.height)
-    ctx.fillStyle = 'rgba(255,255,255,0.22)'
-    ctx.fillRect(0, fTop, W, 1)
-    ctx.fillStyle = DesignSystem.brand.primary
-    ctx.fillRect(0, fTop, W * 0.3, 3)
-
-    // NM monogram — the brand logo, replaced from the old 'T' mark.
-    const box = 64
-    const boxY = fTop + (footer.height - box) / 2
-    const boxX = 28
-    ctx.shadowColor = 'rgba(0,0,0,0.9)'
-    ctx.shadowBlur = 6
-    ctx.fillStyle = DesignSystem.brand.primary
-    ctx.beginPath()
-    ctx.roundRect(boxX, boxY, box, box, 10)
-    ctx.fill()
-    ctx.shadowBlur = 0
-    ctx.font = `900 46px ${DesignSystem.getTypography('watermark', 'footer').font}, sans-serif`
-    ctx.fillStyle = '#FFFFFF'
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'middle'
-    ctx.fillText('NM', boxX + box / 2, boxY + box / 2 + 3)
-
-    // Brand name next to the monogram
-    ctx.font = `${footer.weight} ${footer.size}px ${DesignSystem.getTypography('watermark', 'footer').font}, sans-serif`
-    ctx.fillStyle = '#FFFFFF'
-    ctx.textAlign = 'left'
-    ctx.textBaseline = 'middle'
-    ctx.shadowColor = 'rgba(0,0,0,0.9)'
-    ctx.shadowBlur = 4
-    ctx.fillText('NEWS-MONSTER', boxX + box + 20, H - footer.height / 2)
-    ctx.shadowBlur = 0
-
-    // URL — fit-to-width so the full site string stays readable without
-    // bleeding over the monogram on short sides.
-    const siteUrl = 'https://sham435.github.io/video-gen-stack/'
-    ctx.font = `${footer.weight} ${footer.urlSize}px ${DesignSystem.getTypography('watermark', 'footer').font}, sans-serif`
-    const urlW = ctx.measureText(siteUrl).width
-    const avail = W - 28 - (boxX + box + 20 + ctx.measureText('NEWS-MONSTER').width + 24)
-    if (urlW > avail) {
-      const fit = Math.max(24, footer.urlSize * (avail / urlW))
-      ctx.font = `${footer.weight} ${fit}px ${DesignSystem.getTypography('watermark', 'footer').font}, sans-serif`
-    }
-    ctx.fillStyle = '#FFFFFF'
-    ctx.textAlign = 'right'
-    ctx.shadowColor = 'rgba(0,0,0,0.9)'
-    ctx.shadowBlur = 4
-    ctx.fillText(siteUrl, W - 28, H - footer.height / 2)
-    ctx.shadowBlur = 0
+    // Platform badges load async — fire once, draw with whatever is ready.
+    loadPlatformIcons().then(icons => { this._icons = icons }).catch(() => {})
+    FooterLayout.draw(ctx, W, H, {}, this._icons || {})
     ctx.restore()
   }
 
