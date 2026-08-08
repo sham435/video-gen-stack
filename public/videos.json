@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-08T05:53:16.191Z",
+  "updatedAt": "2026-08-08T07:00:49.879Z",
   "videos": [
+    {
+      "id": "OR0glPkMUGU",
+      "title": "Tőzsdei összeomlásra figyelmeztet a 2008-as válságot előrejelző befektető | NEWS-MONSTER",
+      "publishedAt": "2026-08-08T06:52:37+00:00",
+      "publishedLabel": "Aug 8, 06:52 AM",
+      "thumbnail": "https://i4.ytimg.com/vi/OR0glPkMUGU/hqdefault.jpg"
+    },
     {
       "id": "XUpKaNXEt-k",
       "title": "China’s New Export Engine: Supplying the Factories of the World - WSJ | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-07T15:29:29+00:00",
       "publishedLabel": "Aug 7, 03:29 PM",
       "thumbnail": "https://i3.ytimg.com/vi/b2zWJEttBxs/hqdefault.jpg"
-    },
-    {
-      "id": "c7apbW_52og",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-07T14:18:24+00:00",
-      "publishedLabel": "Aug 7, 02:18 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/c7apbW_52og/hqdefault.jpg"
     }
   ]
 }
