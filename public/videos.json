@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-08T07:00:49.879Z",
+  "updatedAt": "2026-08-08T07:58:55.095Z",
   "videos": [
+    {
+      "id": "91IeH41U54g",
+      "title": "SoftBank Uses OpenAI Stake to Borrow $10 Billion | NEWS-MONSTER",
+      "publishedAt": "2026-08-08T07:51:29+00:00",
+      "publishedLabel": "Aug 8, 07:51 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/91IeH41U54g/hqdefault.jpg"
+    },
     {
       "id": "OR0glPkMUGU",
       "title": "Tőzsdei összeomlásra figyelmeztet a 2008-as válságot előrejelző befektető | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-07T16:28:52+00:00",
       "publishedLabel": "Aug 7, 04:28 PM",
       "thumbnail": "https://i2.ytimg.com/vi/aAUh_htGr-g/hqdefault.jpg"
-    },
-    {
-      "id": "b2zWJEttBxs",
-      "title": "Pokémon Pokopia's free 2.0 update is here, and it's making a splash with new underwater fe | NEWS-MO",
-      "publishedAt": "2026-08-07T15:29:29+00:00",
-      "publishedLabel": "Aug 7, 03:29 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/b2zWJEttBxs/hqdefault.jpg"
     }
   ]
 }
