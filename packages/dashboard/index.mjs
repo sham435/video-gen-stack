@@ -31,11 +31,17 @@ const app = express()
 app.use(express.json())
 
 // Public auth routes — registered BEFORE requireAuth so the login flow works
-// without a key. Everything else fails closed.
+// without a key. Everything else fails closed. On success we issue an httpOnly
+// session cookie so subsequent page loads + EventSource streams are
+// authenticated without ever placing the admin key in a URL.
+const { createAdminSession } = await import('../../packages/auth/requireAuth.js')
+
 app.get('/api/auth/check', (req, res) => {
   if (!process.env.ADMIN_API_KEY) return res.status(503).json({ ok: false, error: 'ADMIN_API_KEY not configured on server' })
-  const key = req.headers['x-api-key'] || req.query.apiKey
+  const key = req.headers['x-api-key']
   if (!key || key !== process.env.ADMIN_API_KEY) return res.status(401).json({ ok: false, error: 'Unauthorized: invalid or missing x-api-key' })
+  const token = createAdminSession()
+  res.setHeader('Set-Cookie', `nm_session=${token}; HttpOnly; Path=/; SameSite=Strict; Max-Age=${60 * 60 * 12}`)
   return res.json({ ok: true })
 })
 
@@ -84,7 +90,7 @@ async function go() {
     if (r.status === 503) { msg.textContent = 'ADMIN_API_KEY not configured on server'; button.disabled = false; return }
     if (!r.ok) { msg.textContent = 'Invalid key'; button.disabled = false; return }
     localStorage.setItem('nm-api-key', key)
-    location.href = '/?apiKey=' + encodeURIComponent(key)
+    location.href = '/'
   } catch {
     msg.textContent = 'Server unreachable'
     button.disabled = false
@@ -1186,7 +1192,8 @@ app.post('/api/contract/build', async (req, res) => {
   }
 })
 
-// Shared publish helper — uploads video + cover to YouTube
+// Shared publish helper — uploads video + cover to YouTube, then shares to
+// LinkedIn when authenticated (best-effort, never blocks the YouTube result).
 async function publishToYouTube(videoPath, headline, category, contract, job) {
   if (!process.env.YOUTUBE_REFRESH_TOKEN) return { status: 'skipped', reason: 'YOUTUBE_REFRESH_TOKEN not set' }
   try {
@@ -1208,6 +1215,23 @@ async function publishToYouTube(videoPath, headline, category, contract, job) {
     const result = { status: 'published', videoId: pub?.id, url: pub?.id ? `https://youtu.be/${pub.id}` : null, thumbnail: coverPath ? 'uploaded' : 'missing' }
     if (pub?.id) job?.markDone('publish', { detail: `Published: ${pub.id}`, score: 99 })
     else job?.markFailed('publish', 'no video id returned')
+
+    if (process.env.LINKEDIN_ACCESS_TOKEN && process.env.LINKEDIN_MEMBER_URN) {
+      try {
+        const li = await import('../../apps/api/publishers/linkedin.js')
+        const liResult = await li.shareVideo(
+          process.env.LINKEDIN_ACCESS_TOKEN,
+          process.env.LINKEDIN_MEMBER_URN,
+          `data:video/mp4;base64,${base64}`,
+          `${headline || 'NEWS-MONSTER'}\n\n${description}`
+        )
+        result.linkedin = liResult.id ? `https://www.linkedin.com/feed/update/${liResult.id}` : 'shared'
+        console.log(`✅ LinkedIn shared: ${result.linkedin}`)
+      } catch (e) {
+        console.warn(`⚠️  LinkedIn share skipped: ${e.message}`)
+      }
+    }
+
     return result
   } catch (e) {
     job?.markFailed('publish', e.message)
@@ -1806,7 +1830,7 @@ body.light-mode .border-white\\/5{border-color:#e5e7eb}
 // Attach the admin key from the URL (?apiKey=...) to every API request.
 // Preserves the server-side auth model: pages still fail closed without a key.
 (() => {
-  const key = new URLSearchParams(location.search).get('apiKey') || localStorage.getItem('nm-api-key')
+  const key = localStorage.getItem('nm-api-key')
   if (!key) return
   const original = window.fetch
   window.fetch = (url, opts = {}) => {
@@ -2893,8 +2917,7 @@ function livePanel(state){
 function openStream(cid, bubble){
   if (evtSource) { evtSource.close(); evtSource = null }
   const state = { percent: 5, label: 'Connecting to agent…', lines: [] }
-  const key = new URLSearchParams(location.search).get('apiKey') || localStorage.getItem('nm-api-key')
-  const es = new EventSource('/api/ai/task/'+cid+'/events' + (key ? '?apiKey='+encodeURIComponent(key) : ''))
+  const es = new EventSource('/api/ai/task/'+cid+'/events')
   evtSource = es
   es.onmessage = (e) => {
     let ev
@@ -2936,8 +2959,7 @@ let liveSource = null
 
 function openLive(){
   if (liveSource) return
-  const key = new URLSearchParams(location.search).get('apiKey') || localStorage.getItem('nm-api-key')
-  const es = new EventSource('/api/live/stream' + (key ? '?apiKey='+encodeURIComponent(key) : ''))
+  const es = new EventSource('/api/live/stream')
   liveSource = es
   const handlers = {
     queue:  (d) => loadAutoQueue(JSON.parse(d)),
@@ -3078,7 +3100,7 @@ body{background:#000;color:#F8FAFC;font-family:'Inter',system-ui,sans-serif}
 <script>
 // Attach the admin key from the URL (?apiKey=...) to every API request.
 (() => {
-  const key = new URLSearchParams(location.search).get('apiKey') || localStorage.getItem('nm-api-key')
+  const key = localStorage.getItem('nm-api-key')
   if (!key) return
   const original = window.fetch
   window.fetch = (url, opts = {}) => {
@@ -3323,7 +3345,7 @@ const ENGINE_HTML = `<!DOCTYPE html>
 <script>
 // Attach the admin key from the URL (?apiKey=...) to every API request.
 (() => {
-  const key = new URLSearchParams(location.search).get('apiKey') || localStorage.getItem('nm-api-key')
+  const key = localStorage.getItem('nm-api-key')
   if (!key) return
   const original = window.fetch
   window.fetch = (url, opts = {}) => {

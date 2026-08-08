@@ -125,18 +125,25 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
     } catch { /* dedup is best-effort */ }
 
     if (!articles?.length) {
-      if (process.env.NEWSAPI_KEY && !process.argv[2]) {
-        throw new Error(`No articles returned for category "${category}" (NewsAPI empty or rate-limited) — aborting instead of publishing placeholder content`)
+      // Never publish placeholder junk. If a manual override title was passed
+      // (process.argv[2]) that's an explicit operator decision; otherwise abort.
+      const override = process.argv[2]?.trim()
+      if (override && !process.env.NEWSAPI_KEY) {
+        articles = [{
+          title: override,
+          description: process.argv[3] || 'A story from the NEWS-MONSTER pipeline.',
+          source: 'Operator override',
+          url: '',
+          imageUrl: null,
+          category,
+          publishedAt: new Date().toISOString(),
+        }]
+      } else {
+        throw new Error(
+          `No articles returned for category "${category}" — aborting instead of publishing placeholder content` +
+          (process.env.NEWSAPI_KEY ? ' (NewsAPI empty or rate-limited)' : ' (no news source configured)')
+        )
       }
-      articles = [{
-        title: process.argv[2] || 'Apple releases groundbreaking AI model that changes everything',
-        description: process.argv[3] || 'Apple announced a revolutionary new AI model that can process images and video simultaneously.',
-        source: 'Tech News',
-        url: '',
-        imageUrl: null,
-        category,
-        publishedAt: new Date().toISOString(),
-      }]
     }
 
     let uploadCount = 0
@@ -186,6 +193,27 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             coverPath
           )
           console.log(`[UPLOAD] videoId=${result?.id} url=https://youtu.be/${result?.id}`)
+
+          // Cross-post to LinkedIn — same video, 30-min cadence mirrored from
+          // YouTube. Best-effort: a LinkedIn auth/config failure must never
+          // fail the YouTube publish that already succeeded.
+          if (process.env.LINKEDIN_ACCESS_TOKEN && process.env.LINKEDIN_MEMBER_URN) {
+            try {
+              const { shareVideo } = await import('../apps/api/publishers/linkedin.js')
+              const liDesc = `${title}\n\nWatch on YouTube: https://youtu.be/${result?.id}\n\nSource: ${article.source || 'NewsAPI'}\n\n${hashtags}`
+              const li = await shareVideo(
+                process.env.LINKEDIN_ACCESS_TOKEN,
+                process.env.LINKEDIN_MEMBER_URN,
+                `data:video/mp4;base64,${buffer.toString('base64')}`,
+                liDesc
+              )
+              console.log(`[LINKEDIN] post=${li?.id || 'ok'} — shared https://www.linkedin.com/feed/update/${li?.id}`)
+            } catch (e) {
+              console.log(`[LINKEDIN] skipped (best-effort): ${e.message}`)
+            }
+          } else {
+            console.log('[LINKEDIN] skipped — LINKEDIN_ACCESS_TOKEN/LINKEDIN_MEMBER_URN not set')
+          }
 
           // Community loop — post the topic-specific pinned-comment question.
           // The 100% 'stayed to watch' audience needs a reason to comment.

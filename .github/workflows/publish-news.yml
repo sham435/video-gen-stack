@@ -33,10 +33,11 @@ jobs:
       - run: npm install --include=optional
       - name: Syntax check all modules
         run: |
+          FAILED=0
           for f in src/**/*.mjs scripts/*.mjs packages/**/*.mjs; do
-            [ -f "$f" ] && node --check "$f" 2>/dev/null || true
+            [ -f "$f" ] && { node --check "$f" 2>/dev/null && echo "  OK: $f" || { echo "  FAIL: $f"; FAILED=1; }; }
           done
-          echo "All modules validated"
+          exit $FAILED
       - name: Validate template
         run: node -e "JSON.parse(require('fs').readFileSync('src/templates/breaking-news.json')); console.log('Template valid')"
 
@@ -56,7 +57,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: data
-          key: newsroom-data-v1
+          key: newsroom-data-${{ github.run_id }}
 
       - name: Install dependencies
         run: npm install --include=optional
@@ -88,6 +89,8 @@ jobs:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_PRIVACY: public
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_MEMBER_URN: ${{ secrets.LINKEDIN_MEMBER_URN }}
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
           QUICK_RENDER: 'true'
@@ -101,7 +104,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: data
-          key: newsroom-data-v1
+          key: newsroom-data-${{ github.run_id }}
 
       - name: Refresh landing page video feed
         if: always()
@@ -123,8 +126,9 @@ jobs:
           fi
 
   retention-learning:
-    # Daily 3:23am — calibrate ProductionMemory with real viewer analytics
-    if: github.event_name == 'schedule'
+    # Daily 3:23am — calibrate ProductionMemory with real viewer analytics.
+    # Gated on the exact cron arm so it runs once a day, not on every */30 run.
+    if: github.event.schedule == '23 3 * * *'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -135,7 +139,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: data
-          key: newsroom-data-v1
+          key: newsroom-data-${{ github.run_id }}
       - name: Install dependencies
         run: npm install --include=optional
       - name: Learn retention patterns
@@ -149,4 +153,16 @@ jobs:
         uses: actions/cache@v5
         with:
           path: data
-          key: newsroom-data-v1
+          key: newsroom-data-${{ github.run_id }}
+
+  gc-artifacts:
+    # Daily 3:23am with retention-learning — reclaim the 1GB+ of render
+    # artifacts each publish cycle leaves on the runner. Runs the safe,
+    # published-ref-aware GC (never touches published batches) with --apply.
+    if: github.event.schedule == '23 3 * * *'
+    needs: retention-learning
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Garbage-collect stale render artifacts
+        run: node scripts/gc-artifacts.mjs --apply

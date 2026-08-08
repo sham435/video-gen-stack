@@ -1,12 +1,43 @@
+import { randomBytes, randomUUID } from 'crypto'
 import { Router } from 'express'
 import { requireAuth } from '../../../packages/auth/requireAuth.js'
-import { readFileSync, writeFileSync } from 'fs'
-import { resolve } from 'path'
+import { validateBody, publishSchema } from '../../../packages/validation/schemas.mjs'
+import { readFileSync, renameSync, writeFileSync } from 'fs'
+import { dirname, resolve } from 'path'
 
 const router = Router()
 
 const ENV_PATH = resolve(process.cwd(), '.env')
 
+// OAuth `state` protection: an attacker can never complete their own OAuth
+// dance against this deployment because the callback must echo the state that
+// the (authenticated) /auth redirect endpoint issued. States are single-use
+// and expire after 10 minutes.
+const OAUTH_PURPOSES = new Set(['tiktok', 'youtube', 'linkedin'])
+let oauthStates = new Map() // state -> { purpose, expiresAt }
+let nextStateGc = 0
+function gcOAuthStates() {
+  const now = Date.now()
+  if (nextStateGc > now) return
+  for (const [token, s] of oauthStates) if (s.expiresAt <= now) oauthStates.delete(token)
+  nextStateGc = now + 60_000
+}
+function issueOAuthState(purpose) {
+  gcOAuthStates()
+  const state = randomUUID() + randomBytes(16).toString('hex')
+  oauthStates.set(state, { purpose, expiresAt: Date.now() + 10 * 60_000 })
+  return state
+}
+function consumeOAuthState(state, purpose) {
+  gcOAuthStates()
+  const s = oauthStates.get(state)
+  if (!s) return false
+  oauthStates.delete(state)
+  return s.purpose === purpose && s.expiresAt > Date.now()
+}
+
+// Atomic, crash-safe .env write (tmp + rename). Never leaves a half-written
+// .env that would drop every other credential.
 function saveEnv(entries) {
   let content = ''
   try { content = readFileSync(ENV_PATH, 'utf-8') } catch {}
@@ -17,17 +48,23 @@ function saveEnv(entries) {
     if (idx >= 0) lines[idx] = `${key}=${value}`
     else lines.push(`${key}=${value}`)
   }
-  writeFileSync(ENV_PATH, lines.join('\n').replace(/\n+$/, '') + '\n')
+  const tmp = resolve(dirname(ENV_PATH), `.env.tmp-${randomBytes(6).toString('hex')}`)
+  writeFileSync(tmp, lines.join('\n').replace(/\n+$/, '') + '\n')
+  renameSync(tmp, ENV_PATH)
 }
 
 // ── TikTok Auth ──
-router.get('/tiktok/auth', (req, res) => {
-  res.redirect(`https://www.tiktok.com/v2/auth/authorize?client_key=${process.env.TIKTOK_CLIENT_KEY}&scope=user.info.basic,video.publish&response_type=code&redirect_uri=${encodeURIComponent(process.env.TIKTOK_REDIRECT_URI || 'http://localhost:4567/auth/tiktok/callback')}`)
+router.get('/tiktok/auth', requireAuth, (req, res) => {
+  const state = issueOAuthState('tiktok')
+  res.redirect(`https://www.tiktok.com/v2/auth/authorize?client_key=${process.env.TIKTOK_CLIENT_KEY}&scope=user.info.basic,video.publish&response_type=code&state=${encodeURIComponent(state)}&redirect_uri=${encodeURIComponent(process.env.TIKTOK_REDIRECT_URI || 'http://localhost:4567/auth/tiktok/callback')}`)
 })
 
 router.get('/auth/tiktok/callback', async (req, res) => {
-  const { code } = req.query
+  const { code, state } = req.query
   if (!code) return res.status(400).send('No code')
+  if (!consumeOAuthState(state, 'tiktok')) {
+    return res.status(403).json({ success: false, error: 'invalid or expired OAuth state — re-authenticate from the dashboard' })
+  }
 
   const resp = await fetch('https://open.tiktokapis.com/v2/oauth/token/', {
     method: 'POST',
@@ -39,6 +76,7 @@ router.get('/auth/tiktok/callback', async (req, res) => {
       grant_type: 'authorization_code',
       redirect_uri: process.env.TIKTOK_REDIRECT_URI || 'http://localhost:4567/auth/tiktok/callback',
     }),
+    signal: AbortSignal.timeout(15000),
   })
   const data = await resp.json()
   if (!data.access_token) {
@@ -57,13 +95,17 @@ router.get('/auth/tiktok/callback', async (req, res) => {
 })
 
 // ── YouTube Auth ──
-router.get('/youtube/auth', (req, res) => {
-  res.redirect(`https://accounts.google.com/o/oauth2/auth?client_id=${process.env.YOUTUBE_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.YOUTUBE_REDIRECT_URI || 'http://localhost:4567/auth/youtube/callback')}&scope=https://www.googleapis.com/auth/youtube.upload&response_type=code&access_type=offline`)
+router.get('/youtube/auth', requireAuth, (req, res) => {
+  const state = issueOAuthState('youtube')
+  res.redirect(`https://accounts.google.com/o/oauth2/auth?client_id=${process.env.YOUTUBE_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.YOUTUBE_REDIRECT_URI || 'http://localhost:4567/auth/youtube/callback')}&scope=https://www.googleapis.com/auth/youtube.upload&response_type=code&access_type=offline&state=${encodeURIComponent(state)}`)
 })
 
 router.get('/auth/youtube/callback', async (req, res) => {
-  const { code } = req.query
+  const { code, state } = req.query
   if (!code) return res.status(400).send('No code')
+  if (!consumeOAuthState(state, 'youtube')) {
+    return res.status(403).json({ success: false, error: 'invalid or expired OAuth state — re-authenticate from the dashboard' })
+  }
 
   const resp = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
@@ -75,6 +117,7 @@ router.get('/auth/youtube/callback', async (req, res) => {
       grant_type: 'authorization_code',
       redirect_uri: process.env.YOUTUBE_REDIRECT_URI || 'http://localhost:4567/auth/youtube/callback',
     }),
+    signal: AbortSignal.timeout(15000),
   })
   const data = await resp.json()
   if (!data.refresh_token) {
@@ -88,8 +131,46 @@ router.get('/auth/youtube/callback', async (req, res) => {
   }
 })
 
+// ── LinkedIn Auth ──
+router.get('/linkedin/auth', requireAuth, async (req, res) => {
+  const state = issueOAuthState('linkedin')
+  const { authUrl } = await useLinkedIn()
+  res.redirect(`${authUrl}&state=${encodeURIComponent(state)}`)
+})
+
+router.get('/auth/linkedin/callback', async (req, res) => {
+  const { code, state } = req.query
+  if (!code) return res.status(400).send('No code')
+  if (!consumeOAuthState(state, 'linkedin')) {
+    return res.status(403).json({ success: false, error: 'invalid or expired OAuth state — re-authenticate from the dashboard' })
+  }
+  try {
+    const { exchangeCode, getMemberUrn } = await useLinkedIn()
+    const data = await exchangeCode(code)
+    if (!data.access_token) {
+      return res.json({ success: false, error: data.error_description || data.error || 'linkedin auth failed' })
+    }
+    const urn = await getMemberUrn(data.access_token)
+    saveEnv({
+      LINKEDIN_ACCESS_TOKEN: data.access_token,
+      LINKEDIN_REFRESH_TOKEN: data.refresh_token || '',
+      LINKEDIN_MEMBER_URN: urn,
+      LINKEDIN_TOKEN_EXPIRES_AT: String(Date.now() + (data.expires_in || 5184000) * 1000),
+    })
+    res.json({ success: true, urn, saved: 'LinkedIn credentials written to .env' })
+  } catch (e) {
+    res.json({ success: false, saved: false, error: `credentials not persisted — add LINKEDIN_ACCESS_TOKEN to .env manually (${e.message})` })
+  }
+})
+
+// Lazy dynamic import keeps the publisher module's process.env reads fresh
+// after the callback rewrites .env (dotenv is loaded once at server boot).
+async function useLinkedIn() {
+  return import('../publishers/linkedin.js')
+}
+
 // ── Publish Video ──
-router.post('/publish', requireAuth, async (req, res) => {
+router.post('/publish', requireAuth, validateBody(publishSchema), async (req, res) => {
   const { videoUrl, title, description, platforms } = req.body
   if (!videoUrl) return res.status(400).json({ error: 'videoUrl required' })
 
@@ -120,6 +201,20 @@ router.post('/publish', requireAuth, async (req, res) => {
         results.youtube = { error: 'YouTube not authenticated. Visit /api/youtube/auth' }
       }
     } catch (e) { results.youtube = { error: e.message } }
+  }
+
+  if (targets.includes('linkedin')) {
+    try {
+      const mod = await useLinkedIn()
+      const token = mod.accessToken()
+      const urn = mod.memberUrn()
+      if (token && urn) {
+        const r = await mod.shareVideo(token, urn, videoUrl, description || title || '')
+        results.linkedin = r
+      } else {
+        results.linkedin = { error: 'LinkedIn not authenticated. Visit /api/linkedin/auth' }
+      }
+    } catch (e) { results.linkedin = { error: e.message } }
   }
 
   res.json({ videoUrl, results })
