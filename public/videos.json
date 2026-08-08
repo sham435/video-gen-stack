@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-08T00:11:05.183Z",
+  "updatedAt": "2026-08-08T02:04:02.401Z",
   "videos": [
+    {
+      "id": "BnrSq81zbNE",
+      "title": "SoftBank Uses OpenAI Stake to Borrow $10 Billion | NEWS-MONSTER",
+      "publishedAt": "2026-08-08T01:56:32+00:00",
+      "publishedLabel": "Aug 8, 01:56 AM",
+      "thumbnail": "https://i3.ytimg.com/vi/BnrSq81zbNE/hqdefault.jpg"
+    },
     {
       "id": "Uoeu5c_U1TE",
       "title": "Trump announces tariffs on key component for solar panels and semiconductors - Politico | NEWS-MONST",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-07T09:35:34+00:00",
       "publishedLabel": "Aug 7, 09:35 AM",
       "thumbnail": "https://i3.ytimg.com/vi/BLelvkofBsU/hqdefault.jpg"
-    },
-    {
-      "id": "ESp9hf5VhJs",
-      "title": "Fire Emblem: Fortune's Weave Is Getting A Manga Series, Here's The Key Art - Nintendo Life | NEWS-MO",
-      "publishedAt": "2026-08-07T08:17:12+00:00",
-      "publishedLabel": "Aug 7, 08:17 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/ESp9hf5VhJs/hqdefault.jpg"
     }
   ]
 }
