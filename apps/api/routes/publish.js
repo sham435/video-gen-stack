@@ -201,20 +201,26 @@ router.get('/linkedin/status', requireAuth, async (req, res) => {
     } catch { /* introspect may be down — fall back to env booleans */ }
   }
 
-  const hasOrgScope = scopes.includes('w_organization_social') || orgEnabled
+  const hasOrgScope = scopes.includes('w_organization_social')
+  // Truthful target: the token's granted scopes decide what the API allows.
+  // orgEnabled only flips the author URN in code — without the scope it 403s.
+  const target = hasOrgScope && orgId ? 'company' : 'profile'
   res.json({
     authenticated: active || !!token,
     active,
-    target: hasOrgScope && orgId ? 'company' : 'profile',
+    target,
     scope: scopes,
     hasOrgScope,
+    orgEnabled,
+    orgMismatch: !hasOrgScope && orgEnabled,
     memberUrn: urn || null,
     orgId: orgId || null,
-    orgEnabled,
     expiresAt,
     note: hasOrgScope && orgId
       ? `Posting to company page urn:li:organization:${orgId}`
-      : 'Posting to member profile — w_organization_social not granted (company-page posting locked until LinkedIn approves the scope)',
+      : orgEnabled
+        ? `LINKEDIN_ORG_SOCIAL=1 but the token lacks w_organization_social (scopes: ${scopes.join(', ')}). Org posts would 403 — re-authenticate after LinkedIn approves the Community Management API scope, then update the token. › posting to profile now.`
+        : 'Posting to member profile — w_organization_social not granted (company-page posting locked until LinkedIn approves the scope)',
   })
 })
 
