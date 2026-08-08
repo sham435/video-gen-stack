@@ -15,6 +15,8 @@ import assert from 'node:assert/strict'
 import { createCanvas, GlobalFonts } from '@napi-rs/canvas'
 import fs from 'node:fs'
 import { FooterLayout } from '../src/video/footer/FooterLayout.mjs'
+import { BROADCAST_TEXT } from '../src/style/text-tokens.mjs'
+const FOOTER = BROADCAST_TEXT.footer
 
 if (fs.existsSync('assets/fonts/Montserrat-ExtraBold.ttf'))
   GlobalFonts.registerFromPath('assets/fonts/Montserrat-ExtraBold.ttf', 'Montserrat ExtraBold')
@@ -77,6 +79,13 @@ for (const fmt of FORMATS) {
 
     // 7. Subscribe pill keeps its scaled 50px-height intent.
     assert.ok(pill.h > 0)
+
+    // 8. Site-URL text baseline is aligned with the "AVAILABLE ON" label
+    //    baseline (both brand lines sit on the same optical line).
+    const { scale } = layout
+    const availableBaseline = platform.y + Math.round(FOOTER.available.size * scale)
+    const urlBaseline = url.y + Math.round(FOOTER.url.size * scale)
+    assert.equal(urlBaseline, availableBaseline, 'URL baseline must match AVAILABLE ON baseline')
   })
 }
 

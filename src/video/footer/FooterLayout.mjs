@@ -104,10 +104,18 @@ export class FooterLayout {
     ]
 
     // Right zone: pill on top, URL + tagline beneath — right-aligned group.
+    // The URL text baseline is aligned with the "AVAILABLE ON" label baseline
+    // (left zone) so the two brand lines sit on the same optical line.
     const rightTop = leftTop + (leftH - rightH) / 2
+    const platformY = leftTop + logo.h + vGap
+    const availableBaseline = platformY + Math.round(F.available.size * scale)
+    const urlBaseline = Math.round(F.url.size * scale)
+    let urlY = availableBaseline - urlBaseline
+    const minUrlY = rightTop + subscribe.h + Math.round(2 * scale) // just below the pill
+    if (urlY < minUrlY) urlY = minUrlY // keep below the pill, never overlap
     const rightColumns = [
       { key: 'subscribe', block: SubscribeBlock, x: rightX - subscribe.w, y: rightTop, w: subscribe.w, h: subscribe.h },
-      { key: 'url', block: UrlBlock, x: rightX - url.w, y: rightTop + subscribe.h + vGap, w: url.w, h: url.h },
+      { key: 'url', block: UrlBlock, x: rightX - url.w, y: urlY, w: url.w, h: url.h },
     ]
 
     return { scale, barHeight, zones, left: leftColumns, right: rightColumns, data: D }
