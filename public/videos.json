@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-08T18:50:49.674Z",
+  "updatedAt": "2026-08-08T19:35:49.409Z",
   "videos": [
+    {
+      "id": "9WzbeIzARks",
+      "title": "Werewolf transformed my old gadgets into USB-C powered ones | NEWS-MONSTER",
+      "publishedAt": "2026-08-08T19:32:09+00:00",
+      "publishedLabel": "Aug 8, 07:32 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/9WzbeIzARks/hqdefault.jpg"
+    },
     {
       "id": "NB8IRWCF-X8",
       "title": "Idaho police release chilling new video of In-N-Out mass shooting | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T07:51:29+00:00",
       "publishedLabel": "Aug 8, 07:51 AM",
       "thumbnail": "https://i2.ytimg.com/vi/91IeH41U54g/hqdefault.jpg"
-    },
-    {
-      "id": "OR0glPkMUGU",
-      "title": "Tőzsdei összeomlásra figyelmeztet a 2008-as válságot előrejelző befektető | NEWS-MONSTER",
-      "publishedAt": "2026-08-08T06:52:37+00:00",
-      "publishedLabel": "Aug 8, 06:52 AM",
-      "thumbnail": "https://i4.ytimg.com/vi/OR0glPkMUGU/hqdefault.jpg"
     }
   ]
 }
