@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-08T12:55:20.558Z",
+  "updatedAt": "2026-08-08T13:55:10.204Z",
   "videos": [
+    {
+      "id": "vvuKKDBWJaY",
+      "title": "SoftBank Uses OpenAI Stake to Borrow $10 Billion | NEWS-MONSTER",
+      "publishedAt": "2026-08-08T13:47:48+00:00",
+      "publishedLabel": "Aug 8, 01:47 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/vvuKKDBWJaY/hqdefault.jpg"
+    },
     {
       "id": "b9GMdRUf0iQ",
       "title": "Henry Ford: \"Si un trabajador se considera experto, lo despedimos, nadie se considera un e | NEWS-MO",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-07T23:11:36+00:00",
       "publishedLabel": "Aug 7, 11:11 PM",
       "thumbnail": "https://i1.ytimg.com/vi/XWJineuOT0s/hqdefault.jpg"
-    },
-    {
-      "id": "s9fw6AJ_24o",
-      "title": "Why does Apple keep banning Telegram, but never X? | NEWS-MONSTER",
-      "publishedAt": "2026-08-07T22:11:07+00:00",
-      "publishedLabel": "Aug 7, 10:11 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/s9fw6AJ_24o/hqdefault.jpg"
     }
   ]
 }
