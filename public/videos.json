@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-08T19:35:49.409Z",
+  "updatedAt": "2026-08-08T20:08:37.705Z",
   "videos": [
+    {
+      "id": "KmcGSCD02jo",
+      "title": "Stocks Rise After Cooler-Than-Expected July Jobs Data | NEWS-MONSTER",
+      "publishedAt": "2026-08-08T19:59:58+00:00",
+      "publishedLabel": "Aug 8, 07:59 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/KmcGSCD02jo/hqdefault.jpg"
+    },
     {
       "id": "9WzbeIzARks",
       "title": "Werewolf transformed my old gadgets into USB-C powered ones | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T08:42:17+00:00",
       "publishedLabel": "Aug 8, 08:42 AM",
       "thumbnail": "https://i2.ytimg.com/vi/99AN5B2mblk/hqdefault.jpg"
-    },
-    {
-      "id": "91IeH41U54g",
-      "title": "SoftBank Uses OpenAI Stake to Borrow $10 Billion | NEWS-MONSTER",
-      "publishedAt": "2026-08-08T07:51:29+00:00",
-      "publishedLabel": "Aug 8, 07:51 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/91IeH41U54g/hqdefault.jpg"
     }
   ]
 }
