@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-08T13:55:10.204Z",
+  "updatedAt": "2026-08-08T14:41:56.985Z",
   "videos": [
+    {
+      "id": "kYmgHLDSNcs",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-08T14:34:44+00:00",
+      "publishedLabel": "Aug 8, 02:34 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/kYmgHLDSNcs/hqdefault.jpg"
+    },
     {
       "id": "vvuKKDBWJaY",
       "title": "SoftBank Uses OpenAI Stake to Borrow $10 Billion | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T00:02:57+00:00",
       "publishedLabel": "Aug 8, 12:02 AM",
       "thumbnail": "https://i2.ytimg.com/vi/Uoeu5c_U1TE/hqdefault.jpg"
-    },
-    {
-      "id": "XWJineuOT0s",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-07T23:11:36+00:00",
-      "publishedLabel": "Aug 7, 11:11 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/XWJineuOT0s/hqdefault.jpg"
     }
   ]
 }
