@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-08T10:34:16.292Z",
+  "updatedAt": "2026-08-08T11:17:04.141Z",
   "videos": [
+    {
+      "id": "SWLETJiVKYw",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-08T11:08:21+00:00",
+      "publishedLabel": "Aug 8, 11:08 AM",
+      "thumbnail": "https://i4.ytimg.com/vi/SWLETJiVKYw/hqdefault.jpg"
+    },
     {
       "id": "CqFtbMYSPuk",
       "title": "New Gemini overlay for Wear OS rolling out to Pixel Watch - 9to5Google | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-07T19:33:49+00:00",
       "publishedLabel": "Aug 7, 07:33 PM",
       "thumbnail": "https://i2.ytimg.com/vi/EZN5bQkTvFM/hqdefault.jpg"
-    },
-    {
-      "id": "MddVV64oxJk",
-      "title": "Google reveals who is hosting Pixel 11 launch event and other guests - 9to5Google | NEWS-MONSTER",
-      "publishedAt": "2026-08-07T18:16:11+00:00",
-      "publishedLabel": "Aug 7, 06:16 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/MddVV64oxJk/hqdefault.jpg"
     }
   ]
 }
