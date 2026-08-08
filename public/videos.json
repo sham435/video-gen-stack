@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-08T15:14:54.515Z",
+  "updatedAt": "2026-08-08T15:49:43.559Z",
   "videos": [
+    {
+      "id": "4Z-XMz3LQko",
+      "title": "SpaceX elige gas natural para Terafab: ¿adiós a los paneles solares de Tesla? | NEWS-MONSTER",
+      "publishedAt": "2026-08-08T15:43:18+00:00",
+      "publishedLabel": "Aug 8, 03:43 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/4Z-XMz3LQko/hqdefault.jpg"
+    },
     {
       "id": "S2wswWyCqYI",
       "title": "Experts Disagree On GTA | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T03:27:51+00:00",
       "publishedLabel": "Aug 8, 03:27 AM",
       "thumbnail": "https://i4.ytimg.com/vi/_1eIA5Ybtsk/hqdefault.jpg"
-    },
-    {
-      "id": "BnrSq81zbNE",
-      "title": "SoftBank Uses OpenAI Stake to Borrow $10 Billion | NEWS-MONSTER",
-      "publishedAt": "2026-08-08T01:56:32+00:00",
-      "publishedLabel": "Aug 8, 01:56 AM",
-      "thumbnail": "https://i3.ytimg.com/vi/BnrSq81zbNE/hqdefault.jpg"
     }
   ]
 }
