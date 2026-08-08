@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-08T11:17:04.141Z",
+  "updatedAt": "2026-08-08T12:03:26.488Z",
   "videos": [
+    {
+      "id": "DMEUKKJLU8s",
+      "title": "US to pay $1.2bn to energy firm RWE to halt offshore wind projects - BBC | NEWS-MONSTER",
+      "publishedAt": "2026-08-08T11:58:43+00:00",
+      "publishedLabel": "Aug 8, 11:58 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/DMEUKKJLU8s/hqdefault.jpg"
+    },
     {
       "id": "SWLETJiVKYw",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-07T21:15:16+00:00",
       "publishedLabel": "Aug 7, 09:15 PM",
       "thumbnail": "https://i2.ytimg.com/vi/IAeqgfMgVRg/hqdefault.jpg"
-    },
-    {
-      "id": "EZN5bQkTvFM",
-      "title": "Why does Apple keep banning Telegram, but never X? | NEWS-MONSTER",
-      "publishedAt": "2026-08-07T19:33:49+00:00",
-      "publishedLabel": "Aug 7, 07:33 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/EZN5bQkTvFM/hqdefault.jpg"
     }
   ]
 }
