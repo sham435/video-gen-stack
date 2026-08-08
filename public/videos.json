@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-08T17:18:16.385Z",
+  "updatedAt": "2026-08-08T18:09:18.309Z",
   "videos": [
+    {
+      "id": "VwTTqeXNGd4",
+      "title": "Why SpaceX Stock Can Break Its Brutal 4-Week Slump Today - Barron's | NEWS-MONSTER",
+      "publishedAt": "2026-08-08T18:01:21+00:00",
+      "publishedLabel": "Aug 8, 06:01 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/VwTTqeXNGd4/hqdefault.jpg"
+    },
     {
       "id": "YPPrJFBG8hQ",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T05:45:28+00:00",
       "publishedLabel": "Aug 8, 05:45 AM",
       "thumbnail": "https://i1.ytimg.com/vi/XUpKaNXEt-k/hqdefault.jpg"
-    },
-    {
-      "id": "LwXjvsSrMSM",
-      "title": "SoftBank Uses OpenAI Stake to Borrow $10 Billion | NEWS-MONSTER",
-      "publishedAt": "2026-08-08T04:51:17+00:00",
-      "publishedLabel": "Aug 8, 04:51 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/LwXjvsSrMSM/hqdefault.jpg"
     }
   ]
 }
