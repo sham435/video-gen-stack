@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-08T21:12:31.202Z",
+  "updatedAt": "2026-08-08T21:48:29.357Z",
   "videos": [
+    {
+      "id": "x3KrLA8puqo",
+      "title": "'I wasn’t driving. I had Autopilot on': Tesla’s Full Self-Driving system is getting driver | NEWS-MO",
+      "publishedAt": "2026-08-08T21:40:49+00:00",
+      "publishedLabel": "Aug 8, 09:40 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/x3KrLA8puqo/hqdefault.jpg"
+    },
     {
       "id": "e3LUzFQCx84",
       "title": "Why SK Hynix’s $38 Billion Memory Splurge Is No Problem for Micron Stock - Barron's | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T11:58:43+00:00",
       "publishedLabel": "Aug 8, 11:58 AM",
       "thumbnail": "https://i1.ytimg.com/vi/DMEUKKJLU8s/hqdefault.jpg"
-    },
-    {
-      "id": "SWLETJiVKYw",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-08T11:08:21+00:00",
-      "publishedLabel": "Aug 8, 11:08 AM",
-      "thumbnail": "https://i4.ytimg.com/vi/SWLETJiVKYw/hqdefault.jpg"
     }
   ]
 }
