@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-08T18:09:18.309Z",
+  "updatedAt": "2026-08-08T18:50:49.674Z",
   "videos": [
+    {
+      "id": "NB8IRWCF-X8",
+      "title": "Idaho police release chilling new video of In-N-Out mass shooting | NEWS-MONSTER",
+      "publishedAt": "2026-08-08T18:42:03+00:00",
+      "publishedLabel": "Aug 8, 06:42 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/NB8IRWCF-X8/hqdefault.jpg"
+    },
     {
       "id": "VwTTqeXNGd4",
       "title": "Why SpaceX Stock Can Break Its Brutal 4-Week Slump Today - Barron's | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T06:52:37+00:00",
       "publishedLabel": "Aug 8, 06:52 AM",
       "thumbnail": "https://i4.ytimg.com/vi/OR0glPkMUGU/hqdefault.jpg"
-    },
-    {
-      "id": "XUpKaNXEt-k",
-      "title": "China’s New Export Engine: Supplying the Factories of the World - WSJ | NEWS-MONSTER",
-      "publishedAt": "2026-08-08T05:45:28+00:00",
-      "publishedLabel": "Aug 8, 05:45 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/XUpKaNXEt-k/hqdefault.jpg"
     }
   ]
 }
