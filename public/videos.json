@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-08T02:04:02.401Z",
+  "updatedAt": "2026-08-08T03:35:40.077Z",
   "videos": [
+    {
+      "id": "_1eIA5Ybtsk",
+      "title": "Splatoon Raiders 1.1.1 update out now, patch notes - Nintendo Everything | NEWS-MONSTER",
+      "publishedAt": "2026-08-08T03:27:51+00:00",
+      "publishedLabel": "Aug 8, 03:27 AM",
+      "thumbnail": "https://i4.ytimg.com/vi/_1eIA5Ybtsk/hqdefault.jpg"
+    },
     {
       "id": "BnrSq81zbNE",
       "title": "SoftBank Uses OpenAI Stake to Borrow $10 Billion | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-07T10:55:40+00:00",
       "publishedLabel": "Aug 7, 10:55 AM",
       "thumbnail": "https://i2.ytimg.com/vi/qFtyHNYDun0/hqdefault.jpg"
-    },
-    {
-      "id": "BLelvkofBsU",
-      "title": "Samsung Galaxy Z series is breaking pre-order records - Mashable | NEWS-MONSTER",
-      "publishedAt": "2026-08-07T09:35:34+00:00",
-      "publishedLabel": "Aug 7, 09:35 AM",
-      "thumbnail": "https://i3.ytimg.com/vi/BLelvkofBsU/hqdefault.jpg"
     }
   ]
 }
