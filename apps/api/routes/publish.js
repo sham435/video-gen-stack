@@ -169,6 +169,98 @@ async function useLinkedIn() {
   return import('../publishers/linkedin.js')
 }
 
+// ── LinkedIn Status ──
+// Shows whether the pipeline is authenticated for LinkedIn and whether posts
+// target the member profile or the verified company page.
+router.get('/linkedin/status', requireAuth, async (req, res) => {
+  const token = process.env.LINKEDIN_ACCESS_TOKEN
+  const urn = process.env.LINKEDIN_MEMBER_URN || ''
+  const orgId = process.env.LINKEDIN_ORG_ID || ''
+  const orgEnabled = process.env.LINKEDIN_ORG_SOCIAL === '1'
+
+  // Scope introspection is a reliable way to detect w_organization_social.
+  let scopes = []
+  let active = false
+  let expiresAt = null
+  if (token) {
+    try {
+      const r = await fetch('https://www.linkedin.com/oauth/v2/introspectToken', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          token,
+          client_id: process.env.LINKEDIN_CLIENT_ID || '',
+          client_secret: process.env.LINKEDIN_CLIENT_SECRET || '',
+        }),
+        signal: AbortSignal.timeout(10000),
+      })
+      const data = await r.json()
+      active = !!data.active
+      scopes = (data.scope || '').split(',').filter(Boolean)
+      expiresAt = data.expires_at ? new Date(data.expires_at * 1000).toISOString() : null
+    } catch { /* introspect may be down — fall back to env booleans */ }
+  }
+
+  const hasOrgScope = scopes.includes('w_organization_social') || orgEnabled
+  res.json({
+    authenticated: active || !!token,
+    active,
+    target: hasOrgScope && orgId ? 'company' : 'profile',
+    scope: scopes,
+    hasOrgScope,
+    memberUrn: urn || null,
+    orgId: orgId || null,
+    orgEnabled,
+    expiresAt,
+    note: hasOrgScope && orgId
+      ? `Posting to company page urn:li:organization:${orgId}`
+      : 'Posting to member profile — w_organization_social not granted (company-page posting locked until LinkedIn approves the scope)',
+  })
+})
+
+// ── LinkedIn Manual Share (latest video) ──
+// Posts the most recently published video (from public/videos.json) to
+// LinkedIn on demand — a dashboard "Share now" button.
+router.post('/linkedin/share', requireAuth, async (req, res) => {
+  try {
+    const mod = await useLinkedIn()
+    const token = mod.accessToken()
+    const urn = mod.memberUrn()
+    if (!token || !urn) {
+      return res.status(400).json({ success: false, error: 'LinkedIn not authenticated — run /api/linkedin/auth first' })
+    }
+
+    // Latest published video — static feed written by the publish workflow.
+    const fs = await import('fs')
+    let latest = null
+    try {
+      const feed = JSON.parse(fs.readFileSync('public/videos.json', 'utf8'))
+      latest = feed?.videos?.[0] || null
+    } catch { latest = null }
+    if (!latest?.id) {
+      return res.status(404).json({ success: false, error: 'No published video found in public/videos.json' })
+    }
+
+    const title = (latest.title || 'NEWS-MONSTER').replace(/\| NEWS-MONSTER$/i, '').trim()
+    const ytUrl = `https://youtu.be/${latest.id}`
+    const commentary = `📰 ${title}\n\n🎬 Automated AI news short from NEWS-MONSTER — new drops every 30 minutes.\n\n▶️ Watch: ${ytUrl}\n\n#AI #News #BreakingNews #Tech`
+
+    const customVideo = req.body?.videoUrl
+    const result = customVideo
+      ? await mod.shareVideo(token, urn, customVideo, commentary)
+      : await mod.sharePost(token, urn, commentary, ytUrl)
+
+    res.json({
+      success: true,
+      shared: { videoId: latest.id, title, url: ytUrl },
+      post: result,
+      profile: mod.authorUrn ? mod.authorUrn(urn) : urn,
+    })
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.message })
+  }
+})
+
 // ── Publish Video ──
 router.post('/publish', requireAuth, validateBody(publishSchema), async (req, res) => {
   const { videoUrl, title, description, platforms } = req.body

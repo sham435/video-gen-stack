@@ -65,7 +65,7 @@ export async function getMemberUrn(token) {
   return `urn:li:person:${data.sub}`
 }
 
-function authorUrn(memberUrn) {
+export function authorUrn(memberUrn) {
   return ORG_ID && process.env.LINKEDIN_ORG_SOCIAL === '1'
     ? `urn:li:organization:${ORG_ID}`
     : memberUrn
