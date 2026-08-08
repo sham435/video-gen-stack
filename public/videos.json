@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-07T23:20:00.621Z",
+  "updatedAt": "2026-08-08T00:11:05.183Z",
   "videos": [
+    {
+      "id": "Uoeu5c_U1TE",
+      "title": "Trump announces tariffs on key component for solar panels and semiconductors - Politico | NEWS-MONST",
+      "publishedAt": "2026-08-08T00:02:57+00:00",
+      "publishedLabel": "Aug 8, 12:02 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/Uoeu5c_U1TE/hqdefault.jpg"
+    },
     {
       "id": "XWJineuOT0s",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-07T08:17:12+00:00",
       "publishedLabel": "Aug 7, 08:17 AM",
       "thumbnail": "https://i2.ytimg.com/vi/ESp9hf5VhJs/hqdefault.jpg"
-    },
-    {
-      "id": "m1v-P2ilIN4",
-      "title": "'Will move SC': Tarun Tejpal after Bombay HC conviction in rape case | NEWS-MONSTER",
-      "publishedAt": "2026-08-07T06:49:40+00:00",
-      "publishedLabel": "Aug 7, 06:49 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/m1v-P2ilIN4/hqdefault.jpg"
     }
   ]
 }
