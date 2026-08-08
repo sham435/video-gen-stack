@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-08T15:49:43.559Z",
+  "updatedAt": "2026-08-08T17:18:16.385Z",
   "videos": [
+    {
+      "id": "YPPrJFBG8hQ",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-08T17:09:49+00:00",
+      "publishedLabel": "Aug 8, 05:09 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/YPPrJFBG8hQ/hqdefault.jpg"
+    },
+    {
+      "id": "2qpwdOqjJws",
+      "title": "Meta Ordered to Pay $942 Million in New Mexico Child-Safety Lawsuit | NEWS-MONSTER",
+      "publishedAt": "2026-08-08T16:35:04+00:00",
+      "publishedLabel": "Aug 8, 04:35 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/2qpwdOqjJws/hqdefault.jpg"
+    },
     {
       "id": "4Z-XMz3LQko",
       "title": "SpaceX elige gas natural para Terafab: ¿adiós a los paneles solares de Tesla? | NEWS-MONSTER",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-08T04:51:17+00:00",
       "publishedLabel": "Aug 8, 04:51 AM",
       "thumbnail": "https://i1.ytimg.com/vi/LwXjvsSrMSM/hqdefault.jpg"
-    },
-    {
-      "id": "xUY5_rrZGgU",
-      "title": "SoftBank Uses OpenAI Stake to Borrow $10 Billion | NEWS-MONSTER",
-      "publishedAt": "2026-08-08T04:37:31+00:00",
-      "publishedLabel": "Aug 8, 04:37 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/xUY5_rrZGgU/hqdefault.jpg"
-    },
-    {
-      "id": "_1eIA5Ybtsk",
-      "title": "Splatoon Raiders 1.1.1 update out now, patch notes - Nintendo Everything | NEWS-MONSTER",
-      "publishedAt": "2026-08-08T03:27:51+00:00",
-      "publishedLabel": "Aug 8, 03:27 AM",
-      "thumbnail": "https://i4.ytimg.com/vi/_1eIA5Ybtsk/hqdefault.jpg"
     }
   ]
 }
