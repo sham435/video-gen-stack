@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-08T12:03:26.488Z",
+  "updatedAt": "2026-08-08T12:55:20.558Z",
   "videos": [
+    {
+      "id": "b9GMdRUf0iQ",
+      "title": "Henry Ford: \"Si un trabajador se considera experto, lo despedimos, nadie se considera un e | NEWS-MO",
+      "publishedAt": "2026-08-08T12:46:20+00:00",
+      "publishedLabel": "Aug 8, 12:46 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/b9GMdRUf0iQ/hqdefault.jpg"
+    },
     {
       "id": "DMEUKKJLU8s",
       "title": "US to pay $1.2bn to energy firm RWE to halt offshore wind projects - BBC | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-07T22:11:07+00:00",
       "publishedLabel": "Aug 7, 10:11 PM",
       "thumbnail": "https://i4.ytimg.com/vi/s9fw6AJ_24o/hqdefault.jpg"
-    },
-    {
-      "id": "IAeqgfMgVRg",
-      "title": "Quake remaster ‘Dawn of the Machine’ update now available - Gematsu | NEWS-MONSTER",
-      "publishedAt": "2026-08-07T21:15:16+00:00",
-      "publishedLabel": "Aug 7, 09:15 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/IAeqgfMgVRg/hqdefault.jpg"
     }
   ]
 }
