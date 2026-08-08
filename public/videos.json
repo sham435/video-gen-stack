@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-08T20:08:37.705Z",
+  "updatedAt": "2026-08-08T20:39:53.921Z",
   "videos": [
+    {
+      "id": "Y5UPC_W88Uw",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-08T20:30:42+00:00",
+      "publishedLabel": "Aug 8, 08:30 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/Y5UPC_W88Uw/hqdefault.jpg"
+    },
     {
       "id": "KmcGSCD02jo",
       "title": "Stocks Rise After Cooler-Than-Expected July Jobs Data | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T09:39:26+00:00",
       "publishedLabel": "Aug 8, 09:39 AM",
       "thumbnail": "https://i4.ytimg.com/vi/CqFtbMYSPuk/hqdefault.jpg"
-    },
-    {
-      "id": "99AN5B2mblk",
-      "title": "New Gemini overlay for Wear OS rolling out to Pixel Watch - 9to5Google | NEWS-MONSTER",
-      "publishedAt": "2026-08-08T08:42:17+00:00",
-      "publishedLabel": "Aug 8, 08:42 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/99AN5B2mblk/hqdefault.jpg"
     }
   ]
 }
