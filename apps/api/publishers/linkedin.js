@@ -113,42 +113,80 @@ export async function sharePost(token, memberUrn, commentary, linkUrl = null) {
 }
 
 // Upload a video (mp4) and post it. Returns the created post id/urn.
+// 2026 Videos API: initializeUpload → PUT bytes (capture ETag part id) →
+// finalizeUpload → post with content.media.id = video URN.
 export async function shareVideo(token, memberUrn, videoUrl, commentary) {
-  const videoResp = await fetch(videoUrl, { signal: AbortSignal.timeout(120000) })
-  if (!videoResp.ok) throw new Error(`Failed to fetch video: ${videoResp.status}`)
-  const buffer = Buffer.from(await videoResp.arrayBuffer())
+  let buffer
+  if (String(videoUrl).startsWith('data:')) {
+    // Node's fetch returns 0 bytes for data: URLs — decode inline.
+    const m = /^data:[^;,]+;base64,(.+)$/.exec(videoUrl)
+    if (!m) throw new Error('Unsupported data: URL (only base64 is supported)')
+    buffer = Buffer.from(m[1], 'base64')
+  } else {
+    const videoResp = await fetch(videoUrl, { signal: AbortSignal.timeout(120000) })
+    if (!videoResp.ok) throw new Error(`Failed to fetch video: ${videoResp.status}`)
+    buffer = Buffer.from(await videoResp.arrayBuffer())
+  }
+  if (!buffer.byteLength) throw new Error('Video buffer is empty')
 
   const owner = authorUrn(memberUrn)
   const init = await fetch(`${BASE}/rest/videos?action=initializeUpload`, {
     method: 'POST',
     headers: apiHeaders(token),
-    body: JSON.stringify({ initializeUploadRequest: { owner, fileSizeBytes: buffer.byteLength } }),
+    body: JSON.stringify({
+      initializeUploadRequest: { owner, fileSizeBytes: buffer.byteLength, uploadCaptions: false, uploadThumbnail: false },
+    }),
   })
   const initData = await init.json()
-  const uploadUrl = initData?.value?.uploadUrl
-  const videoUrn = initData?.value?.video
-  if (!uploadUrl || !videoUrn) {
-    throw new Error(`LinkedIn video init failed: ${JSON.stringify(initData).slice(0, 300)}`)
+  const value = initData?.value || {}
+  const instructions = value?.uploadInstructions || []
+  const videoUrn = value?.video
+  const uploadToken = value?.uploadToken || ''
+  if (!instructions.length || !videoUrn) {
+    throw new Error(`LinkedIn video init failed: ${JSON.stringify(initData).slice(0, 400)}`)
   }
 
-  const up = await fetch(uploadUrl, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${token}` },
-    body: buffer,
-  })
-  if (!up.ok) throw new Error(`LinkedIn video upload failed: ${up.status} ${await up.text().catch(() => '')}`)
+  // Multi-part upload: each instruction has a byte range + uploadUrl; PUT each
+  // part (sliced from the buffer) and collect the ETag response as the part id.
+  const partIds = []
+  for (const part of instructions) {
+    const { uploadUrl, firstByte = 0, lastByte = buffer.byteLength - 1 } = part
+    const slice = buffer.subarray(firstByte, lastByte + 1)
+    const up = await fetch(uploadUrl, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/octet-stream',
+      },
+      body: slice,
+    })
+    const etag = up.headers.get('etag')
+    if (!up.ok || !etag) {
+      throw new Error(`LinkedIn video part ${firstByte}-${lastByte} upload failed: ${up.status} (etag=${etag || 'missing'}) ${await up.text().catch(() => '')}`)
+    }
+    partIds.push(etag)
+  }
 
-  // Poll until the video is READY (processing).
-  const videoId = videoUrn.split(':').pop()
+  const fin = await fetch(`${BASE}/rest/videos?action=finalizeUpload`, {
+    method: 'POST',
+    headers: apiHeaders(token),
+    body: JSON.stringify({ finalizeUploadRequest: { video: videoUrn, uploadToken, uploadedPartIds: partIds } }),
+  })
+  if (!fin.ok) {
+    throw new Error(`LinkedIn video finalize failed: ${fin.status} ${await fin.text().catch(() => '')}`)
+  }
+
+  // Poll until the video is AVAILABLE (processing).
+  const videoId = encodeURIComponent(videoUrn)
   let ready = false
-  for (let i = 0; i < 20 && !ready; i++) {
+  for (let i = 0; i < 24 && !ready; i++) {
     await new Promise(r => setTimeout(r, 5000))
     const st = await fetch(`${BASE}/rest/videos/${videoId}`, { headers: apiHeaders(token) })
     const stData = await st.json()
     const status = stData?.status
-    if (status === 'READY') ready = true
-    else if (status === 'FAILED' || status === 'CANCELED') {
-      throw new Error(`LinkedIn video processing ${status}`)
+    if (status === 'AVAILABLE') ready = true
+    else if (status === 'PROCESSING_FAILED') {
+      throw new Error(`LinkedIn video processing failed: ${stData?.processingFailureReason || 'unknown'}`)
     }
   }
   if (!ready) throw new Error('LinkedIn video processing timed out')
