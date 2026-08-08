@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-08T03:35:40.077Z",
+  "updatedAt": "2026-08-08T04:45:32.592Z",
   "videos": [
+    {
+      "id": "xUY5_rrZGgU",
+      "title": "SoftBank Uses OpenAI Stake to Borrow $10 Billion | NEWS-MONSTER",
+      "publishedAt": "2026-08-08T04:37:31+00:00",
+      "publishedLabel": "Aug 8, 04:37 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/xUY5_rrZGgU/hqdefault.jpg"
+    },
     {
       "id": "_1eIA5Ybtsk",
       "title": "Splatoon Raiders 1.1.1 update out now, patch notes - Nintendo Everything | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-07T11:48:54+00:00",
       "publishedLabel": "Aug 7, 11:48 AM",
       "thumbnail": "https://i1.ytimg.com/vi/02hcou67pes/hqdefault.jpg"
-    },
-    {
-      "id": "qFtyHNYDun0",
-      "title": "Theme Parks and ‘Toy Story 5’ Boost Disney Results | NEWS-MONSTER",
-      "publishedAt": "2026-08-07T10:55:40+00:00",
-      "publishedLabel": "Aug 7, 10:55 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/qFtyHNYDun0/hqdefault.jpg"
     }
   ]
 }
