@@ -46,8 +46,14 @@ export async function loadPlatformIcons() {
  * The bar bottom-anchors to the frame and is sized by content, so it scales
  * cleanly across 9:16, 1:1 and 16:9 without collisions while the reserved
  * bottom safe zone (footer bar) stays free of captions.
+ *
+ * LinkedIn safe-area: the bar keeps SAFE_BOTTOM px of clear canvas below it so
+ * platform UI (rounded corners, play/progress chrome, pillarbox cropping) never
+ * clips the bar's content. Consumers must compute the bar top via
+ * barTopInFrame() — never H - barHeight directly.
  */
 export class FooterLayout {
+  static SAFE_BOTTOM = 64
   static DEFAULT_DATA = {
     brand: 'NEWS-MONSTER',
     tagline: 'Breaking News, AI, Science, Sports & Future Tech',
@@ -55,8 +61,18 @@ export class FooterLayout {
     urlTagline: 'Open Source AI Video Platform',
   }
 
-  /**
-   * Measure-only pass. Returns computed geometry:
+/**
+ * The bar's top edge in a full frame (H tall): everything below this y is the
+ * footer's reserved chrome zone. Ticker / captions / anchor content must dock
+ * ABOVE it. The footer owns this contract so consumers never hard-code 180.
+ */
+static barTopInFrame(ctx, W, H, data = {}) {
+  const { barHeight } = this.compute(ctx, W, data)
+  return H - barHeight - this.SAFE_BOTTOM
+}
+
+/**
+ * Measure-only pass. Returns computed geometry:
    *   { scale, barHeight, zones: [{ key, x, y, w, h }],
    *     left:  [{ key, block, x, y, w, h }],
    *     right: [{ key, block, x, y, w, h }] }
@@ -72,8 +88,8 @@ export class FooterLayout {
 
     const padX = Math.max(16, Math.round(F.padding.x * scale))
     const innerW = W - padX * 2
-    const zoneW = { left: innerW * 0.25, center: innerW * 0.5, right: innerW * 0.25 }
-    const vGap = Math.max(10, Math.round(14 * scale))
+    const zoneW = { left: innerW * F.grid.left, center: innerW * F.grid.center, right: innerW * F.grid.right }
+    const vGap = Math.max(10, Math.round(F.lineGap * scale))
 
     // Stack heights inside each end zone.
     const logo = LogoBlock.measure(ctx, scale)
@@ -84,7 +100,7 @@ export class FooterLayout {
     const url = UrlBlock.measure(ctx, scale, D, zoneW.right)
     const rightH = subscribe.h + vGap + url.h
 
-    const barHeight = Math.round(Math.max(F.height, leftH, rightH) + Math.round(F.padding.y * scale) * 2)
+    const barHeight = Math.round(Math.max(F.minHeight, leftH, rightH) + Math.round(F.padding.y * scale) * 2)
 
     const leftX = padX
     const centerX = padX + zoneW.left
@@ -129,7 +145,8 @@ export class FooterLayout {
   static draw(ctx, W, H, data = {}, icons = {}) {
     const layout = this.compute(ctx, W, data)
     const { barHeight } = layout
-    const top = H - barHeight
+    // Anchor clear of the frame's bottom edge (LinkedIn safe-area).
+    const top = H - barHeight - this.SAFE_BOTTOM
 
     ctx.save()
 
@@ -139,7 +156,7 @@ export class FooterLayout {
     ctx.fillStyle = F.border
     ctx.fillRect(0, top, W, 1)
     ctx.fillStyle = F.accent
-    ctx.fillRect(0, H - 3, W * 0.3, 3)
+    ctx.fillRect(0, top + barHeight - 3, W * 0.3, 3)
 
     for (const col of [...layout.left, ...layout.right]) {
       col.y = top + col.y

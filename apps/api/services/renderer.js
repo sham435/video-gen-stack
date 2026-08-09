@@ -139,30 +139,33 @@ export async function renderPromptVideo(prompt, options = {}) {
   const bg1 = ff(theme.bg1)
   const accent = ff(theme.accent)
 
+  // NEWS-MONSTER vertical format: 1080x1920 (9:16) — never letterbox/pillarbox.
+  const OW = 1080, OH = 1920
+
   const bgPath = join(tmp, `pb_${Date.now()}_${segmentIndex}.mp4`)
   const renderedPath = join(tmp, `pr_${Date.now()}_${segmentIndex}.mp4`)
 
   try {
     execFileSync('ffmpeg', [
-      '-y', '-f', 'lavfi', '-i', `color=c=${bg0}:s=1920x1080:d=${duration}:r=30`,
-      '-f', 'lavfi', '-i', `color=c=${bg1}:s=1920x1080:d=${duration}:r=30,format=rgba,colorchannelmixer=aa=0.35`,
+      '-y', '-f', 'lavfi', '-i', `color=c=${bg0}:s=${OW}x${OH}:d=${duration}:r=30`,
+      '-f', 'lavfi', '-i', `color=c=${bg1}:s=${OW}x${OH}:d=${duration}:r=30,format=rgba,colorchannelmixer=aa=0.35`,
       '-filter_complex', '[0][1]overlay=0:0',
       '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '24', bgPath,
     ], { stdio: 'pipe', timeout: 30000 })
 
-    const headline = `drawtext=text='${title}':fontcolor=white:fontsize=48:x=100:y=280:box=1:boxcolor=0x000000@0.4:boxborderw=16`
-    const badge = `drawtext=text='AI-GENERATED':fontcolor=${accent}:fontsize=14:x=80:y=80:box=1:boxcolor=0x000000@0.4:boxborderw=8`
-    const footer = `drawtext=text='${totalSegments > 1 ? `SEGMENT ${segmentIndex}/${totalSegments}` : 'NEWS'}':fontcolor=gray:fontsize=16:x=80:y=h-60:box=1:boxcolor=0x000000@0.3:boxborderw=8`
+    const headline = `drawtext=text='${title}':fontcolor=white:fontsize=56:x=96:y=420:box=1:boxcolor=0x000000@0.4:boxborderw=20`
+    const badge = `drawtext=text='AI-GENERATED':fontcolor=${accent}:fontsize=22:x=88:y=120:box=1:boxcolor=0x000000@0.4:boxborderw=12`
+    const footer = `drawtext=text='${totalSegments > 1 ? `SEGMENT ${segmentIndex}/${totalSegments}` : 'NEWS'}':fontcolor=gray:fontsize=22:x=88:y=h-120:box=1:boxcolor=0x000000@0.3:boxborderw=12`
 
     execFileSync('ffmpeg', [
-      '-y', '-i', bgPath, '-vf', `${headline},${badge},${footer}`,
+      '-y', '-i', bgPath, '-vf', `${headline},${badge},${footer},scale=${OW}:${OH}:setsar=1,fps=30`,
       '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '24', renderedPath,
     ], { stdio: 'pipe', timeout: 30000 })
   } catch (e) {
     const safeTitle = (title || 'AI Generated').slice(0, 40)
     execFileSync('ffmpeg', [
-      '-y', '-f', 'lavfi', '-i', `color=c=0x0B1020:s=1920x1080:d=${duration}:r=30`,
-      '-vf', `drawtext=text='${safeTitle}':fontcolor=white:fontsize=48:x=(w-text_w)/2:y=(h-text_h)/2:box=1:boxcolor=black@0.4:boxborderw=16`,
+      '-y', '-f', 'lavfi', '-i', `color=c=0x0B1020:s=${OW}x${OH}:d=${duration}:r=30`,
+      '-vf', `drawtext=text='${safeTitle}':fontcolor=white:fontsize=52:x=(w-text_w)/2:y=(h-text_h)/2:box=1:boxcolor=black@0.4:boxborderw=20,scale=${OW}:${OH}:setsar=1,fps=30`,
       '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '28', '-an', out,
     ], { stdio: 'pipe', timeout: 60000 })
     try { unlinkSync(renderedPath) } catch {}

@@ -45,7 +45,9 @@ for (const fmt of FORMATS) {
       ['left', 'center', 'right'],
       'zone order: left | center | right'
     )
-    assert.ok(Math.abs(zones[0].w - zones[2].w) < 1, 'left/right zones equal width')
+    // Right zone is intentionally ≥ left: it carries the URL at a legible size
+    // (readability wins over a symmetric 25/50/25 split).
+    assert.ok(zones[2].w >= zones[0].w, 'right zone >= left zone (URL legibility)')
     assert.ok(zones[1].w > zones[0].w * 1.5, 'center zone is the largest (whitespace)')
 
     // 3. No zone clips the canvas horizontally.
@@ -81,11 +83,23 @@ for (const fmt of FORMATS) {
     assert.ok(pill.h > 0)
 
     // 8. Site-URL text baseline is aligned with the "AVAILABLE ON" label
-    //    baseline (both brand lines sit on the same optical line).
+    //    baseline (both brand lines sit on the same optical line). URL size
+    //    must stay at a legible floor so the CTA reads after compression.
     const { scale } = layout
     const availableBaseline = platform.y + Math.round(FOOTER.available.size * scale)
     const urlBaseline = url.y + Math.round(FOOTER.url.size * scale)
     assert.equal(urlBaseline, availableBaseline, 'URL baseline must match AVAILABLE ON baseline')
+
+    // 9. URL font size is the broadcast legibility floor (≥ 30px at design width).
+    const urlPx = Math.round(FOOTER.url.size * scale)
+    assert.ok(urlPx >= 30, `URL font ${urlPx}px must be ≥ 30px`)
+
+    // 10. Line gaps: the URL-to-tagline stack and the logo→platform stack
+    //     carry at least a 12px (scaled) vertical gap — no touching lines.
+    const lineGapPx = Math.round(FOOTER.lineGap * scale)
+    assert.ok(lineGapPx >= 12, `line gap ${lineGapPx}px must be ≥ 12px`)
+    assert.ok(url.h - Math.round(FOOTER.url.size * scale) >= Math.round(FOOTER.urlTagline.size * scale) * 0.5,
+      'URL stack reserves room for a separate tagline line')
   })
 }
 
@@ -96,7 +110,8 @@ test('footer draw — produces a non-empty frame', () => {
   const ctx = canvas.getContext('2d')
   const layout = FooterLayout.draw(ctx, fmt.W, fmt.H)
   assert.ok(layout.left.length === 2 && layout.right.length === 2)
-  const data = ctx.getImageData(0, fmt.H - layout.barHeight, fmt.W, layout.barHeight).data
+  const barTop = FooterLayout.barTopInFrame(ctx, fmt.W, fmt.H)
+  const data = ctx.getImageData(0, barTop, fmt.W, layout.barHeight).data
   let lit = 0
   for (let i = 3; i < data.length; i += 4) if (data[i] > 0) lit++
   assert.ok(lit > 1000, `bar has lit pixels: ${lit}`)
@@ -136,6 +151,72 @@ test('footer generator — writes responsive PNGs that probe clean', () => {
     for (let i = 3; i < data.length; i += 4) if (data[i] > 0) lit++
     assert.ok(lit > 500, `W=${W} bar lit pixels ${lit}`)
   }
+})
+
+// The ticker docks above the footer's ACTUAL bar top (computed), never above
+// the static height token. Guards the regression where the ticker rode 10px
+// onto the bar after the bar grew past 180px.
+test('ticker docks strictly above the footer bar (no overlap)', () => {
+  const fmt = FORMATS[0]
+  const ctx = createCanvas(fmt.W, fmt.H).getContext('2d')
+  const layout = FooterLayout.compute(ctx, fmt.W)
+  const footerTop = FooterLayout.barTopInFrame(ctx, fmt.W, fmt.H)
+  const tickerH = 50
+  const margin = 14
+  const tickerY = footerTop - tickerH - margin
+  assert.ok(tickerY + tickerH <= footerTop, `ticker bottom ${tickerY + tickerH} <= footer top ${footerTop}`)
+})
+
+// The brand-close (last) scene: the tagline wraps into lines that fit and the
+// anchor badge sits between the tagline block and the footer bar top — never
+// clipped by the footer, never truncated.
+test('brand close — tagline wraps to fit and anchor clears the footer', async () => {
+  const { SceneEngine } = await import('../src/video/SceneEngine.mjs')
+  const { BROADCAST_TEXT } = await import('../src/style/text-tokens.mjs')
+  const close = BROADCAST_TEXT.close
+  const fmt = FORMATS[0]
+  const engine = new SceneEngine({ category: 'technology' })
+  const scene = {
+    type: 'brand_close',
+    duration: 3,
+    ticker: ['AI', 'Robotics', 'Cybersecurity', 'Space', 'Programming', 'Quantum', 'Biotech'],
+  }
+  // progress 1.0 = full brand-outro exposure (anchor + tagline fully in)
+  const buf = await engine.renderSceneFrame(scene, 1.0, [], 0, null)
+  const canvas = createCanvas(fmt.W, fmt.H)
+  const cctx = canvas.getContext('2d')
+  const { loadImage } = await import('@napi-rs/canvas')
+  const img = await loadImage(buf)
+  cctx.drawImage(img, 0, 0)
+
+  const countLit = (y0, y1, thresh = 130) => {
+    const d = cctx.getImageData(0, y0, fmt.W, y1 - y0).data
+    let n = 0
+    for (let i = 0; i < d.length; i += 4) {
+      if (d[i] > thresh && d[i + 1] > thresh && d[i + 2] > thresh) n++
+    }
+    return n
+  }
+
+  // Tagline block present (wrapped lines around the STAY WITH / brand area).
+  const tagLit = countLit(1120, 1280)
+  assert.ok(tagLit > 2000, `tagline renders content (lit=${tagLit})`)
+
+  // Anchor badge renders between the tagline and the footer bar.
+  const anchorLit = countLit(1270, 1350)
+  assert.ok(anchorLit > 800, `anchor badge renders content (lit=${anchorLit})`)
+
+  // Safe-zone contract: the anchor badge bottom never enters the footer bar.
+  const footerTop = FooterLayout.barTopInFrame(cctx, fmt.W, fmt.H)
+  const anchorBottom = footerTop - close.anchor.margin - close.anchor.badgeH + close.anchor.badgeH
+  assert.ok(anchorBottom <= footerTop, `anchor bottom ${anchorBottom} <= footer top ${footerTop}`)
+
+  // No truncation: the tagline max-width holds the full phrase on ≤ 2 lines.
+  const ctx2 = createCanvas(fmt.W, 1).getContext('2d')
+  ctx2.font = `900 ${close.tagline.size}px "Montserrat ExtraBold", sans-serif`
+  const fullW = ctx2.measureText('UNFILTERED BREAKING NEWS FROM THE FUTURE').width
+  assert.ok(close.tagline.maxWidth <= fmt.W - 160, 'tagline maxWidth fits within frame margins')
+  assert.ok(fullW > close.tagline.maxWidth, 'tagline genuinely wraps (was overflowing single line)')
 })
 
 void fs

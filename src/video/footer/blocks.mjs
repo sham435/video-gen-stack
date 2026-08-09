@@ -6,10 +6,20 @@ const F = BROADCAST_TEXT.footer
 // 'Montserrat ExtraBold'; Inter falls through to system sans if absent).
 export const FONT_BRAND = `'Montserrat ExtraBold', Inter, sans-serif`
 
-// ── Reusable blocks ─────────────────────────────────────────────────────────
+// ├─ Reusable blocks ─────────────────────────────────────────────────────
 // Each block is a pure measure + draw pair. Blocks receive the scale computed
 // by the layout pass (proportional to the 1080px design width) and a box
 // { x, y, w, h } given in canvas coordinates. No hard-coded positions.
+
+// Reduce a URL to its recognizable domain when the full string cannot fit in
+// the footer column — "sham435.github.io" reads far better than "https://…".
+function domainOf(url) {
+  const s = String(url || '')
+  const fn = s.indexOf('://')
+  const afterScheme = fn >= 0 ? s.slice(fn + 3) : s
+  const slash = afterScheme.indexOf('/')
+  return slash >= 0 ? afterScheme.slice(0, slash) : afterScheme
+}
 
 export const LogoBlock = {
   measure(ctx, scale) {
@@ -64,13 +74,14 @@ export const BrandBlock = {
     ctx.textAlign = 'left'
     ctx.fillText(data.brand || 'NEWS-MONSTER', box.x, top)
 
-    // Tagline — centered under the brand, pinned to the brand width.
+    // Tagline — centered under the brand, pinned to the brand width. Loosened
+    // leading (1.25) so the secondary line reads as a separate line.
     if (tag) {
       const tagH = Math.round(F.tagline.size * scale)
       ctx.font = `${F.tagline.weight} ${tagH}px ${FONT_BRAND}`
       ctx.fillStyle = F.muted
       const x = box.x + (box.w - ctx.measureText(tag).width) / 2
-      ctx.fillText(tag, x, top + brandH * 1.15)
+      ctx.fillText(tag, x, top + brandH * 1.25)
     }
     ctx.restore()
   },
@@ -186,7 +197,7 @@ export const UrlBlock = {
     const urlW = Math.min(measureText(ctx, F.url, scale, data.url), budget)
     const tagW = tag ? measureText(ctx, F.urlTagline, scale, tag) : 0
     const w = Math.max(urlW, Math.min(tagW, budget))
-    const h = urlH + (tag ? Math.round(F.urlTagline.size * scale) * 1.15 : 0)
+    const h = urlH + (tag ? Math.round(F.urlTagline.size * scale * F.urlLeading) : 0)
     return { w, h }
   },
 
@@ -198,9 +209,19 @@ export const UrlBlock = {
     ctx.save()
     const size = Math.round(F.url.size * scale)
     ctx.font = `${F.url.weight} ${size}px ${FONT_BRAND}`
-    // measure -> fit -> ellipsis: full URL at full size wins; only truncate
-    // when the width truly cannot hold the full string.
-    const display = ctx.measureText(url).width <= maxW ? url : ellipsize(ctx, url, maxW, F.url.weight, size)
+    // Prefer the full URL; when the column cannot hold it, fall back to the
+    // recognizable domain (everything after the scheme, before the first path
+    // slash) instead of an anonymous "https://…" ellipsis. Preference is given
+    // to showing the visually distinctive part of the URL.
+    let display = ctx.measureText(url).width <= maxW ? url : null
+    if (!display) {
+      const dom = domainOf(url)
+      if (dom && ctx.measureText(dom).width <= maxW) {
+        display = dom
+      } else {
+        display = ellipsize(ctx, url, maxW, F.url.weight, size)
+      }
+    }
 
     ctx.textBaseline = 'alphabetic'
     ctx.shadowColor = 'rgba(0,0,0,0.9)'
@@ -215,7 +236,7 @@ export const UrlBlock = {
       ctx.font = `${F.urlTagline.weight} ${tagH}px ${FONT_BRAND}`
       ctx.fillStyle = F.muted
       ctx.textAlign = 'right'
-      ctx.fillText(ellipsize(ctx, tag, maxW, F.urlTagline.weight, tagH), box.x + box.w, box.y + size + tagH * 1.15)
+      ctx.fillText(ellipsize(ctx, tag, maxW, F.urlTagline.weight, tagH), box.x + box.w, box.y + size + tagH * F.urlLeading)
     }
     ctx.restore()
   },

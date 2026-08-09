@@ -1,16 +1,17 @@
 import { DesignSystem } from '../../visuals/DesignSystem.mjs'
 import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
+import { headerLayout } from '../../layout/HeaderLayout.mjs'
 
 const { W, H } = DesignSystem
 
 export class BroadcastUILayer {
   draw(ctx, scene, progress, category) {
     const catStyle = DesignSystem.getCategoryStyle(category)
-    const overlays = DesignSystem.overlayDefaults
-
     const p = Math.min(1, progress * 1.5)
 
-    // LIVE indicator — 36px bold on a red pill with padding; never text-only
+    // LIVE indicator — sits immediately right of the NEWS-MONSTER brand pill
+    // (20px gap, same visual centerline) per the shared header layout. Never a
+    // hard-coded corner position. 36px bold on a red pill.
     const live = BROADCAST_TEXT.live
     const liveAlpha = (0.9 + Math.sin(progress * 6) * 0.1) * p
     ctx.save()
@@ -19,14 +20,16 @@ export class BroadcastUILayer {
     const liveFont = DesignSystem.getTypography('overlay', 'live')
     ctx.font = `${live.weight} ${live.size}px ${liveFont.font}, sans-serif`
 
-    const liveX = W - overlays.live.position.right - 80
-    const liveY = overlays.live.position.top + 14
-    const liveW = ctx.measureText('LIVE').width + live.padding[1] * 2
-    const liveH = live.size + live.padding[0] * 2
+    const header = headerLayout(ctx)
+    const liveX = header.live.x
+    const liveY = header.live.y
+    const liveW = header.live.w
+    const liveH = header.live.h
+    const centerY = liveY + liveH / 2
 
     ctx.fillStyle = live.bg
     ctx.beginPath()
-    ctx.roundRect(liveX, liveY - liveH / 2, liveW, liveH, live.borderRadius)
+    ctx.roundRect(liveX, liveY, liveW, liveH, live.borderRadius)
     ctx.fill()
 
     ctx.fillStyle = '#FFFFFF'
@@ -34,7 +37,7 @@ export class BroadcastUILayer {
     ctx.textBaseline = 'middle'
     ctx.shadowColor = 'rgba(0,0,0,0.8)'
     ctx.shadowBlur = 4
-    ctx.fillText('LIVE', liveX + liveW / 2, liveY + 1)
+    ctx.fillText('LIVE', liveX + liveW / 2, centerY + 1)
     ctx.shadowBlur = 0
     ctx.restore()
 
@@ -43,11 +46,14 @@ export class BroadcastUILayer {
     ctx.globalAlpha = catTagP
     ctx.font = `${DesignSystem.getTypography('badge', 'label').weight} ${DesignSystem.getTypography('badge', 'label').size}px ${DesignSystem.getTypography('badge', 'label').font}, sans-serif`
     const catLabel = category ? category.toUpperCase() : 'TECHNOLOGY'
-    const catX = overlays.category.position.left
-    const catY = overlays.category.position.top + 12
+    // Category chip sits BELOW the brand+LIVE header row (never over the
+    // NEWS-MONSTER pill); top-aligned to the header left edge.
+    const chipH = 26
+    const catX = header.brand.x
+    const catY = header.brand.y + header.brand.h + 12 + chipH / 2
     ctx.fillStyle = catStyle.colors.primary
     ctx.beginPath()
-    ctx.roundRect(catX, catY - 9, ctx.measureText(catLabel).width + 24, 26, 4)
+    ctx.roundRect(catX, catY - 9, ctx.measureText(catLabel).width + 24, chipH, 4)
     ctx.fill()
     ctx.fillStyle = '#FFFFFF'
     ctx.textAlign = 'left'
