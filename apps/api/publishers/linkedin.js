@@ -218,6 +218,22 @@ export async function shareVideo(token, memberUrn, videoUrl, commentary) {
   return { id, urn: videoUrn, ...data }
 }
 
+// Append the post's own feed URL to its commentary (e.g.
+// "...#news-monster\n\nhttps://www.linkedin.com/feed/update/<urn>") so the
+// status text carries the canonical link. Post ID must be a share/ugcPost URN.
+export async function updatePostCommentary(token, postUrn, commentary) {
+  const res = await fetch(`${BASE}/rest/posts/${encodeURIComponent(postUrn)}`, {
+    method: 'POST',
+    headers: { ...apiHeaders(token), 'X-RestLi-Method': 'PARTIAL_UPDATE' },
+    body: JSON.stringify({ patch: { $set: { commentary: (commentary || '').slice(0, 1500) } } }),
+  })
+  if (!res.ok) {
+    const text = await res.text().catch(() => '')
+    throw new Error(`LinkedIn update failed (${res.status}): ${text.slice(0, 300)}`)
+  }
+  return true
+}
+
 // Persisted tokens (written to .env by the callback route).
 export const accessToken = () => process.env.LINKEDIN_ACCESS_TOKEN
 export const refreshToken = () => process.env.LINKEDIN_REFRESH_TOKEN

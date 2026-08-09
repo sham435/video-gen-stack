@@ -185,7 +185,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             pipelineProfile: 'breaking',
             channel: 'NEWS-MONSTER',
           })
-          const desc = `${title}\n\nSource: ${article.source || 'NewsAPI'}\n\n${hashtags}`
+          const desc = `${title}\n\nSource: ${article.source || 'NewsAPI'}\n\n${hashtags}\n\nhttps://www.youtube.com/shorts/${result?.id}`
           const result = await uploadShort(
             `data:video/mp4;base64,${buffer.toString('base64')}`,
             title, desc,
@@ -199,15 +199,33 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           // fail the YouTube publish that already succeeded.
           if (process.env.LINKEDIN_ACCESS_TOKEN && process.env.LINKEDIN_MEMBER_URN) {
             try {
-              const { shareVideo } = await import('../apps/api/publishers/linkedin.js')
-              const liDesc = `${title}\n\nWatch on YouTube: https://youtu.be/${result?.id}\n\nSource: ${article.source || 'NewsAPI'}\n\n${hashtags}`
+              const { shareVideo, updatePostCommentary, authorUrn } = await import('../apps/api/publishers/linkedin.js')
+              // Mirror the YouTube description on LinkedIn: title, Source row,
+              // hashtags — then append the YouTube shorts link. The LinkedIn
+              // post's own feed URL is unknown until creation, so we add it in
+              // a PARTIAL_UPDATE right after (…https://lnkd.in post link).
+              const body = `${title}\n\nSource: ${article.source || 'NewsAPI'}\n\n${hashtags}\n\nhttps://www.youtube.com/shorts/${result?.id}`
               const li = await shareVideo(
                 process.env.LINKEDIN_ACCESS_TOKEN,
                 process.env.LINKEDIN_MEMBER_URN,
                 `data:video/mp4;base64,${buffer.toString('base64')}`,
-                liDesc
+                body
               )
-              console.log(`[LINKEDIN] post=${li?.id || 'ok'} — shared https://www.linkedin.com/feed/update/${li?.id}`)
+              const postId = li?.id
+              if (postId) {
+                try {
+                  await updatePostCommentary(
+                    process.env.LINKEDIN_ACCESS_TOKEN,
+                    postId,
+                    `${body}\n\nhttps://www.linkedin.com/feed/update/${postId}`
+                  )
+                  console.log(`[LINKEDIN] post=${postId} — shared https://www.linkedin.com/feed/update/${postId}`)
+                } catch (ue) {
+                  console.log(`[LINKEDIN] posted ${postId} (link append skipped: ${ue.message})`)
+                }
+              } else {
+                console.log(`[LINKEDIN] post=ok — shared https://www.linkedin.com/feed/update/${li?.id || li?.urn}`)
+              }
             } catch (e) {
               console.log(`[LINKEDIN] skipped (best-effort): ${e.message}`)
             }
