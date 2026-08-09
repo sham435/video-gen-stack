@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-09T10:35:58.103Z",
+  "updatedAt": "2026-08-09T11:39:55.756Z",
   "videos": [
+    {
+      "id": "OSoNphtnZaI",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-09T11:31:00+00:00",
+      "publishedLabel": "Aug 9, 11:31 AM",
+      "thumbnail": "https://i4.ytimg.com/vi/OSoNphtnZaI/hqdefault.jpg"
+    },
     {
       "id": "wOjFOzPaRYw",
       "title": "Werewolf transformed my old gadgets into USB-C powered ones | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T13:47:48+00:00",
       "publishedLabel": "Aug 8, 01:47 PM",
       "thumbnail": "https://i3.ytimg.com/vi/vvuKKDBWJaY/hqdefault.jpg"
-    },
-    {
-      "id": "b9GMdRUf0iQ",
-      "title": "Henry Ford: \"Si un trabajador se considera experto, lo despedimos, nadie se considera un e | NEWS-MO",
-      "publishedAt": "2026-08-08T12:46:20+00:00",
-      "publishedLabel": "Aug 8, 12:46 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/b9GMdRUf0iQ/hqdefault.jpg"
     }
   ]
 }
