@@ -3,6 +3,9 @@ import { drawBreakingBanner, drawGlitchOverlay } from '../../visuals/BreakingBan
 import { drawHeadlineCard } from '../../visuals/HeadlineCard.mjs'
 import { drawAnchorBadge } from '../../visuals/AnchorBadge.mjs'
 import { TextTimelineScheduler } from '../TextTimelineScheduler.mjs'
+import { wrapText } from '../../layout/wrapText.mjs'
+import { FooterLayout } from '../footer/FooterLayout.mjs'
+import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
 
 const { W, H } = DesignSystem
 
@@ -338,20 +341,59 @@ export class InformationLayer {
       ctx.restore()
     }
 
-    if (tagP > 0) {
+if (tagP > 0) {
+      // Tagline wraps to the close-scene maxWidth (never truncates) and every
+      // wrapped line gets the shared leading token — loose enough to read as
+      // separate lines. The block is centered just inside the safe top zone.
+      const close = BROADCAST_TEXT.close
+      const tagSize = close.tagline.size
+      const tagLeading = close.tagline.leading
       ctx.save()
       ctx.globalAlpha = tagP
-      ctx.font = '900 40px "Montserrat ExtraBold", sans-serif'
+      ctx.font = `900 ${tagSize}px "Montserrat ExtraBold", sans-serif`
       ctx.fillStyle = 'rgba(255,255,255,0.92)'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
-      ctx.fillText('UNFILTERED BREAKING NEWS', W / 2, H * 0.62)
-      ctx.fillText('FROM THE FUTURE', W / 2, H * 0.62 + 58)
+      const tagLines = wrapText(ctx, 'UNFILTERED BREAKING NEWS FROM THE FUTURE', close.tagline.maxWidth, 2)
+      const leading = tagSize * tagLeading
+      const blockH = tagLines.length * leading
+      // Center the wrapped block on the headline anchor line.
+      const blockTop = H * 0.60 - blockH / 2 + tagSize / 2
+      tagLines.forEach((line, i) => {
+        ctx.font = `900 ${tagSize}px "Montserrat ExtraBold", sans-serif`
+        ctx.fillText(line, W / 2, blockTop + leading * i + tagSize * 0.5)
+      })
       ctx.restore()
+
+      // News source credit — revealed after the tagline so the end card always
+      // attributes the story ("Source: The Washington Post"), matching the
+      // publish description. Never replaces the brand outro.
+      const src = scene.source || 'News'
+      const srcP = Math.min(1, Math.max(0, (t - 1.6) / 0.4))
+      if (srcP > 0 && src !== 'News') {
+        ctx.save()
+        ctx.globalAlpha = srcP
+        const srcFont = '700 34px Inter, sans-serif'
+        ctx.font = srcFont
+        ctx.fillStyle = 'rgba(255,255,255,0.78)'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.fillText(`Source: ${src}`, W / 2, H * 0.60 + blockH / 2 + tagSize + 42)
+        ctx.restore()
+      }
+
+      // Anchor badge sits below the tagline block and is clamped so the pill
+      // clears the footer bar top — the tagline can never collide with it.
+      const footerTop = FooterLayout.barTopInFrame(ctx, W, H)
+      const anchor = close.anchor
+      const taglineBottom = blockTop + blockH
+      const badgeY = Math.min(
+        taglineBottom + anchor.gap,
+        footerTop - anchor.margin - anchor.badgeH
+      )
+      drawAnchorBadge(ctx, 'sham435', anchorP, { y: badgeY })
     }
 
     ctx.restore()
-
-    drawAnchorBadge(ctx, 'sham435', anchorP, 20)
   }
 }

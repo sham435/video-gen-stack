@@ -22,14 +22,16 @@ export const BRAND_OUTRO = {
   },
 }
 
-/** Build the fixed close scene — identical for every video. */
-export function brandOutroScene() {
+/** Build the fixed close scene — identical for every video, plus the story's
+ * news source so the end card can credit it ("Source: The Washington Post"). */
+export function brandOutroScene(article = {}) {
   return {
     id: 'close',
     type: 'close',
     purpose: 'brand outro',
     duration: BRAND_OUTRO.duration,
     narration: BRAND_OUTRO.narration,
+    source: article.source || 'News',
     visual: { subject: 'NEWS-MONSTER brand logo', style: 'red and cyan futuristic', composition: 'medium' },
     camera: 'pull_back',
     motion: null,

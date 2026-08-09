@@ -23,10 +23,11 @@ export class StoryDirector {
 
   // The last scene is ALWAYS the fixed brand outro — the LLM is told not to
   // invent close text, and this overwrites whatever it returned anyway, so
-  // article words can never leak into the ending.
-  applyBrandOutro(story) {
+  // article words can never leak into the ending. The story source still
+  // travels through so the end card can credit it.
+  applyBrandOutro(story, article = {}) {
     const scenePlan = Array.isArray(story.scenePlan) ? story.scenePlan.slice(0, -1) : []
-    scenePlan.push(brandOutroScene())
+    scenePlan.push(brandOutroScene(article))
     return { ...story, scenePlan, brandMoment: { type: 'cta', sceneIndex: scenePlan.length - 1 } }
   }
 
@@ -164,6 +165,6 @@ Target Format: ${targetFormat}`
       console.log(`StoryDirector: total duration ${total}s out of range, falling back`)
       return this.applyBrandOutro(this.fallbackPlan(article))
     }
-    return this.applyBrandOutro(story)
+    return this.applyBrandOutro(story, article)
   }
 }
