@@ -90,7 +90,7 @@ test('footer URL — does not overlap AVAILABLE ON', () => {
 
 test('footer — actually visible in the composed frame (bright text after post-process)', async () => {
   const ctx = await loadIntoCanvas(await renderBrandCloseFrame(1.0))
-  const footerTop = H - FooterLayout.compute(ctx, W).barHeight
+  const footerTop = FooterLayout.barTopInFrame(ctx, W, H)
   // URL text glyphs occupy the upper rows of the bar (~footerTop+32..66).
   const s = regionStats(ctx, 380, footerTop + 32, 770, footerTop + 72)
   assert.ok(s.maxB >= 200, `URL area max brightness ${s.maxB} must be ≥200 (was ~124 before fix)`)

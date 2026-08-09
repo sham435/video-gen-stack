@@ -57,7 +57,7 @@ export class FooterLayout {
   static DEFAULT_DATA = {
     brand: 'NEWS-MONSTER',
     tagline: 'Breaking News, AI, Science, Sports & Future Tech',
-    url: 'https://sham435.github.io/video-gen-stack/',
+    url: 'https://video-gen-stack-production.up.railway.app/',
     urlTagline: 'Open Source AI Video Platform',
   }
 
@@ -93,8 +93,9 @@ static barTopInFrame(ctx, W, H, data = {}) {
 
     // Stack heights inside each end zone.
     const logo = LogoBlock.measure(ctx, scale)
+    const brand = BrandBlock.measure(ctx, scale, D)
     const platform = PlatformBlock.measure(ctx, scale)
-    const leftH = logo.h + vGap + platform.h
+    const leftH = logo.h + vGap + brand.h + vGap + platform.h
 
     const subscribe = SubscribeBlock.measure(ctx, scale)
     const url = UrlBlock.measure(ctx, scale, D, zoneW.right)
@@ -112,18 +113,19 @@ static barTopInFrame(ctx, W, H, data = {}) {
       { key: 'right', x: rightX, w: zoneW.right },
     ]
 
-    // Left zone stack: logo on top, AVAILABLE ON + icons below it.
+    // Left zone stack: logo, NEWS-MONSTER wordmark, AVAILABLE ON + icons.
     const leftTop = Math.round(F.padding.y * scale) + (barHeight - leftH - Math.round(F.padding.y * scale) * 2) / 2
     const leftColumns = [
       { key: 'logo', block: LogoBlock, x: leftX, y: leftTop, w: logo.w, h: logo.h },
-      { key: 'platform', block: PlatformBlock, x: leftX, y: leftTop + logo.h + vGap, w: platform.w, h: platform.h },
+      { key: 'brand', block: BrandBlock, x: leftX, y: leftTop + logo.h + vGap, w: brand.w, h: brand.h },
+      { key: 'platform', block: PlatformBlock, x: leftX, y: leftTop + logo.h + vGap + brand.h + vGap, w: platform.w, h: platform.h },
     ]
 
     // Right zone: pill on top, URL + tagline beneath — right-aligned group.
     // The URL text baseline is aligned with the "AVAILABLE ON" label baseline
     // (left zone) so the two brand lines sit on the same optical line.
     const rightTop = leftTop + (leftH - rightH) / 2
-    const platformY = leftTop + logo.h + vGap
+    const platformY = leftTop + logo.h + vGap + brand.h + vGap
     const availableBaseline = platformY + Math.round(F.available.size * scale)
     const urlBaseline = Math.round(F.url.size * scale)
     let urlY = availableBaseline - urlBaseline

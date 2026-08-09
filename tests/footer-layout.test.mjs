@@ -64,12 +64,16 @@ for (const fmt of FORMATS) {
       )
     }
 
-    // 5. Left stack: logo then AVAILABLE ON, stacked vertically inside left zone.
-    const [logo, platform] = layout.left
+    // 5. Left stack: logo -> NEWS-MONSTER brand -> AVAILABLE ON, stacked
+    //    vertically inside left zone (5-column footer: Logo | Brand+Tagline |
+    //    AVAILABLE ON | URL | Subscribe).
+    const [logo, brand, platform] = layout.left
     assert.equal(logo.key, 'logo')
+    assert.equal(brand.key, 'brand')
     assert.equal(platform.key, 'platform')
-    assert.ok(logo.h > 0 && platform.h > 0)
-    assert.ok(platform.y + PAD >= logo.y + logo.h, 'logo -> platform overlap')
+    assert.ok(logo.h > 0 && brand.h > 0 && platform.h > 0)
+    assert.ok(brand.y + PAD >= logo.y + logo.h, 'logo -> brand overlap')
+    assert.ok(platform.y + PAD >= brand.y + brand.h, 'brand -> platform overlap')
 
     // 6. Right stack: pill on top, URL+tagline beneath, inside right zone.
     const [pill, url] = layout.right
@@ -109,7 +113,7 @@ test('footer draw — produces a non-empty frame', () => {
   const canvas = createCanvas(fmt.W, fmt.H)
   const ctx = canvas.getContext('2d')
   const layout = FooterLayout.draw(ctx, fmt.W, fmt.H)
-  assert.ok(layout.left.length === 2 && layout.right.length === 2)
+  assert.ok(layout.left.length === 3 && layout.right.length === 2)
   const barTop = FooterLayout.barTopInFrame(ctx, fmt.W, fmt.H)
   const data = ctx.getImageData(0, barTop, fmt.W, layout.barHeight).data
   let lit = 0
