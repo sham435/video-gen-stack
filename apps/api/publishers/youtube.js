@@ -186,7 +186,7 @@ export async function postComment(videoId, text) {
   const data = await res.json()
   if (data.error) {
     if (String(data.error.message).includes('parentId')) {
-      console.warn('⚠️  Comment post failed: YouTube no longer allows API top-level comments. Post one manually in Studio and pin it, then set YOUTUBE_PARENT_COMMENT_ID to that comment\'s ID so the pipeline replies to it.')
+      console.warn('⚠️  Comment post failed: YouTube no longer allows API top-level comments. Pin one manually in Studio (https://support.google.com/youtube/answer/171664?hl=en), then set YOUTUBE_PARENT_COMMENT_ID to that comment\'s ID so the pipeline replies to it.')
     } else {
       console.warn(`⚠️  Comment post failed: ${data.error.message}`)
     }

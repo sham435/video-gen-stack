@@ -23,15 +23,18 @@ export const BRAND_OUTRO = {
 }
 
 /** Build the fixed close scene — identical for every video, plus the story's
- * news source so the end card can credit it ("Source: The Washington Post"). */
-export function brandOutroScene(article = {}) {
+ * news source so the end card can credit it ("Source: The Washington Post").
+ * When a topic CTA is supplied it travels with the scene so the renderer can
+ * draw the engagement question on-screen — no manual pinned comment needed. */
+export function brandOutroScene(article = {}, cta = null) {
   return {
     id: 'close',
     type: 'close',
     purpose: 'brand outro',
     duration: BRAND_OUTRO.duration,
-    narration: BRAND_OUTRO.narration,
+    narration: cta?.narration || BRAND_OUTRO.narration,
     source: article.source || 'News',
+    cta: cta ? { text: cta.cta, caption: cta.caption, engagement: cta.engagement } : null,
     visual: { subject: 'NEWS-MONSTER brand logo', style: 'red and cyan futuristic', composition: 'medium' },
     camera: 'pull_back',
     motion: null,

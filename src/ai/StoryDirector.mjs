@@ -24,10 +24,13 @@ export class StoryDirector {
   // The last scene is ALWAYS the fixed brand outro — the LLM is told not to
   // invent close text, and this overwrites whatever it returned anyway, so
   // article words can never leak into the ending. The story source still
-  // travels through so the end card can credit it.
+  // travels through so the end card can credit it, and the topic CTA is
+  // carried in so the renderer can draw the engagement question on-screen.
   applyBrandOutro(story, article = {}) {
     const scenePlan = Array.isArray(story.scenePlan) ? story.scenePlan.slice(0, -1) : []
-    scenePlan.push(brandOutroScene(article))
+    let cta = null
+    try { cta = new TopicCtaBuilder().build(article) } catch {}
+    scenePlan.push(brandOutroScene(article, cta))
     return { ...story, scenePlan, brandMoment: { type: 'cta', sceneIndex: scenePlan.length - 1 } }
   }
 

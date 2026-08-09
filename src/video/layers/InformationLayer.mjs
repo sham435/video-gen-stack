@@ -382,6 +382,29 @@ if (tagP > 0) {
         ctx.restore()
       }
 
+      // Engagement question — topic CTA rendered on-screen so no manual pinned
+      // comment is needed (YouTube's API blocks top-level comments; the render
+      // carries the CTA instead). Question fades in above the footer bar.
+      const q = scene.cta?.engagement || scene.cta?.text
+      const qP = Math.min(1, Math.max(0, (t - 2.2) / 0.4))
+      if (q && qP > 0) {
+        const footerTop = FooterLayout.barTopInFrame(ctx, W, H)
+        // Keep the question clear of the source line and above the anchor/footer.
+        const qY = Math.min(H * 0.60 + blockH / 2 + tagSize + 110, footerTop - 200)
+        ctx.save()
+        ctx.globalAlpha = qP
+        ctx.font = '800 40px Inter, sans-serif'
+        ctx.fillStyle = '#FFFFFF'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.shadowColor = 'rgba(0,0,0,0.9)'
+        ctx.shadowBlur = 10
+        const qLines = wrapText(ctx, q, W - 160, 2)
+        qLines.forEach((line, i) => ctx.fillText(line, W / 2, qY + i * 48))
+        ctx.shadowBlur = 0
+        ctx.restore()
+      }
+
       // Anchor badge sits below the tagline block and is clamped so the pill
       // clears the footer bar top — the tagline can never collide with it.
       const footerTop = FooterLayout.barTopInFrame(ctx, W, H)
