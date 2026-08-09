@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-09T11:39:55.756Z",
+  "updatedAt": "2026-08-09T12:08:59.615Z",
   "videos": [
+    {
+      "id": "U203iMJ7ygw",
+      "title": "The mall rink where they fell in love and skated for nearly 60 years is closing - The Wash | NEWS-MO",
+      "publishedAt": "2026-08-09T12:00:23+00:00",
+      "publishedLabel": "Aug 9, 12:00 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/U203iMJ7ygw/hqdefault.jpg"
+    },
     {
       "id": "OSoNphtnZaI",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T14:34:44+00:00",
       "publishedLabel": "Aug 8, 02:34 PM",
       "thumbnail": "https://i4.ytimg.com/vi/kYmgHLDSNcs/hqdefault.jpg"
-    },
-    {
-      "id": "vvuKKDBWJaY",
-      "title": "SoftBank Uses OpenAI Stake to Borrow $10 Billion | NEWS-MONSTER",
-      "publishedAt": "2026-08-08T13:47:48+00:00",
-      "publishedLabel": "Aug 8, 01:47 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/vvuKKDBWJaY/hqdefault.jpg"
     }
   ]
 }
