@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-10T14:08:08.360Z",
+  "updatedAt": "2026-08-10T15:09:06.652Z",
   "videos": [
+    {
+      "id": "vpaF8YsSmbY",
+      "title": "Dave Ramsey has blunt advice on major 401(k), IRA decision - thestreet.com | NEWS-MONSTER",
+      "publishedAt": "2026-08-10T15:00:20+00:00",
+      "publishedLabel": "Aug 10, 03:00 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/vpaF8YsSmbY/hqdefault.jpg"
+    },
     {
       "id": "0vAPfk3h7P8",
       "title": "Stocks Rise After Cooler-Than-Expected July Jobs Data | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T18:42:03+00:00",
       "publishedLabel": "Aug 8, 06:42 PM",
       "thumbnail": "https://i3.ytimg.com/vi/NB8IRWCF-X8/hqdefault.jpg"
-    },
-    {
-      "id": "VwTTqeXNGd4",
-      "title": "Why SpaceX Stock Can Break Its Brutal 4-Week Slump Today - Barron's | NEWS-MONSTER",
-      "publishedAt": "2026-08-08T18:01:21+00:00",
-      "publishedLabel": "Aug 8, 06:01 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/VwTTqeXNGd4/hqdefault.jpg"
     }
   ]
 }
