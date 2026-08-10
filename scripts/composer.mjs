@@ -185,7 +185,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             pipelineProfile: 'breaking',
             channel: 'NEWS-MONSTER',
           })
-          const desc = `${title}\n\nSource: ${article.source || 'NewsAPI'}\n\n${hashtags}\n\nhttps://www.youtube.com/shorts/${result?.id}`
+          const desc = `${title}\n\nSource: ${article.source || 'NewsAPI'}\n\n${hashtags}`
           const result = await uploadShort(
             `data:video/mp4;base64,${buffer.toString('base64')}`,
             title, desc,
