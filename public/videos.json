@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-10T17:08:15.152Z",
+  "updatedAt": "2026-08-10T18:04:24.164Z",
   "videos": [
+    {
+      "id": "zKr0QUZ9BaM",
+      "title": "Zuckerberg Was Not On Yacht When Nearby Ship Needed Assistance, Representative Says - Forb | NEWS-MO",
+      "publishedAt": "2026-08-10T17:55:25+00:00",
+      "publishedLabel": "Aug 10, 05:55 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/zKr0QUZ9BaM/hqdefault.jpg"
+    },
     {
       "id": "eDL3DTHxfIc",
       "title": "Stocks Rise After Cooler-Than-Expected July Jobs Data | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T20:30:42+00:00",
       "publishedLabel": "Aug 8, 08:30 PM",
       "thumbnail": "https://i2.ytimg.com/vi/Y5UPC_W88Uw/hqdefault.jpg"
-    },
-    {
-      "id": "KmcGSCD02jo",
-      "title": "Stocks Rise After Cooler-Than-Expected July Jobs Data | NEWS-MONSTER",
-      "publishedAt": "2026-08-08T19:59:58+00:00",
-      "publishedLabel": "Aug 8, 07:59 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/KmcGSCD02jo/hqdefault.jpg"
     }
   ]
 }
