@@ -112,7 +112,83 @@ export async function sharePost(token, memberUrn, commentary, linkUrl = null) {
   return { id, urn: id, ...data }
 }
 
-// Upload a video (mp4) and post it. Returns the created post id/urn.
+// Upload an image (png/jpeg) and post it with commentary (colourful
+// promotional post). 2026 Images API: initializeUpload → PUT bytes →
+// post with content.media.id = image URN. Falls back to a text/URL share
+// when the image upload fails (non-fatal for distribution).
+export async function shareImage(token, memberUrn, imageUrl, commentary, linkUrl = null) {
+  let buffer
+  if (String(imageUrl).startsWith('data:')) {
+    const m = /^data:[^;,]+;base64,(.+)$/.exec(imageUrl)
+    if (!m) throw new Error('Unsupported data: URL (only base64 is supported)')
+    buffer = Buffer.from(m[1], 'base64')
+  } else if (/^https?:\/\//.test(imageUrl)) {
+    const r = await fetch(imageUrl, { signal: AbortSignal.timeout(60000) })
+    if (!r.ok) throw new Error(`Failed to fetch image: ${r.status}`)
+    buffer = Buffer.from(await r.arrayBuffer())
+  } else {
+    // Local path
+    const { readFileSync } = await import('node:fs')
+    buffer = readFileSync(imageUrl)
+  }
+  if (!buffer.byteLength) throw new Error('Image buffer is empty')
+
+  const owner = authorUrn(memberUrn)
+  const init = await fetch(`${BASE}/rest/images?action=initializeUpload`, {
+    method: 'POST',
+    headers: apiHeaders(token),
+    body: JSON.stringify({
+      initializeUploadRequest: { owner, fileSizeBytes: buffer.byteLength, uploadCaptions: false },
+    }),
+  })
+  const initData = await init.json()
+  const value = initData?.value || {}
+  const uploadUrl = value?.uploadInstructions?.[0]?.uploadUrl
+  const imageUrn = value?.image || value?.asset
+  if (!uploadUrl || !imageUrn) {
+    throw new Error(`LinkedIn image init failed: ${JSON.stringify(initData).slice(0, 400)}`)
+  }
+
+  const up = await fetch(uploadUrl, {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/octet-stream' },
+    body: buffer,
+  })
+  if (!up.ok) throw new Error(`LinkedIn image upload failed: ${up.status} ${await up.text().catch(() => '')}`)
+
+  const body = {
+    author: owner,
+    commentary: (commentary || '').slice(0, 1500),
+    visibility: 'PUBLIC',
+    distribution: { feedDistribution: 'MAIN_FEED', targetEntities: [], thirdPartyDistributionChannels: [] },
+    lifecycleState: 'PUBLISHED',
+    isReshareDisabledByAuthor: false,
+    content: { media: { title: 'NEWS-MONSTER', id: imageUrn } },
+  }
+  if (linkUrl) {
+    body.content = {
+      article: {
+        source: linkUrl.slice(0, 2000),
+        title: 'NEWS-MONSTER',
+        description: 'Watch the full story on YouTube.',
+      },
+    }
+  }
+
+  const res = await fetch(`${BASE}/rest/posts`, {
+    method: 'POST',
+    headers: apiHeaders(token),
+    body: JSON.stringify(body),
+  })
+  const text = await res.text()
+  const data = text ? JSON.parse(text).catch(() => ({})) : {}
+  if (!res.ok) {
+    const msg = data.message || data.serviceErrorCode || text.slice(0, 300)
+    throw new Error(`LinkedIn image post failed (${res.status}): ${msg}`)
+  }
+  const id = res.headers.get('x-restli-id') || data.id || data.urn || null
+  return { id, urn: id, imageUrn, ...data }
+}
 // 2026 Videos API: initializeUpload → PUT bytes (capture ETag part id) →
 // finalizeUpload → post with content.media.id = video URN.
 export async function shareVideo(token, memberUrn, videoUrl, commentary) {

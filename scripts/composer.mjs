@@ -233,6 +233,31 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             console.log('[LINKEDIN] skipped — LINKEDIN_ACCESS_TOKEN/LINKEDIN_MEMBER_URN not set')
           }
 
+          // POST-PUBLISH SOCIAL DISTRIBUTION — the video is confirmed live on
+          // YouTube (result.id is set). Dispatch the promotional post to
+          // LinkedIn + YouTube Community through the idempotent manager.
+          // Best-effort: any platform failure is persisted but NEVER fails or
+          // rolls back the YouTube publication that already succeeded.
+          try {
+            const { SocialDistributionManager } = await import('../src/publishing/SocialDistributionManager.mjs')
+            const sdm = new SocialDistributionManager()
+            const dist = await sdm.distribute({
+              videoId: result?.id,
+              title: article.title || title,
+              videoUrl: `https://youtu.be/${result?.id}`,
+              thumbnailPath: coverPath,
+              category: category || 'technology',
+              hook: `${article.title?.split(' ').slice(0, 5).join(' ') || 'This'} — here's what just happened.`,
+              summary: (article.description || '').slice(0, 160) || `A story you should see from the desk of NEWS-MONSTER.`,
+            })
+            sdm.close()
+            for (const [platform, r] of Object.entries(dist.results || {})) {
+              console.log(`[DISTRIBUTE] ${platform}: ${r.status}${r.reason ? ` (${r.reason})` : ''}${r.postId ? ` postId=${r.postId}` : ''}${r.url ? ` url=${r.url}` : ''}`)
+            }
+          } catch (e) {
+            console.log(`[DISTRIBUTE] skipped (best-effort): ${e.message}`)
+          }
+
           // Community loop — post the topic-specific pinned-comment question.
           // The 100% 'stayed to watch' audience needs a reason to comment.
           let commentEvent = null

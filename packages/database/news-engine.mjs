@@ -297,6 +297,32 @@ const MIGRATIONS = [
       CREATE INDEX IF NOT EXISTS idx_approvals_cid ON approvals(conversation_id, tool);
     `,
   },
+  {
+    // v4 — post-publish social distribution state. One row per (video, platform,
+    // distribution type). Idempotent: a worker restart can NEVER create two
+    // LinkedIn posts for the same video because of the UNIQUE constraint.
+    version: 4,
+    sql: `
+      CREATE TABLE IF NOT EXISTS social_distributions (
+        id               INTEGER PRIMARY KEY AUTOINCREMENT,
+        video_id         TEXT NOT NULL,
+        platform         TEXT NOT NULL,
+        distribution_type TEXT NOT NULL DEFAULT 'promotional_post',
+        status           TEXT NOT NULL DEFAULT 'pending'
+                         CHECK(status IN ('pending','publishing','published','failed','unsupported','skipped')),
+        post_id          TEXT,
+        post_url         TEXT,
+        payload          TEXT NOT NULL DEFAULT '{}',
+        error            TEXT,
+        attempts         INTEGER NOT NULL DEFAULT 0,
+        created_at       TEXT NOT NULL DEFAULT (datetime('now')),
+        updated_at       TEXT NOT NULL DEFAULT (datetime('now')),
+        UNIQUE(video_id, platform, distribution_type)
+      );
+      CREATE INDEX IF NOT EXISTS idx_social_dist_status ON social_distributions(status, platform, updated_at);
+      CREATE INDEX IF NOT EXISTS idx_social_dist_video ON social_distributions(video_id);
+    `,
+  },
 ]
 
 export function getDb() {
