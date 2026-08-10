@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-10T16:10:13.225Z",
+  "updatedAt": "2026-08-10T17:08:15.152Z",
   "videos": [
+    {
+      "id": "eDL3DTHxfIc",
+      "title": "Stocks Rise After Cooler-Than-Expected July Jobs Data | NEWS-MONSTER",
+      "publishedAt": "2026-08-10T17:00:31+00:00",
+      "publishedLabel": "Aug 10, 05:00 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/eDL3DTHxfIc/hqdefault.jpg"
+    },
     {
       "id": "eX9vSV00Xks",
       "title": "49ers coach says his Tesla was on Autopilot when he crashed | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T19:59:58+00:00",
       "publishedLabel": "Aug 8, 07:59 PM",
       "thumbnail": "https://i4.ytimg.com/vi/KmcGSCD02jo/hqdefault.jpg"
-    },
-    {
-      "id": "9WzbeIzARks",
-      "title": "Werewolf transformed my old gadgets into USB-C powered ones | NEWS-MONSTER",
-      "publishedAt": "2026-08-08T19:32:09+00:00",
-      "publishedLabel": "Aug 8, 07:32 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/9WzbeIzARks/hqdefault.jpg"
     }
   ]
 }
