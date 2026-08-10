@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-10T15:09:06.652Z",
+  "updatedAt": "2026-08-10T16:10:13.225Z",
   "videos": [
+    {
+      "id": "eX9vSV00Xks",
+      "title": "49ers coach says his Tesla was on Autopilot when he crashed | NEWS-MONSTER",
+      "publishedAt": "2026-08-10T16:02:35+00:00",
+      "publishedLabel": "Aug 10, 04:02 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/eX9vSV00Xks/hqdefault.jpg"
+    },
     {
       "id": "vpaF8YsSmbY",
       "title": "Dave Ramsey has blunt advice on major 401(k), IRA decision - thestreet.com | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T19:32:09+00:00",
       "publishedLabel": "Aug 8, 07:32 PM",
       "thumbnail": "https://i2.ytimg.com/vi/9WzbeIzARks/hqdefault.jpg"
-    },
-    {
-      "id": "NB8IRWCF-X8",
-      "title": "Idaho police release chilling new video of In-N-Out mass shooting | NEWS-MONSTER",
-      "publishedAt": "2026-08-08T18:42:03+00:00",
-      "publishedLabel": "Aug 8, 06:42 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/NB8IRWCF-X8/hqdefault.jpg"
     }
   ]
 }
