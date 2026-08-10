@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-10T18:04:24.164Z",
+  "updatedAt": "2026-08-10T19:06:29.399Z",
   "videos": [
+    {
+      "id": "RKAENLFVkkw",
+      "title": "Billionaire investor shorting SpaceX says one possible fix won't work | NEWS-MONSTER",
+      "publishedAt": "2026-08-10T18:58:19+00:00",
+      "publishedLabel": "Aug 10, 06:58 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/RKAENLFVkkw/hqdefault.jpg"
+    },
     {
       "id": "zKr0QUZ9BaM",
       "title": "Zuckerberg Was Not On Yacht When Nearby Ship Needed Assistance, Representative Says - Forb | NEWS-MO",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T21:04:02+00:00",
       "publishedLabel": "Aug 8, 09:04 PM",
       "thumbnail": "https://i2.ytimg.com/vi/e3LUzFQCx84/hqdefault.jpg"
-    },
-    {
-      "id": "Y5UPC_W88Uw",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-08T20:30:42+00:00",
-      "publishedLabel": "Aug 8, 08:30 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/Y5UPC_W88Uw/hqdefault.jpg"
     }
   ]
 }
