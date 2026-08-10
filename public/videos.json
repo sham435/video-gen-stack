@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-10T05:03:41.263Z",
+  "updatedAt": "2026-08-10T05:13:55.371Z",
   "videos": [
+    {
+      "id": "oQaDNo3_Rh4",
+      "title": "iPhone Ultra colors: New leak reveals silver and dark blue - 9to5Mac | NEWS-MONSTER",
+      "publishedAt": "2026-08-10T05:10:20+00:00",
+      "publishedLabel": "Aug 10, 05:10 AM",
+      "thumbnail": "https://i4.ytimg.com/vi/oQaDNo3_Rh4/hqdefault.jpg"
+    },
     {
       "id": "plCwWmeCwec",
       "title": "Experts Disagree On USD | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T15:43:18+00:00",
       "publishedLabel": "Aug 8, 03:43 PM",
       "thumbnail": "https://i1.ytimg.com/vi/4Z-XMz3LQko/hqdefault.jpg"
-    },
-    {
-      "id": "S2wswWyCqYI",
-      "title": "Experts Disagree On GTA | NEWS-MONSTER",
-      "publishedAt": "2026-08-08T15:06:26+00:00",
-      "publishedLabel": "Aug 8, 03:06 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/S2wswWyCqYI/hqdefault.jpg"
     }
   ]
 }
