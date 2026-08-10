@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-10T12:21:05.063Z",
+  "updatedAt": "2026-08-10T14:08:08.360Z",
   "videos": [
+    {
+      "id": "0vAPfk3h7P8",
+      "title": "Stocks Rise After Cooler-Than-Expected July Jobs Data | NEWS-MONSTER",
+      "publishedAt": "2026-08-10T14:00:18+00:00",
+      "publishedLabel": "Aug 10, 02:00 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/0vAPfk3h7P8/hqdefault.jpg"
+    },
     {
       "id": "2tZZ2ybBDnk",
       "title": "Minecraft's Latest Update Is Now Live, Here Are The Full Patch Notes - Nintendo Life | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T18:01:21+00:00",
       "publishedLabel": "Aug 8, 06:01 PM",
       "thumbnail": "https://i3.ytimg.com/vi/VwTTqeXNGd4/hqdefault.jpg"
-    },
-    {
-      "id": "YPPrJFBG8hQ",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-08T17:09:49+00:00",
-      "publishedLabel": "Aug 8, 05:09 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/YPPrJFBG8hQ/hqdefault.jpg"
     }
   ]
 }
