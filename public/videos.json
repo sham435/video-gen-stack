@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-10T11:44:41.247Z",
+  "updatedAt": "2026-08-10T12:21:05.063Z",
   "videos": [
+    {
+      "id": "2tZZ2ybBDnk",
+      "title": "Minecraft's Latest Update Is Now Live, Here Are The Full Patch Notes - Nintendo Life | NEWS-MONSTER",
+      "publishedAt": "2026-08-10T12:16:30+00:00",
+      "publishedLabel": "Aug 10, 12:16 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/2tZZ2ybBDnk/hqdefault.jpg"
+    },
     {
       "id": "dhI7kRC_z5E",
       "title": "Historic Maine house selling for $1 — but under one condition or it’ll face demolition - N | NEWS-MO",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T17:09:49+00:00",
       "publishedLabel": "Aug 8, 05:09 PM",
       "thumbnail": "https://i2.ytimg.com/vi/YPPrJFBG8hQ/hqdefault.jpg"
-    },
-    {
-      "id": "2qpwdOqjJws",
-      "title": "Meta Ordered to Pay $942 Million in New Mexico Child-Safety Lawsuit | NEWS-MONSTER",
-      "publishedAt": "2026-08-08T16:35:04+00:00",
-      "publishedLabel": "Aug 8, 04:35 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/2qpwdOqjJws/hqdefault.jpg"
     }
   ]
 }
