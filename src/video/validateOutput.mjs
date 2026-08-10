@@ -7,24 +7,34 @@ const MIN_SIZE = 1024 * 100
 // A valid file of zero frames / sub-second duration is not publishable.
 const MIN_DURATION = 0
 
-export async function validateOutput(videoPath, options = {}) {
+// RENDER-001: canonical render-output validator. Never trust file existence or
+// the FFmpeg exit code alone — a killed/mid-write stage can leave a file on
+// disk that ffmpeg exited 0 for but that no consumer (YouTube, LinkedIn,
+// ffprobe) can open (e.g. missing moov atom, truncated mdat tail).
+//
+// Returns { ok, errors, diagnostics } — errors are stable machine-checkable
+// codes; diagnostics carry the raw ffprobe observations (size, duration,
+// stream table) so callers can log what was actually probed.
+export async function validateRenderOutput(videoPath, options = {}) {
   const errors = []
-  const { minSize = MIN_SIZE, requireAudio = true } = options
+  const diagnostics = { path: videoPath }
+  const { minSize = MIN_SIZE, requireAudio = true, minDuration = MIN_DURATION } = options
 
   if (!videoPath) {
-    return { ok: false, errors: ['VIDEO_PATH_MISSING'] }
+    return { ok: false, errors: ['VIDEO_PATH_MISSING'], diagnostics }
   }
 
   if (!fs.existsSync(videoPath)) {
-    return { ok: false, errors: ['FILE_MISSING'] }
+    return { ok: false, errors: ['FILE_MISSING'], diagnostics }
   }
 
   let stat
   try {
     stat = fs.statSync(videoPath)
   } catch {
-    return { ok: false, errors: ['FILE_UNREADABLE'] }
+    return { ok: false, errors: ['FILE_UNREADABLE'], diagnostics }
   }
+  diagnostics.size = stat.size
 
   if (!stat.isFile()) {
     errors.push('NOT_A_FILE')
@@ -35,6 +45,7 @@ export async function validateOutput(videoPath, options = {}) {
   }
 
   const moov = detectMoovAtom(videoPath)
+  diagnostics.moovDetected = moov
   if (!moov) {
     errors.push('MOOV_ATOM_MISSING')
   }
@@ -42,12 +53,17 @@ export async function validateOutput(videoPath, options = {}) {
   let probe
   try {
     probe = probeWithFfprobe(videoPath)
+    diagnostics.duration = probe.duration
+    diagnostics.streams = probe.streams
+    diagnostics.hasVideo = probe.hasVideo
+    diagnostics.hasAudio = probe.hasAudio
+    diagnostics.format = probe.format
   } catch (err) {
     errors.push(`FFPROBE_FAILED:${err.stderr ? String(err.stderr).trim().slice(0, 200) : err.message}`)
   }
 
   if (probe) {
-    if (!(probe.duration > MIN_DURATION)) {
+    if (!(probe.duration > minDuration)) {
       errors.push('ZERO_DURATION')
     }
     if (!probe.hasVideo) {
@@ -58,16 +74,19 @@ export async function validateOutput(videoPath, options = {}) {
     }
   }
 
-  return { ok: errors.length === 0, errors }
+  return { ok: errors.length === 0, errors, diagnostics }
 }
+
+// Backward-compatible alias: pre-RENDER-001 callers imported validateOutput.
+export const validateOutput = validateRenderOutput
 
 function probeWithFfprobe(videoPath) {
   const out = execFileSync(
     'ffprobe',
     [
       '-v', 'error',
-      '-show_entries', 'format=duration',
-      '-show_entries', 'stream=codec_type',
+      '-show_entries', 'format=duration:format=format_name',
+      '-show_entries', 'stream=codec_type:stream=codec_name:stream=width:stream=height',
       '-of', 'json',
       videoPath,
     ],
@@ -75,11 +94,18 @@ function probeWithFfprobe(videoPath) {
   )
   const parsed = JSON.parse(out)
   const duration = Number.parseFloat(parsed?.format?.duration) || 0
-  const types = (parsed?.streams || []).map((s) => s.codec_type)
+  const streams = (parsed?.streams || []).map((s) => ({
+    type: s.codec_type,
+    codec: s.codec_name,
+    width: s.width,
+    height: s.height,
+  }))
   return {
     duration,
-    hasVideo: types.includes('video'),
-    hasAudio: types.includes('audio'),
+    streams,
+    hasVideo: streams.some((s) => s.type === 'video'),
+    hasAudio: streams.some((s) => s.type === 'audio'),
+    format: parsed?.format?.format_name || 'unknown',
   }
 }
 

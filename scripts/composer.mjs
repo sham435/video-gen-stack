@@ -4,8 +4,27 @@ import { execFileSync } from 'child_process'
 import { ensureMusicExists } from './audio.mjs'
 import { fetchBestImage } from './pexels.mjs'
 import { NewsBroadcastEngine } from '../src/index.mjs'
+import { validateRenderOutput } from '../src/video/validateOutput.mjs'
+import { resolveRenderManifest, resolveRenderGates } from '../src/pipeline/RenderManifest.mjs'
 
-export async function composeVideo(articles, outDir = 'output') {
+async function assertValidRender(file, stage) {
+  const res = await validateRenderOutput(file, { requireAudio: true })
+  if (res.ok) {
+    console.log(`[RENDER-001] ${stage} OK ${(res.diagnostics.size / 1024).toFixed(0)}KB ${res.diagnostics.duration}s v=${res.diagnostics.hasVideo} a=${res.diagnostics.hasAudio}`)
+    return res
+  }
+  const { diagnostics } = res
+  const detail = [
+    `stage=${stage}`,
+    res.errors.join(','),
+    `size=${diagnostics.size}`,
+    `duration=${diagnostics.duration ?? 'n/a'}`,
+    `moov=${diagnostics.moovDetected ?? 'n/a'}`,
+  ].join(' | ')
+  throw new Error(`Render validation failed: ${detail}`)
+}
+
+export async function composeVideo(articles, outDir = 'output', options = {}) {
   fs.mkdirSync(outDir, { recursive: true })
   const article = articles[0]
   if (!article) throw new Error('No articles')
@@ -15,14 +34,23 @@ export async function composeVideo(articles, outDir = 'output') {
   }
 
   const engine = new NewsBroadcastEngine()
-  const result = await engine.generateFromArticle(article, outDir, null, { quick: !!process.env.QUICK_RENDER })
+  const result = await engine.generateFromArticle(article, outDir, null, { ...options, quick: !!process.env.QUICK_RENDER })
   const broadcastPath = typeof result === 'string' ? result : result.videoPath
 
   const finalPath = `${outDir}/final.mp4`
   fs.copyFileSync(broadcastPath, finalPath)
+  await assertValidRender(finalPath, 'final-copy')
 
+  // Single footer owner — RenderManifest gate. The render engine draws the
+  // footer on CANVAS into every frame (footer → canvas → FooterLayout). The
+  // standalone footer.png composite is ONLY allowed when the canvas footer is
+  // disabled and overlayFooter is explicitly requested (mutual exclusion).
+  // Without this gate composer.mjs re-composites footer.png on top of a video
+  // that already carries the canvas footer → two stacked footer bars.
+  const manifest = resolveRenderManifest({ ...options, footer: options.footer })
+  const gates = resolveRenderGates({ ...options, footer: options.footer }, manifest)
   const footerPath = 'assets/footer.png'
-  if (fs.existsSync(footerPath)) {
+  if (gates.overlayFooter && fs.existsSync(footerPath)) {
     const withFooter = `${outDir}/final_with_footer.mp4`
     execFileSync(
       'ffmpeg',
@@ -30,6 +58,7 @@ export async function composeVideo(articles, outDir = 'output') {
       { stdio: 'inherit' }
     )
     fs.copyFileSync(withFooter, finalPath)
+    await assertValidRender(finalPath, 'footer-overlay')
   }
 
   return { finalPath, hooks: [], retention: engine.lastRetention || null }
