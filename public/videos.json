@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-10T22:45:58.990Z",
+  "updatedAt": "2026-08-10T23:44:11.692Z",
   "videos": [
+    {
+      "id": "ZaCamx4pdVM",
+      "title": "Porter Airliines flight in Canada canceled after child refuses to sit down and buckle up - | NEWS-MO",
+      "publishedAt": "2026-08-10T23:36:53+00:00",
+      "publishedLabel": "Aug 10, 11:36 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/ZaCamx4pdVM/hqdefault.jpg"
+    },
     {
       "id": "rkkUCytRojo",
       "title": "Stocks Rise After Cooler-Than-Expected July Jobs Data | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T17:09:49+00:00",
       "publishedLabel": "Aug 8, 05:09 PM",
       "thumbnail": "https://i2.ytimg.com/vi/YPPrJFBG8hQ/hqdefault.jpg"
-    },
-    {
-      "id": "2qpwdOqjJws",
-      "title": "Meta Ordered to Pay $942 Million in New Mexico Child-Safety Lawsuit | NEWS-MONSTER",
-      "publishedAt": "2026-08-08T16:35:04+00:00",
-      "publishedLabel": "Aug 8, 04:35 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/2qpwdOqjJws/hqdefault.jpg"
     }
   ]
 }
