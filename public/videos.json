@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-11T11:53:20.419Z",
+  "updatedAt": "2026-08-11T13:08:06.345Z",
   "videos": [
+    {
+      "id": "ntrMUCDBaf8",
+      "title": "Kyle Shanahan, returning after serious car crash, has new perspective on Tesla Autopilot a | NEWS-MO",
+      "publishedAt": "2026-08-11T13:01:08+00:00",
+      "publishedLabel": "Aug 11, 01:01 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/ntrMUCDBaf8/hqdefault.jpg"
+    },
     {
       "id": "FY6wwfDu70o",
       "title": "Stock Market Today: Dow Futures Dip; Oil Prices Edge Higher — Live Updates - WSJ | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T19:32:09+00:00",
       "publishedLabel": "Aug 8, 07:32 PM",
       "thumbnail": "https://i2.ytimg.com/vi/9WzbeIzARks/hqdefault.jpg"
-    },
-    {
-      "id": "NB8IRWCF-X8",
-      "title": "Idaho police release chilling new video of In-N-Out mass shooting | NEWS-MONSTER",
-      "publishedAt": "2026-08-08T18:42:03+00:00",
-      "publishedLabel": "Aug 8, 06:42 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/NB8IRWCF-X8/hqdefault.jpg"
     }
   ]
 }
