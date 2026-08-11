@@ -38,6 +38,7 @@ import { SoundFX } from './audio/SoundFX.mjs'
 import { QualityChecker } from './quality/QualityChecker.mjs'
 import { AudioMixer } from './audio/AudioMixer.mjs'
 import { ScenePlanner } from './ai/ScenePlanner.mjs'
+import { validateRenderOutput } from './video/validateOutput.mjs'
 import { StoryDirector } from './ai/StoryDirector.mjs'
 import { VisualReasoner } from './ai/VisualReasoner.mjs'
 import { MotionPlanner, TransitionPlanner } from './ai/StoryAnalyzer.mjs'
@@ -695,6 +696,13 @@ export class NewsBroadcastEngine {
     this.audioMixer.mixAudio(silentVideo, voicePath, musicPath, totalDuration, videoPath)
     console.log('Broadcast video:', videoPath)
 
+    // RENDER-001: every FFmpeg stage that produces/intermediates the final
+    // render is validated with ffprobe before the next stage consumes it. A
+    // silent concat that ffmpeg exited 0 for but cannot be probed is caught
+    // here, not after 3 hours of YouTube processing.
+    await this.assertValidRender(silentVideo, 'concat', { requireAudio: false })
+    await this.assertValidRender(videoPath, 'audio-mix', { requireAudio: true })
+
     // Burn subtitles from narration beat timings (SRT).
     // Single-owner rule: only when the manifest hands the subtitle layer to
     // ffmpeg (options.burnSubtitles: true). Off by default — the canvas
@@ -714,6 +722,7 @@ export class NewsBroadcastEngine {
               fs.copyFileSync(subbed, videoPath)
               fs.unlinkSync(subbed)
               console.log('Subtitles burned:', srtPath)
+              await this.assertValidRender(videoPath, 'subtitle-burn', { requireAudio: true })
             }
           } catch (e) {
             console.warn(`Subtitle burn skipped: ${e.message}`)
@@ -731,6 +740,7 @@ export class NewsBroadcastEngine {
       this.audioMixer.overlayFooter(videoPath, 'assets/footer.png', footerWith)
       if (fs.existsSync(footerWith)) {
         fs.copyFileSync(footerWith, videoPath)
+        await this.assertValidRender(videoPath, 'footer-overlay', { requireAudio: true })
       }
     }
     // Milestone B: persist the scene→asset mapping so the analytics job can
@@ -746,6 +756,26 @@ export class NewsBroadcastEngine {
     } catch { /* best-effort */ }
 
     return videoPath
+  }
+
+  /// RENDER-001 stage gate: probe + classify every ffmpeg intermediate. Throws
+  /// with a human-readable summary (stage, errors, probed size/duration/streams)
+  /// so the failure surfaces in the job log instead of a silent corrupt MP4.
+  async assertValidRender(file, stage, options = {}) {
+    const res = await validateRenderOutput(file, options)
+    if (res.ok) {
+      console.log(`[RENDER-001] ${stage} OK ${(res.diagnostics.size / 1024).toFixed(0)}KB ${res.diagnostics.duration}s v=${res.diagnostics.hasVideo} a=${res.diagnostics.hasAudio}`)
+      return res
+    }
+    const { diagnostics } = res
+    const detail = [
+      `stage=${stage}`,
+      res.errors.join(','),
+      `size=${diagnostics.size}`,
+      `duration=${diagnostics.duration ?? 'n/a'}`,
+      `moov=${diagnostics.moovDetected ?? 'n/a'}`,
+    ].join(' | ')
+    throw new Error(`Render validation failed: ${detail}`)
   }
 
   async verifyQuality(videoPath) {

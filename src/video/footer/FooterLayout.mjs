@@ -5,13 +5,12 @@ import {
   PlatformBlock,
   UrlBlock,
   SubscribeBlock,
-  FONT_BRAND,
 } from './blocks.mjs'
 
 const F = BROADCAST_TEXT.footer
 
 // Platform badge images are async to load; keep one shared cache so the
-// canvas pipeline and the standalone PNG generator render the same icons.
+// canvas pipeline and standalone PNG generator render the same icons.
 const iconCache = {}
 export async function loadPlatformIcons() {
   if (iconCache.loaded) return iconCache
@@ -32,47 +31,55 @@ export async function loadPlatformIcons() {
  *
  * Broadcast grid (fixed 3-column layout, 25% | 50% | 25%):
  *   ┌─────────────────────────────────────────────────────────┐
- *   │ [LOGO]  AVAILABLE ON                  [SUBSCRIBE]        │
- *   │          Android  Apple                                 │
- *   │                                  sham435.github.io/...   │
- *   │                                  tagline / tagline 2     │
+ *   │ [LOGO]  NEWS-MONSTER              [SUBSCRIBE]           │
+ *   │         Unfiltered Breaking       video-gen-stack...    │
+ *   │         AVAILABLE ON              Unfiltered Global     │
+ *   │         Android  Apple            Headlines             │
+ *   │                                     @sham435            │
  *   └─────────────────────────────────────────────────────────┘
  *
- *   Left  (25%)  logo + "AVAILABLE ON" + badge icons (static)
+ *   Left  (25%)  logo + NEWS-MONSTER + tagline + AVAILABLE ON badges
  *   Center(50%)  whitespace — broadcast layouts breathe
- *   Right (25%)  subscribe pill + URL + tagline, right-aligned,
- *                URL/tagline moving together as a group
+ *   Right (25%)  subscribe pill + URL + urlTagline + handle,
+ *                right-aligned, URL/tagline moving together
  *
- * The bar bottom-anchors to the frame and is sized by content, so it scales
- * cleanly across 9:16, 1:1 and 16:9 without collisions while the reserved
- * bottom safe zone (footer bar) stays free of captions.
+ * The bar bottom-anchors to the frame and is sized by content. showLogo /
+ * showHandle are render-data toggles so a view can selectively hide the logo
+ * or channel handle without touching the layout engine.
  *
  * LinkedIn safe-area: the bar keeps SAFE_BOTTOM px of clear canvas below it so
- * platform UI (rounded corners, play/progress chrome, pillarbox cropping) never
- * clips the bar's content. Consumers must compute the bar top via
- * barTopInFrame() — never H - barHeight directly.
+ * platform UI never clips the bar's content. Consumers must compute the bar
+ * top via barTopInFrame() — never H - barHeight directly.
  */
 export class FooterLayout {
   static SAFE_BOTTOM = 64
   static DEFAULT_DATA = {
     brand: 'NEWS-MONSTER',
-    tagline: 'Breaking News, AI, Science, Sports & Future Tech',
-    url: 'https://video-gen-stack-production.up.railway.app/',
-    urlTagline: 'Open Source AI Video Platform',
+    // Primary brand message — deliberately shorter and more visible.
+    tagline: 'Unfiltered Breaking News',
+    // Secondary footer message.
+    urlTagline: 'Unfiltered Global Headlines',
+    // Display without protocol for cleaner broadcast branding.
+    url: 'video-gen-stack-production.up.railway.app',
+    // Channel identity.
+    handle: '@sham435',
+    // Visibility controls — per-render/view overridable.
+    showLogo: true,
+    showHandle: true,
   }
 
-/**
- * The bar's top edge in a full frame (H tall): everything below this y is the
- * footer's reserved chrome zone. Ticker / captions / anchor content must dock
- * ABOVE it. The footer owns this contract so consumers never hard-code 180.
- */
-static barTopInFrame(ctx, W, H, data = {}) {
-  const { barHeight } = this.compute(ctx, W, data)
-  return H - barHeight - this.SAFE_BOTTOM
-}
+  /**
+   * The bar's top edge in a full frame (H tall): everything below this y is the
+   * footer's reserved chrome zone. Ticker / captions / anchor content must dock
+   * ABOVE it. The footer owns this contract so consumers never hard-code 180.
+   */
+  static barTopInFrame(ctx, W, H, data = {}) {
+    const { barHeight } = this.compute(ctx, W, data)
+    return H - barHeight - this.SAFE_BOTTOM
+  }
 
-/**
- * Measure-only pass. Returns computed geometry:
+  /**
+   * Measure-only pass. Returns computed geometry:
    *   { scale, barHeight, zones: [{ key, x, y, w, h }],
    *     left:  [{ key, block, x, y, w, h }],
    *     right: [{ key, block, x, y, w, h }] }
@@ -84,24 +91,49 @@ static barTopInFrame(ctx, W, H, data = {}) {
     const D = { ...this.DEFAULT_DATA, ...data }
 
     // Responsive scale: proportional to the 1080px design surface.
-    let scale = Math.min(F.maxScale, Math.max(F.minScale, W / F.baseWidth))
+    const scale = Math.min(F.maxScale, Math.max(F.minScale, W / F.baseWidth))
 
     const padX = Math.max(16, Math.round(F.padding.x * scale))
     const innerW = W - padX * 2
-    const zoneW = { left: innerW * F.grid.left, center: innerW * F.grid.center, right: innerW * F.grid.right }
+    const zoneW = {
+      left: innerW * F.grid.left,
+      center: innerW * F.grid.center,
+      right: innerW * F.grid.right,
+    }
     const vGap = Math.max(10, Math.round(F.lineGap * scale))
 
-    // Stack heights inside each end zone.
-    const logo = LogoBlock.measure(ctx, scale)
-    const brand = BrandBlock.measure(ctx, scale, D)
-    const platform = PlatformBlock.measure(ctx, scale)
-    const leftH = logo.h + vGap + brand.h + vGap + platform.h
+    // ── Left zone stack ────────────────────────────────────────────────────
+    const leftBlocks = []
+    let leftH = 0
 
+    // Logo is independently toggleable.
+    if (D.showLogo) {
+      const logo = LogoBlock.measure(ctx, scale)
+      leftBlocks.push({ key: 'logo', block: LogoBlock, w: logo.w, h: logo.h })
+      leftH += logo.h
+    }
+
+    // Brand remains visible even when the logo is hidden.
+    const brand = BrandBlock.measure(ctx, scale, D)
+    if (leftBlocks.length) leftH += vGap
+    leftBlocks.push({ key: 'brand', block: BrandBlock, w: brand.w, h: brand.h })
+    leftH += brand.h
+
+    // Platform badges (AVAILABLE ON + icons).
+    const platform = PlatformBlock.measure(ctx, scale)
+    leftH += vGap
+    leftBlocks.push({ key: 'platform', block: PlatformBlock, w: platform.w, h: platform.h })
+    leftH += platform.h
+
+    // ── Right zone stack ───────────────────────────────────────────────────
     const subscribe = SubscribeBlock.measure(ctx, scale)
     const url = UrlBlock.measure(ctx, scale, D, zoneW.right)
     const rightH = subscribe.h + vGap + url.h
 
-    const barHeight = Math.round(Math.max(F.minHeight, leftH, rightH) + Math.round(F.padding.y * scale) * 2)
+    // Footer height is driven by whichever side needs more vertical space,
+    // while preserving the configured minimum.
+    const verticalPadding = Math.round(F.padding.y * scale)
+    const barHeight = Math.round(Math.max(F.minHeight, leftH, rightH) + verticalPadding * 2)
 
     const leftX = padX
     const centerX = padX + zoneW.left
@@ -113,26 +145,42 @@ static barTopInFrame(ctx, W, H, data = {}) {
       { key: 'right', x: rightX, w: zoneW.right },
     ]
 
-    // Left zone stack: logo, NEWS-MONSTER wordmark, AVAILABLE ON + icons.
-    const leftTop = Math.round(F.padding.y * scale) + (barHeight - leftH - Math.round(F.padding.y * scale) * 2) / 2
-    const leftColumns = [
-      { key: 'logo', block: LogoBlock, x: leftX, y: leftTop, w: logo.w, h: logo.h },
-      { key: 'brand', block: BrandBlock, x: leftX, y: leftTop + logo.h + vGap, w: brand.w, h: brand.h },
-      { key: 'platform', block: PlatformBlock, x: leftX, y: leftTop + logo.h + vGap + brand.h + vGap, w: platform.w, h: platform.h },
-    ]
+    const leftTop = verticalPadding + (barHeight - leftH - verticalPadding * 2) / 2
+    const leftColumns = []
+    let currentY = Math.round(leftTop)
+    for (let i = 0; i < leftBlocks.length; i++) {
+      const item = leftBlocks[i]
+      leftColumns.push({ key: item.key, block: item.block, x: leftX, y: currentY, w: item.w, h: item.h })
+      currentY += item.h
+      if (i < leftBlocks.length - 1) currentY += vGap
+    }
 
-    // Right zone: pill on top, URL + tagline beneath — right-aligned group.
-    // The URL text baseline is aligned with the "AVAILABLE ON" label baseline
-    // (left zone) so the two brand lines sit on the same optical line.
+    // URL + tagline remain grouped together, right-aligned. The URL text
+    // baseline is aligned with the "AVAILABLE ON" label baseline (left zone)
+    // when the stack fits; when the channel handle pushes the stack taller
+    // than the aligned slot, the whole URL group clamps up to stay inside the
+    // bar (safe-area contract — never overflow below the bar).
     const rightTop = leftTop + (leftH - rightH) / 2
-    const platformY = leftTop + logo.h + vGap + brand.h + vGap
-    const availableBaseline = platformY + Math.round(F.available.size * scale)
+    const platformColumn = leftColumns.find((c) => c.key === 'platform')
+    const availableBaseline = platformColumn
+      ? platformColumn.y + Math.round(F.available.size * scale)
+      : rightTop + subscribe.h + vGap
     const urlBaseline = Math.round(F.url.size * scale)
     let urlY = availableBaseline - urlBaseline
     const minUrlY = rightTop + subscribe.h + Math.round(2 * scale) // just below the pill
     if (urlY < minUrlY) urlY = minUrlY // keep below the pill, never overlap
+    const urlBottomLimit = barHeight - verticalPadding
+    if (urlY + url.h > urlBottomLimit) {
+      urlY = Math.max(minUrlY, urlBottomLimit - url.h)
+    }
+
+    // Subscribe shifted 50px further right (proportional on smaller surfaces
+    // so the button never leaves the canvas).
+    const subscribeOffset = Math.round(Math.min(50, Math.max(0, W * 0.04)))
+    const subscribeX = Math.min(W - Math.round(8 * scale), rightX + subscribeOffset)
+
     const rightColumns = [
-      { key: 'subscribe', block: SubscribeBlock, x: rightX - subscribe.w, y: rightTop, w: subscribe.w, h: subscribe.h },
+      { key: 'subscribe', block: SubscribeBlock, x: subscribeX - subscribe.w, y: rightTop, w: subscribe.w, h: subscribe.h },
       { key: 'url', block: UrlBlock, x: rightX - url.w, y: urlY, w: url.w, h: url.h },
     ]
 
@@ -169,7 +217,7 @@ static barTopInFrame(ctx, W, H, data = {}) {
     return layout
   }
 
-  /** Legacy alias for the standalone footer PNG generator. */
+  /** Standalone footer PNG generator — same geometry as draw(), origin y=0. */
   static renderStandalone(ctx, W, data = {}, icons = {}) {
     const layout = this.compute(ctx, W, data)
     const { barHeight } = layout
@@ -182,9 +230,8 @@ static barTopInFrame(ctx, W, H, data = {}) {
     ctx.fillStyle = F.accent
     ctx.fillRect(0, barHeight - 3, W * 0.3, 3)
 
-    const top = 0
-    for (const col of layout.left) {
-      col.block.draw(ctx, { ...col, y: top + col.y }, layout.scale, layout.data, icons)
+    for (const col of [...layout.left, ...layout.right]) {
+      col.block.draw(ctx, { ...col, y: col.y }, layout.scale, layout.data, icons)
     }
 
     ctx.restore()

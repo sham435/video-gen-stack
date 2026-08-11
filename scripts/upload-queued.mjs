@@ -49,6 +49,14 @@ for (const index of indexes) {
     console.error(`[SKIP] index=${index} no final.mp4 in ${outDir}`)
     continue
   }
+  // RENDER-001: never re-upload a corrupt/truncated render. Existence alone
+  // is not the gate — probe the container before base64-uploading it.
+  const { validateRenderOutput } = await import(path.join(ROOT, 'src', 'video', 'validateOutput.mjs'))
+  const vres = validateRenderOutput(finalPath, { requireAudio: true })
+  if (!vres.ok) {
+    console.error(`[SKIP] index=${index} invalid render (${vres.errors.join(', ')}) — not uploading ${finalPath}`)
+    continue
+  }
   const title = `${titleFor(index).slice(0, 90)} | NEWS-MONSTER`
   // Prefer the 16:9 thumbnail (1280x720) — that's what YouTube shows in
   // feed/suggestions; fall back to the portrait cover.

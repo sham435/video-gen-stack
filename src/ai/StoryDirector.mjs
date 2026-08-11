@@ -1,12 +1,21 @@
 import { PromptEngine } from './PromptEngine.mjs'
 import { TopicCtaBuilder } from '../publishing/TopicCtaBuilder.mjs'
 import { brandOutroScene, BRAND_OUTRO } from '../publishing/BrandOutro.mjs'
+import { parseStructured } from './parseStructured.mjs'
 
 const HOOK_STRATEGIES = ['mystery', 'shock', 'question', 'stat']
 const SCENE_TYPES = ['hook', 'fact', 'reveal', 'explanation', 'reaction', 'close']
 const CAMERA_MOTIONS = ['push_in', 'slow_zoom', 'orbit', 'pan', 'shake', 'parallax', 'pull_back']
 const TRANSITIONS = ['cut', 'flash', 'glitch', 'zoom_blur', 'light_leak', 'crossfade']
 const EMOTIONS = ['shock', 'awe', 'curiosity', 'tension', 'excitement', 'neutral']
+
+// JSON-001: the minimal container schema the downstream planner requires. The
+// LLM may return markdown fences, prose, truncated, or wrong-typed JSON — this
+// gate parses + validates + retries once before a scene ever reaches validate().
+const STORY_SCHEMA = {
+  headline: 'string',
+  scenePlan: 'array',
+}
 
 export class StoryDirector {
   constructor(provider) {
@@ -117,7 +126,18 @@ Target Format: ${targetFormat}`
   async queryLLM(messages, article) {
     if (this.provider) {
       try {
-        return await this.provider.generate(messages, { json: true })
+        const raw = await this.provider.generate(messages, { json: true })
+        // JSON-001: structured gate — fence-strip, parse, validate, retry once
+        // with a correction request, THEN hand the validated plan to validate().
+        return await parseStructured(raw, {
+          schema: STORY_SCHEMA,
+          attempts: 1,
+          generate: async (prompt, opts) => {
+            const retry = await this.provider.generate([{ role: 'user', content: prompt }], { json: true, ...opts })
+            return retry
+          },
+          correct: (detail) => `Your previous JSON response was invalid. Fix these issues and return ONLY valid JSON: ${detail.errors ? detail.errors.join('; ') : detail.raw || 'invalid structure'}`,
+        })
       } catch (e) { console.log('StoryDirector LLM error:', e.message) }
     }
     return this.fallbackPlan(article)

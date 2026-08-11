@@ -1,4 +1,11 @@
 import { TopicCtaBuilder } from '../publishing/TopicCtaBuilder.mjs'
+import { parseStructured } from './parseStructured.mjs'
+
+// JSON-001: minimal container schema the planner requires downstream.
+const PLAN_SCHEMA = {
+  headline: 'string',
+  scenes: 'array',
+}
 
 export class StoryPlanner {
   constructor(provider) {
@@ -76,7 +83,16 @@ Category: ${article.category || 'technology'}`
   async queryLLM(messages, article) {
     if (this.provider) {
       try {
-        return await this.provider.generate(messages, { json: true })
+        const raw = await this.provider.generate(messages, { json: true })
+        // JSON-001: structured gate — parse/validate/retry-once before validate().
+        return await parseStructured(raw, {
+          schema: PLAN_SCHEMA,
+          attempts: 1,
+          generate: async (prompt, opts) => {
+            return await this.provider.generate([{ role: 'user', content: prompt }], { json: true, ...opts })
+          },
+          correct: (detail) => `Your previous JSON response was invalid. Fix these issues and return ONLY valid JSON: ${detail.errors ? detail.errors.join('; ') : detail.raw || 'invalid structure'}`,
+        })
       } catch (e) { console.log('StoryPlanner provider error:', e.message) }
     }
     return this.fallbackPlan(article)

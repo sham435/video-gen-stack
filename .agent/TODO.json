@@ -18,31 +18,31 @@
       "id": "RENDER-001",
       "title": "Validate final MP4 after every FFmpeg stage",
       "priority": "P0",
-      "status": "pending",
+      "status": "completed",
       "dependsOn": [
         "PHASE-0"
       ],
-      "currentAction": "Trace final.mp4 creation and FFmpeg concat pipeline",
-      "nextAction": "Implement validateRenderOutput()",
+      "currentAction": "",
+      "nextAction": "",
       "verification": "node --test tests/render-validation.test.mjs",
       "createdAt": "2026-08-10T00:00:00+05:30",
-      "updatedAt": "2026-08-10T00:00:00+05:30",
-      "completedAt": null
+      "updatedAt": "2026-08-10T19:11:16.137Z",
+      "completedAt": "2026-08-10T19:11:16.137Z"
     },
     {
       "id": "AI-001",
       "title": "Harden ProviderChain retry/fallback",
       "priority": "P0",
-      "status": "pending",
+      "status": "completed",
       "dependsOn": [
         "PHASE-0"
       ],
       "currentAction": "",
-      "nextAction": "Audit provider error handling in services/",
+      "nextAction": "",
       "verification": "node --test tests/provider-chain.test.mjs",
       "createdAt": "2026-08-10T00:00:00+05:30",
-      "updatedAt": "2026-08-10T00:00:00+05:30",
-      "completedAt": null
+      "updatedAt": "2026-08-10T19:46:44.684Z",
+      "completedAt": "2026-08-10T19:46:44.684Z"
     },
     {
       "id": "DISTRIBUTE-001",
@@ -104,22 +104,22 @@
       "id": "SCENE-001",
       "title": "ScenePlanner duration clamp",
       "priority": "P1",
-      "status": "pending",
+      "status": "completed",
       "dependsOn": [
         "PHASE-0"
       ],
       "currentAction": "",
       "nextAction": "",
-      "verification": "node --test tests/contract.test.mjs",
+      "verification": "node --test tests/scene-planner-clamp.test.mjs",
       "createdAt": "2026-08-10T00:00:00+05:30",
-      "updatedAt": "2026-08-10T00:00:00+05:30",
-      "completedAt": null
+      "updatedAt": "2026-08-10T19:57:48.840Z",
+      "completedAt": "2026-08-10T19:57:48.840Z"
     },
     {
       "id": "JSON-001",
       "title": "Structured LLM validation",
       "priority": "P1",
-      "status": "pending",
+      "status": "completed",
       "dependsOn": [
         "PHASE-0"
       ],
@@ -127,14 +127,14 @@
       "nextAction": "",
       "verification": "node --test tests/contract.test.mjs",
       "createdAt": "2026-08-10T00:00:00+05:30",
-      "updatedAt": "2026-08-10T00:00:00+05:30",
-      "completedAt": null
+      "updatedAt": "2026-08-10T20:20:28.424Z",
+      "completedAt": "2026-08-10T20:20:28.424Z"
     },
     {
       "id": "LEARN-001",
       "title": "Retention confidence model",
       "priority": "P2",
-      "status": "pending",
+      "status": "completed",
       "dependsOn": [
         "PHASE-0"
       ],
@@ -142,8 +142,8 @@
       "nextAction": "",
       "verification": "node --test tests/analytics-learning.test.mjs",
       "createdAt": "2026-08-10T00:00:00+05:30",
-      "updatedAt": "2026-08-10T00:00:00+05:30",
-      "completedAt": null
+      "updatedAt": "2026-08-10T20:31:31.795Z",
+      "completedAt": "2026-08-10T20:31:31.795Z"
     },
     {
       "id": "PORT-001",
@@ -177,14 +177,14 @@
       "id": "THUMB-001",
       "title": "Wire scripts/refresh-thumbnails.mjs into daily analytics job",
       "priority": "P1",
-      "status": "pending",
+      "status": "completed",
       "dependsOn": [],
       "currentAction": "",
-      "nextAction": "Add to publish-news.yml retention-learning step",
+      "nextAction": "",
       "verification": "gh run list",
       "createdAt": "2026-08-10T00:00:00+05:30",
-      "updatedAt": "2026-08-10T00:00:00+05:30",
-      "completedAt": null
+      "updatedAt": "2026-08-10T20:08:14.917Z",
+      "completedAt": "2026-08-10T20:08:14.917Z"
     },
     {
       "id": "AUDIT-001",
@@ -198,6 +198,21 @@
       "createdAt": "2026-08-10T00:00:00+05:30",
       "updatedAt": "2026-08-10T07:11:32.262Z",
       "completedAt": "2026-08-10T07:11:32.262Z"
+    },
+    {
+      "id": "FOOTER-001",
+      "title": "Critical: eliminate duplicated NEWS-MONSTER footer (canvas + footer.png overlay)",
+      "priority": "P0",
+      "status": "completed",
+      "dependsOn": [
+        "PHASE-0"
+      ],
+      "currentAction": "",
+      "nextAction": "",
+      "verification": "node --test tests/footer-single-owner.test.mjs + scripts/verify-footer-render.mjs",
+      "createdAt": "2026-08-10T19:11:16.137Z",
+      "updatedAt": "2026-08-10T19:11:16.137Z",
+      "completedAt": "2026-08-10T19:11:16.137Z"
     }
   ]
 }

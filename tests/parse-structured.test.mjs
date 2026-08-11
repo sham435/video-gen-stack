@@ -65,3 +65,64 @@ test('validateSchema reports typed mismatches', () => {
   })
   assert.ok(errors.some((e) => e.includes('scenes[0].duration')))
 })
+
+// JSON-001: wiring — StoryDirector/StoryPlanner route LLM JSON through
+// parseStructured so fenced/malformed/truncated output retries once and never
+// silently reaches validate() as a raw string.
+
+import { StoryDirector } from '../src/ai/StoryDirector.mjs'
+import { StoryPlanner } from '../src/ai/StoryPlanner.mjs'
+
+function directorWith(rawSequence) {
+  let i = 0
+  const provider = {
+    name: 'Stub',
+    supportedFeatures: ['chat', 'json-mode'],
+    generate: async () => rawSequence[Math.min(i++, rawSequence.length - 1)],
+  }
+  return new StoryDirector(provider)
+}
+
+test('StoryDirector — accepts markdown-fenced JSON through the structured gate', async () => {
+  const d = directorWith(['```json\n{"headline":"H","scenePlan":[{"type":"fact","duration":4}]}\n```'])
+  const story = await d.queryLLM([{ role: 'user', content: 'go' }], { title: 'T' })
+  assert.equal(story.headline, 'H')
+  assert.equal(story.scenePlan.length, 1)
+})
+
+test('StoryDirector — malformed JSON retries once with correction, then falls back', async () => {
+  // First response: wrong-typed headline (number). Second: valid.
+  let calls = 0
+  const provider = {
+    name: 'Stub',
+    supportedFeatures: ['chat', 'json-mode'],
+    generate: async () => {
+      calls++
+      if (calls === 1) return '{"headline":123,"scenePlan":[]}'
+      return '{"headline":"Fixed","scenePlan":[{"type":"fact","duration":4}]}'
+    },
+  }
+  const d = new StoryDirector(provider)
+  const story = await d.queryLLM([{ role: 'user', content: 'go' }], { title: 'T' })
+  assert.equal(story.headline, 'Fixed')
+  assert.equal(calls, 2, 'correction retry fired once')
+})
+
+test('StoryDirector — only valid parsed/validated structure is returned (no raw string)', async () => {
+  const d = directorWith(['just prose, no json', 'also not json'])
+  const story = await d.queryLLM([{ role: 'user', content: 'go' }], { title: 'T' })
+  // Fails twice → parseStructured throws → queryLLM falls back to fallbackPlan.
+  assert.ok(Array.isArray(story.scenePlan) && story.scenePlan.length >= 2, 'fell back to a valid plan')
+})
+
+test('StoryPlanner — validates a minimal plan via the structured gate', async () => {
+  const provider = {
+    name: 'Stub',
+    supportedFeatures: ['chat', 'json-mode'],
+    generate: async () => '{"headline":"H","scenes":[{"type":"hook","duration":3}]}',
+  }
+  const p = new StoryPlanner(provider)
+  const plan = await p.queryLLM([{ role: 'user', content: 'go' }], { title: 'T' })
+  assert.equal(plan.headline, 'H')
+  assert.equal(plan.scenes.length, 1)
+})

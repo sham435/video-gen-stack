@@ -23,21 +23,27 @@ jobs:
 
       - name: Syntax check scripts
         run: |
+          FAILED=0
           for f in scripts/*.mjs; do
-            node --check "$f" && echo "  OK: $f" || echo "  FAIL: $f"
+            node --check "$f" && echo "  OK: $f" || { echo "  FAIL: $f"; FAILED=1; }
           done
+          exit $FAILED
 
       - name: Syntax check src modules
         run: |
+          FAILED=0
           for f in src/**/*.mjs; do
-            [ -f "$f" ] && node --check "$f" && echo "  OK: $f" || echo "  FAIL: $f"
+            [ -f "$f" ] && { node --check "$f" && echo "  OK: $f" || { echo "  FAIL: $f"; FAILED=1; }; }
           done
+          exit $FAILED
 
       - name: Syntax check packages
         run: |
+          FAILED=0
           for f in packages/**/*.mjs packages/**/*.js; do
-            [ -f "$f" ] && node --check "$f" 2>/dev/null && echo "  OK: $f" || echo "  SKIP: $f"
+            [ -f "$f" ] && { node --check "$f" 2>/dev/null && echo "  OK: $f" || { echo "  FAIL: $f"; FAILED=1; }; }
           done
+          exit $FAILED
 
       - name: Validate JSON templates
         run: |

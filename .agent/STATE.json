@@ -4,31 +4,31 @@
   "repository": "video-gen-stack",
   "branch": "main",
   "currentPhase": "production-hardening",
-  "currentTask": "RENDER-001",
-  "taskTitle": "Render output validation",
-  "status": "pending",
-  "lastCompletedTask": "DISTRIBUTE-001",
-  "lastAction": "Built persistent work-log system; full suite 196/196",
-  "nextAction": "Finish stack audit: CI health + uncommitted file scan; then implement RENDER-001 validateRenderOutput()",
+  "currentTask": "HOTFIX: composer single-footer shipped to main",
+  "taskTitle": "Retention confidence model",
+  "status": "in_progress",
+  "lastCompletedTask": "LEARN-001",
+  "lastAction": "COMMITTED + PUSHED eaf965f: composer.mjs footer.png overlay now gated on RenderManifest (was unconditional in HEAD, so every published MP4 had 2 footers). Next 30-min schedule run (~21:08Z) uses the fix.",
+  "nextAction": "Verify the next scheduled publish (gh run list) produces a single-footer video; then continue PORT-001",
   "blockedBy": [],
   "lastCheckpoint": "2026-08-10T00:00:00+05:30",
   "tests": {
-    "passed": 196,
+    "passed": 231,
     "failed": 0,
     "lastCommand": "npm test"
   },
   "git": {
     "branch": "main",
     "clean": false,
-    "lastCommit": "159387e"
+    "lastCommit": "eaf965f"
   },
   "session": {
     "id": "session-2026-08-10-qkrkaw",
     "startedAt": "2026-08-10T07:11:32.262Z",
-    "lastHeartbeat": "2026-08-10T07:11:32.262Z",
+    "lastHeartbeat": "2026-08-10T20:58:18.010Z",
     "status": "active",
     "meta": {}
   },
   "lastCommand": "npm test",
-  "lastResult": "196 passed / 0 failed"
+  "lastResult": "231 passed / 0 failed"
 }

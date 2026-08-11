@@ -1,5 +1,5 @@
 import { AIProvider } from './AIProvider.mjs'
-import { withRetry } from './retry.mjs'
+import { withRetry, ProviderError } from './retry.mjs'
 
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions'
 
@@ -55,7 +55,10 @@ export class OpenRouterProvider extends AIProvider {
 
       const data = await res.json()
       const content = data.choices?.[0]?.message?.content
-      if (!content) throw new Error('OpenRouter returned empty response')
+      if (!content) {
+        const model = options.model || this.model
+        throw new ProviderError('OpenRouter returned empty response', { code: 'INVALID_RESPONSE', provider: 'OpenRouter', model })
+      }
 
       if (options.responseFormat === 'json' || options.json) {
         try { return JSON.parse(content) }
@@ -64,7 +67,12 @@ export class OpenRouterProvider extends AIProvider {
 
       return content
     } catch (e) {
-      throw new Error(`OpenRouter generate failed: ${e.message}`)
+      if (e instanceof ProviderError) throw e
+      const model = options.model || this.model
+      throw new ProviderError(`OpenRouter generate failed: ${e.message}`, {
+        provider: 'OpenRouter', model,
+        status: e.status ?? undefined, code: e.code ?? undefined, cause: e,
+      })
     }
   }
 }

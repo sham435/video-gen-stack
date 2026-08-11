@@ -28,6 +28,12 @@ const PUBLISH_EVENTS = path.join(ROOT, 'data', 'publish-events.json')
 
 const DEFAULT_TEMP_AGE_DAYS = 7
 
+// How many most-recent batch dirs are kept regardless of publish state. Banner:
+// the YouTube daily-upload cap can defer several already-rendered finals
+// (scripts/upload-queued.mjs re-uploads output/batch-NN/final.mp4 later), so
+// deleting "unpublished" batches too eagerly destroys every pending upload.
+const KEEP_RECENT_BATCHES = 6
+
 function loadPublishEvents() {
   try {
     const raw = fs.readFileSync(PUBLISH_EVENTS, 'utf-8')
@@ -92,8 +98,10 @@ function collectCandidates() {
       return tb - ta
     })
 
-  // Active render = newest batch directory. Never touch it.
-  const activeBatch = batchDirs[0]?.name
+  // Active renders = newest batch dirs (up to KEEP_RECENT_BATCHES). Never
+  // touch them — a batch that just rendered may still be awaiting upload
+  // (YouTube daily-upload cap, manual upload-queued.mjs retry).
+  const activeBatches = new Set(batchDirs.slice(0, KEEP_RECENT_BATCHES).map((b) => b.name))
 
   for (const e of entries) {
     const full = path.join(OUTPUT_DIR, e.name)
@@ -104,9 +112,9 @@ function collectCandidates() {
       continue
     }
 
-    // 2. batch-* folders: keep published + active, clean the rest
+    // 2. batch-* folders: keep published + recent/active, clean the rest
     if (e.isDirectory() && /^batch-\d+$/.test(e.name)) {
-      if (e.name === activeBatch || published.has(e.name)) continue
+      if (activeBatches.has(e.name) || published.has(e.name)) continue
       candidates.push({ path: full, reason: 'unpublished batch', bytes: dirSize(full) })
       continue
     }

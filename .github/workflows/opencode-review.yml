@@ -32,9 +32,11 @@ jobs:
         run: |
           CHANGED=$(git diff --name-only origin/main...HEAD -- '*.mjs' '*.js' 2>/dev/null || echo "")
           if [ -n "$CHANGED" ]; then
+            FAILED=0
             for f in $CHANGED; do
-              [ -f "$f" ] && node --check "$f" 2>&1 && echo "  ✓ $f" || echo "  ✗ $f"
+              [ -f "$f" ] && { node --check "$f" 2>&1 && echo "  ✓ $f" || { echo "  ✗ $f"; FAILED=1; }; }
             done
+            exit $FAILED
           else
             echo "No JS/MJS files changed"
           fi

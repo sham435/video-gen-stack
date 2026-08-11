@@ -86,13 +86,22 @@ for (const fmt of FORMATS) {
     // 7. Subscribe pill keeps its scaled 50px-height intent.
     assert.ok(pill.h > 0)
 
-    // 8. Site-URL text baseline is aligned with the "AVAILABLE ON" label
-    //    baseline (both brand lines sit on the same optical line). URL size
-    //    must stay at a legible floor so the CTA reads after compression.
+    // 8. Site-URL text baseline aligns with the "AVAILABLE ON" label baseline
+    //    when the URL stack fits inside the bar. With the channel handle below
+    //    the urlTagline the stack can outgrow the aligned slot, in which case
+    //    the URL group clamps UP to stay inside the bar (never overflows).
+    //    The invariant that always holds: URL stays fully inside the bar.
     const { scale } = layout
-    const availableBaseline = platform.y + Math.round(FOOTER.available.size * scale)
     const urlBaseline = url.y + Math.round(FOOTER.url.size * scale)
-    assert.equal(urlBaseline, availableBaseline, 'URL baseline must match AVAILABLE ON baseline')
+    assert.ok(url.y + url.h <= layout.barHeight + 1, `URL column inside bar (bottom ${Math.round(url.y + url.h)} ≤ bar ${layout.barHeight})`)
+    assert.ok(urlBaseline >= url.y + FOOTER.url.size * 0.5, 'URL baseline sits within the URL column')
+    // If there is no handle line, alignment must be exact (as before).
+    const noHandle = FooterLayout.compute(ctx, fmt.W, { handle: null, showHandle: false })
+    const nhUrl = noHandle.right.find(c => c.key === 'url')
+    const nhPlatform = noHandle.left.find(c => c.key === 'platform')
+    const nhAvailBaseline = nhPlatform.y + Math.round(FOOTER.available.size * scale)
+    const nhUrlBaseline = nhUrl.y + Math.round(FOOTER.url.size * scale)
+    assert.equal(nhUrlBaseline, nhAvailBaseline, 'URL baseline matches AVAILABLE ON when no handle line')
 
     // 9. URL font size is the broadcast legibility floor (≥ 30px at design width).
     const urlPx = Math.round(FOOTER.url.size * scale)

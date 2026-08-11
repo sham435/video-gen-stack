@@ -1,5 +1,5 @@
 import { AIProvider } from './AIProvider.mjs'
-import { withRetry } from './retry.mjs'
+import { withRetry, ProviderError } from './retry.mjs'
 
 export class OllamaProvider extends AIProvider {
   constructor(options = {}) {
@@ -62,7 +62,9 @@ export class OllamaProvider extends AIProvider {
 
       const data = await res.json()
       const content = data.response
-      if (!content) throw new Error('Ollama returned empty response')
+      if (!content) {
+        throw new ProviderError('Ollama returned empty response', { code: 'INVALID_RESPONSE', provider: 'Ollama', model })
+      }
 
       if (options.responseFormat === 'json' || options.json) {
         try { return JSON.parse(content) }
@@ -74,8 +76,13 @@ export class OllamaProvider extends AIProvider {
       // Clear diagnostic when the default/requested model is unavailable.
       if (e.status === 404 || e.code === 'MODEL_NOT_FOUND') {
         e.message = `Ollama model "${model}" not found. Run: ollama pull ${model}`
+        e.code = 'MODEL_NOT_FOUND'
       }
-      throw new Error(`Ollama generate failed: ${e.message}`)
+      if (e instanceof ProviderError) throw e
+      throw new ProviderError(`Ollama generate failed: ${e.message}`, {
+        provider: 'Ollama', model,
+        status: e.status ?? undefined, code: e.code ?? undefined, cause: e,
+      })
     }
   }
 }

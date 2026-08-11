@@ -199,9 +199,17 @@ test('readability — URL baseline aligned with AVAILABLE ON; line gaps keep tex
   const { scale } = layout
   const platform = layout.left.find(c => c.key === 'platform')
   const url = layout.right.find(c => c.key === 'url')
-  const availableBaseline = platform.y + Math.round(F.available.size * scale)
   const urlBaseline = url.y + Math.round(F.url.size * scale)
-  assert.equal(urlBaseline, availableBaseline, 'site URL baseline === AVAILABLE ON baseline')
+  // URL aligns exactly with AVAILABLE ON only when the stack fits (no handle).
+  // With the handle line the URL group clamps up; the hard invariant is that
+  // the URL column never leaves the bar.
+  assert.ok(url.y + url.h <= layout.barHeight + 1, `URL inside bar (bottom ${Math.round(url.y + url.h)} ≤ bar ${layout.barHeight})`)
+  const noHandle = FooterLayout.compute(ctx, W, { handle: null, showHandle: false })
+  const nhUrl = noHandle.right.find(c => c.key === 'url')
+  const nhPlatform = noHandle.left.find(c => c.key === 'platform')
+  const nhAvail = nhPlatform.y + Math.round(F.available.size * noHandle.scale)
+  const nhUrlBaseline = nhUrl.y + Math.round(F.url.size * noHandle.scale)
+  assert.equal(nhUrlBaseline, nhAvail, 'URL baseline === AVAILABLE ON baseline when no handle')
   // Vertical gap between stacked footer lines has a floor so glyphs never touch.
   const lineGapPx = Math.round(F.lineGap * scale)
   assert.ok(lineGapPx >= 12, `line gap ${lineGapPx}px`)

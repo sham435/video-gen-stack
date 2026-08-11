@@ -92,12 +92,18 @@ export async function parseStructured(content, options = {}) {
   } = options
 
   const parse = (raw) => {
+    // Providers may already return a parsed object (json:true pre-parses).
+    // Validate it directly; only strings go through JSON extraction/parse.
     const extracted = extractJson(raw)
     let parsed
-    try {
-      parsed = JSON.parse(extracted)
-    } catch (err) {
-      throw new StructuredParseError(`Invalid JSON: ${err.message}`, { raw: String(raw).slice(0, 300) })
+    if (extracted !== null && typeof extracted === 'object') {
+      parsed = extracted
+    } else {
+      try {
+        parsed = JSON.parse(extracted)
+      } catch (err) {
+        throw new StructuredParseError(`Invalid JSON: ${err.message}`, { raw: String(raw).slice(0, 300) })
+      }
     }
     const errors = validateSchema(parsed, schema)
     if (errors.length) {

@@ -19,10 +19,10 @@ export async function generateVideo({ endpoint, modelId, prompt, duration = 5, a
   }
 
   const model = endpoint || 'gemini-2.0-flash'
-  const url = `${GEMINI_BASE}/models/${model}:generateContent?key=${getKey()}`
+  const url = `${GEMINI_BASE}/models/${model}:generateContent`
   const response = await fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': getKey() },
     body: JSON.stringify(body),
   })
 

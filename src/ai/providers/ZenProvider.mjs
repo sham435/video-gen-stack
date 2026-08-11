@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import os from 'node:os'
 import { AIProvider } from './AIProvider.mjs'
-import { withRetry } from './retry.mjs'
+import { withRetry, ProviderError } from './retry.mjs'
 
 const ZEN_MODELS = {
   'deepseek-v4-flash-free': 'deepseek-v4-flash-free',
@@ -84,7 +84,10 @@ export class ZenProvider extends AIProvider {
 
       const data = await res.json()
       const content = data.choices?.[0]?.message?.content
-      if (!content) throw new Error('Zen returned empty response')
+      if (!content) {
+        const model = options.model || this.model
+        throw new ProviderError('Zen returned empty response', { code: 'INVALID_RESPONSE', provider: 'Zen', model })
+      }
 
       if (options.responseFormat === 'json' || options.json) {
         try { return JSON.parse(content) }
@@ -93,7 +96,12 @@ export class ZenProvider extends AIProvider {
 
       return content
     } catch (e) {
-      throw new Error(`Zen generate failed: ${e.message}`)
+      if (e instanceof ProviderError) throw e
+      const model = options.model || this.model
+      throw new ProviderError(`Zen generate failed: ${e.message}`, {
+        provider: 'Zen', model,
+        status: e.status ?? undefined, code: e.code ?? undefined, cause: e,
+      })
     }
   }
 }

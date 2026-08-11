@@ -1,5 +1,7 @@
+import { randomUUID } from 'crypto'
 import { Router } from 'express'
 import { getDb as openDb, initSchema } from '../../../packages/database/news-engine.mjs'
+import { validateBody, cronJobSchema } from '../../../packages/validation/schemas.mjs'
 
 const router = Router()
 
@@ -16,7 +18,7 @@ router.get('/cron-jobs', (req, res) => {
   res.json({ jobs })
 })
 
-router.post('/cron-jobs', (req, res) => {
+router.post('/cron-jobs', validateBody(cronJobSchema), (req, res) => {
   const { name, category, schedule } = req.body
   if (!name) return res.status(400).json({ error: 'name required' })
   const db = getDb()

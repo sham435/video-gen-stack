@@ -1,5 +1,7 @@
 import { Router } from 'express'
 import { createHash } from 'crypto'
+import { requireAuth } from '../../../packages/auth/requireAuth.js'
+import { validateBody, generateSchema, newsVideoSchema } from '../../../packages/validation/schemas.mjs'
 import { VIDEO_MODELS, getEndpoint } from '../services/models.js'
 import { fetchTopHeadlines, searchNews, articlesToSummary } from '../services/news.js'
 import { jobDb, enqueue, getJob, listJobs } from '../../../packages/database/jobs.mjs'
@@ -67,7 +69,9 @@ router.get('/models', (req, res) => {
   })
 })
 
-router.post('/generate', (req, res) => {
+// Paid/provider-burning endpoints are admin-gated (requireAuth fails closed if
+// ADMIN_API_KEY unset). Read-only catalog routes above stay public.
+router.post('/generate', requireAuth, validateBody(generateSchema), (req, res) => {
   const { modelId, prompt, duration, aspectRatio, imageUrl, provider, segments, segmentDuration } = req.body
   const activeProvider = provider || 'local'
 
@@ -88,7 +92,7 @@ router.post('/generate', (req, res) => {
 })
 
 // News → Video pipeline
-router.post('/news-video', (req, res) => {
+router.post('/news-video', requireAuth, validateBody(newsVideoSchema), (req, res) => {
   const { topic, category, duration, aspectRatio, provider } = req.body
 
   const payload = { topic, category: category || 'technology', duration: duration || 10, aspectRatio: aspectRatio || '16:9', provider: provider || 'local' }

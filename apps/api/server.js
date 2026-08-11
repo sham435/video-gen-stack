@@ -51,6 +51,9 @@ app.use('/api/generate', renderLimiter)
 app.use('/api/news-video', renderLimiter)
 
 // Read-only catalog routes stay public; every mutating/admin surface is gated.
+// Paid/mutating video endpoints (POST /api/generate, POST /api/news-video) are
+// individually protected inside routes/video.js with requireAuth so the public
+// GET catalog (/providers, /models, /jobs) and /api/health stay reachable.
 app.use('/api', videoRoutes)
 app.use('/api/news', newsRoutes)
 app.use('/api/render-and-publish', requireAuth)
@@ -76,11 +79,9 @@ app.get('/api/health', (req, res) => {
 
   // Check DB connectivity
   let dbStatus = 'healthy'
-  let cronJobs = []
   try {
     const db = require('better-sqlite3')('./data/newsroom.db')
     db.prepare('SELECT 1').get()
-    cronJobs = db.prepare('SELECT * FROM cron_jobs WHERE enabled = 1 ORDER BY name').all()
     db.close()
   } catch { dbStatus = 'unavailable' }
 
@@ -96,14 +97,28 @@ app.get('/api/health', (req, res) => {
     queue: 'healthy',
     database: dbStatus,
     timestamp: new Date().toISOString(),
+  })
+})
+
+// Detailed health — admin only. Does NOT expose which provider keys exist, cron
+// schedules, or any infra, to unauthenticated callers; boolean flags stay here.
+app.get('/api/health/detailed', requireAuth, (req, res) => {
+  let cronJobs = []
+  try {
+    const db = require('better-sqlite3')('./data/newsroom.db')
+    cronJobs = db.prepare('SELECT * FROM cron_jobs WHERE enabled = 1 ORDER BY name').all()
+    db.close()
+  } catch {}
+  res.json({
+    status: 'ok',
     providers: {
       gemini: !!process.env.GEMINI_API_KEY,
       colab: !!process.env.COLAB_API_URL,
       fal: !!process.env.FAL_KEY,
       replicate: !!process.env.REPLICATE_API_TOKEN,
     },
-    cronJobs,
     cronSecret: !!process.env.CRON_SECRET,
+    cronJobs,
   })
 })
 
@@ -129,8 +144,8 @@ setInterval(() => {
   } catch {}
 }, 15000)
 
-// Debug: check deployed file
-app.get('/api/debug/pipeline', (req, res) => {
+// Debug: check deployed file — admin only (leaks source line content)
+app.get('/api/debug/pipeline', requireAuth, (req, res) => {
   import('fs').then(fs => {
     const code = fs.readFileSync('./apps/worker/pipeline.js', 'utf8');
     const lines = code.split('\n');
@@ -192,11 +207,12 @@ app.get('/api/channel/videos', async (req, res) => {
 
 // Admin console (packages/dashboard) mounted LAST so the core API routes above
 // (incl. /api/health) stay public. Non-authed visitors to / get sent to
-// /login; with ?apiKey=KEY they get the full control center. The public
-// landing page lives on GitHub Pages (sham435.github.io/video-gen-stack).
+// /login; header or httpOnly session cookie gets the full control center. The
+// public landing page lives on GitHub Pages (sham435.github.io/video-gen-stack).
 import dashboardApp from '../../packages/dashboard/index.mjs'
+import { isAuthed } from '../../packages/auth/requireAuth.js'
 app.get('/', (req, res, next) => {
-  if (req.query.apiKey || req.headers['x-api-key']) return next()
+  if (isAuthed(req)) return next()
   return res.redirect('/login')
 })
 app.use(dashboardApp)

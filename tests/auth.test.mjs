@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { requireAuth } from '../packages/auth/requireAuth.js'
+import { requireAuth, createAdminSession } from '../packages/auth/requireAuth.js'
 
 function makeRes() {
   const res = { statusCode: null, body: null }
@@ -62,13 +62,26 @@ test('auth: 200 with correct header key', () => {
   }
 })
 
-test('auth: 200 with correct query key', () => {
+test('auth: 401 when key passed in query string (keys must never be in URLs)', () => {
   const prev = process.env.ADMIN_API_KEY
   process.env.ADMIN_API_KEY = 'test-key-123'
   try {
+    const res = makeRes()
+    requireAuth({ headers: {}, query: { apiKey: 'test-key-123' } }, res, () => assert.fail('next() must not run'))
+    assert.equal(res.statusCode, 401)
+  } finally {
+    if (prev !== undefined) process.env.ADMIN_API_KEY = prev
+  }
+})
+
+test('auth: 200 with valid session cookie (EventSource streams)', () => {
+  const prev = process.env.ADMIN_API_KEY
+  process.env.ADMIN_API_KEY = 'test-key-123'
+  try {
+    const token = createAdminSession()
     let nextCalled = false
     const res = makeRes()
-    requireAuth({ headers: {}, query: { apiKey: 'test-key-123' } }, res, () => { nextCalled = true })
+    requireAuth({ headers: { cookie: `nm_session=${token}` } }, res, () => { nextCalled = true })
     assert.equal(nextCalled, true, 'next() invoked')
   } finally {
     if (prev !== undefined) process.env.ADMIN_API_KEY = prev

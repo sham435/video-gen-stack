@@ -1,12 +1,14 @@
 const W = 1080, H = 1920
-import { BROADCAST_TEXT } from '../style/text-tokens.mjs'
+import { FooterLayout } from '../video/footer/FooterLayout.mjs'
 
 export function drawNewsTicker(ctx, items, progress) {
   const tickerH = 50
-  // The footer owns the bottom safe zone (footer.height). The ticker docks
-  // just above it so captions/ticker never enter the reserved footer area.
+  // The footer owns the bottom safe zone. Dock just above its ACTUAL bar top
+  // (computed, not the static token) so the ticker never rides up onto the
+  // footer bar / pill / URL group. That contract lives in FooterLayout.
   const margin = 14
-  const tickerY = H - BROADCAST_TEXT.footer.height - tickerH - margin
+  const footerTop = FooterLayout.barTopInFrame(ctx, W, H)
+  const tickerY = footerTop - tickerH - margin
   const itemW = W / 4
 
   ctx.fillStyle = 'rgba(0,0,0,0.8)'

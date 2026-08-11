@@ -59,12 +59,17 @@ export class Compositor {
     if (owned('emphasis')) this.emphasis.draw(ctx, scene, progress, category, env('ai'))
     if (owned('caption')) this.captions.draw(ctx, scene, progress, wordIndex, env('caption'))
 
+    // Cinematic grade (vignette, color grade, scan lines, noise) runs over the
+    // CONTENT stack only. Chrome (LIVE, footer, ticker, bug) must be drawn
+    // AFTER it — otherwise the vignette (0.4–0.5 black at frame edges) paints
+    // over the footer and LIVE, making them unreadably dim in the final MP4.
+    this.post.draw(ctx, scene, progress, category)
+
     if (director.getOverlays().liveBadge) {
       this.broadcast.draw(ctx, scene, progress, category)
     }
 
     if (owned('footer')) this.branding.draw(ctx, scene, progress)
-    this.post.draw(ctx, scene, progress, category)
 
     // Watermark sits ABOVE post (vignette + grade) so it stays crisp/visible.
     // Always on — every scene, every frame.

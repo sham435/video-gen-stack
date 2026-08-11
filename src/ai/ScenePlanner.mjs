@@ -59,11 +59,13 @@ export class ScenePlanner {
       .trim()
   }
 
-  // Single duration clamp. An explicit numeric value is clamped into [2, 8];
-  // a missing or non-numeric value falls back to the 3s default.
+  // Single duration clamp. A positive finite numeric value is clamped into
+  // [2, 8]; a missing, zero, or non-numeric value falls back to the 3s default
+  // (which is already inside the clamp, so it passes through unchanged). Zero
+  // must NOT be treated as a valid 2s duration — it means "not specified".
   _clampDuration(value) {
     const n = Number(value)
-    const base = Number.isFinite(n) ? n : 3
+    const base = n > 0 && Number.isFinite(n) ? n : 3
     return Math.max(2, Math.min(8, base))
   }
 

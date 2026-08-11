@@ -39,6 +39,10 @@ export const BROADCAST_TEXT = {
     logoSize: 48,
     brand: { size: 38, weight: 900 },
     tagline: { size: 22, weight: 600, gap: 9 },
+    taglineBright: '#FFFFFF',
+
+    // Channel handle (@sham435) — right zone, below the urlTagline.
+    handle: { size: 26, weight: 600 },
 
     // AVAILABLE ON + platform badges (left zone, below the logo)
     available: { size: 24, weight: 800 },

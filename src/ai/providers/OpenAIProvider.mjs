@@ -1,5 +1,5 @@
 import { AIProvider } from './AIProvider.mjs'
-import { withRetry } from './retry.mjs'
+import { withRetry, ProviderError } from './retry.mjs'
 
 export class OpenAIProvider extends AIProvider {
   constructor(apiKey, options = {}) {
@@ -52,7 +52,10 @@ export class OpenAIProvider extends AIProvider {
 
       const data = await res.json()
       const content = data.choices?.[0]?.message?.content
-      if (!content) throw new Error('OpenAI returned empty response')
+      if (!content) {
+        const model = options.model || this.model
+        throw new ProviderError('OpenAI returned empty response', { code: 'INVALID_RESPONSE', provider: 'OpenAI', model })
+      }
 
       if (options.responseFormat === 'json' || options.json) {
         try { return JSON.parse(content) }
@@ -61,7 +64,12 @@ export class OpenAIProvider extends AIProvider {
 
       return content
     } catch (e) {
-      throw new Error(`OpenAI generate failed: ${e.message}`)
+      if (e instanceof ProviderError) throw e
+      const model = options.model || this.model
+      throw new ProviderError(`OpenAI generate failed: ${e.message}`, {
+        provider: 'OpenAI', model,
+        status: e.status ?? undefined, code: e.code ?? undefined, cause: e,
+      })
     }
   }
 }

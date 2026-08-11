@@ -2,6 +2,7 @@ import { DesignSystem } from '../../visuals/DesignSystem.mjs'
 import { drawNewsTicker } from '../../visuals/NewsTicker.mjs'
 import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
 import { FooterLayout, loadPlatformIcons } from '../footer/FooterLayout.mjs'
+import { measureBrandPill } from '../../layout/HeaderLayout.mjs'
 
 const { W, H } = DesignSystem
 
@@ -20,16 +21,15 @@ export class BrandingLayer {
     const bug = BROADCAST_TEXT.bug
     const font = DesignSystem.getTypography('watermark', 'default').font
     const label = 'NEWS-MONSTER'
-    const x = 14
-    const y = 12
+    const { x, y, w: pillW, h: pillH } = measureBrandPill(ctx)
     const padX = bug.padding[1]
     const padY = bug.padding[0]
 
     ctx.save()
     ctx.font = `${bug.weight} ${bug.size}px Anton, ${font}, sans-serif`
     const textW = ctx.measureText(label).width
-    const pillW = textW + padX * 2
-    const pillH = bug.size + padY * 2
+    const textX = x + padX + 8
+    const textY = y + pillH / 2
 
     ctx.shadowColor = 'rgba(0,0,0,0.7)'
     ctx.shadowBlur = 10
@@ -46,7 +46,7 @@ export class BrandingLayer {
     ctx.fillStyle = '#FFFFFF'
     ctx.textAlign = 'left'
     ctx.textBaseline = 'middle'
-    ctx.fillText(label, x + 8 + padX, y + pillH / 2)
+    ctx.fillText(label, textX, textY)
     ctx.restore()
   }
 

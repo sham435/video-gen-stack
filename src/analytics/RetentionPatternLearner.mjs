@@ -4,6 +4,7 @@ import { RetentionAnalyticsAdapter } from './RetentionAnalyticsAdapter.mjs'
 import { ProductionMemory } from '../pipeline/ProductionMemory.mjs'
 import { BrandPerformanceMemory } from '../pipeline/BrandPerformanceMemory.mjs'
 import { patternKey } from '../ai/thumbnail/ThumbnailBrandOptimizer.mjs'
+import { retentionConfidence } from './retentionConfidence.mjs'
 
 const SNAPSHOTS_FILE = path.resolve(process.cwd(), 'data', 'retention-analytics.json')
 
@@ -124,7 +125,7 @@ export class RetentionPatternLearner {
       if (deltasList.length < this.minObservations) continue
       const n = deltasList.length
       const mean = Math.round((deltasList.reduce((s, d) => s + d, 0) / n) * 10) / 10
-      const confidence = Math.min(0.97, Math.round((0.5 + (0.47 * n / (n + 25))) * 100) / 100)
+      const confidence = retentionConfidence(n)
       this.memory.calibrate(risk, { retentionImpact: mean, frequency: n, confidence })
       learned.push({ rule: risk, frequency: n, retentionImpact: mean, confidence })
       if (verbose) console.log(`Calibrated: ${risk} → impact ${mean > 0 ? '+' : ''}${mean}% over ${n} videos (conf ${confidence})`)

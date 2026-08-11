@@ -1,7 +1,10 @@
+import { classifyError } from './retry.mjs'
+
 export class ProviderChain {
   constructor(providers) {
     this.providers = Array.isArray(providers) ? providers : [providers].filter(Boolean)
     this._lastError = null
+    this._failures = []
   }
 
   get name() {
@@ -20,24 +23,41 @@ export class ProviderChain {
     return this._lastError
   }
 
+  // Per-provider classified failures from the most recent generate() call.
+  get failures() {
+    return this._failures
+  }
+
   async generate(messages, options = {}) {
-    let lastError = null
+    const failures = []
 
     for (let i = 0; i < this.providers.length; i++) {
       const provider = this.providers[i]
       try {
         const result = await provider.generate(messages, options)
         this._lastError = null
+        this._failures = []
         return result
       } catch (e) {
-        lastError = e
+        // Classify with the provider's name/model even if the throw didn't
+        // carry them — fallback order and error class stay in the diagnostics.
+        const error = classifyError(e, { provider: provider.name })
+        failures.push(error)
         this._lastError = e
         if (i < this.providers.length - 1) {
-          console.warn(`[ProviderChain] ${provider.name} failed (${i + 1}/${this.providers.length}), falling back: ${e.message}`)
+          console.warn(`[ProviderChain] ${provider.name} failed (${i + 1}/${this.providers.length}) — class=${error.class} retryable=${error.retryable}, falling back: ${error.message}`)
         }
       }
     }
 
-    throw new Error(`All ${this.providers.length} providers failed. Last error: ${lastError?.message}`)
+    this._failures = failures
+
+    const last = failures[failures.length - 1] || null
+    const detail = failures.map(f => `${f.provider}:${f.class}${f.status ? `(${f.status})` : ''} — ${f.message}`).join(' | ')
+    const err = new Error(`All ${this.providers.length} providers failed. ${detail}`)
+    err.providerFailures = failures
+    err.class = last?.class ?? 'UNKNOWN'
+    err.code = last?.code || 'ALL_PROVIDERS_FAILED'
+    throw err
   }
 }

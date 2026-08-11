@@ -1,5 +1,5 @@
 import { AIProvider } from './AIProvider.mjs'
-import { withRetry } from './retry.mjs'
+import { withRetry, ProviderError } from './retry.mjs'
 
 export class GeminiProvider extends AIProvider {
   constructor(apiKey, options = {}) {
@@ -37,7 +37,7 @@ export class GeminiProvider extends AIProvider {
 
     const contents = this.buildContents(messages)
     const model = options.model || this.model
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.apiKey}`
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`
 
     const payload = {
       contents,
@@ -55,7 +55,7 @@ export class GeminiProvider extends AIProvider {
       const res = await withRetry(async () => {
         const r = await fetch(url, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'x-goog-api-key': this.apiKey },
           body: JSON.stringify(payload),
           signal: AbortSignal.timeout(options.timeout || this.timeout),
         })
@@ -70,7 +70,10 @@ export class GeminiProvider extends AIProvider {
 
       const data = await res.json()
       const content = data.candidates?.[0]?.content?.parts?.[0]?.text
-      if (!content) throw new Error('Gemini returned empty response')
+      if (!content) {
+        const model = options.model || this.model
+        throw new ProviderError('Gemini returned empty response', { code: 'INVALID_RESPONSE', provider: 'Gemini', model })
+      }
 
       if (options.responseFormat === 'json' || options.json) {
         try { return JSON.parse(content) }
@@ -79,7 +82,12 @@ export class GeminiProvider extends AIProvider {
 
       return content
     } catch (e) {
-      throw new Error(`Gemini generate failed: ${e.message}`)
+      if (e instanceof ProviderError) throw e
+      const model = options.model || this.model
+      throw new ProviderError(`Gemini generate failed: ${e.message}`, {
+        provider: 'Gemini', model,
+        status: e.status ?? undefined, code: e.code ?? undefined, cause: e,
+      })
     }
   }
 }

@@ -11,8 +11,18 @@ export const FONT_BRAND = `'Montserrat ExtraBold', Inter, sans-serif`
 // by the layout pass (proportional to the 1080px design width) and a box
 // { x, y, w, h } given in canvas coordinates. No hard-coded positions.
 
+// Strip "scheme://" (and a trailing slash) so the footer never shows a
+// protocol — "video-gen-stack-production.up.railway.app", never "https://…".
+function stripProtocol(url) {
+  const s = String(url || '')
+  const fn = s.indexOf('://')
+  const afterScheme = fn >= 0 ? s.slice(fn + 3) : s
+  return afterScheme.replace(/\/+$/, '')
+}
+
 // Reduce a URL to its recognizable domain when the full string cannot fit in
-// the footer column — "sham435.github.io" reads far better than "https://…".
+// the footer column — "video-gen-stack-production.up.railway.app" reads far
+// better than a protocol-prefixed ellipsis.
 function domainOf(url) {
   const s = String(url || '')
   const fn = s.indexOf('://')
@@ -74,12 +84,13 @@ export const BrandBlock = {
     ctx.textAlign = 'left'
     ctx.fillText(data.brand || 'NEWS-MONSTER', box.x, top)
 
-    // Tagline — centered under the brand, pinned to the brand width. Loosened
-    // leading (1.25) so the secondary line reads as a separate line.
+    // Tagline — the primary brand message ("Unfiltered Breaking News").
+    // Rendered at full tagline weight/size in a bright fill so it reads as a
+    // distinct, visually-dominant line under the wordmark.
     if (tag) {
       const tagH = Math.round(F.tagline.size * scale)
       ctx.font = `${F.tagline.weight} ${tagH}px ${FONT_BRAND}`
-      ctx.fillStyle = F.muted
+      ctx.fillStyle = F.taglineBright || F.text
       const x = box.x + (box.w - ctx.measureText(tag).width) / 2
       ctx.fillText(tag, x, top + brandH * 1.25)
     }
@@ -186,24 +197,31 @@ export const SubscribeBlock = {
 
 export const label = () => 'AVAILABLE ON'
 
-// ── Right-aligned URL + tagline stack ───────────────────────────────────────
+// ── Right-aligned URL + tagline + handle stack ─────────────────────────────
 // The URL always renders at its full token size when it fits; when the column
 // is too narrow it is ellipsized (measure -> fit -> ellipsis) rather than
-// shrunk below legibility. The URL and tagline travel together, right-aligned.
+// shrunk below legibility. The protocol is always stripped — the footer shows
+// a clean hostname, never "https://". The channel handle renders below the
+// urlTagline only when showHandle is enabled.
 export const UrlBlock = {
   measure(ctx, scale, data, budget = Infinity) {
     const urlH = Math.round(F.url.size * scale)
     const tag = data.urlTagline
-    const urlW = Math.min(measureText(ctx, F.url, scale, data.url), budget)
+    const handle = data.showHandle !== false ? data.handle : ''
+    const urlW = Math.min(measureText(ctx, F.url, scale, stripProtocol(data.url)), budget)
     const tagW = tag ? measureText(ctx, F.urlTagline, scale, tag) : 0
-    const w = Math.max(urlW, Math.min(tagW, budget))
-    const h = urlH + (tag ? Math.round(F.urlTagline.size * scale * F.urlLeading) : 0)
+    const handleH = handle ? Math.round(F.handle.size * scale) : 0
+    const w = Math.max(urlW, Math.min(tagW, budget), handle ? measureText(ctx, F.handle, scale, handle) : 0)
+    const h = urlH
+      + (tag ? Math.round(F.urlTagline.size * scale * F.urlLeading) : 0)
+      + (handle ? Math.round(F.handle.size * scale * F.urlLeading) : 0)
     return { w, h }
   },
 
   draw(ctx, box, scale, data) {
-    const url = data.url || ''
+    const url = stripProtocol(data.url || '')
     const tag = data.urlTagline || ''
+    const handle = data.showHandle !== false ? (data.handle || '') : ''
     const maxW = Math.max(60, box.w)
 
     ctx.save()
@@ -211,8 +229,7 @@ export const UrlBlock = {
     ctx.font = `${F.url.weight} ${size}px ${FONT_BRAND}`
     // Prefer the full URL; when the column cannot hold it, fall back to the
     // recognizable domain (everything after the scheme, before the first path
-    // slash) instead of an anonymous "https://…" ellipsis. Preference is given
-    // to showing the visually distinctive part of the URL.
+    // slash) instead of an anonymous "https://…" ellipsis.
     let display = ctx.measureText(url).width <= maxW ? url : null
     if (!display) {
       const dom = domainOf(url)
@@ -231,12 +248,23 @@ export const UrlBlock = {
     ctx.fillText(display, box.x + box.w, box.y + size)
     ctx.shadowBlur = 0
 
+    let lineY = box.y + size
     if (tag) {
       const tagH = Math.round(F.urlTagline.size * scale)
       ctx.font = `${F.urlTagline.weight} ${tagH}px ${FONT_BRAND}`
       ctx.fillStyle = F.muted
       ctx.textAlign = 'right'
-      ctx.fillText(ellipsize(ctx, tag, maxW, F.urlTagline.weight, tagH), box.x + box.w, box.y + size + tagH * F.urlLeading)
+      lineY += tagH * F.urlLeading
+      ctx.fillText(ellipsize(ctx, tag, maxW, F.urlTagline.weight, tagH), box.x + box.w, lineY)
+    }
+
+    if (handle) {
+      const handleH = Math.round(F.handle.size * scale)
+      ctx.font = `${F.handle.weight} ${handleH}px ${FONT_BRAND}`
+      ctx.fillStyle = F.muted
+      ctx.textAlign = 'right'
+      lineY += handleH * F.urlLeading
+      ctx.fillText(ellipsize(ctx, handle, maxW, F.handle.weight, handleH), box.x + box.w, lineY)
     }
     ctx.restore()
   },

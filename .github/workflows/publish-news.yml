@@ -157,6 +157,16 @@ jobs:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
         run: node scripts/retention-learning.mjs
+      - name: Refresh underperforming thumbnails (Milestone C3)
+        # Daily self-improvement loop: correct CTR-relative thumbnails from the
+        # same analytics the retention job just read. Best-effort + idempotent
+        # (every video evaluated independently; failures skip that video).
+        if: always()
+        env:
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+        run: node scripts/refresh-thumbnails.mjs --apply --limit=3
       - name: Persist calibrated production memory
         if: always()
         uses: actions/cache@v5
