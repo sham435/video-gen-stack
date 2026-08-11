@@ -206,3 +206,30 @@ test('readability — URL baseline aligned with AVAILABLE ON; line gaps keep tex
   const lineGapPx = Math.round(F.lineGap * scale)
   assert.ok(lineGapPx >= 12, `line gap ${lineGapPx}px`)
 })
+
+test('outro caption — CaptionLayer does not render in the lower third for close scenes', async () => {
+  // The outro scene carries caption.fullText='STAY WITH NEWS-MONSTER'. The
+  // centered InformationLayer stack already renders it; the CaptionLayer must
+  // NOT duplicate it in the lower third (y≈H*0.78), where it collides with the
+  // footer zone and re-prints the outro text. Single-owner rule, like FOOTER-001.
+  const { SceneEngine } = await import('../src/video/SceneEngine.mjs')
+  const engine = new SceneEngine({ quality: 'default', category: 'technology' })
+  const { loadImage } = await import('@napi-rs/canvas')
+
+  const buf = await engine.renderSceneFrame(
+    { type: 'brand_close', outro: true, duration: 6, category: 'technology', image: null, ticker: [], caption: { focus: 'STAY WITH', fullText: 'STAY WITH NEWS-MONSTER' } },
+    0.9, [], 0, null
+  )
+  const canvas = createCanvas(W, H)
+  const ctx = canvas.getContext('2d')
+  ctx.drawImage(await loadImage(buf), 0, 0)
+  // CaptionEngine default anchor: y = H*0.78. Probe a tight window around it.
+  const y0 = Math.floor(H * 0.78) - 30, y1 = Math.floor(H * 0.78) + 30
+  let bright = 0
+  const dd = ctx.getImageData(0, y0, W, y1 - y0).data
+  for (let i = 0; i < dd.length; i += 4) {
+    const l = (dd[i] + dd[i + 1] + dd[i + 2]) / 3
+    if (l > 140) bright++
+  }
+  assert.equal(bright, 0, `outro scene must not render caption glyphs near footer (bright=${bright})`)
+})
