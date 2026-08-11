@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-11T17:39:21.869Z",
+  "updatedAt": "2026-08-11T18:35:20.786Z",
   "videos": [
+    {
+      "id": "OWoJLNTP-gI",
+      "title": "Experts Disagree On GTA | NEWS-MONSTER",
+      "publishedAt": "2026-08-11T18:29:09+00:00",
+      "publishedLabel": "Aug 11, 06:29 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/OWoJLNTP-gI/hqdefault.jpg"
+    },
     {
       "id": "PWcjKok1VTc",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T22:30:21+00:00",
       "publishedLabel": "Aug 8, 10:30 PM",
       "thumbnail": "https://i4.ytimg.com/vi/wOjFOzPaRYw/hqdefault.jpg"
-    },
-    {
-      "id": "x3KrLA8puqo",
-      "title": "'I wasn’t driving. I had Autopilot on': Tesla’s Full Self-Driving system is getting driver | NEWS-MO",
-      "publishedAt": "2026-08-08T21:40:49+00:00",
-      "publishedLabel": "Aug 8, 09:40 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/x3KrLA8puqo/hqdefault.jpg"
     }
   ]
 }
