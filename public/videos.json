@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-11T13:08:06.345Z",
+  "updatedAt": "2026-08-11T14:31:28.494Z",
   "videos": [
+    {
+      "id": "9c7mp1jEp0Q",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-11T14:24:24+00:00",
+      "publishedLabel": "Aug 11, 02:24 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/9c7mp1jEp0Q/hqdefault.jpg"
+    },
     {
       "id": "ntrMUCDBaf8",
       "title": "Kyle Shanahan, returning after serious car crash, has new perspective on Tesla Autopilot a | NEWS-MO",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-08T19:59:58+00:00",
       "publishedLabel": "Aug 8, 07:59 PM",
       "thumbnail": "https://i4.ytimg.com/vi/KmcGSCD02jo/hqdefault.jpg"
-    },
-    {
-      "id": "9WzbeIzARks",
-      "title": "Werewolf transformed my old gadgets into USB-C powered ones | NEWS-MONSTER",
-      "publishedAt": "2026-08-08T19:32:09+00:00",
-      "publishedLabel": "Aug 8, 07:32 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/9WzbeIzARks/hqdefault.jpg"
     }
   ]
 }
