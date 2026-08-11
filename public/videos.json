@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-11T16:31:08.055Z",
+  "updatedAt": "2026-08-11T17:39:21.869Z",
   "videos": [
+    {
+      "id": "PWcjKok1VTc",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-11T17:31:39+00:00",
+      "publishedLabel": "Aug 11, 05:31 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/PWcjKok1VTc/hqdefault.jpg"
+    },
+    {
+      "id": "NIM9zjfE610",
+      "title": "Apple will stream Friday Night Baseball live in Vision Pro | NEWS-MONSTER",
+      "publishedAt": "2026-08-11T16:31:17+00:00",
+      "publishedLabel": "Aug 11, 04:31 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/NIM9zjfE610/hqdefault.jpg"
+    },
     {
       "id": "l_TXX8yhiEM",
       "title": "\"They don't understand art\" - id Software lead slams Xbox, says it's \"impossible\" to make  | NEWS-MO",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-08T21:40:49+00:00",
       "publishedLabel": "Aug 8, 09:40 PM",
       "thumbnail": "https://i1.ytimg.com/vi/x3KrLA8puqo/hqdefault.jpg"
-    },
-    {
-      "id": "e3LUzFQCx84",
-      "title": "Why SK Hynix’s $38 Billion Memory Splurge Is No Problem for Micron Stock - Barron's | NEWS-MONSTER",
-      "publishedAt": "2026-08-08T21:04:02+00:00",
-      "publishedLabel": "Aug 8, 09:04 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/e3LUzFQCx84/hqdefault.jpg"
-    },
-    {
-      "id": "Y5UPC_W88Uw",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-08T20:30:42+00:00",
-      "publishedLabel": "Aug 8, 08:30 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/Y5UPC_W88Uw/hqdefault.jpg"
     }
   ]
 }
