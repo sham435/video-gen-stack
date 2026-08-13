@@ -111,7 +111,7 @@ for (const fmt of FORMATS) {
     const urlPx = Math.round(FOOTER.url.size * scale)
     const urlFont = `${FOOTER.url.weight} ${urlPx}px 'Montserrat ExtraBold', Inter, sans-serif`
     ctx.font = urlFont
-    const urlFull = ctx.measureText('video-gen-stack-production.up.railway.app').width
+    const urlFull = ctx.measureText('sham435.github.io/video-gen-stack').width
     assert.ok(urlFull <= zones[2].w + PAD, `full URL (${Math.round(urlFull)}px) fits right zone (${Math.round(zones[2].w)}px) — no ellipsis`)
     assert.ok(urlPx >= 20, `URL font ${urlPx}px readable`)
     // urlTagline also fits without ellipsis.

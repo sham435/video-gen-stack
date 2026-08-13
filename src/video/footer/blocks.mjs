@@ -12,7 +12,7 @@ export const FONT_BRAND = `'Montserrat ExtraBold', Inter, sans-serif`
 // { x, y, w, h } given in canvas coordinates. No hard-coded positions.
 
 // Strip "scheme://" (and a trailing slash) so the footer never shows a
-// protocol — "video-gen-stack-production.up.railway.app", never "https://…".
+// protocol — "sham435.github.io/video-gen-stack", never "https://…".
 function stripProtocol(url) {
   const s = String(url || '')
   const fn = s.indexOf('://')
@@ -21,7 +21,7 @@ function stripProtocol(url) {
 }
 
 // Reduce a URL to its recognizable domain when the full string cannot fit in
-// the footer column — "video-gen-stack-production.up.railway.app" reads far
+// the footer column — "sham435.github.io" reads far
 // better than a protocol-prefixed ellipsis.
 function domainOf(url) {
   const s = String(url || '')
@@ -176,7 +176,7 @@ export const PlatformBlock = {
     return { w, h }
   },
 
-  draw(ctx, box, scale, icons) {
+  draw(ctx, box, scale, data, icons) {
     const labelH = Math.round(F.available.size * scale)
     const iconW = Math.round(F.platformIcon * scale)
     const gap = Math.round(F.platformGap * scale)

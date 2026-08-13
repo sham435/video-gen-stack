@@ -42,7 +42,7 @@ export const BROADCAST_TEXT = {
     taglineBright: '#FFFFFF',
 
     // Channel handle (@sham435) — right zone, below the urlTagline.
-    handle: { size: 20, weight: 600 },
+    handle: { size: 22, weight: 600 },
 
     // AVAILABLE ON + platform badges (left zone, below the logo)
     available: { size: 24, weight: 800 },
@@ -52,13 +52,13 @@ export const BROADCAST_TEXT = {
     // URL + URL tagline group (right zone, below the pill). The URL is the
     // primary CTA: sized so the FULL hostname fits the 50% right column
     // (no ellipsis); the tagline under it breathes with 1.30 leading.
-    url: { size: 22, weight: 900 },
-    urlTagline: { size: 20, weight: 600 },
+    url: { size: 26, weight: 900 },
+    urlTagline: { size: 24, weight: 600 },
     urlLeading: 1.30,
 
     // YouTube subscribe pill — strongest CTA in the footer:
-    // 50px hier / 25px radius / 26px icon / 24px bold label.
-    pill: { height: 50, radius: 25, icon: 26, labelSize: 24, weight: 800 },
+    // 54px hier / 27px radius / 28px icon / 26px bold label.
+    pill: { height: 54, radius: 27, icon: 28, labelSize: 26, weight: 800 },
 
     // Vertical rhythm between stacked lines/groups — 20–30% looser than the
     // old tight stack so AVAILABLE ON / URL / tagline read as separate lines.

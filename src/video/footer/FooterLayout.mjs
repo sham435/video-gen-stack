@@ -18,11 +18,13 @@ export async function loadPlatformIcons() {
   try {
     const { loadImage } = await import('@napi-rs/canvas')
     const fs = await import('fs')
-    // Android ships a proper green badge PNG. The Apple asset is a BLACK
-    // silhouette (invisible on the dark footer), so it is intentionally NOT
-    // loaded — the white vector apple fallback renders instead.
-    const p = `assets/logos/android.png`
-    if (fs.existsSync(p)) iconCache.android = await loadImage(p)
+    // Android ships a proper green badge PNG. Apple is a monochrome logo — the
+    // asset is stored as a WHITE silhouette so it stays visible on the dark
+    // footer (the vector fallback is used if the PNG is missing).
+    for (const name of ['apple', 'android']) {
+      const p = `assets/logos/${name}.png`
+      if (fs.existsSync(p)) iconCache[name] = await loadImage(p)
+    }
     // Channel avatar (@sham435) — served as JPEG by YouTube, next to NM logo.
     for (const f of ['assets/logos/channel-avatar.jpg', 'assets/logos/channel-avatar.png']) {
       if (fs.existsSync(f) && !iconCache.avatar) {
@@ -40,7 +42,7 @@ export async function loadPlatformIcons() {
  * Broadcast grid (fixed 3-column layout, 25% | 50% | 25%):
  *   ┌─────────────────────────────────────────────────────────┐
  *   │ [LOGO]  NEWS-MONSTER              [SUBSCRIBE]           │
- *   │         Unfiltered Breaking       video-gen-stack...    │
+ *   │         Unfiltered Breaking       sham435.github.io…    │
  *   │         AVAILABLE ON              Unfiltered Global     │
  *   │         Android  Apple            Headlines             │
  *   │                                     @sham435            │
@@ -68,7 +70,7 @@ export class FooterLayout {
     // Secondary footer message.
     urlTagline: 'Unfiltered Global Headlines',
     // Display without protocol for cleaner broadcast branding.
-    url: 'video-gen-stack-production.up.railway.app',
+    url: 'sham435.github.io/video-gen-stack',
     // Channel identity.
     handle: '@sham435',
     // Visibility controls — per-render/view overridable.
