@@ -45,10 +45,10 @@ for (const fmt of FORMATS) {
       ['left', 'center', 'right'],
       'zone order: left | center | right'
     )
-    // Right zone is intentionally ≥ left: it carries the URL at a legible size
-    // (readability wins over a symmetric 25/50/25 split).
-    assert.ok(zones[2].w >= zones[0].w, 'right zone >= left zone (URL legibility)')
-    assert.ok(zones[1].w > zones[0].w * 1.5, 'center zone is the largest (whitespace)')
+    // Right zone is the widest: it must fit the FULL site URL + urlTagline +
+    // handle without ellipsis (left 20% | center 30% | right 50%).
+    assert.ok(zones[2].w >= zones[0].w * 2, 'right zone >= 2x left (full URL visibility)')
+    assert.ok(zones[2].w >= zones[1].w, 'right zone is the largest (URL column)')
 
     // 3. No zone clips the canvas horizontally.
     for (const z of zones) {
@@ -64,16 +64,18 @@ for (const fmt of FORMATS) {
       )
     }
 
-    // 5. Left stack: logo -> NEWS-MONSTER brand -> AVAILABLE ON, stacked
-    //    vertically inside left zone (5-column footer: Logo | Brand+Tagline |
-    //    AVAILABLE ON | URL | Subscribe).
-    const [logo, brand, platform] = layout.left
+    // 5. Left stack: logo -> NEWS-MONSTER brand -> channel (@sham435) ->
+    //    AVAILABLE ON, stacked vertically inside left zone (6-column footer:
+    //    Logo | Brand+Tagline | Channel | AVAILABLE ON | URL | Subscribe).
+    const [logo, brand, channel, platform] = layout.left
     assert.equal(logo.key, 'logo')
     assert.equal(brand.key, 'brand')
+    assert.equal(channel.key, 'channel')
     assert.equal(platform.key, 'platform')
-    assert.ok(logo.h > 0 && brand.h > 0 && platform.h > 0)
+    assert.ok(logo.h > 0 && brand.h > 0 && channel.h > 0 && platform.h > 0)
     assert.ok(brand.y + PAD >= logo.y + logo.h, 'logo -> brand overlap')
-    assert.ok(platform.y + PAD >= brand.y + brand.h, 'brand -> platform overlap')
+    assert.ok(channel.y + PAD >= brand.y + brand.h, 'brand -> channel overlap')
+    assert.ok(platform.y + PAD >= channel.y + channel.h, 'channel -> platform overlap')
 
     // 6. Right stack: pill on top, URL+tagline beneath, inside right zone.
     const [pill, url] = layout.right
@@ -103,9 +105,19 @@ for (const fmt of FORMATS) {
     const nhUrlBaseline = nhUrl.y + Math.round(FOOTER.url.size * scale)
     assert.equal(nhUrlBaseline, nhAvailBaseline, 'URL baseline matches AVAILABLE ON when no handle line')
 
-    // 9. URL font size is the broadcast legibility floor (≥ 30px at design width).
+    // 9. URL font size fits the FULL hostname in the right column at design
+    //    width — the regression this suite guards: the URL used to ellipsize
+    //    to "video-gen-stac-…" because the column was too narrow.
     const urlPx = Math.round(FOOTER.url.size * scale)
-    assert.ok(urlPx >= 30, `URL font ${urlPx}px must be ≥ 30px`)
+    const urlFont = `${FOOTER.url.weight} ${urlPx}px 'Montserrat ExtraBold', Inter, sans-serif`
+    ctx.font = urlFont
+    const urlFull = ctx.measureText('video-gen-stack-production.up.railway.app').width
+    assert.ok(urlFull <= zones[2].w + PAD, `full URL (${Math.round(urlFull)}px) fits right zone (${Math.round(zones[2].w)}px) — no ellipsis`)
+    assert.ok(urlPx >= 20, `URL font ${urlPx}px readable`)
+    // urlTagline also fits without ellipsis.
+    ctx.font = `${FOOTER.urlTagline.weight} ${Math.round(FOOTER.urlTagline.size * scale)}px 'Montserrat ExtraBold', Inter, sans-serif`
+    const tagFull = ctx.measureText('Unfiltered Global Headlines').width
+    assert.ok(tagFull <= zones[2].w + PAD, `urlTagline (${Math.round(tagFull)}px) fits right zone (${Math.round(zones[2].w)}px)`)
 
     // 10. Line gaps: the URL-to-tagline stack and the logo→platform stack
     //     carry at least a 12px (scaled) vertical gap — no touching lines.
@@ -122,7 +134,7 @@ test('footer draw — produces a non-empty frame', () => {
   const canvas = createCanvas(fmt.W, fmt.H)
   const ctx = canvas.getContext('2d')
   const layout = FooterLayout.draw(ctx, fmt.W, fmt.H)
-  assert.ok(layout.left.length === 3 && layout.right.length === 2)
+  assert.ok(layout.left.length === 4 && layout.right.length === 2, `left=${layout.left.length} right=${layout.right.length}`)
   const barTop = FooterLayout.barTopInFrame(ctx, fmt.W, fmt.H)
   const data = ctx.getImageData(0, barTop, fmt.W, layout.barHeight).data
   let lit = 0

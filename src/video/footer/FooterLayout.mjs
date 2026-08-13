@@ -1,6 +1,7 @@
 import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
 import {
   LogoBlock,
+  ChannelBlock,
   BrandBlock,
   PlatformBlock,
   UrlBlock,
@@ -17,9 +18,16 @@ export async function loadPlatformIcons() {
   try {
     const { loadImage } = await import('@napi-rs/canvas')
     const fs = await import('fs')
-    for (const name of ['apple', 'android']) {
-      const p = `assets/logos/${name}.png`
-      if (fs.existsSync(p)) iconCache[name] = await loadImage(p)
+    // Android ships a proper green badge PNG. The Apple asset is a BLACK
+    // silhouette (invisible on the dark footer), so it is intentionally NOT
+    // loaded — the white vector apple fallback renders instead.
+    const p = `assets/logos/android.png`
+    if (fs.existsSync(p)) iconCache.android = await loadImage(p)
+    // Channel avatar (@sham435) — served as JPEG by YouTube, next to NM logo.
+    for (const f of ['assets/logos/channel-avatar.jpg', 'assets/logos/channel-avatar.png']) {
+      if (fs.existsSync(f) && !iconCache.avatar) {
+        try { iconCache.avatar = await loadImage(fs.readFileSync(f)) } catch {}
+      }
     }
   } catch {}
   iconCache.loaded = true
@@ -119,6 +127,12 @@ export class FooterLayout {
     leftBlocks.push({ key: 'brand', block: BrandBlock, w: brand.w, h: brand.h })
     leftH += brand.h
 
+    // Channel handle (@sham435 + avatar) — beside the brand, under the logo.
+    const channel = ChannelBlock.measure(ctx, scale, D)
+    leftH += vGap
+    leftBlocks.push({ key: 'channel', block: ChannelBlock, w: channel.w, h: channel.h })
+    leftH += channel.h
+
     // Platform badges (AVAILABLE ON + icons).
     const platform = PlatformBlock.measure(ctx, scale)
     leftH += vGap
@@ -181,7 +195,10 @@ export class FooterLayout {
 
     const rightColumns = [
       { key: 'subscribe', block: SubscribeBlock, x: subscribeX - subscribe.w, y: rightTop, w: subscribe.w, h: subscribe.h },
-      { key: 'url', block: UrlBlock, x: rightX - url.w, y: urlY, w: url.w, h: url.h },
+      // URL column spans the full right zone (right-aligned to its right
+      // edge) so the URL + urlTagline + handle group docks at the frame edge,
+      // never mid-screen. UrlBlock right-aligns within box.x .. box.x+box.w.
+      { key: 'url', block: UrlBlock, x: rightX, y: urlY, w: zoneW.right, h: url.h },
     ]
 
     return { scale, barHeight, zones, left: leftColumns, right: rightColumns, data: D }

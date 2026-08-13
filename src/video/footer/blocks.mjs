@@ -58,6 +58,70 @@ export const LogoBlock = {
   },
 }
 
+// Channel block — avatar circle + @handle, rendered beside the NM monogram in
+// the left zone (top row). Uses the channel avatar image when loaded (JPEG or
+// PNG), otherwise falls back to the NM monogram on the avatar base.
+export const ChannelBlock = {
+  measure(ctx, scale, data) {
+    const avatarS = Math.round(F.logoSize * 0.8 * scale)
+    const handle = data.showHandle !== false ? (data.handle || '') : ''
+    const textW = handle ? measureText(ctx, F.handle, scale, handle) + Math.round(10 * scale) : 0
+    return { w: avatarS + (handle ? Math.round(12 * scale) : 0) + textW, h: avatarS }
+  },
+
+  draw(ctx, box, scale, data, icons = {}) {
+    const avatarS = box.h
+    const avatar = icons?.avatar || null
+    const handle = data.showHandle !== false ? (data.handle || '') : ''
+    const gap = Math.round(12 * scale)
+    const cx = box.x + avatarS / 2
+    const cy = box.y + avatarS / 2
+    ctx.save()
+
+    if (avatar) {
+      ctx.save()
+      ctx.beginPath()
+      ctx.arc(cx, cy, avatarS / 2, 0, Math.PI * 2)
+      ctx.clip()
+      ctx.drawImage(avatar, box.x, box.y, avatarS, avatarS)
+      ctx.restore()
+      ctx.strokeStyle = 'rgba(255,255,255,0.35)'
+      ctx.lineWidth = 2
+      ctx.beginPath()
+      ctx.arc(cx, cy, avatarS / 2, 0, Math.PI * 2)
+      ctx.stroke()
+    } else {
+      // Fallback: NM branded circle so the handle is never bare.
+      ctx.shadowColor = 'rgba(0,0,0,0.9)'
+      ctx.shadowBlur = 6
+      ctx.fillStyle = F.accent
+      ctx.beginPath()
+      ctx.arc(cx, cy, avatarS / 2, 0, Math.PI * 2)
+      ctx.fill()
+      ctx.shadowBlur = 0
+      ctx.font = `900 ${Math.round(avatarS * 0.45)}px ${FONT_BRAND}`
+      ctx.fillStyle = '#FFFFFF'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.fillText('NM', cx, cy + Math.round(avatarS * 0.08))
+    }
+
+    if (handle) {
+      const handleH = Math.round(F.handle.size * scale)
+      ctx.font = `${F.handle.weight} ${handleH}px ${FONT_BRAND}`
+      ctx.fillStyle = F.text
+      ctx.shadowColor = 'rgba(0,0,0,0.9)'
+      ctx.shadowBlur = 4
+      ctx.textAlign = 'left'
+      ctx.textBaseline = 'middle'
+      ctx.fillText(handle, box.x + avatarS + gap, cy)
+      ctx.shadowBlur = 0
+    }
+    ctx.restore()
+    return { x: box.x, y: box.y, w: box.w, h: avatarS }
+  },
+}
+
 export const BrandBlock = {
   measure(ctx, scale, data) {
     const brandH = Math.round(F.brand.size * scale)
@@ -197,31 +261,26 @@ export const SubscribeBlock = {
 
 export const label = () => 'AVAILABLE ON'
 
-// ── Right-aligned URL + tagline + handle stack ─────────────────────────────
+// ── Right-aligned URL + tagline stack ──────────────────────────────────────
 // The URL always renders at its full token size when it fits; when the column
 // is too narrow it is ellipsized (measure -> fit -> ellipsis) rather than
 // shrunk below legibility. The protocol is always stripped — the footer shows
-// a clean hostname, never "https://". The channel handle renders below the
-// urlTagline only when showHandle is enabled.
+// a clean hostname, never "https://". The channel handle lives next to the NM
+// monogram (ChannelBlock), not here.
 export const UrlBlock = {
   measure(ctx, scale, data, budget = Infinity) {
     const urlH = Math.round(F.url.size * scale)
     const tag = data.urlTagline
-    const handle = data.showHandle !== false ? data.handle : ''
     const urlW = Math.min(measureText(ctx, F.url, scale, stripProtocol(data.url)), budget)
     const tagW = tag ? measureText(ctx, F.urlTagline, scale, tag) : 0
-    const handleH = handle ? Math.round(F.handle.size * scale) : 0
-    const w = Math.max(urlW, Math.min(tagW, budget), handle ? measureText(ctx, F.handle, scale, handle) : 0)
-    const h = urlH
-      + (tag ? Math.round(F.urlTagline.size * scale * F.urlLeading) : 0)
-      + (handle ? Math.round(F.handle.size * scale * F.urlLeading) : 0)
+    const w = Math.max(urlW, Math.min(tagW, budget))
+    const h = urlH + (tag ? Math.round(F.urlTagline.size * scale * F.urlLeading) : 0)
     return { w, h }
   },
 
   draw(ctx, box, scale, data) {
     const url = stripProtocol(data.url || '')
     const tag = data.urlTagline || ''
-    const handle = data.showHandle !== false ? (data.handle || '') : ''
     const maxW = Math.max(60, box.w)
 
     ctx.save()
@@ -256,15 +315,6 @@ export const UrlBlock = {
       ctx.textAlign = 'right'
       lineY += tagH * F.urlLeading
       ctx.fillText(ellipsize(ctx, tag, maxW, F.urlTagline.weight, tagH), box.x + box.w, lineY)
-    }
-
-    if (handle) {
-      const handleH = Math.round(F.handle.size * scale)
-      ctx.font = `${F.handle.weight} ${handleH}px ${FONT_BRAND}`
-      ctx.fillStyle = F.muted
-      ctx.textAlign = 'right'
-      lineY += handleH * F.urlLeading
-      ctx.fillText(ellipsize(ctx, handle, maxW, F.handle.weight, handleH), box.x + box.w, lineY)
     }
     ctx.restore()
   },

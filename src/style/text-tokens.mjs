@@ -29,11 +29,11 @@ export const BROADCAST_TEXT = {
     text: '#FFFFFF',
     muted: 'rgba(255,255,255,0.72)',
 
-    // Broadcast grid: left zone (logo+AVAILABLE/badges), center whitespace,
-    // right zone (subscribe pill + URL/tagline). The right zone is widened so
-    // the site URL renders at a legible size instead of ellipsizing to a few
-    // characters — readability wins over a visually symmetric 25/50/25 split.
-    grid: { left: 0.24, center: 0.46, right: 0.30 },
+    // Broadcast grid: left zone (logo+brand+tagline+badges), center whitespace,
+    // right zone (subscribe pill + URL + tagline + handle). The right zone is
+    // the widest so the FULL site URL and tagline render at a legible size
+    // instead of ellipsizing — visibility wins over a symmetric split.
+    grid: { left: 0.20, center: 0.30, right: 0.50 },
 
     // Brand + tagline stack (left zone)
     logoSize: 48,
@@ -42,7 +42,7 @@ export const BROADCAST_TEXT = {
     taglineBright: '#FFFFFF',
 
     // Channel handle (@sham435) — right zone, below the urlTagline.
-    handle: { size: 26, weight: 600 },
+    handle: { size: 20, weight: 600 },
 
     // AVAILABLE ON + platform badges (left zone, below the logo)
     available: { size: 24, weight: 800 },
@@ -50,11 +50,10 @@ export const BROADCAST_TEXT = {
     platformGap: 10,
 
     // URL + URL tagline group (right zone, below the pill). The URL is the
-    // primary CTA: 30px is the broadcast legibility floor (enforced by the
-    // text-legibility preflight); the tagline under it breathes with 1.30
-    // leading, and a long URL degrades to its domain, never to a tiny ellipsis.
-    url: { size: 30, weight: 900 },
-    urlTagline: { size: 26, weight: 600 },
+    // primary CTA: sized so the FULL hostname fits the 50% right column
+    // (no ellipsis); the tagline under it breathes with 1.30 leading.
+    url: { size: 22, weight: 900 },
+    urlTagline: { size: 20, weight: 600 },
     urlLeading: 1.30,
 
     // YouTube subscribe pill — strongest CTA in the footer:

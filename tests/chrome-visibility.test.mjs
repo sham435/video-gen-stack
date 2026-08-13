@@ -91,17 +91,25 @@ test('footer URL — does not overlap AVAILABLE ON', () => {
 test('footer — actually visible in the composed frame (bright text after post-process)', async () => {
   const ctx = await loadIntoCanvas(await renderBrandCloseFrame(1.0))
   const footerTop = FooterLayout.barTopInFrame(ctx, W, H)
-  // URL text glyphs occupy the upper rows of the bar (~footerTop+32..66).
-  const s = regionStats(ctx, 380, footerTop + 32, 770, footerTop + 72)
+  const layout = FooterLayout.compute(ctx, W)
+  const url = layout.right.find(c => c.key === 'url')
+  // URL text sits at the top of the URL column (right-aligned in the right zone).
+  const yRow = footerTop + Math.round(url.y) + 16
+  const x0 = Math.round(url.x), x1 = Math.round(url.x + url.w)
+  const s = regionStats(ctx, x0, yRow, x1, yRow + 40)
   assert.ok(s.maxB >= 200, `URL area max brightness ${s.maxB} must be ≥200 (was ~124 before fix)`)
   assert.ok(s.pct > 0.1, `URL area has visible text (${(s.pct * 100).toFixed(1)}%)`)
 })
 
 test('footer tagline — readable (not crushed by vignette)', async () => {
   const ctx = await loadIntoCanvas(await renderBrandCloseFrame(1.0))
-  const footerTop = H - FooterLayout.compute(ctx, W).barHeight
-  // Tagline ("For more tech news") sits ~footerTop+74..104, just under the URL.
-  const s = regionStats(ctx, 380, footerTop + 74, 770, footerTop + 104)
+  const footerTop = FooterLayout.barTopInFrame(ctx, W, H)
+  const layout = FooterLayout.compute(ctx, W)
+  const url = layout.right.find(c => c.key === 'url')
+  const urlTagPx = Math.round((BROADCAST_TEXT.footer.urlTagline.size) * layout.scale)
+  const yRow = footerTop + Math.round(url.y) + Math.round((BROADCAST_TEXT.footer.url.size) * layout.scale) + Math.round(urlTagPx * 0.4)
+  const x0 = Math.round(url.x), x1 = Math.round(url.x + url.w)
+  const s = regionStats(ctx, x0, yRow, x1, yRow + 40)
   assert.ok(s.maxB >= 150, `tagline max brightness ${s.maxB} ≥150`)
 })
 
