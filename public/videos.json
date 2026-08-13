@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-13T22:10:18.599Z",
+  "updatedAt": "2026-08-13T23:24:30.833Z",
   "videos": [
+    {
+      "id": "ytYtwa5KbNU",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-13T23:16:39+00:00",
+      "publishedLabel": "Aug 13, 11:16 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/ytYtwa5KbNU/hqdefault.jpg"
+    },
     {
       "id": "-3Bs4U0FC50",
       "title": "Xbox Reveals Stunning 3D-Moulded Gears of War: E-Day Limited Edition Controllers - IGN | NEWS-MONSTE",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-11T13:01:08+00:00",
       "publishedLabel": "Aug 11, 01:01 PM",
       "thumbnail": "https://i3.ytimg.com/vi/ntrMUCDBaf8/hqdefault.jpg"
-    },
-    {
-      "id": "FY6wwfDu70o",
-      "title": "Stock Market Today: Dow Futures Dip; Oil Prices Edge Higher — Live Updates - WSJ | NEWS-MONSTER",
-      "publishedAt": "2026-08-11T11:46:09+00:00",
-      "publishedLabel": "Aug 11, 11:46 AM",
-      "thumbnail": "https://i3.ytimg.com/vi/FY6wwfDu70o/hqdefault.jpg"
     }
   ]
 }
