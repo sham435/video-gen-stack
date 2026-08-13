@@ -131,7 +131,31 @@ jobs:
             git config user.email "actions@users.noreply.github.com"
             git add public/videos.json
             git commit -m "chore: refresh landing page video feed"
-            git push origin main
+            # Scheduled runs overlap (12min run vs 30min cadence) and other
+            # commits can land on main mid-run, so a plain push races. Rebase
+            # onto the live main first, then push — with retries. If the
+            # merge conflicts on videos.json, our freshly-generated feed is
+            # the newer one: keep ours and continue.
+            for attempt in 1 2 3; do
+              git fetch origin main
+              if git push origin main 2>/tmp/push.err; then
+                echo "Pushed on attempt $attempt"
+                exit 0
+              fi
+              cat /tmp/push.err
+              echo "Push attempt $attempt failed, rebasing onto origin/main..."
+              git pull --rebase origin main 2>/tmp/rebase.err || true
+              if grep -q "CONFLICT" /tmp/rebase.err; then
+                echo "Rebase conflict — keeping freshly generated videos.json"
+                git checkout --theirs public/videos.json 2>/dev/null || true
+                git add public/videos.json
+                GIT_EDITOR=true git rebase --continue 2>/dev/null || \
+                  { git rebase --abort 2>/dev/null; git reset --merge origin/main; git add public/videos.json; git commit -m "chore: refresh landing page video feed"; }
+              fi
+              sleep 20
+            done
+            echo "Push failed after 3 attempts"
+            exit 1
           fi
 
   retention-learning:
