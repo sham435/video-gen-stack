@@ -66,7 +66,8 @@ jobs:
         uses: actions/cache@v5
         with:
           path: data
-          key: newsroom-data-${{ github.run_id }}
+          key: newsroom-data-main
+          restore-keys: newsroom-data-
 
       - name: Install dependencies
         run: npm install --include=optional
@@ -113,7 +114,8 @@ jobs:
         uses: actions/cache@v5
         with:
           path: data
-          key: newsroom-data-${{ github.run_id }}
+          key: newsroom-data-main
+          restore-keys: newsroom-data-
 
       - name: Refresh landing page video feed
         if: always()
@@ -172,7 +174,8 @@ jobs:
         uses: actions/cache@v5
         with:
           path: data
-          key: newsroom-data-${{ github.run_id }}
+          key: newsroom-data-main
+          restore-keys: newsroom-data-
       - name: Install dependencies
         run: npm install --include=optional
       - name: Learn retention patterns
@@ -196,7 +199,8 @@ jobs:
         uses: actions/cache@v5
         with:
           path: data
-          key: newsroom-data-${{ github.run_id }}
+          key: newsroom-data-main
+          restore-keys: newsroom-data-
 
   gc-artifacts:
     # Daily 3:23am with retention-learning — reclaim the 1GB+ of render
