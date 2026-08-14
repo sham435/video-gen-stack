@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-14T23:00:40.214Z",
+  "updatedAt": "2026-08-14T23:31:34.694Z",
   "videos": [
+    {
+      "id": "mAyE-urIZB4",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-14T23:23:40+00:00",
+      "publishedLabel": "Aug 14, 11:23 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/mAyE-urIZB4/hqdefault.jpg"
+    },
     {
       "id": "k1M3_3wLWic",
       "title": "Experts Disagree On U.S | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-14T11:46:28+00:00",
       "publishedLabel": "Aug 14, 11:46 AM",
       "thumbnail": "https://i2.ytimg.com/vi/-SYqDhoqnDc/hqdefault.jpg"
-    },
-    {
-      "id": "WRfWw0nRzcw",
-      "title": "We're Live at Made By Google Sharing Every Pixel 11, Pro Fold, and Watch 5 Announcement -  | NEWS-MO",
-      "publishedAt": "2026-08-14T11:12:54+00:00",
-      "publishedLabel": "Aug 14, 11:12 AM",
-      "thumbnail": "https://i4.ytimg.com/vi/WRfWw0nRzcw/hqdefault.jpg"
     }
   ]
 }
