@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-14T18:36:24.974Z",
+  "updatedAt": "2026-08-14T19:35:52.245Z",
   "videos": [
+    {
+      "id": "mjp0fgHl3FQ",
+      "title": "Does Google even want to win at AI? | NEWS-MONSTER",
+      "publishedAt": "2026-08-14T19:32:58+00:00",
+      "publishedLabel": "Aug 14, 07:32 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/mjp0fgHl3FQ/hqdefault.jpg"
+    },
     {
       "id": "8oJxigpB0a0",
       "title": "Google’s Pixel Tag picks a bold strategy in a sea of AirTag clones [Gallery] - 9to5Google | NEWS-MON",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-14T03:09:52+00:00",
       "publishedLabel": "Aug 14, 03:09 AM",
       "thumbnail": "https://i2.ytimg.com/vi/E_vyxImvN6g/hqdefault.jpg"
-    },
-    {
-      "id": "DQm8_WBJR3Y",
-      "title": "Hogwarts Legacy 2 Is Officially in the Works, Confirms Warner Bros. - IGN | NEWS-MONSTER",
-      "publishedAt": "2026-08-14T00:11:46+00:00",
-      "publishedLabel": "Aug 14, 12:11 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/DQm8_WBJR3Y/hqdefault.jpg"
     }
   ]
 }
