@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-14T23:31:34.694Z",
+  "updatedAt": "2026-08-14T23:54:55.542Z",
   "videos": [
+    {
+      "id": "10Zozn-ALkU",
+      "title": "Stock Market Today: Dow Climbs; Wholesale Inflation Unchanged in July — Live Updates - WSJ | NEWS-MO",
+      "publishedAt": "2026-08-14T23:51:31+00:00",
+      "publishedLabel": "Aug 14, 11:51 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/10Zozn-ALkU/hqdefault.jpg"
+    },
     {
       "id": "mAyE-urIZB4",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-14T13:38:41+00:00",
       "publishedLabel": "Aug 14, 01:38 PM",
       "thumbnail": "https://i4.ytimg.com/vi/WnTKprluGpE/hqdefault.jpg"
-    },
-    {
-      "id": "-SYqDhoqnDc",
-      "title": "Cisco Networking Sales Surge on AI Demand. Why the Stock Is Down After Earnings. - Barron' | NEWS-MO",
-      "publishedAt": "2026-08-14T11:46:28+00:00",
-      "publishedLabel": "Aug 14, 11:46 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/-SYqDhoqnDc/hqdefault.jpg"
     }
   ]
 }
