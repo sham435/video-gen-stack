@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-14T15:26:02.389Z",
+  "updatedAt": "2026-08-14T16:31:24.824Z",
   "videos": [
+    {
+      "id": "CrqRYpqX8gM",
+      "title": "Does Google even want to win at AI? | NEWS-MONSTER",
+      "publishedAt": "2026-08-14T16:27:29+00:00",
+      "publishedLabel": "Aug 14, 04:27 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/CrqRYpqX8gM/hqdefault.jpg"
+    },
+    {
+      "id": "aS6ujZQR6nM",
+      "title": "Microsoft is combining its Copilot apps ahead of a ‘super app’ - The Verge | NEWS-MONSTER",
+      "publishedAt": "2026-08-14T15:26:13+00:00",
+      "publishedLabel": "Aug 14, 03:26 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/aS6ujZQR6nM/hqdefault.jpg"
+    },
     {
       "id": "hZRS1aBUvyY",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-13T21:18:32+00:00",
       "publishedLabel": "Aug 13, 09:18 PM",
       "thumbnail": "https://i2.ytimg.com/vi/-3Bs4U0FC50/hqdefault.jpg"
-    },
-    {
-      "id": "eFikzom-NF8",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-13T20:08:36+00:00",
-      "publishedLabel": "Aug 13, 08:08 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/eFikzom-NF8/hqdefault.jpg"
-    },
-    {
-      "id": "_3S-PIk3SZI",
-      "title": "Wall St gains as AI earnings lift tech, inflation data supports rate-hold bets - Yahoo Fin | NEWS-MO",
-      "publishedAt": "2026-08-13T18:01:09+00:00",
-      "publishedLabel": "Aug 13, 06:01 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/_3S-PIk3SZI/hqdefault.jpg"
     }
   ]
 }
