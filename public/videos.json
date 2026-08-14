@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-14T11:53:27.127Z",
+  "updatedAt": "2026-08-14T13:45:24.899Z",
   "videos": [
+    {
+      "id": "WnTKprluGpE",
+      "title": "Bank of America to Deploy $250 Billion to Bolster AI and Energy Infrastructure | NEWS-MONSTER",
+      "publishedAt": "2026-08-14T13:38:41+00:00",
+      "publishedLabel": "Aug 14, 01:38 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/WnTKprluGpE/hqdefault.jpg"
+    },
     {
       "id": "-SYqDhoqnDc",
       "title": "Cisco Networking Sales Surge on AI Demand. Why the Stock Is Down After Earnings. - Barron' | NEWS-MO",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-13T17:00:23+00:00",
       "publishedLabel": "Aug 13, 05:00 PM",
       "thumbnail": "https://i1.ytimg.com/vi/4VKvniIMw1U/hqdefault.jpg"
-    },
-    {
-      "id": "rP2TwAT8k0Q",
-      "title": "Nolte: Democrat CA Gov. Nominee Xavier Becerra Blinks, Calls for Paramount-Warner Settleme | NEWS-MO",
-      "publishedAt": "2026-08-13T16:00:59+00:00",
-      "publishedLabel": "Aug 13, 04:00 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/rP2TwAT8k0Q/hqdefault.jpg"
     }
   ]
 }
