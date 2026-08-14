@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-14T22:07:03.875Z",
+  "updatedAt": "2026-08-14T22:27:22.930Z",
   "videos": [
+    {
+      "id": "b7c6qrbgq48",
+      "title": "Does Google even want to win at AI? | NEWS-MONSTER",
+      "publishedAt": "2026-08-14T22:12:05+00:00",
+      "publishedLabel": "Aug 14, 10:12 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/b7c6qrbgq48/hqdefault.jpg"
+    },
     {
       "id": "L5GETjDAVlc",
       "title": "Tokenized stocks’ share of total RWA market cap rises to over 15% | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-14T08:17:04+00:00",
       "publishedLabel": "Aug 14, 08:17 AM",
       "thumbnail": "https://i2.ytimg.com/vi/EFsIaEU0wmg/hqdefault.jpg"
-    },
-    {
-      "id": "XR1Jm2WyWQ4",
-      "title": "BYD Said One Thing, Then Did This | NEWS-MONSTER",
-      "publishedAt": "2026-08-14T06:57:25+00:00",
-      "publishedLabel": "Aug 14, 06:57 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/XR1Jm2WyWQ4/hqdefault.jpg"
     }
   ]
 }
