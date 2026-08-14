@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-14T22:27:22.930Z",
+  "updatedAt": "2026-08-14T23:00:40.214Z",
   "videos": [
+    {
+      "id": "k1M3_3wLWic",
+      "title": "Experts Disagree On U.S | NEWS-MONSTER",
+      "publishedAt": "2026-08-14T22:53:52+00:00",
+      "publishedLabel": "Aug 14, 10:53 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/k1M3_3wLWic/hqdefault.jpg"
+    },
+    {
+      "id": "jfdhFzGQ6og",
+      "title": "Does Google even want to win at AI? | NEWS-MONSTER",
+      "publishedAt": "2026-08-14T22:23:43+00:00",
+      "publishedLabel": "Aug 14, 10:23 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/jfdhFzGQ6og/hqdefault.jpg"
+    },
     {
       "id": "b7c6qrbgq48",
       "title": "Does Google even want to win at AI? | NEWS-MONSTER",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-14T11:12:54+00:00",
       "publishedLabel": "Aug 14, 11:12 AM",
       "thumbnail": "https://i4.ytimg.com/vi/WRfWw0nRzcw/hqdefault.jpg"
-    },
-    {
-      "id": "Uj37LWTLSZE",
-      "title": "We're Live at Made By Google Sharing Every Pixel 11, Pro Fold, and Watch 5 Announcement -  | NEWS-MO",
-      "publishedAt": "2026-08-14T09:38:57+00:00",
-      "publishedLabel": "Aug 14, 09:38 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/Uj37LWTLSZE/hqdefault.jpg"
-    },
-    {
-      "id": "EFsIaEU0wmg",
-      "title": "Saber CEO Makes Rideshare's Undisclosed AI Mess Even Worse - Kotaku | NEWS-MONSTER",
-      "publishedAt": "2026-08-14T08:17:04+00:00",
-      "publishedLabel": "Aug 14, 08:17 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/EFsIaEU0wmg/hqdefault.jpg"
     }
   ]
 }
