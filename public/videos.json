@@ -1,7 +1,28 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-14T03:13:14.957Z",
+  "updatedAt": "2026-08-14T07:03:50.512Z",
   "videos": [
+    {
+      "id": "XR1Jm2WyWQ4",
+      "title": "BYD Said One Thing, Then Did This | NEWS-MONSTER",
+      "publishedAt": "2026-08-14T06:57:25+00:00",
+      "publishedLabel": "Aug 14, 06:57 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/XR1Jm2WyWQ4/hqdefault.jpg"
+    },
+    {
+      "id": "HGHZmBNwPBg",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-14T05:27:40+00:00",
+      "publishedLabel": "Aug 14, 05:27 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/HGHZmBNwPBg/hqdefault.jpg"
+    },
+    {
+      "id": "AUdZq_yw-c0",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-14T05:14:58+00:00",
+      "publishedLabel": "Aug 14, 05:14 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/AUdZq_yw-c0/hqdefault.jpg"
+    },
     {
       "id": "E_vyxImvN6g",
       "title": "Everything announced at Made by Google today, including Pixel 11, Pixel Watch 4, and Pixel | NEWS-MO",
@@ -85,27 +106,6 @@
       "publishedAt": "2026-08-11T18:29:09+00:00",
       "publishedLabel": "Aug 11, 06:29 PM",
       "thumbnail": "https://i4.ytimg.com/vi/OWoJLNTP-gI/hqdefault.jpg"
-    },
-    {
-      "id": "PWcjKok1VTc",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-11T17:31:39+00:00",
-      "publishedLabel": "Aug 11, 05:31 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/PWcjKok1VTc/hqdefault.jpg"
-    },
-    {
-      "id": "NIM9zjfE610",
-      "title": "Apple will stream Friday Night Baseball live in Vision Pro | NEWS-MONSTER",
-      "publishedAt": "2026-08-11T16:31:17+00:00",
-      "publishedLabel": "Aug 11, 04:31 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/NIM9zjfE610/hqdefault.jpg"
-    },
-    {
-      "id": "l_TXX8yhiEM",
-      "title": "\"They don't understand art\" - id Software lead slams Xbox, says it's \"impossible\" to make  | NEWS-MO",
-      "publishedAt": "2026-08-11T15:33:38+00:00",
-      "publishedLabel": "Aug 11, 03:33 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/l_TXX8yhiEM/hqdefault.jpg"
     }
   ]
 }
