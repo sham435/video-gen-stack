@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-14T19:35:52.245Z",
+  "updatedAt": "2026-08-14T20:16:50.783Z",
   "videos": [
+    {
+      "id": "Ck3cMLScjmo",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-14T20:09:14+00:00",
+      "publishedLabel": "Aug 14, 08:09 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/Ck3cMLScjmo/hqdefault.jpg"
+    },
     {
       "id": "mjp0fgHl3FQ",
       "title": "Does Google even want to win at AI? | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-14T05:14:58+00:00",
       "publishedLabel": "Aug 14, 05:14 AM",
       "thumbnail": "https://i2.ytimg.com/vi/AUdZq_yw-c0/hqdefault.jpg"
-    },
-    {
-      "id": "E_vyxImvN6g",
-      "title": "Everything announced at Made by Google today, including Pixel 11, Pixel Watch 4, and Pixel | NEWS-MO",
-      "publishedAt": "2026-08-14T03:09:52+00:00",
-      "publishedLabel": "Aug 14, 03:09 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/E_vyxImvN6g/hqdefault.jpg"
     }
   ]
 }
