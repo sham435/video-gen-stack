@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-14T13:45:24.899Z",
+  "updatedAt": "2026-08-14T14:31:26.699Z",
   "videos": [
+    {
+      "id": "hZRS1aBUvyY",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-14T14:23:33+00:00",
+      "publishedLabel": "Aug 14, 02:23 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/hZRS1aBUvyY/hqdefault.jpg"
+    },
     {
       "id": "WnTKprluGpE",
       "title": "Bank of America to Deploy $250 Billion to Bolster AI and Energy Infrastructure | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-13T18:01:09+00:00",
       "publishedLabel": "Aug 13, 06:01 PM",
       "thumbnail": "https://i4.ytimg.com/vi/_3S-PIk3SZI/hqdefault.jpg"
-    },
-    {
-      "id": "4VKvniIMw1U",
-      "title": "How the AI Trade Is Stealing Crypto’s Thunder | NEWS-MONSTER",
-      "publishedAt": "2026-08-13T17:00:23+00:00",
-      "publishedLabel": "Aug 13, 05:00 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/4VKvniIMw1U/hqdefault.jpg"
     }
   ]
 }
