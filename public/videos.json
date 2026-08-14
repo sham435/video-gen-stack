@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-14T21:07:29.065Z",
+  "updatedAt": "2026-08-14T22:07:03.875Z",
   "videos": [
+    {
+      "id": "L5GETjDAVlc",
+      "title": "Tokenized stocks’ share of total RWA market cap rises to over 15% | NEWS-MONSTER",
+      "publishedAt": "2026-08-14T21:59:08+00:00",
+      "publishedLabel": "Aug 14, 09:59 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/L5GETjDAVlc/hqdefault.jpg"
+    },
     {
       "id": "gAa1ivQK3pc",
       "title": "Stocks rise and interest rates fall after inflation report - nbcnews.com | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-14T06:57:25+00:00",
       "publishedLabel": "Aug 14, 06:57 AM",
       "thumbnail": "https://i1.ytimg.com/vi/XR1Jm2WyWQ4/hqdefault.jpg"
-    },
-    {
-      "id": "HGHZmBNwPBg",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-14T05:27:40+00:00",
-      "publishedLabel": "Aug 14, 05:27 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/HGHZmBNwPBg/hqdefault.jpg"
     }
   ]
 }
