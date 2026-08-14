@@ -131,7 +131,24 @@ export class RetentionPatternLearner {
       if (verbose) console.log(`Calibrated: ${risk} → impact ${mean > 0 ? '+' : ''}${mean}% over ${n} videos (conf ${confidence})`)
     }
 
-    return { learned, analyzed, skipped, brandLearned: brandRecords }
+    // Music correlation — which underscore family actually holds viewers.
+    // Correlate family → mean predicted retention so the newsroom can favor
+    // winning families. Best-effort: only snapshots that carry musicFamily.
+    const music = new Map()
+    for (const snap of snapshots) {
+      if (!snap.musicFamily || !snap.retention?.completionRate) continue
+      if (!music.has(snap.musicFamily)) music.set(snap.musicFamily, [])
+      music.get(snap.musicFamily).push(snap.retention.completionRate)
+    }
+    const musicLearned = []
+    for (const [family, rates] of music) {
+      if (rates.length < this.minObservations) continue
+      const mean = Math.round((rates.reduce((s, r) => s + r, 0) / rates.length) * 10) / 10
+      musicLearned.push({ family, videos: rates.length, avgRetention: mean })
+      if (verbose) console.log(`Music ${family}: ${mean}% avg predicted retention over ${rates.length} videos`)
+    }
+
+    return { learned, analyzed, skipped, brandLearned: brandRecords, musicLearned }
   }
 }
 

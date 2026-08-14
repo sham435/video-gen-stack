@@ -61,7 +61,13 @@ export async function composeVideo(articles, outDir = 'output', options = {}) {
     await assertValidRender(finalPath, 'footer-overlay')
   }
 
-  return { finalPath, hooks: [], retention: engine.lastRetention || null }
+  return {
+    finalPath,
+    hooks: [],
+    retention: engine.lastRetention || null,
+    musicTrack: engine.audioMixer.lastTrack?.file || null,
+    musicFamily: engine.audioMixer.lastTrack?.family || engine.audioMixer.musicFamily || null,
+  }
 }
 
 // Guard: only self-execute when run directly (`node scripts/composer.mjs`),
@@ -190,7 +196,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
       console.log(`\nProcessing: "${article.title?.slice(0, 80)}..."`)
 
       const renderStart = Date.now()
-      const { finalPath, retention } = await composeVideo([article], outDir)
+      const { finalPath, retention, musicTrack, musicFamily } = await composeVideo([article], outDir)
       const renderTime = Date.now() - renderStart
 
       if (process.env.YOUTUBE_REFRESH_TOKEN && uploadCount === 0) {
@@ -326,11 +332,20 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           } catch (e) { console.log('[ARTIFACT] skipped:', e.message) }
 
           // Snapshot the pipeline's retention prediction for the
-          // RetentionPatternLearner (real analytics calibrate memory later)
+          // RetentionPatternLearner (real analytics calibrate memory later).
+          // Carry the chosen music track + family so the learner can correlate
+          // "breaking-cinematic → +retention" and prefer winning underscores.
           if (result?.id && retention) {
             try {
               const { RetentionPatternLearner } = await import('../src/analytics/RetentionPatternLearner.mjs')
-              new RetentionPatternLearner().appendSnapshot({ videoId: result.id, title: article.title?.slice(0, 100), category: category || 'technology', retention })
+              new RetentionPatternLearner().appendSnapshot({
+                videoId: result.id,
+                title: article.title?.slice(0, 100),
+                category: category || 'technology',
+                musicTrack: musicTrack || null,
+                musicFamily: musicFamily || null,
+                retention,
+              })
               console.log('Retention snapshot recorded for learning loop')
             } catch (e) { console.log('Retention snapshot skipped:', e.message) }
           }

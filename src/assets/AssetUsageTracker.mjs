@@ -13,15 +13,19 @@ import { DUP_THRESHOLD } from './DuplicateDetector.mjs'
 export class AssetUsageTracker {
   constructor(database) {
     this.db = database
+    this._recentWindow = [] // cached last-N video ids (refreshed per status batch)
   }
 
   /**
    * Recency info for an asset against the DB history.
-   * @returns {{usedInDays:number|null, useCount:number, hot:boolean}}
+   * @returns {{usedInDays:number|null, useCount:number, hot:boolean,
+   *   usedInRecentVideos:boolean, nearTwin:boolean}}
    *   usedInDays = days since this asset (or a near-twin) was last used;
-   *   hot = used within `cooldownDays` → ranker should deprioritize.
+   *   hot = used within `cooldownDays` → ranker should deprioritize;
+   *   usedInRecentVideos = asset appeared in any of the last `videoWindow`
+   *   distinct published videos → ranker hard-excludes (per-channel policy).
    */
-  status(asset, { cooldownDays = 7 } = {}) {
+  status(asset, { cooldownDays = 7, videoWindow = 50 } = {}) {
     const exact = asset.sha256 ? this.db.get(asset.sha256) : null
     if (exact?.last_used) {
       const days = (Date.now() - new Date(exact.last_used.replace(' ', 'T') + 'Z').getTime()) / 86400000
@@ -29,6 +33,7 @@ export class AssetUsageTracker {
         usedInDays: days,
         useCount: exact.usage_count,
         hot: days <= cooldownDays,
+        usedInRecentVideos: this._usedInWindow(exact.sha256, videoWindow),
         nearTwin: false,
       }
     }
@@ -47,9 +52,19 @@ export class AssetUsageTracker {
         usedInDays: days,
         useCount: nearest.row.usage_count,
         hot: days <= cooldownDays,
+        usedInRecentVideos: this._usedInWindow(nearest.row.sha256, videoWindow),
         nearTwin: true,
       }
     }
-    return { usedInDays: null, useCount: 0, hot: false, nearTwin: false }
+    return { usedInDays: null, useCount: 0, hot: false, usedInRecentVideos: false, nearTwin: false }
+  }
+
+  /** Cache the last-N-video window across a ranking batch (one query per batch). */
+  _usedInWindow(sha256, videoWindow) {
+    if (!sha256 || !videoWindow || videoWindow <= 0) return false
+    if (!this._recentWindow.length) {
+      this._recentWindow = this.db.recentVideoIds(videoWindow)
+    }
+    return this._recentWindow.includes(sha256) || this.db.usedInVideos(sha256, this._recentWindow)
   }
 }

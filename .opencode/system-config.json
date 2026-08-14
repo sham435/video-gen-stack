@@ -37,6 +37,11 @@
       "path": "agents/github.md",
       "capabilities": ["pr-analysis", "commit-review", "ci-monitoring", "changelog-generation"],
       "access": [".git/", ".github/"]
+    },
+    "visual-intelligence": {
+      "path": "agents/visual-intelligence.md",
+      "capabilities": ["scene-asset-selection", "zero-reuse-enforcement", "narration-visual-matching", "visual-diversity", "entity-consistency", "performance-learning"],
+      "access": ["src/assets/", "src/analytics/", "src/pipeline/", "data/"]
     }
   },
   "memory": {

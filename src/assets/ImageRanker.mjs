@@ -33,7 +33,7 @@ export class ImageRanker {
   /**
    * @param {Array<object>} candidates [{url, width, height, entity, tags, score, sha256, dHash, ...}]
    * @param {object} intent {subject, entities[], keywords[], mustShow[]}
-   * @param {object} [opts] {cooldownDays}
+   * @param {object} [opts] {cooldownDays, videoWindow}
    * @returns {Array<object>} candidates with .rankScore, best first
    */
   rank(candidates, intent = {}, opts = {}) {
@@ -44,21 +44,25 @@ export class ImageRanker {
       const relevance = this._relevance(c, keywords)
       const entity = this._entity(c, entitySet)
       const quality = this._quality(c)
-      const usage = this.usageTracker ? this.usageTracker.status(c, opts) : { hot: false, useCount: 0, usedInDays: null }
+      const usage = this.usageTracker ? this.usageTracker.status(c, opts) : { hot: false, useCount: 0, usedInDays: null, usedInRecentVideos: false }
       const freshnessPenalty = usage.hot ? 1 : 0
       const reusePenalty = Math.min(1, usage.useCount / 6)
 
       // Milestone B: learned-performance bonus (0 on cold start → the
       // ranking is byte-identical to the deterministic heuristic ranking).
       const learned = this._learnedBonus(c, entitySet)
+      // Per-channel policy: an asset used in any of the last `videoWindow`
+      // videos is excluded outright (the "last 50 videos" rule). Hard gate —
+      // not a penalty — so a repeated asset can never surface.
+      const usedInRecentVideos = usage.usedInRecentVideos ? 1 : 0
       const score =
-        this.w.relevance * relevance +
+        (this.w.relevance * relevance +
         this.w.quality * quality +
         this.w.entity * entity -
         this.w.freshness * freshnessPenalty -
         this.w.reuse * reusePenalty +
-        this.w.learned * learned
-      return { ...c, rankScore: +score.toFixed(4), _usage: usage, _learned: learned }
+        this.w.learned * learned) * (1 - usedInRecentVideos)
+      return { ...c, rankScore: +score.toFixed(4), _usage: usage, _learned: learned, _excluded: usedInRecentVideos === 1 }
     })
 
     return scored.sort((a, b) => b.rankScore - a.rankScore)

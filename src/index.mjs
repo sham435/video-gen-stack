@@ -44,6 +44,7 @@ import { VisualReasoner } from './ai/VisualReasoner.mjs'
 import { MotionPlanner, TransitionPlanner } from './ai/StoryAnalyzer.mjs'
 import { VisualSearchEngine, ENTITY_EXPANSIONS } from './assets/VisualSearchEngine.mjs'
 import { ImageDatabase } from './assets/ImageDatabase.mjs'
+import { generateContentId } from '../packages/database/news-engine.mjs'
 import { ImageRanker } from './assets/ImageRanker.mjs'
 import { AssetUsageTracker } from './assets/AssetUsageTracker.mjs'
 import { ImagePerformanceMemory } from './analytics/ImagePerformanceMemory.mjs'
@@ -105,6 +106,10 @@ export class NewsBroadcastEngine {
       this.performanceMemory = new ImagePerformanceMemory(this.imageDb.dbPath)
       this.imageRanker = new ImageRanker({ usageTracker: this.assetUsage, performanceMemory: this.performanceMemory })
       this.visualSearchEngine = new VisualSearchEngine({ database: this.imageDb })
+      // Share the asset DB with the audio mixer so music reuse + retention
+      // tracking use the same last-50-videos window as the visual layer.
+      this.audioMixer.database = this.imageDb
+      this.audioMixer.videoId = this.currentVideoId
       return true
     } catch (e) {
       console.warn(`[VisualIntelligence] disabled: ${e.message}`)
@@ -151,6 +156,12 @@ export class NewsBroadcastEngine {
     const framesDir = `${outDir}/frames`
     fs.mkdirSync(framesDir, { recursive: true })
     if (!job) job = new ProductionJob(article)
+
+    // Per-video id for asset reuse tracking ("last N videos" policy). Built
+    // from the headline BEFORE packaging may rewrite it, so every pipeline
+    // consumer sees one stable id for this run.
+    this.currentVideoId = this.currentVideoId || generateContentId(article.headline || article.title || 'news', article.category || 'tech')
+    this.audioMixer.videoId = this.currentVideoId
 
     // Deterministic music pick: the article title seeds the track index and
     // the article mood maps the cinematic family — every video gets a
@@ -273,7 +284,7 @@ export class NewsBroadcastEngine {
           }
           const candidates = await this.visualSearchEngine.search(intent)
           if (candidates?.length) {
-            const ranked = this.imageRanker.rank(candidates, { subject: scene.visual.subject, entities: intent.entities, keywords: intent.keywords }, { cooldownDays: 7 })
+            const ranked = this.imageRanker.rank(candidates, { subject: scene.visual.subject, entities: intent.entities, keywords: intent.keywords }, { cooldownDays: 7, videoWindow: 50 })
             const diversity = this.sceneVisualPlanner.pick(
               { index: scene.id, entity: visualIntent.brand, images: ranked },
               { usedScenes: usedAssets, entityCounts }
@@ -281,7 +292,7 @@ export class NewsBroadcastEngine {
             chosenMeta = diversity.asset || null
             chosenUrls = chosenMeta ? [chosenMeta.url] : []
             if (chosenMeta?.sha256) {
-              this.imageDb.recordUsage(chosenMeta.sha256, { videoId: null, sceneIndex: scene.id })
+              this.imageDb.recordUsage(chosenMeta.sha256, { videoId: this.currentVideoId, sceneIndex: scene.id })
               usedAssets.push(chosenMeta)
             } else if (chosenMeta?.url) {
               usedAssets.push({ url: chosenMeta.url })
@@ -694,6 +705,15 @@ export class NewsBroadcastEngine {
 
     const musicPath = this.audioMixer.getRandomMusic()
     this.audioMixer.mixAudio(silentVideo, voicePath, musicPath, totalDuration, videoPath)
+
+    // Music reuse + learning hook: persist the chosen track against this video
+    // so the last-50-videos policy keeps underscores fresh and analytics can
+    // correlate family → retention.
+    try {
+      if (this.audioMixer.lastTrack?.file && this.currentVideoId) {
+        this.imageDb.recordMusicUsage(this.currentVideoId, path.basename(this.audioMixer.lastTrack.file), this.audioMixer.lastTrack.family || this.audioMixer.musicFamily)
+      }
+    } catch { /* non-fatal */ }
     console.log('Broadcast video:', videoPath)
 
     // RENDER-001: every FFmpeg stage that produces/intermediates the final

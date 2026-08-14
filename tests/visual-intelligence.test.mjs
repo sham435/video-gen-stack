@@ -1,7 +1,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert'
 import { createCanvas } from '@napi-rs/canvas'
-import { extractImageMetadata, dHashDistance, dHashSimilarity } from '../src/assets/ImageMetadata.mjs'
+import { extractImageMetadata, dHashDistance, dHashSimilarity, pHashDistance, pHashSimilarity } from '../src/assets/ImageMetadata.mjs'
 import { compareAssets, rejectDuplicates, clusterDuplicates, DUP_THRESHOLD } from '../src/assets/DuplicateDetector.mjs'
 import { ImageDatabase } from '../src/assets/ImageDatabase.mjs'
 import { AssetUsageTracker } from '../src/assets/AssetUsageTracker.mjs'
@@ -206,4 +206,153 @@ test('SceneVisualPlanner — never reuses an entity past the cap, prefers distin
 test('SceneVisualPlanner — diversity policy constants sane', () => {
   assert.equal(DIVERSITY.maxScenesPerEntity, 3)
   assert.equal(DIVERSITY.adjacentTwinDistance, 6)
+})
+
+test('ImageMetadata — pHash (DCT) deterministic, content-sensitive, resize-robust', async () => {
+  const a = patternBytes()
+  const b = patternBytes()
+  const c = patternBytes({ left: '#00ff00', right: '#ffff00' })
+
+  const ma = await extractImageMetadata(a)
+  const mb = await extractImageMetadata(b)
+  const mc = await extractImageMetadata(c)
+  const mBig = await extractImageMetadata(patternBytes({ left: '#ff0000', right: '#0000ff', w: 320, h: 480 }))
+  const mSmall = await extractImageMetadata(patternBytes({ left: '#ff0000', right: '#0000ff', w: 64, h: 96 }))
+
+  assert.ok(ma.pHash.length === 16, '64-bit pHash hex')
+  assert.equal(ma.pHash, mb.pHash, 'identical bytes → same pHash')
+  assert.notEqual(ma.pHash, mc.pHash, 'different color → different pHash')
+  assert.ok(pHashDistance(mBig.pHash, mSmall.pHash) <= DUP_THRESHOLD.phash, `resized same content stays close (got ${pHashDistance(mBig.pHash, mSmall.pHash)})`)
+  assert.ok(pHashDistance(ma.pHash, mc.pHash) > DUP_THRESHOLD.phash, 'different content diverges')
+  assert.equal(pHashSimilarity(ma.pHash, ma.pHash), 1, 'self similarity = 1')
+})
+
+test('DuplicateDetector — pHash corroborates derived/cropped content dHash misses', () => {
+  // dHash far apart (>= 20) but pHash agrees strongly → derived
+  const a = { sha256: 'aa', dHash: '0'.repeat(16), pHash: '0'.repeat(16) }
+  const b = { sha256: 'bb', dHash: 'f'.repeat(16), pHash: '1'.repeat(16) }
+  // dHash distance between '0..' and 'f..' = 64 > 20, so NOT flagged (phash needs d<=20)
+  assert.equal(compareAssets(a, b).dup, false)
+  // pHash close but dHash way out of range → not a false positive
+  const c = { sha256: 'cc', dHash: 'e'.repeat(16), pHash: '0'.repeat(16) }
+  assert.equal(compareAssets(a, c).dup, false)
+  // pHash agrees AND dHash within 20 → derived flag
+  const d = { sha256: 'dd', dHash: 'f'.repeat(2) + '0'.repeat(14), pHash: '1'.repeat(16) }
+  const dr = compareAssets({ sha256: 'aa', dHash: '0'.repeat(16), pHash: '0'.repeat(16) }, d)
+  assert.equal(dr.dup, true, 'pHash corroboration catches recolor/crop dHash misses')
+  assert.equal(dr.kind, 'derived')
+})
+
+test('ImageDatabase — pHash column persisted on upsert', async () => {
+  const db = new ImageDatabase(':memory:')
+  const meta = await extractImageMetadata(pngBytes('#ff0000'))
+  assert.ok(meta.pHash.length === 16)
+  db.upsert(meta)
+  const row = db.get(meta.sha256)
+  assert.equal(row.pHash, meta.pHash, 'pHash stored in DB')
+  db.close()
+})
+
+test('ImageDatabase — searchCategory + randomUnused', async () => {
+  const db = new ImageDatabase(':memory:')
+  const tech = await extractImageMetadata(pngBytes('#ff0000'), { tags: ['sports'], url: 'https://x/1.png' })
+  const pol = await extractImageMetadata(pngBytes('#00ff00'), { tags: ['politics'], url: 'https://x/2.png' })
+  db.upsert(tech)
+  db.upsert(pol)
+
+  assert.equal(db.searchCategory('sports').length, 1)
+  assert.equal(db.searchCategory('politics').length, 1)
+  assert.equal(db.searchCategory('sports')[0].url, 'https://x/1.png')
+  assert.equal(db.searchCategory('ai').length, 0)
+
+  // randomUnused prefers usage_count=0 assets
+  const unused = db.randomUnused()
+  assert.equal(unused.length, 2, 'both assets unused → random picks both')
+  db.recordUsage(tech.sha256, { videoId: 'v1' })
+  const unused2 = db.randomUnused()
+  assert.equal(unused2.length, 1, 'only still-unused asset returned')
+  assert.equal(unused2[0].url, 'https://x/2.png')
+  db.close()
+})
+
+test('AssetUsageTracker + ImageRanker — last-50-videos reuse window hard-excludes', async () => {
+  const db = new ImageDatabase(':memory:')
+  // asset used in a recent video (structured pattern so dHash ≠ fresh's)
+  const used = await extractImageMetadata(patternBytes(), { tags: ['apple'], url: 'https://x/used.png' })
+  db.upsert(used)
+  db.recordUsage(used.sha256, { videoId: 'v50' })
+  // asset never used (different pattern → different dHash, not a near-twin)
+  const fresh = await extractImageMetadata(patternBytes({ left: '#0000ff', right: '#00ff00' }), { tags: ['apple'], url: 'https://x/fresh.png' })
+  db.upsert(fresh)
+
+  const tracker = new AssetUsageTracker(db)
+  const ranker = new ImageRanker({ usageTracker: tracker })
+
+  const candidates = [
+    { url: 'https://x/used.png', width: 1080, height: 1920, tags: ['apple'], entity: 'apple', sha256: used.sha256, dHash: used.dHash, pHash: used.pHash },
+    { url: 'https://x/fresh.png', width: 1080, height: 1920, tags: ['apple'], entity: 'apple', sha256: fresh.sha256, dHash: fresh.dHash, pHash: fresh.pHash },
+  ]
+  const ranked = ranker.rank(candidates, { subject: 'apple', entities: ['apple'] }, { cooldownDays: 7, videoWindow: 50 })
+
+  assert.equal(ranked[0].url, 'https://x/fresh.png', 'fresh asset wins over last-50-videos reuse')
+  assert.equal(ranked[1]._excluded, true, 'used-in-recent-videos asset hard-excluded')
+  assert.equal(ranked[1].rankScore, 0, 'excluded asset scores zero')
+
+  // window of 0 disables the policy → used asset ranks again by score
+  const rankedOff = ranker.rank(candidates, { subject: 'apple', entities: ['apple'] }, { cooldownDays: 0, videoWindow: 0 })
+  assert.equal(rankedOff.some(r => r.url === 'https://x/used.png' && r._excluded === false), true, 'policy disabled when window=0')
+  db.close()
+})
+
+test('ImageDatabase — music usage tracking + recent-window query', async () => {
+  const db = new ImageDatabase(':memory:')
+  db.recordMusicUsage('v1', 'nm-track-01-cinematic-tech-reveal-112.mp3', 'cinematic-tech-reveal')
+  db.recordMusicUsage('v2', 'nm-track-02-emotional-story-72.mp3', 'emotional-story')
+  db.recordMusicUsage('v1', 'nm-track-03-action-energy-158.mp3', 'action-energy')
+
+  const recent = db.recentMusicTracks(50)
+  assert.equal(recent.length, 3, 'three distinct tracks tracked')
+  assert.ok(recent[0].track, 'track filename present')
+  assert.ok(recent.every(r => r.family), 'family stored per track')
+  assert.equal(db.musicUsedInVideos('nm-track-01-cinematic-tech-reveal-112.mp3', ['v1']), true)
+  assert.equal(db.musicUsedInVideos('nm-track-99-nope.mp3', ['v1']), false)
+  db.close()
+})
+
+test('RetentionPatternLearner — learn() correlates musicFamily → avg retention', async () => {
+  const { RetentionPatternLearner } = await import('../src/analytics/RetentionPatternLearner.mjs')
+  const { SNAPSHOTS_FILE } = await import('../src/analytics/RetentionPatternLearner.mjs')
+  const fs = await import('node:fs')
+  const os = await import('node:os')
+  const path = await import('node:path')
+
+  // Point the learner at a temp snapshots file so the real data/ is untouched.
+  const tmp = path.join(os.tmpdir(), `music-ret-test-${Date.now()}.json`)
+  fs.writeFileSync(tmp, JSON.stringify([
+    { videoId: 'v1', title: 'a', category: 'politics', musicFamily: 'breaking-cinematic', retention: { completionRate: 70, dropRisks: [] } },
+    { videoId: 'v2', title: 'b', category: 'politics', musicFamily: 'breaking-cinematic', retention: { completionRate: 80, dropRisks: [] } },
+    { videoId: 'v3', title: 'c', category: 'tech', musicFamily: 'tech-ai', retention: { completionRate: 55, dropRisks: [] } },
+  ]))
+
+  // Stub SNAPSHOTS_FILE via the module's internal loader path: monkey-patch by
+  // subclassing and overriding the file path through an env-free approach.
+  const learner = new RetentionPatternLearner({
+    adapter: {
+      fetchVideoStats: async () => ({ views: 999 }),
+      fetchRetentionCurve: async () => ([{ ratio: 1, pct: 70 }]),
+      fetchCTR: async () => null,
+      fetchEngagement: async () => ({}),
+      completionFrom: () => 70,
+    },
+    minViews: 0,
+    minObservations: 2,
+  })
+  learner._loadSnapshots = () => JSON.parse(fs.readFileSync(tmp, 'utf8'))
+  const result = await learner.learn({ verbose: false })
+
+  const fam = result.musicLearned.find(m => m.family === 'breaking-cinematic')
+  assert.ok(fam, 'breaking-cinematic family present in musicLearned')
+  assert.equal(fam.videos, 2)
+  assert.equal(fam.avgRetention, 75, 'mean of 70 + 80')
+  fs.rmSync(tmp, { force: true })
 })

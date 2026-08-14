@@ -12,10 +12,12 @@ const MUSIC_DIR = 'assets/music'
 export { trackIndexFor }
 
 export class AudioMixer {
-  constructor() {
+  constructor({ database = null } = {}) {
     this.musicSeed = null
     this.musicFamily = 'cinematic-tech-reveal'
     this.lastTrack = null
+    this.database = database
+    this.videoId = null
     fs.mkdirSync(MUSIC_DIR, { recursive: true })
   }
 
@@ -31,7 +33,15 @@ export class AudioMixer {
 
     if (this.musicSeed) {
       const pick = pickMusicTrack({ title: this.musicSeed }, { family: this.musicFamily, verbose: true })
-      if (pick) { this.lastTrack = pick; return pick.file }
+      if (pick) {
+        // Last-50-videos reuse policy (same as visual): if this deterministic
+        // pick was already used in a recent published video, advance to the
+        // next track in the family so the underscore never repeats on screen.
+        const safe = this._avoidRecent(pick)
+        this.lastTrack = safe
+        this._recordMusicUsage(safe)
+        return safe.file
+      }
     }
 
     const files = fs.readdirSync(MUSIC_DIR)
@@ -39,10 +49,19 @@ export class AudioMixer {
       .sort()
 
     if (files.length > 0) {
-      const idx = trackIndexFor(this.musicSeed, files.length)
-      const chosen = path.join(MUSIC_DIR, files[idx])
-      console.log(`🎵 Music track ${idx + 1}/${files.length}: ${chosen} ${this.musicSeed ? `(for "${String(this.musicSeed).slice(0, 40)}")` : ''}`)
-      return chosen
+      let idx = trackIndexFor(this.musicSeed, files.length)
+      let chosen = files[idx]
+      let guard = 0
+      while (this._recentTracks().includes(chosen) && guard < files.length) {
+        idx = (idx + 1) % files.length
+        chosen = files[idx]
+        guard++
+      }
+      const full = path.join(MUSIC_DIR, chosen)
+      console.log(`🎵 Music track ${idx + 1}/${files.length}: ${full} ${this.musicSeed ? `(for "${String(this.musicSeed).slice(0, 40)}")` : ''}`)
+      this.lastTrack = { file: full, index: idx + 1, total: files.length, family: this.musicFamily }
+      this._recordMusicUsage(this.lastTrack)
+      return full
     }
 
     const fallbackPath = path.join(MUSIC_DIR, '_ambient_gen.mp3')
@@ -56,6 +75,45 @@ export class AudioMixer {
     } catch {
       return null
     }
+  }
+
+  /** Set of track filenames used in the last `videoWindow` published videos. */
+  _recentTracks(videoWindow = 50) {
+    if (!this.database) return []
+    return this.database.recentMusicTracks(videoWindow).map(r => path.basename(r.track))
+  }
+
+  /** Advance a pick to the first track NOT in the recent window (guarded). */
+  _avoidRecent(pick) {
+    if (!this.database || !pick?.file) return pick
+    const recent = this._recentTracks()
+    if (!recent.length) return pick
+    const baseName = path.basename(pick.file)
+    if (!recent.includes(baseName)) return pick
+
+    // Same family, next track: re-pick the family pool and advance.
+    const familyFiles = fs.existsSync(MUSIC_DIR)
+      ? fs.readdirSync(MUSIC_DIR).filter(f => f.startsWith('nm-track-') && f.includes(`-${pick.family}-`)).sort()
+      : []
+    const pool = familyFiles.length ? familyFiles : recent
+    let idx = (familyFiles.indexOf(baseName) + 1) % familyFiles.length
+    let guard = 0
+    while (recent.includes(familyFiles[idx]) && guard < familyFiles.length) {
+      idx = (idx + 1) % familyFiles.length
+      guard++
+    }
+    const file = path.join(MUSIC_DIR, familyFiles[idx])
+    console.log(`🎵 Avoided recent track ${baseName} → ${familyFiles[idx]}`)
+    return { file, index: idx + 1, total: familyFiles.length, family: pick.family }
+  }
+
+  /** Persist the chosen track against this videoId (for reuse + learning). */
+  _recordMusicUsage(pick) {
+    try {
+      if (this.database && this.videoId && pick?.file) {
+        this.database.recordMusicUsage(this.videoId, path.basename(pick.file), pick.family || this.musicFamily)
+      }
+    } catch { /* non-fatal — reuse policy is best-effort */ }
   }
 
   async ensureMusicExists() {
@@ -85,9 +143,14 @@ export class AudioMixer {
         '-i', voicePath,
         '-stream_loop', '-1', '-i', effectiveMusic,
         '-filter_complex',
-        '[2:a]aformat=channel_layouts=stereo,volume=0.10,afade=t=in:st=0:d=1,apad[bg];' +
-        '[1:a]aformat=channel_layouts=stereo,volume=1.3,apad[voice];' +
-        '[voice][bg]amix=inputs=2:duration=longest:dropout_transition=0:normalize=0[a]',
+        // Voice is the sidechain key: music ducks ~10dB only while speech is
+        // present, then swells back between lines. Static volume=0.10 is
+        // replaced by reactive compression — the retention-critical "voice
+        // stays intelligible" rule without burying the underscore.
+        '[2:a]aformat=channel_layouts=stereo,afade=t=in:st=0:d=1,apad[bg];' +
+        '[1:a]aformat=channel_layouts=stereo,volume=1.3,apad,asplit=2[v1][v2];' +
+        '[v1][bg]sidechaincompress=threshold=0.05:ratio=8:attack=80:release=500:makeup=1[duck];' +
+        '[v2][duck]amix=inputs=2:duration=longest:dropout_transition=0:normalize=0[a]',
         '-map', '0:v', '-map', '[a]',
         '-c:v', 'libx264', '-preset', 'medium', '-crf', '20',
         '-c:a', 'aac', '-b:a', '192k',
