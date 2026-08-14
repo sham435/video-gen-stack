@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-14T20:16:50.783Z",
+  "updatedAt": "2026-08-14T21:07:29.065Z",
   "videos": [
+    {
+      "id": "gAa1ivQK3pc",
+      "title": "Stocks rise and interest rates fall after inflation report - nbcnews.com | NEWS-MONSTER",
+      "publishedAt": "2026-08-14T21:00:22+00:00",
+      "publishedLabel": "Aug 14, 09:00 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/gAa1ivQK3pc/hqdefault.jpg"
+    },
     {
       "id": "Ck3cMLScjmo",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-14T05:27:40+00:00",
       "publishedLabel": "Aug 14, 05:27 AM",
       "thumbnail": "https://i1.ytimg.com/vi/HGHZmBNwPBg/hqdefault.jpg"
-    },
-    {
-      "id": "AUdZq_yw-c0",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-14T05:14:58+00:00",
-      "publishedLabel": "Aug 14, 05:14 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/AUdZq_yw-c0/hqdefault.jpg"
     }
   ]
 }
