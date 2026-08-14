@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-14T11:19:40.314Z",
+  "updatedAt": "2026-08-14T11:53:27.127Z",
   "videos": [
+    {
+      "id": "-SYqDhoqnDc",
+      "title": "Cisco Networking Sales Surge on AI Demand. Why the Stock Is Down After Earnings. - Barron' | NEWS-MO",
+      "publishedAt": "2026-08-14T11:46:28+00:00",
+      "publishedLabel": "Aug 14, 11:46 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/-SYqDhoqnDc/hqdefault.jpg"
+    },
     {
       "id": "WRfWw0nRzcw",
       "title": "We're Live at Made By Google Sharing Every Pixel 11, Pro Fold, and Watch 5 Announcement -  | NEWS-MO",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-13T16:00:59+00:00",
       "publishedLabel": "Aug 13, 04:00 PM",
       "thumbnail": "https://i3.ytimg.com/vi/rP2TwAT8k0Q/hqdefault.jpg"
-    },
-    {
-      "id": "csBTFux0UMM",
-      "title": "The 7 biggest announcements of Google’s Pixel 11 launch - The Verge | NEWS-MONSTER",
-      "publishedAt": "2026-08-13T15:06:37+00:00",
-      "publishedLabel": "Aug 13, 03:06 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/csBTFux0UMM/hqdefault.jpg"
     }
   ]
 }
