@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-14T07:03:50.512Z",
+  "updatedAt": "2026-08-14T08:22:57.848Z",
   "videos": [
+    {
+      "id": "EFsIaEU0wmg",
+      "title": "Saber CEO Makes Rideshare's Undisclosed AI Mess Even Worse - Kotaku | NEWS-MONSTER",
+      "publishedAt": "2026-08-14T08:17:04+00:00",
+      "publishedLabel": "Aug 14, 08:17 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/EFsIaEU0wmg/hqdefault.jpg"
+    },
     {
       "id": "XR1Jm2WyWQ4",
       "title": "BYD Said One Thing, Then Did This | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-11T19:38:21+00:00",
       "publishedLabel": "Aug 11, 07:38 PM",
       "thumbnail": "https://i2.ytimg.com/vi/99aamWTfjJE/hqdefault.jpg"
-    },
-    {
-      "id": "OWoJLNTP-gI",
-      "title": "Experts Disagree On GTA | NEWS-MONSTER",
-      "publishedAt": "2026-08-11T18:29:09+00:00",
-      "publishedLabel": "Aug 11, 06:29 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/OWoJLNTP-gI/hqdefault.jpg"
     }
   ]
 }
