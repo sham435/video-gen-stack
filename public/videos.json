@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-14T16:31:24.824Z",
+  "updatedAt": "2026-08-14T17:39:48.661Z",
   "videos": [
+    {
+      "id": "L-vn_0ACyd0",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-14T17:33:14+00:00",
+      "publishedLabel": "Aug 14, 05:33 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/L-vn_0ACyd0/hqdefault.jpg"
+    },
     {
       "id": "CrqRYpqX8gM",
       "title": "Does Google even want to win at AI? | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-13T23:16:39+00:00",
       "publishedLabel": "Aug 13, 11:16 PM",
       "thumbnail": "https://i2.ytimg.com/vi/ytYtwa5KbNU/hqdefault.jpg"
-    },
-    {
-      "id": "-3Bs4U0FC50",
-      "title": "Xbox Reveals Stunning 3D-Moulded Gears of War: E-Day Limited Edition Controllers - IGN | NEWS-MONSTE",
-      "publishedAt": "2026-08-13T21:18:32+00:00",
-      "publishedLabel": "Aug 13, 09:18 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/-3Bs4U0FC50/hqdefault.jpg"
     }
   ]
 }
