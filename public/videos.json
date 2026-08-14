@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-14T00:18:53.753Z",
+  "updatedAt": "2026-08-14T03:13:14.957Z",
   "videos": [
+    {
+      "id": "E_vyxImvN6g",
+      "title": "Everything announced at Made by Google today, including Pixel 11, Pixel Watch 4, and Pixel | NEWS-MO",
+      "publishedAt": "2026-08-14T03:09:52+00:00",
+      "publishedLabel": "Aug 14, 03:09 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/E_vyxImvN6g/hqdefault.jpg"
+    },
     {
       "id": "DQm8_WBJR3Y",
       "title": "Hogwarts Legacy 2 Is Officially in the Works, Confirms Warner Bros. - IGN | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-11T15:33:38+00:00",
       "publishedLabel": "Aug 11, 03:33 PM",
       "thumbnail": "https://i1.ytimg.com/vi/l_TXX8yhiEM/hqdefault.jpg"
-    },
-    {
-      "id": "9c7mp1jEp0Q",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-11T14:24:24+00:00",
-      "publishedLabel": "Aug 11, 02:24 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/9c7mp1jEp0Q/hqdefault.jpg"
     }
   ]
 }
