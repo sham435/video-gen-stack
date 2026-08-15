@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-15T23:33:14.738Z",
+  "updatedAt": "2026-08-15T23:56:07.948Z",
   "videos": [
+    {
+      "id": "t703577junE",
+      "title": "Exclusive | Trump Family’s World Liberty Financial Gets Preliminary Approval to Launch a B | NEWS-MO",
+      "publishedAt": "2026-08-15T23:48:39+00:00",
+      "publishedLabel": "Aug 15, 11:48 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/t703577junE/hqdefault.jpg"
+    },
     {
       "id": "4ExBeWS_0Io",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-15T16:54:17+00:00",
       "publishedLabel": "Aug 15, 04:54 PM",
       "thumbnail": "https://i1.ytimg.com/vi/4ir2OUai3cw/hqdefault.jpg"
-    },
-    {
-      "id": "N0OYEV5Zs4Y",
-      "title": "Dell XPS 13 Review: Move Over, Neo | NEWS-MONSTER",
-      "publishedAt": "2026-08-15T16:24:22+00:00",
-      "publishedLabel": "Aug 15, 04:24 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/N0OYEV5Zs4Y/hqdefault.jpg"
     }
   ]
 }
