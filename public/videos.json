@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-15T21:30:58.988Z",
+  "updatedAt": "2026-08-15T21:56:30.919Z",
   "videos": [
+    {
+      "id": "NKjK6rpCAg0",
+      "title": "Every 2027 GM EV will plug directly into Tesla Superchargers | NEWS-MONSTER",
+      "publishedAt": "2026-08-15T21:49:16+00:00",
+      "publishedLabel": "Aug 15, 09:49 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/NKjK6rpCAg0/hqdefault.jpg"
+    },
     {
       "id": "X-lOL-rWT8Q",
       "title": "Vulnerability giving attackers full control of Macs is under active exploitation - Ars Tec | NEWS-MO",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-15T14:52:03+00:00",
       "publishedLabel": "Aug 15, 02:52 PM",
       "thumbnail": "https://i3.ytimg.com/vi/bMicvwM0NKo/hqdefault.jpg"
-    },
-    {
-      "id": "g9Ah7L6e-xw",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-15T14:23:48+00:00",
-      "publishedLabel": "Aug 15, 02:23 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/g9Ah7L6e-xw/hqdefault.jpg"
     }
   ]
 }
