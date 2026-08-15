@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-15T14:31:03.419Z",
+  "updatedAt": "2026-08-15T14:55:47.669Z",
   "videos": [
+    {
+      "id": "bMicvwM0NKo",
+      "title": "Property Play: Housing investors say this is their worst market in at least 3 years - CNBC | NEWS-MO",
+      "publishedAt": "2026-08-15T14:52:03+00:00",
+      "publishedLabel": "Aug 15, 02:52 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/bMicvwM0NKo/hqdefault.jpg"
+    },
     {
       "id": "g9Ah7L6e-xw",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-15T07:32:43+00:00",
       "publishedLabel": "Aug 15, 07:32 AM",
       "thumbnail": "https://i1.ytimg.com/vi/PF68EKqlVns/hqdefault.jpg"
-    },
-    {
-      "id": "qdoPNMMjMXM",
-      "title": "Kia EV3: el eléctrico compacto que demuestra que la autonomía también depende de la inteli | NEWS-MO",
-      "publishedAt": "2026-08-15T06:38:27+00:00",
-      "publishedLabel": "Aug 15, 06:38 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/qdoPNMMjMXM/hqdefault.jpg"
     }
   ]
 }
