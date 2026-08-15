@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-15T01:07:49.317Z",
+  "updatedAt": "2026-08-15T02:39:58.792Z",
   "videos": [
+    {
+      "id": "N7uJdBrMMdE",
+      "title": "United Airlines Flight 455 blows tire during takeoff at Chicago O'Hare International Airpo | NEWS-MO",
+      "publishedAt": "2026-08-15T02:36:20+00:00",
+      "publishedLabel": "Aug 15, 02:36 AM",
+      "thumbnail": "https://i3.ytimg.com/vi/N7uJdBrMMdE/hqdefault.jpg"
+    },
+    {
+      "id": "C0iEmsejJ-U",
+      "title": "Dell XPS 13 Review: Move Over, Neo | NEWS-MONSTER",
+      "publishedAt": "2026-08-15T01:07:59+00:00",
+      "publishedLabel": "Aug 15, 01:07 AM",
+      "thumbnail": "https://i4.ytimg.com/vi/C0iEmsejJ-U/hqdefault.jpg"
+    },
     {
       "id": "10Zozn-ALkU",
       "title": "Stock Market Today: Dow Climbs; Wholesale Inflation Unchanged in July — Live Updates - WSJ | NEWS-MO",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-14T15:26:13+00:00",
       "publishedLabel": "Aug 14, 03:26 PM",
       "thumbnail": "https://i2.ytimg.com/vi/aS6ujZQR6nM/hqdefault.jpg"
-    },
-    {
-      "id": "hZRS1aBUvyY",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-14T14:23:33+00:00",
-      "publishedLabel": "Aug 14, 02:23 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/hZRS1aBUvyY/hqdefault.jpg"
-    },
-    {
-      "id": "WnTKprluGpE",
-      "title": "Bank of America to Deploy $250 Billion to Bolster AI and Energy Infrastructure | NEWS-MONSTER",
-      "publishedAt": "2026-08-14T13:38:41+00:00",
-      "publishedLabel": "Aug 14, 01:38 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/WnTKprluGpE/hqdefault.jpg"
     }
   ]
 }
