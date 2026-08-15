@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-15T16:59:53.434Z",
+  "updatedAt": "2026-08-15T17:29:59.003Z",
   "videos": [
+    {
+      "id": "C-m0vG3ZGAE",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-15T17:23:10+00:00",
+      "publishedLabel": "Aug 15, 05:23 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/C-m0vG3ZGAE/hqdefault.jpg"
+    },
     {
       "id": "4ir2OUai3cw",
       "title": "S&P Steady After Record Close | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-15T09:54:01+00:00",
       "publishedLabel": "Aug 15, 09:54 AM",
       "thumbnail": "https://i1.ytimg.com/vi/ppqSjqgX7n8/hqdefault.jpg"
-    },
-    {
-      "id": "gz4Akm9PhN4",
-      "title": "Google Play is hiding a Pixel 11 Pro discount in plain sight - Android Central | NEWS-MONSTER",
-      "publishedAt": "2026-08-15T09:26:36+00:00",
-      "publishedLabel": "Aug 15, 09:26 AM",
-      "thumbnail": "https://i4.ytimg.com/vi/gz4Akm9PhN4/hqdefault.jpg"
     }
   ]
 }
