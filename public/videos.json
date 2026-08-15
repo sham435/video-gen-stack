@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-15T22:58:25.946Z",
+  "updatedAt": "2026-08-15T23:33:14.738Z",
   "videos": [
+    {
+      "id": "4ExBeWS_0Io",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-15T23:25:46+00:00",
+      "publishedLabel": "Aug 15, 11:25 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/4ExBeWS_0Io/hqdefault.jpg"
+    },
     {
       "id": "11RMwv7vz7I",
       "title": "S&P Steady After Record Close | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-15T16:24:22+00:00",
       "publishedLabel": "Aug 15, 04:24 PM",
       "thumbnail": "https://i3.ytimg.com/vi/N0OYEV5Zs4Y/hqdefault.jpg"
-    },
-    {
-      "id": "RLP8nqxFLW4",
-      "title": "Tesla ‘flying’ Roadster demo could come this month, with no one inside | NEWS-MONSTER",
-      "publishedAt": "2026-08-15T15:48:49+00:00",
-      "publishedLabel": "Aug 15, 03:48 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/RLP8nqxFLW4/hqdefault.jpg"
     }
   ]
 }
