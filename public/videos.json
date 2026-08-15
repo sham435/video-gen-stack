@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-15T19:54:57.605Z",
+  "updatedAt": "2026-08-15T20:30:47.974Z",
   "videos": [
+    {
+      "id": "v7EN3CIZ-IY",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-15T20:23:39+00:00",
+      "publishedLabel": "Aug 15, 08:23 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/v7EN3CIZ-IY/hqdefault.jpg"
+    },
     {
       "id": "tlXRz664O84",
       "title": "S&P Steady After Record Close | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-15T13:32:18+00:00",
       "publishedLabel": "Aug 15, 01:32 PM",
       "thumbnail": "https://i1.ytimg.com/vi/0BDcM6p56lA/hqdefault.jpg"
-    },
-    {
-      "id": "zw0z7W2g-fk",
-      "title": "Norges Bank Investment Management holds $400M in crypto assets through indirect exposure | NEWS-MONS",
-      "publishedAt": "2026-08-15T12:35:56+00:00",
-      "publishedLabel": "Aug 15, 12:35 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/zw0z7W2g-fk/hqdefault.jpg"
     }
   ]
 }
