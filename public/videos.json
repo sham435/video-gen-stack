@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-15T02:39:58.792Z",
+  "updatedAt": "2026-08-15T03:47:11.573Z",
   "videos": [
+    {
+      "id": "hHR1k0rKfYE",
+      "title": "Elon Musk besitzt jetzt 48,4 Prozent an SpaceX | NEWS-MONSTER",
+      "publishedAt": "2026-08-15T03:40:44+00:00",
+      "publishedLabel": "Aug 15, 03:40 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/hHR1k0rKfYE/hqdefault.jpg"
+    },
     {
       "id": "N7uJdBrMMdE",
       "title": "United Airlines Flight 455 blows tire during takeoff at Chicago O'Hare International Airpo | NEWS-MO",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-14T16:27:29+00:00",
       "publishedLabel": "Aug 14, 04:27 PM",
       "thumbnail": "https://i4.ytimg.com/vi/CrqRYpqX8gM/hqdefault.jpg"
-    },
-    {
-      "id": "aS6ujZQR6nM",
-      "title": "Microsoft is combining its Copilot apps ahead of a ‘super app’ - The Verge | NEWS-MONSTER",
-      "publishedAt": "2026-08-14T15:26:13+00:00",
-      "publishedLabel": "Aug 14, 03:26 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/aS6ujZQR6nM/hqdefault.jpg"
     }
   ]
 }
