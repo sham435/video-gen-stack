@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-15T03:47:11.573Z",
+  "updatedAt": "2026-08-15T04:10:06.247Z",
   "videos": [
+    {
+      "id": "eVVgcWFiDBM",
+      "title": "Nikhil Kamath asks whether India should build EVs or batteries. The answer from Chinese ex | NEWS-MO",
+      "publishedAt": "2026-08-15T04:03:23+00:00",
+      "publishedLabel": "Aug 15, 04:03 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/eVVgcWFiDBM/hqdefault.jpg"
+    },
     {
       "id": "hHR1k0rKfYE",
       "title": "Elon Musk besitzt jetzt 48,4 Prozent an SpaceX | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-14T17:33:14+00:00",
       "publishedLabel": "Aug 14, 05:33 PM",
       "thumbnail": "https://i1.ytimg.com/vi/L-vn_0ACyd0/hqdefault.jpg"
-    },
-    {
-      "id": "CrqRYpqX8gM",
-      "title": "Does Google even want to win at AI? | NEWS-MONSTER",
-      "publishedAt": "2026-08-14T16:27:29+00:00",
-      "publishedLabel": "Aug 14, 04:27 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/CrqRYpqX8gM/hqdefault.jpg"
     }
   ]
 }
