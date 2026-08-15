@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-15T10:57:45.761Z",
+  "updatedAt": "2026-08-15T11:29:29.464Z",
   "videos": [
+    {
+      "id": "gR_wWvJTgsw",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-15T11:22:12+00:00",
+      "publishedLabel": "Aug 15, 11:22 AM",
+      "thumbnail": "https://i4.ytimg.com/vi/gR_wWvJTgsw/hqdefault.jpg"
+    },
     {
       "id": "2vN8I43NQ9Q",
       "title": "Experts Disagree On U.S | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-15T04:03:23+00:00",
       "publishedLabel": "Aug 15, 04:03 AM",
       "thumbnail": "https://i2.ytimg.com/vi/eVVgcWFiDBM/hqdefault.jpg"
-    },
-    {
-      "id": "hHR1k0rKfYE",
-      "title": "Elon Musk besitzt jetzt 48,4 Prozent an SpaceX | NEWS-MONSTER",
-      "publishedAt": "2026-08-15T03:40:44+00:00",
-      "publishedLabel": "Aug 15, 03:40 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/hHR1k0rKfYE/hqdefault.jpg"
     }
   ]
 }
