@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-15T11:48:24.875Z",
+  "updatedAt": "2026-08-15T12:43:31.806Z",
   "videos": [
+    {
+      "id": "zw0z7W2g-fk",
+      "title": "Norges Bank Investment Management holds $400M in crypto assets through indirect exposure | NEWS-MONS",
+      "publishedAt": "2026-08-15T12:35:56+00:00",
+      "publishedLabel": "Aug 15, 12:35 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/zw0z7W2g-fk/hqdefault.jpg"
+    },
+    {
+      "id": "tayJzfIkBSM",
+      "title": "Stock futures choppy after S&P 500 sets record above 7,800, heads for winning week: Live u | NEWS-MO",
+      "publishedAt": "2026-08-15T11:48:36+00:00",
+      "publishedLabel": "Aug 15, 11:48 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/tayJzfIkBSM/hqdefault.jpg"
+    },
     {
       "id": "gR_wWvJTgsw",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-15T05:01:30+00:00",
       "publishedLabel": "Aug 15, 05:01 AM",
       "thumbnail": "https://i1.ytimg.com/vi/DbSf7j1V3Xs/hqdefault.jpg"
-    },
-    {
-      "id": "__iBnpMkpXk",
-      "title": "Dell XPS 13 Review: Move Over, Neo | NEWS-MONSTER",
-      "publishedAt": "2026-08-15T04:31:03+00:00",
-      "publishedLabel": "Aug 15, 04:31 AM",
-      "thumbnail": "https://i4.ytimg.com/vi/__iBnpMkpXk/hqdefault.jpg"
-    },
-    {
-      "id": "eVVgcWFiDBM",
-      "title": "Nikhil Kamath asks whether India should build EVs or batteries. The answer from Chinese ex | NEWS-MO",
-      "publishedAt": "2026-08-15T04:03:23+00:00",
-      "publishedLabel": "Aug 15, 04:03 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/eVVgcWFiDBM/hqdefault.jpg"
     }
   ]
 }
