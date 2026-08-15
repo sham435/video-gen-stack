@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-15T22:21:47.230Z",
+  "updatedAt": "2026-08-15T22:58:25.946Z",
   "videos": [
+    {
+      "id": "11RMwv7vz7I",
+      "title": "S&P Steady After Record Close | NEWS-MONSTER",
+      "publishedAt": "2026-08-15T22:51:25+00:00",
+      "publishedLabel": "Aug 15, 10:51 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/11RMwv7vz7I/hqdefault.jpg"
+    },
+    {
+      "id": "fasesPZz-SY",
+      "title": "Dell XPS 13 Review: Move Over, Neo | NEWS-MONSTER",
+      "publishedAt": "2026-08-15T22:22:06+00:00",
+      "publishedLabel": "Aug 15, 10:22 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/fasesPZz-SY/hqdefault.jpg"
+    },
     {
       "id": "NKjK6rpCAg0",
       "title": "Every 2027 GM EV will plug directly into Tesla Superchargers | NEWS-MONSTER",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-15T15:48:49+00:00",
       "publishedLabel": "Aug 15, 03:48 PM",
       "thumbnail": "https://i3.ytimg.com/vi/RLP8nqxFLW4/hqdefault.jpg"
-    },
-    {
-      "id": "cM8YY9__wa8",
-      "title": "Google has another Pixel 11 discount for up to $175 off, here’s where to find it - 9to5Goo | NEWS-MO",
-      "publishedAt": "2026-08-15T15:22:16+00:00",
-      "publishedLabel": "Aug 15, 03:22 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/cM8YY9__wa8/hqdefault.jpg"
-    },
-    {
-      "id": "bMicvwM0NKo",
-      "title": "Property Play: Housing investors say this is their worst market in at least 3 years - CNBC | NEWS-MO",
-      "publishedAt": "2026-08-15T14:52:03+00:00",
-      "publishedLabel": "Aug 15, 02:52 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/bMicvwM0NKo/hqdefault.jpg"
     }
   ]
 }
