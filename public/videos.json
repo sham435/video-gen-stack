@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-15T16:24:14.764Z",
+  "updatedAt": "2026-08-15T16:59:53.434Z",
   "videos": [
+    {
+      "id": "4ir2OUai3cw",
+      "title": "S&P Steady After Record Close | NEWS-MONSTER",
+      "publishedAt": "2026-08-15T16:54:17+00:00",
+      "publishedLabel": "Aug 15, 04:54 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/4ir2OUai3cw/hqdefault.jpg"
+    },
+    {
+      "id": "N0OYEV5Zs4Y",
+      "title": "Dell XPS 13 Review: Move Over, Neo | NEWS-MONSTER",
+      "publishedAt": "2026-08-15T16:24:22+00:00",
+      "publishedLabel": "Aug 15, 04:24 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/N0OYEV5Zs4Y/hqdefault.jpg"
+    },
     {
       "id": "RLP8nqxFLW4",
       "title": "Tesla ‘flying’ Roadster demo could come this month, with no one inside | NEWS-MONSTER",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-15T09:26:36+00:00",
       "publishedLabel": "Aug 15, 09:26 AM",
       "thumbnail": "https://i4.ytimg.com/vi/gz4Akm9PhN4/hqdefault.jpg"
-    },
-    {
-      "id": "PPVDu6bP110",
-      "title": "iPhone 17 Pro One Year Later: What Held Up and What Didn't - MacRumors | NEWS-MONSTER",
-      "publishedAt": "2026-08-15T08:59:10+00:00",
-      "publishedLabel": "Aug 15, 08:59 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/PPVDu6bP110/hqdefault.jpg"
-    },
-    {
-      "id": "Fi2C0meXCqc",
-      "title": "iPhone 17 Pro One Year Later: What Held Up and What Didn't - MacRumors | NEWS-MONSTER",
-      "publishedAt": "2026-08-15T08:28:04+00:00",
-      "publishedLabel": "Aug 15, 08:28 AM",
-      "thumbnail": "https://i3.ytimg.com/vi/Fi2C0meXCqc/hqdefault.jpg"
     }
   ]
 }
