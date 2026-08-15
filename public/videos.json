@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-15T17:29:59.003Z",
+  "updatedAt": "2026-08-15T17:56:40.825Z",
   "videos": [
+    {
+      "id": "dYb9yo7jUmo",
+      "title": "SpaceX Stock Drops as Musk’s Rockets Face a Fresh Rival - Barron's | NEWS-MONSTER",
+      "publishedAt": "2026-08-15T17:49:34+00:00",
+      "publishedLabel": "Aug 15, 05:49 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/dYb9yo7jUmo/hqdefault.jpg"
+    },
     {
       "id": "C-m0vG3ZGAE",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-15T10:23:52+00:00",
       "publishedLabel": "Aug 15, 10:23 AM",
       "thumbnail": "https://i3.ytimg.com/vi/vghpphTRbdA/hqdefault.jpg"
-    },
-    {
-      "id": "ppqSjqgX7n8",
-      "title": "Google Play is hiding a Pixel 11 Pro discount in plain sight - Android Central | NEWS-MONSTER",
-      "publishedAt": "2026-08-15T09:54:01+00:00",
-      "publishedLabel": "Aug 15, 09:54 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/ppqSjqgX7n8/hqdefault.jpg"
     }
   ]
 }
