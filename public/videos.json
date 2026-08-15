@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-15T13:32:11.792Z",
+  "updatedAt": "2026-08-15T14:03:53.979Z",
   "videos": [
+    {
+      "id": "8jAIC-zP8Vk",
+      "title": "S&P Steady After Record Close | NEWS-MONSTER",
+      "publishedAt": "2026-08-15T13:57:15+00:00",
+      "publishedLabel": "Aug 15, 01:57 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/8jAIC-zP8Vk/hqdefault.jpg"
+    },
+    {
+      "id": "0BDcM6p56lA",
+      "title": "Dell XPS 13 Review: Move Over, Neo | NEWS-MONSTER",
+      "publishedAt": "2026-08-15T13:32:18+00:00",
+      "publishedLabel": "Aug 15, 01:32 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/0BDcM6p56lA/hqdefault.jpg"
+    },
     {
       "id": "zw0z7W2g-fk",
       "title": "Norges Bank Investment Management holds $400M in crypto assets through indirect exposure | NEWS-MONS",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-15T05:55:20+00:00",
       "publishedLabel": "Aug 15, 05:55 AM",
       "thumbnail": "https://i4.ytimg.com/vi/w08y1DkyP28/hqdefault.jpg"
-    },
-    {
-      "id": "ZkFVkMYPTOY",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-15T05:30:30+00:00",
-      "publishedLabel": "Aug 15, 05:30 AM",
-      "thumbnail": "https://i3.ytimg.com/vi/ZkFVkMYPTOY/hqdefault.jpg"
-    },
-    {
-      "id": "DbSf7j1V3Xs",
-      "title": "Experts Disagree On U.S | NEWS-MONSTER",
-      "publishedAt": "2026-08-15T05:01:30+00:00",
-      "publishedLabel": "Aug 15, 05:01 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/DbSf7j1V3Xs/hqdefault.jpg"
     }
   ]
 }
