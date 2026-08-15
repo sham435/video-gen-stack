@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-15T09:34:26.785Z",
+  "updatedAt": "2026-08-15T10:00:58.272Z",
   "videos": [
+    {
+      "id": "ppqSjqgX7n8",
+      "title": "Google Play is hiding a Pixel 11 Pro discount in plain sight - Android Central | NEWS-MONSTER",
+      "publishedAt": "2026-08-15T09:54:01+00:00",
+      "publishedLabel": "Aug 15, 09:54 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/ppqSjqgX7n8/hqdefault.jpg"
+    },
     {
       "id": "gz4Akm9PhN4",
       "title": "Google Play is hiding a Pixel 11 Pro discount in plain sight - Android Central | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-15T01:07:59+00:00",
       "publishedLabel": "Aug 15, 01:07 AM",
       "thumbnail": "https://i4.ytimg.com/vi/C0iEmsejJ-U/hqdefault.jpg"
-    },
-    {
-      "id": "10Zozn-ALkU",
-      "title": "Stock Market Today: Dow Climbs; Wholesale Inflation Unchanged in July — Live Updates - WSJ | NEWS-MO",
-      "publishedAt": "2026-08-14T23:51:31+00:00",
-      "publishedLabel": "Aug 14, 11:51 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/10Zozn-ALkU/hqdefault.jpg"
     }
   ]
 }
