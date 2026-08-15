@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-15T14:03:53.979Z",
+  "updatedAt": "2026-08-15T14:31:03.419Z",
   "videos": [
+    {
+      "id": "g9Ah7L6e-xw",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-15T14:23:48+00:00",
+      "publishedLabel": "Aug 15, 02:23 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/g9Ah7L6e-xw/hqdefault.jpg"
+    },
     {
       "id": "8jAIC-zP8Vk",
       "title": "S&P Steady After Record Close | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-15T06:38:27+00:00",
       "publishedLabel": "Aug 15, 06:38 AM",
       "thumbnail": "https://i2.ytimg.com/vi/qdoPNMMjMXM/hqdefault.jpg"
-    },
-    {
-      "id": "w08y1DkyP28",
-      "title": "Even Claude Is in the Dark About Dario Amodei’s Wife—and Her Influence at Anthropic - WSJ | NEWS-MON",
-      "publishedAt": "2026-08-15T05:55:20+00:00",
-      "publishedLabel": "Aug 15, 05:55 AM",
-      "thumbnail": "https://i4.ytimg.com/vi/w08y1DkyP28/hqdefault.jpg"
     }
   ]
 }
