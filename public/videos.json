@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-16T10:24:05.178Z",
+  "updatedAt": "2026-08-16T10:58:48.287Z",
   "videos": [
+    {
+      "id": "gpu2ljF3bbw",
+      "title": "S&P Steady After Record Close | NEWS-MONSTER",
+      "publishedAt": "2026-08-16T10:53:54+00:00",
+      "publishedLabel": "Aug 16, 10:53 AM",
+      "thumbnail": "https://i4.ytimg.com/vi/gpu2ljF3bbw/hqdefault.jpg"
+    },
+    {
+      "id": "CWj1NbHcek8",
+      "title": "Zyzz Was the Original Looksmaxxer. His Rise and Untimely Death Feel More Relevant Than Eve | NEWS-MO",
+      "publishedAt": "2026-08-16T10:24:06+00:00",
+      "publishedLabel": "Aug 16, 10:24 AM",
+      "thumbnail": "https://i4.ytimg.com/vi/CWj1NbHcek8/hqdefault.jpg"
+    },
     {
       "id": "32BVpmyt7t4",
       "title": "Large-Scale Pokémon Eviction Looms With Pokémon Bank Server Shutdown - hackaday.com | NEWS-MONSTER",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-16T02:44:51+00:00",
       "publishedLabel": "Aug 16, 02:44 AM",
       "thumbnail": "https://i2.ytimg.com/vi/YAasNoxGFh8/hqdefault.jpg"
-    },
-    {
-      "id": "ENF-UQAKQjc",
-      "title": "Zyzz Was the Original Looksmaxxer. His Rise and Untimely Death Feel More Relevant Than Eve | NEWS-MO",
-      "publishedAt": "2026-08-16T01:11:05+00:00",
-      "publishedLabel": "Aug 16, 01:11 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/ENF-UQAKQjc/hqdefault.jpg"
-    },
-    {
-      "id": "t703577junE",
-      "title": "Exclusive | Trump Family’s World Liberty Financial Gets Preliminary Approval to Launch a B | NEWS-MO",
-      "publishedAt": "2026-08-15T23:48:39+00:00",
-      "publishedLabel": "Aug 15, 11:48 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/t703577junE/hqdefault.jpg"
     }
   ]
 }
