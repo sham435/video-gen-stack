@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-16T04:43:40.118Z",
+  "updatedAt": "2026-08-16T05:37:15.671Z",
   "videos": [
+    {
+      "id": "8RIs-POtS1Q",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-16T05:29:42+00:00",
+      "publishedLabel": "Aug 16, 05:29 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/8RIs-POtS1Q/hqdefault.jpg"
+    },
     {
       "id": "feroGE4T-k0",
       "title": "S&P Steady After Record Close | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-15T19:48:31+00:00",
       "publishedLabel": "Aug 15, 07:48 PM",
       "thumbnail": "https://i1.ytimg.com/vi/tlXRz664O84/hqdefault.jpg"
-    },
-    {
-      "id": "wsnR0H7s5vo",
-      "title": "Dell XPS 13 Review: Move Over, Neo | NEWS-MONSTER",
-      "publishedAt": "2026-08-15T19:24:26+00:00",
-      "publishedLabel": "Aug 15, 07:24 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/wsnR0H7s5vo/hqdefault.jpg"
     }
   ]
 }
