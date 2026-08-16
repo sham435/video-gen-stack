@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-16T15:23:48.554Z",
+  "updatedAt": "2026-08-16T15:56:02.695Z",
   "videos": [
+    {
+      "id": "fkiJEuYDLpU",
+      "title": "Пузырь ИИ надувается: крупнейшие IT-компании всё больше зарабатывают на инвестициях друг в | NEWS-MO",
+      "publishedAt": "2026-08-16T15:49:31+00:00",
+      "publishedLabel": "Aug 16, 03:49 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/fkiJEuYDLpU/hqdefault.jpg"
+    },
+    {
+      "id": "3VLHl-Z5Cng",
+      "title": "Large-Scale Pokémon Eviction Looms With Pokémon Bank Server Shutdown - hackaday.com | NEWS-MONSTER",
+      "publishedAt": "2026-08-16T15:23:51+00:00",
+      "publishedLabel": "Aug 16, 03:23 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/3VLHl-Z5Cng/hqdefault.jpg"
+    },
     {
       "id": "e_uLGr5qQ5w",
       "title": "I drove Tesla FSD, Rivian Autonomy+ ‘hands-free’ driving systems. Here’s how they compare  | NEWS-MO",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-16T08:29:29+00:00",
       "publishedLabel": "Aug 16, 08:29 AM",
       "thumbnail": "https://i1.ytimg.com/vi/xdjm7Yu80Jg/hqdefault.jpg"
-    },
-    {
-      "id": "ISUNeunRhpo",
-      "title": "S&P Steady After Record Close | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T08:00:11+00:00",
-      "publishedLabel": "Aug 16, 08:00 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/ISUNeunRhpo/hqdefault.jpg"
-    },
-    {
-      "id": "LaHC-PNlZh8",
-      "title": "Zyzz Was the Original Looksmaxxer. His Rise and Untimely Death Feel More Relevant Than Eve | NEWS-MO",
-      "publishedAt": "2026-08-16T07:32:18+00:00",
-      "publishedLabel": "Aug 16, 07:32 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/LaHC-PNlZh8/hqdefault.jpg"
     }
   ]
 }
