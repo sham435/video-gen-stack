@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-16T14:34:55.859Z",
+  "updatedAt": "2026-08-16T15:03:20.051Z",
   "videos": [
+    {
+      "id": "e_uLGr5qQ5w",
+      "title": "I drove Tesla FSD, Rivian Autonomy+ ‘hands-free’ driving systems. Here’s how they compare  | NEWS-MO",
+      "publishedAt": "2026-08-16T14:53:30+00:00",
+      "publishedLabel": "Aug 16, 02:53 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/e_uLGr5qQ5w/hqdefault.jpg"
+    },
     {
       "id": "9yTH68-Y9Sk",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T07:32:18+00:00",
       "publishedLabel": "Aug 16, 07:32 AM",
       "thumbnail": "https://i1.ytimg.com/vi/LaHC-PNlZh8/hqdefault.jpg"
-    },
-    {
-      "id": "tCUM2p_g68Q",
-      "title": "Mercedes-Benz создала необычный GLE: огромная колесная база и система Momenta R7 | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T06:37:39+00:00",
-      "publishedLabel": "Aug 16, 06:37 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/tCUM2p_g68Q/hqdefault.jpg"
     }
   ]
 }
