@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-16T20:31:12.648Z",
+  "updatedAt": "2026-08-16T21:01:34.541Z",
   "videos": [
+    {
+      "id": "P9XlASQ3UAk",
+      "title": "Aston Martin's Latest Special Supercar Is A V12 Villain - Motor1.com | NEWS-MONSTER",
+      "publishedAt": "2026-08-16T20:52:33+00:00",
+      "publishedLabel": "Aug 16, 08:52 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/P9XlASQ3UAk/hqdefault.jpg"
+    },
     {
       "id": "QYq6aBQhP-A",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T13:59:15+00:00",
       "publishedLabel": "Aug 16, 01:59 PM",
       "thumbnail": "https://i3.ytimg.com/vi/Z7OpvQfJVlg/hqdefault.jpg"
-    },
-    {
-      "id": "LIeBR-1tZMw",
-      "title": "Zyzz Was the Original Looksmaxxer. His Rise and Untimely Death Feel More Relevant Than Eve | NEWS-MO",
-      "publishedAt": "2026-08-16T13:33:55+00:00",
-      "publishedLabel": "Aug 16, 01:33 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/LIeBR-1tZMw/hqdefault.jpg"
     }
   ]
 }
