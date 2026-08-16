@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-16T09:38:53.425Z",
+  "updatedAt": "2026-08-16T10:02:29.706Z",
   "videos": [
+    {
+      "id": "32BVpmyt7t4",
+      "title": "Large-Scale Pokémon Eviction Looms With Pokémon Bank Server Shutdown - hackaday.com | NEWS-MONSTER",
+      "publishedAt": "2026-08-16T09:56:09+00:00",
+      "publishedLabel": "Aug 16, 09:56 AM",
+      "thumbnail": "https://i4.ytimg.com/vi/32BVpmyt7t4/hqdefault.jpg"
+    },
     {
       "id": "waiOR8omXy4",
       "title": "Large-Scale Pokémon Eviction Looms With Pokémon Bank Server Shutdown - hackaday.com | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-15T23:48:39+00:00",
       "publishedLabel": "Aug 15, 11:48 PM",
       "thumbnail": "https://i1.ytimg.com/vi/t703577junE/hqdefault.jpg"
-    },
-    {
-      "id": "4ExBeWS_0Io",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-15T23:25:46+00:00",
-      "publishedLabel": "Aug 15, 11:25 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/4ExBeWS_0Io/hqdefault.jpg"
     }
   ]
 }
