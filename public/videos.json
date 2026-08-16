@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-16T13:33:41.863Z",
+  "updatedAt": "2026-08-16T14:07:39.107Z",
   "videos": [
+    {
+      "id": "Z7OpvQfJVlg",
+      "title": "S&P Steady After Record Close | NEWS-MONSTER",
+      "publishedAt": "2026-08-16T13:59:15+00:00",
+      "publishedLabel": "Aug 16, 01:59 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/Z7OpvQfJVlg/hqdefault.jpg"
+    },
+    {
+      "id": "LIeBR-1tZMw",
+      "title": "Zyzz Was the Original Looksmaxxer. His Rise and Untimely Death Feel More Relevant Than Eve | NEWS-MO",
+      "publishedAt": "2026-08-16T13:33:55+00:00",
+      "publishedLabel": "Aug 16, 01:33 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/LIeBR-1tZMw/hqdefault.jpg"
+    },
     {
       "id": "PaiNxkzZ7i8",
       "title": "Rivian Confirms Point to Point This Year, All Owners in 2027 - RivianTrackr | NEWS-MONSTER",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-16T05:57:50+00:00",
       "publishedLabel": "Aug 16, 05:57 AM",
       "thumbnail": "https://i1.ytimg.com/vi/8g6N_FLtEj0/hqdefault.jpg"
-    },
-    {
-      "id": "8RIs-POtS1Q",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-16T05:29:42+00:00",
-      "publishedLabel": "Aug 16, 05:29 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/8RIs-POtS1Q/hqdefault.jpg"
-    },
-    {
-      "id": "feroGE4T-k0",
-      "title": "S&P Steady After Record Close | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T04:36:58+00:00",
-      "publishedLabel": "Aug 16, 04:36 AM",
-      "thumbnail": "https://i3.ytimg.com/vi/feroGE4T-k0/hqdefault.jpg"
     }
   ]
 }
