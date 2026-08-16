@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-16T21:28:30.545Z",
+  "updatedAt": "2026-08-16T21:58:41.526Z",
   "videos": [
+    {
+      "id": "gm7LqZ9cbhg",
+      "title": "Tesla en Suecia: no ha sido una derrota sindical, ha sido una lección | NEWS-MONSTER",
+      "publishedAt": "2026-08-16T21:49:29+00:00",
+      "publishedLabel": "Aug 16, 09:49 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/gm7LqZ9cbhg/hqdefault.jpg"
+    },
     {
       "id": "YWVl4bEtmcM",
       "title": "Super Mario 64 is now playable on YouTube - Dexerto | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T14:53:30+00:00",
       "publishedLabel": "Aug 16, 02:53 PM",
       "thumbnail": "https://i2.ytimg.com/vi/e_uLGr5qQ5w/hqdefault.jpg"
-    },
-    {
-      "id": "9yTH68-Y9Sk",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-16T14:25:38+00:00",
-      "publishedLabel": "Aug 16, 02:25 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/9yTH68-Y9Sk/hqdefault.jpg"
     }
   ]
 }
