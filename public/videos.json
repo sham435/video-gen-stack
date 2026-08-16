@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-16T11:28:23.914Z",
+  "updatedAt": "2026-08-16T11:56:08.848Z",
   "videos": [
+    {
+      "id": "Z8hmMIKIkX0",
+      "title": "Georgia financial CEO Todd Burkhalter sentenced for running historic $380M Ponzi scheme to | NEWS-MO",
+      "publishedAt": "2026-08-16T11:49:07+00:00",
+      "publishedLabel": "Aug 16, 11:49 AM",
+      "thumbnail": "https://i3.ytimg.com/vi/Z8hmMIKIkX0/hqdefault.jpg"
+    },
     {
       "id": "5c_x0aV55xA",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T04:08:13+00:00",
       "publishedLabel": "Aug 16, 04:08 AM",
       "thumbnail": "https://i1.ytimg.com/vi/p_t5G5Yu4A4/hqdefault.jpg"
-    },
-    {
-      "id": "S0-71Rhr5EI",
-      "title": "El próximo coche de Elon Musk podrá volar, según fuentes de Tesla. Pero será inútil | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T03:50:25+00:00",
-      "publishedLabel": "Aug 16, 03:50 AM",
-      "thumbnail": "https://i4.ytimg.com/vi/S0-71Rhr5EI/hqdefault.jpg"
     }
   ]
 }
