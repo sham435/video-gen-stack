@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-16T21:01:34.541Z",
+  "updatedAt": "2026-08-16T21:28:30.545Z",
   "videos": [
+    {
+      "id": "YWVl4bEtmcM",
+      "title": "Super Mario 64 is now playable on YouTube - Dexerto | NEWS-MONSTER",
+      "publishedAt": "2026-08-16T21:21:52+00:00",
+      "publishedLabel": "Aug 16, 09:21 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/YWVl4bEtmcM/hqdefault.jpg"
+    },
     {
       "id": "P9XlASQ3UAk",
       "title": "Aston Martin's Latest Special Supercar Is A V12 Villain - Motor1.com | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T14:25:38+00:00",
       "publishedLabel": "Aug 16, 02:25 PM",
       "thumbnail": "https://i2.ytimg.com/vi/9yTH68-Y9Sk/hqdefault.jpg"
-    },
-    {
-      "id": "Z7OpvQfJVlg",
-      "title": "S&P Steady After Record Close | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T13:59:15+00:00",
-      "publishedLabel": "Aug 16, 01:59 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/Z7OpvQfJVlg/hqdefault.jpg"
     }
   ]
 }
