@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-16T22:59:34.300Z",
+  "updatedAt": "2026-08-16T23:31:08.902Z",
   "videos": [
+    {
+      "id": "hJxtaTef6_E",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-16T23:22:17+00:00",
+      "publishedLabel": "Aug 16, 11:22 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/hJxtaTef6_E/hqdefault.jpg"
+    },
     {
       "id": "nuDR9wH8qmg",
       "title": "S&P Steady After Record Close | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T16:26:03+00:00",
       "publishedLabel": "Aug 16, 04:26 PM",
       "thumbnail": "https://i4.ytimg.com/vi/k0zvGicpDIU/hqdefault.jpg"
-    },
-    {
-      "id": "fkiJEuYDLpU",
-      "title": "Пузырь ИИ надувается: крупнейшие IT-компании всё больше зарабатывают на инвестициях друг в | NEWS-MO",
-      "publishedAt": "2026-08-16T15:49:31+00:00",
-      "publishedLabel": "Aug 16, 03:49 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/fkiJEuYDLpU/hqdefault.jpg"
     }
   ]
 }
