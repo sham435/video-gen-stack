@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-16T10:58:48.287Z",
+  "updatedAt": "2026-08-16T11:28:23.914Z",
   "videos": [
+    {
+      "id": "5c_x0aV55xA",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-16T11:22:11+00:00",
+      "publishedLabel": "Aug 16, 11:22 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/5c_x0aV55xA/hqdefault.jpg"
+    },
     {
       "id": "gpu2ljF3bbw",
       "title": "S&P Steady After Record Close | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T03:50:25+00:00",
       "publishedLabel": "Aug 16, 03:50 AM",
       "thumbnail": "https://i4.ytimg.com/vi/S0-71Rhr5EI/hqdefault.jpg"
-    },
-    {
-      "id": "YAasNoxGFh8",
-      "title": "Trump-appointed regulator OKs banking license for Trump-linked crypto firm - Politico | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T02:44:51+00:00",
-      "publishedLabel": "Aug 16, 02:44 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/YAasNoxGFh8/hqdefault.jpg"
     }
   ]
 }
