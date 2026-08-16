@@ -285,6 +285,25 @@ export class OpenCodeBridge {
     return skills
   }
 
+  // 48-algorithm diversity engine — returns the full combo list for audit. Loads
+  // lazily so the bridge stays dependency-free unless the algorithms are asked for.
+  async getAlgorithmList() {
+    try {
+      const mod = await this._loadAlgorithms()
+      return mod.ALGORITHMS_LIST || []
+    } catch {
+      return []
+    }
+  }
+
+  _loadAlgorithms() {
+    if (!this._algorithmPromise) {
+      const url = pathToFileURL(path.join(ROOT, 'src', 'ai', 'StoryAlgorithmRegistry.mjs')).href
+      this._algorithmPromise = import(url)
+    }
+    return this._algorithmPromise
+  }
+
   getSystemContext() {
     return {
       agents: Object.keys(this.config.agents),

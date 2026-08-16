@@ -110,8 +110,10 @@ export class CoverGenerator {
 
   async resolveHero(article, brief) {
     const terms = brief.keywords || (brief.subject ? [brief.subject] : [])
+    const algoN = brief.algorithm?.number || 0
+    const seed = brief.algorithm?.seed || hashCode(article.title || '')
     for (const term of terms.slice(0, 3)) {
-      const url = await this.searchPexels(term)
+      const url = await this.searchPexels(term, seed, algoN)
       if (url) return url
     }
     // Fallback 2: local AI hero via stable-diffusion.cpp (free, offline)
@@ -172,21 +174,33 @@ export class CoverGenerator {
     } catch { return null }
   }
 
-  async searchPexels(query) {
+  async searchPexels(query, seed = 0, algoN = 0) {
     const key = process.env.PEXELS_API_KEY
     if (!key) return null
     try {
       // Visual diversity: 20 candidates, slot-shuffled, rejects photos used in
       // the last 48h via the shared pickDistinctPhoto — covers used to take
       // photos[0] of the first keyword, so similar stories got identical covers.
-      const res = await fetch(`${PEXELS}?query=${encodeURIComponent(query)}&per_page=20&orientation=portrait`, {
+      // + 48-algorithm engine: page + index derived from the algo seed so two
+      // different stories never pull the same candidate photo.
+      const page = (seed % 10) + 1
+      const res = await fetch(`${PEXELS}?query=${encodeURIComponent(query)}&per_page=20&page=${page}&orientation=portrait`, {
         headers: { Authorization: key },
         signal: AbortSignal.timeout(5000),
       })
       if (!res.ok) return null
       const data = await res.json()
-      const photo = pickDistinctPhoto(data.photos || [])
+      const photos = (data.photos || [])
+      const slot = pickDistinctPhoto(photos)
+      const photo = slot || photos[(seed + algoN * 7) % Math.max(1, photos.length)]
       return photo?.src?.large2x || photo?.src?.large || null
     } catch { return null }
   }
+}
+
+function hashCode(s) {
+  let h = 0
+  const str = s || ''
+  for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0
+  return h
 }

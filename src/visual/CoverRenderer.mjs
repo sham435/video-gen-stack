@@ -1,9 +1,11 @@
 import { createCanvas, loadImage } from '@napi-rs/canvas'
 import fs from 'fs'
 import path from 'path'
-import { BrandStyleResolver } from './BrandStyleResolver.mjs'
+import { BrandStyleResolver, ANCHOR_CONFIG } from './BrandStyleResolver.mjs'
 
 const W = 1080, H = 1920
+
+const ACT_EMOJI = { 1: '😭', 2: '💪', 3: '✨' }
 
 export class CoverRenderer {
   constructor() {
@@ -53,27 +55,48 @@ export class CoverRenderer {
     ctx.fillRect(0, 0, W, 130)
     ctx.fillStyle = color
     ctx.fillRect(0, 0, W, 8)
-    ctx.font = '900 56px Inter, sans-serif'
+    ctx.font = '900 42px Inter, sans-serif'
     ctx.fillStyle = '#FFFFFF'
     ctx.textAlign = 'left'
     ctx.textBaseline = 'middle'
-    ctx.fillText('NEWS-MONSTER', 40, 72)
+    ctx.fillText(ANCHOR_CONFIG.label, 40, 66)
+
+    // LIVE pill
+    ctx.fillStyle = '#FF0000'
+    ctx.beginPath()
+    ctx.roundRect(W - 190, 36, 150, 60, 30)
+    ctx.fill()
+    ctx.fillStyle = '#FFFFFF'
+    ctx.font = '900 26px Inter, sans-serif'
+    ctx.textAlign = 'center'
+    ctx.fillText('● LIVE', W - 115, 66)
+
+    // algorithm badge — 1-48, unique combo, so covers are never identical
+    const algo = concept.algorithm
+    if (algo) {
+      ctx.textAlign = 'left'
+      ctx.font = '700 18px Inter, sans-serif'
+      ctx.fillStyle = 'rgba(255,255,255,0.55)'
+      ctx.fillText(`ALGO #${algo.number}/48 • ${algo.visual.id} • ${algo.tone.id}`, 40, 100)
+    }
 
     // category chip
     ctx.font = '700 30px Inter, sans-serif'
     ctx.fillStyle = `${color}`
     ctx.textAlign = 'right'
-    ctx.fillText((article.category || 'news').toUpperCase(), W - 40, 72)
+    ctx.fillText((article.category || 'news').toUpperCase(), W - 40, 100)
 
     // 3. Center hero text (FIXED template position)
     ctx.textAlign = 'center'
 
-    // kicker line — fixed brand tag
-    ctx.font = '900 60px Anton, Impact, sans-serif'
+    // kicker line — act emoji + anchor hook instead of generic "WHY IT MATTERS"
+    const kicker = (concept.overlayText || catStyle.anchorHook || 'NOBODY EXPECTED THIS MOVE').toUpperCase()
+    const act = concept.algorithm?.structure?.order?.includes('tragedy') ? 1 : concept.algorithm?.structure?.order?.includes('win') ? 3 : 2
+    ctx.font = kicker.length > 22 ? '900 44px Anton, Impact, sans-serif' : '900 54px Anton, Impact, sans-serif'
     ctx.fillStyle = color
     ctx.shadowColor = color
-    ctx.shadowBlur = 30
-    ctx.fillText('WHY IT MATTERS', W / 2, H * 0.62)
+    ctx.shadowBlur = 18
+    ctx.fillText(`${kicker} ${ACT_EMOJI[act] || ''}`, W / 2, H * 0.60)
     ctx.shadowBlur = 0
 
     // headline (DYNAMIC content)
@@ -109,7 +132,7 @@ export class CoverRenderer {
     ctx.textAlign = 'right'
     ctx.fillStyle = color
     ctx.font = '700 28px Inter, sans-serif'
-    ctx.fillText(concept.mood?.toUpperCase() || catStyle.mood.toUpperCase(), W - 40, H - 50)
+    ctx.fillText(`${concept.mood?.toUpperCase() || catStyle.mood.toUpperCase()} • ALGO ${algo?.number || 1}/48`, W - 40, H - 50)
 
     fs.mkdirSync(path.dirname(outPath), { recursive: true })
     fs.writeFileSync(outPath, canvas.toBuffer('image/png'))

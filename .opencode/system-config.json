@@ -69,7 +69,9 @@
     "known-fixes": "skills/known-fixes.md",
     "audit": "skills/audit.md",
     "publish-verify": "skills/publish-verify.md",
-    "render-verify": "skills/render-verify.md"
+    "render-verify": "skills/render-verify.md",
+    "story-arc": "skills/story-arc.md",
+    "diversity-48": "skills/diversity-48.md"
   },
   "approval_required": [
     "push-to-main",

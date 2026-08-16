@@ -49,6 +49,7 @@ export class CoverDirector {
       keywords: ai.keywords || fallback.keywords,
       source: ai.source || 'deterministic',
       style_variant: options.style || null,
+      algorithm: fallback.algorithm || ai.algorithm || null,
     }
   }
 
@@ -111,7 +112,11 @@ Output ONLY JSON:
   _deterministic(article) {
     const category = (article.category || 'default').toLowerCase()
     const catVisual = CATEGORY_VISUALS[category] || CATEGORY_VISUALS.default
-    const { brand, brandColor } = this.resolver.resolveBrand(article.title || '')
+    // 48-algorithm diversity: resolve() now returns algorithm + shifted color +
+    // per-algorithm visual style, so covers never repeat the same look twice.
+    const resolved = this.resolver.resolve(article.title || '', category)
+    const algo = resolved.algorithm
+    const brand = resolved.brand
     const subject = brand || (article.title || 'TECH').split(' ').slice(0, 2).join(' ')
     // Deterministic overlay pick — seeded by title so identical input → identical cover.
     const idx = seededFrom(article.title || '') % OVERLAY_PAIRS.length
@@ -120,13 +125,14 @@ Output ONLY JSON:
     const badge = brand ? brand.toUpperCase() : (words[0] || 'TECH').toUpperCase()
     return {
       subject,
-      visual_style: catVisual.style,
+      visual_style: algo?.visual?.prompt || catVisual.style,
       mood: catVisual.mood,
-      accent_color: brandColor || '#E10600',
+      accent_color: resolved.brandColor || '#E10600',
       hero_prompt: catVisual.hero,
-      text_overlay: { top: badge, bottom: bottom },
-      keywords: [subject, ...words.slice(0, 2)].filter(Boolean),
+      text_overlay: { top: badge, bottom },
+      keywords: [algo?.visual?.pexels, ...words.slice(0, 2)].filter(Boolean),
       source: 'deterministic',
+      algorithm: algo,
     }
   }
 }

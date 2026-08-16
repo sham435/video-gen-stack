@@ -1,3 +1,5 @@
+import { pickAlgorithm } from '../ai/StoryAlgorithmRegistry.mjs'
+
 const BRAND_COLORS = {
   apple: '#A2AAAD', iphone: '#A2AAAD', ios: '#A2AAAD', mac: '#A2AAAD',
   samsung: '#1428A0', galaxy: '#1428A0',
@@ -36,6 +38,8 @@ const CATEGORY_STYLES = {
   default: { color: '#E10600', style: 'cinematic news broadcast, dramatic lighting', mood: 'breaking' },
 }
 
+export const ANCHOR_CONFIG = { name: 'sham435', label: 'sham435 · ANCHOR', channel: 'NEWS-MONSTER' }
+
 export class BrandStyleResolver {
   resolveBrand(title) {
     const lower = (title || '').toLowerCase()
@@ -53,12 +57,25 @@ export class BrandStyleResolver {
     const brand = this.resolveBrand(title)
     const cat = this.resolveCategory(category)
     const color = brand.color || cat.color
+    const algorithm = pickAlgorithm({ title, category })
     return {
       brand: brand.brand,
-      brandColor: color,
-      style: cat.style,
+      brandColor: this._shiftColor(color, algorithm.number),
+      style: algorithm.visual.prompt,
       mood: cat.mood,
+      anchorHook: cat.anchorHook || 'NOBODY EXPECTED THIS MOVE',
+      algorithm,
     }
+  }
+
+  _shiftColor(hex, n) {
+    if (!/^#[0-9A-Fa-f]{6}$/.test(hex)) return hex
+    const r = parseInt(hex.slice(1, 3), 16)
+    const g = parseInt(hex.slice(3, 5), 16)
+    const b = parseInt(hex.slice(5, 7), 16)
+    const s = (n * 7) % 30 - 15
+    const cl = v => Math.max(0, Math.min(255, v + s))
+    return `rgb(${cl(r)},${cl(g)},${cl(b)})`
   }
 
   static get BRAND_COLORS() { return BRAND_COLORS }

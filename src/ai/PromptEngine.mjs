@@ -118,7 +118,90 @@ export class PromptEngine {
     return map[category] || 'cinematic_tech'
   }
 
+  // NEWS-MONSTER 3-act narrative: Act 1 Tragedy → Act 2 Courage → Act 3 Transformation.
+  // Wraps any story (tech, crypto, AI) in the monkey-empathy arc so viewers root
+  // for a hero, not a headline. Returns the system prompt for the LLM director.
+  anchorStoryPrompt(article, algorithm) {
+    const arc = algorithm?.arc?.toLowerCase?.() || ''
+    const archetype = ARCHETYPE_BY_ARC[arc] || 'the blocked founder'
+    const heroGoal = archetypeGoal(arc)
+    return `You are ${ANCHOR_NAME} (${ANCHOR_CHANNEL}), a hard-hitting anchor who tells every story as a 3-act drama.
+
+STORY FORMULA (mandatory):
+ACT 1 — PROBLEM/THE TRAGEDY 😭 (0-8s)
+Dark, rainy, lonely. Establish the victim + the unfair world.
+Visual: rain on glass, grainy newsroom, empty street, worried face, ${algorithm?.visual?.prompt || 'documentary shadows'}.
+VO: "It started like any other day for ${archetype}."
+
+ACT 2 — COURAGE/SACRIFICE 💪 (8-18s)
+The hero fights back against the machine. Building, sharing, studying, refusing to give up.
+Visual: hands working, night desk lamp, small wins, determination.
+VO: "But ${archetype} refused to give up."
+
+ACT 3 — TRANSFORMATION ✨ (18-25s)
+Family love, celebration, golden hour light. The world notices.
+Visual: embrace, golden light, applause, future.
+VO: "Now the whole world is watching."
+
+TOTAL: 25 seconds. 8s / 10s / 7s.
+HOOK: "Nobody expected this move — ${article.title || 'this'}"
+Always end with a moral: "This is the power of never giving up."
+Keep VO punchy, short sentences, anchor energy.
+Source attribution: mention the source once in Act 3.`
+  }
+
+  arcScenes(article, algorithm, scenes) {
+    const arc = algorithm?.arc?.toLowerCase?.() || ''
+    const archetype = ARCHETYPE_BY_ARC[arc] || 'the blocked founder'
+    const order = algorithm?.structure?.order || ['hook', 'tragedy', 'courage', 'win']
+    const labels = { hook: 'HOOK', tragedy: 'PROBLEM', courage: 'COURAGE', win: 'TRANSFORMATION' }
+    const emojis = { hook: '📣', tragedy: '😭', courage: '💪', win: '✨' }
+    const slot = {
+      hook: `${article.title || 'THIS'} — NOBODY EXPECTED THIS MOVE`,
+      tragedy: `The unfair start: ${archetype} has nothing but a dream`,
+      courage: `${archetype} fights back — every small win counts`,
+      win: `The world sees it. ${archetype} wins.`,
+    }
+    const ordered = order.map((key, i) => ({
+      id: `scene_${i + 1}`,
+      act: labels[key],
+      emoji: emojis[key],
+      duration: key === 'tragedy' ? 8 : key === 'courage' ? 10 : 7,
+      narration: slot[key],
+      keywords: [algorithm?.visual?.pexels, key, `${arc} ${key}`].filter(Boolean),
+    }))
+    if (scenes && scenes.length) {
+      return ordered.map((s, i) => ({ ...scenes[i] || {}, ...s }))
+    }
+    return ordered
+  }
+
   static get HOOK_FORMATS() { return HOOK_FORMATS }
   static get SCENE_COMPOSITION() { return SCENE_COMPOSITION }
   static get CATEGORY_IMAGE_STYLES() { return CATEGORY_IMAGE_STYLES }
+}
+
+const ANCHOR_NAME = 'sham435 · ANCHOR'
+const ANCHOR_CHANNEL = 'NEWS-MONSTER'
+
+// Story arcs mapped to a human archetype the audience can root for.
+const ARCHETYPE_BY_ARC = {
+  rain_shelter_love: 'the lonely founder',
+  hunger_share_hero: 'the underdog creator',
+  bully_study_success: 'the bullied innovator',
+  river_save_fish: 'the desperate startup',
+  broken_fix_inspire: 'the broken dreamer',
+  left_run_reunion: 'the abandoned worker',
+}
+
+function archetypeGoal(arc) {
+  const goals = {
+    rain_shelter_love: 'builds a shelter from the storm, one brick at a time',
+    hunger_share_hero: 'refuses to give up and builds something the world needs',
+    bully_study_success: 'studies harder than anyone and proves the bullies wrong',
+    river_save_fish: 'refuses to drown and swims against the current',
+    broken_fix_inspire: 'picks up the broken pieces and fixes what the giants broke',
+    left_run_reunion: 'never stops running until they are finally seen',
+  }
+  return goals[arc] || 'refuses to give up and proves the world wrong'
 }

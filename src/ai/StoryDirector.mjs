@@ -1,4 +1,5 @@
 import { PromptEngine } from './PromptEngine.mjs'
+import { pickAlgorithm } from './StoryAlgorithmRegistry.mjs'
 import { TopicCtaBuilder } from '../publishing/TopicCtaBuilder.mjs'
 import { brandOutroScene, BRAND_OUTRO } from '../publishing/BrandOutro.mjs'
 import { parseStructured } from './parseStructured.mjs'
@@ -25,6 +26,7 @@ export class StoryDirector {
 
   async plan(article, options = {}) {
     const targetFormat = options.targetFormat || article.targetFormat || 'youtube_shorts'
+    this.lastAlgorithm = pickAlgorithm({ title: article.title || '', category: article.category })
     const messages = this.buildPrompt(article, targetFormat)
     const story = await this.queryLLM(messages, article)
     return this.validate(story, article, targetFormat)
@@ -44,12 +46,29 @@ export class StoryDirector {
   }
 
   buildPrompt(article, targetFormat) {
+    const algo = this.lastAlgorithm || pickAlgorithm({ title: article.title || '', category: article.category })
     return [
       {
         role: 'system',
         content: `You are a cinematic AI Story Director for NEWS-MONSTER, a premium video news platform.
+Anchor voice: sham435 · ANCHOR (the channel's hard-hitting storyteller).
 
 Given a news article and target format, produce a structured video production plan as JSON.
+
+## STORY FORMULA (3-act arc — mandatory for every video)
+ACT 1 — PROBLEM / THE TRAGEDY 😭 (0-8s)
+Dark, rainy, lonely. Establish the victim and the unfair world. Visual: rain on glass, grainy newsroom, empty street, worried face.
+VO: "It started like any day for [the archetype]."
+
+ACT 2 — COURAGE / SACRIFICE 💪 (8-18s)
+The hero fights back against the machine — building, sharing, studying, refusing to give up. Visual: hands working, night desk lamp, small wins.
+VO: "But [the archetype] refused to give up."
+
+ACT 3 — TRANSFORMATION ✨ (18-25s)
+Family love, celebration, golden hour light. The world notices. Visual: embrace, golden light, applause.
+VO: "Now the whole world is watching."
+
+Total: 25s for youtube_shorts (8/10/7). Always end with a moral: "This is the power of never giving up."
 
 ## Hook Strategies
 Pick one (avoid "hidden/revealed/secret/shocking" phrasing — the channel uses dynamic curiosity patterns only):
@@ -57,6 +76,9 @@ Pick one (avoid "hidden/revealed/secret/shocking" phrasing — the channel uses 
 - "shock": "X changed everything overnight"
 - "question": "What if everything you knew about X was wrong?"
 - "stat": "One number explains why X just changed everything"
+
+Current algorithm: ${algo.id} (#${algo.number}/48)
+Anchor hook: "Nobody expected this move — ${article.title || 'this'}"
 
 ## Scene Types
 - hook (0-3s): stop-scroll intro, max 10 words
@@ -118,6 +140,8 @@ Output ONLY valid JSON.`
 Source: ${article.source || 'News'}
 Description: ${(article.description || article.title || '').slice(0, 500)}
 Category: ${article.category || 'technology'}
+Algorithm: ${algo.id} (#${algo.number}/48)
+Visual style: ${algo.visual.prompt}
 Target Format: ${targetFormat}`
         }
       ]
@@ -147,21 +171,25 @@ Target Format: ${targetFormat}`
     const title = article.title || 'Tech News'
     const desc = article.description || ''
     const sentences = desc.split(/[.!?]+/).filter(s => s.trim().length > 10)
+    const algo = this.lastAlgorithm || pickAlgorithm({ title, category: article.category })
+    const arc = algo.arc.toLowerCase().replace(/_/g, ' ')
     const brand = (title.split(' ')[0] || 'TECH').toUpperCase()
-    // Topic-specific outro — the generic follow plea causes end-of-video
-    // drop-off (measured in analytics). Name the brand + a specific next step.
     const cta = new TopicCtaBuilder().build(article)
     return {
       headline: `${brand} CHANGED EVERYTHING`,
       hookStrategy: 'curiosity',
-      emotionalArc: ['curiosity', 'surprise', 'authority', 'futureVision'],
+      emotionalArc: ['shock', 'courage', 'hope', 'futureVision'],
+      algorithm: algo,
       scenePlan: [
         { type: 'hook', duration: 2.5, narration: `Nobody expected this move from ${brand}.`, visual: { subject: brand, style: 'cinematic dramatic', composition: 'close_up' }, camera: 'push_in', motion: 'cinematicReveal', transition: 'glitch', emotion: 'shock', caption: { focus: 'NOBODY', fullText: 'NOBODY EXPECTED THIS' } },
-        { type: 'fact', duration: 4, narration: `${title.split(' ').slice(0, 6).join(' ')}. This changed the plan overnight.`, visual: { subject: 'technology reveal', style: 'dramatic lighting', composition: 'medium' }, camera: 'slow_zoom', motion: 'depthBlur', transition: 'flash', emotion: 'awe', caption: { focus: 'CHANGED', fullText: 'CHANGED OVERNIGHT' } },
-        { type: 'explanation', duration: 5, narration: sentences[0] || 'Here is the detail everyone missed.', visual: { subject: 'analysis', style: 'forensic digital', composition: 'wide' }, camera: 'orbit', motion: null, transition: 'zoom_blur', emotion: 'curiosity', caption: { focus: 'MISSED', fullText: 'EVERYONE MISSED THIS' } },
-        { type: 'reaction', duration: 4, narration: sentences[1] || 'Most people still do not know about this.', visual: { subject: 'spotlight evidence', style: 'documentary', composition: 'medium' }, camera: 'parallax', motion: 'depthBlur', transition: 'light_leak', emotion: 'tension', caption: { focus: 'DOUBT', fullText: 'THE DOUBT REMAINS' } },
-        { type: 'reveal', duration: 3.5, narration: 'But here is what happened after the announcement.', visual: { subject: 'aftermath reveal', style: 'dramatic impact', composition: 'close_up' }, camera: 'shake', motion: 'particleField', transition: 'glitch', emotion: 'tension', caption: { focus: 'AFTER', fullText: 'WHAT HAPPENED NEXT' } },
-        { type: 'reaction', duration: 3, narration: 'This changes the entire industry going forward.', visual: { subject: 'industry impact', style: 'glowing data streams', composition: 'wide' }, camera: 'pan', motion: 'digitalHUD', transition: 'cut', emotion: 'excitement', caption: { focus: 'IMPACT', fullText: 'INDUSTRY IMPACT' } },
+        // ACT 1 — THE TRAGEDY 😭
+        { type: 'fact', duration: 5.5, narration: `It started like any day for the ${arc}. ${title.split(' ').slice(0, 6).join(' ')}. The world was against them.`, visual: { subject: `rain on glass, empty street, ${arc} alone`, style: 'dark rainy documentary, grainy newsroom', composition: 'wide' }, camera: 'slow_zoom', motion: 'depthBlur', transition: 'flash', emotion: 'tension', caption: { focus: 'TRAGEDY', fullText: 'IT ALL STARTED SO WRONG' } },
+        // ACT 2 — COURAGE 💪
+        { type: 'explanation', duration: 5, narration: `${sentences[0] || 'But they refused to give up.'} Every small win counted. Every night they kept going.`, visual: { subject: 'hands working at night desk lamp, building, small wins', style: algo.visual.prompt, composition: 'medium' }, camera: 'orbit', motion: null, transition: 'zoom_blur', emotion: 'awe', caption: { focus: 'COURAGE', fullText: 'THEY REFUSED TO GIVE UP' } },
+        { type: 'reaction', duration: 5, narration: sentences[1] || 'And little by little, the machine could not ignore them anymore.', visual: { subject: 'spotlight evidence, determination', style: 'documentary', composition: 'medium' }, camera: 'parallax', motion: 'depthBlur', transition: 'light_leak', emotion: 'curiosity', caption: { focus: 'FIGHT', fullText: 'THE FIGHT BACK' } },
+        // ACT 3 — TRANSFORMATION ✨
+        { type: 'reveal', duration: 4.5, narration: 'And then it happened. The whole world started watching.', visual: { subject: 'golden hour light, applause, embrace', style: 'golden warm celebration', composition: 'wide' }, camera: 'shake', motion: 'particleField', transition: 'glitch', emotion: 'excitement', caption: { focus: 'TRANSFORM', fullText: 'THE WORLD IS WATCHING' } },
+        { type: 'reaction', duration: 2.5, narration: 'Now the whole world is watching. This is the power of never giving up.', visual: { subject: 'industry impact, golden light', style: 'glowing data streams', composition: 'wide' }, camera: 'pan', motion: 'digitalHUD', transition: 'cut', emotion: 'excitement', caption: { focus: 'IMPACT', fullText: 'NEVER GIVE UP' } },
         { type: 'close', duration: 3, narration: cta.narration, visual: { subject: 'NEWS-MONSTER brand', style: 'red and cyan futuristic', composition: 'medium' }, camera: 'pull_back', motion: null, transition: 'fade', emotion: 'excitement', caption: { focus: 'SUB', fullText: cta.caption } },
       ],
       brandMoment: { type: 'cta', sceneIndex: 6 },
@@ -183,6 +211,7 @@ Target Format: ${targetFormat}`
       s.emotion = EMOTIONS.includes(s.emotion) ? s.emotion : 'neutral'
       if (!s.caption) s.caption = { focus: 'NEWS', fullText: (s.narration || '').toUpperCase() }
     })
+    story.algorithm = story.algorithm || this.lastAlgorithm || pickAlgorithm({ title: article.title || '', category: article.category })
     const total = story.scenePlan.reduce((sum, s) => sum + s.duration, 0)
     if (total < 15 || total > 60) {
       console.log(`StoryDirector: total duration ${total}s out of range, falling back`)

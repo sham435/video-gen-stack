@@ -20,3 +20,14 @@ Use this when asked about footer bar rendering, layout consistency, or visual as
 ## Rules
 1. Never claim visual correctness without running the tests.
 2. Never read `.env` or files under `data/`.
+
+## Algorithm / diversity checks (48-algo engine)
+1. Metadata.json must contain `algoNumber` (1-48) and `algoId` (e.g. `NOBODY_EXPECTED_...`).
+2. Overlay text must not repeat any caption used in the last 20 stories (unique hook rotation).
+3. Hero image must be a unique Pexels photo hash — two stories may never share a photo
+   (48h exclusion via `pickDistinctPhoto` + algo-seeded page/index).
+4. Tone must rotate across algorithms — consecutive stories must not repeat the same TONE id.
+5. Cover badge must read `ALGO #N/48 • {VISUAL} • {TONE}` in the top bar and `ALGO {N}/48` in
+   the bottom bar.
+6. Verify with `node scripts/opencode-validate.mjs` + `npm test` after any registry change.
+7. Audit live list via dashboard `GET /api/opencode/algorithms` (should return 48 entries).

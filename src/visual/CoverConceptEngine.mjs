@@ -1,4 +1,15 @@
-import { BrandStyleResolver } from './BrandStyleResolver.mjs'
+import { BrandStyleResolver, ANCHOR_CONFIG } from './BrandStyleResolver.mjs'
+
+const HOOK_TEXT = {
+  NOBODY_EXPECTED: 'NOBODY EXPECTED THIS MOVE',
+  LOST_IN_RAIN: 'LOST IN RAIN 🌧️',
+  BULLIED: 'BULLIED 😭',
+  FELL_IN_RIVER: 'FELL IN RIVER 🌊',
+  BROKEN_TOY: 'BROKEN DREAM 😭',
+  LEFT_BEHIND: 'LEFT BEHIND 🚌',
+  HUNGRY_STOLE: 'HUNGRY FOR CHANGE 🍌',
+  SHOCKING_NUMBER: 'SHOCK NUMBER',
+}
 
 export class CoverConceptEngine {
   constructor(aiProvider = null) {
@@ -12,7 +23,7 @@ export class CoverConceptEngine {
         const result = await this.ai.generate([
           {
             role: 'system',
-            content: `You are a visual director for a news video channel. Given a news headline, category, and summary, extract a cover concept as JSON.
+            content: `You are ${ANCHOR_CONFIG.label}, a visual anchor for a news video channel. Given a news headline, category, and summary, extract a cover concept as JSON.
 
 Output ONLY JSON:
 {
@@ -39,6 +50,7 @@ Output ONLY JSON:
             brandColor: result.brand_color || fallback.brandColor,
             headlineStyle: result.headline_style || 'breaking',
             overlayText: (result.overlay_text || '').toUpperCase() || fallback.overlayText,
+            algorithm: fallback.algorithm,
             source: 'ai',
           }
         }
@@ -52,18 +64,21 @@ Output ONLY JSON:
   _deterministic(article) {
     const title = article.title || 'Tech News'
     const category = article.category || 'technology'
-    const { brand, brandColor, style, mood } = this.resolver.resolve(title, category)
+    const resolved = this.resolver.resolve(title, category)
+    const algo = resolved.algorithm
     const words = title.replace(/[^a-zA-Z0-9 ]/g, ' ').split(' ').filter(w => w.length > 3)
-    const subject = brand || (words[0] || 'TECH').toUpperCase()
-    const overlayText = brand ? `${brand.toUpperCase()} UPDATE` : (words.slice(0, 2).join(' ').toUpperCase() || 'BREAKING NEWS')
+    const subject = resolved.brand || (words[0] || 'TECH').toUpperCase()
+    const overlay = HOOK_TEXT[algo.hook] || resolved.anchorHook
     return {
       subject,
-      visualKeywords: [subject, ...words.slice(0, 2)].filter(Boolean),
-      mood,
-      brandColor,
+      visualKeywords: [algo.visual.pexels, algo.arc.toLowerCase().replace(/_/g, ' '), `${category} ${algo.hook.toLowerCase()}`],
+      mood: resolved.mood,
+      brandColor: resolved.brandColor,
       headlineStyle: 'breaking',
-      overlayText,
-      style,
+      overlayText: algo.hook === 'SHOCKING_NUMBER' ? `$${(algo.seed % 90) + 10}B SHOCK` : overlay,
+      style: algo.visual.prompt,
+      algorithm: algo,
+      hash: algo.hash,
     }
   }
 }

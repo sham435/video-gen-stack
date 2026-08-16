@@ -62,6 +62,18 @@ router.get('/api/opencode/skill/:name', (req, res) => {
   }
 })
 
+// 48-algorithm diversity engine — live list for the dashboard (algo badge on
+// covers shows #N/48; this route lets operators audit which combo each story used).
+router.get('/api/opencode/algorithms', async (req, res) => {
+  try {
+    const registry = await getBridge().getAlgorithmList?.()
+    if (registry) return res.json({ total: registry.length, algorithms: registry })
+    res.status(501).json({ error: 'getAlgorithmList not available on bridge' })
+  } catch (e) {
+    res.status(500).json({ error: e.message })
+  }
+})
+
 router.get('/api/opencode/diagnostics', async (req, res) => {
   const results = await getBridge().runDiagnostics()
   res.json(results)
