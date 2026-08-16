@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-16T19:57:28.971Z",
+  "updatedAt": "2026-08-16T20:31:12.648Z",
   "videos": [
+    {
+      "id": "QYq6aBQhP-A",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-16T20:23:34+00:00",
+      "publishedLabel": "Aug 16, 08:23 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/QYq6aBQhP-A/hqdefault.jpg"
+    },
     {
       "id": "NIjqqa21C_A",
       "title": "S&P Steady After Record Close | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T13:33:55+00:00",
       "publishedLabel": "Aug 16, 01:33 PM",
       "thumbnail": "https://i1.ytimg.com/vi/LIeBR-1tZMw/hqdefault.jpg"
-    },
-    {
-      "id": "PaiNxkzZ7i8",
-      "title": "Rivian Confirms Point to Point This Year, All Owners in 2027 - RivianTrackr | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T12:37:44+00:00",
-      "publishedLabel": "Aug 16, 12:37 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/PaiNxkzZ7i8/hqdefault.jpg"
     }
   ]
 }
