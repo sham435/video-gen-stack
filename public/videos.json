@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-16T04:08:08.126Z",
+  "updatedAt": "2026-08-16T04:43:40.118Z",
   "videos": [
+    {
+      "id": "feroGE4T-k0",
+      "title": "S&P Steady After Record Close | NEWS-MONSTER",
+      "publishedAt": "2026-08-16T04:36:58+00:00",
+      "publishedLabel": "Aug 16, 04:36 AM",
+      "thumbnail": "https://i3.ytimg.com/vi/feroGE4T-k0/hqdefault.jpg"
+    },
+    {
+      "id": "p_t5G5Yu4A4",
+      "title": "Zyzz Was the Original Looksmaxxer. His Rise and Untimely Death Feel More Relevant Than Eve | NEWS-MO",
+      "publishedAt": "2026-08-16T04:08:13+00:00",
+      "publishedLabel": "Aug 16, 04:08 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/p_t5G5Yu4A4/hqdefault.jpg"
+    },
     {
       "id": "S0-71Rhr5EI",
       "title": "El próximo coche de Elon Musk podrá volar, según fuentes de Tesla. Pero será inútil | NEWS-MONSTER",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-15T19:24:26+00:00",
       "publishedLabel": "Aug 15, 07:24 PM",
       "thumbnail": "https://i4.ytimg.com/vi/wsnR0H7s5vo/hqdefault.jpg"
-    },
-    {
-      "id": "afmxCgiJlFY",
-      "title": "Tesla pidió permiso para desplega 5.000 robotaxis en Las Vegas, pero Nevada solo autorizó  | NEWS-MO",
-      "publishedAt": "2026-08-15T19:00:35+00:00",
-      "publishedLabel": "Aug 15, 07:00 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/afmxCgiJlFY/hqdefault.jpg"
-    },
-    {
-      "id": "RrmVczLcrvQ",
-      "title": "It's Long Past Time Nintendo Gave Mario A Gun, You Cowards - Kotaku | NEWS-MONSTER",
-      "publishedAt": "2026-08-15T18:28:26+00:00",
-      "publishedLabel": "Aug 15, 06:28 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/RrmVczLcrvQ/hqdefault.jpg"
     }
   ]
 }
