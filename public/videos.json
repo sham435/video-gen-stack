@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-16T06:01:52.811Z",
+  "updatedAt": "2026-08-16T06:44:41.313Z",
   "videos": [
+    {
+      "id": "tCUM2p_g68Q",
+      "title": "Mercedes-Benz создала необычный GLE: огромная колесная база и система Momenta R7 | NEWS-MONSTER",
+      "publishedAt": "2026-08-16T06:37:39+00:00",
+      "publishedLabel": "Aug 16, 06:37 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/tCUM2p_g68Q/hqdefault.jpg"
+    },
     {
       "id": "8g6N_FLtEj0",
       "title": "Experts Disagree On FDA | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-15T20:51:43+00:00",
       "publishedLabel": "Aug 15, 08:51 PM",
       "thumbnail": "https://i1.ytimg.com/vi/hKjrmbo-RUg/hqdefault.jpg"
-    },
-    {
-      "id": "v7EN3CIZ-IY",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-15T20:23:39+00:00",
-      "publishedLabel": "Aug 15, 08:23 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/v7EN3CIZ-IY/hqdefault.jpg"
     }
   ]
 }
