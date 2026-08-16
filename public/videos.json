@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-16T17:04:24.252Z",
+  "updatedAt": "2026-08-16T17:29:48.291Z",
   "videos": [
+    {
+      "id": "RAEoBrADdHA",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-16T17:21:54+00:00",
+      "publishedLabel": "Aug 16, 05:21 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/RAEoBrADdHA/hqdefault.jpg"
+    },
     {
       "id": "IbTxHHDb3mw",
       "title": "S&P Steady After Record Close | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T09:56:09+00:00",
       "publishedLabel": "Aug 16, 09:56 AM",
       "thumbnail": "https://i4.ytimg.com/vi/32BVpmyt7t4/hqdefault.jpg"
-    },
-    {
-      "id": "waiOR8omXy4",
-      "title": "Large-Scale Pokémon Eviction Looms With Pokémon Bank Server Shutdown - hackaday.com | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T09:32:08+00:00",
-      "publishedLabel": "Aug 16, 09:32 AM",
-      "thumbnail": "https://i4.ytimg.com/vi/waiOR8omXy4/hqdefault.jpg"
     }
   ]
 }
