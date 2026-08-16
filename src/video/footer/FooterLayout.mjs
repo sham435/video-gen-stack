@@ -41,16 +41,18 @@ export async function loadPlatformIcons() {
  *
  * Broadcast grid (fixed 3-column layout, 25% | 50% | 25%):
  *   ┌─────────────────────────────────────────────────────────┐
- *   │ [LOGO]  NEWS-MONSTER              [SUBSCRIBE]           │
- *   │         Unfiltered Breaking       sham435.github.io…    │
- *   │         AVAILABLE ON              Unfiltered Global     │
- *   │         Android  Apple            Headlines             │
- *   │                                     @sham435            │
+ *   │ [LOGO]  [@sham435]        [SUBSCRIBE]                   │
+ *   │          NEWS-MONSTER     sham435.github.io…            │
+ *   │          Unfiltered       Unfiltered Global             │
+ *   │          Breaking News    Headlines                     │
+ *   │          AVAILABLE ON                                   │
+ *   │          Android  Apple                                 │
  *   └─────────────────────────────────────────────────────────┘
  *
- *   Left  (25%)  logo + NEWS-MONSTER + tagline + AVAILABLE ON badges
+ *   Left  (25%)  NM monogram + channel avatar/handle on one row,
+ *                then NEWS-MONSTER + tagline + AVAILABLE ON badges
  *   Center(50%)  whitespace — broadcast layouts breathe
- *   Right (25%)  subscribe pill + URL + urlTagline + handle,
+ *   Right (25%)  subscribe pill + URL + urlTagline,
  *                right-aligned, URL/tagline moving together
  *
  * The bar bottom-anchors to the frame and is sized by content. showLogo /
@@ -113,32 +115,26 @@ export class FooterLayout {
     const vGap = Math.max(10, Math.round(F.lineGap * scale))
 
     // ── Left zone stack ────────────────────────────────────────────────────
-    const leftBlocks = []
     let leftH = 0
 
-    // Logo is independently toggleable.
-    if (D.showLogo) {
-      const logo = LogoBlock.measure(ctx, scale)
-      leftBlocks.push({ key: 'logo', block: LogoBlock, w: logo.w, h: logo.h })
-      leftH += logo.h
-    }
+    // Row 1: NM monogram + channel avatar/handle sit side by side, vertically
+    // centered together. The monogram is the anchor; the avatar renders at 80%
+    // of the monogram size so it reads as an identity mark beside the brand
+    // cube, and the @handle follows the avatar.
+    const logo = D.showLogo ? LogoBlock.measure(ctx, scale) : null
+    const channel = ChannelBlock.measure(ctx, scale, D)
+    const rowGap = Math.round(12 * scale) // horizontal gap monogram ↔ avatar
+    const topRowH = Math.max(logo ? logo.h : 0, channel.h)
+    leftH += topRowH
 
     // Brand remains visible even when the logo is hidden.
     const brand = BrandBlock.measure(ctx, scale, D)
-    if (leftBlocks.length) leftH += vGap
-    leftBlocks.push({ key: 'brand', block: BrandBlock, w: brand.w, h: brand.h })
-    leftH += brand.h
-
-    // Channel handle (@sham435 + avatar) — beside the brand, under the logo.
-    const channel = ChannelBlock.measure(ctx, scale, D)
     leftH += vGap
-    leftBlocks.push({ key: 'channel', block: ChannelBlock, w: channel.w, h: channel.h })
-    leftH += channel.h
+    leftH += brand.h
 
     // Platform badges (AVAILABLE ON + icons).
     const platform = PlatformBlock.measure(ctx, scale)
     leftH += vGap
-    leftBlocks.push({ key: 'platform', block: PlatformBlock, w: platform.w, h: platform.h })
     leftH += platform.h
 
     // ── Right zone stack ───────────────────────────────────────────────────
@@ -164,12 +160,24 @@ export class FooterLayout {
     const leftTop = verticalPadding + (barHeight - leftH - verticalPadding * 2) / 2
     const leftColumns = []
     let currentY = Math.round(leftTop)
-    for (let i = 0; i < leftBlocks.length; i++) {
-      const item = leftBlocks[i]
-      leftColumns.push({ key: item.key, block: item.block, x: leftX, y: currentY, w: item.w, h: item.h })
-      currentY += item.h
-      if (i < leftBlocks.length - 1) currentY += vGap
+
+    // Row 1: NM monogram + channel avatar/handle — vertically centered on the
+    // same line, monogram anchoring the row.
+    if (logo) {
+      const ly = currentY + Math.round((topRowH - logo.h) / 2)
+      leftColumns.push({ key: 'logo', block: LogoBlock, x: leftX, y: ly, w: logo.w, h: logo.h })
     }
+    const channelX = leftX + (logo ? logo.w + rowGap : 0)
+    const channelY = currentY + Math.round((topRowH - channel.h) / 2)
+    leftColumns.push({ key: 'channel', block: ChannelBlock, x: channelX, y: channelY, w: channel.w, h: channel.h })
+    currentY += topRowH + vGap
+
+    // Row 2: brand + tagline.
+    leftColumns.push({ key: 'brand', block: BrandBlock, x: leftX, y: currentY, w: brand.w, h: brand.h })
+    currentY += brand.h + vGap
+
+    // Row 3: AVAILABLE ON + platform badges.
+    leftColumns.push({ key: 'platform', block: PlatformBlock, x: leftX, y: currentY, w: platform.w, h: platform.h })
 
     // URL + tagline remain grouped together, right-aligned. The URL text
     // baseline is aligned with the "AVAILABLE ON" label baseline (left zone)

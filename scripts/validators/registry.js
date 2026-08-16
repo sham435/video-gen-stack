@@ -22,7 +22,7 @@ export default function (ctx) {
   const t1 = performance.now()
   r.perf.record('registrySweep', t1 - t0)
 
-  for (const k of ['agents', 'memory', 'workflows', 'policies']) {
+  for (const k of ['agents', 'memory', 'workflows', 'policies', 'skills']) {
     const list = integ.registrySweep[k]
     const fails = list.filter(x => !x.ok)
     const label = `${k} sweep (${list.length})`

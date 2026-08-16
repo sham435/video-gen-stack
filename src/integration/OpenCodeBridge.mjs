@@ -11,17 +11,19 @@ const REQUIRED_TOP_LEVEL_KEYS = Object.freeze([
   'memory',
   'workflows',
   'policies',
+  'skills',
   'approval_required',
   'data_sources',
   'integration_points',
 ])
 
-const KNOWN_DIRS = Object.freeze(['agents', 'memory', 'workflows', 'policies'])
+const KNOWN_DIRS = Object.freeze(['agents', 'memory', 'workflows', 'policies', 'skills'])
 const DIR_TO_CONFIG_KEY = Object.freeze({
   agents: 'agents',
   memory: 'memory',
   workflows: 'workflows',
   policies: 'policies',
+  skills: 'skills',
 })
 
 function readConfigSafe() {
@@ -53,6 +55,7 @@ function validateConfigSchema(parsed) {
     memory: 'object',
     workflows: 'object',
     policies: 'object',
+    skills: 'object',
     approval_required: 'array',
     data_sources: 'array',
     integration_points: 'array',
@@ -79,7 +82,7 @@ function validateConfigSchema(parsed) {
     }
   }
 
-  for (const regKey of ['memory', 'workflows', 'policies']) {
+  for (const regKey of ['memory', 'workflows', 'policies', 'skills']) {
     if (typeof parsed[regKey] !== 'object' || !parsed[regKey]) continue
     for (const [name, entry] of Object.entries(parsed[regKey])) {
       if (typeof entry !== 'string') {
@@ -135,6 +138,7 @@ function detectOrphans(parsed) {
   regDir('memory', 'memory', e => e)
   regDir('workflows', 'workflows', e => e)
   regDir('policies', 'policies', e => e)
+  regDir('skills', 'skills', e => e)
 
   const brokenRegistry = []
   for (const dirName of KNOWN_DIRS) {
@@ -267,12 +271,27 @@ export class OpenCodeBridge {
     return policies
   }
 
+  loadSkill(name) {
+    const skillPath = this.config.skills[name]
+    if (!skillPath) throw new Error(`Unknown skill: ${name}. Available: ${Object.keys(this.config.skills || {}).join(', ')}`)
+    return fs.readFileSync(path.join(ROOT, '.opencode', skillPath), 'utf-8')
+  }
+
+  getSkills() {
+    const skills = {}
+    for (const [name, filePath] of Object.entries(this.config.skills || {})) {
+      skills[name] = fs.readFileSync(path.join(ROOT, '.opencode', filePath), 'utf-8')
+    }
+    return skills
+  }
+
   getSystemContext() {
     return {
       agents: Object.keys(this.config.agents),
       memory: Object.keys(this.config.memory),
       workflows: Object.keys(this.config.workflows),
       policies: Object.keys(this.config.policies),
+      skills: Object.keys(this.config.skills || {}),
       approvalRequired: this.config.approval_required,
       dataSources: this.config.data_sources,
     }
@@ -372,6 +391,19 @@ export class OpenCodeBridge {
     }
   }
 
+  loadAllSkills() {
+    const results = []
+    for (const name of Object.keys(this.config.skills || {})) {
+      try {
+        const content = this.loadSkill(name)
+        results.push({ name, ok: true, contentLen: content.length })
+      } catch (e) {
+        results.push({ name, ok: false, error: e.message })
+      }
+    }
+    return results
+  }
+
   validateIntegrity() {
     const schema = validateConfigSchema(this.config)
     const orphans = detectOrphans(this.config)
@@ -380,13 +412,15 @@ export class OpenCodeBridge {
       memory: this.loadAllMemory(),
       workflows: this.loadAllWorkflows(),
       policies: this.loadAllPolicies(),
+      skills: this.loadAllSkills(),
     }
     const anyFailed = (arr) => arr.some(x => !x.ok)
     const allFailed =
       anyFailed(registrySweep.agents) ||
       anyFailed(registrySweep.memory) ||
       anyFailed(registrySweep.workflows) ||
-      anyFailed(registrySweep.policies)
+      anyFailed(registrySweep.policies) ||
+      anyFailed(registrySweep.skills)
     return {
       schemaErrors: schema.errors,
       schemaWarnings: [...(this.schemaWarnings || []), ...schema.warnings],
@@ -479,6 +513,10 @@ export class OpenCodeBridge {
       const fullPath = path.join(ROOT, '.opencode', polPath)
       fileExistence.push({ type: 'policy', name, exists: fs.existsSync(fullPath), size: fs.existsSync(fullPath) ? fs.statSync(fullPath).size : 0 })
     }
+    for (const [name, skillPath] of Object.entries(this.config.skills || {})) {
+      const fullPath = path.join(ROOT, '.opencode', skillPath)
+      fileExistence.push({ type: 'skill', name, exists: fs.existsSync(fullPath), size: fs.existsSync(fullPath) ? fs.statSync(fullPath).size : 0 })
+    }
     return {
       ok: integrity.ok,
       summary: {
@@ -490,6 +528,7 @@ export class OpenCodeBridge {
         memorySweep: { total: integrity.registrySweep.memory.length, failed: integrity.registrySweep.memory.filter(a => !a.ok).length },
         workflowsSweep: { total: integrity.registrySweep.workflows.length, failed: integrity.registrySweep.workflows.filter(a => !a.ok).length },
         policiesSweep: { total: integrity.registrySweep.policies.length, failed: integrity.registrySweep.policies.filter(a => !a.ok).length },
+        skillsSweep: { total: integrity.registrySweep.skills.length, failed: integrity.registrySweep.skills.filter(a => !a.ok).length },
       },
       files: fileExistence,
       integrity,

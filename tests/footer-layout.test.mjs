@@ -64,18 +64,21 @@ for (const fmt of FORMATS) {
       )
     }
 
-    // 5. Left stack: logo -> NEWS-MONSTER brand -> channel (@sham435) ->
-    //    AVAILABLE ON, stacked vertically inside left zone (6-column footer:
-    //    Logo | Brand+Tagline | Channel | AVAILABLE ON | URL | Subscribe).
-    const [logo, brand, channel, platform] = layout.left
+    // 5. Left stack: NM monogram + channel avatar/handle share the top row
+    //    (vertically centered), then NEWS-MONSTER brand -> AVAILABLE ON below
+    //    (6-column footer: Logo+Channel | Brand+Tagline | AVAILABLE ON | URL |
+    //    Subscribe).
+    const [logo, channel, brand, platform] = layout.left
     assert.equal(logo.key, 'logo')
-    assert.equal(brand.key, 'brand')
     assert.equal(channel.key, 'channel')
+    assert.equal(brand.key, 'brand')
     assert.equal(platform.key, 'platform')
-    assert.ok(logo.h > 0 && brand.h > 0 && channel.h > 0 && platform.h > 0)
-    assert.ok(brand.y + PAD >= logo.y + logo.h, 'logo -> brand overlap')
-    assert.ok(channel.y + PAD >= brand.y + brand.h, 'brand -> channel overlap')
-    assert.ok(platform.y + PAD >= channel.y + channel.h, 'channel -> platform overlap')
+    assert.ok(logo.h > 0 && channel.h > 0 && brand.h > 0 && platform.h > 0)
+    const topRowY = Math.min(logo.y, channel.y)
+    const topRowBottom = Math.max(logo.y + logo.h, channel.y + channel.h)
+    assert.ok(channel.x >= logo.x + logo.w - PAD, 'channel sits right of the monogram')
+    assert.ok(brand.y + PAD >= topRowBottom, 'top row -> brand overlap')
+    assert.ok(platform.y + PAD >= brand.y + brand.h, 'brand -> platform overlap')
 
     // 6. Right stack: pill on top, URL+tagline beneath, inside right zone.
     const [pill, url] = layout.right

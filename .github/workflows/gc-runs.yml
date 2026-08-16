@@ -1,0 +1,54 @@
+name: GC Old Workflow Runs
+on:
+  schedule:
+    # Daily 03:00 UTC — tidy the Actions run list (GitHub never resets run
+    # numbers and only auto-expires runs after the 90-day retention default).
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    inputs:
+      max_age_hours:
+        description: 'Delete runs older than this many hours'
+        required: false
+        default: '168'
+      dry_run:
+        description: 'List what would be deleted without deleting'
+        required: false
+        default: 'false'
+        type: boolean
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  gc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete old workflow runs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAX_AGE_HOURS: ${{ inputs.max_age_hours || '168' }}
+          DRY_RUN: ${{ inputs.dry_run || 'false' }}
+        run: |
+          set -u
+          CUTOFF=$(( $(date +%s) - MAX_AGE_HOURS * 3600 ))
+          echo "Deleting runs older than $MAX_AGE_HOURS hours (cutoff $(date -u -d @$CUTOFF '+%Y-%m-%dT%H:%MZ'))"
+          gh api "repos/${{ github.repository }}/actions/runs?per_page=100" --paginate \
+            -q '.workflow_runs[] | "\(.id)\t\(.created_at)\t\(.name)"' \
+            > runs.tsv
+          TOTAL=$(wc -l < runs.tsv | tr -d ' ')
+          echo "Scanned $TOTAL runs"
+          DELETED=0
+          while IFS=$'\t' read -r ID CREATED NAME; do
+            [ -z "$ID" ] && continue
+            TS=$(date -u -d "$CREATED" +%s)
+            if [ "$TS" -lt "$CUTOFF" ]; then
+              echo "  delete #$ID ($CREATED) — $NAME"
+              if [ "$DRY_RUN" != "true" ]; then
+                gh api -X DELETE "repos/${{ github.repository }}/actions/runs/$ID" --silent \
+                  && DELETED=$((DELETED + 1)) \
+                  || echo "    failed to delete run $ID"
+              fi
+            fi
+          done < runs.tsv
+          echo "GC complete. deleted=$DELETED"

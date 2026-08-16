@@ -435,7 +435,18 @@ app.post('/api/ai/chat', async (req, res) => {
     const bridge = await dashboardAI.getBridge()
     if (bridge) {
       const ctx = bridge.getSystemContext()
-      systemContext += `\n\nSystem state:\n- Agents (${ctx.agents.length}): ${ctx.agents.join(', ')}\n- Memory (${ctx.memory.length}): ${ctx.memory.join(', ')}\n- Workflows (${ctx.workflows.length}): ${ctx.workflows.join(', ')}\n- Policies (${ctx.policies.length}): ${ctx.policies.join(', ')}\n- Approval required: ${ctx.approvalRequired.join(', ')}`
+      systemContext += `\n\nSystem state:\n- Agents (${ctx.agents.length}): ${ctx.agents.join(', ')}\n- Memory (${ctx.memory.length}): ${ctx.memory.join(', ')}\n- Workflows (${ctx.workflows.length}): ${ctx.workflows.join(', ')}\n- Policies (${ctx.policies.length}): ${ctx.policies.join(', ')}\n- Skills (${(ctx.skills || []).length}): ${(ctx.skills || []).join(', ')}\n- Approval required: ${ctx.approvalRequired.join(', ')}`
+      try {
+        const skills = bridge.getSkills()
+        const names = Object.keys(skills)
+        if (names.length) {
+          systemContext += `\n\nAvailable skills (load the matching one and follow its steps when the request matches):`
+          for (const name of names) {
+            const firstLines = skills[name].split('\n').slice(0, 4).join(' ')
+            systemContext += `\n- ${name}: ${firstLines}`
+          }
+        }
+      } catch { /* skills optional */ }
     }
     systemContext += `\n\nResponse style (${intent.label} mode): ${modeText}`
     if (resume) {
@@ -862,7 +873,7 @@ app.post('/api/ai/execute-action', async (req, res) => {
         const bridge = await dashboardAI.getBridge()
         if (!bridge) return { ok: true, result: 'Diagnostics queued', note: 'Run: node scripts/opencode-validate.mjs' }
         const diag = bridge.runDiagnostics ? await bridge.runDiagnostics() : null
-        return { ok: diag?.ok === true, result: 'Diagnostics complete', detail: diag ? { agents: `${diag.summary.agentsSweep.total}/${diag.summary.agentsSweep.total}`, memory: `${diag.summary.memorySweep.total}/${diag.summary.memorySweep.total}`, workflows: `${diag.summary.workflowsSweep.total}/${diag.summary.workflowsSweep.total}`, policies: `${diag.summary.policiesSweep.total}/${diag.summary.policiesSweep.total}` } : null }
+        return { ok: diag?.ok === true, result: 'Diagnostics complete', detail: diag ? { agents: `${diag.summary.agentsSweep.total}/${diag.summary.agentsSweep.total}`, memory: `${diag.summary.memorySweep.total}/${diag.summary.memorySweep.total}`, workflows: `${diag.summary.workflowsSweep.total}/${diag.summary.workflowsSweep.total}`, policies: `${diag.summary.policiesSweep.total}/${diag.summary.policiesSweep.total}`, skills: `${diag.summary.skillsSweep.total}/${diag.summary.skillsSweep.total}` } : null }
       } catch { return { ok: true, result: 'Diagnostics queued: run node scripts/opencode-validate.mjs' } }
     },
     'Load Memory': async () => {

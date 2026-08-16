@@ -49,6 +49,19 @@ router.get('/api/opencode/policies', (req, res) => {
   res.json(getBridge().getPolicies())
 })
 
+router.get('/api/opencode/skills', (req, res) => {
+  res.json(getBridge().getSkills())
+})
+
+router.get('/api/opencode/skill/:name', (req, res) => {
+  try {
+    const content = getBridge().loadSkill(req.params.name)
+    res.json({ name: req.params.name, content: content.slice(0, 5000) })
+  } catch (e) {
+    res.status(404).json({ error: e.message })
+  }
+})
+
 router.get('/api/opencode/diagnostics', async (req, res) => {
   const results = await getBridge().runDiagnostics()
   res.json(results)

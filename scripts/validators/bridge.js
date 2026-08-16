@@ -18,13 +18,13 @@ export default function (ctx) {
     r.add('bridge', 'bridge smoke (bridge unavailable)', 'ERROR', false)
     return
   }
-  const reqKeys = ['agents', 'memory', 'workflows', 'policies', 'approvalRequired', 'dataSources']
+  const reqKeys = ['agents', 'memory', 'workflows', 'policies', 'skills', 'approvalRequired', 'dataSources']
   const t0 = performance.now()
   const ctxObj = b.getSystemContext()
   const t1 = performance.now()
   r.perf.record('schemaValidation', t1 - t0)
   const miss = reqKeys.filter(k => !(k in ctxObj))
-  if (miss.length === 0) r.add('bridge', 'getSystemContext() 6 historical keys', 'INFO', true,
+  if (miss.length === 0) r.add('bridge', 'getSystemContext() 7 historical keys', 'INFO', true,
     Object.fromEntries(reqKeys.map(k => [k, Array.isArray(ctxObj[k]) ? ctxObj[k].length : typeof ctxObj[k]])))
   else r.add('bridge', `getSystemContext() missing keys: ${miss.join(',')}`, 'CRITICAL', false)
 

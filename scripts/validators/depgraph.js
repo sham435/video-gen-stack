@@ -26,7 +26,7 @@ export default function (ctx) {
 
   function resolvePath(kind, entry) {
     if (kind === 'agent') return entry.path
-    return entry // string for memory/workflow/policy
+    return entry // string for memory/workflow/policy/skill
   }
 
   function runLoader(kind, name) {
@@ -35,6 +35,7 @@ export default function (ctx) {
       if (kind === 'memory') { b.loadMemory(name); return true }
       if (kind === 'workflow') { b.loadWorkflow(name); return true }
       if (kind === 'policy') { return typeof b.getPolicies()[name] === 'string' }
+      if (kind === 'skill') { b.loadSkill(name); return true }
       return false
     } catch { return false }
   }

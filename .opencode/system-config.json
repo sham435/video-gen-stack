@@ -65,6 +65,12 @@
     "publishing": "policies/publishing.md",
     "ai-approval": "policies/ai-approval.md"
   },
+  "skills": {
+    "known-fixes": "skills/known-fixes.md",
+    "audit": "skills/audit.md",
+    "publish-verify": "skills/publish-verify.md",
+    "render-verify": "skills/render-verify.md"
+  },
   "approval_required": [
     "push-to-main",
     "merge-pr",
@@ -120,6 +126,12 @@
         "path_extractor": "entry as string",
         "loader": "bridge.getPolicies()[name]",
         "checks": ["registered", "exists", "markdown", "bridge.loadPolicy", "dashboard.route"]
+      },
+      "skill": {
+        "registry_key": "skills",
+        "path_extractor": "entry as string",
+        "loader": "bridge.loadSkill",
+        "checks": ["registered", "exists", "markdown", "bridge.loadSkill", "dashboard.route"]
       }
     },
     "public_api": {
@@ -129,6 +141,7 @@
         "loadMemory",
         "loadWorkflow",
         "getPolicies",
+        "loadSkill",
         "getApprovalLevel",
         "getAgentNames",
         "getSystemContext",
@@ -136,6 +149,7 @@
         "loadAllMemory",
         "loadAllWorkflows",
         "loadAllPolicies",
+        "loadAllSkills",
         "validateIntegrity",
         "snapshotForRollback",
         "isConfigSameAs",
