@@ -2,7 +2,9 @@ import { Router } from 'express'
 import { OpenCodeBridge } from '../../../src/integration/OpenCodeBridge.mjs'
 import fs from 'fs'
 import path from 'path'
+import { fileURLToPath } from 'url'
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const router = Router()
 let _bridge = null
 function getBridge() {
@@ -69,6 +71,42 @@ router.get('/api/opencode/algorithms', async (req, res) => {
     const registry = await getBridge().getAlgorithmList?.()
     if (registry) return res.json({ total: registry.length, algorithms: registry })
     res.status(501).json({ error: 'getAlgorithmList not available on bridge' })
+  } catch (e) {
+    res.status(500).json({ error: e.message })
+  }
+})
+
+// M6 diversity dashboard — proves no two videos repeat photo/style/tone in production.
+// Photo reuse source: data/pexels-used.json (48h TTL, written by pickDistinctPhoto).
+// Algo usage source: data/algos-used.json (written by CoverGenerator.resolveHero).
+router.get('/api/opencode/diversity', (req, res) => {
+  try {
+    const root = path.resolve(__dirname, '..', '..', '..')
+    const read = (f) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')) } catch { return {} } }
+    const pexels = read(path.join(root, 'data', 'pexels-used.json'))
+    const algos = Array.isArray(read(path.join(root, 'data', 'algos-used.json'))) ? read(path.join(root, 'data', 'algos-used.json')) : []
+
+    const photoIds = Object.keys(pexels).map(u => u.match(/photos\/(\d+)/)?.[1]).filter(Boolean)
+    const photoCounts = {}
+    for (const id of photoIds) photoCounts[id] = (photoCounts[id] || 0) + 1
+    const dupPhotos = Object.values(photoCounts).filter(c => c > 1).length
+
+    const last20 = algos.slice(-20)
+    const recentAlgoNumbers = last20.map(a => a.algoNumber)
+    const toneCounts = {}
+    for (const a of last20) toneCounts[a.tone] = (toneCounts[a.tone] || 0) + 1
+    const repeatedTones = Object.entries(toneCounts).filter(([, c]) => c > 1).map(([t, c]) => `${t}×${c}`)
+
+    res.json({
+      total: 48,
+      videos: algos.length,
+      used: algos.map(a => ({ n: a.algoNumber, algo: a.algoId, hook: a.hook, visual: a.visual, tone: a.tone, photo: a.photo, at: a.at })),
+      last20Algos: recentAlgoNumbers,
+      dupPhotos,
+      photoCount: photoIds.length,
+      last20UniqueAlgos: new Set(recentAlgoNumbers).size,
+      repeatedTones: repeatedTones.length ? repeatedTones : 'none',
+    })
   } catch (e) {
     res.status(500).json({ error: e.message })
   }

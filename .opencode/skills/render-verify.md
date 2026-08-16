@@ -31,3 +31,8 @@ Use this when asked about footer bar rendering, layout consistency, or visual as
    the bottom bar.
 6. Verify with `node scripts/opencode-validate.mjs` + `npm test` after any registry change.
 7. Audit live list via dashboard `GET /api/opencode/algorithms` (should return 48 entries).
+8. Diversity proof: `GET /api/opencode/diversity` must report `dupPhotos: 0` and last20 algos
+   with no repeated tone — if `dupPhotos > 0`, the algo-seeded Pexels page/index failed and
+   two videos reused a photo (viral blocker). Algo usage is recorded by
+   `CoverGenerator.resolveHero` → `data/algos-used.json`; photo reuse by
+   `pickDistinctPhoto` → `data/pexels-used.json` (48h TTL).

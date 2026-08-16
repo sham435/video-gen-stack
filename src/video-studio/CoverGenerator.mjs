@@ -5,8 +5,42 @@ import { ThumbnailIntelligence } from '../analytics/ThumbnailIntelligence.mjs'
 import { SDCPPProvider } from '../thumbnail/SDCPPProvider.mjs'
 import { pickDistinctPhoto } from '../../scripts/pexels.mjs'
 import path from 'node:path'
+import fs from 'node:fs'
 
 const PEXELS = 'https://api.pexels.com/v1/search'
+const ALGOS_USED_FILE = path.join(process.cwd(), 'data', 'algos-used.json')
+
+function recordAlgoUsage(article, algo, heroUrl) {
+  try {
+    const existing = JSON.parse(fs.readFileSync(ALGOS_USED_FILE, 'utf8'))
+    existing.push({
+      at: Date.now(),
+      algoNumber: algo?.number || 0,
+      algoId: algo?.id || 'unknown',
+      visual: algo?.visual?.id || '',
+      tone: algo?.tone?.id || '',
+      hook: algo?.hook || '',
+      title: (article?.title || '').slice(0, 80),
+      category: article?.category || '',
+      photo: heroUrl ? (heroUrl.match(/photos\/(\d+)/)?.[1] || heroUrl) : null,
+    })
+    fs.writeFileSync(ALGOS_USED_FILE, JSON.stringify(existing.slice(-200)))
+  } catch {
+    try {
+      fs.writeFileSync(ALGOS_USED_FILE, JSON.stringify([{
+        at: Date.now(),
+        algoNumber: algo?.number || 0,
+        algoId: algo?.id || 'unknown',
+        visual: algo?.visual?.id || '',
+        tone: algo?.tone?.id || '',
+        hook: algo?.hook || '',
+        title: (article?.title || '').slice(0, 80),
+        category: article?.category || '',
+        photo: heroUrl ? (heroUrl.match(/photos\/(\d+)/)?.[1] || heroUrl) : null,
+      }]))
+    } catch {}
+  }
+}
 
 export class CoverGenerator {
   constructor(aiProvider = null, options = {}) {
@@ -114,7 +148,10 @@ export class CoverGenerator {
     const seed = brief.algorithm?.seed || hashCode(article.title || '')
     for (const term of terms.slice(0, 3)) {
       const url = await this.searchPexels(term, seed, algoN)
-      if (url) return url
+      if (url) {
+        recordAlgoUsage(article, brief.algorithm, url)
+        return url
+      }
     }
     // Fallback 2: local AI hero via stable-diffusion.cpp (free, offline)
     const sdHero = article?.sdcpp === false ? null : await this.resolveSDCPP(article, brief)

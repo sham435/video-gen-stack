@@ -1,6 +1,7 @@
 import { createCanvas, loadImage } from '@napi-rs/canvas'
 import fs from 'fs'
 import path from 'path'
+import { ANCHOR_CONFIG } from '../visual/BrandStyleResolver.mjs'
 
 const W = 1080, H = 1920
 
@@ -37,28 +38,40 @@ export class CoverComposer {
     ctx.fillRect(0, 0, W, 120)
     ctx.fillStyle = accent
     ctx.fillRect(0, 0, W, 8)
-    ctx.font = '900 52px Anton, Impact, sans-serif'
+    ctx.font = '900 40px Anton, Impact, sans-serif'
     ctx.fillStyle = '#FFFFFF'
     ctx.textAlign = 'left'
     ctx.textBaseline = 'middle'
-    ctx.fillText('NEWS-MONSTER', 40, 64)
+    ctx.fillText(ANCHOR_CONFIG.label, 40, 58)
 
     // LIVE badge
     const liveW = 110, liveH = 44
     ctx.font = '900 26px Inter, sans-serif'
     ctx.fillStyle = '#E10600'
     ctx.beginPath()
-    ctx.roundRect(W - 40 - liveW, 20, liveW, liveH, 6)
+    ctx.roundRect(W - 40 - liveW, 16, liveW, liveH, 6)
     ctx.fill()
     ctx.fillStyle = '#FFFFFF'
     ctx.textAlign = 'center'
-    ctx.fillText('LIVE', W - 40 - liveW / 2, 42)
+    ctx.fillText('LIVE', W - 40 - liveW / 2, 38)
+
+    // algorithm badge — 1-48, unique combo, covers are never identical
+    const algo = brief.algorithm
+    if (algo) {
+      ctx.font = '600 20px Inter, sans-serif'
+      ctx.fillStyle = 'rgba(255,255,255,0.6)'
+      ctx.textAlign = 'left'
+      ctx.fillText(`ALGO #${algo.number}/48 • ${algo.visual?.id || ''} • ${algo.tone?.id || ''}`, 40, 96)
+      ctx.textAlign = 'center'
+    }
 
     // 3. Story-specific layer (DYNAMIC)
     ctx.textAlign = 'center'
 
-    // top overlay badge
-    const topText = brief.text_overlay?.top || 'BREAKING'
+    // top overlay badge — anchor hook when algorithm present
+    const topText = algo?.hook && algo.hook !== 'SHOCKING_NUMBER'
+      ? 'NOBODY EXPECTED THIS MOVE'
+      : (brief.text_overlay?.top || 'BREAKING')
     ctx.font = '900 92px Anton, Impact, sans-serif'
     ctx.fillStyle = accent
     ctx.shadowColor = accent
@@ -123,7 +136,7 @@ export class CoverComposer {
     ctx.textAlign = 'right'
     ctx.fillStyle = accent
     ctx.font = '700 36px Inter, sans-serif'
-    ctx.fillText((brief.mood || 'BREAKING').toUpperCase(), W - 40, H - 50)
+    ctx.fillText(`${(brief.mood || 'BREAKING').toUpperCase()} • ALGO ${algo?.number || 1}/48`, W - 40, H - 50)
 
     fs.mkdirSync(path.dirname(outPath), { recursive: true })
     fs.writeFileSync(outPath, canvas.toBuffer('image/png'))
@@ -182,11 +195,11 @@ export class CoverComposer {
     ctx.fillRect(0, 0, TW, 84)
     ctx.fillStyle = accent
     ctx.fillRect(0, 0, TW, 6)
-    ctx.font = '900 38px Anton, Impact, sans-serif'
+    ctx.font = '900 30px Anton, Impact, sans-serif'
     ctx.fillStyle = '#FFFFFF'
     ctx.textAlign = 'left'
     ctx.textBaseline = 'middle'
-    ctx.fillText('NEWS-MONSTER', 40, 42)
+    ctx.fillText(ANCHOR_CONFIG.label, 40, 42)
     // LIVE badge
     const liveW = 92, liveH = 38
     ctx.font = '900 22px Inter, sans-serif'
@@ -198,8 +211,20 @@ export class CoverComposer {
     ctx.textAlign = 'center'
     ctx.fillText('LIVE', TW - 40 - liveW / 2, 42)
 
+    // algorithm badge (16:9 keeps it small — visible in desktop feed)
+    const algo = brief.algorithm
+    if (algo) {
+      ctx.font = '600 16px Inter, sans-serif'
+      ctx.fillStyle = 'rgba(255,255,255,0.6)'
+      ctx.textAlign = 'left'
+      ctx.fillText(`ALGO #${algo.number}/48 • ${algo.visual?.id || ''}`, 40, 72)
+      ctx.textAlign = 'center'
+    }
+
     // 3. Top overlay badge (accent, glow)
-    const topText = brief.text_overlay?.top || 'BREAKING'
+    const topText = algo?.hook && algo.hook !== 'SHOCKING_NUMBER'
+      ? 'NOBODY EXPECTED THIS MOVE'
+      : (brief.text_overlay?.top || 'BREAKING')
     ctx.textAlign = 'center'
     ctx.font = '900 64px Anton, Impact, sans-serif'
     ctx.fillStyle = accent
