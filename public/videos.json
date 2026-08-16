@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-16T08:07:24.669Z",
+  "updatedAt": "2026-08-16T08:33:10.969Z",
   "videos": [
+    {
+      "id": "xdjm7Yu80Jg",
+      "title": "Switch Online's DK Challenge Now Offering Physical 39-Card Set Reward - nintendolife.com | NEWS-MONS",
+      "publishedAt": "2026-08-16T08:29:29+00:00",
+      "publishedLabel": "Aug 16, 08:29 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/xdjm7Yu80Jg/hqdefault.jpg"
+    },
     {
       "id": "ISUNeunRhpo",
       "title": "S&P Steady After Record Close | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-15T22:22:06+00:00",
       "publishedLabel": "Aug 15, 10:22 PM",
       "thumbnail": "https://i3.ytimg.com/vi/fasesPZz-SY/hqdefault.jpg"
-    },
-    {
-      "id": "NKjK6rpCAg0",
-      "title": "Every 2027 GM EV will plug directly into Tesla Superchargers | NEWS-MONSTER",
-      "publishedAt": "2026-08-15T21:49:16+00:00",
-      "publishedLabel": "Aug 15, 09:49 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/NKjK6rpCAg0/hqdefault.jpg"
     }
   ]
 }
