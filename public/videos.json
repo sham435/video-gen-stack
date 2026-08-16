@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-16T14:07:39.107Z",
+  "updatedAt": "2026-08-16T14:34:55.859Z",
   "videos": [
+    {
+      "id": "9yTH68-Y9Sk",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-16T14:25:38+00:00",
+      "publishedLabel": "Aug 16, 02:25 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/9yTH68-Y9Sk/hqdefault.jpg"
+    },
     {
       "id": "Z7OpvQfJVlg",
       "title": "S&P Steady After Record Close | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T06:37:39+00:00",
       "publishedLabel": "Aug 16, 06:37 AM",
       "thumbnail": "https://i1.ytimg.com/vi/tCUM2p_g68Q/hqdefault.jpg"
-    },
-    {
-      "id": "8g6N_FLtEj0",
-      "title": "Experts Disagree On FDA | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T05:57:50+00:00",
-      "publishedLabel": "Aug 16, 05:57 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/8g6N_FLtEj0/hqdefault.jpg"
     }
   ]
 }
