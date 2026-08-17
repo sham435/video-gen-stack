@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-17T07:02:28.158Z",
+  "updatedAt": "2026-08-17T08:03:53.820Z",
   "videos": [
+    {
+      "id": "-oHUMYdZ1sI",
+      "title": "S&P Steady After Record Close | NEWS-MONSTER",
+      "publishedAt": "2026-08-17T07:55:33+00:00",
+      "publishedLabel": "Aug 17, 07:55 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/-oHUMYdZ1sI/hqdefault.jpg"
+    },
     {
       "id": "UVKm_mqh3Fc",
       "title": "Mașinile electrice schimbă regulile jocului. 586 km cu o singură încărcare | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T20:52:33+00:00",
       "publishedLabel": "Aug 16, 08:52 PM",
       "thumbnail": "https://i1.ytimg.com/vi/P9XlASQ3UAk/hqdefault.jpg"
-    },
-    {
-      "id": "QYq6aBQhP-A",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-16T20:23:34+00:00",
-      "publishedLabel": "Aug 16, 08:23 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/QYq6aBQhP-A/hqdefault.jpg"
     }
   ]
 }
