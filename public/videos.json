@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-17T12:51:57.400Z",
+  "updatedAt": "2026-08-17T13:46:42.852Z",
   "videos": [
+    {
+      "id": "rg8MSKN8pz0",
+      "title": "S&P Steady After Record Close | NEWS-MONSTER",
+      "publishedAt": "2026-08-17T13:41:07+00:00",
+      "publishedLabel": "Aug 17, 01:41 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/rg8MSKN8pz0/hqdefault.jpg"
+    },
     {
       "id": "mQF0GNqK04E",
       "title": "Android Auto frustrates me so much that I understand why some car makers are ditching it | NEWS-MONS",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-17T01:09:25+00:00",
       "publishedLabel": "Aug 17, 01:09 AM",
       "thumbnail": "https://i1.ytimg.com/vi/D1kj5Lj80Ds/hqdefault.jpg"
-    },
-    {
-      "id": "ACJBZxv04JA",
-      "title": "Trump Family’s World Liberty Financial Gets Preliminary Approval to Launch a Bank - WSJ | NEWS-MONST",
-      "publishedAt": "2026-08-16T23:48:26+00:00",
-      "publishedLabel": "Aug 16, 11:48 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/ACJBZxv04JA/hqdefault.jpg"
     }
   ]
 }
