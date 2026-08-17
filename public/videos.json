@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-17T11:39:54.596Z",
+  "updatedAt": "2026-08-17T12:51:57.400Z",
   "videos": [
+    {
+      "id": "mQF0GNqK04E",
+      "title": "Android Auto frustrates me so much that I understand why some car makers are ditching it | NEWS-MONS",
+      "publishedAt": "2026-08-17T12:42:29+00:00",
+      "publishedLabel": "Aug 17, 12:42 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/mQF0GNqK04E/hqdefault.jpg"
+    },
     {
       "id": "39-AGV9-OA4",
       "title": "World’s biggest wealth fund buys $1.2 billion of SpaceX stock - thestreet.com | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T23:48:26+00:00",
       "publishedLabel": "Aug 16, 11:48 PM",
       "thumbnail": "https://i2.ytimg.com/vi/ACJBZxv04JA/hqdefault.jpg"
-    },
-    {
-      "id": "hJxtaTef6_E",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-16T23:22:17+00:00",
-      "publishedLabel": "Aug 16, 11:22 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/hJxtaTef6_E/hqdefault.jpg"
     }
   ]
 }
