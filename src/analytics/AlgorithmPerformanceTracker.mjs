@@ -1,118 +1,79 @@
-// AlgorithmPerformanceTracker — M7: track which of the 48 algorithms
-// gets the best retention/views per category. On cold start every algo
-// gets seed=0.5 confidence. Once real YouTube analytics flow in, the
-// tracker ranks algos by weighted retention and can bias generation.
-
-import fs from 'node:fs'
-import path from 'node:path'
-
-const DATA_DIR = path.join(process.cwd(), 'data')
-const TRACKER_FILE = path.join(DATA_DIR, 'algo-performance.json')
+import fs from 'fs'; import path from 'path'
+const DB_PATH = 'data/analytics/algorithm_performance.json'
 
 export class AlgorithmPerformanceTracker {
-  constructor() {
-    this.data = this._load()
-  }
-
-  _load() {
-    try {
-      return JSON.parse(fs.readFileSync(TRACKER_FILE, 'utf8'))
-    } catch {
-      return this._seed()
-    }
-  }
-
-  _seed() {
-    const data = { videos: [], byAlgo: {}, byCategory: {} }
-    fs.mkdirSync(DATA_DIR, { recursive: true })
-    this._save(data)
-    return data
-  }
-
-  _save(data) {
-    try {
-      fs.mkdirSync(DATA_DIR, { recursive: true })
-      fs.writeFileSync(TRACKER_FILE, JSON.stringify(data, null, 2))
-    } catch {}
-  }
-
-  // Record a video upload with its algo and optional metrics.
-  record({ algoNumber, algoId, category, videoId, views = 0, retention = 0, completionRate = 0 }) {
+  constructor(){ this.dbPath = DB_PATH; this.data = this._load() }
+  _load(){ try{ return JSON.parse(fs.readFileSync(this.dbPath,'utf8')) }catch{ return { algos: {}, history: [] } } }
+  _save(){ try{ fs.mkdirSync(path.dirname(this.dbPath),{recursive:true}); fs.writeFileSync(this.dbPath, JSON.stringify(this.data, null, 2)) }catch{} }
+  
+  trackRender(article, algorithm, concept){
     const entry = {
-      at: Date.now(),
-      algoNumber,
-      algoId,
-      category: category || 'unknown',
-      videoId: videoId || `vid_${Date.now().toString(36)}`,
-      views,
-      retention,
-      completionRate,
+      timestamp: Date.now(),
+      algoNumber: algorithm.number,
+      algoId: algorithm.id,
+      niche: algorithm.niche,
+      hook: algorithm.hook,
+      arc: algorithm.arc,
+      visual: algorithm.visual.id,
+      tone: algorithm.tone.id,
+      structure: algorithm.structure.id,
+      title: article.title,
+      category: article.category,
+      heroImage: concept.heroImage,
+      overlayText: concept.overlayText,
     }
-    this.data.videos.push(entry)
-
-    // Per-algo aggregation
-    const ak = String(algoNumber)
-    if (!this.data.byAlgo[ak]) this.data.byAlgo[ak] = { count: 0, views: 0, retentionSum: 0, completionSum: 0 }
-    this.data.byAlgo[ak].count++
-    this.data.byAlgo[ak].views += views
-    this.data.byAlgo[ak].retentionSum += retention
-    this.data.byAlgo[ak].completionSum += completionRate
-
-    // Per-category aggregation
-    const ck = entry.category
-    if (!this.data.byCategory[ck]) this.data.byCategory[ck] = {}
-    if (!this.data.byCategory[ck][ak]) this.data.byCategory[ck][ak] = 0
-    this.data.byCategory[ck][ak]++
-
-    this._save(this.data)
+    if(!this.data.algos[algorithm.number]) this.data.algos[algorithm.number] = { count:0, titles:[], niches:{}, visuals:{}, tones:{} }
+    const a = this.data.algos[algorithm.number]
+    a.count++; a.titles.push(article.title.slice(0,60))
+    a.niches[algorithm.niche] = (a.niches[algorithm.niche]||0)+1
+    a.visuals[algorithm.visual.id] = (a.visuals[algorithm.visual.id]||0)+1
+    a.tones[algorithm.tone.id] = (a.tones[algorithm.tone.id]||0)+1
+    this.data.history.push(entry)
+    if(this.data.history.length>200) this.data.history = this.data.history.slice(-200)
+    this._save()
     return entry
   }
 
-  // Rank algorithms by retention (or views when retention data is sparse).
-  // Returns [{algoNumber, avgRetention, avgCompletion, videos, views}].
-  topAlgorithms({ limit = 10, category = null } = {}) {
-    let source = this.data.byAlgo
-    if (category && this.data.byCategory[category]) {
-      source = {}
-      for (const [ak, count] of Object.entries(this.data.byCategory[category])) {
-        source[ak] = this.data.byAlgo[ak] || { count: 0, views: 0, retentionSum: 0, completionSum: 0 }
-        source[ak] = { ...source[ak], count }
-      }
-    }
-    return Object.entries(source)
-      .map(([ak, d]) => ({
-        algoNumber: Number(ak),
-        avgRetention: d.count ? d.retentionSum / d.count : 0,
-        avgCompletion: d.count ? d.completionSum / d.count : 0,
-        videos: d.count,
-        views: d.views,
-      }))
-      .sort((a, b) => b.avgRetention - a.avgRetention || b.views - a.views)
-      .slice(0, limit)
+  trackPerformance(algoNumber, metrics){
+    // metrics: { retention: 0-100, ctr: 0-100, views, likes }
+    if(!this.data.algos[algoNumber]) return
+    const a = this.data.algos[algoNumber]
+    if(!a.perf) a.perf = { totalViews:0, avgRetention:0, avgCtr:0, count:0 }
+    a.perf.totalViews += metrics.views||0
+    a.perf.avgRetention = ((a.perf.avgRetention * a.perf.count) + (metrics.retention||0)) / (a.perf.count+1)
+    a.perf.avgCtr = ((a.perf.avgCtr * a.perf.count) + (metrics.ctr||0)) / (a.perf.count+1)
+    a.perf.count++
+    this._save()
   }
 
-  // Which categories perform best for a given algo?
-  topCategories({ limit = 5 } = {}) {
-    const out = []
-    for (const [cat, algos] of Object.entries(this.data.byCategory)) {
-      const total = Object.values(algos).reduce((s, n) => s + n, 0)
-      const bestAlgo = Object.entries(algos).sort((a, b) => b[1] - a[1])[0]
-      out.push({ category: cat, totalVideos: total, bestAlgo: bestAlgo ? Number(bestAlgo[0]) : null, bestCount: bestAlgo?.[1] || 0 })
-    }
-    return out.sort((a, b) => b.totalVideos - a.totalVideos).slice(0, limit)
+  getTopAlgos(limit=10){
+    return Object.entries(this.data.algos)
+      .map(([num, d])=>({ number: parseInt(num), count: d.count, avgRetention: d.perf?.avgRetention||0, avgCtr: d.perf?.avgCtr||0, score: (d.perf?.avgRetention||50)*0.6 + (d.perf?.avgCtr||5)*8 }))
+      .sort((a,b)=>b.score-a.score)
+      .slice(0,limit)
   }
 
-  // Full summary for the dashboard.
-  summary() {
-    const total = this.data.videos.length
-    const totalViews = this.data.videos.reduce((s, v) => s + v.views, 0)
-    const avgRetention = total ? this.data.videos.reduce((s, v) => s + v.retention, 0) / total : 0
+  getDiversityReport(){
+    const recent = this.data.history.slice(-20)
+    const uniquePhotos = new Set(recent.map(r=>r.heroImage)).size
+    const uniqueAlgos = new Set(recent.map(r=>r.algoNumber)).size
+    const uniqueVisuals = new Set(recent.map(r=>r.visual)).size
+    const uniqueTones = new Set(recent.map(r=>r.tone)).size
+    const duplicatePhotos = recent.length - uniquePhotos
     return {
-      totalVideos: total,
-      totalViews,
-      avgRetention: avgRetention.toFixed(3),
-      top5: this.topAlgorithms({ limit: 5 }),
-      categoryBreakdown: this.topCategories({ limit: 10 }),
+      last20: recent.length,
+      uniquePhotos,
+      uniqueAlgos,
+      uniqueVisuals,
+      uniqueTones,
+      duplicatePhotos,
+      isDiverse: duplicatePhotos===0 && uniqueAlgos>=Math.min(10, recent.length),
+      topAlgos: this.getTopAlgos(5),
+      recent
     }
   }
+
+  verifyNoActuallySee(text){ return !/actually see/i.test(text) }
 }
+
+export const tracker = new AlgorithmPerformanceTracker()

@@ -21,21 +21,21 @@ const BRAND_COLORS = {
 }
 
 const CATEGORY_STYLES = {
-  ai: { color: '#00E5FF', style: 'dark futuristic, holographic UI, neon data streams', mood: 'futuristic' },
-  space: { color: '#FFFFFF', style: 'cinematic NASA style, deep space, stars, nebula', mood: 'epic' },
-  gaming: { color: '#E100FF', style: 'neon, characters, hardware, arcade glow', mood: 'hype' },
-  politics: { color: '#E10600', style: 'documentary photojournalism, newsroom', mood: 'serious' },
-  finance: { color: '#FFD700', style: 'premium newsroom, stock tickers, gold accents', mood: 'authoritative' },
-  health: { color: '#00FF88', style: 'clean medical visualization, white clinical', mood: 'trustworthy' },
-  science: { color: '#00E5FF', style: 'laboratory, blue tones, microscopic detail', mood: 'discovery' },
-  sports: { color: '#FFD700', style: 'stadium energy, motion, vibrant', mood: 'energetic' },
-  robotics: { color: '#FF6B00', style: 'mechanical detail, industrial lighting', mood: 'innovative' },
-  cybersecurity: { color: '#00FF41', style: 'dark digital, glowing code, matrix', mood: 'threat' },
-  technology: { color: '#E10600', style: 'futuristic technology, neon blue/red, cyberpunk', mood: 'breaking' },
-  lifestyle: { color: '#FF6B9D', style: 'clean modern, warm lighting, premium', mood: 'aspirational' },
-  business: { color: '#3B82F6', style: 'corporate, financial district, professional', mood: 'authoritative' },
-  entertainment: { color: '#E100FF', style: 'vibrant, colorful, dynamic', mood: 'exciting' },
-  default: { color: '#E10600', style: 'cinematic news broadcast, dramatic lighting', mood: 'breaking' },
+  ai: { color: '#00E5FF', style: 'dark futuristic, holographic UI, neon data streams', mood: 'futuristic', anchorHook: 'NOBODY SAW THIS COMING' },
+  space: { color: '#FFFFFF', style: 'cinematic NASA style, deep space, stars, nebula', mood: 'epic', anchorHook: 'NOBODY EXPECTED THIS MOVE' },
+  gaming: { color: '#E100FF', style: 'neon, characters, hardware, arcade glow', mood: 'hype', anchorHook: 'NOBODY EXPECTED THIS MOVE' },
+  politics: { color: '#E10600', style: 'documentary photojournalism, newsroom', mood: 'serious', anchorHook: 'NOBODY EXPECTED THIS MOVE' },
+  finance: { color: '#FFD700', style: 'premium newsroom, stock tickers, gold accents', mood: 'authoritative', anchorHook: 'NOBODY EXPECTED THIS MOVE' },
+  health: { color: '#00FF88', style: 'clean medical visualization, white clinical', mood: 'trustworthy', anchorHook: 'NOBODY EXPECTED THIS MOVE' },
+  science: { color: '#00E5FF', style: 'laboratory, blue tones, microscopic detail', mood: 'discovery', anchorHook: 'NOBODY EXPECTED THIS MOVE' },
+  sports: { color: '#FFD700', style: 'stadium energy, motion, vibrant', mood: 'energetic', anchorHook: 'NOBODY EXPECTED THIS MOVE' },
+  robotics: { color: '#FF6B00', style: 'mechanical detail, industrial lighting', mood: 'innovative', anchorHook: 'NOBODY EXPECTED THIS MOVE' },
+  cybersecurity: { color: '#00FF41', style: 'dark digital, glowing code, matrix', mood: 'threat', anchorHook: 'NOBODY EXPECTED THIS MOVE' },
+  technology: { color: '#E10600', style: 'futuristic technology, neon blue/red, cyberpunk', mood: 'breaking', anchorHook: 'NOBODY EXPECTED THIS MOVE' },
+  lifestyle: { color: '#FF6B9D', style: 'clean modern, warm lighting, premium', mood: 'aspirational', anchorHook: 'NOBODY EXPECTED THIS MOVE' },
+  business: { color: '#3B82F6', style: 'corporate, financial district, professional', mood: 'authoritative', anchorHook: 'NOBODY EXPECTED THIS MOVE' },
+  entertainment: { color: '#E100FF', style: 'vibrant, colorful, dynamic', mood: 'exciting', anchorHook: 'NOBODY EXPECTED THIS MOVE' },
+  default: { color: '#E10600', style: 'cinematic news broadcast, dramatic lighting', mood: 'breaking', anchorHook: 'NOBODY EXPECTED THIS MOVE' },
 }
 
 export const ANCHOR_CONFIG = { name: 'sham435', label: 'sham435 · ANCHOR', channel: 'NEWS-MONSTER' }
