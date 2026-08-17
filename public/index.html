@@ -341,8 +341,19 @@ const carousel = document.getElementById('videos')
 const prevBtn = document.querySelector('.carousel-nav.prev')
 const nextBtn = document.querySelector('.carousel-nav.next')
 const scrollAmt = () => carousel.querySelector('.vid')?.offsetWidth + 16 || 200
-prevBtn.addEventListener('click', () => carousel.scrollBy({ left: -scrollAmt(), behavior: 'smooth' }))
-nextBtn.addEventListener('click', () => carousel.scrollBy({ left: scrollAmt(), behavior: 'smooth' }))
+
+// Snap-aligned scroll: round to nearest card boundary so snap points
+// never land between cards (Safari edge case with smooth behavior).
+function snapScroll(dir) {
+  const cardW = scrollAmt()
+  const current = carousel.scrollLeft
+  const target = dir === 'next'
+    ? Math.ceil(current / cardW) * cardW
+    : Math.floor(current / cardW) * cardW
+  carousel.scrollTo({ left: target, behavior: 'smooth' })
+}
+prevBtn.addEventListener('click', () => snapScroll('prev'))
+nextBtn.addEventListener('click', () => snapScroll('next'))
 
 // ── Load Videos ───────────────────────────────────────────
 let allVideos = []
@@ -454,23 +465,22 @@ document.addEventListener('mouseleave', function(e) {
 
 // ── Dynamic Prefetch (70% scroll) ─────────────────────────
 let prefetched = false
+let hasScrolled = false
+carousel.addEventListener('scroll', () => { hasScrolled = true }, { passive: true, once: true })
+
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
-    if (entry.isIntersecting) {
+    // Only prefetch after user has actually scrolled — prevents firing on
+    // wide screens where 70% of cards are visible on initial render.
+    if (entry.isIntersecting && hasScrolled && !prefetched) {
       const idx = parseInt(entry.target.dataset.index || '0')
-      if (idx >= allVideos.length * 0.7 && !prefetched) {
+      if (idx >= allVideos.length * 0.7) {
         prefetched = true
-        // Prefetch next batch of thumbnails
-        allVideos.slice(allVideos.length).forEach(v => {
-          const link = document.createElement('link')
-          link.rel = 'prefetch'
-          link.href = `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`
-          document.head.appendChild(link)
-        })
+        observer.disconnect()
       }
     }
   })
-}, { threshold: 0.5 })
+}, { threshold: 0.5, root: carousel })
 
 // Observe last 3 cards for prefetch trigger
 function observePrefetch() {
