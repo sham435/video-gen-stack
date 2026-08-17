@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-17T13:46:42.852Z",
+  "updatedAt": "2026-08-17T15:03:14.638Z",
   "videos": [
+    {
+      "id": "9sxjmwIVMtE",
+      "title": "Maker of ice cream sold at grocery stores nationwide files for bankruptcy as it appeals $2 | NEWS-MO",
+      "publishedAt": "2026-08-17T14:58:39+00:00",
+      "publishedLabel": "Aug 17, 02:58 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/9sxjmwIVMtE/hqdefault.jpg"
+    },
+    {
+      "id": "q54PsSTWtgw",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-17T14:29:18+00:00",
+      "publishedLabel": "Aug 17, 02:29 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/q54PsSTWtgw/hqdefault.jpg"
+    },
     {
       "id": "rg8MSKN8pz0",
       "title": "S&P Steady After Record Close | NEWS-MONSTER",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-17T03:52:06+00:00",
       "publishedLabel": "Aug 17, 03:52 AM",
       "thumbnail": "https://i2.ytimg.com/vi/5ZwfROoFogA/hqdefault.jpg"
-    },
-    {
-      "id": "jyRm8u-YHK8",
-      "title": "Harvard makes massive $2.2B SpaceX bet on Elon Musk's rocket company - Fox Business | NEWS-MONSTER",
-      "publishedAt": "2026-08-17T02:45:07+00:00",
-      "publishedLabel": "Aug 17, 02:45 AM",
-      "thumbnail": "https://i3.ytimg.com/vi/jyRm8u-YHK8/hqdefault.jpg"
-    },
-    {
-      "id": "D1kj5Lj80Ds",
-      "title": "Open Mike Eagle and Kenny Segal crafted a hip hop breakup masterpiece | NEWS-MONSTER",
-      "publishedAt": "2026-08-17T01:09:25+00:00",
-      "publishedLabel": "Aug 17, 01:09 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/D1kj5Lj80Ds/hqdefault.jpg"
     }
   ]
 }
