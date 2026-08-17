@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-17T20:04:40.286Z",
+  "updatedAt": "2026-08-17T20:38:50.130Z",
   "videos": [
+    {
+      "id": "ZBQXNJE3NVw",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-17T20:28:34+00:00",
+      "publishedLabel": "Aug 17, 08:28 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/ZBQXNJE3NVw/hqdefault.jpg"
+    },
     {
       "id": "0dvJldwuoRk",
       "title": "Trump Administration ‘Not in Favor’ of Apple Using Chinese RAM | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-17T11:35:49+00:00",
       "publishedLabel": "Aug 17, 11:35 AM",
       "thumbnail": "https://i4.ytimg.com/vi/39-AGV9-OA4/hqdefault.jpg"
-    },
-    {
-      "id": "UlKWqg2F2aU",
-      "title": "S&P Steady After Record Close | NEWS-MONSTER",
-      "publishedAt": "2026-08-17T11:04:00+00:00",
-      "publishedLabel": "Aug 17, 11:04 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/UlKWqg2F2aU/hqdefault.jpg"
     }
   ]
 }
