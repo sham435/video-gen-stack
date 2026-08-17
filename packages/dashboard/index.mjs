@@ -3421,8 +3421,10 @@ app.get('/engineering', (req, res) => res.type('html').send(ENGINE_HTML))
 
 const { default: opencodeRoutes } = await import('./routes/opencode.mjs')
 const { default: repoToolsRoutes } = await import('./routes/repo-tools.mjs')
+const { default: topAlgosRoutes } = await import('./routes/top-algos.mjs')
 app.use(opencodeRoutes)
 app.use(repoToolsRoutes)
+app.use(topAlgosRoutes)
 
 export default app
 
