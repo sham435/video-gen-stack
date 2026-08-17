@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-17T16:04:36.954Z",
+  "updatedAt": "2026-08-17T16:32:24.918Z",
   "videos": [
+    {
+      "id": "NrzzMwmPv08",
+      "title": "Open Mike Eagle and Kenny Segal crafted a hip hop breakup masterpiece | NEWS-MONSTER",
+      "publishedAt": "2026-08-17T16:27:56+00:00",
+      "publishedLabel": "Aug 17, 04:27 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/NrzzMwmPv08/hqdefault.jpg"
+    },
     {
       "id": "5CbRfO9naQw",
       "title": "Las irritantes obras de Sevilla | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-17T05:37:32+00:00",
       "publishedLabel": "Aug 17, 05:37 AM",
       "thumbnail": "https://i2.ytimg.com/vi/-69wFyrm180/hqdefault.jpg"
-    },
-    {
-      "id": "V3_1I_sjBKY",
-      "title": "S&P Steady After Record Close | NEWS-MONSTER",
-      "publishedAt": "2026-08-17T04:43:42+00:00",
-      "publishedLabel": "Aug 17, 04:43 AM",
-      "thumbnail": "https://i3.ytimg.com/vi/V3_1I_sjBKY/hqdefault.jpg"
     }
   ]
 }
