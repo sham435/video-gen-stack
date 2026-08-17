@@ -195,3 +195,17 @@ export async function postComment(videoId, text) {
   console.log(`${parentId ? '✅ Comment reply posted' : '✅ Comment posted'}: ${data.snippet?.textOriginal?.slice(0, 60)}...`)
   return data
 }
+
+export async function deleteVideo(videoId) {
+  const token = await getAccessToken()
+  const res = await fetch(`${BASE}/youtube/v3/videos?id=${videoId}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${token}` },
+  })
+  if (!res.ok) {
+    const err = await res.text()
+    throw new Error(`Delete failed (${res.status}): ${err}`)
+  }
+  console.log(`🗑️  Deleted video ${videoId}`)
+  return true
+}
