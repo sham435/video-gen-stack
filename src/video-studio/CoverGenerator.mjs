@@ -64,6 +64,7 @@ export class CoverGenerator {
   async generateThumbnail(article, outPath, options = {}) {
     const brief = await this.director.analyzeStory(article, options.style ? { style: options.style } : {})
     const tuned = this.intel?.tuneBrief(brief) || brief
+    if (options.hideBranding) tuned.hideBranding = true
     const hero = await this.resolveHero(article, tuned)
     await this.composer.composeThumbnail(tuned, hero, outPath)
     return { brief: tuned, hero, path: outPath }
@@ -72,6 +73,7 @@ export class CoverGenerator {
   async generate(article, outPath, options = {}) {
     const brief = await this.director.analyzeStory(article, options.style ? { style: options.style } : {})
     const tuned = this.intel?.tuneBrief(brief) || brief
+    if (options.hideBranding) tuned.hideBranding = true
     const hero = await this.resolveHero(article, tuned)
     await this.composer.compose(tuned, hero, outPath)
     const validation = await this.validator.validate(outPath, tuned)

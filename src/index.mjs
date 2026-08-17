@@ -395,6 +395,9 @@ export class NewsBroadcastEngine {
     // Layout snapshots for regression testing (LAYOUT_SNAPSHOTS=1 to record)
     if (process.env.LAYOUT_SNAPSHOTS === '1') LayoutSnapshotStore.capture(scenes)
 
+    // Thread hideBranding through every scene so layers skip branding elements.
+    if (options.hideBranding) scenes.forEach(sc => { sc.hideBranding = true })
+
     const timedScenes = this.scenePlanner.assignTimestamps(scenes)
     this.validateTemplate(timedScenes)
 
@@ -478,14 +481,14 @@ export class NewsBroadcastEngine {
       // Pass contract cover metadata (headline/subheadline/subject) into the article
       // so the CoverDirector produces a story-aligned cover
       const coverArticle = { ...article, title: article.title || this.contract?.cover?.headline }
-      const coverResult = await this.coverGenerator.generateTournament(coverArticle, outDir, { styles: ['breaking', 'cinematic', 'minimal', 'reaction', 'data'] })
+      const coverResult = await this.coverGenerator.generateTournament(coverArticle, outDir, { styles: ['breaking', 'cinematic', 'minimal', 'reaction', 'data'], hideBranding: options.hideBranding })
       const coverPath = coverResult.path
       this.coverPath = coverPath
       this.coverBrief = coverResult.brief
       // 16:9 YouTube thumbnail (1280x720) — landscape variant for uploads
       try {
         const thumbPath = `${outDir}/thumbnail.png`
-        await this.coverGenerator.generateThumbnail(coverArticle, thumbPath, { style: coverResult.winner || 'breaking' })
+        await this.coverGenerator.generateThumbnail(coverArticle, thumbPath, { style: coverResult.winner || 'breaking', hideBranding: options.hideBranding })
         this.thumbnailPath = thumbPath
       } catch (e) {
         console.warn(`Thumbnail variant skipped: ${e.message}`)
