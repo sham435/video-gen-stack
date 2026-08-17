@@ -5,6 +5,17 @@ import { ANCHOR_CONFIG } from '../visual/BrandStyleResolver.mjs'
 
 const W = 1080, H = 1920
 
+const BAD_OVERLAYS = new Set([
+  'ACTUALLY SEE', 'ACTUALLY', 'SEE HOW', 'SEE WHY', 'SEE WHAT',
+  'THIS IS', 'HERE IS', 'LOOK AT', 'CHECK OUT',
+])
+
+function safeOverlay(text, fallback = 'BREAKING') {
+  const up = (text || '').toUpperCase().trim()
+  if (!up || BAD_OVERLAYS.has(up)) return fallback
+  return up
+}
+
 export class CoverComposer {
   async compose(brief, heroImage, outPath) {
     const canvas = createCanvas(W, H)
@@ -73,7 +84,7 @@ export class CoverComposer {
     // top overlay badge — anchor hook when algorithm present
     const topText = algo?.hook && algo.hook !== 'SHOCKING_NUMBER'
       ? 'NOBODY EXPECTED THIS MOVE'
-      : (brief.text_overlay?.top || 'BREAKING')
+      : safeOverlay(brief.text_overlay?.top)
     ctx.font = '900 92px Anton, Impact, sans-serif'
     ctx.fillStyle = accent
     ctx.shadowColor = accent
@@ -116,7 +127,7 @@ export class CoverComposer {
     ctx.shadowBlur = 0
 
     // bottom overlay badge
-    const bottomText = brief.text_overlay?.bottom || 'NEW DETAILS'
+    const bottomText = safeOverlay(brief.text_overlay?.bottom, 'NEW DETAILS')
     ctx.shadowBlur = 0
     ctx.font = '900 44px Anton, Impact, sans-serif'
     const bw = ctx.measureText(bottomText).width + 60
@@ -230,7 +241,7 @@ export class CoverComposer {
     // 3. Top overlay badge (accent, glow)
     const topText = algo?.hook && algo.hook !== 'SHOCKING_NUMBER'
       ? 'NOBODY EXPECTED THIS MOVE'
-      : (brief.text_overlay?.top || 'BREAKING')
+      : safeOverlay(brief.text_overlay?.top)
     ctx.textAlign = 'center'
     ctx.font = '900 64px Anton, Impact, sans-serif'
     ctx.fillStyle = accent
@@ -274,7 +285,7 @@ export class CoverComposer {
     ctx.shadowBlur = 0
 
     // 5. Bottom accent badge
-    const bottomText = brief.text_overlay?.bottom || 'NEW DETAILS'
+    const bottomText = safeOverlay(brief.text_overlay?.bottom, 'NEW DETAILS')
     ctx.font = '900 34px Anton, Impact, sans-serif'
     const bw = ctx.measureText(bottomText).width + 50
     ctx.fillStyle = accent

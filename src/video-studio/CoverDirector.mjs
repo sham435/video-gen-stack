@@ -27,6 +27,20 @@ const OVERLAY_PAIRS = [
   ['WHAT HAPPENED', 'NEXT'],
 ]
 
+// Bad overlays the AI sometimes generates from headlines — must never render on video.
+const BAD_OVERLAYS = new Set([
+  'ACTUALLY SEE', 'ACTUALLY', 'SEE HOW', 'SEE WHY', 'SEE WHAT',
+  'THIS IS', 'HERE IS', 'LOOK AT', 'CHECK OUT',
+])
+
+function sanitizeOverlay(text) {
+  const up = (text || '').toUpperCase().trim()
+  if (!up || BAD_OVERLAYS.has(up)) return null
+  // Also reject if it's just 1 word that's a common verb/preposition
+  if (up.split(/\s+/).length === 1 && /^(THE|A|AN|IS|ARE|WAS|WERE|HAS|HAVE|HAD|DO|DOES|DID|CAN|COULD|WILL|WOULD|SHOULD|MAY|MIGHT|SEE|ACTUALLY|LOOK|CHECK|GET|GO|COME|TAKE|MAKE|USE|FIND|SHOW|TELL|ASK|SAY|SPEAK|HEAR|LISTEN|READ|WRITE|RUN|WALK|STOP|START|END|BEGIN|OPEN|CLOSE|PUSH|PULL|HOLD|KEEP|LET|PUT|SET|CUT|HIT|BEAT|WIN|LOSE|PLAY|PAUSE|WAIT|NEXT|BACK|DONE|OK|YES|NO|NOT|BUT|AND|OR|FOR|NOR|SO|YET|ALL|SOME|MANY|FEW|MORE|MOST|BEST|WORST|TOP|NEW|OLD|BIG|SMALL|GOOD|BAD|HIGH|LOW|FAST|SLOW|HOT|COLD|LONG|SHORT|EASY|HARD|TRUE|FALSE)$/.test(up)) return null
+  return up
+}
+
 export class CoverDirector {
   constructor(aiProvider = null) {
     this.ai = aiProvider
@@ -45,7 +59,10 @@ export class CoverDirector {
       mood: styleOverride?.mood || ai.mood || fallback.mood,
       accent_color: ai.brandColor || fallback.accent_color,
       hero_prompt: styleOverride?.hero_prompt || ai.hero_prompt || fallback.hero_prompt,
-      text_overlay: styleOverride?.text_overlay || ai.text_overlay || fallback.text_overlay,
+      text_overlay: {
+        top: sanitizeOverlay(styleOverride?.text_overlay?.top || ai.text_overlay?.top) || sanitizeOverlay(fallback.text_overlay?.top) || 'BREAKING',
+        bottom: sanitizeOverlay(styleOverride?.text_overlay?.bottom || ai.text_overlay?.bottom) || sanitizeOverlay(fallback.text_overlay?.bottom) || 'NEW DETAILS'
+      },
       keywords: ai.keywords || fallback.keywords,
       source: ai.source || 'deterministic',
       style_variant: options.style || null,
@@ -102,7 +119,7 @@ Output ONLY JSON:
         visual_style: result.visual_style,
         mood: result.mood,
         accent_color: result.accent_color,
-        text_overlay: { top: (result.text_overlay?.top || '').toUpperCase(), bottom: (result.text_overlay?.bottom || '').toUpperCase() },
+        text_overlay: { top: sanitizeOverlay(result.text_overlay?.top) || 'BREAKING', bottom: sanitizeOverlay(result.text_overlay?.bottom) || 'NEW DETAILS' },
         keywords: result.keywords || [],
         source: 'ai',
       }
