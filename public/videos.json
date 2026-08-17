@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-17T19:34:47.336Z",
+  "updatedAt": "2026-08-17T20:04:40.286Z",
   "videos": [
+    {
+      "id": "0dvJldwuoRk",
+      "title": "Trump Administration ‘Not in Favor’ of Apple Using Chinese RAM | NEWS-MONSTER",
+      "publishedAt": "2026-08-17T19:56:09+00:00",
+      "publishedLabel": "Aug 17, 07:56 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/0dvJldwuoRk/hqdefault.jpg"
+    },
     {
       "id": "toA52h9Eqbc",
       "title": "Open Mike Eagle and Kenny Segal crafted a hip hop breakup masterpiece | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-17T11:04:00+00:00",
       "publishedLabel": "Aug 17, 11:04 AM",
       "thumbnail": "https://i2.ytimg.com/vi/UlKWqg2F2aU/hqdefault.jpg"
-    },
-    {
-      "id": "Wcvc0vtiZyE",
-      "title": "Open Mike Eagle and Kenny Segal crafted a hip hop breakup masterpiece | NEWS-MONSTER",
-      "publishedAt": "2026-08-17T10:33:28+00:00",
-      "publishedLabel": "Aug 17, 10:33 AM",
-      "thumbnail": "https://i4.ytimg.com/vi/Wcvc0vtiZyE/hqdefault.jpg"
     }
   ]
 }
