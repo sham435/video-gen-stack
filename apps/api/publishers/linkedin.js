@@ -103,7 +103,8 @@ export async function sharePost(token, memberUrn, commentary, linkUrl = null) {
     body: JSON.stringify(body),
   })
   const text = await res.text()
-  const data = text ? JSON.parse(text).catch(() => ({})) : {}
+  let data = {}
+  try { data = text ? JSON.parse(text) : {} } catch { data = {} }
   if (!res.ok) {
     const msg = data.message || data.serviceErrorCode || text.slice(0, 300)
     throw new Error(`LinkedIn share failed (${res.status}): ${msg}`)
@@ -181,7 +182,8 @@ export async function shareImage(token, memberUrn, imageUrl, commentary, linkUrl
     body: JSON.stringify(body),
   })
   const text = await res.text()
-  const data = text ? JSON.parse(text).catch(() => ({})) : {}
+  let data = {}
+  try { data = text ? JSON.parse(text) : {} } catch { data = {} }
   if (!res.ok) {
     const msg = data.message || data.serviceErrorCode || text.slice(0, 300)
     throw new Error(`LinkedIn image post failed (${res.status}): ${msg}`)
@@ -285,7 +287,8 @@ export async function shareVideo(token, memberUrn, videoUrl, commentary) {
     }),
   })
   const text = await res.text()
-  const data = text ? JSON.parse(text).catch(() => ({})) : {}
+  let data = {}
+  try { data = text ? JSON.parse(text) : {} } catch { data = {} }
   if (!res.ok) {
     const msg = data.message || text.slice(0, 300)
     throw new Error(`LinkedIn video post failed (${res.status}): ${msg}`)
