@@ -66,6 +66,7 @@ export class CoverComposer {
       ctx.fillStyle = '#FFFFFF'
       ctx.textAlign = 'center'
       ctx.fillText('LIVE', W - 40 - liveW / 2, 38)
+    }
 
     // algorithm badge — 1-48, unique combo, covers are never identical
     const algo = brief.algorithm
@@ -75,7 +76,6 @@ export class CoverComposer {
       ctx.textAlign = 'left'
       ctx.fillText(`ALGO #${algo.number}/48 • ${algo.visual?.id || ''} • ${algo.tone?.id || ''}`, 40, 96)
       ctx.textAlign = 'center'
-    }
     }
 
     // 3. Story-specific layer (DYNAMIC)
