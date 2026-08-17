@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-17T09:50:43.310Z",
+  "updatedAt": "2026-08-17T10:37:44.794Z",
   "videos": [
+    {
+      "id": "Wcvc0vtiZyE",
+      "title": "Open Mike Eagle and Kenny Segal crafted a hip hop breakup masterpiece | NEWS-MONSTER",
+      "publishedAt": "2026-08-17T10:33:28+00:00",
+      "publishedLabel": "Aug 17, 10:33 AM",
+      "thumbnail": "https://i4.ytimg.com/vi/Wcvc0vtiZyE/hqdefault.jpg"
+    },
     {
       "id": "2ZgCekpHzOQ",
       "title": "McLaren McL 6GT Concept (2026) - NetCarShow.com | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T22:23:14+00:00",
       "publishedLabel": "Aug 16, 10:23 PM",
       "thumbnail": "https://i3.ytimg.com/vi/jJTwo9D6HG4/hqdefault.jpg"
-    },
-    {
-      "id": "gm7LqZ9cbhg",
-      "title": "Tesla en Suecia: no ha sido una derrota sindical, ha sido una lección | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T21:49:29+00:00",
-      "publishedLabel": "Aug 16, 09:49 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/gm7LqZ9cbhg/hqdefault.jpg"
     }
   ]
 }
