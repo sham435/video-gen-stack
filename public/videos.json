@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-17T04:16:53.229Z",
+  "updatedAt": "2026-08-17T04:52:45.745Z",
   "videos": [
+    {
+      "id": "V3_1I_sjBKY",
+      "title": "S&P Steady After Record Close | NEWS-MONSTER",
+      "publishedAt": "2026-08-17T04:43:42+00:00",
+      "publishedLabel": "Aug 17, 04:43 AM",
+      "thumbnail": "https://i3.ytimg.com/vi/V3_1I_sjBKY/hqdefault.jpg"
+    },
     {
       "id": "a_QvgpLC038",
       "title": "Open Mike Eagle and Kenny Segal crafted a hip hop breakup masterpiece | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T19:24:55+00:00",
       "publishedLabel": "Aug 16, 07:24 PM",
       "thumbnail": "https://i2.ytimg.com/vi/q4125mzaeMY/hqdefault.jpg"
-    },
-    {
-      "id": "11JpSzo66I8",
-      "title": "Opinion: No, Elon Musk Isn’t the Best CEO in the Magnificent 7 – It’s Jensen Huang, and He | NEWS-MO",
-      "publishedAt": "2026-08-16T19:01:11+00:00",
-      "publishedLabel": "Aug 16, 07:01 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/11JpSzo66I8/hqdefault.jpg"
     }
   ]
 }
