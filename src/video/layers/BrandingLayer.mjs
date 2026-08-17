@@ -17,7 +17,9 @@ export class BrandingLayer {
   // Top-left broadcast bug — rendered AFTER post-processing (Compositor) so
   // the vignette and category grade can never dim it. Solid near-black pill,
   // 900-weight brand wordmark, red accent — readable on any hero plate.
-  drawBug(ctx) {
+  // Skipped when scene.hideBranding is set (Shorts mode).
+  drawBug(ctx, scene) {
+    if (scene?.hideBranding) return
     const bug = BROADCAST_TEXT.bug
     const font = DesignSystem.getTypography('watermark', 'default').font
     const label = 'NEWS-MONSTER'
@@ -61,7 +63,8 @@ export class BrandingLayer {
     ctx.globalAlpha = 1
     // Platform badges load async — fire once, draw with whatever is ready.
     loadPlatformIcons().then(icons => { this._icons = icons }).catch(() => {})
-    FooterLayout.draw(ctx, W, H, {}, this._icons || {})
+    const hideBranding = scene?.hideBranding || false
+    FooterLayout.draw(ctx, W, H, { hideBranding }, this._icons || {})
     ctx.restore()
   }
 

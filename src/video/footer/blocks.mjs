@@ -37,7 +37,8 @@ export const LogoBlock = {
     return { w: size, h: size }
   },
 
-  draw(ctx, box, scale) {
+  draw(ctx, box, scale, data) {
+    if (data?.hideBranding) return
     const size = box.h
     ctx.save()
 
@@ -70,6 +71,7 @@ export const ChannelBlock = {
   },
 
   draw(ctx, box, scale, data, icons = {}) {
+    if (data?.hideBranding) return
     const avatarS = box.h
     const avatar = icons?.avatar || null
     const handle = data.showHandle !== false ? (data.handle || '') : ''

@@ -32,37 +32,39 @@ export class CoverComposer {
       this._gradientBg(ctx, accent)
     }
 
-    // 2. Brand layer (FIXED — always present)
-    // top bar
-    ctx.fillStyle = 'rgba(0,0,0,0.6)'
-    ctx.fillRect(0, 0, W, 120)
-    ctx.fillStyle = accent
-    ctx.fillRect(0, 0, W, 8)
-    ctx.font = '900 40px Anton, Impact, sans-serif'
-    ctx.fillStyle = '#FFFFFF'
-    ctx.textAlign = 'left'
-    ctx.textBaseline = 'middle'
-    ctx.fillText(ANCHOR_CONFIG.label, 40, 58)
+    // 2. Brand layer (FIXED — always present unless hideBranding for Shorts)
+    if (!brief.hideBranding) {
+      // top bar
+      ctx.fillStyle = 'rgba(0,0,0,0.6)'
+      ctx.fillRect(0, 0, W, 120)
+      ctx.fillStyle = accent
+      ctx.fillRect(0, 0, W, 8)
+      ctx.font = '900 40px Anton, Impact, sans-serif'
+      ctx.fillStyle = '#FFFFFF'
+      ctx.textAlign = 'left'
+      ctx.textBaseline = 'middle'
+      ctx.fillText(ANCHOR_CONFIG.label, 40, 58)
 
-    // LIVE badge
-    const liveW = 110, liveH = 44
-    ctx.font = '900 26px Inter, sans-serif'
-    ctx.fillStyle = '#E10600'
-    ctx.beginPath()
-    ctx.roundRect(W - 40 - liveW, 16, liveW, liveH, 6)
-    ctx.fill()
-    ctx.fillStyle = '#FFFFFF'
-    ctx.textAlign = 'center'
-    ctx.fillText('LIVE', W - 40 - liveW / 2, 38)
+      // LIVE badge
+      const liveW = 110, liveH = 44
+      ctx.font = '900 26px Inter, sans-serif'
+      ctx.fillStyle = '#E10600'
+      ctx.beginPath()
+      ctx.roundRect(W - 40 - liveW, 16, liveW, liveH, 6)
+      ctx.fill()
+      ctx.fillStyle = '#FFFFFF'
+      ctx.textAlign = 'center'
+      ctx.fillText('LIVE', W - 40 - liveW / 2, 38)
 
     // algorithm badge — 1-48, unique combo, covers are never identical
     const algo = brief.algorithm
-    if (algo) {
+    if (!brief.hideBranding && algo) {
       ctx.font = '600 20px Inter, sans-serif'
       ctx.fillStyle = 'rgba(255,255,255,0.6)'
       ctx.textAlign = 'left'
       ctx.fillText(`ALGO #${algo.number}/48 • ${algo.visual?.id || ''} • ${algo.tone?.id || ''}`, 40, 96)
       ctx.textAlign = 'center'
+    }
     }
 
     // 3. Story-specific layer (DYNAMIC)
@@ -126,17 +128,19 @@ export class CoverComposer {
     ctx.fillText(bottomText, W / 2, H * 0.68 + 36)
 
     // 4. Bottom brand strip (FIXED)
-    ctx.fillStyle = 'rgba(0,0,0,0.6)'
-    ctx.fillRect(0, H - 100, W, 100)
-    ctx.font = '400 36px Inter, sans-serif'
-    ctx.fillStyle = 'rgba(255,255,255,0.7)'
-    ctx.textAlign = 'left'
-    ctx.textBaseline = 'middle'
-    ctx.fillText(`Source: ${brief.source_label || 'NEWS-MONSTER'}`, 40, H - 50)
-    ctx.textAlign = 'right'
-    ctx.fillStyle = accent
-    ctx.font = '700 36px Inter, sans-serif'
-    ctx.fillText(`${(brief.mood || 'BREAKING').toUpperCase()} • ALGO ${algo?.number || 1}/48`, W - 40, H - 50)
+    if (!brief.hideBranding) {
+      ctx.fillStyle = 'rgba(0,0,0,0.6)'
+      ctx.fillRect(0, H - 100, W, 100)
+      ctx.font = '400 36px Inter, sans-serif'
+      ctx.fillStyle = 'rgba(255,255,255,0.7)'
+      ctx.textAlign = 'left'
+      ctx.textBaseline = 'middle'
+      ctx.fillText(`Source: ${brief.source_label || 'NEWS-MONSTER'}`, 40, H - 50)
+      ctx.textAlign = 'right'
+      ctx.fillStyle = accent
+      ctx.font = '700 36px Inter, sans-serif'
+      ctx.fillText(`${(brief.mood || 'BREAKING').toUpperCase()} • ALGO ${algo?.number || 1}/48`, W - 40, H - 50)
+    }
 
     fs.mkdirSync(path.dirname(outPath), { recursive: true })
     fs.writeFileSync(outPath, canvas.toBuffer('image/png'))
@@ -191,29 +195,31 @@ export class CoverComposer {
     }
 
     // 2. Brand bar (FIXED top)
-    ctx.fillStyle = 'rgba(0,0,0,0.6)'
-    ctx.fillRect(0, 0, TW, 84)
-    ctx.fillStyle = accent
-    ctx.fillRect(0, 0, TW, 6)
-    ctx.font = '900 30px Anton, Impact, sans-serif'
-    ctx.fillStyle = '#FFFFFF'
-    ctx.textAlign = 'left'
-    ctx.textBaseline = 'middle'
-    ctx.fillText(ANCHOR_CONFIG.label, 40, 42)
-    // LIVE badge
-    const liveW = 92, liveH = 38
-    ctx.font = '900 22px Inter, sans-serif'
-    ctx.fillStyle = '#E10600'
-    ctx.beginPath()
-    ctx.roundRect(TW - 40 - liveW, 23, liveW, liveH, 6)
-    ctx.fill()
-    ctx.fillStyle = '#FFFFFF'
-    ctx.textAlign = 'center'
-    ctx.fillText('LIVE', TW - 40 - liveW / 2, 42)
+    if (!brief.hideBranding) {
+      ctx.fillStyle = 'rgba(0,0,0,0.6)'
+      ctx.fillRect(0, 0, TW, 84)
+      ctx.fillStyle = accent
+      ctx.fillRect(0, 0, TW, 6)
+      ctx.font = '900 30px Anton, Impact, sans-serif'
+      ctx.fillStyle = '#FFFFFF'
+      ctx.textAlign = 'left'
+      ctx.textBaseline = 'middle'
+      ctx.fillText(ANCHOR_CONFIG.label, 40, 42)
+      // LIVE badge
+      const liveW = 92, liveH = 38
+      ctx.font = '900 22px Inter, sans-serif'
+      ctx.fillStyle = '#E10600'
+      ctx.beginPath()
+      ctx.roundRect(TW - 40 - liveW, 23, liveW, liveH, 6)
+      ctx.fill()
+      ctx.fillStyle = '#FFFFFF'
+      ctx.textAlign = 'center'
+      ctx.fillText('LIVE', TW - 40 - liveW / 2, 42)
+    }
 
     // algorithm badge (16:9 keeps it small — visible in desktop feed)
     const algo = brief.algorithm
-    if (algo) {
+    if (!brief.hideBranding && algo) {
       ctx.font = '600 16px Inter, sans-serif'
       ctx.fillStyle = 'rgba(255,255,255,0.6)'
       ctx.textAlign = 'left'
@@ -279,17 +285,19 @@ export class CoverComposer {
     ctx.fillText(bottomText, TW / 2, TH * 0.80 + 28)
 
     // 6. Bottom brand strip
-    ctx.fillStyle = 'rgba(0,0,0,0.6)'
-    ctx.fillRect(0, TH - 54, TW, 54)
-    ctx.font = '500 26px Inter, sans-serif'
-    ctx.fillStyle = 'rgba(255,255,255,0.75)'
-    ctx.textAlign = 'left'
-    ctx.textBaseline = 'middle'
-    ctx.fillText(`Source: ${brief.source_label || 'NEWS-MONSTER'}`, 28, TH - 27)
-    ctx.textAlign = 'right'
-    ctx.fillStyle = accent
-    ctx.font = '700 26px Inter, sans-serif'
-    ctx.fillText((brief.mood || 'BREAKING').toUpperCase(), TW - 28, TH - 27)
+    if (!brief.hideBranding) {
+      ctx.fillStyle = 'rgba(0,0,0,0.6)'
+      ctx.fillRect(0, TH - 54, TW, 54)
+      ctx.font = '500 26px Inter, sans-serif'
+      ctx.fillStyle = 'rgba(255,255,255,0.75)'
+      ctx.textAlign = 'left'
+      ctx.textBaseline = 'middle'
+      ctx.fillText(`Source: ${brief.source_label || 'NEWS-MONSTER'}`, 28, TH - 27)
+      ctx.textAlign = 'right'
+      ctx.fillStyle = accent
+      ctx.font = '700 26px Inter, sans-serif'
+      ctx.fillText((brief.mood || 'BREAKING').toUpperCase(), TW - 28, TH - 27)
+    }
 
     fs.mkdirSync(path.dirname(outPath), { recursive: true })
     fs.writeFileSync(outPath, canvas.toBuffer('image/png'))

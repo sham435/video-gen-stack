@@ -289,7 +289,7 @@ export class InformationLayer {
       ctx.restore()
     }
 
-    if (bgP > 0.2) {
+    if (bgP > 0.2 && !scene.hideBranding) {
       ctx.save()
       ctx.globalAlpha = 0.12 * bgP
       const wmSize = 420
@@ -407,14 +407,17 @@ if (tagP > 0) {
 
       // Anchor badge sits below the tagline block and is clamped so the pill
       // clears the footer bar top — the tagline can never collide with it.
-      const footerTop = FooterLayout.barTopInFrame(ctx, W, H)
-      const anchor = close.anchor
-      const taglineBottom = blockTop + blockH
-      const badgeY = Math.min(
-        taglineBottom + anchor.gap,
-        footerTop - anchor.margin - anchor.badgeH
-      )
-      drawAnchorBadge(ctx, 'sham435', anchorP, { y: badgeY })
+      // Skipped when scene.hideBranding is set (Shorts mode).
+      if (!scene.hideBranding) {
+        const footerTop = FooterLayout.barTopInFrame(ctx, W, H)
+        const anchor = close.anchor
+        const taglineBottom = blockTop + blockH
+        const badgeY = Math.min(
+          taglineBottom + anchor.gap,
+          footerTop - anchor.margin - anchor.badgeH
+        )
+        drawAnchorBadge(ctx, 'sham435', anchorP, { y: badgeY })
+      }
     }
 
     ctx.restore()
