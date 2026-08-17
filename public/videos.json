@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-16T23:52:32.962Z",
+  "updatedAt": "2026-08-17T01:13:56.307Z",
   "videos": [
+    {
+      "id": "D1kj5Lj80Ds",
+      "title": "Open Mike Eagle and Kenny Segal crafted a hip hop breakup masterpiece | NEWS-MONSTER",
+      "publishedAt": "2026-08-17T01:09:25+00:00",
+      "publishedLabel": "Aug 17, 01:09 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/D1kj5Lj80Ds/hqdefault.jpg"
+    },
     {
       "id": "ACJBZxv04JA",
       "title": "Trump Family’s World Liberty Financial Gets Preliminary Approval to Launch a Bank - WSJ | NEWS-MONST",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T17:21:54+00:00",
       "publishedLabel": "Aug 16, 05:21 PM",
       "thumbnail": "https://i3.ytimg.com/vi/RAEoBrADdHA/hqdefault.jpg"
-    },
-    {
-      "id": "IbTxHHDb3mw",
-      "title": "S&P Steady After Record Close | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T16:55:58+00:00",
-      "publishedLabel": "Aug 16, 04:55 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/IbTxHHDb3mw/hqdefault.jpg"
     }
   ]
 }
