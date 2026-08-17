@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-17T21:28:08.796Z",
+  "updatedAt": "2026-08-17T22:04:07.898Z",
   "videos": [
+    {
+      "id": "wnueSLQJ_bk",
+      "title": "Мосбиржа в сентябре запустит вечные фьючерсы на Bitcoin и Ethereum | NEWS-MONSTER",
+      "publishedAt": "2026-08-17T21:54:49+00:00",
+      "publishedLabel": "Aug 17, 09:54 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/wnueSLQJ_bk/hqdefault.jpg"
+    },
+    {
+      "id": "ceXHcFVh24c",
+      "title": "Pyrex Collectors Are Always Looking For This Rare Mod Pattern - Tasting Table | NEWS-MONSTER",
+      "publishedAt": "2026-08-17T21:28:09+00:00",
+      "publishedLabel": "Aug 17, 09:28 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/ceXHcFVh24c/hqdefault.jpg"
+    },
     {
       "id": "OI6BvTNpLsw",
       "title": "iCloud Private Relay leaks can expose your real IP - Fox News | NEWS-MONSTER",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-17T14:29:18+00:00",
       "publishedLabel": "Aug 17, 02:29 PM",
       "thumbnail": "https://i2.ytimg.com/vi/q54PsSTWtgw/hqdefault.jpg"
-    },
-    {
-      "id": "rg8MSKN8pz0",
-      "title": "S&P Steady After Record Close | NEWS-MONSTER",
-      "publishedAt": "2026-08-17T13:41:07+00:00",
-      "publishedLabel": "Aug 17, 01:41 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/rg8MSKN8pz0/hqdefault.jpg"
-    },
-    {
-      "id": "mQF0GNqK04E",
-      "title": "Android Auto frustrates me so much that I understand why some car makers are ditching it | NEWS-MONS",
-      "publishedAt": "2026-08-17T12:42:29+00:00",
-      "publishedLabel": "Aug 17, 12:42 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/mQF0GNqK04E/hqdefault.jpg"
     }
   ]
 }
