@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-17T11:12:22.182Z",
+  "updatedAt": "2026-08-17T11:39:54.596Z",
   "videos": [
+    {
+      "id": "39-AGV9-OA4",
+      "title": "World’s biggest wealth fund buys $1.2 billion of SpaceX stock - thestreet.com | NEWS-MONSTER",
+      "publishedAt": "2026-08-17T11:35:49+00:00",
+      "publishedLabel": "Aug 17, 11:35 AM",
+      "thumbnail": "https://i4.ytimg.com/vi/39-AGV9-OA4/hqdefault.jpg"
+    },
     {
       "id": "UlKWqg2F2aU",
       "title": "S&P Steady After Record Close | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T23:22:17+00:00",
       "publishedLabel": "Aug 16, 11:22 PM",
       "thumbnail": "https://i1.ytimg.com/vi/hJxtaTef6_E/hqdefault.jpg"
-    },
-    {
-      "id": "nuDR9wH8qmg",
-      "title": "S&P Steady After Record Close | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T22:51:39+00:00",
-      "publishedLabel": "Aug 16, 10:51 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/nuDR9wH8qmg/hqdefault.jpg"
     }
   ]
 }
