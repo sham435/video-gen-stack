@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-17T08:03:53.820Z",
+  "updatedAt": "2026-08-17T08:48:22.821Z",
   "videos": [
+    {
+      "id": "G6_6AWZA8eg",
+      "title": "“Predicting” Zelda: Ocarina of Time’s release date using amiibo - Nintendo Everything | NEWS-MONSTER",
+      "publishedAt": "2026-08-17T08:44:12+00:00",
+      "publishedLabel": "Aug 17, 08:44 AM",
+      "thumbnail": "https://i4.ytimg.com/vi/G6_6AWZA8eg/hqdefault.jpg"
+    },
     {
       "id": "-oHUMYdZ1sI",
       "title": "S&P Steady After Record Close | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T21:21:52+00:00",
       "publishedLabel": "Aug 16, 09:21 PM",
       "thumbnail": "https://i2.ytimg.com/vi/YWVl4bEtmcM/hqdefault.jpg"
-    },
-    {
-      "id": "P9XlASQ3UAk",
-      "title": "Aston Martin's Latest Special Supercar Is A V12 Villain - Motor1.com | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T20:52:33+00:00",
-      "publishedLabel": "Aug 16, 08:52 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/P9XlASQ3UAk/hqdefault.jpg"
     }
   ]
 }
