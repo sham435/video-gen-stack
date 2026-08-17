@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-17T17:39:00.284Z",
+  "updatedAt": "2026-08-17T18:08:39.109Z",
   "videos": [
+    {
+      "id": "i0hNEzpVmQ8",
+      "title": "Anthropic CEO says AI backlash is ‘fundamentally a crisis of trust’ - TechCrunch | NEWS-MONSTER",
+      "publishedAt": "2026-08-17T18:00:14+00:00",
+      "publishedLabel": "Aug 17, 06:00 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/i0hNEzpVmQ8/hqdefault.jpg"
+    },
     {
       "id": "Myjk2Zf3cCI",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-17T08:44:12+00:00",
       "publishedLabel": "Aug 17, 08:44 AM",
       "thumbnail": "https://i4.ytimg.com/vi/G6_6AWZA8eg/hqdefault.jpg"
-    },
-    {
-      "id": "-oHUMYdZ1sI",
-      "title": "S&P Steady After Record Close | NEWS-MONSTER",
-      "publishedAt": "2026-08-17T07:55:33+00:00",
-      "publishedLabel": "Aug 17, 07:55 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/-oHUMYdZ1sI/hqdefault.jpg"
     }
   ]
 }
