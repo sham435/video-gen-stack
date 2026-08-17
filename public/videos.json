@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-17T10:37:44.794Z",
+  "updatedAt": "2026-08-17T11:12:22.182Z",
   "videos": [
+    {
+      "id": "UlKWqg2F2aU",
+      "title": "S&P Steady After Record Close | NEWS-MONSTER",
+      "publishedAt": "2026-08-17T11:04:00+00:00",
+      "publishedLabel": "Aug 17, 11:04 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/UlKWqg2F2aU/hqdefault.jpg"
+    },
     {
       "id": "Wcvc0vtiZyE",
       "title": "Open Mike Eagle and Kenny Segal crafted a hip hop breakup masterpiece | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T22:51:39+00:00",
       "publishedLabel": "Aug 16, 10:51 PM",
       "thumbnail": "https://i3.ytimg.com/vi/nuDR9wH8qmg/hqdefault.jpg"
-    },
-    {
-      "id": "jJTwo9D6HG4",
-      "title": "Zyzz Was the Original Looksmaxxer. His Rise and Untimely Death Feel More Relevant Than Eve | NEWS-MO",
-      "publishedAt": "2026-08-16T22:23:14+00:00",
-      "publishedLabel": "Aug 16, 10:23 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/jJTwo9D6HG4/hqdefault.jpg"
     }
   ]
 }
