@@ -2124,6 +2124,30 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
   </div>
 
+  <!-- LinkedIn Quick Post -->
+  <div class="card p-4 mt-4">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-bold">LINKEDIN — QUICK POST</div>
+      <div id="liStatus" class="text-xs text-gray-500">checking...</div>
+    </div>
+    <div id="liPanel">
+      <textarea id="liCommentary" rows="3" placeholder="Write your LinkedIn post..." class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm mb-2" style="color:#F8FAFC">🚨 24/7 BREAKING NEWS — DROPPING EVERY 30 MINUTES ⚡
+
+Stop scrolling through noise. Get bite-sized video news shorts covering Technology, Tesla, Wall Street, Apple, Space, and AI as it happens.
+
+🚀 48 fresh news drops a day
+🌐 Watch live: https://sham435.github.io/video-gen-stack/
+▶️ Subscribe: https://www.youtube.com/@sham435
+
+#TechNews #BreakingNews #AI #Tesla #Markets #NewsMonster</textarea>
+      <div class="flex items-center gap-2">
+        <input id="liLinkUrl" type="text" value="https://sham435.github.io/video-gen-stack/" placeholder="Link URL (optional)" class="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm" style="color:#F8FAFC">
+        <button onclick="postLinkedIn()" id="liPostBtn" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-bold">Post to LinkedIn</button>
+      </div>
+      <div id="liResult" class="mt-2 text-xs"></div>
+    </div>
+  </div>
+
   <!-- AI Chat Assistant -->
   <div class="card p-4 mt-4">
     <div class="flex items-center justify-between mb-3">
@@ -2156,6 +2180,46 @@ document.addEventListener('DOMContentLoaded', () => {
 <script>
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]))
 const api = async (path) => { try { const r = await fetch(path); return await r.json() } catch { return [] } }
+
+// ── LinkedIn Panel ──────────────────────────────────────────
+async function loadLinkedInStatus() {
+  const el = document.getElementById('liStatus')
+  try {
+    const r = await fetch('/api/linkedin/status').then(r => r.json())
+    el.innerHTML = r.configured
+      ? '<span class="text-green-400">● Connected</span> ' + esc(r.memberUrn || '')
+      : '<span class="text-red-400">● Not configured</span>'
+    if (!r.configured) document.getElementById('liPostBtn').disabled = true
+  } catch { el.innerHTML = '<span class="text-yellow-400">● Status unknown</span>' }
+}
+loadLinkedInStatus()
+
+async function postLinkedIn() {
+  const commentary = document.getElementById('liCommentary').value.trim()
+  const linkUrl = document.getElementById('liLinkUrl').value.trim()
+  const result = document.getElementById('liResult')
+  const btn = document.getElementById('liPostBtn')
+  if (!commentary) { result.innerHTML = '<span class="text-red-400">Enter a post message</span>'; return }
+  btn.disabled = true; btn.textContent = 'Posting...'
+  try {
+    const r = await fetch('/api/linkedin/post', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ commentary, linkUrl: linkUrl || null })
+    }).then(r => r.json())
+    if (r.ok) {
+      result.innerHTML = '<span class="text-green-400">✅ Posted!</span> ' +
+        (r.url ? '<a href="' + esc(r.url) + '" target="_blank" class="text-blue-400 underline">View on LinkedIn →</a>' : '')
+    } else {
+      result.innerHTML = '<span class="text-red-400">❌ ' + esc(r.error || 'Failed') + '</span>'
+    }
+  } catch (e) {
+    result.innerHTML = '<span class="text-red-400">❌ ' + esc(e.message) + '</span>'
+  }
+  btn.disabled = false; btn.textContent = 'Post to LinkedIn'
+  setTimeout(() => { result.innerHTML = '' }, 8000)
+}
+
 
 async function load(){
   // System Status
@@ -3422,9 +3486,11 @@ app.get('/engineering', (req, res) => res.type('html').send(ENGINE_HTML))
 const { default: opencodeRoutes } = await import('./routes/opencode.mjs')
 const { default: repoToolsRoutes } = await import('./routes/repo-tools.mjs')
 const { default: topAlgosRoutes } = await import('./routes/top-algos.mjs')
+const { default: linkedinRoutes } = await import('./routes/linkedin.mjs')
 app.use(opencodeRoutes)
 app.use(repoToolsRoutes)
 app.use(topAlgosRoutes)
+app.use(linkedinRoutes)
 
 export default app
 
