@@ -24,7 +24,7 @@ env:
 
 concurrency:
   group: publish-news
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -156,7 +156,11 @@ jobs:
               fi
               sleep 20
             done
-            echo "Push failed after 3 attempts"
+            # Safety: force push the freshly generated feed if retries exhausted
+            echo "All retries failed — force pushing with lease"
+            git push origin main --force-with-lease 2>/tmp/push.err && { echo "Force pushed"; exit 0; }
+            cat /tmp/push.err
+            echo "Push failed after 3 attempts + force"
             exit 1
           fi
 
