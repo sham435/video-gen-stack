@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-18T20:03:13.491Z",
+  "updatedAt": "2026-08-18T20:33:37.665Z",
   "videos": [
+    {
+      "id": "-AWkpS8nAEE",
+      "title": "Apple’s new macOS update reportedly contains a video of AirPods with a camera | NEWS-MONSTER",
+      "publishedAt": "2026-08-18T20:25:03+00:00",
+      "publishedLabel": "Aug 18, 08:25 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/-AWkpS8nAEE/hqdefault.jpg"
+    },
     {
       "id": "3jyl6kQacbU",
       "title": "Google Wallet's fancy new colorful UI is finally rolling out | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T20:23:34+00:00",
       "publishedLabel": "Aug 16, 08:23 PM",
       "thumbnail": "https://i2.ytimg.com/vi/QYq6aBQhP-A/hqdefault.jpg"
-    },
-    {
-      "id": "11JpSzo66I8",
-      "title": "Opinion: No, Elon Musk Isn’t the Best CEO in the Magnificent 7 – It’s Jensen Huang, and He | NEWS-MO",
-      "publishedAt": "2026-08-16T19:01:11+00:00",
-      "publishedLabel": "Aug 16, 07:01 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/11JpSzo66I8/hqdefault.jpg"
     }
   ]
 }
