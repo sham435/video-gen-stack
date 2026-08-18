@@ -1,13 +1,27 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-18T18:04:56.636Z",
+  "updatedAt": "2026-08-18T18:53:28.875Z",
   "videos": [
+    {
+      "id": "mv_E-cdwbzE",
+      "title": "Apple’s new macOS update reportedly contains a video of AirPods with a camera | NEWS-MONSTER",
+      "publishedAt": "2026-08-18T18:44:49+00:00",
+      "publishedLabel": "Aug 18, 06:44 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/mv_E-cdwbzE/hqdefault.jpg"
+    },
     {
       "id": "i8AkPUJZ2AE",
       "title": "Meta 'hid the truth' over child safety, court hears, as social media trial begins | NEWS-MONSTER",
       "publishedAt": "2026-08-18T18:01:14+00:00",
       "publishedLabel": "Aug 18, 06:01 PM",
       "thumbnail": "https://i2.ytimg.com/vi/i8AkPUJZ2AE/hqdefault.jpg"
+    },
+    {
+      "id": "uB-tuu5T5SI",
+      "title": "The Fiscal Threat",
+      "publishedAt": "2026-08-18T17:38:42+00:00",
+      "publishedLabel": "Aug 18, 05:38 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/uB-tuu5T5SI/hqdefault.jpg"
     },
     {
       "id": "cR27v99_Q70",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-17T18:40:29+00:00",
       "publishedLabel": "Aug 17, 06:40 PM",
       "thumbnail": "https://i4.ytimg.com/vi/wDz15jTQJqA/hqdefault.jpg"
-    },
-    {
-      "id": "i0hNEzpVmQ8",
-      "title": "Anthropic CEO says AI backlash is ‘fundamentally a crisis of trust’ - TechCrunch | NEWS-MONSTER",
-      "publishedAt": "2026-08-17T18:00:14+00:00",
-      "publishedLabel": "Aug 17, 06:00 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/i0hNEzpVmQ8/hqdefault.jpg"
-    },
-    {
-      "id": "NrzzMwmPv08",
-      "title": "Open Mike Eagle and Kenny Segal crafted a hip hop breakup masterpiece | NEWS-MONSTER",
-      "publishedAt": "2026-08-17T16:27:56+00:00",
-      "publishedLabel": "Aug 17, 04:27 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/NrzzMwmPv08/hqdefault.jpg"
     }
   ]
 }
