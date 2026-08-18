@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-18T15:17:44.185Z",
+  "updatedAt": "2026-08-18T16:11:04.781Z",
   "videos": [
+    {
+      "id": "bknnkN1EvgQ",
+      "title": "iPhone 18 Pro Max Rumored to Get Exclusive Camera Upgrade | NEWS-MONSTER",
+      "publishedAt": "2026-08-18T16:04:07+00:00",
+      "publishedLabel": "Aug 18, 04:04 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/bknnkN1EvgQ/hqdefault.jpg"
+    },
     {
       "id": "2qvMdRFJH9s",
       "title": "Exclusive: You Can Finally Buy a Fairphone—a Sustainable, Repairable Smartphone—in the US | NEWS-MON",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-17T18:40:29+00:00",
       "publishedLabel": "Aug 17, 06:40 PM",
       "thumbnail": "https://i4.ytimg.com/vi/wDz15jTQJqA/hqdefault.jpg"
-    },
-    {
-      "id": "i0hNEzpVmQ8",
-      "title": "Anthropic CEO says AI backlash is ‘fundamentally a crisis of trust’ - TechCrunch | NEWS-MONSTER",
-      "publishedAt": "2026-08-17T18:00:14+00:00",
-      "publishedLabel": "Aug 17, 06:00 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/i0hNEzpVmQ8/hqdefault.jpg"
     }
   ]
 }
