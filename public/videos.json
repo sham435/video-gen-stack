@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-18T21:57:07.307Z",
+  "updatedAt": "2026-08-18T22:28:48.013Z",
   "videos": [
+    {
+      "id": "3F7aa8w63i4",
+      "title": "Why Apple’s camera-equipped AirPods may not be the ‘pervert pods’ consumers fear | NEWS-MONSTER",
+      "publishedAt": "2026-08-18T22:24:35+00:00",
+      "publishedLabel": "Aug 18, 10:24 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/3F7aa8w63i4/hqdefault.jpg"
+    },
     {
       "id": "Hu71BMJwr3o",
       "title": "Why Apple’s camera-equipped AirPods may not be the ‘pervert pods’ consumers fear | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T22:23:14+00:00",
       "publishedLabel": "Aug 16, 10:23 PM",
       "thumbnail": "https://i3.ytimg.com/vi/jJTwo9D6HG4/hqdefault.jpg"
-    },
-    {
-      "id": "gm7LqZ9cbhg",
-      "title": "Tesla en Suecia: no ha sido una derrota sindical, ha sido una lección | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T21:49:29+00:00",
-      "publishedLabel": "Aug 16, 09:49 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/gm7LqZ9cbhg/hqdefault.jpg"
     }
   ]
 }
