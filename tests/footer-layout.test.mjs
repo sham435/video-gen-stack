@@ -45,8 +45,8 @@ for (const fmt of FORMATS) {
       ['left', 'center', 'right'],
       'zone order: left | center | right'
     )
-    // Right zone is the widest: it must fit the FULL site URL + urlTagline +
-    // channel handle without ellipsis (left 25% | center 50% | right 25%).
+    // Right zone is the widest: it must fit the FULL site URL + channel
+    // handle without ellipsis (left 25% | center 50% | right 25%).
     assert.ok(zones[2].w >= zones[0].w * 2, 'right zone >= 2x left (full URL visibility)')
     assert.ok(zones[2].w >= zones[1].w, 'right zone is the largest (URL column)')
 
@@ -97,9 +97,9 @@ for (const fmt of FORMATS) {
 
     // 8. Site-URL text baseline aligns with the "AVAILABLE ON" label baseline
     //    when the URL stack fits inside the bar. With the channel row above
-    //    the urlTagline the stack can outgrow the aligned slot, in which case
-    //    the URL group clamps UP to stay inside the bar (never overflows).
-    //    The invariant that always holds: URL stays fully inside the bar.
+    //    the URL the stack can outgrow the aligned slot, in which case the URL
+    //    clamps UP to stay inside the bar (never overflows). The invariant
+    //    that always holds: URL stays fully inside the bar.
     const { scale } = layout
     const urlBaseline = url.y + Math.round(FOOTER.url.size * scale)
     assert.ok(url.y + url.h <= layout.barHeight + 1, `URL column inside bar (bottom ${Math.round(url.y + url.h)} ≤ bar ${layout.barHeight})`)
@@ -121,17 +121,13 @@ for (const fmt of FORMATS) {
     const urlFull = ctx.measureText('sham435.github.io/video-gen-stack').width
     assert.ok(urlFull <= zones[2].w + PAD, `full URL (${Math.round(urlFull)}px) fits right zone (${Math.round(zones[2].w)}px) — no ellipsis`)
     assert.ok(urlPx >= 20, `URL font ${urlPx}px readable`)
-    // urlTagline also fits without ellipsis.
-    ctx.font = `${FOOTER.urlTagline.weight} ${Math.round(FOOTER.urlTagline.size * scale)}px 'Montserrat ExtraBold', Inter, sans-serif`
-    const tagFull = ctx.measureText('Unfiltered Global Headlines').width
-    assert.ok(tagFull <= zones[2].w + PAD, `urlTagline (${Math.round(tagFull)}px) fits right zone (${Math.round(zones[2].w)}px)`)
 
-    // 10. Line gaps: the URL-to-tagline stack and the logo→platform stack
-    //     carry at least a 12px (scaled) vertical gap — no touching lines.
+    // 10. Line gaps: the logo→platform stack carries at least a 12px
+    //     (scaled) vertical gap — no touching lines.
     const lineGapPx = Math.round(FOOTER.lineGap * scale)
     assert.ok(lineGapPx >= 12, `line gap ${lineGapPx}px must be ≥ 12px`)
-    assert.ok(url.h - Math.round(FOOTER.url.size * scale) >= Math.round(FOOTER.urlTagline.size * scale) * 0.5,
-      'URL stack reserves room for a separate tagline line')
+    // The urlTagline line was removed — the URL column is a single line.
+    assert.ok(url.h === Math.round(FOOTER.url.size * scale), 'URL column is single-line (no urlTagline)')
   })
 }
 

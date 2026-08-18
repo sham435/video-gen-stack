@@ -43,8 +43,8 @@ export async function loadPlatformIcons() {
  *   ┌─────────────────────────────────────────────────────────┐
  *   │ [NM]                    [SUBSCRIBE]   (avatar)@sham435  │
  *   │   NEWS-MONSTER          sham435.github.io…              │
- *   │   Unfiltered            Unfiltered Global               │
- *   │   Breaking News         Headlines                       │
+ *   │   Unfiltered                                            │
+ *   │   Breaking News                                         │
  *   │   AVAILABLE ON                                          │
  *   │   Android  Apple                                        │
  *   └─────────────────────────────────────────────────────────┘
@@ -52,9 +52,8 @@ export async function loadPlatformIcons() {
  *   Left  (25%)  NM monogram, then NEWS-MONSTER + tagline +
  *                AVAILABLE ON badges
  *   Center(50%)  whitespace — broadcast layouts breathe
- *   Right (25%)  subscribe pill + channel avatar/@handle + URL +
- *                urlTagline, right-aligned, URL/tagline moving
- *                together
+ *   Right (25%)  subscribe pill + channel avatar/@handle + URL,
+ *                right-aligned
  *
  * The channel identity (avatar + @handle) lives in the RIGHT zone, not next
  * to the monogram: YouTube's shorts player draws its own channel bar at the
@@ -74,8 +73,6 @@ export class FooterLayout {
     brand: 'NEWS-MONSTER',
     // Primary brand message — deliberately shorter and more visible.
     tagline: 'Unfiltered Breaking News',
-    // Secondary footer message.
-    urlTagline: 'Unfiltered Global Headlines',
     // Display without protocol for cleaner broadcast branding.
     url: 'sham435.github.io/video-gen-stack',
     // Channel identity.
@@ -177,11 +174,10 @@ export class FooterLayout {
     // Row 3: AVAILABLE ON + platform badges.
     leftColumns.push({ key: 'platform', block: PlatformBlock, x: leftX, y: currentY, w: platform.w, h: platform.h })
 
-    // URL + tagline remain grouped together, right-aligned. The URL text
-    // baseline is aligned with the "AVAILABLE ON" label baseline (left zone)
-    // when the stack fits; when the channel row pushes the stack taller than
-    // the aligned slot, the whole URL group clamps up to stay inside the bar
-    // (safe-area contract — never overflow below the bar).
+    // URL right-aligned. The URL text baseline is aligned with the
+    // "AVAILABLE ON" label baseline (left zone) when the stack fits; when the
+    // channel row pushes the stack taller than the aligned slot, the URL
+    // clamps up to stay inside the bar (safe-area contract — never overflow).
     const rightTop = leftTop + (leftH - rightH) / 2
     const platformColumn = leftColumns.find((c) => c.key === 'platform')
     const availableBaseline = platformColumn
@@ -211,8 +207,8 @@ export class FooterLayout {
       { key: 'subscribe', block: SubscribeBlock, x: subscribeX - subscribe.w, y: rightTop, w: subscribe.w, h: subscribe.h },
       { key: 'channel', block: ChannelBlock, x: channelX, y: channelY, w: channel.w, h: channel.h },
       // URL column spans the full right zone (right-aligned to its right
-      // edge) so the URL + urlTagline group docks at the frame edge,
-      // never mid-screen. UrlBlock right-aligns within box.x .. box.x+box.w.
+      // edge) so the URL docks at the frame edge, never mid-screen.
+      // UrlBlock right-aligns within box.x .. box.x+box.w.
       { key: 'url', block: UrlBlock, x: rightX, y: urlY, w: zoneW.right, h: url.h },
     ]
 

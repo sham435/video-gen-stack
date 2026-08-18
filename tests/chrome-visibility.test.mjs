@@ -101,7 +101,7 @@ test('footer — actually visible in the composed frame (bright text after post-
   assert.ok(s.pct > 0.1, `URL area has visible text (${(s.pct * 100).toFixed(1)}%)`)
 })
 
-test('footer tagline — readable (not crushed by vignette)', async () => {
+test('footer — urlTagline removed (no second line under the URL)', async () => {
   const ctx = await loadIntoCanvas(await renderBrandCloseFrame(1.0))
   const footerTop = FooterLayout.barTopInFrame(ctx, W, H)
   const layout = FooterLayout.compute(ctx, W)
@@ -110,7 +110,7 @@ test('footer tagline — readable (not crushed by vignette)', async () => {
   const yRow = footerTop + Math.round(url.y) + Math.round((BROADCAST_TEXT.footer.url.size) * layout.scale) + Math.round(urlTagPx * 0.4)
   const x0 = Math.round(url.x), x1 = Math.round(url.x + url.w)
   const s = regionStats(ctx, x0, yRow, x1, yRow + 40)
-  assert.ok(s.maxB >= 150, `tagline max brightness ${s.maxB} ≥150`)
+  assert.ok(s.maxB < 150, `tagline row is empty after removal (max brightness ${s.maxB})`)
 })
 
 test('footer — allowed by RenderManifest (canvas owner, enabled by default)', () => {

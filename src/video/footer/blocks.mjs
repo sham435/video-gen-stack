@@ -265,26 +265,23 @@ export const SubscribeBlock = {
 
 export const label = () => 'AVAILABLE ON'
 
-// ── Right-aligned URL + tagline stack ──────────────────────────────────────
+// ── Right-aligned URL stack ────────────────────────────────────────────────
 // The URL always renders at its full token size when it fits; when the column
 // is too narrow it is ellipsized (measure -> fit -> ellipsis) rather than
 // shrunk below legibility. The protocol is always stripped — the footer shows
 // a clean hostname, never "https://". The channel handle lives in its own
-// right-zone row above the URL (ChannelBlock), not here.
+// right-zone row above the URL (ChannelBlock), not here. The old secondary
+// urlTagline line ("Unfiltered Global Headlines") was removed — single URL
+// line only.
 export const UrlBlock = {
   measure(ctx, scale, data, budget = Infinity) {
     const urlH = Math.round(F.url.size * scale)
-    const tag = data.urlTagline
     const urlW = Math.min(measureText(ctx, F.url, scale, stripProtocol(data.url)), budget)
-    const tagW = tag ? measureText(ctx, F.urlTagline, scale, tag) : 0
-    const w = Math.max(urlW, Math.min(tagW, budget))
-    const h = urlH + (tag ? Math.round(F.urlTagline.size * scale * F.urlLeading) : 0)
-    return { w, h }
+    return { w: urlW, h: urlH }
   },
 
   draw(ctx, box, scale, data) {
     const url = stripProtocol(data.url || '')
-    const tag = data.urlTagline || ''
     const maxW = Math.max(60, box.w)
 
     ctx.save()
@@ -310,16 +307,6 @@ export const UrlBlock = {
     ctx.textAlign = 'right'
     ctx.fillText(display, box.x + box.w, box.y + size)
     ctx.shadowBlur = 0
-
-    let lineY = box.y + size
-    if (tag) {
-      const tagH = Math.round(F.urlTagline.size * scale)
-      ctx.font = `${F.urlTagline.weight} ${tagH}px ${FONT_BRAND}`
-      ctx.fillStyle = F.muted
-      ctx.textAlign = 'right'
-      lineY += tagH * F.urlLeading
-      ctx.fillText(ellipsize(ctx, tag, maxW, F.urlTagline.weight, tagH), box.x + box.w, lineY)
-    }
     ctx.restore()
   },
 }
