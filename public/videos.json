@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-18T10:00:19.694Z",
+  "updatedAt": "2026-08-18T10:50:41.155Z",
   "videos": [
+    {
+      "id": "w3xi_N93hvI",
+      "title": "Trump Administration ‘Not in Favor’ of Apple Using Chinese RAM | NEWS-MONSTER",
+      "publishedAt": "2026-08-18T10:42:40+00:00",
+      "publishedLabel": "Aug 18, 10:42 AM",
+      "thumbnail": "https://i4.ytimg.com/vi/w3xi_N93hvI/hqdefault.jpg"
+    },
     {
       "id": "H_UvRs_hOMQ",
       "title": "Video: Digital Foundry Breaks Down Oblivion's \"Frustrating Performance\" On Switch 2 - Nint | NEWS-MO",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-17T18:40:29+00:00",
       "publishedLabel": "Aug 17, 06:40 PM",
       "thumbnail": "https://i4.ytimg.com/vi/wDz15jTQJqA/hqdefault.jpg"
-    },
-    {
-      "id": "i0hNEzpVmQ8",
-      "title": "Anthropic CEO says AI backlash is ‘fundamentally a crisis of trust’ - TechCrunch | NEWS-MONSTER",
-      "publishedAt": "2026-08-17T18:00:14+00:00",
-      "publishedLabel": "Aug 17, 06:00 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/i0hNEzpVmQ8/hqdefault.jpg"
     }
   ]
 }
