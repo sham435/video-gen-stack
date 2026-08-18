@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-18T16:11:04.781Z",
+  "updatedAt": "2026-08-18T16:57:29.896Z",
   "videos": [
+    {
+      "id": "7Uygw0rwrHM",
+      "title": "iPhone 18 Pro Max Rumored to Get Exclusive Camera Upgrade | NEWS-MONSTER",
+      "publishedAt": "2026-08-18T16:50:00+00:00",
+      "publishedLabel": "Aug 18, 04:50 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/7Uygw0rwrHM/hqdefault.jpg"
+    },
     {
       "id": "bknnkN1EvgQ",
       "title": "iPhone 18 Pro Max Rumored to Get Exclusive Camera Upgrade | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-17T19:30:18+00:00",
       "publishedLabel": "Aug 17, 07:30 PM",
       "thumbnail": "https://i1.ytimg.com/vi/toA52h9Eqbc/hqdefault.jpg"
-    },
-    {
-      "id": "wDz15jTQJqA",
-      "title": "Especulación de fusión entre Tesla y SpaceX alcanza 65% en mercados de predicción | NEWS-MONSTER",
-      "publishedAt": "2026-08-17T18:40:29+00:00",
-      "publishedLabel": "Aug 17, 06:40 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/wDz15jTQJqA/hqdefault.jpg"
     }
   ]
 }
