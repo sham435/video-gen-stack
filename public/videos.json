@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-18T21:01:51.758Z",
+  "updatedAt": "2026-08-18T21:33:14.995Z",
   "videos": [
+    {
+      "id": "2kDIvA6r248",
+      "title": "Apple's Camera AirPods May Launch as 'AirPods Pro,' Not 'AirPods Ultra' | NEWS-MONSTER",
+      "publishedAt": "2026-08-18T21:25:35+00:00",
+      "publishedLabel": "Aug 18, 09:25 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/2kDIvA6r248/hqdefault.jpg"
+    },
     {
       "id": "i7tb45sb9Sc",
       "title": "Meta 'hid the truth' over child safety, court hears, as social media trial begins | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T21:21:52+00:00",
       "publishedLabel": "Aug 16, 09:21 PM",
       "thumbnail": "https://i2.ytimg.com/vi/YWVl4bEtmcM/hqdefault.jpg"
-    },
-    {
-      "id": "P9XlASQ3UAk",
-      "title": "Aston Martin's Latest Special Supercar Is A V12 Villain - Motor1.com | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T20:52:33+00:00",
-      "publishedLabel": "Aug 16, 08:52 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/P9XlASQ3UAk/hqdefault.jpg"
     }
   ]
 }
