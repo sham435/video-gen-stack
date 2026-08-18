@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-18T13:52:46.603Z",
+  "updatedAt": "2026-08-18T14:40:06.646Z",
   "videos": [
+    {
+      "id": "cR27v99_Q70",
+      "title": "Home Depot reaffirms guidance amid 'frozen housing market conditions' | NEWS-MONSTER",
+      "publishedAt": "2026-08-18T14:35:30+00:00",
+      "publishedLabel": "Aug 18, 02:35 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/cR27v99_Q70/hqdefault.jpg"
+    },
     {
       "id": "asn8MKs716U",
       "title": "Fairphone’s latest repairable phone is going on sale in the US | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-17T15:55:01+00:00",
       "publishedLabel": "Aug 17, 03:55 PM",
       "thumbnail": "https://i2.ytimg.com/vi/5CbRfO9naQw/hqdefault.jpg"
-    },
-    {
-      "id": "WKpVPRdpJlo",
-      "title": "I planned to use Gmail forever, until one email app quietly replaced it for good - android | NEWS-MO",
-      "publishedAt": "2026-08-17T15:27:34+00:00",
-      "publishedLabel": "Aug 17, 03:27 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/WKpVPRdpJlo/hqdefault.jpg"
     }
   ]
 }
