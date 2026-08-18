@@ -154,6 +154,14 @@ export class NewsBroadcastEngine {
 
     fs.mkdirSync(outDir, { recursive: true })
     const framesDir = `${outDir}/frames`
+    // Wipe stale frames + intermediates before rendering. In CI the checkout
+    // restores any committed output/frames/*.png, and assembleVideo concats
+    // EVERY .png in the dir (lexicographic order) — leftover frames from a
+    // previous run would otherwise appear at the start/end of the video.
+    fs.rmSync(framesDir, { recursive: true, force: true })
+    for (const stale of ['list.txt', 'scene_list.txt', 'final.mp4']) {
+      fs.rmSync(`${outDir}/${stale}`, { force: true })
+    }
     fs.mkdirSync(framesDir, { recursive: true })
     if (!job) job = new ProductionJob(article)
 
