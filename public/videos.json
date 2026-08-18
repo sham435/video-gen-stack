@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-18T10:50:41.155Z",
+  "updatedAt": "2026-08-18T11:36:52.448Z",
   "videos": [
+    {
+      "id": "hn7UTQVcLHo",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-18T11:28:18+00:00",
+      "publishedLabel": "Aug 18, 11:28 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/hn7UTQVcLHo/hqdefault.jpg"
+    },
     {
       "id": "w3xi_N93hvI",
       "title": "Trump Administration ‘Not in Favor’ of Apple Using Chinese RAM | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-17T19:30:18+00:00",
       "publishedLabel": "Aug 17, 07:30 PM",
       "thumbnail": "https://i1.ytimg.com/vi/toA52h9Eqbc/hqdefault.jpg"
-    },
-    {
-      "id": "wDz15jTQJqA",
-      "title": "Especulación de fusión entre Tesla y SpaceX alcanza 65% en mercados de predicción | NEWS-MONSTER",
-      "publishedAt": "2026-08-17T18:40:29+00:00",
-      "publishedLabel": "Aug 17, 06:40 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/wDz15jTQJqA/hqdefault.jpg"
     }
   ]
 }
