@@ -1,7 +1,7 @@
 import { createCanvas, loadImage } from '@napi-rs/canvas'
 import fs from 'fs'
 import path from 'path'
-import { ANCHOR_CONFIG } from '../visual/BrandStyleResolver.mjs'
+import { ANCHOR_CONFIG, BrandStyleResolver } from '../visual/BrandStyleResolver.mjs'
 import { drawThumbnailOverlay } from './ThumbnailOverlay.mjs'
 
 const W = 1080, H = 1920
@@ -70,7 +70,7 @@ export class CoverComposer {
     }
 
     // algorithm badge — 1-48, unique combo, covers are never identical
-    const algo = brief.algorithm
+    const algo = brief.algorithm || new BrandStyleResolver().resolve(brief.headline || '', 'technology').algorithm
     if (!brief.hideBranding && algo) {
       ctx.font = '600 20px Inter, sans-serif'
       ctx.fillStyle = 'rgba(255,255,255,0.6)'
@@ -244,7 +244,7 @@ export class CoverComposer {
     }
 
     // algorithm badge (16:9 keeps it small — visible in desktop feed)
-    const algo = brief.algorithm
+    const algo = brief.algorithm || new BrandStyleResolver().resolve(brief.headline || '', 'technology').algorithm
     if (!brief.hideBranding && algo) {
       ctx.font = '600 16px Inter, sans-serif'
       ctx.fillStyle = 'rgba(255,255,255,0.6)'
