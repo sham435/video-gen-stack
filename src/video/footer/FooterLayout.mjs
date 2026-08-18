@@ -1,8 +1,8 @@
 import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
 import {
   LogoBlock,
-  ChannelBlock,
   BrandBlock,
+  TaglineBlock,
   PlatformBlock,
   UrlBlock,
   SubscribeBlock,
@@ -25,12 +25,6 @@ export async function loadPlatformIcons() {
       const p = `assets/logos/${name}.png`
       if (fs.existsSync(p)) iconCache[name] = await loadImage(p)
     }
-    // Channel avatar (@sham435) — served as JPEG by YouTube, next to NM logo.
-    for (const f of ['assets/logos/channel-avatar.jpg', 'assets/logos/channel-avatar.png']) {
-      if (fs.existsSync(f) && !iconCache.avatar) {
-        try { iconCache.avatar = await loadImage(fs.readFileSync(f)) } catch {}
-      }
-    }
   } catch {}
   iconCache.loaded = true
   return iconCache
@@ -41,27 +35,22 @@ export async function loadPlatformIcons() {
  *
  * Broadcast grid (fixed 3-column layout, 25% | 50% | 25%):
  *   ┌─────────────────────────────────────────────────────────┐
- *   │ [NM]                    [SUBSCRIBE]   (avatar)@sham435  │
- *   │   NEWS-MONSTER          sham435.github.io…              │
- *   │   Unfiltered                                            │
- *   │   Breaking News                                         │
- *   │   AVAILABLE ON                                          │
- *   │   Android  Apple                                        │
+ *   │ [NM] NEWS-MONSTER          [SUBSCRIBE]                  │
+ *   │      Unfiltered                                          │
+ *   │      Breaking News                                       │
+ *   │      AVAILABLE ON          sham435.github.io/…          │
+ *   │      Android  Apple                                     │
  *   └─────────────────────────────────────────────────────────┘
  *
- *   Left  (25%)  NM monogram, then NEWS-MONSTER + tagline +
- *                AVAILABLE ON badges
+ *   Left  (25%)  TOP ROW: NM monogram + NEWS-MONSTER word side by side,
+ *                then tagline, then AVAILABLE ON badges
  *   Center(50%)  whitespace — broadcast layouts breathe
- *   Right (25%)  subscribe pill + channel avatar/@handle + URL,
- *                right-aligned
+ *   Right (25%)  TOP ROW: subscribe pill (aligned with the wordmark row),
+ *                then the site URL on a lower line, right-aligned
  *
- * The channel identity (avatar + @handle) lives in the RIGHT zone, not next
- * to the monogram: YouTube's shorts player draws its own channel bar at the
- * bottom-left of the frame, which would overlap and hide it.
- *
- * The bar bottom-anchors to the frame and is sized by content. showLogo /
- * showHandle are render-data toggles so a view can selectively hide the logo
- * or channel handle without touching the layout engine.
+ * The bar bottom-anchors to the frame and is sized by content. showLogo is a
+ * render-data toggle so a view can selectively hide the logo without touching
+ * the layout engine.
  *
  * LinkedIn safe-area: the bar keeps SAFE_BOTTOM px of clear canvas below it so
  * platform UI never clips the bar's content. Consumers must compute the bar
@@ -75,11 +64,8 @@ export class FooterLayout {
     tagline: 'Unfiltered Breaking News',
     // Display without protocol for cleaner broadcast branding.
     url: 'sham435.github.io/video-gen-stack',
-    // Channel identity.
-    handle: '@sham435',
     // Visibility controls — per-render/view overridable.
     showLogo: true,
-    showHandle: true,
   }
 
   /**
@@ -119,28 +105,28 @@ export class FooterLayout {
     // ── Left zone stack ────────────────────────────────────────────────────
     let leftH = 0
 
-    // Row 1: NM monogram. The channel identity moved to the right zone —
-    // YouTube's shorts player draws its own channel bar over the bottom-left,
-    // so the footer avatar/handle must not live there.
+    // TOP ROW: NM monogram + NEWS-MONSTER wordmark side by side, vertically
+    // centered on the same line as the subscribe pill.
     const logo = D.showLogo ? LogoBlock.measure(ctx, scale) : null
-    const topRowH = logo ? logo.h : 0
+    const brand = BrandBlock.measure(ctx, scale, D)
+    const logoBrandGap = Math.round(14 * scale)
+    const topRowH = Math.max(logo ? logo.h : 0, brand.h)
     leftH += topRowH
 
-    // Brand remains visible even when the logo is hidden.
-    const brand = BrandBlock.measure(ctx, scale, D)
+    // Row 2: tagline, its own line below the wordmark.
+    const tagline = TaglineBlock.measure(ctx, scale, D)
     leftH += vGap
-    leftH += brand.h
+    leftH += tagline.h
 
-    // Platform badges (AVAILABLE ON + icons).
+    // Row 3: platform badges (AVAILABLE ON + icons).
     const platform = PlatformBlock.measure(ctx, scale)
     leftH += vGap
     leftH += platform.h
 
     // ── Right zone stack ───────────────────────────────────────────────────
     const subscribe = SubscribeBlock.measure(ctx, scale)
-    const channel = ChannelBlock.measure(ctx, scale, D)
     const url = UrlBlock.measure(ctx, scale, D, zoneW.right)
-    const rightH = subscribe.h + vGap + channel.h + vGap + url.h
+    const rightH = subscribe.h + vGap + url.h
 
     // Footer height is driven by whichever side needs more vertical space,
     // while preserving the configured minimum.
@@ -161,51 +147,42 @@ export class FooterLayout {
     const leftColumns = []
     let currentY = Math.round(leftTop)
 
-    // Row 1: NM monogram.
+    // TOP ROW: monogram + wordmark share the row (vertically centered).
     if (logo) {
-      leftColumns.push({ key: 'logo', block: LogoBlock, x: leftX, y: currentY, w: logo.w, h: logo.h })
+      const logoY = currentY + Math.round((topRowH - logo.h) / 2)
+      leftColumns.push({ key: 'logo', block: LogoBlock, x: leftX, y: logoY, w: logo.w, h: logo.h })
     }
+    const brandX = leftX + (logo ? logo.w + logoBrandGap : 0)
+    const brandY = currentY + Math.round((topRowH - brand.h) / 2)
+    leftColumns.push({ key: 'brand', block: BrandBlock, x: brandX, y: brandY, w: brand.w, h: brand.h })
     currentY += topRowH + vGap
 
-    // Row 2: brand + tagline.
-    leftColumns.push({ key: 'brand', block: BrandBlock, x: leftX, y: currentY, w: brand.w, h: brand.h })
-    currentY += brand.h + vGap
+    // Row 2: tagline under the wordmark.
+    leftColumns.push({ key: 'tagline', block: TaglineBlock, x: brandX, y: currentY, w: tagline.w, h: tagline.h })
+    currentY += tagline.h + vGap
 
     // Row 3: AVAILABLE ON + platform badges.
     leftColumns.push({ key: 'platform', block: PlatformBlock, x: leftX, y: currentY, w: platform.w, h: platform.h })
 
-    // URL right-aligned. The URL text baseline is aligned with the
-    // "AVAILABLE ON" label baseline (left zone) when the stack fits; when the
-    // channel row pushes the stack taller than the aligned slot, the URL
-    // clamps up to stay inside the bar (safe-area contract — never overflow).
-    const rightTop = leftTop + (leftH - rightH) / 2
-    const platformColumn = leftColumns.find((c) => c.key === 'platform')
-    const availableBaseline = platformColumn
-      ? platformColumn.y + Math.round(F.available.size * scale)
-      : rightTop + subscribe.h + vGap + channel.h + vGap
-    const urlBaseline = Math.round(F.url.size * scale)
-    let urlY = availableBaseline - urlBaseline
-    const minUrlY = rightTop + subscribe.h + vGap + channel.h + Math.round(2 * scale) // just below the channel row
-    if (urlY < minUrlY) urlY = minUrlY // keep below the channel row, never overlap
-    const urlBottomLimit = barHeight - verticalPadding
-    if (urlY + url.h > urlBottomLimit) {
-      urlY = Math.max(minUrlY, urlBottomLimit - url.h)
-    }
-
-    // Subscribe shifted 50px further right (proportional on smaller surfaces
-    // so the button never leaves the canvas).
+    // Subscribe pill sits on the TOP ROW — vertically centered with the
+    // monogram + wordmark line. Shifted slightly right (proportional on
+    // smaller surfaces so the button never leaves the canvas).
     const subscribeOffset = Math.round(Math.min(50, Math.max(0, W * 0.04)))
     const subscribeX = Math.min(W - Math.round(8 * scale), rightX + subscribeOffset)
+    const subscribeY = leftTop + Math.round((topRowH - subscribe.h) / 2)
 
-    // Channel identity (avatar + @handle) right-aligned under the pill. It
-    // lives in the right zone so YouTube's own channel bar (bottom-left
-    // overlay on shorts) can never cover it.
-    const channelX = rightX + zoneW.right - channel.w
-    const channelY = rightTop + subscribe.h + vGap
+    // URL on a lower line, right-aligned to the right zone edge. When the
+    // stack outgrows the bar the URL clamps UP to stay inside (safe-area
+    // contract — never overflow).
+    const urlBaseline = Math.round(F.url.size * scale)
+    let urlY = subscribeY + subscribe.h + vGap
+    const urlBottomLimit = barHeight - verticalPadding
+    if (urlY + url.h > urlBottomLimit) {
+      urlY = Math.max(subscribeY + subscribe.h + Math.round(2 * scale), urlBottomLimit - url.h)
+    }
 
     const rightColumns = [
-      { key: 'subscribe', block: SubscribeBlock, x: subscribeX - subscribe.w, y: rightTop, w: subscribe.w, h: subscribe.h },
-      { key: 'channel', block: ChannelBlock, x: channelX, y: channelY, w: channel.w, h: channel.h },
+      { key: 'subscribe', block: SubscribeBlock, x: subscribeX - subscribe.w, y: subscribeY, w: subscribe.w, h: subscribe.h },
       // URL column spans the full right zone (right-aligned to its right
       // edge) so the URL docks at the frame edge, never mid-screen.
       // UrlBlock right-aligns within box.x .. box.x+box.w.

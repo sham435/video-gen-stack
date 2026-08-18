@@ -64,53 +64,49 @@ for (const fmt of FORMATS) {
       )
     }
 
-    // 5. Left stack: NM monogram, then NEWS-MONSTER brand -> AVAILABLE ON
-    //    below (6-column footer: Logo | Brand+Tagline | AVAILABLE ON | URL |
-    //    Subscribe | Channel). The channel identity moved to the RIGHT zone
-    //    so YouTube's own shorts channel bar (bottom-left overlay) can never
-    //    cover it.
-    const [logo, brand, platform] = layout.left
+    // 5. Left stack: TOP ROW = NM monogram + NEWS-MONSTER wordmark side by
+    //    side (vertically centered), then tagline on its own line, then
+    //    AVAILABLE ON badges (Logo|Brand on one row | Tagline | AVAILABLE ON).
+    const [logo, brand, tagline, platform] = layout.left
     assert.equal(logo.key, 'logo')
     assert.equal(brand.key, 'brand')
+    assert.equal(tagline.key, 'tagline')
     assert.equal(platform.key, 'platform')
-    assert.ok(logo.h > 0 && brand.h > 0 && platform.h > 0)
-    assert.ok(brand.y + 0.5 >= logo.y + logo.h, 'logo -> brand overlap')
-    assert.ok(platform.y + 0.5 >= brand.y + brand.h, 'brand -> platform overlap')
+    assert.ok(logo.h > 0 && brand.h > 0 && tagline.h > 0 && platform.h > 0)
+    // Monogram + wordmark share the top row (vertically centered together).
+    const logoCenter = logo.y + logo.h / 2
+    const brandCenter = brand.y + brand.h / 2
+    assert.ok(Math.abs(brandCenter - logoCenter) <= 1, `logo + brand share top row (delta ${Math.abs(brandCenter - logoCenter).toFixed(2)})`)
+    assert.ok(brand.x + 0.5 >= logo.x + logo.w, 'brand wordmark right of the monogram')
+    // Tagline on its own line below the wordmark; badges below the tagline.
+    assert.ok(tagline.y + 0.5 >= Math.max(logo.y + logo.h, brand.y + brand.h), 'top row -> tagline overlap')
+    assert.ok(platform.y + 0.5 >= tagline.y + tagline.h, 'tagline -> platform overlap')
 
-    // 6. Right stack: pill on top, channel avatar/handle beneath it, then
-    //    URL+tagline, all inside the right zone.
-    const [pill, channel, url] = layout.right
+    // 6. Right stack: subscribe pill on the TOP ROW (aligned with the
+    //    wordmark line), then the URL on a lower line. No channel avatar/
+    //    handle — removed from the footer.
+    const [pill, url] = layout.right
     assert.equal(pill.key, 'subscribe')
-    assert.equal(channel.key, 'channel')
     assert.equal(url.key, 'url')
-    assert.ok(pill.h > 0 && channel.h > 0 && url.h > 0)
-    assert.ok(channel.y + 0.5 >= pill.y + pill.h, 'pill -> channel overlap')
-    assert.ok(url.y + 0.5 >= channel.y + channel.h, 'channel -> url overlap')
+    assert.ok(pill.h > 0 && url.h > 0)
+    assert.ok(url.y + 0.5 >= pill.y + pill.h, 'pill -> url overlap')
     assert.ok(url.w >= 60, `url column width ${url.w.toFixed(0)}`)
-    // Channel block right-aligns to the right zone edge (it must never sit in
-    // the bottom-left where the YouTube channel bar would hide it).
-    assert.ok(Math.abs(channel.x + channel.w - (zones[2].x + zones[2].w)) <= 1.5,
-      'channel block right-aligns to the right zone edge')
+    // Pill vertically centered with the top row (monogram + wordmark line).
+    const pillCenter = pill.y + pill.h / 2
+    assert.ok(Math.abs(pillCenter - logoCenter) <= 1, `pill shares top row center (delta ${Math.abs(pillCenter - logoCenter).toFixed(2)})`)
+    // URL right-aligns to the right zone edge.
+    assert.ok(Math.abs(url.x + url.w - (zones[2].x + zones[2].w)) <= 1.5,
+      'url block right-aligns to the right zone edge')
 
     // 7. Subscribe pill keeps its scaled 50px-height intent.
     assert.ok(pill.h > 0)
 
-    // 8. Site-URL text baseline aligns with the "AVAILABLE ON" label baseline
-    //    when the URL stack fits inside the bar. With the channel row above
-    //    the URL the stack can outgrow the aligned slot, in which case the URL
-    //    clamps UP to stay inside the bar (never overflows). The invariant
-    //    that always holds: URL stays fully inside the bar.
+    // 8. The URL always stays fully inside the bar (never overflows) and sits
+    //    below the subscribe pill on its lower line.
     const { scale } = layout
     const urlBaseline = url.y + Math.round(FOOTER.url.size * scale)
     assert.ok(url.y + url.h <= layout.barHeight + 1, `URL column inside bar (bottom ${Math.round(url.y + url.h)} ≤ bar ${layout.barHeight})`)
     assert.ok(urlBaseline >= url.y + FOOTER.url.size * 0.5, 'URL baseline sits within the URL column')
-    // If there is no handle line, alignment must be exact (as before).
-    const noHandle = FooterLayout.compute(ctx, fmt.W, { handle: null, showHandle: false })
-    const nhUrl = noHandle.right.find(c => c.key === 'url')
-    const nhPlatform = noHandle.left.find(c => c.key === 'platform')
-    const nhAvailBaseline = nhPlatform.y + Math.round(FOOTER.available.size * scale)
-    const nhUrlBaseline = nhUrl.y + Math.round(FOOTER.url.size * scale)
-    assert.equal(nhUrlBaseline, nhAvailBaseline, 'URL baseline matches AVAILABLE ON when no handle line')
 
     // 9. URL font size fits the FULL hostname in the right column at design
     //    width — the regression this suite guards: the URL used to ellipsize
@@ -137,7 +133,7 @@ test('footer draw — produces a non-empty frame', () => {
   const canvas = createCanvas(fmt.W, fmt.H)
   const ctx = canvas.getContext('2d')
   const layout = FooterLayout.draw(ctx, fmt.W, fmt.H)
-  assert.ok(layout.left.length === 3 && layout.right.length === 3, `left=${layout.left.length} right=${layout.right.length}`)
+  assert.ok(layout.left.length === 4 && layout.right.length === 2, `left=${layout.left.length} right=${layout.right.length}`)
   const barTop = FooterLayout.barTopInFrame(ctx, fmt.W, fmt.H)
   const data = ctx.getImageData(0, barTop, fmt.W, layout.barHeight).data
   let lit = 0

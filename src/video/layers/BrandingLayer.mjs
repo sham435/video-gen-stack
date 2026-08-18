@@ -54,8 +54,9 @@ export class BrandingLayer {
 
   // Footer — rendered by the shared FooterLayout engine so the in-canvas bar
   // and the standalone footer.png composite are always identical. Layout:
-  //   Left(25%): Logo + AVAILABLE ON + badges | Center(50%): whitespace |
-  //   Right(25%): YouTube Pill + URL/tagline (right-aligned group)
+  //   Left(25%): [NM] NEWS-MONSTER (top row) + tagline + AVAILABLE ON badges |
+  //   Center(50%): whitespace |
+  //   Right(25%): [SUBSCRIBE] (aligned with the wordmark) + URL below
   // Drawn every scene; it is chrome, not content, so it stays on-brand and
   // readable after compression.
   drawFooter(ctx, scene, progress) {

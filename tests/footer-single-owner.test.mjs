@@ -192,24 +192,17 @@ test('readability — footer text sizes readable (brand/URL ≥ legibility floor
   assert.ok(availablePx >= 22, `AVAILABLE ON ${availablePx}px readable`)
 })
 
-test('readability — URL baseline aligned with AVAILABLE ON; line gaps keep text apart', () => {
+test('readability — URL sits below the pill on its own line; line gaps keep text apart', () => {
   const ctx = makeCanvas()
   const layout = FooterLayout.compute(ctx, W)
   const F = BROADCAST_TEXT.footer
   const { scale } = layout
-  const platform = layout.left.find(c => c.key === 'platform')
+  const pill = layout.right.find(c => c.key === 'subscribe')
   const url = layout.right.find(c => c.key === 'url')
-  const urlBaseline = url.y + Math.round(F.url.size * scale)
-  // URL aligns exactly with AVAILABLE ON only when the stack fits (no handle).
-  // With the handle line the URL group clamps up; the hard invariant is that
-  // the URL column never leaves the bar.
+  // The URL lives on a lower line, below the subscribe pill — the hard
+  // invariant is that the URL column never leaves the bar.
   assert.ok(url.y + url.h <= layout.barHeight + 1, `URL inside bar (bottom ${Math.round(url.y + url.h)} ≤ bar ${layout.barHeight})`)
-  const noHandle = FooterLayout.compute(ctx, W, { handle: null, showHandle: false })
-  const nhUrl = noHandle.right.find(c => c.key === 'url')
-  const nhPlatform = noHandle.left.find(c => c.key === 'platform')
-  const nhAvail = nhPlatform.y + Math.round(F.available.size * noHandle.scale)
-  const nhUrlBaseline = nhUrl.y + Math.round(F.url.size * noHandle.scale)
-  assert.equal(nhUrlBaseline, nhAvail, 'URL baseline === AVAILABLE ON baseline when no handle')
+  assert.ok(url.y + 0.5 >= pill.y + pill.h, 'URL below the subscribe pill')
   // Vertical gap between stacked footer lines has a floor so glyphs never touch.
   const lineGapPx = Math.round(F.lineGap * scale)
   assert.ok(lineGapPx >= 12, `line gap ${lineGapPx}px`)

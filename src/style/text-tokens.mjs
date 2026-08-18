@@ -41,7 +41,8 @@ export const BROADCAST_TEXT = {
     tagline: { size: 22, weight: 600, gap: 9 },
     taglineBright: '#FFFFFF',
 
-    // Channel handle (@sham435) — right zone, below the urlTagline.
+    // Legacy handle token — the channel avatar/@handle row was removed from
+    // the footer (kept for token-shape compatibility, no consumer).
     handle: { size: 22, weight: 600 },
 
     // AVAILABLE ON + platform badges (left zone, below the logo)

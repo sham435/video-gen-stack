@@ -59,109 +59,53 @@ export const LogoBlock = {
   },
 }
 
-// Channel block — avatar circle + @handle, rendered in the RIGHT zone under
-// the subscribe pill. Uses the channel avatar image when loaded (JPEG or
-// PNG), otherwise falls back to the NM monogram on the avatar base. It lives
-// on the right because YouTube's shorts player draws its own channel bar at
-// the bottom-left of the frame, which would overlap and hide it.
-export const ChannelBlock = {
-  measure(ctx, scale, data) {
-    const avatarS = Math.round(F.logoSize * 0.8 * scale)
-    const handle = data.showHandle !== false ? (data.handle || '') : ''
-    const textW = handle ? measureText(ctx, F.handle, scale, handle) + Math.round(10 * scale) : 0
-    return { w: avatarS + (handle ? Math.round(12 * scale) : 0) + textW, h: avatarS }
-  },
-
-  draw(ctx, box, scale, data, icons = {}) {
-    if (data?.hideBranding) return
-    const avatarS = box.h
-    const avatar = icons?.avatar || null
-    const handle = data.showHandle !== false ? (data.handle || '') : ''
-    const gap = Math.round(12 * scale)
-    const cx = box.x + avatarS / 2
-    const cy = box.y + avatarS / 2
-    ctx.save()
-
-    if (avatar) {
-      ctx.save()
-      ctx.beginPath()
-      ctx.arc(cx, cy, avatarS / 2, 0, Math.PI * 2)
-      ctx.clip()
-      ctx.drawImage(avatar, box.x, box.y, avatarS, avatarS)
-      ctx.restore()
-      ctx.strokeStyle = 'rgba(255,255,255,0.35)'
-      ctx.lineWidth = 2
-      ctx.beginPath()
-      ctx.arc(cx, cy, avatarS / 2, 0, Math.PI * 2)
-      ctx.stroke()
-    } else {
-      // Fallback: NM branded circle so the handle is never bare.
-      ctx.shadowColor = 'rgba(0,0,0,0.9)'
-      ctx.shadowBlur = 6
-      ctx.fillStyle = F.accent
-      ctx.beginPath()
-      ctx.arc(cx, cy, avatarS / 2, 0, Math.PI * 2)
-      ctx.fill()
-      ctx.shadowBlur = 0
-      ctx.font = `900 ${Math.round(avatarS * 0.45)}px ${FONT_BRAND}`
-      ctx.fillStyle = '#FFFFFF'
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'middle'
-      ctx.fillText('NM', cx, cy + Math.round(avatarS * 0.08))
-    }
-
-    if (handle) {
-      const handleH = Math.round(F.handle.size * scale)
-      ctx.font = `${F.handle.weight} ${handleH}px ${FONT_BRAND}`
-      ctx.fillStyle = F.text
-      ctx.shadowColor = 'rgba(0,0,0,0.9)'
-      ctx.shadowBlur = 4
-      ctx.textAlign = 'left'
-      ctx.textBaseline = 'middle'
-      ctx.fillText(handle, box.x + avatarS + gap, cy)
-      ctx.shadowBlur = 0
-    }
-    ctx.restore()
-    return { x: box.x, y: box.y, w: box.w, h: avatarS }
-  },
-}
-
+// Brand word — "NEWS-MONSTER", drawn on the TOP row beside the NM monogram.
+// The tagline is its own row below (TaglineBlock), so the wordmark can sit
+// on the same horizontal line as the subscribe pill.
 export const BrandBlock = {
   measure(ctx, scale, data) {
     const brandH = Math.round(F.brand.size * scale)
-    const tag = data.tagline || ''
-    const brandW = measureText(ctx, F.brand, scale, data.brand)
-    const tagW = tag ? measureText(ctx, F.tagline, scale, tag) : 0
-    const w = Math.max(brandW, tagW)
-    const h = brandH + (tag ? Math.round(F.tagline.size * scale) + Math.round(F.tagline.gap * scale) : 0)
-    return { w, h }
+    const w = measureText(ctx, F.brand, scale, data.brand || 'NEWS-MONSTER')
+    return { w, h: brandH }
   },
 
   draw(ctx, box, scale, data) {
-    const brandH = Math.round(F.brand.size * scale)
-    const tag = data.tagline
+    if (data?.hideBranding) return
+    const brandH = box.h
     ctx.save()
     ctx.textBaseline = 'alphabetic'
     ctx.shadowColor = 'rgba(0,0,0,0.9)'
     ctx.shadowBlur = 4
-
-    // Brand word
-    const top = box.y + brandH
     ctx.font = `${F.brand.weight} ${brandH}px ${FONT_BRAND}`
     ctx.fillStyle = F.text
     ctx.textAlign = 'left'
-    ctx.fillText(data.brand || 'NEWS-MONSTER', box.x, top)
+    ctx.fillText(data.brand || 'NEWS-MONSTER', box.x, box.y + brandH)
+    ctx.restore()
+  },
+}
 
-    // Tagline — the primary brand message ("Unfiltered Breaking News").
-    // Rendered at full tagline weight/size in a bright fill so it reads as a
-    // distinct, visually-dominant line under the wordmark.
-    if (tag) {
-      const tagH = Math.round(F.tagline.size * scale)
-      ctx.font = `${F.tagline.weight} ${tagH}px ${FONT_BRAND}`
-      ctx.fillStyle = F.taglineBright || F.text
-      const x = box.x + (box.w - ctx.measureText(tag).width) / 2
-      ctx.fillText(tag, x, top + brandH * 1.25)
-    }
+// Tagline — "Unfiltered Breaking News", its own row directly below the
+// NEWS-MONSTER wordmark (left-aligned with it, bright fill).
+export const TaglineBlock = {
+  measure(ctx, scale, data) {
+    const tag = data.tagline || ''
+    if (!tag) return { w: 0, h: 0 }
+    const tagH = Math.round(F.tagline.size * scale)
+    return { w: measureText(ctx, F.tagline, scale, tag), h: tagH }
+  },
+
+  draw(ctx, box, scale, data) {
+    const tag = data.tagline
+    if (!tag || data?.hideBranding) return
+    const tagH = Math.round(F.tagline.size * scale)
+    ctx.save()
+    ctx.textBaseline = 'alphabetic'
+    ctx.shadowColor = 'rgba(0,0,0,0.9)'
+    ctx.shadowBlur = 4
+    ctx.font = `${F.tagline.weight} ${tagH}px ${FONT_BRAND}`
+    ctx.fillStyle = F.taglineBright || F.text
+    ctx.textAlign = 'left'
+    ctx.fillText(tag, box.x, box.y + tagH)
     ctx.restore()
   },
 }
@@ -269,10 +213,9 @@ export const label = () => 'AVAILABLE ON'
 // The URL always renders at its full token size when it fits; when the column
 // is too narrow it is ellipsized (measure -> fit -> ellipsis) rather than
 // shrunk below legibility. The protocol is always stripped — the footer shows
-// a clean hostname, never "https://". The channel handle lives in its own
-// right-zone row above the URL (ChannelBlock), not here. The old secondary
-// urlTagline line ("Unfiltered Global Headlines") was removed — single URL
-// line only.
+// a clean hostname, never "https://". The URL sits on its own lower line
+// below the subscribe pill in the right zone. The old secondary urlTagline
+// line ("Unfiltered Global Headlines") was removed — single URL line only.
 export const UrlBlock = {
   measure(ctx, scale, data, budget = Infinity) {
     const urlH = Math.round(F.url.size * scale)

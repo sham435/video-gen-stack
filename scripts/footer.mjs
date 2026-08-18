@@ -2,7 +2,7 @@
  * Footer Generator — permanent overlay for all videos.
  *
  * Style: premium broadcast bar rendered by the shared FooterLayout engine
- * (NM logo | NEWS-MONSTER + tagline | AVAILABLE ON + badges | URL | YouTube pill),
+ * ([NM] NEWS-MONSTER + tagline | AVAILABLE ON badges | [SUBSCRIBE] + URL),
  * identical to the in-canvas footer so overlays and short-form renders match.
  *
  * Usage:  node scripts/footer.mjs               # generates assets/footer.png
