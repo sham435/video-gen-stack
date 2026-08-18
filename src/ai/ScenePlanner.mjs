@@ -13,6 +13,9 @@ export class ScenePlanner {
 
   buildScene(sceneDef, index, article) {
     const emphasis = this._resolveEmphasis(sceneDef, article)
+    const narration = this.cleanNarration(sceneDef.narration)
+    const safeNarration = this.sanitizeText(narration)
+    const safeEmphasis = this.sanitizeText(emphasis)
     const scene = {
       id: sceneDef.id || index + 1,
       type: sceneDef.type || 'fact',
@@ -20,15 +23,15 @@ export class ScenePlanner {
       start: 0,
       end: 0,
       duration: this._clampDuration(sceneDef.duration),
-      narration: this.cleanNarration(sceneDef.narration),
-      text: this.cleanNarration(sceneDef.narration) || (article.title || '').slice(0, 60),
-      subheadline: this.cleanNarration(sceneDef.narration) || (article.title || '').slice(0, 60),
+      narration: safeNarration,
+      text: safeNarration || (article.title || '').slice(0, 60),
+      subheadline: safeNarration || (article.title || '').slice(0, 60),
       // Never fall back caption to caption_focus or narration words — the
       // manifest emits narration as its own caption layer; duplicating the
       // keyword here is what produced the "SECRET twice" render bug.
       caption: '',
-      caption_focus: emphasis,
-      captionFocus: emphasis.toUpperCase(),
+      caption_focus: safeEmphasis,
+      captionFocus: safeEmphasis.toUpperCase(),
       camera: {
         type: sceneDef.camera || 'push_in',
         speed: this.cameraSpeed(sceneDef.camera),
@@ -57,6 +60,31 @@ export class ScenePlanner {
       .replace(/\*\*/g, '')
       .replace(/[«»""]/g, '"')
       .trim()
+  }
+
+  // Dead phrasing the channel never wants on screen or in VO — matches the
+  // BAD_OVERLAYS blacklist used by the cover pipeline. The AI (StoryDirector)
+  // keeps inventing these, so the text is scrubbed at the single funnel every
+  // scene passes through. Replacements keep the text punchy and grammatical:
+  // "Actually see how X changed everything" -> "How X changed everything".
+  sanitizeText(text) {
+    if (!text) return ''
+    let out = String(text)
+    for (const [phrase, replacement] of [
+      ['ACTUALLY SEE', ''],
+      ['SEE HOW', ''],
+      ['SEE WHY', ''],
+      ['SEE WHAT', ''],
+      ['THIS IS', ''],
+      ['HERE IS', ''],
+      ['HERE\'S', ''],
+      ['LOOK AT', ''],
+      ['CHECK OUT', ''],
+      ['ACTUALLY', ''],
+    ]) {
+      out = out.replace(new RegExp(`\\b${phrase}\\b`, 'gi'), replacement)
+    }
+    return out.replace(/\s{2,}/g, ' ').replace(/^\s*(,|and|but|so)\s*/i, '').trim()
   }
 
   // Single duration clamp. A positive finite numeric value is clamped into

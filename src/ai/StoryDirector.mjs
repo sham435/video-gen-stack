@@ -77,6 +77,10 @@ Pick one (avoid "hidden/revealed/secret/shocking" phrasing — the channel uses 
 - "question": "What if everything you knew about X was wrong?"
 - "stat": "One number explains why X just changed everything"
 
+NEVER use the phrasing "Actually see", "See how", "See why", "See what",
+"This is", "Here is", "Look at", "Check out" in narration, captions, or
+emphasis keywords — those are dead patterns the channel has banned.
+
 Current algorithm: ${algo.id} (#${algo.number}/48)
 Anchor hook: "Nobody expected this move — ${article.title || 'this'}"
 
