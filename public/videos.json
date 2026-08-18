@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-18T08:38:40.457Z",
+  "updatedAt": "2026-08-18T09:38:24.969Z",
   "videos": [
+    {
+      "id": "H_UvRs_hOMQ",
+      "title": "Video: Digital Foundry Breaks Down Oblivion's \"Frustrating Performance\" On Switch 2 - Nint | NEWS-MO",
+      "publishedAt": "2026-08-18T09:34:37+00:00",
+      "publishedLabel": "Aug 18, 09:34 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/H_UvRs_hOMQ/hqdefault.jpg"
+    },
+    {
+      "id": "uPNR281R1nA",
+      "title": "Elden Ring Tarnished Edition: Release Date, Pre-Order And Platform - Forbes | NEWS-MONSTER",
+      "publishedAt": "2026-08-18T08:38:43+00:00",
+      "publishedLabel": "Aug 18, 08:38 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/uPNR281R1nA/hqdefault.jpg"
+    },
     {
       "id": "ooqUgVEcYzc",
       "title": "Trump Administration ‘Not in Favor’ of Apple Using Chinese RAM | NEWS-MONSTER",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-17T18:00:14+00:00",
       "publishedLabel": "Aug 17, 06:00 PM",
       "thumbnail": "https://i2.ytimg.com/vi/i0hNEzpVmQ8/hqdefault.jpg"
-    },
-    {
-      "id": "Myjk2Zf3cCI",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-17T17:30:00+00:00",
-      "publishedLabel": "Aug 17, 05:30 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/Myjk2Zf3cCI/hqdefault.jpg"
-    },
-    {
-      "id": "hi44cu9J25A",
-      "title": "Trump Administration ‘Not in Favor’ of Apple Using Chinese RAM | NEWS-MONSTER",
-      "publishedAt": "2026-08-17T17:00:56+00:00",
-      "publishedLabel": "Aug 17, 05:00 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/hi44cu9J25A/hqdefault.jpg"
     }
   ]
 }
