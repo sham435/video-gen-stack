@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-18T20:33:37.665Z",
+  "updatedAt": "2026-08-18T21:01:51.758Z",
   "videos": [
+    {
+      "id": "i7tb45sb9Sc",
+      "title": "Meta 'hid the truth' over child safety, court hears, as social media trial begins | NEWS-MONSTER",
+      "publishedAt": "2026-08-18T20:58:21+00:00",
+      "publishedLabel": "Aug 18, 08:58 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/i7tb45sb9Sc/hqdefault.jpg"
+    },
     {
       "id": "-AWkpS8nAEE",
       "title": "Apple’s new macOS update reportedly contains a video of AirPods with a camera | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T20:52:33+00:00",
       "publishedLabel": "Aug 16, 08:52 PM",
       "thumbnail": "https://i1.ytimg.com/vi/P9XlASQ3UAk/hqdefault.jpg"
-    },
-    {
-      "id": "QYq6aBQhP-A",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-16T20:23:34+00:00",
-      "publishedLabel": "Aug 16, 08:23 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/QYq6aBQhP-A/hqdefault.jpg"
     }
   ]
 }
