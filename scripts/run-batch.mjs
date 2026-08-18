@@ -69,8 +69,9 @@ async function publishOne(article, index) {
   const { finalPath } = await composeVideo([{ ...article, imageUrl: null }], outDir)
   console.log('Uploading to YouTube...')
   const { uploadShort } = await import(path.join(ROOT, 'apps', 'api', 'publishers', 'youtube.js'))
+  const { formatTitle } = await import(path.join(ROOT, 'src', 'publishing', 'TitleTemplates.mjs'))
   const buffer = fs.readFileSync(finalPath)
-  const title = `${article.title.slice(0, 90)} | NEWS-MONSTER`
+  const title = formatTitle(article)
   // Prefer the 16:9 thumbnail (1280x720) for the YouTube custom thumbnail
   const thumbPath = path.join(outDir, 'thumbnail.png')
   const coverPath = fs.existsSync(thumbPath) ? thumbPath : (fs.existsSync(path.join(outDir, 'cover.png')) ? path.join(outDir, 'cover.png') : null)

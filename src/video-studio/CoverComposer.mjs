@@ -2,6 +2,7 @@ import { createCanvas, loadImage } from '@napi-rs/canvas'
 import fs from 'fs'
 import path from 'path'
 import { ANCHOR_CONFIG } from '../visual/BrandStyleResolver.mjs'
+import { drawThumbnailOverlay } from './ThumbnailOverlay.mjs'
 
 const W = 1080, H = 1920
 
@@ -81,6 +82,19 @@ export class CoverComposer {
     // 3. Story-specific layer (DYNAMIC)
     ctx.textAlign = 'center'
 
+    // PILLAR MODE: 3-layer ThumbnailOverlay when _pillar is set
+    if (brief._pillar) {
+      drawThumbnailOverlay(ctx, {
+        pillar: brief._pillar,
+        title: brief.headline || '',
+        hook: brief._hook,
+        payoff: brief._payoff,
+        barLabel: brief._barLabel,
+        w: W,
+        h: H,
+      })
+    } else {
+    // LEGACY MODE: top overlay badge + headline + bottom badge
     // top overlay badge — anchor hook when algorithm present
     const topText = algo?.hook && algo.hook !== 'SHOCKING_NUMBER'
       ? 'NOBODY EXPECTED THIS MOVE'
@@ -137,6 +151,7 @@ export class CoverComposer {
     ctx.fill()
     ctx.fillStyle = '#FFFFFF'
     ctx.fillText(bottomText, W / 2, H * 0.68 + 36)
+    } // end legacy mode
 
     // 4. Bottom brand strip (FIXED)
     if (!brief.hideBranding) {
@@ -239,6 +254,19 @@ export class CoverComposer {
     }
 
     // 3. Top overlay badge (accent, glow)
+    // PILLAR MODE: 3-layer ThumbnailOverlay when _pillar is set
+    if (brief._pillar) {
+      drawThumbnailOverlay(ctx, {
+        pillar: brief._pillar,
+        title: brief.headline || '',
+        hook: brief._hook,
+        payoff: brief._payoff,
+        barLabel: brief._barLabel,
+        w: TW,
+        h: TH,
+      })
+    } else {
+    // LEGACY MODE
     const topText = algo?.hook && algo.hook !== 'SHOCKING_NUMBER'
       ? 'NOBODY EXPECTED THIS MOVE'
       : safeOverlay(brief.text_overlay?.top)
@@ -294,6 +322,7 @@ export class CoverComposer {
     ctx.fill()
     ctx.fillStyle = '#FFFFFF'
     ctx.fillText(bottomText, TW / 2, TH * 0.80 + 28)
+    } // end legacy mode
 
     // 6. Bottom brand strip
     if (!brief.hideBranding) {

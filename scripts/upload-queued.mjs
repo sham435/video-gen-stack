@@ -57,7 +57,8 @@ for (const index of indexes) {
     console.error(`[SKIP] index=${index} invalid render (${vres.errors.join(', ')}) — not uploading ${finalPath}`)
     continue
   }
-  const title = `${titleFor(index).slice(0, 90)} | NEWS-MONSTER`
+  const { formatTitle } = await import(path.join(ROOT, 'src', 'publishing', 'TitleTemplates.mjs'))
+  const title = formatTitle({ title: titleFor(index) })
   // Prefer the 16:9 thumbnail (1280x720) — that's what YouTube shows in
   // feed/suggestions; fall back to the portrait cover.
   const thumbPath = path.join(outDir, 'thumbnail.png')

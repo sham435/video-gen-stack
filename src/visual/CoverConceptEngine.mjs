@@ -11,6 +11,18 @@ const HOOK_TEXT = {
   SHOCKING_NUMBER: 'SHOCK NUMBER',
 }
 
+// Blacklist — never render on any video frame or cover.
+const BAD_OVERLAYS = new Set([
+  'ACTUALLY SEE', 'ACTUALLY', 'SEE HOW', 'SEE WHY', 'SEE WHAT',
+  'THIS IS', 'HERE IS', 'LOOK AT', 'CHECK OUT',
+])
+
+function sanitizeOverlay(text) {
+  const up = (text || '').toUpperCase().trim()
+  if (!up || BAD_OVERLAYS.has(up)) return null
+  return up
+}
+
 export class CoverConceptEngine {
   constructor(aiProvider = null) {
     this.ai = aiProvider
@@ -24,6 +36,8 @@ export class CoverConceptEngine {
           {
             role: 'system',
             content: `You are ${ANCHOR_CONFIG.label}, a visual anchor for a news video channel. Given a news headline, category, and summary, extract a cover concept as JSON.
+
+NEVER use these phrases as overlay text: "ACTUALLY SEE", "ACTUALLY", "SEE HOW", "SEE WHY", "SEE WHAT", "THIS IS", "HERE IS", "LOOK AT", "CHECK OUT". Use punchy 2-4 word badges instead (e.g. "ROBOTAXI LEAK", "RECORD HIGH", "BREAKING").
 
 Output ONLY JSON:
 {
@@ -49,7 +63,7 @@ Output ONLY JSON:
             mood: result.mood || fallback.mood,
             brandColor: result.brand_color || fallback.brandColor,
             headlineStyle: result.headline_style || 'breaking',
-            overlayText: (result.overlay_text || '').toUpperCase() || fallback.overlayText,
+            overlayText: sanitizeOverlay(result.overlay_text) || fallback.overlayText,
             algorithm: fallback.algorithm,
             source: 'ai',
           }

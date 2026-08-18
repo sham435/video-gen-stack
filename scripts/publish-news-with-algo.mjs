@@ -113,9 +113,10 @@ for (const dir of outputDirs) {
 
 if (!videoPath) {
   console.log('\n[DRY-RUN] No final.mp4 found — showing publish payload only')
+  const { formatTitle } = await import(path.join(ROOT, 'src', 'publishing', 'TitleTemplates.mjs'))
   console.log('\nPayload:')
   console.log(JSON.stringify({
-    title: `${lastAlgo.title.slice(0, 90)} | NEWS-MONSTER`,
+    title: formatTitle({ title: lastAlgo.title, category: lastAlgo.category }),
     description,
     algoNumber: lastAlgo.algoNumber,
     algoVisual: lastAlgo.visual,
@@ -133,7 +134,7 @@ if (dryRun) {
   console.log(`[DRY-RUN] Thumbnail: ${thumbnailPath || 'none'}`)
   console.log('\nPayload:')
   console.log(JSON.stringify({
-    title: `${lastAlgo.title.slice(0, 90)} | NEWS-MONSTER`,
+    title: formatTitle({ title: lastAlgo.title, category: lastAlgo.category }),
     description,
     algoNumber: lastAlgo.algoNumber,
     videoPath,
@@ -146,7 +147,7 @@ if (dryRun) {
 
 // ─── Real publish ────────────────────────────────────────────────────────────
 console.log(`\n[UPLOAD] Publishing: ${videoPath}`)
-console.log(`[UPLOAD] Title: ${lastAlgo.title.slice(0, 90)} | NEWS-MONSTER`)
+console.log(`[UPLOAD] Title: ${formatTitle({ title: lastAlgo.title, category: lastAlgo.category })}`)
 
 try {
   const { validateRenderOutput } = await import(path.join(ROOT, 'src', 'video', 'validateOutput.mjs'))
@@ -157,8 +158,9 @@ try {
   }
 
   const { uploadShort } = await import(path.join(ROOT, 'apps', 'api', 'publishers', 'youtube.js'))
+  const { formatTitle } = await import(path.join(ROOT, 'src', 'publishing', 'TitleTemplates.mjs'))
   const buffer = fs.readFileSync(videoPath)
-  const title = `${lastAlgo.title.slice(0, 90)} | NEWS-MONSTER`
+  const title = formatTitle({ title: lastAlgo.title, category: lastAlgo.category })
 
   const result = await uploadShort(
     `data:video/mp4;base64,${buffer.toString('base64')}`,

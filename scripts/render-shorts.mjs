@@ -58,7 +58,7 @@ export function renderShortsFrames(phrases, outDir = 'output/frames') {
 
 // CLI
 if (import.meta.url.endsWith('render-shorts.mjs')) {
-  const txt = process.argv[2] || 'ACTUALLY SEE'
+  const txt = process.argv[2] || 'BREAKING NEWS'
   const phrases = splitIntoPhrases(txt)
   renderShortsFrames(phrases, 'output/frames')
   console.log('Rendered phrases:', phrases)
