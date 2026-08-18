@@ -94,6 +94,7 @@ jobs:
       - name: Generate NEWS-MONSTER Broadcast
         env:
           NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}

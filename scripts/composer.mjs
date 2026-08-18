@@ -84,8 +84,9 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
     let articles
     let preset = null
 
-    // NewsData.io is the primary source (enforces a 3-hour fetch gap); NewsAPI
-    // remains the fallback when NewsData is unconfigured or returns nothing.
+    // NewsData.io is the primary source (enforces a 3-hour fetch gap); the
+    // RapidAPI Real-Time News Data provider is the second tier (100 req/day
+    // free), and NewsAPI remains the final fallback.
     if (!articles) {
       try {
         const newsDataSvc = await import('../src/news/NewsDataProvider.mjs')
@@ -93,6 +94,16 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           articles = await newsDataSvc.fetchTopHeadlines({ category })
         }
       } catch (e) { console.log('NewsData error:', e.message) }
+    }
+
+    if (!articles) {
+      try {
+        const rapidSvc = await import('../src/news/RapidNewsProvider.mjs')
+        if (rapidSvc.isConfigured()) {
+          articles = await rapidSvc.fetchTopHeadlines({ category })
+          if (articles?.length) console.log(`[NEWS] RapidAPI "${category}" returned ${articles.length} articles`)
+        }
+      } catch (e) { console.log('RapidNews error:', e.message) }
     }
 
     if (!articles && process.env.NEWSAPI_KEY) {
