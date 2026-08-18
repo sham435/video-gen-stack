@@ -12,6 +12,11 @@ concurrency:
   group: opencode-review-${{ github.event.number || github.event.inputs.pr_number }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
 jobs:
   analyze:
     runs-on: ubuntu-latest
