@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-18T11:36:52.448Z",
+  "updatedAt": "2026-08-18T12:04:23.478Z",
   "videos": [
+    {
+      "id": "y0k1iwekILs",
+      "title": "They were told to park outside. Then their cars burst into flames. - The Washington Post | NEWS-MONS",
+      "publishedAt": "2026-08-18T11:55:36+00:00",
+      "publishedLabel": "Aug 18, 11:55 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/y0k1iwekILs/hqdefault.jpg"
+    },
     {
       "id": "hn7UTQVcLHo",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-17T19:56:09+00:00",
       "publishedLabel": "Aug 17, 07:56 PM",
       "thumbnail": "https://i1.ytimg.com/vi/0dvJldwuoRk/hqdefault.jpg"
-    },
-    {
-      "id": "toA52h9Eqbc",
-      "title": "Open Mike Eagle and Kenny Segal crafted a hip hop breakup masterpiece | NEWS-MONSTER",
-      "publishedAt": "2026-08-17T19:30:18+00:00",
-      "publishedLabel": "Aug 17, 07:30 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/toA52h9Eqbc/hqdefault.jpg"
     }
   ]
 }
