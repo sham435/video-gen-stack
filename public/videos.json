@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-18T12:54:22.372Z",
+  "updatedAt": "2026-08-18T13:52:46.603Z",
   "videos": [
+    {
+      "id": "asn8MKs716U",
+      "title": "Fairphone’s latest repairable phone is going on sale in the US | NEWS-MONSTER",
+      "publishedAt": "2026-08-18T13:44:48+00:00",
+      "publishedLabel": "Aug 18, 01:44 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/asn8MKs716U/hqdefault.jpg"
+    },
     {
       "id": "hInSxhVQoxw",
       "title": "Experts Disagree On ECB | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-17T15:27:34+00:00",
       "publishedLabel": "Aug 17, 03:27 PM",
       "thumbnail": "https://i4.ytimg.com/vi/WKpVPRdpJlo/hqdefault.jpg"
-    },
-    {
-      "id": "9sxjmwIVMtE",
-      "title": "Maker of ice cream sold at grocery stores nationwide files for bankruptcy as it appeals $2 | NEWS-MO",
-      "publishedAt": "2026-08-17T14:58:39+00:00",
-      "publishedLabel": "Aug 17, 02:58 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/9sxjmwIVMtE/hqdefault.jpg"
     }
   ]
 }
