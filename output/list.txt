@@ -1,0 +1,7 @@
+file '/Users/sham4/vedio_genspark/output/frames/f00.png'
+duration 5
+file '/Users/sham4/vedio_genspark/output/frames/f01.png'
+duration 5
+file '/Users/sham4/vedio_genspark/output/frames/f02.png'
+duration 5
+file '/Users/sham4/vedio_genspark/output/frames/f02.png'
