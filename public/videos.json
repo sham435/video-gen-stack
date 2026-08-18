@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-18T21:33:14.995Z",
+  "updatedAt": "2026-08-18T21:57:07.307Z",
   "videos": [
+    {
+      "id": "Hu71BMJwr3o",
+      "title": "Why Apple’s camera-equipped AirPods may not be the ‘pervert pods’ consumers fear | NEWS-MONSTER",
+      "publishedAt": "2026-08-18T21:53:12+00:00",
+      "publishedLabel": "Aug 18, 09:53 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/Hu71BMJwr3o/hqdefault.jpg"
+    },
     {
       "id": "2kDIvA6r248",
       "title": "Apple's Camera AirPods May Launch as 'AirPods Pro,' Not 'AirPods Ultra' | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T21:49:29+00:00",
       "publishedLabel": "Aug 16, 09:49 PM",
       "thumbnail": "https://i4.ytimg.com/vi/gm7LqZ9cbhg/hqdefault.jpg"
-    },
-    {
-      "id": "YWVl4bEtmcM",
-      "title": "Super Mario 64 is now playable on YouTube - Dexerto | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T21:21:52+00:00",
-      "publishedLabel": "Aug 16, 09:21 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/YWVl4bEtmcM/hqdefault.jpg"
     }
   ]
 }
