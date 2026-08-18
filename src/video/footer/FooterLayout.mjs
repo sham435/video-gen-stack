@@ -41,19 +41,24 @@ export async function loadPlatformIcons() {
  *
  * Broadcast grid (fixed 3-column layout, 25% | 50% | 25%):
  *   ┌─────────────────────────────────────────────────────────┐
- *   │ [LOGO]  [@sham435]        [SUBSCRIBE]                   │
- *   │          NEWS-MONSTER     sham435.github.io…            │
- *   │          Unfiltered       Unfiltered Global             │
- *   │          Breaking News    Headlines                     │
- *   │          AVAILABLE ON                                   │
- *   │          Android  Apple                                 │
+ *   │ [NM]                    [SUBSCRIBE]   (avatar)@sham435  │
+ *   │   NEWS-MONSTER          sham435.github.io…              │
+ *   │   Unfiltered            Unfiltered Global               │
+ *   │   Breaking News         Headlines                       │
+ *   │   AVAILABLE ON                                          │
+ *   │   Android  Apple                                        │
  *   └─────────────────────────────────────────────────────────┘
  *
- *   Left  (25%)  NM monogram + channel avatar/handle on one row,
- *                then NEWS-MONSTER + tagline + AVAILABLE ON badges
+ *   Left  (25%)  NM monogram, then NEWS-MONSTER + tagline +
+ *                AVAILABLE ON badges
  *   Center(50%)  whitespace — broadcast layouts breathe
- *   Right (25%)  subscribe pill + URL + urlTagline,
- *                right-aligned, URL/tagline moving together
+ *   Right (25%)  subscribe pill + channel avatar/@handle + URL +
+ *                urlTagline, right-aligned, URL/tagline moving
+ *                together
+ *
+ * The channel identity (avatar + @handle) lives in the RIGHT zone, not next
+ * to the monogram: YouTube's shorts player draws its own channel bar at the
+ * bottom-left of the frame, which would overlap and hide it.
  *
  * The bar bottom-anchors to the frame and is sized by content. showLogo /
  * showHandle are render-data toggles so a view can selectively hide the logo
@@ -117,14 +122,11 @@ export class FooterLayout {
     // ── Left zone stack ────────────────────────────────────────────────────
     let leftH = 0
 
-    // Row 1: NM monogram + channel avatar/handle sit side by side, vertically
-    // centered together. The monogram is the anchor; the avatar renders at 80%
-    // of the monogram size so it reads as an identity mark beside the brand
-    // cube, and the @handle follows the avatar.
+    // Row 1: NM monogram. The channel identity moved to the right zone —
+    // YouTube's shorts player draws its own channel bar over the bottom-left,
+    // so the footer avatar/handle must not live there.
     const logo = D.showLogo ? LogoBlock.measure(ctx, scale) : null
-    const channel = ChannelBlock.measure(ctx, scale, D)
-    const rowGap = Math.round(12 * scale) // horizontal gap monogram ↔ avatar
-    const topRowH = Math.max(logo ? logo.h : 0, channel.h)
+    const topRowH = logo ? logo.h : 0
     leftH += topRowH
 
     // Brand remains visible even when the logo is hidden.
@@ -139,8 +141,9 @@ export class FooterLayout {
 
     // ── Right zone stack ───────────────────────────────────────────────────
     const subscribe = SubscribeBlock.measure(ctx, scale)
+    const channel = ChannelBlock.measure(ctx, scale, D)
     const url = UrlBlock.measure(ctx, scale, D, zoneW.right)
-    const rightH = subscribe.h + vGap + url.h
+    const rightH = subscribe.h + vGap + channel.h + vGap + url.h
 
     // Footer height is driven by whichever side needs more vertical space,
     // while preserving the configured minimum.
@@ -161,15 +164,10 @@ export class FooterLayout {
     const leftColumns = []
     let currentY = Math.round(leftTop)
 
-    // Row 1: NM monogram + channel avatar/handle — vertically centered on the
-    // same line, monogram anchoring the row.
+    // Row 1: NM monogram.
     if (logo) {
-      const ly = currentY + Math.round((topRowH - logo.h) / 2)
-      leftColumns.push({ key: 'logo', block: LogoBlock, x: leftX, y: ly, w: logo.w, h: logo.h })
+      leftColumns.push({ key: 'logo', block: LogoBlock, x: leftX, y: currentY, w: logo.w, h: logo.h })
     }
-    const channelX = leftX + (logo ? logo.w + rowGap : 0)
-    const channelY = currentY + Math.round((topRowH - channel.h) / 2)
-    leftColumns.push({ key: 'channel', block: ChannelBlock, x: channelX, y: channelY, w: channel.w, h: channel.h })
     currentY += topRowH + vGap
 
     // Row 2: brand + tagline.
@@ -181,18 +179,18 @@ export class FooterLayout {
 
     // URL + tagline remain grouped together, right-aligned. The URL text
     // baseline is aligned with the "AVAILABLE ON" label baseline (left zone)
-    // when the stack fits; when the channel handle pushes the stack taller
-    // than the aligned slot, the whole URL group clamps up to stay inside the
-    // bar (safe-area contract — never overflow below the bar).
+    // when the stack fits; when the channel row pushes the stack taller than
+    // the aligned slot, the whole URL group clamps up to stay inside the bar
+    // (safe-area contract — never overflow below the bar).
     const rightTop = leftTop + (leftH - rightH) / 2
     const platformColumn = leftColumns.find((c) => c.key === 'platform')
     const availableBaseline = platformColumn
       ? platformColumn.y + Math.round(F.available.size * scale)
-      : rightTop + subscribe.h + vGap
+      : rightTop + subscribe.h + vGap + channel.h + vGap
     const urlBaseline = Math.round(F.url.size * scale)
     let urlY = availableBaseline - urlBaseline
-    const minUrlY = rightTop + subscribe.h + Math.round(2 * scale) // just below the pill
-    if (urlY < minUrlY) urlY = minUrlY // keep below the pill, never overlap
+    const minUrlY = rightTop + subscribe.h + vGap + channel.h + Math.round(2 * scale) // just below the channel row
+    if (urlY < minUrlY) urlY = minUrlY // keep below the channel row, never overlap
     const urlBottomLimit = barHeight - verticalPadding
     if (urlY + url.h > urlBottomLimit) {
       urlY = Math.max(minUrlY, urlBottomLimit - url.h)
@@ -203,10 +201,17 @@ export class FooterLayout {
     const subscribeOffset = Math.round(Math.min(50, Math.max(0, W * 0.04)))
     const subscribeX = Math.min(W - Math.round(8 * scale), rightX + subscribeOffset)
 
+    // Channel identity (avatar + @handle) right-aligned under the pill. It
+    // lives in the right zone so YouTube's own channel bar (bottom-left
+    // overlay on shorts) can never cover it.
+    const channelX = rightX + zoneW.right - channel.w
+    const channelY = rightTop + subscribe.h + vGap
+
     const rightColumns = [
       { key: 'subscribe', block: SubscribeBlock, x: subscribeX - subscribe.w, y: rightTop, w: subscribe.w, h: subscribe.h },
+      { key: 'channel', block: ChannelBlock, x: channelX, y: channelY, w: channel.w, h: channel.h },
       // URL column spans the full right zone (right-aligned to its right
-      // edge) so the URL + urlTagline + handle group docks at the frame edge,
+      // edge) so the URL + urlTagline group docks at the frame edge,
       // never mid-screen. UrlBlock right-aligns within box.x .. box.x+box.w.
       { key: 'url', block: UrlBlock, x: rightX, y: urlY, w: zoneW.right, h: url.h },
     ]

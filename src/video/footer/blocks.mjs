@@ -59,9 +59,11 @@ export const LogoBlock = {
   },
 }
 
-// Channel block — avatar circle + @handle, rendered beside the NM monogram in
-// the left zone (top row). Uses the channel avatar image when loaded (JPEG or
-// PNG), otherwise falls back to the NM monogram on the avatar base.
+// Channel block — avatar circle + @handle, rendered in the RIGHT zone under
+// the subscribe pill. Uses the channel avatar image when loaded (JPEG or
+// PNG), otherwise falls back to the NM monogram on the avatar base. It lives
+// on the right because YouTube's shorts player draws its own channel bar at
+// the bottom-left of the frame, which would overlap and hide it.
 export const ChannelBlock = {
   measure(ctx, scale, data) {
     const avatarS = Math.round(F.logoSize * 0.8 * scale)
@@ -267,8 +269,8 @@ export const label = () => 'AVAILABLE ON'
 // The URL always renders at its full token size when it fits; when the column
 // is too narrow it is ellipsized (measure -> fit -> ellipsis) rather than
 // shrunk below legibility. The protocol is always stripped — the footer shows
-// a clean hostname, never "https://". The channel handle lives next to the NM
-// monogram (ChannelBlock), not here.
+// a clean hostname, never "https://". The channel handle lives in its own
+// right-zone row above the URL (ChannelBlock), not here.
 export const UrlBlock = {
   measure(ctx, scale, data, budget = Infinity) {
     const urlH = Math.round(F.url.size * scale)

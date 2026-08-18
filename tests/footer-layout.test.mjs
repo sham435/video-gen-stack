@@ -46,7 +46,7 @@ for (const fmt of FORMATS) {
       'zone order: left | center | right'
     )
     // Right zone is the widest: it must fit the FULL site URL + urlTagline +
-    // handle without ellipsis (left 20% | center 30% | right 50%).
+    // channel handle without ellipsis (left 25% | center 50% | right 25%).
     assert.ok(zones[2].w >= zones[0].w * 2, 'right zone >= 2x left (full URL visibility)')
     assert.ok(zones[2].w >= zones[1].w, 'right zone is the largest (URL column)')
 
@@ -64,35 +64,39 @@ for (const fmt of FORMATS) {
       )
     }
 
-    // 5. Left stack: NM monogram + channel avatar/handle share the top row
-    //    (vertically centered), then NEWS-MONSTER brand -> AVAILABLE ON below
-    //    (6-column footer: Logo+Channel | Brand+Tagline | AVAILABLE ON | URL |
-    //    Subscribe).
-    const [logo, channel, brand, platform] = layout.left
+    // 5. Left stack: NM monogram, then NEWS-MONSTER brand -> AVAILABLE ON
+    //    below (6-column footer: Logo | Brand+Tagline | AVAILABLE ON | URL |
+    //    Subscribe | Channel). The channel identity moved to the RIGHT zone
+    //    so YouTube's own shorts channel bar (bottom-left overlay) can never
+    //    cover it.
+    const [logo, brand, platform] = layout.left
     assert.equal(logo.key, 'logo')
-    assert.equal(channel.key, 'channel')
     assert.equal(brand.key, 'brand')
     assert.equal(platform.key, 'platform')
-    assert.ok(logo.h > 0 && channel.h > 0 && brand.h > 0 && platform.h > 0)
-    const topRowY = Math.min(logo.y, channel.y)
-    const topRowBottom = Math.max(logo.y + logo.h, channel.y + channel.h)
-    assert.ok(channel.x >= logo.x + logo.w - PAD, 'channel sits right of the monogram')
-    assert.ok(brand.y + PAD >= topRowBottom, 'top row -> brand overlap')
-    assert.ok(platform.y + PAD >= brand.y + brand.h, 'brand -> platform overlap')
+    assert.ok(logo.h > 0 && brand.h > 0 && platform.h > 0)
+    assert.ok(brand.y + 0.5 >= logo.y + logo.h, 'logo -> brand overlap')
+    assert.ok(platform.y + 0.5 >= brand.y + brand.h, 'brand -> platform overlap')
 
-    // 6. Right stack: pill on top, URL+tagline beneath, inside right zone.
-    const [pill, url] = layout.right
+    // 6. Right stack: pill on top, channel avatar/handle beneath it, then
+    //    URL+tagline, all inside the right zone.
+    const [pill, channel, url] = layout.right
     assert.equal(pill.key, 'subscribe')
+    assert.equal(channel.key, 'channel')
     assert.equal(url.key, 'url')
-    assert.ok(pill.h > 0 && url.h > 0)
-    assert.ok(url.y + PAD >= pill.y + pill.h, 'pill -> url overlap')
+    assert.ok(pill.h > 0 && channel.h > 0 && url.h > 0)
+    assert.ok(channel.y + 0.5 >= pill.y + pill.h, 'pill -> channel overlap')
+    assert.ok(url.y + 0.5 >= channel.y + channel.h, 'channel -> url overlap')
     assert.ok(url.w >= 60, `url column width ${url.w.toFixed(0)}`)
+    // Channel block right-aligns to the right zone edge (it must never sit in
+    // the bottom-left where the YouTube channel bar would hide it).
+    assert.ok(Math.abs(channel.x + channel.w - (zones[2].x + zones[2].w)) <= 1.5,
+      'channel block right-aligns to the right zone edge')
 
     // 7. Subscribe pill keeps its scaled 50px-height intent.
     assert.ok(pill.h > 0)
 
     // 8. Site-URL text baseline aligns with the "AVAILABLE ON" label baseline
-    //    when the URL stack fits inside the bar. With the channel handle below
+    //    when the URL stack fits inside the bar. With the channel row above
     //    the urlTagline the stack can outgrow the aligned slot, in which case
     //    the URL group clamps UP to stay inside the bar (never overflows).
     //    The invariant that always holds: URL stays fully inside the bar.
@@ -137,7 +141,7 @@ test('footer draw — produces a non-empty frame', () => {
   const canvas = createCanvas(fmt.W, fmt.H)
   const ctx = canvas.getContext('2d')
   const layout = FooterLayout.draw(ctx, fmt.W, fmt.H)
-  assert.ok(layout.left.length === 4 && layout.right.length === 2, `left=${layout.left.length} right=${layout.right.length}`)
+  assert.ok(layout.left.length === 3 && layout.right.length === 3, `left=${layout.left.length} right=${layout.right.length}`)
   const barTop = FooterLayout.barTopInFrame(ctx, fmt.W, fmt.H)
   const data = ctx.getImageData(0, barTop, fmt.W, layout.barHeight).data
   let lit = 0
