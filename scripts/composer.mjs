@@ -106,20 +106,39 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           techcrunch: ['headlines', { sources: 'techcrunch', pageSize: 3 }],
           business: ['headlines', { category: 'business', country: 'us', pageSize: 3 }],
         }
-        preset = CATEGORY_QUERY[category]
-        if (preset) {
-          if (preset[0] === 'search') {
-            articles = await newsSvc.searchNews(preset[1], preset[2])
-            if (!articles.length && preset[2].from) {
-              console.log(`[NEWS] ${category}: empty date-filtered result, retrying without date range`)
-              const { from, to, ...rest } = preset[2]
-              articles = await newsSvc.searchNews(preset[1], rest)
+        // Try the requested category first, then fall back through the reliable
+        // NewsAPI categories. Never abort on a single empty/rate-limited result.
+        const FALLBACK_ORDER = [category, 'business', 'technology', 'general', 'science', 'health', 'sports']
+        const tried = new Set()
+        for (const cat of FALLBACK_ORDER) {
+          if (tried.has(cat)) continue
+          tried.add(cat)
+          preset = CATEGORY_QUERY[cat]
+          try {
+            if (preset) {
+              if (preset[0] === 'search') {
+                articles = await newsSvc.searchNews(preset[1], preset[2])
+                if (!articles.length && preset[2].from) {
+                  console.log(`[NEWS] ${cat}: empty date-filtered result, retrying without date range`)
+                  const { from, to, ...rest } = preset[2]
+                  articles = await newsSvc.searchNews(preset[1], rest)
+                }
+              } else {
+                articles = await newsSvc.fetchTopHeadlines(preset[1])
+              }
+            } else {
+              articles = await newsSvc.fetchTopHeadlines({ category: cat, pageSize: 3 })
             }
-          } else {
-            articles = await newsSvc.fetchTopHeadlines(preset[1])
+            if (articles?.length) {
+              if (cat !== category) console.log(`[NEWS] category "${category}" empty — fell back to "${cat}" (${articles.length} articles)`)
+              break
+            }
+            console.log(`[NEWS] ${cat}: no articles, trying next fallback`)
+            articles = null
+          } catch (e) {
+            console.log(`[NEWS] ${cat} error: ${e.message}`)
+            articles = null
           }
-        } else {
-          articles = await newsSvc.fetchTopHeadlines({ category, pageSize: 3 })
         }
       } catch (e) { console.log('NewsAPI error:', e.message) }
     }
