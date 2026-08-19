@@ -64,28 +64,33 @@ for (const fmt of FORMATS) {
       )
     }
 
-    // 5. Left stack: TOP ROW = NM monogram + NEWS-MONSTER wordmark side by
-    //    side (vertically centered), then tagline on its own line, then
-    //    AVAILABLE ON badges (Logo|Brand on one row | Tagline | AVAILABLE ON).
-    const [logo, brand, tagline, platform] = layout.left
-    assert.equal(logo.key, 'logo')
-    assert.equal(brand.key, 'brand')
-    assert.equal(tagline.key, 'tagline')
-    assert.equal(platform.key, 'platform')
+    // 5. Right-aligned stack: TOP ROW = NM monogram + NEWS-MONSTER wordmark +
+    //    SUBSCRIBE pill on one line (pill rightmost, vertically centered),
+    //    then tagline, then URL, then AVAILABLE ON badges — every row
+    //    right-aligned to the frame's right edge. No left-zone content.
+    assert.deepEqual(layout.left, [], 'left zone is empty (all content right-aligned)')
+    const right = layout.right
+    const keys = right.map(c => c.key)
+    assert.ok(keys.includes('logo') && keys.includes('brand') && keys.includes('subscribe'), `top row has logo+brand+subscribe (${keys})`)
+    assert.ok(keys.includes('tagline') && keys.includes('url') && keys.includes('platform'), `stack has tagline+url+platform (${keys})`)
+    const logo = right.find(c => c.key === 'logo')
+    const brand = right.find(c => c.key === 'brand')
+    const tagline = right.find(c => c.key === 'tagline')
+    const platform = right.find(c => c.key === 'platform')
     assert.ok(logo.h > 0 && brand.h > 0 && tagline.h > 0 && platform.h > 0)
     // Monogram + wordmark share the top row (vertically centered together).
     const logoCenter = logo.y + logo.h / 2
     const brandCenter = brand.y + brand.h / 2
     assert.ok(Math.abs(brandCenter - logoCenter) <= 1, `logo + brand share top row (delta ${Math.abs(brandCenter - logoCenter).toFixed(2)})`)
-    assert.ok(brand.x + 0.5 >= logo.x + logo.w, 'brand wordmark right of the monogram')
-    // Tagline on its own line below the wordmark; badges below the tagline.
-    assert.ok(tagline.y + 0.5 >= Math.max(logo.y + logo.h, brand.y + brand.h), 'top row -> tagline overlap')
+    assert.ok(logo.x + logo.w + 0.5 <= brand.x, 'logo left of brand wordmark')
+    // Tagline on its own line below the top row; badges below the tagline.
+    const topRowBottom = Math.max(logo.y + logo.h, brand.y + brand.h)
+    assert.ok(tagline.y + 0.5 >= topRowBottom, 'top row -> tagline overlap')
     assert.ok(platform.y + 0.5 >= tagline.y + tagline.h, 'tagline -> platform overlap')
 
-    // 6. Right stack: subscribe pill on the TOP ROW (aligned with the
-    //    wordmark line), then the URL on a lower line. No channel avatar/
-    //    handle — removed from the footer.
-    const [pill, url] = layout.right
+    // 6. Subscribe pill on the TOP ROW (aligned with the wordmark line),
+    //    rightmost of the top-row group. URL + platform rows are below.
+    const [pill, url] = right.filter(c => ['subscribe', 'url'].includes(c.key))
     assert.equal(pill.key, 'subscribe')
     assert.equal(url.key, 'url')
     assert.ok(pill.h > 0 && url.h > 0)
@@ -94,9 +99,14 @@ for (const fmt of FORMATS) {
     // Pill vertically centered with the top row (monogram + wordmark line).
     const pillCenter = pill.y + pill.h / 2
     assert.ok(Math.abs(pillCenter - logoCenter) <= 1, `pill shares top row center (delta ${Math.abs(pillCenter - logoCenter).toFixed(2)})`)
-    // URL right-aligns to the right zone edge.
-    assert.ok(Math.abs(url.x + url.w - (zones[2].x + zones[2].w)) <= 1.5,
-      'url block right-aligns to the right zone edge')
+    // Pill is the rightmost element of the top row; every row right-aligns to
+    // the frame's right edge.
+    const rightEdge = fmt.W - Math.max(16, Math.round(FOOTER.padding.x * layout.scale))
+    assert.ok(Math.abs(pill.x + pill.w - rightEdge) <= 1.5, 'pill right-aligns to the frame edge')
+    assert.ok(brand.x + brand.w + 0.5 <= pill.x, 'brand wordmark left of the pill')
+    assert.ok(Math.abs(url.x + url.w - rightEdge) <= 1.5, 'url right-aligns to the frame edge')
+    assert.ok(Math.abs(tagline.x + tagline.w - rightEdge) <= 1.5, 'tagline right-aligns to the frame edge')
+    assert.ok(Math.abs(platform.x + platform.w - rightEdge) <= 1.5, 'platform row right-aligns to the frame edge')
 
     // 7. Subscribe pill keeps its scaled 50px-height intent.
     assert.ok(pill.h > 0)
@@ -133,7 +143,7 @@ test('footer draw — produces a non-empty frame', () => {
   const canvas = createCanvas(fmt.W, fmt.H)
   const ctx = canvas.getContext('2d')
   const layout = FooterLayout.draw(ctx, fmt.W, fmt.H)
-  assert.ok(layout.left.length === 4 && layout.right.length === 2, `left=${layout.left.length} right=${layout.right.length}`)
+  assert.ok(layout.left.length === 0 && layout.right.length === 6, `left=${layout.left.length} right=${layout.right.length}`)
   const barTop = FooterLayout.barTopInFrame(ctx, fmt.W, fmt.H)
   const data = ctx.getImageData(0, barTop, fmt.W, layout.barHeight).data
   let lit = 0

@@ -79,12 +79,12 @@ if (band) { band.end = H; bands.push(band) }
 const accentBands = bands.filter(b => b.end - b.start >= 2)
 
 // 2. Bright-pixel row histogram to look for repeated footer-brand text lines.
-function brightRows(y0, y1) {
+function brightRows(y0, y1, x0 = 0, x1 = W) {
   const dd = ctx.getImageData(0, y0, W, y1 - y0).data
   const out = []
   for (let r = 0; r < y1 - y0; r++) {
     let n = 0
-    for (let x = 0; x < W; x += 6) {
+    for (let x = x0; x < x1; x += 6) {
       const i = (r * W + x) * 4
       if (dd[i] > 190 && dd[i + 1] > 190 && dd[i + 2] > 190) n++
     }
@@ -93,11 +93,12 @@ function brightRows(y0, y1) {
   return out
 }
 
-// The brand word "NEWS-MONSTER" + "AVAILABLE ON" produce two dense bright rows
-// in the left zone. A duplicated footer would show the same pattern twice.
-const leftX0 = 0, leftX1 = W * 0.25
-const barRows = brightRows(barTop + 20, barTop + layout.barHeight - 40) // inside bar, skip accent
-// row crossings = number of bright-text horizontal bands in the left zone
+// The brand word "NEWS-MONSTER" + tagline + "AVAILABLE ON" produce several
+// dense bright rows in the right-aligned footer stack. A duplicated footer
+// would show the same pattern twice. Scan the right 45% (content column).
+const rightX0 = W * 0.55, rightX1 = W
+const barRows = brightRows(barTop + 20, barTop + layout.barHeight - 40, rightX0, rightX1) // inside bar, skip accent
+// row crossings = number of bright-text horizontal bands in the content column
 let textBands = 0, inText = false
 for (const n of barRows) {
   const lit = n > 3
@@ -112,7 +113,7 @@ console.log('\n=== FOOTER RENDER VERIFICATION ===')
 console.log(`frame: ${framePath}`)
 console.log(`footer barTopInFrame=${barTop} barHeight=${layout.barHeight}`)
 console.log(`red accent bands (footer count): ${accentBands.length} ${JSON.stringify(accentBands)}`)
-console.log(`left-zone bright text bands inside bar: ${textBands}`)
+console.log(`right-zone bright text bands inside bar: ${textBands}`)
 
 let fail = 0
 const failMsg = (m) => { fail++; console.log(`  FAIL: ${m}`) }
@@ -121,10 +122,10 @@ const passMsg = (m) => console.log(`  PASS: ${m}`)
 if (accentBands.length === 1) passMsg('exactly ONE footer bar (single accent band)')
 else failMsg(`expected ONE footer bar, got ${accentBands.length} bands`)
 
-// Normal single footer left zone = logo + NEWS-MONSTER + tagline + AVAILABLE ON
+// Normal single footer right stack = logo row + tagline + URL + AVAILABLE ON
 // + badge row (~5-6 dense bright bands). A second stacked footer roughly doubles
 // this, so reject only a clearly duplicated pattern.
-if (textBands >= 3 && textBands <= 9) passMsg(`left-zone text bands ${textBands} (single footer row cluster)`)
+if (textBands >= 3 && textBands <= 9) passMsg(`right-zone text bands ${textBands} (single footer row cluster)`)
 else failMsg(`unexpected text band count ${textBands}`)
 
 // 4. Inspect the final (brand-close) scene frame too.

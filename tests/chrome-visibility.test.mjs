@@ -80,10 +80,11 @@ test('footer URL — does not overlap AVAILABLE ON', () => {
   const ctx = createCanvas(W, H).getContext('2d')
   const layout = FooterLayout.compute(ctx, W)
   const url = layout.right.find(c => c.key === 'url')
-  const platform = layout.left.find(c => c.key === 'platform')
-  // URL in right zone, AVAILABLE ON in left zone — no shared x range.
-  assert.ok(url.x > platform.x + platform.w, `url.x ${url.x} > platform right ${platform.x + platform.w}`)
-  // Zone-level separation too.
+  const platform = layout.right.find(c => c.key === 'platform')
+  // URL on line 3, AVAILABLE ON badges on line 4 — vertically stacked, both
+  // right-aligned. They must not overlap (URL bottom above platform top).
+  assert.ok(url.y + url.h <= platform.y + 0.5, `url bottom ${url.y + url.h} <= platform top ${platform.y}`)
+  // Zone-level separation still holds (right zone after left zone).
   const zones = layout.zones
   assert.ok(zones[2].x >= zones[0].x + zones[0].w, 'right zone after left zone')
 })
@@ -106,11 +107,15 @@ test('footer — urlTagline removed (no second line under the URL)', async () =>
   const footerTop = FooterLayout.barTopInFrame(ctx, W, H)
   const layout = FooterLayout.compute(ctx, W)
   const url = layout.right.find(c => c.key === 'url')
-  const urlTagPx = Math.round((BROADCAST_TEXT.footer.urlTagline.size) * layout.scale)
-  const yRow = footerTop + Math.round(url.y) + Math.round((BROADCAST_TEXT.footer.url.size) * layout.scale) + Math.round(urlTagPx * 0.4)
+  const platform = layout.right.find(c => c.key === 'platform')
+  // The gap between the URL row and the AVAILABLE ON row must be empty —
+  // the removed urlTagline would have painted there (bright) if it came back.
+  // Skip the first few px (URL glyph descenders sit at the box bottom).
+  const yRow = footerTop + Math.round(url.y + url.h + 8)
+  const gapH = Math.max(4, Math.round(platform.y - url.y - url.h - 10))
   const x0 = Math.round(url.x), x1 = Math.round(url.x + url.w)
-  const s = regionStats(ctx, x0, yRow, x1, yRow + 40)
-  assert.ok(s.maxB < 150, `tagline row is empty after removal (max brightness ${s.maxB})`)
+  const s = regionStats(ctx, x0, yRow, x1, yRow + gapH)
+  assert.ok(s.maxB < 150, `tagline gap is empty after removal (max brightness ${s.maxB})`)
 })
 
 test('footer — allowed by RenderManifest (canvas owner, enabled by default)', () => {
