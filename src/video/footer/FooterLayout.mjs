@@ -36,14 +36,15 @@ export async function loadPlatformIcons() {
  * The footer content is a single right-aligned stack (broadcast layouts dock
  * the brand chrome to the right edge):
  *   ┌──────────────────────────────────────────────────────────────────┐
- *   │                                              [NM] NEWS-MONSTER   │
+ *   │                                              NEWS-MONSTER [NM]   │
  *   │                                              UNFILTERED BREAKING NEWS│
  *   │                                              sham435.github.io/video-gen-stack│
  *   │                                    [SUBSCRIBE] AVAILABLE ON [Apple] [Android]│
  *   └──────────────────────────────────────────────────────────────────┘
  *
- *   TOP ROW: NM monogram + NEWS-MONSTER wordmark, rightmost at the edge.
- *   LINE 2:  tagline (same size as the wordmark), right-aligned.
+ *   TOP ROW: NEWS-MONSTER wordmark left of the [NM] monogram badge — badge
+ *            rightmost at the frame edge (40px safe right margin).
+ *   LINE 2:  tagline (32px, slightly smaller than the wordmark), right-aligned.
  *   LINE 3:  site URL, right-aligned.
  *   LINE 4:  SUBSCRIBE pill left of the AVAILABLE ON label + platform
  *            badges, whole group right-aligned.
@@ -139,18 +140,23 @@ export class FooterLayout {
 
     const stackTop = verticalPadding + (barHeight - stackH - verticalPadding * 2) / 2
 
-    // TOP ROW: [NM] NEWS-MONSTER — brand rightmost at the frame edge.
+    // TOP ROW: NEWS-MONSTER wordmark left of the [NM] badge — badge rightmost
+    // at the frame edge.
     const rightColumns = []
     let currentY = Math.round(stackTop)
 
-    const brandX = rightEdge - brand.w
-    const brandY = currentY + Math.round((topRowH - brand.h) / 2)
-    rightColumns.push({ key: 'brand', block: BrandBlock, x: brandX, y: brandY, w: brand.w, h: brand.h })
-
     if (logo) {
-      const logoX = brandX - logoBrandGap - logo.w
+      const logoX = rightEdge - logo.w
       const logoY = currentY + Math.round((topRowH - logo.h) / 2)
       rightColumns.push({ key: 'logo', block: LogoBlock, x: logoX, y: logoY, w: logo.w, h: logo.h })
+
+      const brandX = logoX - logoBrandGap - brand.w
+      const brandY = currentY + Math.round((topRowH - brand.h) / 2)
+      rightColumns.push({ key: 'brand', block: BrandBlock, x: brandX, y: brandY, w: brand.w, h: brand.h })
+    } else {
+      const brandX = rightEdge - brand.w
+      const brandY = currentY + Math.round((topRowH - brand.h) / 2)
+      rightColumns.push({ key: 'brand', block: BrandBlock, x: brandX, y: brandY, w: brand.w, h: brand.h })
     }
     currentY += topRowH + vGap
 

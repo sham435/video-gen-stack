@@ -82,14 +82,14 @@ for (const fmt of FORMATS) {
     const logoCenter = logo.y + logo.h / 2
     const brandCenter = brand.y + brand.h / 2
     assert.ok(Math.abs(brandCenter - logoCenter) <= 1, `logo + brand share top row (delta ${Math.abs(brandCenter - logoCenter).toFixed(2)})`)
-    assert.ok(logo.x + logo.w + 0.5 <= brand.x, 'logo left of brand wordmark')
+    assert.ok(brand.x + brand.w + 0.5 <= logo.x, 'wordmark left of the [NM] badge')
     // Tagline on its own line below the top row; badges below the tagline.
     const topRowBottom = Math.max(logo.y + logo.h, brand.y + brand.h)
     assert.ok(tagline.y + 0.5 >= topRowBottom, 'top row -> tagline overlap')
     assert.ok(platform.y + 0.5 >= tagline.y + tagline.h, 'tagline -> platform overlap')
 
-    // 6. Subscribe pill sits on the LAST line, LEFT of AVAILABLE ON; brand
-    //    is rightmost on the top row. URL is on line 3 between them.
+    // 6. Subscribe pill sits on the LAST line, LEFT of AVAILABLE ON; the [NM]
+    //    badge is rightmost on the top row. URL is on line 3 between them.
     const pill = right.find(c => c.key === 'subscribe')
     const url = right.find(c => c.key === 'url')
     assert.ok(pill.h > 0 && url.h > 0)
@@ -99,18 +99,18 @@ for (const fmt of FORMATS) {
     const pillCenter = pill.y + pill.h / 2
     const platformCenter = platform.y + platform.h / 2
     assert.ok(Math.abs(pillCenter - platformCenter) <= 1, `pill shares platform row center (delta ${Math.abs(pillCenter - platformCenter).toFixed(2)})`)
-    // Brand rightmost on the top row; every row right-aligns to the frame's
-    // right edge; pill sits LEFT of the AVAILABLE ON group.
+    // [NM] badge rightmost on the top row; every row right-aligns to the
+    // frame's right edge; pill sits LEFT of the AVAILABLE ON group.
     const rightEdge = fmt.W - Math.max(16, Math.round(FOOTER.padding.x * layout.scale))
-    assert.ok(Math.abs(brand.x + brand.w - rightEdge) <= 1.5, 'brand right-aligns to the frame edge')
+    assert.ok(Math.abs(logo.x + logo.w - rightEdge) <= 1.5, '[NM] badge right-aligns to the frame edge')
     assert.ok(pill.x + pill.w + 0.5 <= platform.x, 'pill left of AVAILABLE ON group')
     assert.ok(Math.abs(url.x + url.w - rightEdge) <= 1.5, 'url right-aligns to the frame edge')
     assert.ok(Math.abs(tagline.x + tagline.w - rightEdge) <= 1.5, 'tagline right-aligns to the frame edge')
     assert.ok(Math.abs(platform.x + platform.w - rightEdge) <= 1.5, 'platform row right-aligns to the frame edge')
 
-    // 7. Tagline font matches the NEWS-MONSTER wordmark size; AVAILABLE ON
-    //    matches the subscribe pill label size.
-    assert.equal(Math.round(FOOTER.tagline.size * layout.scale), Math.round(FOOTER.brand.size * layout.scale), 'tagline size == brand size')
+    // 7. Tagline font at its token size (32 — slightly smaller than the
+    //    38px wordmark); AVAILABLE ON matches the subscribe pill label size.
+    assert.equal(Math.round(FOOTER.tagline.size * layout.scale), Math.round(32 * layout.scale), 'tagline size == 32 token')
     assert.equal(Math.round(FOOTER.available.size * layout.scale), Math.round(FOOTER.pill.labelSize * layout.scale), 'AVAILABLE ON size == pill label size')
 
     // 8. The URL always stays fully inside the bar (never overflows) and sits

@@ -33,28 +33,31 @@ function domainOf(url) {
 
 export const LogoBlock = {
   measure(ctx, scale) {
-    const size = Math.round(F.logoSize * scale)
-    return { w: size, h: size }
+    const w = Math.round(F.logo.w * scale)
+    const h = Math.round(F.logo.h * scale)
+    return { w, h }
   },
 
   draw(ctx, box, scale, data) {
     if (data?.hideBranding) return
-    const size = box.h
+    const w = box.w
+    const h = box.h
     ctx.save()
 
     ctx.shadowColor = 'rgba(0,0,0,0.9)'
     ctx.shadowBlur = 6
     ctx.fillStyle = F.accent
     ctx.beginPath()
-    ctx.roundRect(box.x, box.y, size, size, Math.round(9 * scale))
+    ctx.roundRect(box.x, box.y, w, h, Math.round(F.logo.radius * scale))
     ctx.fill()
     ctx.shadowBlur = 0
 
-    ctx.font = `900 ${Math.round(30 * scale)}px ${FONT_BRAND}`
+    // ~8px padding around the letters — roomier than the old tight 48px box.
+    ctx.font = `900 ${Math.round(F.logo.font * scale)}px ${FONT_BRAND}`
     ctx.fillStyle = '#FFFFFF'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
-    ctx.fillText('NM', box.x + size / 2, box.y + size / 2 + Math.round(3 * scale))
+    ctx.fillText('NM', box.x + w / 2, box.y + h / 2 + Math.round(2 * scale))
     ctx.restore()
   },
 }

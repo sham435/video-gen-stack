@@ -22,7 +22,7 @@ export const BROADCAST_TEXT = {
     // Layout chrome (bar): 180px bottom safe zone owned exclusively by the
     // footer — captions never render inside it.
     height: 180,
-    padding: { x: 18, y: 12 },
+    padding: { x: 40, y: 12 },
     bg: 'rgba(5,5,5,0.96)',
     border: 'rgba(255,255,255,0.22)',
     accent: '#E10600',
@@ -36,9 +36,12 @@ export const BROADCAST_TEXT = {
     grid: { left: 0.20, center: 0.30, right: 0.50 },
 
     // Brand + tagline stack (left zone)
-    logoSize: 48,
+    // NM monogram badge — EXPANDED: ~8px padding around the letters, rounded
+    // corners, height ≈ the 38px wordmark + 2×7px padding (52). Sits rightmost
+    // on the top row at the 40px safe right margin (never cropped).
+    logo: { w: 64, h: 52, radius: 16, font: 26 },
     brand: { size: 38, weight: 900 },
-    tagline: { size: 38, weight: 600, gap: 9 },
+    tagline: { size: 32, weight: 600, gap: 9 },
     taglineBright: '#FFFFFF',
 
     // Legacy handle token — the channel avatar/@handle row was removed from
