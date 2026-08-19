@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-19T23:33:26.844Z",
+  "updatedAt": "2026-08-19T23:56:02.615Z",
   "videos": [
+    {
+      "id": "YLIR9C9MD7w",
+      "title": "Bessent acts to break bond market fever, head off rising borrowing costs | NEWS-MONSTER",
+      "publishedAt": "2026-08-19T23:52:08+00:00",
+      "publishedLabel": "Aug 19, 11:52 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/YLIR9C9MD7w/hqdefault.jpg"
+    },
     {
       "id": "gVaESH4NeeQ",
       "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-17T08:44:12+00:00",
       "publishedLabel": "Aug 17, 08:44 AM",
       "thumbnail": "https://i4.ytimg.com/vi/G6_6AWZA8eg/hqdefault.jpg"
-    },
-    {
-      "id": "-69wFyrm180",
-      "title": "BREAKING: New Disney Cruise Line Ship Class Breaks Mold with Giant Atrium Windows - WDW Ne | NEWS-MO",
-      "publishedAt": "2026-08-17T05:37:32+00:00",
-      "publishedLabel": "Aug 17, 05:37 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/-69wFyrm180/hqdefault.jpg"
     }
   ]
 }
