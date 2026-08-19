@@ -38,7 +38,7 @@ export const BROADCAST_TEXT = {
     // Brand + tagline stack (left zone)
     logoSize: 48,
     brand: { size: 38, weight: 900 },
-    tagline: { size: 38, weight: 600, gap: 9 },
+    tagline: { size: 32, weight: 600, gap: 9 },
     taglineBright: '#FFFFFF',
 
     // Legacy handle token — the channel avatar/@handle row was removed from

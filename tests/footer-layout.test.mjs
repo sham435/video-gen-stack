@@ -108,9 +108,9 @@ for (const fmt of FORMATS) {
     assert.ok(Math.abs(tagline.x + tagline.w - rightEdge) <= 1.5, 'tagline right-aligns to the frame edge')
     assert.ok(Math.abs(platform.x + platform.w - rightEdge) <= 1.5, 'platform row right-aligns to the frame edge')
 
-    // 7. Tagline font matches the NEWS-MONSTER wordmark size; AVAILABLE ON
-    //    matches the subscribe pill label size.
-    assert.equal(Math.round(FOOTER.tagline.size * layout.scale), Math.round(FOOTER.brand.size * layout.scale), 'tagline size == brand size')
+    // 7. Tagline font at its token size (32 — slightly smaller than the
+    //    38px wordmark); AVAILABLE ON matches the subscribe pill label size.
+    assert.equal(Math.round(FOOTER.tagline.size * layout.scale), Math.round(32 * layout.scale), 'tagline size == 32 token')
     assert.equal(Math.round(FOOTER.available.size * layout.scale), Math.round(FOOTER.pill.labelSize * layout.scale), 'AVAILABLE ON size == pill label size')
 
     // 8. The URL always stays fully inside the bar (never overflows) and sits
