@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-19T23:03:47.165Z",
+  "updatedAt": "2026-08-19T23:33:26.844Z",
   "videos": [
+    {
+      "id": "gVaESH4NeeQ",
+      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
+      "publishedAt": "2026-08-19T23:25:34+00:00",
+      "publishedLabel": "Aug 19, 11:25 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/gVaESH4NeeQ/hqdefault.jpg"
+    },
     {
       "id": "tXkFWB3alPE",
       "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-17T05:37:32+00:00",
       "publishedLabel": "Aug 17, 05:37 AM",
       "thumbnail": "https://i2.ytimg.com/vi/-69wFyrm180/hqdefault.jpg"
-    },
-    {
-      "id": "ACJBZxv04JA",
-      "title": "Trump Family’s World Liberty Financial Gets Preliminary Approval to Launch a Bank - WSJ | NEWS-MONST",
-      "publishedAt": "2026-08-16T23:48:26+00:00",
-      "publishedLabel": "Aug 16, 11:48 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/ACJBZxv04JA/hqdefault.jpg"
     }
   ]
 }
