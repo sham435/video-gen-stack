@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-19T22:09:48.016Z",
+  "updatedAt": "2026-08-19T22:38:37.061Z",
   "videos": [
+    {
+      "id": "jmGWFKmtkFY",
+      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
+      "publishedAt": "2026-08-19T22:30:02+00:00",
+      "publishedLabel": "Aug 19, 10:30 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/jmGWFKmtkFY/hqdefault.jpg"
+    },
     {
       "id": "ZuW4hhVR8y0",
       "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T23:22:17+00:00",
       "publishedLabel": "Aug 16, 11:22 PM",
       "thumbnail": "https://i1.ytimg.com/vi/hJxtaTef6_E/hqdefault.jpg"
-    },
-    {
-      "id": "nuDR9wH8qmg",
-      "title": "S&P Steady After Record Close | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T22:51:39+00:00",
-      "publishedLabel": "Aug 16, 10:51 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/nuDR9wH8qmg/hqdefault.jpg"
     }
   ]
 }
