@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-19T13:54:58.950Z",
+  "updatedAt": "2026-08-19T14:44:01.874Z",
   "videos": [
+    {
+      "id": "xyPFsOSMDnA",
+      "title": "Stock futures jump as Treasury action relieves bond market pressure: Live updates | NEWS-MONSTER",
+      "publishedAt": "2026-08-19T14:35:35+00:00",
+      "publishedLabel": "Aug 19, 02:35 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/xyPFsOSMDnA/hqdefault.jpg"
+    },
     {
       "id": "rnfRsIIO4sM",
       "title": "Googlebooks are finally getting their big reveal on September 15 | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T20:23:34+00:00",
       "publishedLabel": "Aug 16, 08:23 PM",
       "thumbnail": "https://i2.ytimg.com/vi/QYq6aBQhP-A/hqdefault.jpg"
-    },
-    {
-      "id": "11JpSzo66I8",
-      "title": "Opinion: No, Elon Musk Isn’t the Best CEO in the Magnificent 7 – It’s Jensen Huang, and He | NEWS-MO",
-      "publishedAt": "2026-08-16T19:01:11+00:00",
-      "publishedLabel": "Aug 16, 07:01 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/11JpSzo66I8/hqdefault.jpg"
     }
   ]
 }
