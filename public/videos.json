@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-19T14:44:01.874Z",
+  "updatedAt": "2026-08-19T15:25:27.565Z",
   "videos": [
+    {
+      "id": "aAYgIKb5mMg",
+      "title": "Apple's iPhone 18 Release Schedule: What's Coming and When | NEWS-MONSTER",
+      "publishedAt": "2026-08-19T15:17:18+00:00",
+      "publishedLabel": "Aug 19, 03:17 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/aAYgIKb5mMg/hqdefault.jpg"
+    },
     {
       "id": "xyPFsOSMDnA",
       "title": "Stock futures jump as Treasury action relieves bond market pressure: Live updates | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T20:52:33+00:00",
       "publishedLabel": "Aug 16, 08:52 PM",
       "thumbnail": "https://i1.ytimg.com/vi/P9XlASQ3UAk/hqdefault.jpg"
-    },
-    {
-      "id": "QYq6aBQhP-A",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-16T20:23:34+00:00",
-      "publishedLabel": "Aug 16, 08:23 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/QYq6aBQhP-A/hqdefault.jpg"
     }
   ]
 }
