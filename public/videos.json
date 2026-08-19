@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-18T23:51:42.114Z",
+  "updatedAt": "2026-08-19T01:11:57.587Z",
   "videos": [
+    {
+      "id": "390PpmdGoYk",
+      "title": "Google makes it official: Googlebook launch event set for September in NYC | NEWS-MONSTER",
+      "publishedAt": "2026-08-19T01:07:48+00:00",
+      "publishedLabel": "Aug 19, 01:07 AM",
+      "thumbnail": "https://i4.ytimg.com/vi/390PpmdGoYk/hqdefault.jpg"
+    },
+    {
+      "id": "28b502WDvjY",
+      "title": "Meta 'hid the truth' over child safety, court hears, as social media trial begins | NEWS-MONSTER",
+      "publishedAt": "2026-08-18T23:51:50+00:00",
+      "publishedLabel": "Aug 18, 11:51 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/28b502WDvjY/hqdefault.jpg"
+    },
     {
       "id": "91MhpJ7ij-s",
       "title": "Why Apple’s camera-equipped AirPods may not be the ‘pervert pods’ consumers fear | NEWS-MONSTER",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-17T05:37:32+00:00",
       "publishedLabel": "Aug 17, 05:37 AM",
       "thumbnail": "https://i2.ytimg.com/vi/-69wFyrm180/hqdefault.jpg"
-    },
-    {
-      "id": "ACJBZxv04JA",
-      "title": "Trump Family’s World Liberty Financial Gets Preliminary Approval to Launch a Bank - WSJ | NEWS-MONST",
-      "publishedAt": "2026-08-16T23:48:26+00:00",
-      "publishedLabel": "Aug 16, 11:48 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/ACJBZxv04JA/hqdefault.jpg"
-    },
-    {
-      "id": "hJxtaTef6_E",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-16T23:22:17+00:00",
-      "publishedLabel": "Aug 16, 11:22 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/hJxtaTef6_E/hqdefault.jpg"
     }
   ]
 }
