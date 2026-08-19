@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-19T12:04:46.640Z",
+  "updatedAt": "2026-08-19T12:48:46.039Z",
   "videos": [
+    {
+      "id": "b2gT4IlcpO8",
+      "title": "Googlebooks are finally getting their big reveal on September 15 | NEWS-MONSTER",
+      "publishedAt": "2026-08-19T12:44:29+00:00",
+      "publishedLabel": "Aug 19, 12:44 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/b2gT4IlcpO8/hqdefault.jpg"
+    },
     {
       "id": "mv_E-cdwbzE",
       "title": "Breaking Tech Alert",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T18:29:19+00:00",
       "publishedLabel": "Aug 16, 06:29 PM",
       "thumbnail": "https://i2.ytimg.com/vi/1RkoFBS5H90/hqdefault.jpg"
-    },
-    {
-      "id": "oV5jL9dGnRQ",
-      "title": "Aston Martin's Latest Special Supercar Is A V12 Villain - Motor1.com | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T17:49:37+00:00",
-      "publishedLabel": "Aug 16, 05:49 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/oV5jL9dGnRQ/hqdefault.jpg"
     }
   ]
 }
