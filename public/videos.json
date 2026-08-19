@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-19T20:32:54.610Z",
+  "updatedAt": "2026-08-19T21:02:01.083Z",
   "videos": [
+    {
+      "id": "XenUc0jWzlk",
+      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
+      "publishedAt": "2026-08-19T20:28:57+00:00",
+      "publishedLabel": "Aug 19, 08:28 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/XenUc0jWzlk/hqdefault.jpg"
+    },
     {
       "id": "nonnbyMyG3M",
       "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T22:23:14+00:00",
       "publishedLabel": "Aug 16, 10:23 PM",
       "thumbnail": "https://i3.ytimg.com/vi/jJTwo9D6HG4/hqdefault.jpg"
-    },
-    {
-      "id": "gm7LqZ9cbhg",
-      "title": "Tesla en Suecia: no ha sido una derrota sindical, ha sido una lección | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T21:49:29+00:00",
-      "publishedLabel": "Aug 16, 09:49 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/gm7LqZ9cbhg/hqdefault.jpg"
     }
   ]
 }
