@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-19T16:13:23.230Z",
+  "updatedAt": "2026-08-19T16:49:38.013Z",
   "videos": [
+    {
+      "id": "YRfQS3wZLmg",
+      "title": "Pixel 11 Pro's telephoto camera has an upgrade Google forgot to mention | NEWS-MONSTER",
+      "publishedAt": "2026-08-19T16:40:47+00:00",
+      "publishedLabel": "Aug 19, 04:40 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/YRfQS3wZLmg/hqdefault.jpg"
+    },
     {
       "id": "A-F4D01Z9tU",
       "title": "Apple Accidentally Leaked More Than 10 New Products in macOS Update | NEWS-MONSTER",
@@ -10,8 +17,15 @@
       "thumbnail": "https://i2.ytimg.com/vi/A-F4D01Z9tU/hqdefault.jpg"
     },
     {
+      "id": "wL6YzLHYylg",
+      "title": "PlayStation's Official Desktop Speakers Arrive in November for $220 | NEWS-MONSTER",
+      "publishedAt": "2026-08-18T19:41:56+00:00",
+      "publishedLabel": "Aug 18, 07:41 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/wL6YzLHYylg/hqdefault.jpg"
+    },
+    {
       "id": "mv_E-cdwbzE",
-      "title": "Breaking Tech Alert",
+      "title": "Apple’s new macOS update",
       "publishedAt": "2026-08-18T18:44:49+00:00",
       "publishedLabel": "Aug 18, 06:44 PM",
       "thumbnail": "https://i2.ytimg.com/vi/mv_E-cdwbzE/hqdefault.jpg"
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-16T20:23:34+00:00",
       "publishedLabel": "Aug 16, 08:23 PM",
       "thumbnail": "https://i2.ytimg.com/vi/QYq6aBQhP-A/hqdefault.jpg"
-    },
-    {
-      "id": "11JpSzo66I8",
-      "title": "Opinion: No, Elon Musk Isn’t the Best CEO in the Magnificent 7 – It’s Jensen Huang, and He | NEWS-MO",
-      "publishedAt": "2026-08-16T19:01:11+00:00",
-      "publishedLabel": "Aug 16, 07:01 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/11JpSzo66I8/hqdefault.jpg"
-    },
-    {
-      "id": "1RkoFBS5H90",
-      "title": "Super Mario 64 is now playable on YouTube - Dexerto | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T18:29:19+00:00",
-      "publishedLabel": "Aug 16, 06:29 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/1RkoFBS5H90/hqdefault.jpg"
     }
   ]
 }
