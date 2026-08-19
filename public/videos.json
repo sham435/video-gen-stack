@@ -1,21 +1,7 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-19T06:52:42.940Z",
+  "updatedAt": "2026-08-19T08:33:07.944Z",
   "videos": [
-    {
-      "id": "YEqvPxOpZX4",
-      "title": "Google just set the date for its big Googlebook event in New York | NEWS-MONSTER",
-      "publishedAt": "2026-08-19T06:48:31+00:00",
-      "publishedLabel": "Aug 19, 06:48 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/YEqvPxOpZX4/hqdefault.jpg"
-    },
-    {
-      "id": "RrP9943OW48",
-      "title": "Chinese humanoid robot maker surges 600% in trading debut | NEWS-MONSTER",
-      "publishedAt": "2026-08-19T06:01:33+00:00",
-      "publishedLabel": "Aug 19, 06:01 AM",
-      "thumbnail": "https://i3.ytimg.com/vi/RrP9943OW48/hqdefault.jpg"
-    },
     {
       "id": "XqoCEqsZVhg",
       "title": "Chinese humanoid robot maker surges 600% in trading debut | NEWS-MONSTER",
@@ -106,6 +92,20 @@
       "publishedAt": "2026-08-18T20:58:21+00:00",
       "publishedLabel": "Aug 18, 08:58 PM",
       "thumbnail": "https://i2.ytimg.com/vi/i7tb45sb9Sc/hqdefault.jpg"
+    },
+    {
+      "id": "-AWkpS8nAEE",
+      "title": "Apple’s new macOS update reportedly contains a video of AirPods with a camera | NEWS-MONSTER",
+      "publishedAt": "2026-08-18T20:25:03+00:00",
+      "publishedLabel": "Aug 18, 08:25 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/-AWkpS8nAEE/hqdefault.jpg"
+    },
+    {
+      "id": "3jyl6kQacbU",
+      "title": "Google Wallet's fancy new colorful UI is finally rolling out | NEWS-MONSTER",
+      "publishedAt": "2026-08-18T19:54:44+00:00",
+      "publishedLabel": "Aug 18, 07:54 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/3jyl6kQacbU/hqdefault.jpg"
     }
   ]
 }
