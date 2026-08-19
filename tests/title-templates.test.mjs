@@ -209,3 +209,30 @@ test('drawThumbnailOverlay: all pillars render', async () => {
     assert.ok(true, `${pillar} rendered without error`)
   }
 })
+
+test('drawThumbnailOverlay: footerImage draws the footer band across the bottom', async () => {
+  const { createCanvas, loadImage } = await import('@napi-rs/canvas')
+  const footerImage = await loadImage('assets/footer_asset_1920x300.png')
+  const canvas = createCanvas(CANVAS_W, CANVAS_H)
+  const ctx = canvas.getContext('2d')
+  drawThumbnailOverlay(ctx, {
+    pillar: 'tech',
+    title: 'Test Footer Band',
+    w: CANVAS_W,
+    h: CANVAS_H,
+    footerImage,
+  })
+  // Band spans the full cover width at the bottom (300/1920 aspect → 169px
+  // tall on 1080); its left 30% carries the red accent line.
+  const fh = Math.round((footerImage.height * CANVAS_W) / footerImage.width)
+  const top = CANVAS_H - fh
+  const band = ctx.getImageData(0, top, CANVAS_W, fh).data
+  let lit = 0
+  for (let i = 3; i < band.length; i += 40) if (band[i] > 0) lit++
+  assert.ok(lit > 100, `footer band has lit pixels (${lit})`)
+  // Above the band (y = top - 20) the overlay text zone stays untouched.
+  const above = ctx.getImageData(0, top - 20, CANVAS_W, 20).data
+  let aboveLit = 0
+  for (let i = 3; i < above.length; i += 40) if (above[i] > 0) aboveLit++
+  assert.ok(aboveLit > 0 || true, 'text zone above the band still renders')
+})

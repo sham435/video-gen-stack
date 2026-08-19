@@ -73,6 +73,8 @@ function extractPayoff(title = '', pillar = 'tech') {
  * @param {string} [opts.barLabel] - override for top bar label
  * @param {number} [opts.w] - canvas width (default 1080)
  * @param {number} [opts.h] - canvas height (default 1920)
+ * @param {Image} [opts.footerImage] - loaded footer_asset_1920x300.png; when
+ *   present the footer band is drawn across the bottom of the canvas
  */
 export function drawThumbnailOverlay(ctx, opts = {}) {
   const {
@@ -83,6 +85,7 @@ export function drawThumbnailOverlay(ctx, opts = {}) {
     barLabel: barLabelOverride,
     w = CANVAS_W,
     h = CANVAS_H,
+    footerImage,
   } = opts
 
   const barColor = pillarColor(pillar)
@@ -132,6 +135,22 @@ export function drawThumbnailOverlay(ctx, opts = {}) {
   ctx.shadowBlur = 30
   ctx.fillText(payoff, w / 2, payoffY)
   ctx.shadowBlur = 0
+
+  // ── Layer 4: FOOTER BAND (optional) ───────────────────────────────────
+  if (footerImage) drawFooterBand(ctx, footerImage, w, h)
+}
+
+/**
+ * Draw the footer band asset (footer_asset_1920x300.png) across the bottom
+ * of a thumbnail canvas, scaled to the canvas width. No-op without an image.
+ * The band carries the full brand chrome (NM badge, wordmark, tagline, URL,
+ * AVAILABLE ON + platform icons) — same FooterLayout engine as the in-video
+ * footer, so covers and videos always match.
+ */
+export function drawFooterBand(ctx, footerImage, w, h) {
+  if (!footerImage) return
+  const fh = Math.round((footerImage.height * w) / footerImage.width)
+  ctx.drawImage(footerImage, 0, h - fh, w, fh)
 }
 
 /**

@@ -6,6 +6,10 @@ const F = BROADCAST_TEXT.footer
 // 'Montserrat ExtraBold'; Inter falls through to system sans if absent).
 export const FONT_BRAND = `'Montserrat ExtraBold', Inter, sans-serif`
 
+// Utility text (URL) — regular weight per the refined footer spec; Inter
+// falls back to the system sans on machines/CI without it.
+const FONT_UI = `'Inter', sans-serif`
+
 // ├─ Reusable blocks ─────────────────────────────────────────────────────
 // Each block is a pure measure + draw pair. Blocks receive the scale computed
 // by the layout pass (proportional to the 1080px design width) and a box
@@ -232,7 +236,7 @@ export const UrlBlock = {
 
     ctx.save()
     const size = Math.round(F.url.size * scale)
-    ctx.font = `${F.url.weight} ${size}px ${FONT_BRAND}`
+    ctx.font = `${F.url.weight} ${size}px ${FONT_UI}`
     // Prefer the full URL; when the column cannot hold it, fall back to the
     // recognizable domain (everything after the scheme, before the first path
     // slash) instead of an anonymous "https://…" ellipsis.

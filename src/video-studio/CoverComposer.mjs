@@ -2,9 +2,21 @@ import { createCanvas, loadImage } from '@napi-rs/canvas'
 import fs from 'fs'
 import path from 'path'
 import { ANCHOR_CONFIG, BrandStyleResolver } from '../visual/BrandStyleResolver.mjs'
-import { drawThumbnailOverlay } from './ThumbnailOverlay.mjs'
+import { drawThumbnailOverlay, drawFooterBand } from './ThumbnailOverlay.mjs'
 
 const W = 1080, H = 1920
+
+// Footer band asset — generated from the shared FooterLayout engine
+// (scripts/footer.mjs --asset 1920x300). Lazy-loaded once and cached; a
+// missing/broken asset is a silent no-op (covers fall back to the text strip).
+const FOOTER_ASSET = new URL('../assets/footer_asset_1920x300.png', import.meta.url).pathname
+let footerAssetPromise = null
+function loadFooterAsset() {
+  if (!footerAssetPromise) {
+    footerAssetPromise = loadImage(FOOTER_ASSET).catch(() => { footerAssetPromise = null; return null })
+  }
+  return footerAssetPromise
+}
 
 const BAD_OVERLAYS = new Set([
   'ACTUALLY SEE', 'ACTUALLY', 'SEE HOW', 'SEE WHY', 'SEE WHAT',
@@ -22,6 +34,7 @@ export class CoverComposer {
     const canvas = createCanvas(W, H)
     const ctx = canvas.getContext('2d')
     const accent = brief.accent_color || '#E10600'
+    const footerImg = brief.hideBranding ? null : await loadFooterAsset()
 
     // 1. Hero background
     if (heroImage) {
@@ -92,6 +105,7 @@ export class CoverComposer {
         barLabel: brief._barLabel,
         w: W,
         h: H,
+        footerImage: footerImg,
       })
     } else {
     // LEGACY MODE: top overlay badge + headline + bottom badge
@@ -153,8 +167,12 @@ export class CoverComposer {
     ctx.fillText(bottomText, W / 2, H * 0.68 + 36)
     } // end legacy mode
 
-    // 4. Bottom brand strip (FIXED)
-    if (!brief.hideBranding) {
+    // 4. Bottom brand strip (FIXED) — the footer band replaces the text strip
+    //    when the asset is present (band carries NM badge/wordmark/tagline/
+    //    URL/AVAILABLE ON — the strip would duplicate the brand).
+    if (footerImg) {
+      drawFooterBand(ctx, footerImg, W, H)
+    } else if (!brief.hideBranding) {
       ctx.fillStyle = 'rgba(0,0,0,0.6)'
       ctx.fillRect(0, H - 100, W, 100)
       ctx.font = '400 36px Inter, sans-serif'
@@ -198,6 +216,7 @@ export class CoverComposer {
     const canvas = createCanvas(TW, TH)
     const ctx = canvas.getContext('2d')
     const accent = brief.accent_color || '#E10600'
+    const footerImg = brief.hideBranding ? null : await loadFooterAsset()
 
     // 1. Hero background (cover full frame)
     if (heroImage) {
@@ -264,6 +283,7 @@ export class CoverComposer {
         barLabel: brief._barLabel,
         w: TW,
         h: TH,
+        footerImage: footerImg,
       })
     } else {
     // LEGACY MODE

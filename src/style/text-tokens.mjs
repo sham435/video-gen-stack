@@ -50,19 +50,19 @@ export const BROADCAST_TEXT = {
 
     // AVAILABLE ON + platform badges (left zone, below the logo)
     available: { size: 26, weight: 800 },
-    platformIcon: 34,
+    platformIcon: 32,
     platformGap: 10,
 
-    // URL + URL tagline group (right zone, below the pill). The URL is the
-    // primary CTA: sized so the FULL hostname fits the 50% right column
-    // (no ellipsis); the tagline under it breathes with 1.30 leading.
-    url: { size: 26, weight: 900 },
+    // URL (right zone, below the pill). The URL is the primary CTA: sized so
+    // the FULL hostname fits the right column (no ellipsis). Inter Regular
+    // 20px — clean utility line under the brand stack.
+    url: { size: 20, weight: 400 },
     urlTagline: { size: 24, weight: 600 },
     urlLeading: 1.30,
 
     // YouTube subscribe pill — strongest CTA in the footer:
-    // 54px hier / 27px radius / 28px icon / 26px bold label.
-    pill: { height: 54, radius: 27, icon: 28, labelSize: 26, weight: 800 },
+    // 48px tall / 24px radius (fully rounded) / 24px icon / 26px bold label.
+    pill: { height: 48, radius: 24, icon: 24, labelSize: 26, weight: 800 },
 
     // Vertical rhythm between stacked lines/groups — 20–30% looser than the
     // old tight stack so AVAILABLE ON / URL / tagline read as separate lines.
