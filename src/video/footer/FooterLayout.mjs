@@ -36,17 +36,17 @@ export async function loadPlatformIcons() {
  * The footer content is a single right-aligned stack (broadcast layouts dock
  * the brand chrome to the right edge):
  *   ┌──────────────────────────────────────────────────────────────────┐
- *   │                                  [NM] NEWS-MONSTER  [SUBSCRIBE]   │
- *   │                                  UNFILTERED BREAKING NEWS         │
- *   │                                  sham435.github.io/video-gen-stack│
- *   │                                  AVAILABLE ON  [Apple] [Android]  │
+ *   │                                              [NM] NEWS-MONSTER   │
+ *   │                                              UNFILTERED BREAKING NEWS│
+ *   │                                              sham435.github.io/video-gen-stack│
+ *   │                                    [SUBSCRIBE] AVAILABLE ON [Apple] [Android]│
  *   └──────────────────────────────────────────────────────────────────┘
  *
- *   TOP ROW: NM monogram + NEWS-MONSTER wordmark + SUBSCRIBE pill on one
- *            line, right-aligned (pill rightmost).
- *   LINE 2:  tagline, right-aligned.
+ *   TOP ROW: NM monogram + NEWS-MONSTER wordmark, rightmost at the edge.
+ *   LINE 2:  tagline (same size as the wordmark), right-aligned.
  *   LINE 3:  site URL, right-aligned.
- *   LINE 4:  AVAILABLE ON label + platform badges, right-aligned.
+ *   LINE 4:  SUBSCRIBE pill left of the AVAILABLE ON label + platform
+ *            badges, whole group right-aligned.
  *
  * The bar bottom-anchors to the frame and is sized by content. showLogo is a
  * render-data toggle so a view can selectively hide the logo without touching
@@ -102,25 +102,26 @@ export class FooterLayout {
     const vGap = Math.max(10, Math.round(F.lineGap * scale))
 
     // ── Right-aligned stack ────────────────────────────────────────────────
-    // TOP ROW: NM monogram + NEWS-MONSTER wordmark + SUBSCRIBE pill on one
-    // line, right-aligned (pill rightmost).
+    // TOP ROW: NM monogram + NEWS-MONSTER wordmark, rightmost at the edge.
     const logo = D.showLogo ? LogoBlock.measure(ctx, scale) : null
     const brand = BrandBlock.measure(ctx, scale, D)
-    const subscribe = SubscribeBlock.measure(ctx, scale)
     const logoBrandGap = Math.round(14 * scale)
-    const brandPillGap = Math.round(22 * scale)
-    const topRowH = Math.max(logo ? logo.h : 0, brand.h, subscribe.h)
+    const topRowH = Math.max(logo ? logo.h : 0, brand.h)
 
-    // Row 2: tagline, right-aligned.
+    // Row 2: tagline (same size as the wordmark), right-aligned.
     const tagline = TaglineBlock.measure(ctx, scale, D)
 
     // Row 3: site URL, right-aligned.
     const url = UrlBlock.measure(ctx, scale, D, innerW)
 
-    // Row 4: AVAILABLE ON + platform badges, right-aligned.
+    // Row 4: SUBSCRIBE pill left of AVAILABLE ON label + platform badges,
+    // whole group right-aligned.
+    const subscribe = SubscribeBlock.measure(ctx, scale)
     const platform = PlatformBlock.measure(ctx, scale)
+    const pillPlatformGap = Math.round(18 * scale)
+    const platformRowH = Math.max(subscribe.h, platform.h)
 
-    const stackH = topRowH + vGap + tagline.h + vGap + url.h + vGap + platform.h
+    const stackH = topRowH + vGap + tagline.h + vGap + url.h + vGap + platformRowH
 
     const verticalPadding = Math.round(F.padding.y * scale)
     const barHeight = Math.round(Math.max(F.minHeight, stackH) + verticalPadding * 2)
@@ -138,15 +139,11 @@ export class FooterLayout {
 
     const stackTop = verticalPadding + (barHeight - stackH - verticalPadding * 2) / 2
 
-    // TOP ROW: [NM] NEWS-MONSTER  [SUBSCRIBE] — right-aligned group.
+    // TOP ROW: [NM] NEWS-MONSTER — brand rightmost at the frame edge.
     const rightColumns = []
     let currentY = Math.round(stackTop)
 
-    const pillX = rightEdge - subscribe.w
-    const pillY = currentY + Math.round((topRowH - subscribe.h) / 2)
-    rightColumns.push({ key: 'subscribe', block: SubscribeBlock, x: pillX, y: pillY, w: subscribe.w, h: subscribe.h })
-
-    const brandX = pillX - brandPillGap - brand.w
+    const brandX = rightEdge - brand.w
     const brandY = currentY + Math.round((topRowH - brand.h) / 2)
     rightColumns.push({ key: 'brand', block: BrandBlock, x: brandX, y: brandY, w: brand.w, h: brand.h })
 
@@ -165,8 +162,15 @@ export class FooterLayout {
     rightColumns.push({ key: 'url', block: UrlBlock, x: rightEdge - url.w, y: currentY, w: url.w, h: url.h })
     currentY += url.h + vGap
 
-    // Row 4: AVAILABLE ON + badges — right-aligned to the same edge.
-    rightColumns.push({ key: 'platform', block: PlatformBlock, x: rightEdge - platform.w, y: currentY, w: platform.w, h: platform.h })
+    // Row 4: [SUBSCRIBE] AVAILABLE ON [Apple] [Android] — pill left of the
+    // platform group, whole row right-aligned.
+    const platformX = rightEdge - platform.w
+    const platformY = currentY + Math.round((platformRowH - platform.h) / 2)
+    rightColumns.push({ key: 'platform', block: PlatformBlock, x: platformX, y: platformY, w: platform.w, h: platform.h })
+
+    const pillX = platformX - pillPlatformGap - subscribe.w
+    const pillY = currentY + Math.round((platformRowH - subscribe.h) / 2)
+    rightColumns.push({ key: 'subscribe', block: SubscribeBlock, x: pillX, y: pillY, w: subscribe.w, h: subscribe.h })
 
     return { scale, barHeight, zones, left: [], right: rightColumns, data: D }
   }

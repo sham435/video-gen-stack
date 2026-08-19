@@ -199,10 +199,10 @@ test('readability — URL sits below the pill on its own line; line gaps keep te
   const { scale } = layout
   const pill = layout.right.find(c => c.key === 'subscribe')
   const url = layout.right.find(c => c.key === 'url')
-  // The URL lives on a lower line, below the subscribe pill — the hard
-  // invariant is that the URL column never leaves the bar.
+  // The URL lives on its own line; the subscribe pill sits on the AVAILABLE
+  // ON row BELOW the URL — the hard invariant is that nothing leaves the bar.
   assert.ok(url.y + url.h <= layout.barHeight + 1, `URL inside bar (bottom ${Math.round(url.y + url.h)} ≤ bar ${layout.barHeight})`)
-  assert.ok(url.y + 0.5 >= pill.y + pill.h, 'URL below the subscribe pill')
+  assert.ok(pill.y + 0.5 >= url.y + url.h, 'pill below the URL (last row)')
   // Vertical gap between stacked footer lines has a floor so glyphs never touch.
   const lineGapPx = Math.round(F.lineGap * scale)
   assert.ok(lineGapPx >= 12, `line gap ${lineGapPx}px`)

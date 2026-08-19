@@ -71,8 +71,8 @@ for (const fmt of FORMATS) {
     assert.deepEqual(layout.left, [], 'left zone is empty (all content right-aligned)')
     const right = layout.right
     const keys = right.map(c => c.key)
-    assert.ok(keys.includes('logo') && keys.includes('brand') && keys.includes('subscribe'), `top row has logo+brand+subscribe (${keys})`)
-    assert.ok(keys.includes('tagline') && keys.includes('url') && keys.includes('platform'), `stack has tagline+url+platform (${keys})`)
+    assert.ok(keys.includes('logo') && keys.includes('brand'), `top row has logo+brand (${keys})`)
+    assert.ok(keys.includes('subscribe') && keys.includes('tagline') && keys.includes('url') && keys.includes('platform'), `stack has subscribe+tagline+url+platform (${keys})`)
     const logo = right.find(c => c.key === 'logo')
     const brand = right.find(c => c.key === 'brand')
     const tagline = right.find(c => c.key === 'tagline')
@@ -88,31 +88,33 @@ for (const fmt of FORMATS) {
     assert.ok(tagline.y + 0.5 >= topRowBottom, 'top row -> tagline overlap')
     assert.ok(platform.y + 0.5 >= tagline.y + tagline.h, 'tagline -> platform overlap')
 
-    // 6. Subscribe pill on the TOP ROW (aligned with the wordmark line),
-    //    rightmost of the top-row group. URL + platform rows are below.
-    const [pill, url] = right.filter(c => ['subscribe', 'url'].includes(c.key))
-    assert.equal(pill.key, 'subscribe')
-    assert.equal(url.key, 'url')
+    // 6. Subscribe pill sits on the LAST line, LEFT of AVAILABLE ON; brand
+    //    is rightmost on the top row. URL is on line 3 between them.
+    const pill = right.find(c => c.key === 'subscribe')
+    const url = right.find(c => c.key === 'url')
     assert.ok(pill.h > 0 && url.h > 0)
-    assert.ok(url.y + 0.5 >= pill.y + pill.h, 'pill -> url overlap')
+    assert.ok(pill.y + 0.5 >= url.y + url.h, 'url -> pill overlap (pill below URL)')
     assert.ok(url.w >= 60, `url column width ${url.w.toFixed(0)}`)
-    // Pill vertically centered with the top row (monogram + wordmark line).
+    // Pill shares the AVAILABLE ON row (same centerline).
     const pillCenter = pill.y + pill.h / 2
-    assert.ok(Math.abs(pillCenter - logoCenter) <= 1, `pill shares top row center (delta ${Math.abs(pillCenter - logoCenter).toFixed(2)})`)
-    // Pill is the rightmost element of the top row; every row right-aligns to
-    // the frame's right edge.
+    const platformCenter = platform.y + platform.h / 2
+    assert.ok(Math.abs(pillCenter - platformCenter) <= 1, `pill shares platform row center (delta ${Math.abs(pillCenter - platformCenter).toFixed(2)})`)
+    // Brand rightmost on the top row; every row right-aligns to the frame's
+    // right edge; pill sits LEFT of the AVAILABLE ON group.
     const rightEdge = fmt.W - Math.max(16, Math.round(FOOTER.padding.x * layout.scale))
-    assert.ok(Math.abs(pill.x + pill.w - rightEdge) <= 1.5, 'pill right-aligns to the frame edge')
-    assert.ok(brand.x + brand.w + 0.5 <= pill.x, 'brand wordmark left of the pill')
+    assert.ok(Math.abs(brand.x + brand.w - rightEdge) <= 1.5, 'brand right-aligns to the frame edge')
+    assert.ok(pill.x + pill.w + 0.5 <= platform.x, 'pill left of AVAILABLE ON group')
     assert.ok(Math.abs(url.x + url.w - rightEdge) <= 1.5, 'url right-aligns to the frame edge')
     assert.ok(Math.abs(tagline.x + tagline.w - rightEdge) <= 1.5, 'tagline right-aligns to the frame edge')
     assert.ok(Math.abs(platform.x + platform.w - rightEdge) <= 1.5, 'platform row right-aligns to the frame edge')
 
-    // 7. Subscribe pill keeps its scaled 50px-height intent.
-    assert.ok(pill.h > 0)
+    // 7. Tagline font matches the NEWS-MONSTER wordmark size; AVAILABLE ON
+    //    matches the subscribe pill label size.
+    assert.equal(Math.round(FOOTER.tagline.size * layout.scale), Math.round(FOOTER.brand.size * layout.scale), 'tagline size == brand size')
+    assert.equal(Math.round(FOOTER.available.size * layout.scale), Math.round(FOOTER.pill.labelSize * layout.scale), 'AVAILABLE ON size == pill label size')
 
     // 8. The URL always stays fully inside the bar (never overflows) and sits
-    //    below the subscribe pill on its lower line.
+    //    below the tagline on its own line.
     const { scale } = layout
     const urlBaseline = url.y + Math.round(FOOTER.url.size * scale)
     assert.ok(url.y + url.h <= layout.barHeight + 1, `URL column inside bar (bottom ${Math.round(url.y + url.h)} ≤ bar ${layout.barHeight})`)
