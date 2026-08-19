@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-19T22:38:37.061Z",
+  "updatedAt": "2026-08-19T23:03:47.165Z",
   "videos": [
+    {
+      "id": "tXkFWB3alPE",
+      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
+      "publishedAt": "2026-08-19T22:55:40+00:00",
+      "publishedLabel": "Aug 19, 10:55 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/tXkFWB3alPE/hqdefault.jpg"
+    },
     {
       "id": "jmGWFKmtkFY",
       "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T23:48:26+00:00",
       "publishedLabel": "Aug 16, 11:48 PM",
       "thumbnail": "https://i2.ytimg.com/vi/ACJBZxv04JA/hqdefault.jpg"
-    },
-    {
-      "id": "hJxtaTef6_E",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-16T23:22:17+00:00",
-      "publishedLabel": "Aug 16, 11:22 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/hJxtaTef6_E/hqdefault.jpg"
     }
   ]
 }
