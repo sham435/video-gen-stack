@@ -1,6 +1,6 @@
 import { DesignSystem } from '../../visuals/DesignSystem.mjs'
 import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
-import { headerLayout, CHIP_H } from '../../layout/HeaderLayout.mjs'
+import { headerLayout } from '../../layout/HeaderLayout.mjs'
 
 const { W, H } = DesignSystem
 
@@ -10,9 +10,8 @@ export class BroadcastUILayer {
     const p = Math.min(1, progress * 1.5)
 
     // LIVE indicator — sits immediately right of the NEWS-MONSTER brand pill
-    // (40px gap, same visual centerline) per the shared header layout; on
-    // Shorts 9:16 it drops to a right-aligned row BELOW the brand, clear of
-    // the native Pause/Volume overlay. Never a hard-coded corner position.
+    // (20px gap, same visual centerline) per the shared header layout. Never a
+    // hard-coded corner position. 36px bold on a red pill.
     const live = BROADCAST_TEXT.live
     const liveAlpha = (0.9 + Math.sin(progress * 6) * 0.1) * p
     ctx.save()
@@ -20,14 +19,8 @@ export class BroadcastUILayer {
 
     const liveFont = DesignSystem.getTypography('overlay', 'live')
     ctx.font = `${live.weight} ${live.size}px ${liveFont.font}, sans-serif`
-    const badgeFont = DesignSystem.getTypography('badge', 'label')
-    const catLabel = category ? category.toUpperCase() : 'TECHNOLOGY'
-    ctx.font = `${badgeFont.weight} ${badgeFont.size}px ${badgeFont.font}, sans-serif`
-    const chipW = Math.round(ctx.measureText(catLabel).width) + 24
 
-    // One layout pass — chip width must be known before the LIVE pill so the
-    // Shorts row can right-align both against the 40px safe margin.
-    const header = headerLayout(ctx, { chipWidth: chipW })
+    const header = headerLayout(ctx)
     const liveX = header.live.x
     const liveY = header.live.y
     const liveW = header.live.w
@@ -51,15 +44,16 @@ export class BroadcastUILayer {
     const catTagP = Math.min(1, progress * 2)
     ctx.save()
     ctx.globalAlpha = catTagP
-    // Category chip — Shorts: right-aligned on the LIVE row (below the brand,
-    // clear of the 40px safe margin); classic: below the brand pill, aligned
-    // to its left edge. Position always comes from the shared header layout.
-    const chip = header.chip
-    const catX = chip.x
-    const catY = chip.y + CHIP_H / 2
+    ctx.font = `${DesignSystem.getTypography('badge', 'label').weight} ${DesignSystem.getTypography('badge', 'label').size}px ${DesignSystem.getTypography('badge', 'label').font}, sans-serif`
+    const catLabel = category ? category.toUpperCase() : 'TECHNOLOGY'
+    // Category chip sits BELOW the brand+LIVE header row (never over the
+    // NEWS-MONSTER pill); top-aligned to the header left edge.
+    const chipH = 26
+    const catX = header.brand.x
+    const catY = header.brand.y + header.brand.h + 12 + chipH / 2
     ctx.fillStyle = catStyle.colors.primary
     ctx.beginPath()
-    ctx.roundRect(catX, catY - 9, chip.w, chip.h, 4)
+    ctx.roundRect(catX, catY - 9, ctx.measureText(catLabel).width + 24, chipH, 4)
     ctx.fill()
     ctx.fillStyle = '#FFFFFF'
     ctx.textAlign = 'left'

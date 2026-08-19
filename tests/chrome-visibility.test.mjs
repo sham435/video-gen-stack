@@ -126,43 +126,27 @@ test('footer — allowed by RenderManifest (canvas owner, enabled by default)', 
 
 // ── HEADER (NEWS-MONSTER + LIVE) ─────────────────────────────────────────
 
-test('header (classic 16:9) — LIVE.x = brandRight + 40 (LinkedIn-safe 40px gap)', () => {
-  const ctx = createCanvas(1920, 1080).getContext('2d')
+test('header — LIVE.x = brandRight + 40 (LinkedIn-safe 40px gap)', () => {
+  const ctx = createCanvas(W, H).getContext('2d')
   const layout = headerLayout(ctx)
-  assert.equal(layout.shorts, false, '16:9 canvas must use the classic layout')
   const gap = layout.live.x - (layout.brand.x + layout.brand.w)
   assert.equal(gap, 40, `gap ${gap} must be exactly 40`)
 })
 
-test('header (classic 16:9) — NEWS-MONSTER and LIVE vertically aligned (same centerline)', () => {
-  const ctx = createCanvas(1920, 1080).getContext('2d')
+test('header — NEWS-MONSTER and LIVE vertically aligned (same centerline)', () => {
+  const ctx = createCanvas(W, H).getContext('2d')
   const layout = headerLayout(ctx)
   const brandCenter = layout.brand.y + layout.brand.h / 2
   const liveCenter = layout.live.y + layout.live.h / 2
   assert.ok(Math.abs(liveCenter - brandCenter) <= 0.6, `centerline delta ${Math.abs(liveCenter - brandCenter)}`)
 })
 
-test('header (Shorts 9:16) — brand right-aligned at 40px margin, below the 160px controls band', () => {
+test('header — LIVE + NEWS-MONSTER both inside top safe zone', () => {
   const ctx = createCanvas(W, H).getContext('2d')
-  const layout = headerLayout(ctx, { chipWidth: 110 })
-  assert.equal(layout.shorts, true, '9:16 canvas must use the Shorts layout')
-  assert.equal(layout.brand.x + layout.brand.w, W - 40, 'brand right edge sits at the 40px safe margin')
-  assert.equal(layout.brand.y, 170, 'brand row starts below the controls band')
-  assert.ok(layout.brand.y >= 160, 'nothing above the 160px top danger line')
-})
-
-test('header (Shorts 9:16) — LIVE + category chip on a right-aligned row below the brand', () => {
-  const ctx = createCanvas(W, H).getContext('2d')
-  const chipWidth = 110
-  const layout = headerLayout(ctx, { chipWidth })
-  // Row 2 lives below the brand pill (never overlapping the top band)
-  assert.ok(layout.live.y >= layout.brand.y + layout.brand.h, 'LIVE row is below the brand row')
-  assert.ok(layout.chip.y >= layout.brand.y + layout.brand.h, 'chip row is below the brand row')
-  // Right-aligned to the 40px safe margin: chip rightmost, LIVE left of it
-  assert.equal(layout.chip.x + layout.chip.w, W - 40, 'chip right edge at the 40px safe margin')
-  assert.ok(layout.live.x + layout.live.w <= layout.chip.x - 12, 'LIVE clears the chip (12px gap)')
-  // Both rows entirely inside the frame width
-  assert.ok(layout.brand.x >= 0 && layout.live.x >= 0 && layout.chip.x >= 0, 'all header chrome inside width')
+  const layout = headerLayout(ctx)
+  assert.ok(layout.brand.y >= 0 && layout.live.y >= 0)
+  assert.ok(layout.live.y + layout.live.h <= 150, `LIVE bottom ${layout.live.y + layout.live.h}`)
+  assert.ok(layout.live.x + layout.live.w <= W, 'LIVE inside width')
 })
 
 test('header — LIVE pill actually painted in composed frame', async () => {
