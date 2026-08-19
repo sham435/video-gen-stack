@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-19T18:44:52.059Z",
+  "updatedAt": "2026-08-19T19:13:33.987Z",
   "videos": [
+    {
+      "id": "nonnbyMyG3M",
+      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
+      "publishedAt": "2026-08-19T19:09:30+00:00",
+      "publishedLabel": "Aug 19, 07:09 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/nonnbyMyG3M/hqdefault.jpg"
+    },
     {
       "id": "8SHKX5E9bkY",
       "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T21:49:29+00:00",
       "publishedLabel": "Aug 16, 09:49 PM",
       "thumbnail": "https://i4.ytimg.com/vi/gm7LqZ9cbhg/hqdefault.jpg"
-    },
-    {
-      "id": "YWVl4bEtmcM",
-      "title": "Super Mario 64 is now playable on YouTube - Dexerto | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T21:21:52+00:00",
-      "publishedLabel": "Aug 16, 09:21 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/YWVl4bEtmcM/hqdefault.jpg"
     }
   ]
 }
