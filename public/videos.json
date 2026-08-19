@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-19T18:00:01.911Z",
+  "updatedAt": "2026-08-19T18:44:52.059Z",
   "videos": [
+    {
+      "id": "8SHKX5E9bkY",
+      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
+      "publishedAt": "2026-08-19T18:36:33+00:00",
+      "publishedLabel": "Aug 19, 06:36 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/8SHKX5E9bkY/hqdefault.jpg"
+    },
     {
       "id": "IST7vGQmYPc",
       "title": "Markets Rally After U.S. Treasury Tries to Ease Bond Market Stress | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-16T21:21:52+00:00",
       "publishedLabel": "Aug 16, 09:21 PM",
       "thumbnail": "https://i2.ytimg.com/vi/YWVl4bEtmcM/hqdefault.jpg"
-    },
-    {
-      "id": "P9XlASQ3UAk",
-      "title": "Aston Martin's Latest Special Supercar Is A V12 Villain - Motor1.com | NEWS-MONSTER",
-      "publishedAt": "2026-08-16T20:52:33+00:00",
-      "publishedLabel": "Aug 16, 08:52 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/P9XlASQ3UAk/hqdefault.jpg"
     }
   ]
 }
