@@ -1,7 +1,28 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-20T05:40:18.794Z",
+  "updatedAt": "2026-08-20T07:49:00.309Z",
   "videos": [
+    {
+      "id": "YPmGn4QnALE",
+      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
+      "publishedAt": "2026-08-20T07:42:54+00:00",
+      "publishedLabel": "Aug 20, 07:42 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/YPmGn4QnALE/hqdefault.jpg"
+    },
+    {
+      "id": "0Sb6p95qjG0",
+      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
+      "publishedAt": "2026-08-20T06:52:39+00:00",
+      "publishedLabel": "Aug 20, 06:52 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/0Sb6p95qjG0/hqdefault.jpg"
+    },
+    {
+      "id": "IWqkbYt7Tls",
+      "title": "Dollar at three-month lows as Treasury seeks to rein in surging bond yields | NEWS-MONSTER",
+      "publishedAt": "2026-08-20T06:03:00+00:00",
+      "publishedLabel": "Aug 20, 06:03 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/IWqkbYt7Tls/hqdefault.jpg"
+    },
     {
       "id": "8VgptAdQI5o",
       "title": "Google Pixel 11 Pro hands-on review | NEWS-MONSTER",
@@ -85,27 +106,6 @@
       "publishedAt": "2026-08-19T20:28:57+00:00",
       "publishedLabel": "Aug 19, 08:28 PM",
       "thumbnail": "https://i1.ytimg.com/vi/XenUc0jWzlk/hqdefault.jpg"
-    },
-    {
-      "id": "nonnbyMyG3M",
-      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
-      "publishedAt": "2026-08-19T19:09:30+00:00",
-      "publishedLabel": "Aug 19, 07:09 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/nonnbyMyG3M/hqdefault.jpg"
-    },
-    {
-      "id": "8SHKX5E9bkY",
-      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
-      "publishedAt": "2026-08-19T18:36:33+00:00",
-      "publishedLabel": "Aug 19, 06:36 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/8SHKX5E9bkY/hqdefault.jpg"
-    },
-    {
-      "id": "IST7vGQmYPc",
-      "title": "Markets Rally After U.S. Treasury Tries to Ease Bond Market Stress | NEWS-MONSTER",
-      "publishedAt": "2026-08-19T17:55:32+00:00",
-      "publishedLabel": "Aug 19, 05:55 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/IST7vGQmYPc/hqdefault.jpg"
     }
   ]
 }
