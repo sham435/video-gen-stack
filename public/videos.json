@@ -1,7 +1,28 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-20T02:45:55.310Z",
+  "updatedAt": "2026-08-20T04:47:15.882Z",
   "videos": [
+    {
+      "id": "m7OgTt_9WVE",
+      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
+      "publishedAt": "2026-08-20T04:38:47+00:00",
+      "publishedLabel": "Aug 20, 04:38 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/m7OgTt_9WVE/hqdefault.jpg"
+    },
+    {
+      "id": "1VZQKybqtyI",
+      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
+      "publishedAt": "2026-08-20T04:08:39+00:00",
+      "publishedLabel": "Aug 20, 04:08 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/1VZQKybqtyI/hqdefault.jpg"
+    },
+    {
+      "id": "l7kpNsFrbUA",
+      "title": "Google Pixel 11 Pro hands-on review | NEWS-MONSTER",
+      "publishedAt": "2026-08-20T03:48:33+00:00",
+      "publishedLabel": "Aug 20, 03:48 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/l7kpNsFrbUA/hqdefault.jpg"
+    },
     {
       "id": "CLwj6fUVzIg",
       "title": "Bessent acts to break bond market fever, head off rising borrowing costs | NEWS-MONSTER",
@@ -85,27 +106,6 @@
       "publishedAt": "2026-08-19T17:30:22+00:00",
       "publishedLabel": "Aug 19, 05:30 PM",
       "thumbnail": "https://i4.ytimg.com/vi/W2ON2e0Txh8/hqdefault.jpg"
-    },
-    {
-      "id": "YRfQS3wZLmg",
-      "title": "Google's Hidden Pixel 11 Pro Upgrade",
-      "publishedAt": "2026-08-19T16:40:47+00:00",
-      "publishedLabel": "Aug 19, 04:40 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/YRfQS3wZLmg/hqdefault.jpg"
-    },
-    {
-      "id": "wL6YzLHYylg",
-      "title": "PlayStation's Official Desktop Speakers Arrive in November for $220 | NEWS-MONSTER",
-      "publishedAt": "2026-08-18T19:41:56+00:00",
-      "publishedLabel": "Aug 18, 07:41 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/wL6YzLHYylg/hqdefault.jpg"
-    },
-    {
-      "id": "mv_E-cdwbzE",
-      "title": "Apple’s new macOS update",
-      "publishedAt": "2026-08-18T18:44:49+00:00",
-      "publishedLabel": "Aug 18, 06:44 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/mv_E-cdwbzE/hqdefault.jpg"
     }
   ]
 }
