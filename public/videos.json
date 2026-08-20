@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-19T23:56:02.615Z",
+  "updatedAt": "2026-08-20T01:16:54.629Z",
   "videos": [
+    {
+      "id": "n4_1vDpo6zo",
+      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
+      "publishedAt": "2026-08-20T01:07:59+00:00",
+      "publishedLabel": "Aug 20, 01:07 AM",
+      "thumbnail": "https://i3.ytimg.com/vi/n4_1vDpo6zo/hqdefault.jpg"
+    },
     {
       "id": "YLIR9C9MD7w",
       "title": "Bessent acts to break bond market fever, head off rising borrowing costs | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-18T17:38:42+00:00",
       "publishedLabel": "Aug 18, 05:38 PM",
       "thumbnail": "https://i2.ytimg.com/vi/uB-tuu5T5SI/hqdefault.jpg"
-    },
-    {
-      "id": "G6_6AWZA8eg",
-      "title": "“Predicting” Zelda: Ocarina of Time’s release date using amiibo - Nintendo Everything | NEWS-MONSTER",
-      "publishedAt": "2026-08-17T08:44:12+00:00",
-      "publishedLabel": "Aug 17, 08:44 AM",
-      "thumbnail": "https://i4.ytimg.com/vi/G6_6AWZA8eg/hqdefault.jpg"
     }
   ]
 }
