@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-20T08:47:18.436Z",
+  "updatedAt": "2026-08-20T09:45:49.546Z",
   "videos": [
+    {
+      "id": "YLqKo5rhIY0",
+      "title": "Samsung confirms August 27 event for the ‘newest addition to the Galaxy S26 family’ | NEWS-MONSTER",
+      "publishedAt": "2026-08-20T09:36:25+00:00",
+      "publishedLabel": "Aug 20, 09:36 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/YLqKo5rhIY0/hqdefault.jpg"
+    },
     {
       "id": "ml3gsCrq_QM",
       "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-19T22:30:02+00:00",
       "publishedLabel": "Aug 19, 10:30 PM",
       "thumbnail": "https://i3.ytimg.com/vi/jmGWFKmtkFY/hqdefault.jpg"
-    },
-    {
-      "id": "ZuW4hhVR8y0",
-      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
-      "publishedAt": "2026-08-19T22:00:47+00:00",
-      "publishedLabel": "Aug 19, 10:00 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/ZuW4hhVR8y0/hqdefault.jpg"
     }
   ]
 }
