@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-20T11:41:16.995Z",
+  "updatedAt": "2026-08-20T12:03:50.308Z",
   "videos": [
+    {
+      "id": "aw9U-PB7yvI",
+      "title": "Stock Market Today: Bond Market Steady After Treasury Intervention, Nasdaq Futures Tick Up | NEWS-MO",
+      "publishedAt": "2026-08-20T11:59:29+00:00",
+      "publishedLabel": "Aug 20, 11:59 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/aw9U-PB7yvI/hqdefault.jpg"
+    },
     {
       "id": "Qvd-FPOgWOs",
       "title": "LG Display Introduces FLiPP OLED Technology, Improving Brightness By Up To 1.6X With Longe | NEWS-MO",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-20T01:07:59+00:00",
       "publishedLabel": "Aug 20, 01:07 AM",
       "thumbnail": "https://i3.ytimg.com/vi/n4_1vDpo6zo/hqdefault.jpg"
-    },
-    {
-      "id": "YLIR9C9MD7w",
-      "title": "Bessent acts to break bond market fever, head off rising borrowing costs | NEWS-MONSTER",
-      "publishedAt": "2026-08-19T23:52:08+00:00",
-      "publishedLabel": "Aug 19, 11:52 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/YLIR9C9MD7w/hqdefault.jpg"
     }
   ]
 }
