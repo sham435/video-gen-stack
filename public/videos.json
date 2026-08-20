@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-20T13:53:37.016Z",
+  "updatedAt": "2026-08-20T14:46:54.586Z",
   "videos": [
+    {
+      "id": "gIRaZwgGWuk",
+      "title": "Stock Market Today: Bond Yields Jump, Largely Wiping Out Effect of Bessent Intervention | NEWS-MONST",
+      "publishedAt": "2026-08-20T14:38:46+00:00",
+      "publishedLabel": "Aug 20, 02:38 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/gIRaZwgGWuk/hqdefault.jpg"
+    },
     {
       "id": "bcJEW8XWpQ0",
       "title": "Using the Pixel 11 Pro for a week confirmed my biggest fear about Pixel's future | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-20T04:08:39+00:00",
       "publishedLabel": "Aug 20, 04:08 AM",
       "thumbnail": "https://i2.ytimg.com/vi/1VZQKybqtyI/hqdefault.jpg"
-    },
-    {
-      "id": "l7kpNsFrbUA",
-      "title": "Google Pixel 11 Pro hands-on review | NEWS-MONSTER",
-      "publishedAt": "2026-08-20T03:48:33+00:00",
-      "publishedLabel": "Aug 20, 03:48 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/l7kpNsFrbUA/hqdefault.jpg"
     }
   ]
 }
