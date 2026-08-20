@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-20T01:16:54.629Z",
+  "updatedAt": "2026-08-20T02:45:55.310Z",
   "videos": [
+    {
+      "id": "CLwj6fUVzIg",
+      "title": "Bessent acts to break bond market fever, head off rising borrowing costs | NEWS-MONSTER",
+      "publishedAt": "2026-08-20T02:41:56+00:00",
+      "publishedLabel": "Aug 20, 02:41 AM",
+      "thumbnail": "https://i4.ytimg.com/vi/CLwj6fUVzIg/hqdefault.jpg"
+    },
     {
       "id": "n4_1vDpo6zo",
       "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-18T18:44:49+00:00",
       "publishedLabel": "Aug 18, 06:44 PM",
       "thumbnail": "https://i2.ytimg.com/vi/mv_E-cdwbzE/hqdefault.jpg"
-    },
-    {
-      "id": "uB-tuu5T5SI",
-      "title": "The Fiscal Threat",
-      "publishedAt": "2026-08-18T17:38:42+00:00",
-      "publishedLabel": "Aug 18, 05:38 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/uB-tuu5T5SI/hqdefault.jpg"
     }
   ]
 }
