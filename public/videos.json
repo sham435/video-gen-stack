@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-20T09:45:49.546Z",
+  "updatedAt": "2026-08-20T10:39:30.984Z",
   "videos": [
+    {
+      "id": "0Jd2BwgPgdQ",
+      "title": "LG Display Introduces FLiPP OLED Technology, Improving Brightness By Up To 1.6X With Longe | NEWS-MO",
+      "publishedAt": "2026-08-20T10:30:56+00:00",
+      "publishedLabel": "Aug 20, 10:30 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/0Jd2BwgPgdQ/hqdefault.jpg"
+    },
     {
       "id": "YLqKo5rhIY0",
       "title": "Samsung confirms August 27 event for the ‘newest addition to the Galaxy S26 family’ | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-19T22:55:40+00:00",
       "publishedLabel": "Aug 19, 10:55 PM",
       "thumbnail": "https://i1.ytimg.com/vi/tXkFWB3alPE/hqdefault.jpg"
-    },
-    {
-      "id": "jmGWFKmtkFY",
-      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
-      "publishedAt": "2026-08-19T22:30:02+00:00",
-      "publishedLabel": "Aug 19, 10:30 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/jmGWFKmtkFY/hqdefault.jpg"
     }
   ]
 }
