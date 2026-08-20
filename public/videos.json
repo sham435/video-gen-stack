@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-20T04:47:15.882Z",
+  "updatedAt": "2026-08-20T05:40:18.794Z",
   "videos": [
+    {
+      "id": "8VgptAdQI5o",
+      "title": "Google Pixel 11 Pro hands-on review | NEWS-MONSTER",
+      "publishedAt": "2026-08-20T05:32:01+00:00",
+      "publishedLabel": "Aug 20, 05:32 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/8VgptAdQI5o/hqdefault.jpg"
+    },
     {
       "id": "m7OgTt_9WVE",
       "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-19T17:55:32+00:00",
       "publishedLabel": "Aug 19, 05:55 PM",
       "thumbnail": "https://i2.ytimg.com/vi/IST7vGQmYPc/hqdefault.jpg"
-    },
-    {
-      "id": "W2ON2e0Txh8",
-      "title": "Google’s Pixel 11 Pro Fold feels like the end of an era | NEWS-MONSTER",
-      "publishedAt": "2026-08-19T17:30:22+00:00",
-      "publishedLabel": "Aug 19, 05:30 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/W2ON2e0Txh8/hqdefault.jpg"
     }
   ]
 }
