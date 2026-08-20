@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-20T10:39:30.984Z",
+  "updatedAt": "2026-08-20T11:11:50.367Z",
   "videos": [
+    {
+      "id": "4kAXBrMghr8",
+      "title": "LG Display Introduces FLiPP OLED Technology, Improving Brightness By Up To 1.6X With Longe | NEWS-MO",
+      "publishedAt": "2026-08-20T11:02:47+00:00",
+      "publishedLabel": "Aug 20, 11:02 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/4kAXBrMghr8/hqdefault.jpg"
+    },
     {
       "id": "0Jd2BwgPgdQ",
       "title": "LG Display Introduces FLiPP OLED Technology, Improving Brightness By Up To 1.6X With Longe | NEWS-MO",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-19T23:25:34+00:00",
       "publishedLabel": "Aug 19, 11:25 PM",
       "thumbnail": "https://i4.ytimg.com/vi/gVaESH4NeeQ/hqdefault.jpg"
-    },
-    {
-      "id": "tXkFWB3alPE",
-      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
-      "publishedAt": "2026-08-19T22:55:40+00:00",
-      "publishedLabel": "Aug 19, 10:55 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/tXkFWB3alPE/hqdefault.jpg"
     }
   ]
 }
