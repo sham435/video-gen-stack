@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-20T12:03:50.308Z",
+  "updatedAt": "2026-08-20T12:50:44.274Z",
   "videos": [
+    {
+      "id": "Csz0wq6XWoM",
+      "title": "We tested the Pixel 11's Tensor G6 chip, and the results are brutal | NEWS-MONSTER",
+      "publishedAt": "2026-08-20T12:46:32+00:00",
+      "publishedLabel": "Aug 20, 12:46 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/Csz0wq6XWoM/hqdefault.jpg"
+    },
     {
       "id": "aw9U-PB7yvI",
       "title": "Stock Market Today: Bond Market Steady After Treasury Intervention, Nasdaq Futures Tick Up | NEWS-MO",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-20T02:41:56+00:00",
       "publishedLabel": "Aug 20, 02:41 AM",
       "thumbnail": "https://i4.ytimg.com/vi/CLwj6fUVzIg/hqdefault.jpg"
-    },
-    {
-      "id": "n4_1vDpo6zo",
-      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
-      "publishedAt": "2026-08-20T01:07:59+00:00",
-      "publishedLabel": "Aug 20, 01:07 AM",
-      "thumbnail": "https://i3.ytimg.com/vi/n4_1vDpo6zo/hqdefault.jpg"
     }
   ]
 }
