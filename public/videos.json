@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-20T12:50:44.274Z",
+  "updatedAt": "2026-08-20T13:53:37.016Z",
   "videos": [
+    {
+      "id": "bcJEW8XWpQ0",
+      "title": "Using the Pixel 11 Pro for a week confirmed my biggest fear about Pixel's future | NEWS-MONSTER",
+      "publishedAt": "2026-08-20T13:49:21+00:00",
+      "publishedLabel": "Aug 20, 01:49 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/bcJEW8XWpQ0/hqdefault.jpg"
+    },
     {
       "id": "Csz0wq6XWoM",
       "title": "We tested the Pixel 11's Tensor G6 chip, and the results are brutal | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-20T03:48:33+00:00",
       "publishedLabel": "Aug 20, 03:48 AM",
       "thumbnail": "https://i1.ytimg.com/vi/l7kpNsFrbUA/hqdefault.jpg"
-    },
-    {
-      "id": "CLwj6fUVzIg",
-      "title": "Bessent acts to break bond market fever, head off rising borrowing costs | NEWS-MONSTER",
-      "publishedAt": "2026-08-20T02:41:56+00:00",
-      "publishedLabel": "Aug 20, 02:41 AM",
-      "thumbnail": "https://i4.ytimg.com/vi/CLwj6fUVzIg/hqdefault.jpg"
     }
   ]
 }
