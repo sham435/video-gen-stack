@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-20T07:49:00.309Z",
+  "updatedAt": "2026-08-20T08:47:18.436Z",
   "videos": [
+    {
+      "id": "ml3gsCrq_QM",
+      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
+      "publishedAt": "2026-08-20T08:39:01+00:00",
+      "publishedLabel": "Aug 20, 08:39 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/ml3gsCrq_QM/hqdefault.jpg"
+    },
     {
       "id": "YPmGn4QnALE",
       "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-19T22:00:47+00:00",
       "publishedLabel": "Aug 19, 10:00 PM",
       "thumbnail": "https://i3.ytimg.com/vi/ZuW4hhVR8y0/hqdefault.jpg"
-    },
-    {
-      "id": "XenUc0jWzlk",
-      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
-      "publishedAt": "2026-08-19T20:28:57+00:00",
-      "publishedLabel": "Aug 19, 08:28 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/XenUc0jWzlk/hqdefault.jpg"
     }
   ]
 }
