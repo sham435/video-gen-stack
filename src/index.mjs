@@ -152,20 +152,6 @@ export class NewsBroadcastEngine {
       throw new Error(`Production preflight failed: ${preflight.errors.join(', ')}`)
     }
 
-    // Optional auto niche detection — when the article carries no category and
-    // the caller opts in (`options.detectNiche`), classify the topic so the
-    // generated brand chrome (the red category pill) reflects the real subject
-    // (TESLA / AI / APPLE / ...). Guarded so default runs are unchanged.
-    if (!article.category && options.detectNiche) {
-      try {
-        const { detectNiche } = await import('./youtube/nicheDetector.mjs')
-        article.category = await detectNiche({
-          text: article.headline || article.title || article.body || article.text || '',
-          llm: options.nicheLlm,
-        })
-      } catch { /* keep undefined — downstream defaults to 'technology' */ }
-    }
-
     fs.mkdirSync(outDir, { recursive: true })
     const framesDir = `${outDir}/frames`
     // Wipe stale frames + intermediates before rendering. In CI the checkout
