@@ -239,22 +239,22 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           if (!publishPreflight.ready) {
             throw new Error(`Publish preflight failed: ${publishPreflight.errors.join(', ')}`)
           }
-          // Thumbnail validation — ensure the cover is a valid PNG before upload
-          const { assertValidThumbnail } = await import('../src/youtube/thumbnailValidator.mjs')
+          // Thumbnail preflight — explicit pipeline stage
+          const { ThumbnailPreflight } = await import('../src/pipeline/ThumbnailPreflight.mjs')
           const coverPath = fs.existsSync('output/cover.png') ? 'output/cover.png' : null
           if (coverPath) {
-            try {
-              const thumbCheck = assertValidThumbnail(coverPath)
-              console.log(`[Thumbnail] valid: ${thumbCheck.width}x${thumbCheck.height}, ${(thumbCheck.sizeBytes / 1024).toFixed(0)}KB`)
-            } catch (e) {
-              console.warn(`\u26a0\ufe0f  ${e.message} \u2014 uploading anyway`)
+            const thumbCheck = ThumbnailPreflight.validate({ path: coverPath, niche: engine?.productionContext?.niche?.key })
+            if (thumbCheck.ready) {
+              console.log(`[Thumbnail] preflight PASS: ${thumbCheck.meta.width}x${thumbCheck.meta.height}, ${(thumbCheck.meta.sizeBytes / 1024).toFixed(0)}KB`)
+            } else {
+              console.warn(`⚠️  ThumbnailPreflight: ${thumbCheck.errors.join('; ')} — uploading anyway`)
             }
           }
 
-          // Niche context — read from engine's production context if available
-          const nicheResult = engine?.nicheResult || null
-          if (nicheResult) {
-            console.log(`[Niche] ${nicheResult.niche} (confidence=${nicheResult.confidence}, source=${nicheResult.source})`)
+          // Niche context — read from immutable production context (resolved once)
+          const nicheDecision = engine?.productionContext?.niche || null
+          if (nicheDecision) {
+            console.log(`[Niche] ${nicheDecision.key} (confidence=${nicheDecision.confidence}, source=${nicheDecision.source})`)
           }
 
           const { publishVideo } = await import('../apps/api/publishers/youtube.js')
@@ -263,7 +263,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           const { HashtagBuilder } = await import('../src/publishing/HashtagBuilder.mjs')
           const hashtags = HashtagBuilder.build({
             topic: HashtagBuilder.topicFromHeadline(article.title),
-            category: category || nicheResult?.niche || 'tech',
+            category: category || nicheDecision?.key || 'tech',
             pipelineProfile: 'breaking',
             channel: 'NEWS-MONSTER',
           })
@@ -274,9 +274,9 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             description: desc,
             privacy: process.env.YOUTUBE_PRIVACY || 'public',
             thumbnailPath: coverPath,
-            niche: nicheResult?.niche || null,
+            niche: nicheDecision?.key || null,
           })
-          console.log(`[UPLOAD] videoId=${result.videoId} url=${result.url} niche=${result.niche || 'none'} thumbnail=${result.thumbnailUploaded ? 'uploaded' : 'skipped'}`)
+          console.log(`[UPLOAD] videoId=${result.videoId} url=${result.url} niche=${result.niche || 'none'} thumbnail=${result.thumbnailUploaded ? 'uploaded' : result.lastError ? 'FAILED: ' + result.lastError : 'skipped'}`)
 
           // Cross-post to LinkedIn — same video, 30-min cadence mirrored from
           // YouTube. Best-effort: a LinkedIn auth/config failure must never

@@ -71,7 +71,7 @@ export function normalize(candidate) {
 // ─── heuristicScore ──────────────────────────────────────────────────────────
 // Weighted keyword scoring with canonical entity short-circuit.
 // Returns { niche, confidence, reason }
-function heuristicScore(text) {
+export function heuristicScore(text) {
   const lower = ` ${String(text || '').toLowerCase()} `
   // 1) Canonical entity mention wins outright
   for (const niche of NICHES) {

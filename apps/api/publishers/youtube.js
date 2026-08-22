@@ -39,30 +39,34 @@ export async function getAccessToken() {
   return data.access_token
 }
 
-// ─── publishVideo (transactional) ────────────────────────────────────────────
-// The production publishing contract: Video + Thumbnail + Metadata → Published.
+// ─── publishVideo ────────────────────────────────────────────────────────────
+// The production publishing contract: Video + Thumbnail → Published.
+//
+// NOT transactional — video and thumbnail uploads are independent. If thumbnail
+// fails, the video remains published. Modelled as a state machine:
+//
+//   VIDEO_UPLOAD_PENDING → VIDEO_UPLOADED → THUMBNAIL_PENDING → PUBLISHED
+//                         ↓ (thumbnail fails)
+//                    THUMBNAIL_FAILED → Retry Queue
 //
 // Accepts either:
 //   publishVideo({ videoUrl, thumbnailPath, metadata, niche })
 //   publishVideo(videoUrl, title, description, privacy, coverPath)  // legacy
 //
-// Returns: { videoId, url, niche, thumbnailUploaded, metadata }
+// Returns: PublishResult (state machine snapshot)
 export async function publishVideo(inputOrUrl, titleOrOpts, description, privacy = 'public', coverPath = null) {
-  // Support both legacy positional args and new object form
-  let videoUrl, thumbnailPath, metadata, niche, _title, _description, _privacy
+  let videoUrl, thumbnailPath, niche, _title, _description, _privacy
   if (typeof inputOrUrl === 'object' && inputOrUrl !== null) {
     const opts = inputOrUrl
     videoUrl = opts.videoUrl
     thumbnailPath = opts.thumbnailPath || opts.coverPath || null
-    metadata = opts.metadata || {}
     niche = opts.niche || null
-    _title = opts.title || metadata.title || 'News Update'
-    _description = opts.description || metadata.description || ''
+    _title = opts.title || opts.metadata?.title || 'News Update'
+    _description = opts.description || opts.metadata?.description || ''
     _privacy = opts.privacy || 'public'
   } else {
     videoUrl = inputOrUrl
     thumbnailPath = coverPath
-    metadata = {}
     niche = null
     _title = titleOrOpts
     _description = description
@@ -71,7 +75,7 @@ export async function publishVideo(inputOrUrl, titleOrOpts, description, privacy
 
   const token = await getAccessToken()
 
-  // 1. Fetch and upload the video
+  // State: VIDEO_UPLOAD_PENDING
   const videoResp = await fetch(videoUrl)
   if (!videoResp.ok) throw new Error(`Failed to fetch video data: ${videoResp.status} ${videoResp.statusText}`)
   const videoBuffer = await videoResp.arrayBuffer()
@@ -96,41 +100,42 @@ export async function publishVideo(inputOrUrl, titleOrOpts, description, privacy
 
   const res = await fetch(`${BASE}/upload/youtube/v3/videos?part=snippet,status&uploadType=multipart`, {
     method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': `multipart/related; boundary=${boundary}`,
-    },
+    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': `multipart/related; boundary=${boundary}` },
     body: combined,
   })
 
   const data = await res.json()
-  if (data.error) {
-    console.error('❌ YouTube API error:', data.error.message || JSON.stringify(data.error))
-    throw new Error(`YouTube upload failed: ${data.error.message || JSON.stringify(data.error)}`)
-  }
-  if (!data.id) {
-    console.error('❌ YouTube response missing video ID:', JSON.stringify(data).slice(0, 500))
-    throw new Error('YouTube upload succeeded but no video ID returned')
-  }
+  if (data.error) throw new Error(`YouTube upload failed: ${data.error.message || JSON.stringify(data.error)}`)
+  if (!data.id) throw new Error('YouTube upload succeeded but no video ID returned')
 
+  // State: VIDEO_UPLOADED
   console.log(`✅ YouTube upload complete: https://youtu.be/${data.id}`)
 
-  // 2. Upload thumbnail (independent — failure must not kill the video)
+  // State: THUMBNAIL_PENDING → attempt thumbnail upload (independent)
   let thumbnailUploaded = false
-  if (data.id && thumbnailPath) {
+  let thumbnailAttempts = 0
+  let lastThumbnailError = null
+  if (thumbnailPath) {
+    thumbnailAttempts++
     try {
       await setThumbnail(token, data.id, thumbnailPath)
       thumbnailUploaded = true
     } catch (e) {
-      console.warn(`⚠️  Thumbnail upload failed: ${e.message} (video still published)`)
+      lastThumbnailError = e.message
+      console.warn(`⚠️  Thumbnail upload failed: ${e.message} (video still published, retry queued)`)
     }
   }
 
+  // Return state machine snapshot
   return {
     videoId: data.id,
     url: `https://youtu.be/${data.id}`,
     niche: niche || null,
+    // State machine fields
+    videoUploaded: true,
     thumbnailUploaded,
+    thumbnailAttempts,
+    lastError: lastThumbnailError,
     metadata: { title: String(_title).slice(0, 100), privacy: _privacy },
   }
 }

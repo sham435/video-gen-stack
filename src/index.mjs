@@ -153,41 +153,39 @@ export class NewsBroadcastEngine {
     }
 
     // ── Stage 0: Niche resolution — single source of truth for the entire ──
-    // production pipeline. Runs once, stored in productionContext, consumed
-    // by CoverComposer, SceneEngine, MetadataBuilder, and the publisher.
-    let nicheResult = { niche: article?.category || 'GENERAL', confidence: 0.99, source: 'explicit', reason: 'article.category', tier: 'high' }
-    if (!article.category && !options.skipNiche) {
-      try {
-        const { detectNiche } = await import('./youtube/nicheResolver.mjs')
-        const text = article.headline || article.title || article.body || article.text || ''
-        nicheResult = await detectNiche({ text, llm: options.nicheLlm })
-        article.category = nicheResult.niche
-      } catch (e) {
-        console.warn(`[Niche] detection failed: ${e.message} — falling back to GENERAL`)
-        nicheResult = { niche: 'GENERAL', confidence: 0.3, source: 'fallback', reason: e.message, tier: 'fallback' }
-        article.category = 'GENERAL'
-      }
-    } else if (article.category) {
-      // Normalize the existing category through the canonical resolver
-      try {
-        const { detectNiche } = await import('./youtube/nicheResolver.mjs')
-        nicheResult = await detectNiche({ category: article.category })
-        article.category = nicheResult.niche
-      } catch { /* keep original category */ }
-    }
-    // Load the production profile for this niche (accent color, tone, visuals)
-    const { getProfile } = await import('./youtube/nicheProfiles.mjs')
-    const nicheProfile = getProfile(nicheResult.niche)
-    // Production context — the single normalized object for the entire pipeline
-    const { buildProductionContext } = await import('./youtube/nicheResolver.mjs')
-    this.productionContext = buildProductionContext({
-      article,
-      nicheResult,
-      assets: { cover: `${outDir}/cover.png`, thumbnail: `${outDir}/thumbnail.png` },
+    // production pipeline. Runs ONCE via resolveNiche(). Nobody downstream
+    // calls detectNiche() again. The decision is immutable after this point.
+    const { resolveNiche } = await import('./pipeline/NicheResolver.mjs')
+    const { getProfile } = await import('./production/CategoryProductionProfiles.mjs')
+    const nicheDecision = await resolveNiche(article, { llm: options.nicheLlm })
+    // Normalize article.category to the canonical niche key
+    article.category = nicheDecision.key
+    // Load the production profile — HOW we produce for this niche
+    const nicheProfile = getProfile(nicheDecision.key)
+    // Immutable production context — the single normalized object for the entire pipeline
+    this.productionContext = Object.freeze({
+      articleId: article?.id || article?.headline?.slice(0, 40) || `run-${Date.now()}`,
+      niche: nicheDecision,
+      profile: nicheProfile,
+      assets: Object.freeze({
+        cover: `${outDir}/cover.png`,
+        thumbnail: `${outDir}/thumbnail.png`,
+        video: `${outDir}/final.mp4`,
+      }),
+      publishing: Object.freeze({
+        youtube: Object.freeze({
+          videoId: null,
+          videoUploaded: false,
+          thumbnailUploaded: false,
+          thumbnailAttempts: 0,
+          lastError: null,
+        }),
+      }),
     })
-    this.nicheResult = nicheResult
+    // Backward-compat aliases for code that reads engine.nicheResult / engine.nicheProfile
+    this.nicheResult = { niche: nicheDecision.key, confidence: nicheDecision.confidence, source: nicheDecision.source, tier: nicheDecision.key !== 'GENERAL' && nicheDecision.confidence >= 0.80 ? 'high' : 'low', reason: nicheDecision.reason }
     this.nicheProfile = nicheProfile
-    console.log(`[Niche] ${nicheResult.niche} (confidence=${nicheResult.confidence}, source=${nicheResult.source}, tier=${nicheResult.tier})`)
+    console.log(`[Niche] ${nicheDecision.key} (confidence=${nicheDecision.confidence}, source=${nicheDecision.source})`)
 
     fs.mkdirSync(outDir, { recursive: true })
     const framesDir = `${outDir}/frames`
@@ -526,16 +524,16 @@ export class NewsBroadcastEngine {
       // Pass contract cover metadata (headline/subheadline/subject) into the article
       // so the CoverDirector produces a story-aligned cover. Include the niche profile
       // so the accent color and pill label come from the production profile.
-      const coverArticle = { ...article, title: article.title || this.contract?.cover?.headline, nicheProfile: this.nicheProfile }
+      const coverArticle = { ...article, title: article.title || this.contract?.cover?.headline, nicheProfile: this.nicheProfile, niche: this.productionContext.niche.key }
       const coverResult = await this.coverGenerator.generateTournament(coverArticle, outDir, { styles: ['breaking', 'cinematic', 'minimal', 'reaction', 'data'], hideBranding: options.hideBranding })
       const coverPath = coverResult.path
       this.coverPath = coverPath
       this.coverBrief = coverResult.brief
-      // 16:9 YouTube thumbnail (1280x720) — landscape variant for uploads
-      // Pass nicheProfile so the accent color and pill label match the production profile
+      // 16:9 YouTube thumbnail (1280x720) — landscape variant for uploads.
+      // Pass nicheProfile so the accent color and pill label match the production profile.
       try {
         const thumbPath = `${outDir}/thumbnail.png`
-        const thumbArticle = { ...coverArticle, nicheProfile: this.nicheProfile }
+        const thumbArticle = { ...coverArticle, nicheProfile: this.nicheProfile, niche: this.productionContext.niche.key }
         await this.coverGenerator.generateThumbnail(thumbArticle, thumbPath, { style: coverResult.winner || 'breaking', hideBranding: options.hideBranding })
         this.thumbnailPath = thumbPath
       } catch (e) {

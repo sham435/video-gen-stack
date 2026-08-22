@@ -1,13 +1,15 @@
-// Niche detection for auto thumbnails.
+// Niche detection for auto thumbnails — LEGACY SHIM.
 //
-// Legacy API: detectNiche({ text, llm, allowed }) returns a string ('TESLA', ...).
-// Production API: import from nicheResolver.mjs which returns
-//   { niche, confidence, source, reason, tier }.
+// All real resolution lives in pipeline/NicheResolver.mjs (Stage 0).
+// This file is kept for backward compatibility: detectNiche() returns a
+// legacy niche string, renderNicheThumbnail() is a UI concern.
 //
-// renderNicheThumbnail() lives here — it depends on CoverComposer.
+// New code should import from pipeline/NicheResolver.mjs directly.
 
-// Re-export the production resolver's normalize for backward compat
 export { normalize } from './nicheResolver.mjs'
+import { resolveNicheSync } from '../pipeline/NicheResolver.mjs'
+import { getProfile } from '../production/CategoryProductionProfiles.mjs'
+
 export const KNOWN_NICHES = [
   'TESLA', 'AI', 'APPLE', 'SPACE', 'CRYPTO', 'STOCKS', 'TECH',
   'GAMING', 'POLITICS', 'SPORTS', 'CLIMATE', 'HEALTH', 'MUSIC', 'MOVIES',
@@ -68,8 +70,10 @@ function heuristicScore(text, allowed = KNOWN_NICHES) {
 }
 
 // Legacy detectNiche — returns a string, not the full result object.
-// New code should use nicheResolver.mjs detectNiche() instead.
+// Delegates to pipeline/NicheResolver for canonical niches, falls back to
+// legacy keyword scoring for non-canonical legacy niches.
 export async function detectNiche({ text, llm, allowed = KNOWN_NICHES } = {}) {
+  // 1. LLM override — if provided and returns a valid niche, it wins
   if (llm) {
     try {
       const raw = await llm(String(text || ''))
@@ -77,7 +81,25 @@ export async function detectNiche({ text, llm, allowed = KNOWN_NICHES } = {}) {
       if (norm) return norm
     } catch { /* fall through to heuristic */ }
   }
-  return heuristicScore(text, allowed) || 'TECH'
+  // 2. Pipeline resolver — canonical 10 niches, high confidence
+  const decision = resolveNicheSync(String(text || ''), '')
+  if (decision.confidence >= 0.80 && decision.key !== 'GENERAL') return decision.key
+  // 3. Legacy keyword scoring — for non-canonical niches (STOCKS, etc.)
+  const lower = ` ${String(text || '').toLowerCase()} `
+  for (const niche of allowed) {
+    if (lower.includes(NICHE_KEYWORDS[niche][0])) return niche
+  }
+  const scores = {}
+  for (const niche of allowed) {
+    for (const kw of NICHE_KEYWORDS[niche] || []) {
+      if (lower.includes(kw)) scores[niche] = (scores[niche] || 0) + (kw.length > 6 ? 2 : 1)
+    }
+  }
+  let best = null, bestScore = 0
+  for (const [n, s] of Object.entries(scores)) {
+    if (s > bestScore) { bestScore = s; best = n }
+  }
+  return best || 'TECH'
 }
 
 // Render a 16:9 YouTube thumbnail (1280x720) with the niche shown as the red
