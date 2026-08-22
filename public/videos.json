@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-22T17:50:04.134Z",
+  "updatedAt": "2026-08-22T18:29:01.093Z",
   "videos": [
+    {
+      "id": "H72_ol4uhV4",
+      "title": "CHINA COLLAPSE",
+      "publishedAt": "2026-08-22T14:52:28+00:00",
+      "publishedLabel": "Aug 22, 02:52 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/H72_ol4uhV4/hqdefault.jpg"
+    },
     {
       "id": "6UCF-Neihq0",
       "title": "AI VS AUTOMATION",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-20T11:02:47+00:00",
       "publishedLabel": "Aug 20, 11:02 AM",
       "thumbnail": "https://i1.ytimg.com/vi/4kAXBrMghr8/hqdefault.jpg"
-    },
-    {
-      "id": "0Jd2BwgPgdQ",
-      "title": "LG Display Introduces FLiPP OLED Technology, Improving Brightness By Up To 1.6X With Longe | NEWS-MO",
-      "publishedAt": "2026-08-20T10:30:56+00:00",
-      "publishedLabel": "Aug 20, 10:30 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/0Jd2BwgPgdQ/hqdefault.jpg"
     }
   ]
 }
