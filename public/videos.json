@@ -1,21 +1,7 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-22T16:53:17.828Z",
+  "updatedAt": "2026-08-22T17:23:29.534Z",
   "videos": [
-    {
-      "id": "Ci5YOj1SRhY",
-      "title": "Experts Disagree On GTA | NEWS-MONSTER",
-      "publishedAt": "2026-08-22T15:22:52+00:00",
-      "publishedLabel": "Aug 22, 03:22 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/Ci5YOj1SRhY/hqdefault.jpg"
-    },
-    {
-      "id": "H72_ol4uhV4",
-      "title": "Why some of America's biggest brands are losing ground in China - CNBC | NEWS-MONSTER",
-      "publishedAt": "2026-08-22T14:52:28+00:00",
-      "publishedLabel": "Aug 22, 02:52 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/H72_ol4uhV4/hqdefault.jpg"
-    },
     {
       "id": "6UCF-Neihq0",
       "title": "AI VS AUTOMATION",
@@ -29,13 +15,6 @@
       "publishedAt": "2026-08-22T13:59:51+00:00",
       "publishedLabel": "Aug 22, 01:59 PM",
       "thumbnail": "https://i1.ytimg.com/vi/DOpue6mL8to/hqdefault.jpg"
-    },
-    {
-      "id": "5B42c3iYVgs",
-      "title": "Why some of America's biggest brands are losing ground in China - CNBC | NEWS-MONSTER",
-      "publishedAt": "2026-08-22T13:34:29+00:00",
-      "publishedLabel": "Aug 22, 01:34 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/5B42c3iYVgs/hqdefault.jpg"
     },
     {
       "id": "lU3jkfLWxRA",
@@ -106,6 +85,27 @@
       "publishedAt": "2026-08-20T11:02:47+00:00",
       "publishedLabel": "Aug 20, 11:02 AM",
       "thumbnail": "https://i1.ytimg.com/vi/4kAXBrMghr8/hqdefault.jpg"
+    },
+    {
+      "id": "0Jd2BwgPgdQ",
+      "title": "LG Display Introduces FLiPP OLED Technology, Improving Brightness By Up To 1.6X With Longe | NEWS-MO",
+      "publishedAt": "2026-08-20T10:30:56+00:00",
+      "publishedLabel": "Aug 20, 10:30 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/0Jd2BwgPgdQ/hqdefault.jpg"
+    },
+    {
+      "id": "YLqKo5rhIY0",
+      "title": "Samsung confirms August 27 event for the ‘newest addition to the Galaxy S26 family’ | NEWS-MONSTER",
+      "publishedAt": "2026-08-20T09:36:25+00:00",
+      "publishedLabel": "Aug 20, 09:36 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/YLqKo5rhIY0/hqdefault.jpg"
+    },
+    {
+      "id": "ml3gsCrq_QM",
+      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
+      "publishedAt": "2026-08-20T08:39:01+00:00",
+      "publishedLabel": "Aug 20, 08:39 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/ml3gsCrq_QM/hqdefault.jpg"
     }
   ]
 }
