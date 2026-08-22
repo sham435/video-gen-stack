@@ -1,6 +1,6 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-22T17:23:29.534Z",
+  "updatedAt": "2026-08-22T17:50:04.134Z",
   "videos": [
     {
       "id": "6UCF-Neihq0",
@@ -22,6 +22,20 @@
       "publishedAt": "2026-08-22T12:37:20+00:00",
       "publishedLabel": "Aug 22, 12:37 PM",
       "thumbnail": "https://i1.ytimg.com/vi/lU3jkfLWxRA/hqdefault.jpg"
+    },
+    {
+      "id": "geWZRq_7dbI",
+      "title": "$77,000 NEW RECORD",
+      "publishedAt": "2026-08-22T11:50:23+00:00",
+      "publishedLabel": "Aug 22, 11:50 AM",
+      "thumbnail": "https://i4.ytimg.com/vi/geWZRq_7dbI/hqdefault.jpg"
+    },
+    {
+      "id": "i-Qmv44IRZc",
+      "title": "Gaming AI Agent Breakthrough",
+      "publishedAt": "2026-08-22T11:23:51+00:00",
+      "publishedLabel": "Aug 22, 11:23 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/i-Qmv44IRZc/hqdefault.jpg"
     },
     {
       "id": "Sb1VNzd8ZZ4",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-20T10:30:56+00:00",
       "publishedLabel": "Aug 20, 10:30 AM",
       "thumbnail": "https://i1.ytimg.com/vi/0Jd2BwgPgdQ/hqdefault.jpg"
-    },
-    {
-      "id": "YLqKo5rhIY0",
-      "title": "Samsung confirms August 27 event for the ‘newest addition to the Galaxy S26 family’ | NEWS-MONSTER",
-      "publishedAt": "2026-08-20T09:36:25+00:00",
-      "publishedLabel": "Aug 20, 09:36 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/YLqKo5rhIY0/hqdefault.jpg"
-    },
-    {
-      "id": "ml3gsCrq_QM",
-      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
-      "publishedAt": "2026-08-20T08:39:01+00:00",
-      "publishedLabel": "Aug 20, 08:39 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/ml3gsCrq_QM/hqdefault.jpg"
     }
   ]
 }
