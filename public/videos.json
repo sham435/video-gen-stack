@@ -1,10 +1,24 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-22T11:33:34.358Z",
+  "updatedAt": "2026-08-22T11:58:29.421Z",
   "videos": [
     {
+      "id": "geWZRq_7dbI",
+      "title": "Live Bitcoin price news: Bitcoin tops $77,000 - CoinDesk | NEWS-MONSTER",
+      "publishedAt": "2026-08-22T11:50:23+00:00",
+      "publishedLabel": "Aug 22, 11:50 AM",
+      "thumbnail": "https://i4.ytimg.com/vi/geWZRq_7dbI/hqdefault.jpg"
+    },
+    {
+      "id": "2MqIsNVYt68",
+      "title": "ERIC SCHMIDT",
+      "publishedAt": "2026-08-22T10:25:07+00:00",
+      "publishedLabel": "Aug 22, 10:25 AM",
+      "thumbnail": "https://i3.ytimg.com/vi/2MqIsNVYt68/hqdefault.jpg"
+    },
+    {
       "id": "cvNZJ0Bu2K0",
-      "title": "Breaking News - Altera AI",
+      "title": "Altera AI",
       "publishedAt": "2026-08-22T09:38:00+00:00",
       "publishedLabel": "Aug 22, 09:38 AM",
       "thumbnail": "https://i4.ytimg.com/vi/cvNZJ0Bu2K0/hqdefault.jpg"
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-20T06:03:00+00:00",
       "publishedLabel": "Aug 20, 06:03 AM",
       "thumbnail": "https://i2.ytimg.com/vi/IWqkbYt7Tls/hqdefault.jpg"
-    },
-    {
-      "id": "8VgptAdQI5o",
-      "title": "Google Pixel 11 Pro hands-on review | NEWS-MONSTER",
-      "publishedAt": "2026-08-20T05:32:01+00:00",
-      "publishedLabel": "Aug 20, 05:32 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/8VgptAdQI5o/hqdefault.jpg"
-    },
-    {
-      "id": "m7OgTt_9WVE",
-      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
-      "publishedAt": "2026-08-20T04:38:47+00:00",
-      "publishedLabel": "Aug 20, 04:38 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/m7OgTt_9WVE/hqdefault.jpg"
     }
   ]
 }
