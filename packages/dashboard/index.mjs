@@ -2186,10 +2186,10 @@ async function loadLinkedInStatus() {
   const el = document.getElementById('liStatus')
   try {
     const r = await fetch('/api/linkedin/status').then(r => r.json())
-    el.innerHTML = r.configured
+    el.innerHTML = r.authenticated
       ? '<span class="text-green-400">● Connected</span> ' + esc(r.memberUrn || '')
       : '<span class="text-red-400">● Not configured</span>'
-    if (!r.configured) document.getElementById('liPostBtn').disabled = true
+    if (!r.authenticated) document.getElementById('liPostBtn').disabled = true
   } catch { el.innerHTML = '<span class="text-yellow-400">● Status unknown</span>' }
 }
 loadLinkedInStatus()
