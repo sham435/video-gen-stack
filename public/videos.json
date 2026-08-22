@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-22T15:01:09.886Z",
+  "updatedAt": "2026-08-22T15:27:36.577Z",
   "videos": [
+    {
+      "id": "Ci5YOj1SRhY",
+      "title": "Experts Disagree On GTA | NEWS-MONSTER",
+      "publishedAt": "2026-08-22T15:22:52+00:00",
+      "publishedLabel": "Aug 22, 03:22 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/Ci5YOj1SRhY/hqdefault.jpg"
+    },
     {
       "id": "H72_ol4uhV4",
       "title": "Why some of America's biggest brands are losing ground in China - CNBC | NEWS-MONSTER",
@@ -18,7 +25,7 @@
     },
     {
       "id": "DOpue6mL8to",
-      "title": "Italy’s Monte dei Paschi Makes $40 Billion Move to Buy Rival Banks | NEWS-MONSTER",
+      "title": "$40B",
       "publishedAt": "2026-08-22T13:59:51+00:00",
       "publishedLabel": "Aug 22, 01:59 PM",
       "thumbnail": "https://i1.ytimg.com/vi/DOpue6mL8to/hqdefault.jpg"
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-20T11:02:47+00:00",
       "publishedLabel": "Aug 20, 11:02 AM",
       "thumbnail": "https://i1.ytimg.com/vi/4kAXBrMghr8/hqdefault.jpg"
-    },
-    {
-      "id": "0Jd2BwgPgdQ",
-      "title": "LG Display Introduces FLiPP OLED Technology, Improving Brightness By Up To 1.6X With Longe | NEWS-MO",
-      "publishedAt": "2026-08-20T10:30:56+00:00",
-      "publishedLabel": "Aug 20, 10:30 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/0Jd2BwgPgdQ/hqdefault.jpg"
     }
   ]
 }
