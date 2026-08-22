@@ -1,13 +1,20 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-22T11:58:29.421Z",
+  "updatedAt": "2026-08-22T12:45:50.378Z",
   "videos": [
     {
-      "id": "geWZRq_7dbI",
-      "title": "Live Bitcoin price news: Bitcoin tops $77,000 - CoinDesk | NEWS-MONSTER",
-      "publishedAt": "2026-08-22T11:50:23+00:00",
-      "publishedLabel": "Aug 22, 11:50 AM",
-      "thumbnail": "https://i4.ytimg.com/vi/geWZRq_7dbI/hqdefault.jpg"
+      "id": "lU3jkfLWxRA",
+      "title": "Tesla прекращает выпуск солнечной черепицы Solar Roof | NEWS-MONSTER",
+      "publishedAt": "2026-08-22T12:37:20+00:00",
+      "publishedLabel": "Aug 22, 12:37 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/lU3jkfLWxRA/hqdefault.jpg"
+    },
+    {
+      "id": "Sb1VNzd8ZZ4",
+      "title": "Drone Delivery Nation",
+      "publishedAt": "2026-08-22T10:54:53+00:00",
+      "publishedLabel": "Aug 22, 10:54 AM",
+      "thumbnail": "https://i4.ytimg.com/vi/Sb1VNzd8ZZ4/hqdefault.jpg"
     },
     {
       "id": "2MqIsNVYt68",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-20T06:52:39+00:00",
       "publishedLabel": "Aug 20, 06:52 AM",
       "thumbnail": "https://i1.ytimg.com/vi/0Sb6p95qjG0/hqdefault.jpg"
-    },
-    {
-      "id": "IWqkbYt7Tls",
-      "title": "Dollar at three-month lows as Treasury seeks to rein in surging bond yields | NEWS-MONSTER",
-      "publishedAt": "2026-08-20T06:03:00+00:00",
-      "publishedLabel": "Aug 20, 06:03 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/IWqkbYt7Tls/hqdefault.jpg"
     }
   ]
 }
