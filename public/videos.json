@@ -1,10 +1,17 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-22T14:33:48.223Z",
+  "updatedAt": "2026-08-22T15:01:09.886Z",
   "videos": [
     {
+      "id": "H72_ol4uhV4",
+      "title": "Why some of America's biggest brands are losing ground in China - CNBC | NEWS-MONSTER",
+      "publishedAt": "2026-08-22T14:52:28+00:00",
+      "publishedLabel": "Aug 22, 02:52 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/H72_ol4uhV4/hqdefault.jpg"
+    },
+    {
       "id": "6UCF-Neihq0",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "title": "AI VS AUTOMATION",
       "publishedAt": "2026-08-22T14:24:00+00:00",
       "publishedLabel": "Aug 22, 02:24 PM",
       "thumbnail": "https://i3.ytimg.com/vi/6UCF-Neihq0/hqdefault.jpg"
@@ -22,6 +29,13 @@
       "publishedAt": "2026-08-22T13:34:29+00:00",
       "publishedLabel": "Aug 22, 01:34 PM",
       "thumbnail": "https://i2.ytimg.com/vi/5B42c3iYVgs/hqdefault.jpg"
+    },
+    {
+      "id": "lU3jkfLWxRA",
+      "title": "Solar Roof Dead",
+      "publishedAt": "2026-08-22T12:37:20+00:00",
+      "publishedLabel": "Aug 22, 12:37 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/lU3jkfLWxRA/hqdefault.jpg"
     },
     {
       "id": "Sb1VNzd8ZZ4",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-20T10:30:56+00:00",
       "publishedLabel": "Aug 20, 10:30 AM",
       "thumbnail": "https://i1.ytimg.com/vi/0Jd2BwgPgdQ/hqdefault.jpg"
-    },
-    {
-      "id": "YLqKo5rhIY0",
-      "title": "Samsung confirms August 27 event for the ‘newest addition to the Galaxy S26 family’ | NEWS-MONSTER",
-      "publishedAt": "2026-08-20T09:36:25+00:00",
-      "publishedLabel": "Aug 20, 09:36 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/YLqKo5rhIY0/hqdefault.jpg"
-    },
-    {
-      "id": "ml3gsCrq_QM",
-      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
-      "publishedAt": "2026-08-20T08:39:01+00:00",
-      "publishedLabel": "Aug 20, 08:39 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/ml3gsCrq_QM/hqdefault.jpg"
     }
   ]
 }
