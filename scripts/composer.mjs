@@ -278,6 +278,11 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           })
           console.log(`[UPLOAD] videoId=${result.videoId} url=${result.url} niche=${result.niche || 'none'} thumbnail=${result.thumbnailUploaded ? 'uploaded' : result.lastError ? 'FAILED: ' + result.lastError : 'skipped'}`)
 
+          // Record YouTube state in production trace
+          if (engine?.productionTrace) {
+            engine.productionTrace.setYouTube(result)
+          }
+
           // Cross-post to LinkedIn — same video, 30-min cadence mirrored from
           // YouTube. Best-effort: a LinkedIn auth/config failure must never
           // fail the YouTube publish that already succeeded.
@@ -312,6 +317,9 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
               }
             } catch (e) {
               console.log(`[LINKEDIN] skipped (best-effort): ${e.message}`)
+              if (engine?.productionTrace) {
+                engine.productionTrace.setLinkedIn({ attempted: true, success: false, error: e.message })
+              }
             }
           } else {
             console.log('[LINKEDIN] skipped — LINKEDIN_ACCESS_TOKEN/LINKEDIN_MEMBER_URN not set')
@@ -330,7 +338,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
               title: article.title || title,
               videoUrl: result.url,
               thumbnailPath: coverPath,
-              category: category || nicheResult?.niche || 'technology',
+              category: category || nicheDecision?.key || 'technology',
               hook: `${article.title?.split(' ').slice(0, 5).join(' ') || 'This'} — here's what just happened.`,
               summary: (article.description || '').slice(0, 160) || `A story you should see from the desk of NEWS-MONSTER.`,
             })

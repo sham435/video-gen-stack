@@ -144,6 +144,11 @@ export class NewsBroadcastEngine {
   }
 
   async generateFromArticle(article, outDir = 'output', job = null, options = {}) {
+    // Production trace — structured JSON record for this run
+    const { ProductionTrace } = await import('./pipeline/ProductionTrace.mjs')
+    const trace = new ProductionTrace(article?.id || article?.headline?.slice(0, 40))
+    this.productionTrace = trace
+
     // Stage 1: Article preflight — verify the source data before any work.
     const preflight = await ProductionPreflight.check({ article, category: article?.category }, { outDir, bypassYoutube: true, stage: 'article' })
     if (!preflight.ready) {
@@ -186,6 +191,7 @@ export class NewsBroadcastEngine {
     this.nicheResult = { niche: nicheDecision.key, confidence: nicheDecision.confidence, source: nicheDecision.source, tier: nicheDecision.key !== 'GENERAL' && nicheDecision.confidence >= 0.80 ? 'high' : 'low', reason: nicheDecision.reason }
     this.nicheProfile = nicheProfile
     console.log(`[Niche] ${nicheDecision.key} (confidence=${nicheDecision.confidence}, source=${nicheDecision.source})`)
+    trace.setNiche(nicheDecision)
 
     fs.mkdirSync(outDir, { recursive: true })
     const framesDir = `${outDir}/frames`
@@ -536,9 +542,11 @@ export class NewsBroadcastEngine {
         const thumbArticle = { ...coverArticle, nicheProfile: this.nicheProfile, niche: this.productionContext.niche.key }
         await this.coverGenerator.generateThumbnail(thumbArticle, thumbPath, { style: coverResult.winner || 'breaking', hideBranding: options.hideBranding })
         this.thumbnailPath = thumbPath
+        trace.setThumbnailGenerated()
       } catch (e) {
         console.warn(`Thumbnail variant skipped: ${e.message}`)
         this.thumbnailPath = null
+        trace.thumbnail.generated = false
       }
       if (coverResult.winner) {
         console.log(`Cover tournament: winner "${coverResult.winner}" (CTR ${coverResult.winnerCtr})`)
@@ -681,7 +689,18 @@ export class NewsBroadcastEngine {
       console.warn(`Quality Guardian skipped: ${e.message}`)
     }
 
-    return { videoPath, job }
+    // Thumbnail preflight — record validation result in trace
+    if (this.thumbnailPath) {
+      try {
+        const { ThumbnailPreflight } = await import('./pipeline/ThumbnailPreflight.mjs')
+        const thumbResult = ThumbnailPreflight.validate({ path: this.thumbnailPath, niche: this.productionContext.niche.key })
+        trace.setThumbnailPreflight(thumbResult)
+      } catch (e) {
+        trace.setThumbnailPreflight({ ready: false, errors: [e.message] })
+      }
+    }
+
+    return { videoPath, job, trace: trace.finish('published') }
   }
 
   buildScenesFromAnalysis(template, article, analysis) {
