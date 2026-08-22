@@ -14,6 +14,7 @@ import premiumRoutes from './routes/premium.js'
 import directRoutes from './routes/direct.js'
 import cronManagerRoutes from './routes/cron-manager.js'
 import aiManagerRoutes from './routes/ai-manager.js'
+import youtubeThumbnailRoutes from '../../src/youtube/youtubeThumbnailRoute.js'
 import { requireAuth } from '../../packages/auth/requireAuth.js'
 import { logger } from '../../packages/logger.mjs'
 import { startMetricsServer, httpRequestsTotal, httpRequestDurationMs, updateJobGauges } from '../../packages/metrics.mjs'
@@ -68,6 +69,7 @@ app.use('/api', pipelineRoutes)
 app.use('/api', premiumRoutes)
 app.use('/api', directRoutes)
 app.use('/api', cronManagerRoutes)
+app.use('/api/youtube', youtubeThumbnailRoutes)
 app.use('/api/ai', aiManagerRoutes)
 
 app.get('/api/health', (req, res) => {

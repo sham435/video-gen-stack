@@ -85,7 +85,7 @@ jobs:
             cat="${{ github.event.inputs.category }}"
           else
             cats=(technology tesla apple wsj techcrunch business)
-            idx=$(( ($(date +%H) * 2 + $(date +%M) / 30) % ${#cats[@]} ))
+            idx=$(( ($(date +%H) * 2 + 10#$(date +%M) / 30) % ${#cats[@]} ))
             cat="${cats[$idx]}"
           fi
           echo "category=$cat" >> "$GITHUB_OUTPUT"
