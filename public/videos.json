@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-22T08:34:13.059Z",
+  "updatedAt": "2026-08-22T09:12:48.735Z",
   "videos": [
+    {
+      "id": "p62cONPUZMI",
+      "title": "AEW reportedly took $30 million loss on Fight Forever video game, more details - F4W/WON | NEWS-MONS",
+      "publishedAt": "2026-08-22T09:04:06+00:00",
+      "publishedLabel": "Aug 22, 09:04 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/p62cONPUZMI/hqdefault.jpg"
+    },
     {
       "id": "gIRaZwgGWuk",
       "title": "Stock Market Today: Bond Yields Jump, Largely Wiping Out Effect of Bessent Intervention | NEWS-MONST",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-20T04:38:47+00:00",
       "publishedLabel": "Aug 20, 04:38 AM",
       "thumbnail": "https://i2.ytimg.com/vi/m7OgTt_9WVE/hqdefault.jpg"
-    },
-    {
-      "id": "1VZQKybqtyI",
-      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
-      "publishedAt": "2026-08-20T04:08:39+00:00",
-      "publishedLabel": "Aug 20, 04:08 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/1VZQKybqtyI/hqdefault.jpg"
     }
   ]
 }
