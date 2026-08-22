@@ -239,25 +239,44 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           if (!publishPreflight.ready) {
             throw new Error(`Publish preflight failed: ${publishPreflight.errors.join(', ')}`)
           }
-          const { uploadShort } = await import('../apps/api/publishers/youtube.js')
+          // Thumbnail validation — ensure the cover is a valid PNG before upload
+          const { assertValidThumbnail } = await import('../src/youtube/thumbnailValidator.mjs')
+          const coverPath = fs.existsSync('output/cover.png') ? 'output/cover.png' : null
+          if (coverPath) {
+            try {
+              const thumbCheck = assertValidThumbnail(coverPath)
+              console.log(`[Thumbnail] valid: ${thumbCheck.width}x${thumbCheck.height}, ${(thumbCheck.sizeBytes / 1024).toFixed(0)}KB`)
+            } catch (e) {
+              console.warn(`\u26a0\ufe0f  ${e.message} \u2014 uploading anyway`)
+            }
+          }
+
+          // Niche context — read from engine's production context if available
+          const nicheResult = engine?.nicheResult || null
+          if (nicheResult) {
+            console.log(`[Niche] ${nicheResult.niche} (confidence=${nicheResult.confidence}, source=${nicheResult.source})`)
+          }
+
+          const { publishVideo } = await import('../apps/api/publishers/youtube.js')
           const buffer = fs.readFileSync(finalPath)
           const title = `${article.title?.slice(0, 90) || 'News Update'} | NEWS-MONSTER`
-          const coverPath = fs.existsSync('output/cover.png') ? 'output/cover.png' : null
           const { HashtagBuilder } = await import('../src/publishing/HashtagBuilder.mjs')
           const hashtags = HashtagBuilder.build({
             topic: HashtagBuilder.topicFromHeadline(article.title),
-            category: category || 'tech',
+            category: category || nicheResult?.niche || 'tech',
             pipelineProfile: 'breaking',
             channel: 'NEWS-MONSTER',
           })
           const desc = `${title}\n\nSource: ${article.source || 'NewsAPI'}\n\n${hashtags}`
-          const result = await uploadShort(
-            `data:video/mp4;base64,${buffer.toString('base64')}`,
-            title, desc,
-            process.env.YOUTUBE_PRIVACY || 'public',
-            coverPath
-          )
-          console.log(`[UPLOAD] videoId=${result?.id} url=https://youtu.be/${result?.id}`)
+          const result = await publishVideo({
+            videoUrl: `data:video/mp4;base64,${buffer.toString('base64')}`,
+            title,
+            description: desc,
+            privacy: process.env.YOUTUBE_PRIVACY || 'public',
+            thumbnailPath: coverPath,
+            niche: nicheResult?.niche || null,
+          })
+          console.log(`[UPLOAD] videoId=${result.videoId} url=${result.url} niche=${result.niche || 'none'} thumbnail=${result.thumbnailUploaded ? 'uploaded' : 'skipped'}`)
 
           // Cross-post to LinkedIn — same video, 30-min cadence mirrored from
           // YouTube. Best-effort: a LinkedIn auth/config failure must never
@@ -269,7 +288,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
               // hashtags — then append the YouTube shorts link. The LinkedIn
               // post's own feed URL is unknown until creation, so we add it in
               // a PARTIAL_UPDATE right after (…https://lnkd.in post link).
-              const body = `${title}\n\nSource: ${article.source || 'NewsAPI'}\n\n${hashtags}\n\nhttps://www.youtube.com/shorts/${result?.id}`
+              const body = `${title}\n\nSource: ${article.source || 'NewsAPI'}\n\n${hashtags}\n\nhttps://www.youtube.com/shorts/${result.videoId}`
               const li = await shareVideo(
                 process.env.LINKEDIN_ACCESS_TOKEN,
                 process.env.LINKEDIN_MEMBER_URN,
@@ -307,11 +326,11 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             const { SocialDistributionManager } = await import('../src/publishing/SocialDistributionManager.mjs')
             const sdm = new SocialDistributionManager()
             const dist = await sdm.distribute({
-              videoId: result?.id,
+              videoId: result.videoId,
               title: article.title || title,
-              videoUrl: `https://youtu.be/${result?.id}`,
+              videoUrl: result.url,
               thumbnailPath: coverPath,
-              category: category || 'technology',
+              category: category || nicheResult?.niche || 'technology',
               hook: `${article.title?.split(' ').slice(0, 5).join(' ') || 'This'} — here's what just happened.`,
               summary: (article.description || '').slice(0, 160) || `A story you should see from the desk of NEWS-MONSTER.`,
             })
@@ -326,7 +345,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           // Community loop — post the topic-specific pinned-comment question.
           // The 100% 'stayed to watch' audience needs a reason to comment.
           let commentEvent = null
-          if (result?.id) {
+          if (result.videoId) {
             try {
               const { PinnedCommentBuilder } = await import('../src/publishing/PinnedCommentBuilder.mjs')
               const { TopicCtaBuilder } = await import('../src/publishing/TopicCtaBuilder.mjs')
@@ -335,7 +354,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
               const comment = new PinnedCommentBuilder().build(article)
               console.log(`[CTA] topic=${cta.topic} mode=${cta.mode} "${cta.narration}"`)
               console.log(`[PIN COMMENT] "${comment.question}"`)
-              const posted = await postComment(result.id, comment.question)
+              const posted = await postComment(result.videoId, comment.question)
               console.log(`[COMMENT INSERT] ${posted?.id ? `success commentId=${posted.id}` : 'failed — post it manually in Studio and pin it, then set YOUTUBE_PARENT_COMMENT_ID to its ID'}`)
               commentEvent = {
                 text: comment.question,

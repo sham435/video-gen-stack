@@ -39,25 +39,52 @@ export async function getAccessToken() {
   return data.access_token
 }
 
-export async function uploadShort(videoUrl, title, description, privacy = 'public', coverPath = null) {
+// ─── publishVideo (transactional) ────────────────────────────────────────────
+// The production publishing contract: Video + Thumbnail + Metadata → Published.
+//
+// Accepts either:
+//   publishVideo({ videoUrl, thumbnailPath, metadata, niche })
+//   publishVideo(videoUrl, title, description, privacy, coverPath)  // legacy
+//
+// Returns: { videoId, url, niche, thumbnailUploaded, metadata }
+export async function publishVideo(inputOrUrl, titleOrOpts, description, privacy = 'public', coverPath = null) {
+  // Support both legacy positional args and new object form
+  let videoUrl, thumbnailPath, metadata, niche, _title, _description, _privacy
+  if (typeof inputOrUrl === 'object' && inputOrUrl !== null) {
+    const opts = inputOrUrl
+    videoUrl = opts.videoUrl
+    thumbnailPath = opts.thumbnailPath || opts.coverPath || null
+    metadata = opts.metadata || {}
+    niche = opts.niche || null
+    _title = opts.title || metadata.title || 'News Update'
+    _description = opts.description || metadata.description || ''
+    _privacy = opts.privacy || 'public'
+  } else {
+    videoUrl = inputOrUrl
+    thumbnailPath = coverPath
+    metadata = {}
+    niche = null
+    _title = titleOrOpts
+    _description = description
+    _privacy = privacy
+  }
+
   const token = await getAccessToken()
 
+  // 1. Fetch and upload the video
   const videoResp = await fetch(videoUrl)
-  if (!videoResp.ok) {
-    throw new Error(`Failed to fetch video data: ${videoResp.status} ${videoResp.statusText}`)
-  }
+  if (!videoResp.ok) throw new Error(`Failed to fetch video data: ${videoResp.status} ${videoResp.statusText}`)
   const videoBuffer = await videoResp.arrayBuffer()
   console.log(`📤 Uploading to YouTube: ${(videoBuffer.byteLength / 1024 / 1024).toFixed(1)}MB`)
 
-  // YouTube uses multipart upload
   const boundary = 'boundary123'
-  const metadata = JSON.stringify({
-    snippet: { title: title.slice(0, 100), description: description.slice(0, 5000) },
-    status: { privacyStatus: privacy, selfDeclaredMadeForKids: false },
+  const meta = JSON.stringify({
+    snippet: { title: String(_title || 'News Update').slice(0, 100), description: String(_description || '').slice(0, 5000) },
+    status: { privacyStatus: _privacy, selfDeclaredMadeForKids: false },
   })
 
   const body = [
-    `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${metadata}\r\n`,
+    `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${meta}\r\n`,
     `--${boundary}\r\nContent-Type: video/mp4\r\n\r\n`,
     new Uint8Array(videoBuffer),
     `\r\n--${boundary}--\r\n`,
@@ -77,12 +104,10 @@ export async function uploadShort(videoUrl, title, description, privacy = 'publi
   })
 
   const data = await res.json()
-
   if (data.error) {
     console.error('❌ YouTube API error:', data.error.message || JSON.stringify(data.error))
     throw new Error(`YouTube upload failed: ${data.error.message || JSON.stringify(data.error)}`)
   }
-
   if (!data.id) {
     console.error('❌ YouTube response missing video ID:', JSON.stringify(data).slice(0, 500))
     throw new Error('YouTube upload succeeded but no video ID returned')
@@ -90,16 +115,29 @@ export async function uploadShort(videoUrl, title, description, privacy = 'publi
 
   console.log(`✅ YouTube upload complete: https://youtu.be/${data.id}`)
 
-  // Upload thumbnail if provided
-  if (data.id) {
+  // 2. Upload thumbnail (independent — failure must not kill the video)
+  let thumbnailUploaded = false
+  if (data.id && thumbnailPath) {
     try {
-      await setThumbnail(token, data.id, coverPath)
+      await setThumbnail(token, data.id, thumbnailPath)
+      thumbnailUploaded = true
     } catch (e) {
-      console.warn(`⚠️  Thumbnail upload skipped: ${e.message}`)
+      console.warn(`⚠️  Thumbnail upload failed: ${e.message} (video still published)`)
     }
   }
 
-  return data
+  return {
+    videoId: data.id,
+    url: `https://youtu.be/${data.id}`,
+    niche: niche || null,
+    thumbnailUploaded,
+    metadata: { title: String(_title).slice(0, 100), privacy: _privacy },
+  }
+}
+
+// Legacy uploadShort — kept for backward compatibility. Use publishVideo() for new code.
+export async function uploadShort(videoUrl, title, description, privacy = 'public', coverPath = null) {
+  return publishVideo({ videoUrl, title, description, privacy, thumbnailPath: coverPath })
 }
 
 export async function setThumbnail(token, videoId, coverPath) {

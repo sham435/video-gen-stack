@@ -33,7 +33,9 @@ export class CoverComposer {
   async compose(brief, heroImage, outPath) {
     const canvas = createCanvas(W, H)
     const ctx = canvas.getContext('2d')
-    const accent = brief.accent_color || '#E10600'
+    const profile = brief.nicheProfile || null
+    const accent = profile?.accent || brief.accent_color || '#E10600'
+    const pillLabel = profile?.label || brief.category || 'NEWS'
     const footerImg = brief.hideBranding ? null : await loadFooterAsset()
 
     // 1. Hero background
@@ -154,8 +156,9 @@ export class CoverComposer {
     lines.forEach((l, i) => ctx.fillText(l, W / 2, startY + i * lineH + hFontSize * 0.8))
     ctx.shadowBlur = 0
 
-    // bottom overlay badge
-    const bottomText = safeOverlay(brief.text_overlay?.bottom, 'NEW DETAILS')
+    // bottom overlay badge — niche pill from profile takes priority
+    const nicheText916 = profile?.label || null
+    const bottomText = nicheText916 || safeOverlay(brief.text_overlay?.bottom, 'NEW DETAILS')
     ctx.shadowBlur = 0
     ctx.font = '900 44px Anton, Impact, sans-serif'
     const bw = ctx.measureText(bottomText).width + 60
@@ -209,13 +212,20 @@ export class CoverComposer {
   // 16:9 YouTube thumbnail (1280x720) — the image actually shown in
   // feed/suggestions. Same brand system as the portrait Shorts cover but
   // laid out landscape. Deterministic for identical input.
+  //
+  // brief.nicheProfile — when provided, the profile's accent color and
+  //   label override the brief's accent_color / category. This is the
+  //   niche-aware path: profile → accent → pill, rather than hardcoded #E10600.
   // ------------------------------------------------------------------
 
   async composeThumbnail(brief, heroImage, outPath) {
     const TW = 1280, TH = 720
     const canvas = createCanvas(TW, TH)
     const ctx = canvas.getContext('2d')
-    const accent = brief.accent_color || '#E10600'
+    // Niche profile overrides: profile.accent > brief.accent_color > default
+    const profile = brief.nicheProfile || null
+    const accent = profile?.accent || brief.accent_color || '#E10600'
+    const pillLabel = profile?.label || brief.category || 'NEWS'
     const footerImg = brief.hideBranding ? null : await loadFooterAsset()
 
     // 1. Hero background (cover full frame)
@@ -332,8 +342,9 @@ export class CoverComposer {
     lines.forEach((l, i) => ctx.fillText(l, TW / 2, startY + i * lineH + hFontSize * 0.8))
     ctx.shadowBlur = 0
 
-    // 5. Bottom accent badge
-    const bottomText = safeOverlay(brief.text_overlay?.bottom, 'NEW DETAILS')
+    // 5. Bottom accent badge — niche pill from profile takes priority
+    const nicheText = profile?.label || null
+    const bottomText = nicheText || safeOverlay(brief.text_overlay?.bottom, 'NEW DETAILS')
     ctx.font = '900 34px Anton, Impact, sans-serif'
     const bw = ctx.measureText(bottomText).width + 50
     ctx.fillStyle = accent

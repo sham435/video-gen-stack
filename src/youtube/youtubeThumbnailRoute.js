@@ -10,7 +10,9 @@
 // Auth mirrors the rest of the API: requireAuth (the dashboard owner only).
 import { Router } from 'express'
 import { requireAuth } from '../../packages/auth/requireAuth.js'
-import { detectNiche, renderNicheThumbnail } from '../youtube/nicheDetector.mjs'
+import { detectNiche as detectNicheFull, normalize } from '../youtube/nicheResolver.mjs'
+import { getProfile } from '../youtube/nicheProfiles.mjs'
+import { renderNicheThumbnail } from '../youtube/nicheDetector.mjs'
 import { setNicheThumbnail } from '../youtube/youtubeStudioLink.mjs'
 
 const router = Router()
@@ -32,16 +34,21 @@ router.post('/set-thumbnail', requireAuth, async (req, res) => {
   if (!videoId) return res.status(400).json({ success: false, error: 'videoId is required' })
 
   try {
-    const resolved = niche || (await detectNiche({ text: article || headline || '' }))
-    const { buffer } = await renderNicheThumbnail({ niche: resolved, headline: headline || 'BREAKING NEWS', heroImage: heroImage || null })
+    const nicheInput = niche || normalize(article || headline || '') || null
+    const detection = await detectNicheFull({ text: article || headline || '', category: nicheInput })
+    const profile = getProfile(detection.niche)
+    const { buffer } = await renderNicheThumbnail({
+      niche: detection.niche,
+      headline: headline || 'BREAKING NEWS',
+      heroImage: heroImage || null,
+      profile,
+    })
     const result = await setNicheThumbnail({
       videoId,
       thumbnailBuffer: buffer,
-      // refresh token comes from the linked Studio account (saved to .env by
-      // the /api/auth/youtube/callback flow); override via options if needed.
       refreshToken: process.env.YOUTUBE_REFRESH_TOKEN,
     })
-    res.json({ success: true, niche: resolved, videoId, youtube: result.data })
+    res.json({ success: true, niche: detection.niche, confidence: detection.confidence, tier: detection.tier, videoId, youtube: result.data })
   } catch (e) {
     res.status(502).json({ success: false, error: e.message, niche: niche || null })
   }

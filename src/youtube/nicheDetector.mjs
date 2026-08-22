@@ -1,21 +1,19 @@
 // Niche detection for auto thumbnails.
 //
-// Maps an article into a 1-word niche category that becomes the red pill in the
-// generated thumbnail (e.g. TESLA, AI, APPLE, SPACE). Two modes:
-//   * LLM mode  — pass `llm(text) => Promise<string>` to classify free-form.
-//   * Heuristic — keyword scoring, zero dependencies, always available offline.
-// The heuristic is also the normalizer/fallback for LLM output so the result is
-// always one of `allowed` (uppercased) or 'TECH'.
+// Legacy API: detectNiche({ text, llm, allowed }) returns a string ('TESLA', ...).
+// Production API: import from nicheResolver.mjs which returns
+//   { niche, confidence, source, reason, tier }.
+//
+// renderNicheThumbnail() lives here — it depends on CoverComposer.
 
+// Re-export the production resolver's normalize for backward compat
+export { normalize } from './nicheResolver.mjs'
 export const KNOWN_NICHES = [
   'TESLA', 'AI', 'APPLE', 'SPACE', 'CRYPTO', 'STOCKS', 'TECH',
   'GAMING', 'POLITICS', 'SPORTS', 'CLIMATE', 'HEALTH', 'MUSIC', 'MOVIES',
 ]
 
 const NICHE_KEYWORDS = {
-  // First keyword is the CANONICAL entity — an exact mention short-circuits to
-  // that niche so generic terms ("stock", "earnings") never override a real
-  // subject ("Tesla stock ..." -> TESLA, not STOCKS).
   TESLA: ['tesla', 'elon musk', 'cybertruck', 'model s', 'model 3', 'model y', 'gigafactory', 'fsd'],
   AI: ['artificial intelligence', 'openai', 'chatgpt', 'gpt', 'llm', 'anthropic', 'machine learning', 'neural', 'gemini', 'claude'],
   APPLE: ['apple', 'iphone', 'ipad', 'macbook', 'macos', 'vision pro', 'tim cook', 'm_series', 'm1', 'm2', 'm3', 'm4'],
@@ -39,15 +37,13 @@ const ALIAS = {
   technology: 'TECH', tech: 'TECH',
 }
 
-function normalize(candidate, allowed = KNOWN_NICHES) {
+function legacyNormalize(candidate, allowed = KNOWN_NICHES) {
   if (!candidate) return null
   const up = String(candidate).trim().toUpperCase().replace(/[^A-Z0-9]/g, '')
   const direct = allowed.find((n) => n === up)
   if (direct) return direct
-  // tolerate a trailing plural / minor variance by stripping trailing S
   const loose = allowed.find((n) => n === up.replace(/S$/, ''))
   if (loose) return loose
-  // keyword alias map (e.g. "artificialintelligence" -> AI)
   const key = String(candidate).trim().toLowerCase().replace(/[^a-z]/g, '')
   if (ALIAS[key]) return ALIAS[key]
   return null
@@ -55,11 +51,9 @@ function normalize(candidate, allowed = KNOWN_NICHES) {
 
 function heuristicScore(text, allowed = KNOWN_NICHES) {
   const lower = ` ${String(text || '').toLowerCase()} `
-  // 1) Canonical entity mention wins outright (specific subject over generic).
   for (const niche of allowed) {
     if (lower.includes(NICHE_KEYWORDS[niche][0])) return niche
   }
-  // 2) Weighted keyword scoring fallback.
   const scores = {}
   for (const niche of allowed) {
     for (const kw of NICHE_KEYWORDS[niche] || []) {
@@ -73,12 +67,13 @@ function heuristicScore(text, allowed = KNOWN_NICHES) {
   return best
 }
 
-// detectNiche({ text, llm, allowed }) -> Promise<'TESLA' | ... | 'TECH'>
+// Legacy detectNiche — returns a string, not the full result object.
+// New code should use nicheResolver.mjs detectNiche() instead.
 export async function detectNiche({ text, llm, allowed = KNOWN_NICHES } = {}) {
   if (llm) {
     try {
       const raw = await llm(String(text || ''))
-      const norm = normalize(raw, allowed)
+      const norm = legacyNormalize(raw, allowed)
       if (norm) return norm
     } catch { /* fall through to heuristic */ }
   }
@@ -89,25 +84,27 @@ export async function detectNiche({ text, llm, allowed = KNOWN_NICHES } = {}) {
 // pill, then return the PNG as a Buffer ready for thumbnails.set. The niche is
 // placed in the bottom accent badge (visible red pill) and also forwarded as
 // `category` so a linked video frame inherits the same label.
-export async function renderNicheThumbnail({ niche, headline = 'BREAKING NEWS', heroImage = null, outPath } = {}) {
+//
+// When a `profile` is provided (from nicheProfiles.mjs), it is passed as
+// `nicheProfile` to CoverComposer so the accent color and label come from the
+// production profile rather than hardcoded defaults.
+export async function renderNicheThumbnail({ niche, headline = 'BREAKING NEWS', heroImage = null, outPath, profile = null } = {}) {
   const { CoverComposer } = await import('../video-studio/CoverComposer.mjs')
   const fs = await import('fs')
   const os = await import('os')
   const path = await import('path')
   const tmp = outPath || path.join(os.tmpdir(), `nm-thumb-${Date.now()}-${Math.random().toString(36).slice(2)}.png`)
   const composer = new CoverComposer()
-  await composer.composeThumbnail(
-    {
-      headline,
-      accent_color: '#E10600',
-      source_label: 'NEWS-MONSTER',
-      mood: 'BREAKING',
-      category: niche,
-      text_overlay: { bottom: niche },
-    },
-    heroImage,
-    tmp,
-  )
+  const brief = {
+    headline,
+    accent_color: profile?.accent || '#E10600',
+    source_label: 'NEWS-MONSTER',
+    mood: 'BREAKING',
+    category: niche,
+    nicheProfile: profile || { label: niche, accent: '#E10600' },
+    text_overlay: { bottom: niche },
+  }
+  await composer.composeThumbnail(brief, heroImage, tmp)
   const buffer = fs.readFileSync(tmp)
   if (!outPath) fs.rmSync(tmp, { force: true })
   return { buffer, niche, headline }

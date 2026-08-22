@@ -152,19 +152,42 @@ export class NewsBroadcastEngine {
       throw new Error(`Production preflight failed: ${preflight.errors.join(', ')}`)
     }
 
-    // Auto niche detection — when the article carries no category, classify
-    // the topic so the generated brand chrome (the red category pill) reflects
-    // the real subject (TESLA / AI / APPLE / ...). Always runs unless category
-    // is already set or options.skipNiche is true.
+    // ── Stage 0: Niche resolution — single source of truth for the entire ──
+    // production pipeline. Runs once, stored in productionContext, consumed
+    // by CoverComposer, SceneEngine, MetadataBuilder, and the publisher.
+    let nicheResult = { niche: article?.category || 'GENERAL', confidence: 0.99, source: 'explicit', reason: 'article.category', tier: 'high' }
     if (!article.category && !options.skipNiche) {
       try {
-        const { detectNiche } = await import('./youtube/nicheDetector.mjs')
-        article.category = await detectNiche({
-          text: article.headline || article.title || article.body || article.text || '',
-          llm: options.nicheLlm,
-        })
-      } catch { /* keep undefined — downstream defaults to 'technology' */ }
+        const { detectNiche } = await import('./youtube/nicheResolver.mjs')
+        const text = article.headline || article.title || article.body || article.text || ''
+        nicheResult = await detectNiche({ text, llm: options.nicheLlm })
+        article.category = nicheResult.niche
+      } catch (e) {
+        console.warn(`[Niche] detection failed: ${e.message} — falling back to GENERAL`)
+        nicheResult = { niche: 'GENERAL', confidence: 0.3, source: 'fallback', reason: e.message, tier: 'fallback' }
+        article.category = 'GENERAL'
+      }
+    } else if (article.category) {
+      // Normalize the existing category through the canonical resolver
+      try {
+        const { detectNiche } = await import('./youtube/nicheResolver.mjs')
+        nicheResult = await detectNiche({ category: article.category })
+        article.category = nicheResult.niche
+      } catch { /* keep original category */ }
     }
+    // Load the production profile for this niche (accent color, tone, visuals)
+    const { getProfile } = await import('./youtube/nicheProfiles.mjs')
+    const nicheProfile = getProfile(nicheResult.niche)
+    // Production context — the single normalized object for the entire pipeline
+    const { buildProductionContext } = await import('./youtube/nicheResolver.mjs')
+    this.productionContext = buildProductionContext({
+      article,
+      nicheResult,
+      assets: { cover: `${outDir}/cover.png`, thumbnail: `${outDir}/thumbnail.png` },
+    })
+    this.nicheResult = nicheResult
+    this.nicheProfile = nicheProfile
+    console.log(`[Niche] ${nicheResult.niche} (confidence=${nicheResult.confidence}, source=${nicheResult.source}, tier=${nicheResult.tier})`)
 
     fs.mkdirSync(outDir, { recursive: true })
     const framesDir = `${outDir}/frames`
@@ -501,16 +524,19 @@ export class NewsBroadcastEngine {
     job.markStart('cover')
     try {
       // Pass contract cover metadata (headline/subheadline/subject) into the article
-      // so the CoverDirector produces a story-aligned cover
-      const coverArticle = { ...article, title: article.title || this.contract?.cover?.headline }
+      // so the CoverDirector produces a story-aligned cover. Include the niche profile
+      // so the accent color and pill label come from the production profile.
+      const coverArticle = { ...article, title: article.title || this.contract?.cover?.headline, nicheProfile: this.nicheProfile }
       const coverResult = await this.coverGenerator.generateTournament(coverArticle, outDir, { styles: ['breaking', 'cinematic', 'minimal', 'reaction', 'data'], hideBranding: options.hideBranding })
       const coverPath = coverResult.path
       this.coverPath = coverPath
       this.coverBrief = coverResult.brief
       // 16:9 YouTube thumbnail (1280x720) — landscape variant for uploads
+      // Pass nicheProfile so the accent color and pill label match the production profile
       try {
         const thumbPath = `${outDir}/thumbnail.png`
-        await this.coverGenerator.generateThumbnail(coverArticle, thumbPath, { style: coverResult.winner || 'breaking', hideBranding: options.hideBranding })
+        const thumbArticle = { ...coverArticle, nicheProfile: this.nicheProfile }
+        await this.coverGenerator.generateThumbnail(thumbArticle, thumbPath, { style: coverResult.winner || 'breaking', hideBranding: options.hideBranding })
         this.thumbnailPath = thumbPath
       } catch (e) {
         console.warn(`Thumbnail variant skipped: ${e.message}`)

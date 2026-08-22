@@ -149,7 +149,7 @@ test('uploadShort — succeeds with valid video response', async () => {
     'public',
     null // no cover
   )
-  assert.equal(result.id, 'vid-123')
+  assert.equal(result.videoId, 'vid-123')
   assert.ok(uploadAuth?.startsWith('Bearer '))
 })
 
