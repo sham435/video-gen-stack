@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-22T14:08:25.867Z",
+  "updatedAt": "2026-08-22T14:33:48.223Z",
   "videos": [
+    {
+      "id": "6UCF-Neihq0",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-22T14:24:00+00:00",
+      "publishedLabel": "Aug 22, 02:24 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/6UCF-Neihq0/hqdefault.jpg"
+    },
     {
       "id": "DOpue6mL8to",
       "title": "Italy’s Monte dei Paschi Makes $40 Billion Move to Buy Rival Banks | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-20T08:39:01+00:00",
       "publishedLabel": "Aug 20, 08:39 AM",
       "thumbnail": "https://i2.ytimg.com/vi/ml3gsCrq_QM/hqdefault.jpg"
-    },
-    {
-      "id": "YPmGn4QnALE",
-      "title": "Google Pixel 11 series review: Is the magic fading? | NEWS-MONSTER",
-      "publishedAt": "2026-08-20T07:42:54+00:00",
-      "publishedLabel": "Aug 20, 07:42 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/YPmGn4QnALE/hqdefault.jpg"
     }
   ]
 }
