@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-22T10:33:46.915Z",
+  "updatedAt": "2026-08-22T11:03:58.528Z",
   "videos": [
+    {
+      "id": "Sb1VNzd8ZZ4",
+      "title": "Amazon to Expand Drone Delivery Service to Nearly 500 Locales | NEWS-MONSTER",
+      "publishedAt": "2026-08-22T10:54:53+00:00",
+      "publishedLabel": "Aug 22, 10:54 AM",
+      "thumbnail": "https://i4.ytimg.com/vi/Sb1VNzd8ZZ4/hqdefault.jpg"
+    },
     {
       "id": "2MqIsNVYt68",
       "title": "Asian Stocks Set to Fall as Bonds Resume Decline: Markets Wrap - Bloomberg.com | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-20T06:03:00+00:00",
       "publishedLabel": "Aug 20, 06:03 AM",
       "thumbnail": "https://i2.ytimg.com/vi/IWqkbYt7Tls/hqdefault.jpg"
-    },
-    {
-      "id": "8VgptAdQI5o",
-      "title": "Google Pixel 11 Pro hands-on review | NEWS-MONSTER",
-      "publishedAt": "2026-08-20T05:32:01+00:00",
-      "publishedLabel": "Aug 20, 05:32 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/8VgptAdQI5o/hqdefault.jpg"
     }
   ]
 }
