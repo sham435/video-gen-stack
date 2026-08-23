@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-23T01:13:11.641Z",
+  "updatedAt": "2026-08-23T02:48:44.520Z",
   "videos": [
+    {
+      "id": "Ci5YOj1SRhY",
+      "title": "Experts Disagree On GTA",
+      "publishedAt": "2026-08-22T15:22:52+00:00",
+      "publishedLabel": "Aug 22, 03:22 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/Ci5YOj1SRhY/hqdefault.jpg"
+    },
     {
       "id": "H72_ol4uhV4",
       "title": "CHINA COLLAPSE",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-20T11:59:29+00:00",
       "publishedLabel": "Aug 20, 11:59 AM",
       "thumbnail": "https://i2.ytimg.com/vi/aw9U-PB7yvI/hqdefault.jpg"
-    },
-    {
-      "id": "Qvd-FPOgWOs",
-      "title": "LG Display Introduces FLiPP OLED Technology, Improving Brightness By Up To 1.6X With Longe | NEWS-MO",
-      "publishedAt": "2026-08-20T11:32:40+00:00",
-      "publishedLabel": "Aug 20, 11:32 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/Qvd-FPOgWOs/hqdefault.jpg"
     }
   ]
 }
