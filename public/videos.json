@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-23T14:10:38.802Z",
+  "updatedAt": "2026-08-23T14:36:45.298Z",
   "videos": [
+    {
+      "id": "sG8CzeyWh9g",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-23T14:27:26+00:00",
+      "publishedLabel": "Aug 23, 02:27 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/sG8CzeyWh9g/hqdefault.jpg"
+    },
     {
       "id": "dp8SzamyN4k",
       "title": "Italy’s Monte dei Paschi Makes $40 Billion Move to Buy Rival Banks | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-23T06:00:01+00:00",
       "publishedLabel": "Aug 23, 06:00 AM",
       "thumbnail": "https://i1.ytimg.com/vi/h2ctrGwakw0/hqdefault.jpg"
-    },
-    {
-      "id": "IHqc_aVaV-o",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-23T05:31:51+00:00",
-      "publishedLabel": "Aug 23, 05:31 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/IHqc_aVaV-o/hqdefault.jpg"
     }
   ]
 }
