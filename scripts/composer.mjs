@@ -251,6 +251,41 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             }
           }
 
+          // C2PA content credentials — sign thumbnail with provenance manifest
+          let c2paSignedPath = coverPath
+          if (coverPath && process.env.C2PA_ENABLED !== 'false') {
+            try {
+              const { ContentCredentials } = await import('../src/pipeline/ContentCredentials.mjs')
+              const c2paResult = await ContentCredentials.sign({
+                input: coverPath,
+                article,
+                productionContext: engine?.productionContext,
+              })
+              if (c2paResult.signed) {
+                c2paSignedPath = c2paResult.path
+                console.log(`[C2PA] signed thumbnail: ${c2paResult.path}`)
+                // Verify after sign if enabled
+                if (process.env.C2PA_VERIFY_AFTER_SIGN !== 'false') {
+                  const verifyResult = await ContentCredentials.verify(c2paResult.path)
+                  console.log(`[C2PA] verification: ${verifyResult.valid ? 'PASS' : 'FAIL'} (${verifyResult.error || 'ok'})`)
+                  if (engine?.productionTrace) {
+                    engine.productionTrace.setProvenance({
+                      signed: true,
+                      verified: verifyResult.valid,
+                      manifestId: c2paResult.manifestId,
+                      error: verifyResult.error,
+                    })
+                  }
+                }
+              }
+            } catch (e) {
+              console.warn(`[C2PA] signing failed: ${e.message}`)
+              if (engine?.productionTrace) {
+                engine.productionTrace.setProvenance({ signed: false, verified: false, error: e.message })
+              }
+            }
+          }
+
           // Niche context — read from immutable production context (resolved once)
           const nicheDecision = engine?.productionContext?.niche || null
           if (nicheDecision) {
@@ -273,7 +308,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             title,
             description: desc,
             privacy: process.env.YOUTUBE_PRIVACY || 'public',
-            thumbnailPath: coverPath,
+            thumbnailPath: c2paSignedPath,
             niche: nicheDecision?.key || null,
           })
           console.log(`[UPLOAD] videoId=${result.videoId} url=${result.url} niche=${result.niche || 'none'} thumbnail=${result.thumbnailUploaded ? 'uploaded' : result.lastError ? 'FAILED: ' + result.lastError : 'skipped'}`)
@@ -337,7 +372,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
               videoId: result.videoId,
               title: article.title || title,
               videoUrl: result.url,
-              thumbnailPath: coverPath,
+              thumbnailPath: c2paSignedPath,
               category: category || nicheDecision?.key || 'technology',
               hook: `${article.title?.split(' ').slice(0, 5).join(' ') || 'This'} — here's what just happened.`,
               summary: (article.description || '').slice(0, 160) || `A story you should see from the desk of NEWS-MONSTER.`,

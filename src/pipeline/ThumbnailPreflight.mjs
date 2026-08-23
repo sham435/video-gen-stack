@@ -112,4 +112,37 @@ export const ThumbnailPreflight = Object.freeze({
     return base
   },
 
+  // ─── validateC2PA ─────────────────────────────────────────────────────
+  // C2PA validation gate. Checks that the asset has a valid C2PA manifest
+  // when C2PA is required. Returns { ready, errors[], c2paResult }.
+  // Does NOT require C2PA — only enforces when C2PA_REQUIRED=true.
+  async validateC2PA({ path } = {}) {
+    const c2paRequired = process.env.C2PA_REQUIRED === 'true'
+    const errors = []
+
+    if (!path) {
+      return { ready: !c2paRequired, errors: c2paRequired ? ['thumbnail path not provided for C2PA validation'] : [], c2paResult: null }
+    }
+
+    // If C2PA is not required, pass through
+    if (!c2paRequired) {
+      return { ready: true, errors: [], c2paResult: null }
+    }
+
+    // Lazy-load ContentCredentials to avoid circular deps
+    const { ContentCredentials } = await import('./ContentCredentials.mjs')
+    const c2paAvailable = await ContentCredentials.isAvailable()
+    if (!c2paAvailable) {
+      if (c2paRequired) errors.push('C2PA required but c2pa-node not available')
+      return { ready: !c2paRequired, errors, c2paResult: null }
+    }
+
+    const verifyResult = await ContentCredentials.verify(path)
+    if (!verifyResult.valid) {
+      errors.push(`C2PA verification failed: ${verifyResult.error}`)
+    }
+
+    return { ready: errors.length === 0, errors, c2paResult: verifyResult }
+  },
+
 })

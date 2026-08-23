@@ -30,6 +30,7 @@ export class ProductionTrace {
       thumbnail: Object.seal({ generated: false, preflight: 'skipped', uploaded: false, error: null }),
       youtube: Object.seal({ videoUploaded: false, videoId: null, thumbnailUploaded: false, thumbnailAttempts: 0, lastError: null }),
       linkedin: Object.seal({ attempted: false, success: false, error: null }),
+      provenance: Object.seal({ c2paSigned: false, c2paVerified: false, manifestId: null, error: null }),
       render: Object.seal({ frames: 0, durationSec: 0, sizeBytes: 0 }),
       status: 'pending',
     })
@@ -68,6 +69,14 @@ export class ProductionTrace {
     this.record.linkedin.attempted = attempted
     this.record.linkedin.success = success
     this.record.linkedin.error = error || null
+  }
+
+  // ─── provenance ────────────────────────────────────────────────────────
+  setProvenance({ signed, verified, manifestId, error }) {
+    this.record.provenance.c2paSigned = signed || false
+    this.record.provenance.c2paVerified = verified || false
+    this.record.provenance.manifestId = manifestId || null
+    this.record.provenance.error = error || null
   }
 
   // ─── render ─────────────────────────────────────────────────────────────
