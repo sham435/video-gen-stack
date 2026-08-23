@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-23T14:36:45.298Z",
+  "updatedAt": "2026-08-23T15:03:35.397Z",
   "videos": [
+    {
+      "id": "5Tc1gZwOFPY",
+      "title": "As debt surpasses $40 trillion, the bill for Washington spending comes due - The Washingto | NEWS-MO",
+      "publishedAt": "2026-08-23T14:54:24+00:00",
+      "publishedLabel": "Aug 23, 02:54 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/5Tc1gZwOFPY/hqdefault.jpg"
+    },
     {
       "id": "sG8CzeyWh9g",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-23T06:41:00+00:00",
       "publishedLabel": "Aug 23, 06:41 AM",
       "thumbnail": "https://i4.ytimg.com/vi/ogRfiMbtq8E/hqdefault.jpg"
-    },
-    {
-      "id": "h2ctrGwakw0",
-      "title": "E. coli and salmonella outbreak linked to alfalfa sprouts sickens dozens across multiple s | NEWS-MO",
-      "publishedAt": "2026-08-23T06:00:01+00:00",
-      "publishedLabel": "Aug 23, 06:00 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/h2ctrGwakw0/hqdefault.jpg"
     }
   ]
 }
