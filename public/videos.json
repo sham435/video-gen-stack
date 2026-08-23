@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-23T16:36:53.008Z",
+  "updatedAt": "2026-08-23T17:04:28.601Z",
   "videos": [
+    {
+      "id": "Z3_m_H8q4rg",
+      "title": "Italy’s Monte dei Paschi Makes $40 Billion Move to Buy Rival Banks | NEWS-MONSTER",
+      "publishedAt": "2026-08-23T16:56:20+00:00",
+      "publishedLabel": "Aug 23, 04:56 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/Z3_m_H8q4rg/hqdefault.jpg"
+    },
     {
       "id": "Etsw3dpR8Oo",
       "title": "Todo lo que puedes hacer con OpenClaw gracias a su app para iPhone y Android | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-23T09:34:20+00:00",
       "publishedLabel": "Aug 23, 09:34 AM",
       "thumbnail": "https://i4.ytimg.com/vi/7hmh0JQoxWA/hqdefault.jpg"
-    },
-    {
-      "id": "XI-uYU1J4WI",
-      "title": "Experts Disagree On GTA | NEWS-MONSTER",
-      "publishedAt": "2026-08-23T09:01:17+00:00",
-      "publishedLabel": "Aug 23, 09:01 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/XI-uYU1J4WI/hqdefault.jpg"
     }
   ]
 }
