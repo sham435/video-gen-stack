@@ -17,10 +17,10 @@ const SAMPLE_ARTICLE = {
 }
 
 describe('Stages', () => {
-  it('has 8 stages in correct order', () => {
-    assert.equal(STAGES.length, 8)
+  it('has 9 stages in correct order', () => {
+    assert.equal(STAGES.length, 9)
     const ids = STAGES.map(s => s.id)
-    assert.deepEqual(ids, ['DISCOVER', 'RENDER', 'THUMBNAIL', 'C2PA', 'UPLOAD', 'PUBLISH', 'VERIFY', 'ANALYTICS'])
+    assert.deepEqual(ids, ['DISCOVER', 'RENDER', 'THUMBNAIL', 'C2PA', 'UNIQUENESS', 'UPLOAD', 'PUBLISH', 'VERIFY', 'ANALYTICS'])
   })
 
   it('every stage has a failureClass', () => {
@@ -43,7 +43,7 @@ describe('Stages', () => {
 
   it('stageIndex returns -1 for unknown', () => {
     assert.equal(stageIndex('DISCOVER'), 0)
-    assert.equal(stageIndex('ANALYTICS'), 7)
+    assert.equal(stageIndex('ANALYTICS'), 8)
     assert.equal(stageIndex('NOPE'), -1)
   })
 
@@ -327,7 +327,7 @@ describe('ProductionJob', () => {
     for (const s of STAGES.slice(2)) j2.onStage(s.id, () => { order.push(s.id); return {} })
 
     await j2.run()
-    assert.deepEqual(order, ['THUMBNAIL', 'C2PA', 'UPLOAD', 'PUBLISH', 'VERIFY', 'ANALYTICS'])
+    assert.deepEqual(order, ['THUMBNAIL', 'C2PA', 'UNIQUENESS', 'UPLOAD', 'PUBLISH', 'VERIFY', 'ANALYTICS'])
   })
 
   it('results accumulate across stages', async () => {

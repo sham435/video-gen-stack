@@ -331,10 +331,66 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             }
             if (engine?.productionTrace) engine.productionTrace.setProvenance({ gateBlocked: false, gateReason: null })
           }
-          return {
+           return {
             signed: c2paResult.signed, path: c2paResult.path || coverPath,
             signMs, verifyMs, verified: verifyResult.valid,
           }
+        })
+
+        // ── UNIQUENESS ──
+        job.onStage('UNIQUENESS', async (ctx) => {
+          const { engine } = ctx.results.RENDER
+          const { AssetRegistry } = await import('../src/uniqueness/AssetRegistry.mjs')
+          const { ProductionUniquenessManifest } = await import('../src/uniqueness/ProductionUniquenessManifest.mjs')
+          const { UniquenessPreflight } = await import('../src/uniqueness/UniquenessPreflight.mjs')
+          const { ImageDatabase } = await import('../src/assets/ImageDatabase.mjs')
+
+          const registryPath = path.join(outDir, '.asset-registry.json')
+          const imageDbPath = path.join(outDir, 'image-index.db')
+          const imageDb = fs.existsSync(imageDbPath) ? new ImageDatabase(imageDbPath) : null
+          const preflight = new UniquenessPreflight(registry, imageDb)
+
+          const scenes = engine?.productionContext?.scenes || []
+          const narrationScript = engine?.productionContext?.narrationScript || ''
+          const musicTrack = ctx.results.RENDER.musicTrack
+          const musicFamily = ctx.results.RENDER.musicFamily
+          const thumbnail = ctx.results.THUMBNAIL?.selected || null
+
+          const manifest = new ProductionUniquenessManifest()
+            .setArticle(article)
+            .setScript(narrationScript)
+            .setJobId(ctx.jobId)
+
+          for (const s of scenes) {
+            manifest.addScene(s.id || s.sceneIndex, {
+              imageHash: s.imageHash || s.heroImageHash || null,
+              sourceId: s.imageSource || null,
+              headline: s.headline || s.caption || null,
+            })
+          }
+          if (musicTrack) manifest.setMusic(musicTrack, { family: musicFamily })
+          if (thumbnail?.path && fs.existsSync(thumbnail.path)) {
+            const thumbHash = AssetRegistry.hash(fs.readFileSync(thumbnail.path).toString('base64').slice(0, 4096))
+            manifest.setThumbnail(thumbHash)
+          }
+
+          const result = preflight.validate(manifest)
+
+          if (!result.pass) {
+            console.log(`[UNIQUENESS] BLOCKED — ${result.violations.length} violations:`)
+            for (const v of result.violations) {
+              console.log(`  - ${v.type}: ${v.reason}`)
+            }
+            // Quarantine: quarantineId allows retry with different assets
+            const quarantineId = `unq-${ctx.jobId}-${Date.now()}`
+            return { pass: false, violations: result.violations, quarantineId, manifest: result.details }
+          }
+
+          console.log(`[UNIQUENESS] PASS — all ${scenes.length} scenes + music + script unique`)
+          // Record assets as used (prevents reuse in next run)
+          preflight.record(manifest, narrationScript)
+          if (imageDb) { try { imageDb.close() } catch {} }
+          return { pass: true, violations: [], manifest: result.details }
         })
 
         // ── UPLOAD ──

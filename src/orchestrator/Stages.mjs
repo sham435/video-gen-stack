@@ -50,6 +50,14 @@ export const STAGES = Object.freeze([
     provider: null,
   },
   {
+    id: 'UNIQUENESS',
+    description: 'Content uniqueness validation — blocks PUBLISH if any asset is duplicate',
+    failureClass: FailureClass.INVALID_ARTIFACT,
+    maxRetries: 2,
+    backoffMs: 0,
+    provider: null,
+  },
+  {
     id: 'UPLOAD',
     description: 'YouTube video upload + thumbnail set',
     failureClass: FailureClass.RATE_LIMITED,
