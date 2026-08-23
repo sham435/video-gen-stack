@@ -117,14 +117,14 @@ header .tag { color: var(--muted); font-size: 13px; margin-top: 2px; }
 
 /* ── Skeleton (reserved dimensions, no CLS) ─────────────── */
 .skeleton {
-  width: 100%; aspect-ratio: 16 / 9; background: linear-gradient(110deg, #18181f 30%, #22222c 50%, #18181f 70%);
+  width: 100%; aspect-ratio: 9 / 16; background: linear-gradient(110deg, #18181f 30%, #22222c 50%, #18181f 70%);
   background-size: 200% 100%; animation: shimmer 1.5s infinite linear;
 }
 @keyframes shimmer { from { background-position: 200% 0 } to { background-position: -200% 0 } }
 
 /* ── YouTube Facade ─────────────────────────────────────── */
 .youtube-player {
-  position: relative; width: 100%; aspect-ratio: 16 / 9;
+  position: relative; width: 100%; aspect-ratio: 9 / 16;
   cursor: pointer; overflow: hidden; background: #000;
 }
 .youtube-player img {
