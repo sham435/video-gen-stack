@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-23T07:44:19.092Z",
+  "updatedAt": "2026-08-23T08:35:37.554Z",
   "videos": [
+    {
+      "id": "QnRuTHuwqr8",
+      "title": "Experts Disagree On GTA | NEWS-MONSTER",
+      "publishedAt": "2026-08-23T08:31:09+00:00",
+      "publishedLabel": "Aug 23, 08:31 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/QnRuTHuwqr8/hqdefault.jpg"
+    },
     {
       "id": "mmFUQp0ocwU",
       "title": "Italy’s Monte dei Paschi Makes $40 Billion Move to Buy Rival Banks | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-22T10:25:07+00:00",
       "publishedLabel": "Aug 22, 10:25 AM",
       "thumbnail": "https://i3.ytimg.com/vi/2MqIsNVYt68/hqdefault.jpg"
-    },
-    {
-      "id": "cvNZJ0Bu2K0",
-      "title": "Altera AI",
-      "publishedAt": "2026-08-22T09:38:00+00:00",
-      "publishedLabel": "Aug 22, 09:38 AM",
-      "thumbnail": "https://i4.ytimg.com/vi/cvNZJ0Bu2K0/hqdefault.jpg"
     }
   ]
 }
