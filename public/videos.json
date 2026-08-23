@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-23T10:33:29.526Z",
+  "updatedAt": "2026-08-23T11:04:29.933Z",
   "videos": [
+    {
+      "id": "Ev2sWNPsH64",
+      "title": "Italy’s Monte dei Paschi Makes $40 Billion Move to Buy Rival Banks | NEWS-MONSTER",
+      "publishedAt": "2026-08-23T10:55:30+00:00",
+      "publishedLabel": "Aug 23, 10:55 AM",
+      "thumbnail": "https://i2.ytimg.com/vi/Ev2sWNPsH64/hqdefault.jpg"
+    },
     {
       "id": "tgK_aDHWk6w",
       "title": "Todo lo que puedes hacer con OpenClaw gracias a su app para iPhone y Android | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-22T13:34:29+00:00",
       "publishedLabel": "Aug 22, 01:34 PM",
       "thumbnail": "https://i2.ytimg.com/vi/5B42c3iYVgs/hqdefault.jpg"
-    },
-    {
-      "id": "lU3jkfLWxRA",
-      "title": "Solar Roof Dead",
-      "publishedAt": "2026-08-22T12:37:20+00:00",
-      "publishedLabel": "Aug 22, 12:37 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/lU3jkfLWxRA/hqdefault.jpg"
     }
   ]
 }
