@@ -254,9 +254,11 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           if (!publishPreflight.ready) {
             throw new Error(`Publish preflight failed: ${publishPreflight.errors.join(', ')}`)
           }
-          // Thumbnail preflight — explicit pipeline stage
+          // Thumbnail preflight — prefer 16:9 thumbnail.png (what YouTube shows
+          // in feed/suggestions); fall back to portrait cover.png for Shorts.
           const { ThumbnailPreflight } = await import('../src/pipeline/ThumbnailPreflight.mjs')
-          const coverPath = fs.existsSync('output/cover.png') ? 'output/cover.png' : null
+          const thumbPath16 = fs.existsSync('output/thumbnail.png') ? 'output/thumbnail.png' : null
+          const coverPath = thumbPath16 || (fs.existsSync('output/cover.png') ? 'output/cover.png' : null)
           if (coverPath) {
             const thumbCheck = ThumbnailPreflight.validate({ path: coverPath, niche: engine?.productionContext?.niche?.key })
             if (thumbCheck.ready) {
