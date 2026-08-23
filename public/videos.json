@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-23T17:33:34.192Z",
+  "updatedAt": "2026-08-23T17:54:12.850Z",
   "videos": [
+    {
+      "id": "CI_ThnNgP1Y",
+      "title": "Trump reshuffled his portfolio in June, selling names like Meta and buying Berkshire Hatha | NEWS-MO",
+      "publishedAt": "2026-08-23T17:50:21+00:00",
+      "publishedLabel": "Aug 23, 05:50 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/CI_ThnNgP1Y/hqdefault.jpg"
+    },
     {
       "id": "RKEVFOZCwG8",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-23T10:25:48+00:00",
       "publishedLabel": "Aug 23, 10:25 AM",
       "thumbnail": "https://i1.ytimg.com/vi/tgK_aDHWk6w/hqdefault.jpg"
-    },
-    {
-      "id": "9UywuxB_4VA",
-      "title": "Experts Disagree On GTA | NEWS-MONSTER",
-      "publishedAt": "2026-08-23T09:58:17+00:00",
-      "publishedLabel": "Aug 23, 09:58 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/9UywuxB_4VA/hqdefault.jpg"
     }
   ]
 }
