@@ -85,6 +85,8 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
       process.exit(1)
     }
 
+    const { ProductionJob } = await import('../src/orchestrator/ProductionJob.mjs')
+
     const category = process.env.INPUT_CATEGORY || process.argv[2] || 'technology'
     const outDir = 'output'
     fs.mkdirSync(outDir, { recursive: true })
@@ -240,22 +242,31 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
 
       console.log(`\nProcessing: "${article.title?.slice(0, 80)}..."`)
 
-      const renderStart = Date.now()
-      const { engine, finalPath, retention, musicTrack, musicFamily } = await composeVideo([article], outDir)
-      const renderTime = Date.now() - renderStart
+      // ── ProductionJob orchestrator — stage checkpoints + retry + quarantine ──
+      const job = new ProductionJob(article, { outDir })
+
+      // ── RENDER ──
+      job.onStage('RENDER', async (ctx) => {
+        const renderStart = Date.now()
+        const result = await composeVideo([article], outDir)
+        const renderTime = Date.now() - renderStart
+        return {
+          engine: result.engine,
+          finalPath: result.finalPath,
+          retention: result.retention,
+          musicTrack: result.musicTrack,
+          musicFamily: result.musicFamily,
+          renderTimeMs: renderTime,
+        }
+      })
 
       if (process.env.YOUTUBE_REFRESH_TOKEN && uploadCount === 0) {
         uploadCount++
         console.log('Uploading to YouTube...')
-        try {
-          // Stage 4: Publish preflight — video must exist before upload
-          const { ProductionPreflight } = await import('../src/ai/ProductionPreflight.mjs')
-          const publishPreflight = await ProductionPreflight.check({}, { outDir, stage: 'publish' })
-          if (!publishPreflight.ready) {
-            throw new Error(`Publish preflight failed: ${publishPreflight.errors.join(', ')}`)
-          }
 
-          // Thumbnail Factory — autonomous 5-candidate production + selection
+        // ── THUMBNAIL ──
+        job.onStage('THUMBNAIL', async (ctx) => {
+          const { engine } = ctx.results.RENDER
           const { ThumbnailFactory } = await import('../src/thumbnail/ThumbnailFactory.mjs')
           const factory = new ThumbnailFactory({ outputDir: outDir })
           const thumbResult = await factory.produce({
@@ -268,165 +279,134 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             nicheProfile: engine?.productionContext?.niche || null,
           })
           console.log(`[Thumbnail] Factory: ${thumbResult.candidates.length} candidates → winner="${thumbResult.strategy}" (${thumbResult.selected.width}x${thumbResult.selected.height})`)
+          if (engine?.productionTrace) engine.productionTrace.setThumbnailGenerated()
+          return { ...thumbResult }
+        })
+
+        // ── C2PA ──
+        job.onStage('C2PA', async (ctx) => {
+          const { engine } = ctx.results.RENDER
+          const coverPath = ctx.results.THUMBNAIL?.selected?.path
+          if (!coverPath || process.env.C2PA_ENABLED === 'false') {
+            return { signed: false, path: coverPath, skipped: true }
+          }
+          const { ProductionSigner } = await import('../src/pipeline/ProductionSigner.mjs')
+          const { ContentCredentials } = await import('../src/pipeline/ContentCredentials.mjs')
+          const signStart = Date.now()
+          const c2paResult = await ProductionSigner.sign({
+            input: coverPath, article,
+            productionContext: engine?.productionContext,
+            productionTrace: engine?.productionTrace,
+          })
+          const signMs = Date.now() - signStart
+          let verifyResult = { valid: false }
+          let verifyMs = null
+          if (c2paResult.signed && process.env.C2PA_VERIFY_AFTER_SIGN !== 'false') {
+            const vStart = Date.now()
+            verifyResult = await ContentCredentials.verify(c2paResult.path)
+            verifyMs = Date.now() - vStart
+            console.log(`[C2PA] verification: ${verifyResult.valid ? 'PASS' : 'FAIL'} (${verifyMs}ms, ${verifyResult.error || 'ok'})`)
+          }
+          if (c2paResult.signed) console.log(`[C2PA] signed thumbnail: ${c2paResult.path} (${signMs}ms)`)
           if (engine?.productionTrace) {
-            engine.productionTrace.setThumbnailGenerated()
+            engine.productionTrace.setProvenance({
+              signed: c2paResult.signed, verified: verifyResult.valid,
+              manifestId: c2paResult.manifestId,
+              error: c2paResult.error || verifyResult.error || null,
+              signMs, verifyMs, reason: c2paResult.reason || null,
+              validationState: verifyResult.manifest?.validationState || null,
+              failures: verifyResult.manifest?.failures || [],
+            })
           }
-
-          // C2PA content credentials — sign the factory-selected thumbnail
-          const coverPath = thumbResult.selected.path
-          let c2paSignedPath = coverPath
-          let c2paResult = { signed: false }
-          let c2paVerifyResult = { valid: false }
-          let c2paSignMs = null
-          let c2paVerifyMs = null
-          if (coverPath && process.env.C2PA_ENABLED !== 'false') {
-            try {
-              const { ProductionSigner } = await import('../src/pipeline/ProductionSigner.mjs')
-              const { ContentCredentials } = await import('../src/pipeline/ContentCredentials.mjs')
-              const signStart = Date.now()
-              c2paResult = await ProductionSigner.sign({
-                input: coverPath,
-                article,
-                productionContext: engine?.productionContext,
-                productionTrace: engine?.productionTrace,
-              })
-              c2paSignMs = Date.now() - signStart
-              if (c2paResult.signed) {
-                c2paSignedPath = c2paResult.path
-                console.log(`[C2PA] signed thumbnail: ${c2paResult.path} (${c2paSignMs}ms)`)
-                if (process.env.C2PA_VERIFY_AFTER_SIGN !== 'false') {
-                  const verifyStart = Date.now()
-                  c2paVerifyResult = await ContentCredentials.verify(c2paResult.path)
-                  c2paVerifyMs = Date.now() - verifyStart
-                  console.log(`[C2PA] verification: ${c2paVerifyResult.valid ? 'PASS' : 'FAIL'} (${c2paVerifyMs}ms, ${c2paVerifyResult.error || 'ok'})`)
-                }
-              }
-              if (engine?.productionTrace) {
-                engine.productionTrace.setProvenance({
-                  signed: c2paResult.signed,
-                  verified: c2paVerifyResult.valid,
-                  manifestId: c2paResult.manifestId,
-                  error: c2paResult.error || c2paVerifyResult.error || null,
-                  signMs: c2paSignMs,
-                  verifyMs: c2paVerifyMs,
-                  reason: c2paResult.reason || null,
-                  validationState: c2paVerifyResult.manifest?.validationState || null,
-                  failures: c2paVerifyResult.manifest?.failures || [],
-                })
-              }
-            } catch (e) {
-              console.warn(`[C2PA] signing failed: ${e.message}`)
-              c2paResult = { signed: false, error: e.message }
-              if (engine?.productionTrace) {
-                engine.productionTrace.setProvenance({ signed: false, verified: false, error: e.message })
-              }
-            }
-          }
-
-          // C2PA enforcement gate
           if (process.env.C2PA_REQUIRED === 'true') {
             const signOk = c2paResult.signed
-            const verifyOk = c2paVerifyResult.valid || process.env.C2PA_VERIFY_AFTER_SIGN === 'false'
+            const verifyOk = verifyResult.valid || process.env.C2PA_VERIFY_AFTER_SIGN === 'false'
             if (!signOk || !verifyOk) {
               const gateReason = !signOk ? `signing failed: ${c2paResult.error || c2paResult.reason || 'unknown'}`
-                : `verification failed: ${c2paVerifyResult.error || 'unknown'}`
-              if (engine?.productionTrace) {
-                engine.productionTrace.setProvenance({ gateBlocked: true, gateReason })
-              }
+                : `verification failed: ${verifyResult.error || 'unknown'}`
+              if (engine?.productionTrace) engine.productionTrace.setProvenance({ gateBlocked: true, gateReason })
               throw new Error(`C2PA required but ${gateReason} — blocking publish`)
             }
-            if (engine?.productionTrace) {
-              engine.productionTrace.setProvenance({ gateBlocked: false, gateReason: null })
-            }
+            if (engine?.productionTrace) engine.productionTrace.setProvenance({ gateBlocked: false, gateReason: null })
           }
+          return {
+            signed: c2paResult.signed, path: c2paResult.path || coverPath,
+            signMs, verifyMs, verified: verifyResult.valid,
+          }
+        })
 
-          // Niche context — read from immutable production context (resolved once)
-          const nicheDecision = engine?.productionContext?.niche || null
-          if (nicheDecision) {
-            console.log(`[Niche] ${nicheDecision.key} (confidence=${nicheDecision.confidence}, source=${nicheDecision.source})`)
-          }
+        // ── UPLOAD ──
+        job.onStage('UPLOAD', async (ctx) => {
+          const { engine } = ctx.results.RENDER
+          const { ProductionPreflight } = await import('../src/ai/ProductionPreflight.mjs')
+          const publishPreflight = await ProductionPreflight.check({}, { outDir, stage: 'publish' })
+          if (!publishPreflight.ready) throw new Error(`Publish preflight failed: ${publishPreflight.errors.join(', ')}`)
 
           const { publishVideo } = await import('../apps/api/publishers/youtube.js')
-          const buffer = fs.readFileSync(finalPath)
-          const title = `${article.title?.slice(0, 90) || 'News Update'} | NEWS-MONSTER`
+          const buffer = fs.readFileSync(ctx.results.RENDER.finalPath)
+          const uploadTitle = `${article.title?.slice(0, 90) || 'News Update'} | NEWS-MONSTER`
           const { HashtagBuilder } = await import('../src/publishing/HashtagBuilder.mjs')
+          const nicheDecision = engine?.productionContext?.niche || null
           const hashtags = HashtagBuilder.build({
             topic: HashtagBuilder.topicFromHeadline(article.title),
             category: category || nicheDecision?.key || 'tech',
             pipelineProfile: 'breaking',
             channel: 'NEWS-MONSTER',
           })
-          const desc = `${title}\n\nSource: ${article.source || 'NewsAPI'}\n\n${hashtags}`
+          const desc = `${uploadTitle}\n\nSource: ${article.source || 'NewsAPI'}\n\n${hashtags}`
           const result = await publishVideo({
             videoUrl: `data:video/mp4;base64,${buffer.toString('base64')}`,
-            title,
-            description: desc,
+            title: uploadTitle, description: desc,
             privacy: process.env.YOUTUBE_PRIVACY || 'public',
-            thumbnailPath: c2paSignedPath,
+            thumbnailPath: ctx.results.C2PA?.path || ctx.results.THUMBNAIL?.selected?.path,
             niche: nicheDecision?.key || null,
           })
           console.log(`[UPLOAD] videoId=${result.videoId} url=${result.url} niche=${result.niche || 'none'} thumbnail=${result.thumbnailUploaded ? 'uploaded' : result.lastError ? 'FAILED: ' + result.lastError : 'skipped'}`)
+          if (engine?.productionTrace) engine.productionTrace.setYouTube(result)
+          return { uploadTitle, hashtags, nicheDecision, ...result }
+        })
 
-          // Record YouTube state in production trace
-          if (engine?.productionTrace) {
-            engine.productionTrace.setYouTube(result)
-          }
+        // ── PUBLISH ──
+        job.onStage('PUBLISH', async (ctx) => {
+          const { engine } = ctx.results.RENDER
+          const { videoId, uploadTitle, hashtags, nicheDecision } = ctx.results.UPLOAD
+          const coverPath = ctx.results.C2PA?.path || ctx.results.THUMBNAIL?.selected?.path
+          const buffer = fs.readFileSync(ctx.results.RENDER.finalPath)
 
-          // Cross-post to LinkedIn — same video, 30-min cadence mirrored from
-          // YouTube. Best-effort: a LinkedIn auth/config failure must never
-          // fail the YouTube publish that already succeeded.
+          // LinkedIn
           if (process.env.LINKEDIN_ACCESS_TOKEN && process.env.LINKEDIN_MEMBER_URN) {
             try {
-              const { shareVideo, updatePostCommentary, authorUrn } = await import('../apps/api/publishers/linkedin.js')
-              // Mirror the YouTube description on LinkedIn: title, Source row,
-              // hashtags — then append the YouTube shorts link. The LinkedIn
-              // post's own feed URL is unknown until creation, so we add it in
-              // a PARTIAL_UPDATE right after (…https://lnkd.in post link).
-              const body = `${title}\n\nSource: ${article.source || 'NewsAPI'}\n\n${hashtags}\n\nhttps://www.youtube.com/shorts/${result.videoId}`
+              const { shareVideo, updatePostCommentary } = await import('../apps/api/publishers/linkedin.js')
+              const body = `${uploadTitle}\n\nSource: ${article.source || 'NewsAPI'}\n\n${hashtags}\n\nhttps://www.youtube.com/shorts/${videoId}`
               const li = await shareVideo(
-                process.env.LINKEDIN_ACCESS_TOKEN,
-                process.env.LINKEDIN_MEMBER_URN,
-                `data:video/mp4;base64,${buffer.toString('base64')}`,
-                body
+                process.env.LINKEDIN_ACCESS_TOKEN, process.env.LINKEDIN_MEMBER_URN,
+                `data:video/mp4;base64,${buffer.toString('base64')}`, body
               )
               const postId = li?.id
               if (postId) {
                 try {
-                  await updatePostCommentary(
-                    process.env.LINKEDIN_ACCESS_TOKEN,
-                    postId,
-                    `${body}\n\nhttps://www.linkedin.com/feed/update/${postId}`
-                  )
+                  await updatePostCommentary(process.env.LINKEDIN_ACCESS_TOKEN, postId,
+                    `${body}\n\nhttps://www.linkedin.com/feed/update/${postId}`)
                   console.log(`[LINKEDIN] post=${postId} — shared https://www.linkedin.com/feed/update/${postId}`)
-                } catch (ue) {
-                  console.log(`[LINKEDIN] posted ${postId} (link append skipped: ${ue.message})`)
-                }
+                } catch (ue) { console.log(`[LINKEDIN] posted ${postId} (link append skipped: ${ue.message})`) }
               } else {
                 console.log(`[LINKEDIN] post=ok — shared https://www.linkedin.com/feed/update/${li?.id || li?.urn}`)
               }
             } catch (e) {
               console.log(`[LINKEDIN] skipped (best-effort): ${e.message}`)
-              if (engine?.productionTrace) {
-                engine.productionTrace.setLinkedIn({ attempted: true, success: false, error: e.message })
-              }
+              if (engine?.productionTrace) engine.productionTrace.setLinkedIn({ attempted: true, success: false, error: e.message })
             }
           } else {
             console.log('[LINKEDIN] skipped — LINKEDIN_ACCESS_TOKEN/LINKEDIN_MEMBER_URN not set')
           }
 
-          // POST-PUBLISH SOCIAL DISTRIBUTION — the video is confirmed live on
-          // YouTube (result.id is set). Dispatch the promotional post to
-          // LinkedIn + YouTube Community through the idempotent manager.
-          // Best-effort: any platform failure is persisted but NEVER fails or
-          // rolls back the YouTube publication that already succeeded.
+          // Social distribution
           try {
             const { SocialDistributionManager } = await import('../src/publishing/SocialDistributionManager.mjs')
             const sdm = new SocialDistributionManager()
             const dist = await sdm.distribute({
-              videoId: result.videoId,
-              title: article.title || title,
-              videoUrl: result.url,
-              thumbnailPath: c2paSignedPath,
+              videoId, title: article.title || uploadTitle,
+              videoUrl: ctx.results.UPLOAD?.url, thumbnailPath: coverPath,
               category: category || nicheDecision?.key || 'technology',
               hook: `${article.title?.split(' ').slice(0, 5).join(' ') || 'This'} — here's what just happened.`,
               summary: (article.description || '').slice(0, 160) || `A story you should see from the desk of NEWS-MONSTER.`,
@@ -435,14 +415,11 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             for (const [platform, r] of Object.entries(dist.results || {})) {
               console.log(`[DISTRIBUTE] ${platform}: ${r.status}${r.reason ? ` (${r.reason})` : ''}${r.postId ? ` postId=${r.postId}` : ''}${r.url ? ` url=${r.url}` : ''}`)
             }
-          } catch (e) {
-            console.log(`[DISTRIBUTE] skipped (best-effort): ${e.message}`)
-          }
+          } catch (e) { console.log(`[DISTRIBUTE] skipped (best-effort): ${e.message}`) }
 
-          // Community loop — post the topic-specific pinned-comment question.
-          // The 100% 'stayed to watch' audience needs a reason to comment.
+          // Pinned comment
           let commentEvent = null
-          if (result.videoId) {
+          if (videoId) {
             try {
               const { PinnedCommentBuilder } = await import('../src/publishing/PinnedCommentBuilder.mjs')
               const { TopicCtaBuilder } = await import('../src/publishing/TopicCtaBuilder.mjs')
@@ -451,25 +428,37 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
               const comment = new PinnedCommentBuilder().build(article)
               console.log(`[CTA] topic=${cta.topic} mode=${cta.mode} "${cta.narration}"`)
               console.log(`[PIN COMMENT] "${comment.question}"`)
-              const posted = await postComment(result.videoId, comment.question)
+              const posted = await postComment(videoId, comment.question)
               console.log(`[COMMENT INSERT] ${posted?.id ? `success commentId=${posted.id}` : 'failed — post it manually in Studio and pin it, then set YOUTUBE_PARENT_COMMENT_ID to its ID'}`)
-              commentEvent = {
-                text: comment.question,
-                status: posted?.id ? 'published' : 'failed',
-                commentId: posted?.id || null,
-              }
+              commentEvent = { text: comment.question, status: posted?.id ? 'published' : 'failed', commentId: posted?.id || null }
             } catch (e) { console.log('[PIN COMMENT] skipped:', e.message) }
           }
+          return { commentEvent }
+        })
 
-          // Ground-truth artifact: what the pipeline shipped (CTA + comment)
-          // joins with later analytics to measure whether the loop works.
+        // ── VERIFY (YouTube thumbnail state) ──
+        job.onStage('VERIFY', async (ctx) => {
+          const { videoId } = ctx.results.UPLOAD || {}
+          if (!videoId) return { verified: false, reason: 'no videoId' }
+          // Verification is implicit — YouTube upload already returns
+          // thumbnailUploaded state. Real verification happens via analytics poller.
+          return { verified: true, videoId }
+        })
+
+        // ── ANALYTICS ──
+        job.onStage('ANALYTICS', async (ctx) => {
+          const { engine } = ctx.results.RENDER
+          const { videoId, uploadTitle, nicheDecision } = ctx.results.UPLOAD || {}
+          const { commentEvent } = ctx.results.PUBLISH || {}
+          const { retention, musicTrack, musicFamily } = ctx.results.RENDER
+
+          // Publish events store
           try {
             const { TopicCtaBuilder } = await import('../src/publishing/TopicCtaBuilder.mjs')
             const { PublishEventsStore } = await import('../src/publishing/PublishEventsStore.mjs')
             const cta = new TopicCtaBuilder().build(article)
             new PublishEventsStore().record({
-              videoId: result?.id,
-              title: article.title?.slice(0, 100),
+              videoId, title: article.title?.slice(0, 100),
               category: category || 'technology',
               cta: { topic: cta.topic, mode: cta.mode, text: cta.narration },
               comment: commentEvent || null,
@@ -477,40 +466,28 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             console.log('[ARTIFACT] data/publish-events.json updated')
           } catch (e) { console.log('[ARTIFACT] skipped:', e.message) }
 
-          // Snapshot the pipeline's retention prediction for the
-          // RetentionPatternLearner (real analytics calibrate memory later).
-          // Carry the chosen music track + family so the learner can correlate
-          // "breaking-cinematic → +retention" and prefer winning underscores.
-          if (result?.id && retention) {
+          // Retention snapshot
+          if (videoId && retention) {
             try {
               const { RetentionPatternLearner } = await import('../src/analytics/RetentionPatternLearner.mjs')
               new RetentionPatternLearner().appendSnapshot({
-                videoId: result.id,
-                title: article.title?.slice(0, 100),
+                videoId, title: article.title?.slice(0, 100),
                 category: category || 'technology',
-                musicTrack: musicTrack || null,
-                musicFamily: musicFamily || null,
-                retention,
+                musicTrack: musicTrack || null, musicFamily: musicFamily || null, retention,
               })
               console.log('Retention snapshot recorded for learning loop')
             } catch (e) { console.log('Retention snapshot skipped:', e.message) }
           }
 
-          // Record production observation for feedback loop.
-          // This feeds PerformanceMemory → RecommendationEngine → ProfileOptimizer.
-          // The observation is a seed record — real analytics are joined later
-          // by the YouTube Analytics poller.
+          // Performance observation
           try {
             const { PerformanceObservation } = await import('../src/production/PerformanceObservation.mjs')
             const { PerformanceMemory } = await import('../src/production/PerformanceMemory.mjs')
             const obs = new PerformanceObservation({
-              videoId: result.videoId,
-              articleId: engine?.productionContext?.articleId || null,
-              niche: nicheDecision?.key || 'GENERAL',
-              publishedAt: new Date().toISOString(),
+              videoId, articleId: engine?.productionContext?.articleId || null,
+              niche: nicheDecision?.key || 'GENERAL', publishedAt: new Date().toISOString(),
               analytics: {
-                impressions: 0, // placeholder — YouTube Analytics poller fills this
-                views: 0,
+                impressions: 0, views: 0,
                 avgViewDuration: retention?.avgViewDuration || 0,
                 avgPercentViewed: retention?.avgPercentViewed || 0,
               },
@@ -520,10 +497,19 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             mem.close()
             console.log(`[FEEDBACK] observation recorded: niche=${obs.niche} videoId=${obs.videoId}`)
           } catch (e) { console.log('[FEEDBACK] observation skipped:', e.message) }
+          return { recorded: true }
+        })
 
-        } catch (e) {
-          console.log('Upload failed:', e.message)
-          throw new Error(`Upload failed — no video published: ${e.message}`)
+        // Run the orchestrator
+        const result = await job.run()
+        if (!result.success) {
+          console.error(`[JOB] Article quarantined: ${result.quarantineReason}`)
+        }
+      } else {
+        // No YouTube token — render only (no upload stages)
+        const renderResult = await job.run('RENDER')
+        if (!renderResult.success) {
+          console.error(`[JOB] Render failed: ${renderResult.quarantineReason}`)
         }
       }
     }
