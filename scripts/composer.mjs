@@ -406,6 +406,32 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
               console.log('Retention snapshot recorded for learning loop')
             } catch (e) { console.log('Retention snapshot skipped:', e.message) }
           }
+
+          // Record production observation for feedback loop.
+          // This feeds PerformanceMemory → RecommendationEngine → ProfileOptimizer.
+          // The observation is a seed record — real analytics are joined later
+          // by the YouTube Analytics poller.
+          try {
+            const { PerformanceObservation } = await import('../src/production/PerformanceObservation.mjs')
+            const { PerformanceMemory } = await import('../src/production/PerformanceMemory.mjs')
+            const obs = new PerformanceObservation({
+              videoId: result.videoId,
+              articleId: engine?.productionContext?.articleId || null,
+              niche: nicheDecision?.key || 'GENERAL',
+              publishedAt: new Date().toISOString(),
+              analytics: {
+                impressions: 0, // placeholder — YouTube Analytics poller fills this
+                views: 0,
+                avgViewDuration: retention?.avgViewDuration || 0,
+                avgPercentViewed: retention?.avgPercentViewed || 0,
+              },
+            })
+            const mem = new PerformanceMemory()
+            mem.record(obs)
+            mem.close()
+            console.log(`[FEEDBACK] observation recorded: niche=${obs.niche} videoId=${obs.videoId}`)
+          } catch (e) { console.log('[FEEDBACK] observation skipped:', e.message) }
+
         } catch (e) {
           console.log('Upload failed:', e.message)
           throw new Error(`Upload failed — no video published: ${e.message}`)

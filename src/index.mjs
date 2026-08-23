@@ -148,6 +148,8 @@ export class NewsBroadcastEngine {
     const { ProductionTrace } = await import('./pipeline/ProductionTrace.mjs')
     const trace = new ProductionTrace(article?.id || article?.headline?.slice(0, 40))
     this.productionTrace = trace
+    // Resolve-once invariant: count how many times resolveNiche is called
+    this._resolveNicheCallCount = 0
 
     // Stage 1: Article preflight — verify the source data before any work.
     const preflight = await ProductionPreflight.check({ article, category: article?.category }, { outDir, bypassYoutube: true, stage: 'article' })
@@ -163,6 +165,7 @@ export class NewsBroadcastEngine {
     const { resolveNiche } = await import('./pipeline/NicheResolver.mjs')
     const { getProfile } = await import('./production/CategoryProductionProfiles.mjs')
     const nicheDecision = await resolveNiche(article, { llm: options.nicheLlm })
+    this._resolveNicheCallCount++
     // Normalize article.category to the canonical niche key
     article.category = nicheDecision.key
     // Load the production profile — HOW we produce for this niche
@@ -698,6 +701,11 @@ export class NewsBroadcastEngine {
       } catch (e) {
         trace.setThumbnailPreflight({ ready: false, errors: [e.message] })
       }
+    }
+
+    // Resolve-once invariant: assert exactly one resolution per run
+    if (this._resolveNicheCallCount !== 1) {
+      console.warn(`[INVARIANT] resolveNiche called ${this._resolveNicheCallCount}x — expected exactly 1`)
     }
 
     return { videoPath, job, trace: trace.finish('published') }
