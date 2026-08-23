@@ -14,6 +14,8 @@ import { buildJobId } from './ArtifactID.mjs'
  *  - Crash-resumable: reads last checkpoint, resumes from next incomplete stage
  *  - Autonomous: retry / regenerate / quarantine decisions are automatic
  *  - Checkpointed: state persists to disk after every stage transition
+ *  - Quota-aware: checks ResourceGovernor before external provider calls
+ *  - Operation-journaled: external side effects are logged for crash recovery
  */
 
 export class ProductionJob {
@@ -23,6 +25,7 @@ export class ProductionJob {
     this.outDir = options.outDir || 'output'
     this.checkpointDir = options.checkpointDir || '.newsmonster/checkpoints'
     this.store = new CheckpointStore(this.jobId, this.checkpointDir)
+    this.governor = options.governor || null
     this.stageHandlers = {}
     this.results = {}
     this.startedAt = null
@@ -68,11 +71,31 @@ export class ProductionJob {
         continue
       }
 
-      const success = await this._executeStage(stage)
-      if (!success) {
+      const stageResult = await this._executeStage(stage)
+
+      // WAITING_FOR_QUOTA: stop pipeline, log nextEligibleAt
+      if (stageResult && stageResult.waiting) {
+        this.status = StageStatus.WAITING_FOR_QUOTA
+        this.completedAt = new Date().toISOString()
+        const finalState = this.store.load() || {}
+        this.store.save({
+          ...finalState,
+          jobId: this.jobId,
+          status: StageStatus.WAITING_FOR_QUOTA,
+          nextEligibleAt: stageResult.nextEligibleAt,
+          waitingReason: stageResult.reason,
+          startedAt: this.startedAt,
+          completedAt: this.completedAt,
+        })
+        return { success: false, waiting: true, nextEligibleAt: stageResult.nextEligibleAt, reason: stageResult.reason, lastStage: stage.id }
+      }
+
+      if (!stageResult) {
         this.status = StageStatus.QUARANTINED
         this.completedAt = new Date().toISOString()
+        const finalState = this.store.load() || {}
         this.store.save({
+          ...finalState,
           jobId: this.jobId,
           status: StageStatus.QUARANTINED,
           quarantineReason: this.quarantineReason,
@@ -104,6 +127,36 @@ export class ProductionJob {
       return true
     }
 
+    // ── Governor gate: check quota BEFORE attempting the stage ──
+    if (this.governor && stage.provider) {
+      const quota = this.governor.canExecute(stage.provider, this.jobId)
+      if (!quota.allowed) {
+        this.store.updateStage(stage.id, {
+          status: StageStatus.WAITING_FOR_QUOTA,
+          reason: quota.reason,
+          nextEligibleAt: quota.nextEligibleAt,
+          provider: stage.provider,
+          budget: quota.budget,
+        })
+        console.log(`[JOB] ${stage.id}: WAITING_FOR_QUOTA — ${quota.reason} (next eligible: ${quota.nextEligibleAt})`)
+        return { waiting: true, nextEligibleAt: quota.nextEligibleAt, reason: quota.reason }
+      }
+      // Reserve slot before execution
+      this.governor.reserve(stage.provider)
+    }
+
+    // ── Crash recovery: check if this external operation was already completed ──
+    if (this.governor && stage.provider) {
+      const operationType = `${stage.provider}.${stage.id.toLowerCase()}`
+      const prior = this.governor.wasCompleted(this.jobId, operationType)
+      if (prior) {
+        console.log(`[JOB] ${stage.id}: RECOVERY — operation already completed remotely (remote_id=${prior.remote_id})`)
+        this.results[stage.id] = { remote_id: prior.remote_id, remote_state: prior.remote_state, recovered: true }
+        this.store.markStageCompleted(stage.id, this.results[stage.id])
+        return true
+      }
+    }
+
     let retries = 0
     const maxRetries = stage.maxRetries ?? 2
     let lastError = null
@@ -124,6 +177,7 @@ export class ProductionJob {
           results: this.results,
           attempts: attempt,
           stage,
+          governor: this.governor,
         }
 
         const result = await handler(ctx)
@@ -147,6 +201,8 @@ export class ProductionJob {
           this.quarantineReason = `${stage.id} quarantined: permanent failure (last error: ${error.message})`
           this.store.markStageQuarantined(stage.id, this.quarantineReason)
           console.error(`[JOB] ${stage.id}: QUARANTINED — ${this.quarantineReason}`)
+          // Release governor slot on permanent failure
+          if (this.governor && stage.provider) this.governor.release(stage.provider)
           return false
         }
 
@@ -165,6 +221,8 @@ export class ProductionJob {
     this.quarantineReason = `${stage.id} quarantined: exhausted ${maxRetries} retries (last error: ${lastError?.message})`
     this.store.markStageQuarantined(stage.id, this.quarantineReason)
     console.error(`[JOB] ${stage.id}: QUARANTINED — ${this.quarantineReason}`)
+    // Release governor slot on exhaustion
+    if (this.governor && stage.provider) this.governor.release(stage.provider)
     return false
   }
 

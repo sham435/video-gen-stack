@@ -6,6 +6,7 @@ export const StageStatus = Object.freeze({
   RETRYING: 'RETRYING',
   QUARANTINED: 'QUARANTINED',
   SKIPPED: 'SKIPPED',
+  WAITING_FOR_QUOTA: 'WAITING_FOR_QUOTA',
 })
 
 export const FailureClass = Object.freeze({
@@ -22,6 +23,7 @@ export const STAGES = Object.freeze([
     failureClass: FailureClass.TRANSIENT,
     maxRetries: 2,
     backoffMs: 2000,
+    provider: null,
   },
   {
     id: 'RENDER',
@@ -29,6 +31,7 @@ export const STAGES = Object.freeze([
     failureClass: FailureClass.INVALID_ARTIFACT,
     maxRetries: 2,
     backoffMs: 0,
+    provider: null,
   },
   {
     id: 'THUMBNAIL',
@@ -36,6 +39,7 @@ export const STAGES = Object.freeze([
     failureClass: FailureClass.INVALID_ARTIFACT,
     maxRetries: 2,
     backoffMs: 0,
+    provider: null,
   },
   {
     id: 'C2PA',
@@ -43,6 +47,7 @@ export const STAGES = Object.freeze([
     failureClass: FailureClass.TRANSIENT,
     maxRetries: 2,
     backoffMs: 1000,
+    provider: null,
   },
   {
     id: 'UPLOAD',
@@ -50,6 +55,7 @@ export const STAGES = Object.freeze([
     failureClass: FailureClass.RATE_LIMITED,
     maxRetries: 3,
     backoffMs: 5000,
+    provider: 'youtube',
   },
   {
     id: 'PUBLISH',
@@ -57,6 +63,7 @@ export const STAGES = Object.freeze([
     failureClass: FailureClass.TRANSIENT,
     maxRetries: 2,
     backoffMs: 3000,
+    provider: 'youtube',
   },
   {
     id: 'VERIFY',
@@ -64,6 +71,7 @@ export const STAGES = Object.freeze([
     failureClass: FailureClass.TRANSIENT,
     maxRetries: 3,
     backoffMs: 10000,
+    provider: 'youtube',
   },
   {
     id: 'ANALYTICS',
@@ -71,6 +79,7 @@ export const STAGES = Object.freeze([
     failureClass: FailureClass.TRANSIENT,
     maxRetries: 1,
     backoffMs: 0,
+    provider: null,
   },
 ])
 
