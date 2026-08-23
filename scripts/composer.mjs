@@ -252,6 +252,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           }
 
           // C2PA content credentials — sign thumbnail with provenance manifest
+          // ProductionSigner validates certificate lifecycle before signing
           let c2paSignedPath = coverPath
           let c2paResult = { signed: false }
           let c2paVerifyResult = { valid: false }
@@ -259,12 +260,14 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           let c2paVerifyMs = null
           if (coverPath && process.env.C2PA_ENABLED !== 'false') {
             try {
+              const { ProductionSigner } = await import('../src/pipeline/ProductionSigner.mjs')
               const { ContentCredentials } = await import('../src/pipeline/ContentCredentials.mjs')
               const signStart = Date.now()
-              c2paResult = await ContentCredentials.sign({
+              c2paResult = await ProductionSigner.sign({
                 input: coverPath,
                 article,
                 productionContext: engine?.productionContext,
+                productionTrace: engine?.productionTrace,
               })
               c2paSignMs = Date.now() - signStart
               if (c2paResult.signed) {

@@ -38,6 +38,8 @@ export class ProductionTrace {
         signMs: null, verifyMs: null, reason: null,
         validationState: null, failures: [],
         gateBlocked: false, gateReason: null,
+        certFingerprint: null, certSubject: null, certSerial: null,
+        certExpiry: null, certRemainingDays: null,
       }),
       render: Object.seal({ frames: 0, durationSec: 0, sizeBytes: 0 }),
       status: 'pending',
@@ -81,7 +83,8 @@ export class ProductionTrace {
 
   // ─── provenance ────────────────────────────────────────────────────────
   setProvenance({ signed, verified, manifestId, error, signMs, verifyMs, reason,
-                   validationState, failures, gateBlocked, gateReason }) {
+                   validationState, failures, gateBlocked, gateReason,
+                   certFingerprint, certSubject, certSerial, certExpiry, certRemainingDays }) {
     this.record.provenance.c2paSigned = signed || false
     this.record.provenance.c2paVerified = verified || false
     this.record.provenance.manifestId = manifestId || null
@@ -93,6 +96,11 @@ export class ProductionTrace {
     if (Array.isArray(failures)) this.record.provenance.failures = failures
     if (gateBlocked != null) this.record.provenance.gateBlocked = gateBlocked
     if (gateReason != null) this.record.provenance.gateReason = gateReason
+    if (certFingerprint != null) this.record.provenance.certFingerprint = certFingerprint
+    if (certSubject != null) this.record.provenance.certSubject = certSubject
+    if (certSerial != null) this.record.provenance.certSerial = certSerial
+    if (certExpiry != null) this.record.provenance.certExpiry = certExpiry
+    if (certRemainingDays != null) this.record.provenance.certRemainingDays = certRemainingDays
   }
 
   // ─── render ─────────────────────────────────────────────────────────────
