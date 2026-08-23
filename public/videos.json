@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-23T17:04:28.601Z",
+  "updatedAt": "2026-08-23T17:33:34.192Z",
   "videos": [
+    {
+      "id": "RKEVFOZCwG8",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
+      "publishedAt": "2026-08-23T17:24:12+00:00",
+      "publishedLabel": "Aug 23, 05:24 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/RKEVFOZCwG8/hqdefault.jpg"
+    },
     {
       "id": "Z3_m_H8q4rg",
       "title": "Italy’s Monte dei Paschi Makes $40 Billion Move to Buy Rival Banks | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-23T09:58:17+00:00",
       "publishedLabel": "Aug 23, 09:58 AM",
       "thumbnail": "https://i2.ytimg.com/vi/9UywuxB_4VA/hqdefault.jpg"
-    },
-    {
-      "id": "7hmh0JQoxWA",
-      "title": "Experts Disagree On GTA | NEWS-MONSTER",
-      "publishedAt": "2026-08-23T09:34:20+00:00",
-      "publishedLabel": "Aug 23, 09:34 AM",
-      "thumbnail": "https://i4.ytimg.com/vi/7hmh0JQoxWA/hqdefault.jpg"
     }
   ]
 }
