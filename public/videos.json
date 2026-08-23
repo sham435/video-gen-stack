@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-23T15:03:35.397Z",
+  "updatedAt": "2026-08-23T15:31:50.450Z",
   "videos": [
+    {
+      "id": "MymWhtneprk",
+      "title": "Experts Disagree On GTA | NEWS-MONSTER",
+      "publishedAt": "2026-08-23T15:23:34+00:00",
+      "publishedLabel": "Aug 23, 03:23 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/MymWhtneprk/hqdefault.jpg"
+    },
     {
       "id": "5Tc1gZwOFPY",
       "title": "As debt surpasses $40 trillion, the bill for Washington spending comes due - The Washingto | NEWS-MO",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-23T07:35:58+00:00",
       "publishedLabel": "Aug 23, 07:35 AM",
       "thumbnail": "https://i2.ytimg.com/vi/mmFUQp0ocwU/hqdefault.jpg"
-    },
-    {
-      "id": "ogRfiMbtq8E",
-      "title": "Researchers chain Tesla charger bug into a four-vendor EV worm | NEWS-MONSTER",
-      "publishedAt": "2026-08-23T06:41:00+00:00",
-      "publishedLabel": "Aug 23, 06:41 AM",
-      "thumbnail": "https://i4.ytimg.com/vi/ogRfiMbtq8E/hqdefault.jpg"
     }
   ]
 }
