@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-23T10:01:57.409Z",
+  "updatedAt": "2026-08-23T10:33:29.526Z",
   "videos": [
+    {
+      "id": "tgK_aDHWk6w",
+      "title": "Todo lo que puedes hacer con OpenClaw gracias a su app para iPhone y Android | NEWS-MONSTER",
+      "publishedAt": "2026-08-23T10:25:48+00:00",
+      "publishedLabel": "Aug 23, 10:25 AM",
+      "thumbnail": "https://i1.ytimg.com/vi/tgK_aDHWk6w/hqdefault.jpg"
+    },
     {
       "id": "9UywuxB_4VA",
       "title": "Experts Disagree On GTA | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-22T12:37:20+00:00",
       "publishedLabel": "Aug 22, 12:37 PM",
       "thumbnail": "https://i1.ytimg.com/vi/lU3jkfLWxRA/hqdefault.jpg"
-    },
-    {
-      "id": "geWZRq_7dbI",
-      "title": "$77,000 NEW RECORD",
-      "publishedAt": "2026-08-22T11:50:23+00:00",
-      "publishedLabel": "Aug 22, 11:50 AM",
-      "thumbnail": "https://i4.ytimg.com/vi/geWZRq_7dbI/hqdefault.jpg"
     }
   ]
 }
