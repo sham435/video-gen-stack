@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-23T15:56:39.305Z",
+  "updatedAt": "2026-08-23T16:36:53.008Z",
   "videos": [
+    {
+      "id": "Etsw3dpR8Oo",
+      "title": "Todo lo que puedes hacer con OpenClaw gracias a su app para iPhone y Android | NEWS-MONSTER",
+      "publishedAt": "2026-08-23T16:26:59+00:00",
+      "publishedLabel": "Aug 23, 04:26 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/Etsw3dpR8Oo/hqdefault.jpg"
+    },
     {
       "id": "Hczazp6QK2s",
       "title": "MG 07 бросил вызов BYD и Tesla: 845 км, 800 В и 10 000 заказов за 117 секунд | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-23T09:01:17+00:00",
       "publishedLabel": "Aug 23, 09:01 AM",
       "thumbnail": "https://i1.ytimg.com/vi/XI-uYU1J4WI/hqdefault.jpg"
-    },
-    {
-      "id": "QnRuTHuwqr8",
-      "title": "Experts Disagree On GTA | NEWS-MONSTER",
-      "publishedAt": "2026-08-23T08:31:09+00:00",
-      "publishedLabel": "Aug 23, 08:31 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/QnRuTHuwqr8/hqdefault.jpg"
     }
   ]
 }
