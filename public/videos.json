@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-23T20:53:20.140Z",
+  "updatedAt": "2026-08-23T21:23:19.413Z",
   "videos": [
+    {
+      "id": "dfB0AngrQFs",
+      "title": "Red Lobster brings back Endless Shrimp after promotion helped push chain toward bankruptcy | NEWS-MO",
+      "publishedAt": "2026-08-23T20:53:26+00:00",
+      "publishedLabel": "Aug 23, 08:53 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/dfB0AngrQFs/hqdefault.jpg"
+    },
     {
       "id": "w1l1Z1ECnkM",
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-23T14:01:54+00:00",
       "publishedLabel": "Aug 23, 02:01 PM",
       "thumbnail": "https://i1.ytimg.com/vi/dp8SzamyN4k/hqdefault.jpg"
-    },
-    {
-      "id": "5V2c9Ca1iU8",
-      "title": "Italy’s Monte dei Paschi Makes $40 Billion Move to Buy Rival Banks | NEWS-MONSTER",
-      "publishedAt": "2026-08-23T13:34:56+00:00",
-      "publishedLabel": "Aug 23, 01:34 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/5V2c9Ca1iU8/hqdefault.jpg"
     }
   ]
 }
