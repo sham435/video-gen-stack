@@ -32,7 +32,8 @@
     "ai:enhance": "node .github/scripts/ai-helper.mjs enhance",
     "ai:debug": "node .github/scripts/ai-helper.mjs debug",
     "ai:full": "node .github/scripts/ai-helper.mjs full",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@contentauth/c2pa-node": "^0.9.1",
@@ -51,6 +52,7 @@
     "@napi-rs/canvas-linux-x64-gnu": "^1.0.2"
   },
   "devDependencies": {
-    "@types/node": "^26.1.2"
+    "@types/node": "^26.1.2",
+    "patch-package": "^8.0.1"
   }
 }

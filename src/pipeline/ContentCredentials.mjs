@@ -49,6 +49,26 @@ const BUNDLED_CERT_DIR = path.join(path.dirname(new URL(import.meta.url).pathnam
 
 function ensureDevCertificate() {
   const { cert, key } = getCertPaths()
+  const isProduction = process.env.NODE_ENV === 'production'
+
+  // Production: certs must exist — never auto-copy test fixtures
+  if (isProduction) {
+    if (!fs.existsSync(cert) || !fs.existsSync(key)) {
+      throw new Error(
+        'C2PA: production mode requires C2PA_CERT_PATH + C2PA_KEY_PATH env vars '
+        + 'pointing to an organization-issued certificate. '
+        + 'Bundled test certificates cannot be used in production.'
+      )
+    }
+    // Warn if the production cert is actually the test fixture
+    const certContent = fs.readFileSync(cert, 'utf8')
+    if (certContent.includes('FOR TESTING_ONLY')) {
+      console.warn('[C2PA] WARNING: production cert contains FOR TESTING_ONLY marker — this is a test certificate')
+    }
+    return { cert, key }
+  }
+
+  // Development/CI: use existing certs or copy bundled test fixtures
   if (fs.existsSync(cert) && fs.existsSync(key)) return { cert, key }
 
   const certDir = path.dirname(cert)
@@ -120,12 +140,23 @@ export const ContentCredentials = Object.freeze({
       // signFile writes the signed PNG to outputPath with JUMBF embedded
       const manifestData = builder.signFile(signer, input, { path: outputPath })
 
-      console.log(`[C2PA] signed: ${outputPath} (${manifestData.length} bytes manifest)`)
+      // Extract the real manifest label from the signed file
+      let manifestId = null
+      try {
+        const reader = await c2pa.Reader.fromAsset(
+          { path: outputPath },
+          { verify: { verify_after_reading: false, verify_trust: false } }
+        )
+        const json = reader.json()
+        manifestId = json?.active_manifest || null
+      } catch {}
+
+      console.log(`[C2PA] signed: ${outputPath} (${manifestData.length} bytes manifest${manifestId ? ', id=' + manifestId : ''})`)
 
       return {
         signed: true,
         path: outputPath,
-        manifestId: `c2pa:${Date.now()}`,
+        manifestId,
         size: manifestData.length,
       }
     } catch (e) {
@@ -148,7 +179,10 @@ export const ContentCredentials = Object.freeze({
     }
 
     try {
-      const reader = await c2pa.Reader.fromAsset({ path: assetPath })
+      const reader = await c2pa.Reader.fromAsset(
+        { path: assetPath },
+        { verify: { verify_after_reading: true, verify_trust: false } }
+      )
       const json = reader.json()
 
       if (!json?.active_manifest || !json?.manifests) {
@@ -160,19 +194,25 @@ export const ContentCredentials = Object.freeze({
         return { valid: false, error: 'active manifest not found', manifest: null }
       }
 
+      // Check validation_state — 'Invalid' means integrity/hash mismatch
+      const validationState = json.validation_state || null
+      const failures = json.validation_results?.activeManifest?.failure || []
+      const isValid = validationState === 'Valid' && failures.length === 0
+
       return {
-        valid: true,
+        valid: isValid,
         manifest: {
           label: json.active_manifest,
           claimGenerator: active.claim?.generator?.[0] || null,
           title: active.title || null,
           generatedByAI: active.claim?.generated_by_ai || false,
           actions: (active.assertions || []).find(a => a.label?.startsWith('c2pa.actions'))?.data?.actions || [],
-          validationState: json.validation_state || null,
+          validationState,
+          failures: failures.map(f => f.code),
         },
         issuer: active.claim?.generator?.[0] || null,
         claimGenerator: active.claim?.generator?.[0] || null,
-        error: null,
+        error: isValid ? null : `validation_state=${validationState}, failures=${failures.map(f => f.code).join(',')}`,
       }
     } catch (e) {
       return { valid: false, error: e.message, manifest: null }
