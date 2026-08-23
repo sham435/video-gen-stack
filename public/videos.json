@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-23T21:23:19.413Z",
+  "updatedAt": "2026-08-23T21:50:38.513Z",
   "videos": [
+    {
+      "id": "fD82a4jGZOs",
+      "title": "PlayStation Blasts Out Poorly Timed Reminder About Digital Games - Kotaku | NEWS-MONSTER",
+      "publishedAt": "2026-08-23T21:24:18+00:00",
+      "publishedLabel": "Aug 23, 09:24 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/fD82a4jGZOs/hqdefault.jpg"
+    },
     {
       "id": "dfB0AngrQFs",
       "title": "Red Lobster brings back Endless Shrimp after promotion helped push chain toward bankruptcy | NEWS-MO",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-23T14:27:26+00:00",
       "publishedLabel": "Aug 23, 02:27 PM",
       "thumbnail": "https://i4.ytimg.com/vi/sG8CzeyWh9g/hqdefault.jpg"
-    },
-    {
-      "id": "dp8SzamyN4k",
-      "title": "Italy’s Monte dei Paschi Makes $40 Billion Move to Buy Rival Banks | NEWS-MONSTER",
-      "publishedAt": "2026-08-23T14:01:54+00:00",
-      "publishedLabel": "Aug 23, 02:01 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/dp8SzamyN4k/hqdefault.jpg"
     }
   ]
 }
