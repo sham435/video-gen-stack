@@ -45,14 +45,32 @@ describe('ProviderBudgets', () => {
     assert.ok(Object.keys(all).length >= 6)
   })
 
-  it('getBudgetWithOverrides respects env overrides', () => {
+  it('getBudgetWithOverrides respects env overrides (reduce only)', () => {
     const orig = process.env.RAPIDNEWS_DAILY_BUDGET
-    process.env.RAPIDNEWS_DAILY_BUDGET = '99'
+    process.env.RAPIDNEWS_DAILY_BUDGET = '2'
     const b = getBudgetWithOverrides('rapidnews')
-    assert.equal(b.daily, 99)
+    assert.equal(b.daily, 2) // reduced from 3
     assert.equal(b.monthly, 100) // not overridden
     if (orig === undefined) delete process.env.RAPIDNEWS_DAILY_BUDGET
     else process.env.RAPIDNEWS_DAILY_BUDGET = orig
+  })
+
+  it('getBudgetWithOverrides caps at hard limit', () => {
+    const orig = process.env.RAPIDNEWS_DAILY_BUDGET
+    process.env.RAPIDNEWS_DAILY_BUDGET = '500'
+    const b = getBudgetWithOverrides('rapidnews')
+    assert.equal(b.daily, 3) // capped at hard limit, not 500
+    if (orig === undefined) delete process.env.RAPIDNEWS_DAILY_BUDGET
+    else process.env.RAPIDNEWS_DAILY_BUDGET = orig
+  })
+
+  it('getBudgetWithOverrides monthly capped at hard limit', () => {
+    const orig = process.env.RAPIDNEWS_MONTHLY_BUDGET
+    process.env.RAPIDNEWS_MONTHLY_BUDGET = '99999'
+    const b = getBudgetWithOverrides('rapidnews')
+    assert.equal(b.monthly, 100) // capped at hard limit
+    if (orig === undefined) delete process.env.RAPIDNEWS_MONTHLY_BUDGET
+    else process.env.RAPIDNEWS_MONTHLY_BUDGET = orig
   })
 })
 

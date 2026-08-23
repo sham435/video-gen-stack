@@ -86,6 +86,8 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
     }
 
     const { ProductionJob } = await import('../src/orchestrator/ProductionJob.mjs')
+    const { ResourceGovernor } = await import('../src/governor/ResourceGovernor.mjs')
+    const governor = new ResourceGovernor()
 
     const category = process.env.INPUT_CATEGORY || process.argv[2] || 'technology'
     const outDir = 'output'
@@ -200,8 +202,8 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           console.log(`[DEDUP] skipped ${articles.length - fresh.length} already-published article(s)`)
           articles = fresh
         } else {
-          console.log('[DEDUP] all fetched articles were published in the last 24h — taking the newest anyway')
-          articles = articles.slice(0, 1)
+          console.log('[DEDUP] all fetched articles were published in the last 24h — aborting to prevent duplicate publish')
+          articles = null
         }
       }
     } catch { /* dedup is best-effort */ }
@@ -243,7 +245,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
       console.log(`\nProcessing: "${article.title?.slice(0, 80)}..."`)
 
       // ── ProductionJob orchestrator — stage checkpoints + retry + quarantine ──
-      const job = new ProductionJob(article, { outDir })
+      const job = new ProductionJob(article, { outDir, governor })
 
       // ── RENDER ──
       job.onStage('RENDER', async (ctx) => {
@@ -354,13 +356,44 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             channel: 'NEWS-MONSTER',
           })
           const desc = `${uploadTitle}\n\nSource: ${article.source || 'NewsAPI'}\n\n${hashtags}`
-          const result = await publishVideo({
-            videoUrl: `data:video/mp4;base64,${buffer.toString('base64')}`,
-            title: uploadTitle, description: desc,
-            privacy: process.env.YOUTUBE_PRIVACY || 'public',
-            thumbnailPath: ctx.results.C2PA?.path || ctx.results.THUMBNAIL?.selected?.path,
-            niche: nicheDecision?.key || null,
-          })
+
+          // Journal: record operation start for crash recovery
+          if (ctx.governor) {
+            ctx.governor.recordStart(ctx.jobId, 'youtube.upload', 'youtube', { title: uploadTitle })
+          }
+
+          // Pre-publish record: write dedup marker BEFORE upload so crash
+          // during upload is caught by dedup on retry. VideoId is filled in after.
+          try {
+            const { PublishEventsStore } = await import('../src/publishing/PublishEventsStore.mjs')
+            new PublishEventsStore().record({
+              videoId: null,
+              title: article.title?.slice(0, 100),
+              category: category || 'technology',
+              pending: true,
+            })
+          } catch { /* best-effort */ }
+
+          const uploadStart = Date.now()
+          let result
+          try {
+            result = await publishVideo({
+              videoUrl: `data:video/mp4;base64,${buffer.toString('base64')}`,
+              title: uploadTitle, description: desc,
+              privacy: process.env.YOUTUBE_PRIVACY || 'public',
+              thumbnailPath: ctx.results.C2PA?.path || ctx.results.THUMBNAIL?.selected?.path,
+              niche: nicheDecision?.key || null,
+            })
+          } catch (uploadErr) {
+            if (ctx.governor) ctx.governor.recordFail(ctx.jobId, 'youtube.upload', 'youtube', uploadErr, Date.now() - uploadStart)
+            throw uploadErr
+          }
+
+          // Journal: record remote_id immediately after successful upload
+          if (ctx.governor) {
+            ctx.governor.recordComplete(ctx.jobId, 'youtube.upload', 'youtube', result.videoId, 'uploaded', Date.now() - uploadStart)
+          }
+
           console.log(`[UPLOAD] videoId=${result.videoId} url=${result.url} niche=${result.niche || 'none'} thumbnail=${result.thumbnailUploaded ? 'uploaded' : result.lastError ? 'FAILED: ' + result.lastError : 'skipped'}`)
           if (engine?.productionTrace) engine.productionTrace.setYouTube(result)
           return { uploadTitle, hashtags, nicheDecision, ...result }
@@ -452,17 +485,28 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           const { commentEvent } = ctx.results.PUBLISH || {}
           const { retention, musicTrack, musicFamily } = ctx.results.RENDER
 
-          // Publish events store
+          // Publish events store — update the pre-upload pending record with videoId,
+          // or create a new one if the pending write was skipped.
           try {
             const { TopicCtaBuilder } = await import('../src/publishing/TopicCtaBuilder.mjs')
             const { PublishEventsStore } = await import('../src/publishing/PublishEventsStore.mjs')
             const cta = new TopicCtaBuilder().build(article)
-            new PublishEventsStore().record({
-              videoId, title: article.title?.slice(0, 100),
+            const store = new PublishEventsStore()
+            const title100 = article.title?.slice(0, 100)
+            const updated = store.updateByTitle(title100, {
+              videoId,
               category: category || 'technology',
               cta: { topic: cta.topic, mode: cta.mode, text: cta.narration },
               comment: commentEvent || null,
             })
+            if (!updated) {
+              store.record({
+                videoId, title: title100,
+                category: category || 'technology',
+                cta: { topic: cta.topic, mode: cta.mode, text: cta.narration },
+                comment: commentEvent || null,
+              })
+            }
             console.log('[ARTIFACT] data/publish-events.json updated')
           } catch (e) { console.log('[ARTIFACT] skipped:', e.message) }
 

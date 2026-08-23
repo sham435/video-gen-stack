@@ -127,6 +127,20 @@ export class ProductionJob {
       return true
     }
 
+    // ── Crash recovery: check if this external operation was already completed ──
+    // This must run BEFORE the governor gate — recovery is a local journal read,
+    // no API call, and should succeed even if quota is exhausted or cooldown active.
+    if (this.governor && stage.provider) {
+      const operationType = `${stage.provider}.${stage.id.toLowerCase()}`
+      const prior = this.governor.wasCompleted(this.jobId, operationType)
+      if (prior) {
+        console.log(`[JOB] ${stage.id}: RECOVERY — operation already completed remotely (remote_id=${prior.remote_id})`)
+        this.results[stage.id] = { remote_id: prior.remote_id, remote_state: prior.remote_state, recovered: true }
+        this.store.markStageCompleted(stage.id, this.results[stage.id])
+        return true
+      }
+    }
+
     // ── Governor gate: check quota BEFORE attempting the stage ──
     if (this.governor && stage.provider) {
       const quota = this.governor.canExecute(stage.provider, this.jobId)
@@ -143,18 +157,6 @@ export class ProductionJob {
       }
       // Reserve slot before execution
       this.governor.reserve(stage.provider)
-    }
-
-    // ── Crash recovery: check if this external operation was already completed ──
-    if (this.governor && stage.provider) {
-      const operationType = `${stage.provider}.${stage.id.toLowerCase()}`
-      const prior = this.governor.wasCompleted(this.jobId, operationType)
-      if (prior) {
-        console.log(`[JOB] ${stage.id}: RECOVERY — operation already completed remotely (remote_id=${prior.remote_id})`)
-        this.results[stage.id] = { remote_id: prior.remote_id, remote_state: prior.remote_state, recovered: true }
-        this.store.markStageCompleted(stage.id, this.results[stage.id])
-        return true
-      }
     }
 
     let retries = 0

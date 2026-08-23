@@ -69,17 +69,23 @@ export function listProviders() {
 }
 
 /**
- * Build budget from env overrides. E.g. RAPIDNEWS_DAILY_BUDGET=5 overrides
- * the default daily=3.
+ * Build budget from env overrides. Env values can only REDUCE limits,
+ * never increase them above the hard provider cap.
+ *
+ * E.g. RAPIDNEWS_DAILY_BUDGET=2 reduces from 3→2 (valid).
+ *      RAPIDNEWS_DAILY_BUDGET=500 stays at 3 (hard cap).
  */
 export function getBudgetWithOverrides(provider) {
   const base = BUDGETS[provider]
   if (!base) return null
   const envKey = provider.toUpperCase()
+  const envDaily = parseInt(process.env[`${envKey}_DAILY_BUDGET`], 10)
+  const envMonthly = parseInt(process.env[`${envKey}_MONTHLY_BUDGET`], 10)
+  const envCooldown = parseInt(process.env[`${envKey}_COOLDOWN_MS`], 10)
   return {
     ...base,
-    daily: parseInt(process.env[`${envKey}_DAILY_BUDGET`], 10) || base.daily,
-    monthly: parseInt(process.env[`${envKey}_MONTHLY_BUDGET`], 10) || base.monthly,
-    cooldownMs: parseInt(process.env[`${envKey}_COOLDOWN_MS`], 10) || base.cooldownMs,
+    daily: Number.isFinite(envDaily) ? Math.min(envDaily, base.daily) : base.daily,
+    monthly: Number.isFinite(envMonthly) ? Math.min(envMonthly, base.monthly) : base.monthly,
+    cooldownMs: Number.isFinite(envCooldown) ? Math.max(envCooldown, base.cooldownMs) : base.cooldownMs,
   }
 }

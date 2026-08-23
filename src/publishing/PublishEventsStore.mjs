@@ -46,6 +46,24 @@ export class PublishEventsStore {
   byVideo(videoId) {
     return this.events.find(e => e.videoId === videoId) || null
   }
+
+  updateByTitle(title, patch) {
+    const e = this.events.find(ev => ev.title === title && ev.pending)
+    if (e) {
+      Object.assign(e, patch)
+      e.pending = false
+      this._save()
+      return e
+    }
+    return null
+  }
+
+  _save() {
+    try {
+      fs.mkdirSync(path.dirname(PUBLISH_EVENTS_FILE), { recursive: true })
+      fs.writeFileSync(PUBLISH_EVENTS_FILE, JSON.stringify(this.events, null, 2))
+    } catch { /* ignore */ }
+  }
 }
 
 export { PUBLISH_EVENTS_FILE }

@@ -30,10 +30,16 @@ export class OperationJournal {
     this.baseDir = baseDir || DEFAULT_DIR
     this.filePath = path.join(this.baseDir, 'operations.jsonl')
     this._cache = null
+    this._cacheMtime = 0
   }
 
   _loadAll() {
-    if (this._cache) return this._cache
+    try {
+      const stat = fs.statSync(this.filePath)
+      const mt = stat.mtimeMs
+      if (this._cache && this._cacheMtime === mt) return this._cache
+      this._cacheMtime = mt
+    } catch { /* file may not exist */ }
     if (!fs.existsSync(this.filePath)) { this._cache = []; return this._cache }
     const lines = fs.readFileSync(this.filePath, 'utf-8').split('\n').filter(Boolean)
     this._cache = lines.map(l => { try { return JSON.parse(l) } catch { return null } }).filter(Boolean)
