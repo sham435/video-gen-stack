@@ -5,8 +5,14 @@
 // At 48/day, uniqueness cannot depend on randomness — this registry
 // is the single source of truth for "was this asset used before?"
 //
+// Lifecycle: RESERVE → COMMIT → (or RELEASE on failure)
+//
+// A reservation locks assets for a job between UNIQUENESS and VERIFY.
+// If VERIFY succeeds, the reservation is committed to the permanent index.
+// If the job fails at any point, the reservation is released so assets
+// can be retried without false-positive duplicate detection.
+//
 // Persisted as JSON (same pattern as ProviderBudgets/ResourceGovernor).
-// SQLite would be better at scale; JSON keeps the dependency tree flat.
 
 import fs from 'node:fs'
 import path from 'node:path'
@@ -26,7 +32,7 @@ export class AssetRegistry {
     try {
       if (fs.existsSync(this.filePath)) return JSON.parse(fs.readFileSync(this.filePath, 'utf-8'))
     } catch { /* corrupt file — reset */ }
-    return { scripts: {}, images: {}, music: {}, publishedVideos: [] }
+    return { scripts: {}, images: {}, music: {}, publishedVideos: [], reservations: {} }
   }
 
   _save() {
@@ -34,33 +40,153 @@ export class AssetRegistry {
     fs.writeFileSync(this.filePath, JSON.stringify(this.state, null, 2))
   }
 
-  // ── Script tracking ──────────────────────────────────────────────────
+  // ── Reservation lifecycle ──────────────────────────────────────────────
 
   /**
-   * Record a script as used. The hash is sha256 of the full narration text.
+   * Reserve assets for a job. Blocks other jobs from using the same assets
+   * until commit() or release() is called.
+   *
+   * @param {string} jobId
+   * @param {object} manifest — { scriptHash, imageHashes: string[], musicTrackId }
+   * @returns {{ reserved: boolean, conflict: string|null }}
    */
-  recordScript(hash, { articleHash, jobId, title } = {}) {
+  reserve(jobId, manifest) {
+    if (!jobId) throw new Error('reserve() requires a jobId')
+    if (!manifest?.scriptHash && !manifest?.imageHashes?.length && !manifest?.musicTrackId) {
+      return { reserved: true, conflict: null }
+    }
+
+    // Check for conflicts BEFORE reserving
+    const conflict = this._checkReservationConflict(manifest, jobId)
+    if (conflict) return { reserved: false, conflict }
+
+    this.state.reservations[jobId] = {
+      scriptHash: manifest.scriptHash || null,
+      imageHashes: manifest.imageHashes || [],
+      musicTrackId: manifest.musicTrackId || null,
+      reservedAt: new Date().toISOString(),
+    }
+    this._save()
+    return { reserved: true, conflict: null }
+  }
+
+  /**
+   * Commit a reservation — assets become permanently recorded.
+   * Called after VERIFY succeeds.
+   */
+  commit(jobId, { videoId, category } = {}) {
+    const res = this.state.reservations[jobId]
+    if (!res) return false
+
+    // Record to permanent indexes
+    if (res.scriptHash) {
+      this._recordScript(res.scriptHash, { jobId })
+    }
+    for (const h of res.imageHashes) {
+      this._recordImage(h, { jobId })
+    }
+    if (res.musicTrackId) {
+      this._recordMusic(res.musicTrackId, { jobId })
+    }
+
+    // Record the published video in the rolling window
+    this.state.publishedVideos.push({
+      videoId: videoId || `job-${jobId}`,
+      scriptHash: res.scriptHash,
+      imageHashes: res.imageHashes,
+      musicTrackId: res.musicTrackId,
+      jobId,
+      category: category || null,
+      publishedAt: new Date().toISOString(),
+    })
+    if (this.state.publishedVideos.length > this.rollingWindow) {
+      this.state.publishedVideos = this.state.publishedVideos.slice(-this.rollingWindow)
+    }
+
+    // Remove reservation
+    delete this.state.reservations[jobId]
+    this._save()
+    return true
+  }
+
+  /**
+   * Release a reservation — assets become free for retry.
+   * Called on UPLOAD/PUBLISH/VERIFY failure.
+   */
+  release(jobId) {
+    if (this.state.reservations[jobId]) {
+      delete this.state.reservations[jobId]
+      this._save()
+    }
+  }
+
+  /**
+   * List all active reservations (for crash recovery reconciliation).
+   */
+  listReservations() {
+    return { ...this.state.reservations }
+  }
+
+  /**
+   * Check if any asset in a manifest conflicts with an existing reservation
+   * from a DIFFERENT job.
+   */
+  _checkReservationConflict(manifest, excludeJobId) {
+    for (const [jid, res] of Object.entries(this.state.reservations)) {
+      if (jid === excludeJobId) continue
+
+      if (manifest.scriptHash && res.scriptHash === manifest.scriptHash) {
+        return `SCRIPT reserved by job ${jid}`
+      }
+      if (manifest.musicTrackId && res.musicTrackId === manifest.musicTrackId) {
+        return `MUSIC reserved by job ${jid}`
+      }
+      if (manifest.imageHashes?.length && res.imageHashes?.length) {
+        const overlap = manifest.imageHashes.filter(h => res.imageHashes.includes(h))
+        if (overlap.length > 0) {
+          return `IMAGE ${overlap[0]} reserved by job ${jid}`
+        }
+      }
+    }
+    return null
+  }
+
+  // ── Script tracking (committed) ────────────────────────────────────────
+
+  _recordScript(hash, { jobId, title } = {}) {
     const existing = this.state.scripts[hash]
     this.state.scripts[hash] = {
       firstUsed: existing?.firstUsed || new Date().toISOString(),
       lastUsed: new Date().toISOString(),
-      articleHash: articleHash || null,
       jobId: jobId || null,
       title: title || null,
       usageCount: (existing?.usageCount || 0) + 1,
     }
+  }
+
+  /**
+   * Public convenience: record a script directly (for testing / one-off use).
+   * Prefer reserve() + commit() for production pipeline.
+   */
+  recordScript(hash, opts) {
+    this._recordScript(hash, opts)
     this._save()
   }
 
   /**
    * Check if a script hash was used within the rolling window.
-   * Only counts scripts that appeared in a published video.
-   * Multiple generations without publish are not duplicates.
+   * Returns true if in committed publishedVideos OR reserved by another job.
    */
-  isScriptDuplicate(hash) {
-    return this.state.publishedVideos.slice(-this.rollingWindow).some(v =>
-      v.scriptHash === hash
-    )
+  isScriptDuplicate(hash, excludeJobId = null) {
+    if (this.state.publishedVideos.slice(-this.rollingWindow).some(v => v.scriptHash === hash)) {
+      return true
+    }
+    // Check reservations from other jobs
+    for (const [jid, res] of Object.entries(this.state.reservations)) {
+      if (jid === excludeJobId) continue
+      if (res.scriptHash === hash) return true
+    }
+    return false
   }
 
   /**
@@ -72,7 +198,7 @@ export class AssetRegistry {
       this.state.publishedVideos.slice(-window).map(v => v.scriptHash).filter(Boolean)
     )
     let removed = 0
-    for (const [hash, entry] of Object.entries(this.state.scripts)) {
+    for (const [hash] of Object.entries(this.state.scripts)) {
       if (!recentScriptHashes.has(hash)) {
         delete this.state.scripts[hash]
         removed++
@@ -82,30 +208,44 @@ export class AssetRegistry {
     return removed
   }
 
-  // ── Image tracking ───────────────────────────────────────────────────
+  // ── Image tracking (committed) ─────────────────────────────────────────
 
-  recordImage(hash, { sourceId, url, jobId } = {}) {
+  _recordImage(hash, { jobId } = {}) {
     const existing = this.state.images[hash]
     this.state.images[hash] = {
       firstUsed: existing?.firstUsed || new Date().toISOString(),
       lastUsed: new Date().toISOString(),
-      sourceId: sourceId || null,
-      url: url || null,
       jobId: jobId || null,
       usageCount: (existing?.usageCount || 0) + 1,
     }
+  }
+
+  /**
+   * Public convenience: record an image directly (for testing / one-off use).
+   */
+  recordImage(hash, opts) {
+    this._recordImage(hash, opts)
     this._save()
   }
 
-  isImageDuplicate(hash) {
-    return this.state.publishedVideos.slice(-this.rollingWindow).some(v =>
-      v.imageHashes?.includes(hash)
-    )
+  /**
+   * Check if an image hash was used within the rolling window.
+   * Returns true if in committed publishedVideos OR reserved by another job.
+   */
+  isImageDuplicate(hash, excludeJobId = null) {
+    if (this.state.publishedVideos.slice(-this.rollingWindow).some(v => v.imageHashes?.includes(hash))) {
+      return true
+    }
+    for (const [jid, res] of Object.entries(this.state.reservations)) {
+      if (jid === excludeJobId) continue
+      if (res.imageHashes?.includes(hash)) return true
+    }
+    return false
   }
 
-  // ── Music tracking ───────────────────────────────────────────────────
+  // ── Music tracking (committed) ─────────────────────────────────────────
 
-  recordMusic(trackId, { trackHash, family, jobId } = {}) {
+  _recordMusic(trackId, { trackHash, family, jobId } = {}) {
     const existing = this.state.music[trackId]
     this.state.music[trackId] = {
       firstUsed: existing?.firstUsed || new Date().toISOString(),
@@ -115,17 +255,35 @@ export class AssetRegistry {
       jobId: jobId || null,
       usageCount: (existing?.usageCount || 0) + 1,
     }
+  }
+
+  /**
+   * Public convenience: record a music track directly (for testing / one-off use).
+   */
+  recordMusic(trackId, opts) {
+    this._recordMusic(trackId, opts)
     this._save()
   }
 
-  isMusicDuplicate(trackId) {
-    return this.state.publishedVideos.slice(-this.rollingWindow).some(v =>
-      v.musicTrackId === trackId
-    )
+  /**
+   * Check if a music track was used within the rolling window.
+   * Returns true if in committed publishedVideos OR reserved by another job.
+   */
+  isMusicDuplicate(trackId, excludeJobId = null) {
+    if (this.state.publishedVideos.slice(-this.rollingWindow).some(v => v.musicTrackId === trackId)) {
+      return true
+    }
+    for (const [jid, res] of Object.entries(this.state.reservations)) {
+      if (jid === excludeJobId) continue
+      if (res.musicTrackId === trackId) return true
+    }
+    return false
   }
 
-  // ── Published video tracking ─────────────────────────────────────────
-
+  /**
+   * Public convenience: record a published video directly (for testing / one-off use).
+   * Prefer reserve() + commit() for production pipeline.
+   */
   recordPublishedVideo(videoId, { scriptHash, imageHashes, musicTrackId, articleHash, jobId, category } = {}) {
     this.state.publishedVideos.push({
       videoId,
@@ -137,7 +295,6 @@ export class AssetRegistry {
       category: category || null,
       publishedAt: new Date().toISOString(),
     })
-    // Enforce rolling window — trim oldest
     if (this.state.publishedVideos.length > this.rollingWindow) {
       this.state.publishedVideos = this.state.publishedVideos.slice(-this.rollingWindow)
     }
@@ -152,6 +309,7 @@ export class AssetRegistry {
       images: Object.keys(this.state.images).length,
       music: Object.keys(this.state.music).length,
       publishedVideos: this.state.publishedVideos.length,
+      activeReservations: Object.keys(this.state.reservations).length,
       rollingWindow: this.rollingWindow,
     }
   }
@@ -164,7 +322,7 @@ export class AssetRegistry {
   }
 
   cleanup() {
-    this.state = { scripts: {}, images: {}, music: {}, publishedVideos: [] }
+    this.state = { scripts: {}, images: {}, music: {}, publishedVideos: [], reservations: {} }
     try { fs.unlinkSync(this.filePath) } catch { /* ok */ }
   }
 }

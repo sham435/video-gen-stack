@@ -374,23 +374,27 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             manifest.setThumbnail(thumbHash)
           }
 
-          const result = preflight.validate(manifest)
+          const result = preflight.validate(manifest, { jobId: ctx.jobId })
 
           if (!result.pass) {
             console.log(`[UNIQUENESS] BLOCKED — ${result.violations.length} violations:`)
             for (const v of result.violations) {
               console.log(`  - ${v.type}: ${v.reason}`)
             }
-            // Quarantine: quarantineId allows retry with different assets
             const quarantineId = `unq-${ctx.jobId}-${Date.now()}`
             return { pass: false, violations: result.violations, quarantineId, manifest: result.details }
           }
 
-          console.log(`[UNIQUENESS] PASS — all ${scenes.length} scenes + music + script unique`)
-          // Record assets as used (prevents reuse in next run)
-          preflight.record(manifest, narrationScript)
+          // Reserve assets — blocks other jobs until commit() or release()
+          const reservation = preflight.reserve(manifest, { jobId: ctx.jobId })
+          if (!reservation.reserved) {
+            console.log(`[UNIQUENESS] RESERVE CONFLICT — ${reservation.conflict}`)
+            return { pass: false, violations: [{ type: 'RESERVATION', reason: reservation.conflict }], manifest: result.details }
+          }
+
+          console.log(`[UNIQUENESS] PASS + RESERVED — ${scenes.length} scenes + music + script locked for job ${ctx.jobId}`)
           if (imageDb) { try { imageDb.close() } catch {} }
-          return { pass: true, violations: [], manifest: result.details }
+          return { pass: true, reserved: true, violations: [], manifest: result.details }
         })
 
         // ── UPLOAD ──
@@ -525,12 +529,27 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           return { commentEvent }
         })
 
-        // ── VERIFY (YouTube thumbnail state) ──
+        // ── VERIFY (YouTube thumbnail state + uniqueness commit) ──
         job.onStage('VERIFY', async (ctx) => {
           const { videoId } = ctx.results.UPLOAD || {}
           if (!videoId) return { verified: false, reason: 'no videoId' }
-          // Verification is implicit — YouTube upload already returns
-          // thumbnailUploaded state. Real verification happens via analytics poller.
+
+          // Commit uniqueness reservation — assets are now permanently recorded
+          if (ctx.results.UNIQUENESS?.reserved) {
+            try {
+              const { AssetRegistry } = await import('../src/uniqueness/AssetRegistry.mjs')
+              const registryPath = path.join(outDir, '.asset-registry.json')
+              const registry = new AssetRegistry({ filePath: registryPath })
+              registry.commit(ctx.jobId, {
+                videoId,
+                category: category || ctx.results.UPLOAD?.nicheDecision?.key || 'technology',
+              })
+              console.log(`[UNIQUENESS] COMMITTED — reservation locked for job ${ctx.jobId} video=${videoId}`)
+            } catch (e) {
+              console.log(`[UNIQUENESS] commit failed (non-fatal): ${e.message}`)
+            }
+          }
+
           return { verified: true, videoId }
         })
 

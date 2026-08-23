@@ -27,24 +27,22 @@ export class MusicUniqueness {
       return { pass: true, reason: null, duplicateOf: null }
     }
 
-    const window = context.rollingWindow || this.registry.rollingWindow
-    const recentVideos = this.registry.state.publishedVideos.slice(-window)
+    const excludeJobId = context.excludeJobId || null
 
-    // Check AssetRegistry (JSON rolling window)
-    const regEntry = this.registry.state.music[music.trackId]
-    if (regEntry) {
-      const inRecentWindow = recentVideos.some(v => v.musicTrackId === music.trackId)
-      if (inRecentWindow || regEntry.usageCount > 1) {
-        return {
-          pass: false,
-          reason: `MUSIC_DUPLICATE: track=${music.trackId} used ${regEntry.usageCount}x`,
-          duplicateOf: regEntry,
-        }
+    // Check AssetRegistry (committed + reservations from other jobs)
+    const isDup = this.registry.isMusicDuplicate(music.trackId, excludeJobId)
+    if (isDup) {
+      const regEntry = this.registry.state.music[music.trackId]
+      return {
+        pass: false,
+        reason: `MUSIC_DUPLICATE: track=${music.trackId}`,
+        duplicateOf: regEntry || null,
       }
     }
 
     // Check ImageDatabase (SQLite historical)
     if (this.imageDb) {
+      const window = context.rollingWindow || this.registry.rollingWindow
       const recentTrackers = this.imageDb.recentVideoIds(window)
       if (this.imageDb.musicUsedInVideos(music.trackId, recentTrackers)) {
         return {

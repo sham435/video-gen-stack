@@ -386,7 +386,7 @@ describe('UniquenessPreflight', () => {
     assert.equal(r.pass, true) // aged out of window
   })
 
-  it('record() tracks all assets after publish', () => {
+  it('reserve() + commit() tracks all assets after publish', () => {
     const manifest = new ProductionUniquenessManifest()
       .setArticle(ARTICLE)
       .setScript('Published narration')
@@ -395,14 +395,23 @@ describe('UniquenessPreflight', () => {
       .setJobId('job-pub')
       .build()
 
-    preflight.record(manifest, 'Published narration')
+    // Reserve
+    const res = preflight.reserve(manifest, { jobId: 'job-pub' })
+    assert.equal(res.reserved, true)
+    assert.ok(reg.state.reservations['job-pub'])
 
-    // All assets should now be tracked
+    // Commit
+    const committed = preflight.commit('job-pub', { videoId: 'vid-123' })
+    assert.equal(committed, true)
+    assert.equal(reg.state.reservations['job-pub'], undefined)
+
+    // All assets should now be in permanent indexes
     const scriptHash = AssetRegistry.hash('Published narration')
     assert.ok(reg.state.scripts[scriptHash])
     assert.ok(reg.state.images['img-pub'])
     assert.ok(reg.state.music['music-pub'])
     assert.equal(reg.state.publishedVideos.length, 1)
+    assert.equal(reg.state.publishedVideos[0].videoId, 'vid-123')
   })
 
   it('multiple violations reported together', () => {

@@ -28,7 +28,7 @@ export class ScriptUniqueness {
     }
 
     const duplicateOf = this.registry.state.scripts[hash] || null
-    const isDup = this.registry.isScriptDuplicate(hash)
+    const isDup = this.registry.isScriptDuplicate(hash, context.jobId)
 
     if (isDup) {
       return {

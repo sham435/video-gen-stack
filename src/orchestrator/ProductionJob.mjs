@@ -203,8 +203,8 @@ export class ProductionJob {
           this.quarantineReason = `${stage.id} quarantined: permanent failure (last error: ${error.message})`
           this.store.markStageQuarantined(stage.id, this.quarantineReason)
           console.error(`[JOB] ${stage.id}: QUARANTINED — ${this.quarantineReason}`)
-          // Release governor slot on permanent failure
           if (this.governor && stage.provider) this.governor.release(stage.provider)
+          this._releaseUniquenessReservation()
           return false
         }
 
@@ -223,8 +223,8 @@ export class ProductionJob {
     this.quarantineReason = `${stage.id} quarantined: exhausted ${maxRetries} retries (last error: ${lastError?.message})`
     this.store.markStageQuarantined(stage.id, this.quarantineReason)
     console.error(`[JOB] ${stage.id}: QUARANTINED — ${this.quarantineReason}`)
-    // Release governor slot on exhaustion
     if (this.governor && stage.provider) this.governor.release(stage.provider)
+    this._releaseUniquenessReservation()
     return false
   }
 
@@ -249,6 +249,28 @@ export class ProductionJob {
 
   cleanup() {
     this.store.cleanup()
+  }
+
+  /**
+   * Release uniqueness reservation if UNIQUENESS stage completed with reserved: true.
+   * Called when a subsequent stage (UPLOAD/PUBLISH/VERIFY) quarantines.
+   * Reads/writes the asset-registry.json directly to avoid coupling to UniquenessPreflight.
+   */
+  _releaseUniquenessReservation() {
+    const unqResult = this.results?.UNIQUENESS
+    if (!unqResult?.reserved) return
+    try {
+      const registryPath = this.outDir ? `${this.outDir}/.asset-registry.json` : null
+      if (!registryPath || !fs.existsSync(registryPath)) return
+      const state = JSON.parse(fs.readFileSync(registryPath, 'utf-8'))
+      if (state.reservations?.[this.jobId]) {
+        delete state.reservations[this.jobId]
+        fs.writeFileSync(registryPath, JSON.stringify(state, null, 2))
+        console.log(`[JOB] UNIQUENESS reservation released for job ${this.jobId}`)
+      }
+    } catch (e) {
+      console.log(`[JOB] Failed to release uniqueness reservation: ${e.message}`)
+    }
   }
 }
 

@@ -1,22 +1,18 @@
 // UniquenessPreflight — pre-publish content uniqueness gate.
 //
-// A production job CANNOT reach PUBLISH unless its uniqueness manifest passes.
-// This is the missing layer that turns "we generate different things most of
-// the time" into an actual production invariant.
-//
-// Architecture:
+// Lifecycle: RESERVE → COMMIT → (or RELEASE on failure)
 //
 //   ProductionUniquenessManifest
 //     ↓
-//   UniquenessPreflight.validate(manifest)
+//   UniquenessPreflight.validate(manifest)  ← checks committed + other reservations
 //     ↓
-//   ┌──────────────┬──────────────┐
-//   │  PASS        │  FAIL        │
-//   │  ↓           │  ↓           │
-//   │  PUBLISH     │  REGENERATE  │
-//   │              │    ↓         │
-//   │              │  revalidate  │
-//   └──────────────┴──────────────┘
+//   PASS → reserve()  ← locks assets for this job
+//     ↓
+//   UPLOAD → PUBLISH → VERIFY
+//     ↓
+//   commit()  ← assets become permanent
+//     ↓
+//   (on failure) release()  ← assets free for retry
 //
 // At 48/day, uniqueness cannot depend on randomness. This gate
 // enforces deterministic asset separation across all production runs.
@@ -35,36 +31,33 @@ export class UniquenessPreflight {
 
   /**
    * Validate a full production manifest for uniqueness.
+   * Excludes the current job's own reservations from duplicate checks.
    *
    * @param {object} manifest — from ProductionUniquenessManifest.build()
+   * @param {object} opts — { jobId }
    * @returns {{ pass: boolean, details: object, violations: Array }}
    */
-  validate(manifest) {
+  validate(manifest, { jobId } = {}) {
+    const jid = jobId || manifest.jobId
     const violations = []
     const details = {
       script: null,
       scenes: null,
       music: null,
       articleHash: manifest.articleHash,
-      jobId: manifest.jobId,
+      jobId: jid,
     }
 
     // 1. Script uniqueness
     if (manifest.scriptHash) {
-      const scriptEntry = this.registry.state.scripts[manifest.scriptHash]
-      const isDup = this.registry.isScriptDuplicate(manifest.scriptHash)
+      const isDup = this.registry.isScriptDuplicate(manifest.scriptHash, jid)
       details.script = {
         hash: manifest.scriptHash,
         pass: !isDup,
         reason: isDup ? `SCRIPT_DUPLICATE: hash=${manifest.scriptHash}` : null,
       }
       if (isDup) {
-        violations.push({
-          type: 'SCRIPT',
-          hash: manifest.scriptHash,
-          reason: details.script.reason,
-          duplicateOf: scriptEntry,
-        })
+        violations.push({ type: 'SCRIPT', hash: manifest.scriptHash, reason: details.script.reason })
       }
     }
 
@@ -72,6 +65,7 @@ export class UniquenessPreflight {
     if (manifest.scenes?.length) {
       const sceneResult = this.sceneCheck.validate(manifest.scenes, {
         rollingWindow: this.registry.rollingWindow,
+        excludeJobId: jid,
       })
       details.scenes = {
         total: sceneResult.total,
@@ -85,6 +79,7 @@ export class UniquenessPreflight {
     if (manifest.music?.trackId) {
       const musicResult = this.musicCheck.validate(manifest.music, {
         rollingWindow: this.registry.rollingWindow,
+        excludeJobId: jid,
       })
       details.music = {
         trackId: manifest.music.trackId,
@@ -106,41 +101,41 @@ export class UniquenessPreflight {
   }
 
   /**
-   * Record all assets from a manifest as used (call after PUBLISH succeeds).
-   * This prevents the same assets from being reused in subsequent runs.
+   * Reserve assets for a job. Called in UNIQUENESS stage after validation passes.
+   * Blocks other jobs from using the same assets until commit() or release().
+   *
+   * @param {object} manifest — the built manifest
+   * @param {object} opts — { jobId }
+   * @returns {{ reserved: boolean, conflict: string|null }}
    */
-  record(manifest, narrationText) {
-    const ctx = {
-      articleHash: manifest.articleHash,
-      jobId: manifest.jobId,
-    }
+  reserve(manifest, { jobId } = {}) {
+    const jid = jobId || manifest.jobId
+    return this.registry.reserve(jid, {
+      scriptHash: manifest.scriptHash,
+      imageHashes: manifest.scenes?.map(s => s.imageHash).filter(Boolean) || [],
+      musicTrackId: manifest.music?.trackId,
+    })
+  }
 
-    // Record script
-    if (narrationText) {
-      this.scriptCheck.record(narrationText, ctx)
-    }
+  /**
+   * Commit a reservation — assets become permanently recorded.
+   * Called in VERIFY stage after upload is confirmed.
+   *
+   * @param {string} jobId
+   * @param {object} opts — { videoId, category }
+   */
+  commit(jobId, { videoId, category } = {}) {
+    return this.registry.commit(jobId, { videoId, category })
+  }
 
-    // Record scene images
-    if (manifest.scenes?.length) {
-      this.sceneCheck.record(manifest.scenes, ctx)
-    }
-
-    // Record music
-    if (manifest.music?.trackId) {
-      this.musicCheck.record(manifest.music, ctx)
-    }
-
-    // Record the full video in the rolling window
-    this.registry.recordPublishedVideo(
-      `job-${manifest.jobId}`,
-      {
-        scriptHash: manifest.scriptHash,
-        imageHashes: manifest.scenes?.map(s => s.imageHash).filter(Boolean) || [],
-        musicTrackId: manifest.music?.trackId,
-        articleHash: manifest.articleHash,
-        jobId: manifest.jobId,
-      }
-    )
+  /**
+   * Release a reservation — assets become free for retry.
+   * Called on UPLOAD/PUBLISH/VERIFY failure.
+   *
+   * @param {string} jobId
+   */
+  release(jobId) {
+    return this.registry.release(jobId)
   }
 
   /**

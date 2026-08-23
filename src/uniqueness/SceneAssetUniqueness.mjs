@@ -24,32 +24,28 @@ export class SceneAssetUniqueness {
    */
   validate(scenes, context = {}) {
     const violations = []
-    const window = context.rollingWindow || this.registry.rollingWindow
-    const recentVideos = this.registry.state.publishedVideos.slice(-window)
+    const excludeJobId = context.excludeJobId || null
 
     for (const scene of scenes) {
       if (!scene.imageHash) continue
 
-      // Check AssetRegistry (JSON rolling window)
-      const regEntry = this.registry.state.images[scene.imageHash]
-      if (regEntry) {
-        const inRecentWindow = recentVideos.some(v =>
-          v.imageHashes?.includes(scene.imageHash)
-        )
-        if (inRecentWindow || regEntry.usageCount > 1) {
-          violations.push({
-            sceneIndex: scene.sceneIndex,
-            imageHash: scene.imageHash,
-            source: 'AssetRegistry',
-            reason: `IMAGE_DUPLICATE: hash=${scene.imageHash} used ${regEntry.usageCount}x`,
-            duplicateOf: regEntry,
-          })
-          continue
-        }
+      // Check AssetRegistry (committed + reservations from other jobs)
+      const isDup = this.registry.isImageDuplicate(scene.imageHash, excludeJobId)
+      if (isDup) {
+        const regEntry = this.registry.state.images[scene.imageHash]
+        violations.push({
+          sceneIndex: scene.sceneIndex,
+          imageHash: scene.imageHash,
+          source: 'AssetRegistry',
+          reason: `IMAGE_DUPLICATE: hash=${scene.imageHash}`,
+          duplicateOf: regEntry || null,
+        })
+        continue
       }
 
       // Check ImageDatabase (SQLite historical)
       if (this.imageDb) {
+        const window = context.rollingWindow || this.registry.rollingWindow
         const recentTrackers = this.imageDb.recentVideoIds(window)
         if (this.imageDb.usedInVideos(scene.imageHash, recentTrackers)) {
           violations.push({
