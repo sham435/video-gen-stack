@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-23T19:11:01.078Z",
+  "updatedAt": "2026-08-23T20:24:16.590Z",
   "videos": [
+    {
+      "id": "yElPK-6fTWs",
+      "title": "Italy’s Monte dei Paschi Makes $40 Billion Move to Buy Rival Banks | NEWS-MONSTER",
+      "publishedAt": "2026-08-23T19:50:29+00:00",
+      "publishedLabel": "Aug 23, 07:50 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/yElPK-6fTWs/hqdefault.jpg"
+    },
+    {
+      "id": "9dBDuCgb5RA",
+      "title": "Todo lo que puedes hacer con OpenClaw gracias a su app para iPhone y Android | NEWS-MONSTER",
+      "publishedAt": "2026-08-23T19:27:54+00:00",
+      "publishedLabel": "Aug 23, 07:27 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/9dBDuCgb5RA/hqdefault.jpg"
+    },
     {
       "id": "tMeSMMYghyM",
       "title": "Tariffs just pushed Hyundai deeper into America | NEWS-MONSTER",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-23T12:38:45+00:00",
       "publishedLabel": "Aug 23, 12:38 PM",
       "thumbnail": "https://i4.ytimg.com/vi/kiMOWj_FYfY/hqdefault.jpg"
-    },
-    {
-      "id": "tdc2DReJz3Q",
-      "title": "As debt surpasses $40 trillion, the bill for Washington spending comes due - The Washingto | NEWS-MO",
-      "publishedAt": "2026-08-23T11:51:06+00:00",
-      "publishedLabel": "Aug 23, 11:51 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/tdc2DReJz3Q/hqdefault.jpg"
-    },
-    {
-      "id": "53FaMPJuhL0",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-23T11:24:18+00:00",
-      "publishedLabel": "Aug 23, 11:24 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/53FaMPJuhL0/hqdefault.jpg"
     }
   ]
 }
