@@ -47,6 +47,17 @@ function getCertPaths() {
 
 const BUNDLED_CERT_DIR = path.join(path.dirname(new URL(import.meta.url).pathname), 'c2pa-certs')
 
+function containsTestMarker(certPath) {
+  try {
+    const pem = fs.readFileSync(certPath, 'utf8')
+    // Extract base64 content between PEM header/footer
+    const b64 = pem.replace(/-----[^-]+-----/g, '').replace(/\s/g, '')
+    const der = Buffer.from(b64, 'base64')
+    // Search DER for the UTF-8 encoded string 'FOR TESTING_ONLY'
+    return der.includes(Buffer.from('FOR TESTING_ONLY'))
+  } catch { return false }
+}
+
 function ensureDevCertificate() {
   const { cert, key } = getCertPaths()
   const isProduction = process.env.NODE_ENV === 'production'
@@ -60,9 +71,7 @@ function ensureDevCertificate() {
         + 'Bundled test certificates cannot be used in production.'
       )
     }
-    // Warn if the production cert is actually the test fixture
-    const certContent = fs.readFileSync(cert, 'utf8')
-    if (certContent.includes('FOR TESTING_ONLY')) {
+    if (containsTestMarker(cert)) {
       console.warn('[C2PA] WARNING: production cert contains FOR TESTING_ONLY marker — this is a test certificate')
     }
     return { cert, key }
@@ -252,6 +261,45 @@ export const ContentCredentials = Object.freeze({
     if (process.env.C2PA_ENABLED === 'false') return false
     const c2pa = await getC2pa()
     return c2pa != null
+  },
+
+  // ─── validateProductionConfig ──────────────────────────────────────────
+  // Startup preflight: validates C2PA configuration is production-ready.
+  // Call once at pipeline init. Returns { valid, errors }.
+  // In production (NODE_ENV=production):
+  //   - C2PA_REQUIRED must be 'true' (fail-open forbidden)
+  //   - Certificate files must exist at C2PA_CERT_PATH + C2PA_KEY_PATH
+  //   - Bundled test certificates are rejected
+  validateProductionConfig() {
+    const errors = []
+    const isProduction = process.env.NODE_ENV === 'production'
+    if (!isProduction) return { valid: true, errors: [] }
+
+    // Production must have C2PA_REQUIRED=true
+    if (process.env.C2PA_REQUIRED !== 'true') {
+      errors.push('C2PA_REQUIRED must be "true" in production (fail-open is forbidden)')
+    }
+
+    // Production must have C2PA_ENABLED (not explicitly disabled)
+    if (process.env.C2PA_ENABLED === 'false') {
+      errors.push('C2PA_ENABLED cannot be "false" in production')
+    }
+
+    // Certificate files must exist
+    const { cert, key } = getCertPaths()
+    if (!fs.existsSync(cert)) {
+      errors.push(`C2PA certificate not found: ${cert} — set C2PA_CERT_PATH`)
+    }
+    if (!fs.existsSync(key)) {
+      errors.push(`C2PA private key not found: ${key} — set C2PA_KEY_PATH`)
+    }
+
+    // Warn if cert is the test fixture (non-blocking in preflight, blocking in ensureDevCertificate)
+    if (fs.existsSync(cert) && containsTestMarker(cert)) {
+      errors.push('Production certificate contains FOR TESTING_ONLY marker — this is a test certificate')
+    }
+
+    return { valid: errors.length === 0, errors }
   },
 
 })

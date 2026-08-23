@@ -14,6 +14,9 @@
 //     thumbnail: { generated, preflight, uploaded, error },
 //     youtube: { videoUploaded, videoId, thumbnailUploaded, thumbnailAttempts, lastError },
 //     linkedin: { attempted, success, error },
+//     provenance: { c2paSigned, c2paVerified, manifestId, error,
+//                    signMs, verifyMs, reason, validationState, failures,
+//                    gateBlocked, gateReason },
 //     render: { frames, durationSec, sizeBytes },
 //     status: "published" | "render_failed" | "publish_failed"
 //   }
@@ -30,7 +33,12 @@ export class ProductionTrace {
       thumbnail: Object.seal({ generated: false, preflight: 'skipped', uploaded: false, error: null }),
       youtube: Object.seal({ videoUploaded: false, videoId: null, thumbnailUploaded: false, thumbnailAttempts: 0, lastError: null }),
       linkedin: Object.seal({ attempted: false, success: false, error: null }),
-      provenance: Object.seal({ c2paSigned: false, c2paVerified: false, manifestId: null, error: null }),
+      provenance: Object.seal({
+        c2paSigned: false, c2paVerified: false, manifestId: null, error: null,
+        signMs: null, verifyMs: null, reason: null,
+        validationState: null, failures: [],
+        gateBlocked: false, gateReason: null,
+      }),
       render: Object.seal({ frames: 0, durationSec: 0, sizeBytes: 0 }),
       status: 'pending',
     })
@@ -72,11 +80,19 @@ export class ProductionTrace {
   }
 
   // ─── provenance ────────────────────────────────────────────────────────
-  setProvenance({ signed, verified, manifestId, error }) {
+  setProvenance({ signed, verified, manifestId, error, signMs, verifyMs, reason,
+                   validationState, failures, gateBlocked, gateReason }) {
     this.record.provenance.c2paSigned = signed || false
     this.record.provenance.c2paVerified = verified || false
     this.record.provenance.manifestId = manifestId || null
     this.record.provenance.error = error || null
+    if (signMs != null) this.record.provenance.signMs = signMs
+    if (verifyMs != null) this.record.provenance.verifyMs = verifyMs
+    if (reason != null) this.record.provenance.reason = reason
+    if (validationState != null) this.record.provenance.validationState = validationState
+    if (Array.isArray(failures)) this.record.provenance.failures = failures
+    if (gateBlocked != null) this.record.provenance.gateBlocked = gateBlocked
+    if (gateReason != null) this.record.provenance.gateReason = gateReason
   }
 
   // ─── render ─────────────────────────────────────────────────────────────

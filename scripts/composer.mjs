@@ -255,21 +255,27 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           let c2paSignedPath = coverPath
           let c2paResult = { signed: false }
           let c2paVerifyResult = { valid: false }
+          let c2paSignMs = null
+          let c2paVerifyMs = null
           if (coverPath && process.env.C2PA_ENABLED !== 'false') {
             try {
               const { ContentCredentials } = await import('../src/pipeline/ContentCredentials.mjs')
+              const signStart = Date.now()
               c2paResult = await ContentCredentials.sign({
                 input: coverPath,
                 article,
                 productionContext: engine?.productionContext,
               })
+              c2paSignMs = Date.now() - signStart
               if (c2paResult.signed) {
                 c2paSignedPath = c2paResult.path
-                console.log(`[C2PA] signed thumbnail: ${c2paResult.path}`)
+                console.log(`[C2PA] signed thumbnail: ${c2paResult.path} (${c2paSignMs}ms)`)
                 // Verify after sign if enabled
                 if (process.env.C2PA_VERIFY_AFTER_SIGN !== 'false') {
+                  const verifyStart = Date.now()
                   c2paVerifyResult = await ContentCredentials.verify(c2paResult.path)
-                  console.log(`[C2PA] verification: ${c2paVerifyResult.valid ? 'PASS' : 'FAIL'} (${c2paVerifyResult.error || 'ok'})`)
+                  c2paVerifyMs = Date.now() - verifyStart
+                  console.log(`[C2PA] verification: ${c2paVerifyResult.valid ? 'PASS' : 'FAIL'} (${c2paVerifyMs}ms, ${c2paVerifyResult.error || 'ok'})`)
                 }
               }
               if (engine?.productionTrace) {
@@ -278,6 +284,11 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
                   verified: c2paVerifyResult.valid,
                   manifestId: c2paResult.manifestId,
                   error: c2paResult.error || c2paVerifyResult.error || null,
+                  signMs: c2paSignMs,
+                  verifyMs: c2paVerifyMs,
+                  reason: c2paResult.reason || null,
+                  validationState: c2paVerifyResult.manifest?.validationState || null,
+                  failures: c2paVerifyResult.manifest?.failures || [],
                 })
               }
             } catch (e) {
@@ -294,9 +305,15 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             const signOk = c2paResult.signed
             const verifyOk = c2paVerifyResult.valid || process.env.C2PA_VERIFY_AFTER_SIGN === 'false'
             if (!signOk || !verifyOk) {
-              const reason = !signOk ? `signing failed: ${c2paResult.error || c2paResult.reason || 'unknown'}`
+              const gateReason = !signOk ? `signing failed: ${c2paResult.error || c2paResult.reason || 'unknown'}`
                 : `verification failed: ${c2paVerifyResult.error || 'unknown'}`
-              throw new Error(`C2PA required but ${reason} — blocking publish`)
+              if (engine?.productionTrace) {
+                engine.productionTrace.setProvenance({ gateBlocked: true, gateReason })
+              }
+              throw new Error(`C2PA required but ${gateReason} — blocking publish`)
+            }
+            if (engine?.productionTrace) {
+              engine.productionTrace.setProvenance({ gateBlocked: false, gateReason: null })
             }
           }
 
