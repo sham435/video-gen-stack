@@ -62,6 +62,7 @@ export async function composeVideo(articles, outDir = 'output', options = {}) {
   }
 
   return {
+    engine,
     finalPath,
     hooks: [],
     retention: engine.lastRetention || null,
@@ -235,7 +236,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
       console.log(`\nProcessing: "${article.title?.slice(0, 80)}..."`)
 
       const renderStart = Date.now()
-      const { finalPath, retention, musicTrack, musicFamily } = await composeVideo([article], outDir)
+      const { engine, finalPath, retention, musicTrack, musicFamily } = await composeVideo([article], outDir)
       const renderTime = Date.now() - renderStart
 
       if (process.env.YOUTUBE_REFRESH_TOKEN && uploadCount === 0) {
