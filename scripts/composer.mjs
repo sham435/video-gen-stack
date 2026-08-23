@@ -254,22 +254,26 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           if (!publishPreflight.ready) {
             throw new Error(`Publish preflight failed: ${publishPreflight.errors.join(', ')}`)
           }
-          // Thumbnail preflight — prefer 16:9 thumbnail.png (what YouTube shows
-          // in feed/suggestions); fall back to portrait cover.png for Shorts.
-          const { ThumbnailPreflight } = await import('../src/pipeline/ThumbnailPreflight.mjs')
-          const thumbPath16 = fs.existsSync('output/thumbnail.png') ? 'output/thumbnail.png' : null
-          const coverPath = thumbPath16 || (fs.existsSync('output/cover.png') ? 'output/cover.png' : null)
-          if (coverPath) {
-            const thumbCheck = ThumbnailPreflight.validate({ path: coverPath, niche: engine?.productionContext?.niche?.key })
-            if (thumbCheck.ready) {
-              console.log(`[Thumbnail] preflight PASS: ${thumbCheck.meta.width}x${thumbCheck.meta.height}, ${(thumbCheck.meta.sizeBytes / 1024).toFixed(0)}KB`)
-            } else {
-              console.warn(`⚠️  ThumbnailPreflight: ${thumbCheck.errors.join('; ')} — uploading anyway`)
-            }
+
+          // Thumbnail Factory — autonomous 5-candidate production + selection
+          const { ThumbnailFactory } = await import('../src/thumbnail/ThumbnailFactory.mjs')
+          const factory = new ThumbnailFactory({ outputDir: outDir })
+          const thumbResult = await factory.produce({
+            article,
+            title: article.title,
+            category: category || engine?.productionContext?.niche?.key || 'technology',
+            productionProfile: engine?.productionContext?.profile || null,
+            heroImage: article.imageUrl || null,
+            hideBranding: false,
+            nicheProfile: engine?.productionContext?.niche || null,
+          })
+          console.log(`[Thumbnail] Factory: ${thumbResult.candidates.length} candidates → winner="${thumbResult.strategy}" (${thumbResult.selected.width}x${thumbResult.selected.height})`)
+          if (engine?.productionTrace) {
+            engine.productionTrace.setThumbnailGenerated()
           }
 
-          // C2PA content credentials — sign thumbnail with provenance manifest
-          // ProductionSigner validates certificate lifecycle before signing
+          // C2PA content credentials — sign the factory-selected thumbnail
+          const coverPath = thumbResult.selected.path
           let c2paSignedPath = coverPath
           let c2paResult = { signed: false }
           let c2paVerifyResult = { valid: false }
@@ -290,7 +294,6 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
               if (c2paResult.signed) {
                 c2paSignedPath = c2paResult.path
                 console.log(`[C2PA] signed thumbnail: ${c2paResult.path} (${c2paSignMs}ms)`)
-                // Verify after sign if enabled
                 if (process.env.C2PA_VERIFY_AFTER_SIGN !== 'false') {
                   const verifyStart = Date.now()
                   c2paVerifyResult = await ContentCredentials.verify(c2paResult.path)
@@ -320,7 +323,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             }
           }
 
-          // C2PA enforcement gate — block publish if C2PA_REQUIRED and conditions not met
+          // C2PA enforcement gate
           if (process.env.C2PA_REQUIRED === 'true') {
             const signOk = c2paResult.signed
             const verifyOk = c2paVerifyResult.valid || process.env.C2PA_VERIFY_AFTER_SIGN === 'false'
