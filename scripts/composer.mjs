@@ -110,8 +110,13 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
       try {
         const rapidSvc = await import('../src/news/RapidNewsProvider.mjs')
         if (rapidSvc.isConfigured()) {
-          articles = await rapidSvc.fetchTopHeadlines({ category })
-          if (articles?.length) console.log(`[NEWS] RapidAPI "${category}" returned ${articles.length} articles`)
+          const rapidResult = await rapidSvc.fetchTopHeadlines({ category })
+          if (rapidResult.skipped) {
+            console.log(`[NEWS] RapidAPI skipped: ${rapidResult.reason}`)
+          } else {
+            articles = rapidResult.articles
+            if (articles?.length) console.log(`[NEWS] RapidAPI "${category}" returned ${articles.length} articles`)
+          }
         }
       } catch (e) { console.log('RapidNews error:', e.message) }
     }
