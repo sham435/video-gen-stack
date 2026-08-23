@@ -75,6 +75,15 @@ export async function composeVideo(articles, outDir = 'output', options = {}) {
 // with the module filename, so a filename check alone is wrong).
 if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
   const runFull = async () => {
+    // Production preflight — validate all invariants before accepting traffic
+    const { ProductionPreflight } = await import('../src/pipeline/ProductionPreflight.mjs')
+    const preflight = await ProductionPreflight.run()
+    if (!preflight.ok) {
+      console.error('[PREFLIGHT] BLOCKED — production invariants not met:')
+      for (const e of preflight.errors) console.error(`  - ${e}`)
+      process.exit(1)
+    }
+
     const category = process.env.INPUT_CATEGORY || process.argv[2] || 'technology'
     const outDir = 'output'
     fs.mkdirSync(outDir, { recursive: true })
