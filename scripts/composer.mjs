@@ -347,6 +347,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
 
           const registryPath = path.join(outDir, '.asset-registry.json')
           const imageDbPath = path.join(outDir, 'image-index.db')
+          const registry = new AssetRegistry({ filePath: registryPath })
           const imageDb = fs.existsSync(imageDbPath) ? new ImageDatabase(imageDbPath) : null
           const preflight = new UniquenessPreflight(registry, imageDb)
 
