@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-24T13:54:09.833Z",
+  "updatedAt": "2026-08-24T14:38:50.577Z",
   "videos": [
+    {
+      "id": "zQ8NA52zeeo",
+      "title": "Italy’s Monte dei Paschi Makes $40 Billion Move to Buy Rival Banks | NEWS-MONSTER",
+      "publishedAt": "2026-08-24T13:54:30+00:00",
+      "publishedLabel": "Aug 24, 01:54 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/zQ8NA52zeeo/hqdefault.jpg"
+    },
     {
       "id": "aHbHa7pfdyg",
       "title": "Tesla Semi wreszcie jedzie do Europy. Wielki debiut już we wrześniu | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-23T15:23:34+00:00",
       "publishedLabel": "Aug 23, 03:23 PM",
       "thumbnail": "https://i2.ytimg.com/vi/MymWhtneprk/hqdefault.jpg"
-    },
-    {
-      "id": "5Tc1gZwOFPY",
-      "title": "As debt surpasses $40 trillion, the bill for Washington spending comes due - The Washingto | NEWS-MO",
-      "publishedAt": "2026-08-23T14:54:24+00:00",
-      "publishedLabel": "Aug 23, 02:54 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/5Tc1gZwOFPY/hqdefault.jpg"
     }
   ]
 }
