@@ -171,10 +171,13 @@ export class NewsBroadcastEngine {
     // Load the production profile — HOW we produce for this niche
     const nicheProfile = getProfile(nicheDecision.key)
     // Immutable production context — the single normalized object for the entire pipeline
+    // If a ProductionPlan was passed via options.strategy, merge it into context
+    const planStrategy = options.strategy || null
     this.productionContext = Object.freeze({
       articleId: article?.id || article?.headline?.slice(0, 40) || `run-${Date.now()}`,
       niche: nicheDecision,
       profile: nicheProfile,
+      strategy: planStrategy ? Object.freeze({ ...planStrategy }) : null,
       assets: Object.freeze({
         cover: `${outDir}/cover.png`,
         thumbnail: `${outDir}/thumbnail.png`,

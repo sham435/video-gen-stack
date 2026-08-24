@@ -286,10 +286,23 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         return { plan, strategy: plan.hookStrategy.style, niche: plan.niche.key }
       })
 
-      // ── RENDER ──
+      // ── RENDER — consumes plan.sceneStrategy + plan.visualStrategy ──
       job.onStage('RENDER', async (ctx) => {
+        const plan = ctx.results.DISCOVER?.plan
+        const renderOptions = { ...options, quick: !!process.env.QUICK_RENDER }
+        // Pass plan strategy into render engine via options
+        if (plan) {
+          renderOptions.strategy = {
+            sceneStrategy: plan.sceneStrategy,
+            visualStrategy: plan.visualStrategy,
+            hookStrategy: plan.hookStrategy,
+            profile: plan.profile,
+            qualityTargets: plan.qualityTargets,
+          }
+          console.log(`[RENDER] consuming plan: ${plan.sceneStrategy.sceneCount} scenes, density=${plan.sceneStrategy.density}, motion=${plan.sceneStrategy.motion}`)
+        }
         const renderStart = Date.now()
-        const result = await composeVideo([article], outDir)
+        const result = await composeVideo([article], outDir, renderOptions)
         const renderTime = Date.now() - renderStart
         return {
           engine: result.engine,
@@ -305,12 +318,13 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         uploadCount++
         console.log('Uploading to YouTube...')
 
-        // ── THUMBNAIL ──
+        // ── THUMBNAIL — consumes plan.thumbnailStrategy ──
         job.onStage('THUMBNAIL', async (ctx) => {
           const { engine } = ctx.results.RENDER
+          const plan = ctx.results.DISCOVER?.plan
           const { ThumbnailFactory } = await import('../src/thumbnail/ThumbnailFactory.mjs')
           const factory = new ThumbnailFactory({ outputDir: outDir })
-          const thumbResult = await factory.produce({
+          const thumbOpts = {
             article,
             title: article.title,
             category: category || engine?.productionContext?.niche?.key || 'technology',
@@ -318,7 +332,13 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             heroImage: article.imageUrl || null,
             hideBranding: false,
             nicheProfile: engine?.productionContext?.niche || null,
-          })
+          }
+          // Apply plan thumbnail strategy if available
+          if (plan?.thumbnailStrategy) {
+            thumbOpts.thumbnailStrategy = plan.thumbnailStrategy
+            console.log(`[THUMBNAIL] consuming plan: layout=${plan.thumbnailStrategy.layout}, text=${plan.thumbnailStrategy.textStrategy}, diversity=${plan.thumbnailStrategy.diversityRequired}`)
+          }
+          const thumbResult = await factory.produce(thumbOpts)
           console.log(`[Thumbnail] Factory: ${thumbResult.candidates.length} candidates → winner="${thumbResult.strategy}" (${thumbResult.selected.width}x${thumbResult.selected.height})`)
           if (engine?.productionTrace) engine.productionTrace.setThumbnailGenerated()
           return { ...thumbResult }
@@ -469,12 +489,22 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           return { pass: true, reserved: true, violations: [], scopeResults: validation.scopeResults, thumbnailHash: thumbCompositionHash }
         })
 
-        // ── UPLOAD ──
+        // ── UPLOAD — consumes plan.providerPreferences for governor-aware selection ──
         job.onStage('UPLOAD', async (ctx) => {
           const { engine } = ctx.results.RENDER
+          const plan = ctx.results.DISCOVER?.plan
           const { ProductionPreflight } = await import('../src/ai/ProductionPreflight.mjs')
           const publishPreflight = await ProductionPreflight.check({}, { outDir, stage: 'publish' })
           if (!publishPreflight.ready) throw new Error(`Publish preflight failed: ${publishPreflight.errors.join(', ')}`)
+
+          // Governor-aware provider check before upload
+          if (ctx.governor && plan?.providerPreferences) {
+            const quota = ctx.governor.canExecute('youtube', ctx.jobId)
+            if (!quota.allowed) {
+              console.log(`[UPLOAD] blocked by governor: ${quota.reason}`)
+              return { uploadTitle: null, blocked: true, reason: quota.reason }
+            }
+          }
 
           const { publishVideo } = await import('../apps/api/publishers/youtube.js')
           const buffer = fs.readFileSync(ctx.results.RENDER.finalPath)
@@ -531,9 +561,10 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           return { uploadTitle, hashtags, nicheDecision, ...result }
         })
 
-        // ── PUBLISH ──
+        // ── PUBLISH — consumes plan.hookStrategy for CTA/comment strategy ──
         job.onStage('PUBLISH', async (ctx) => {
           const { engine } = ctx.results.RENDER
+          const plan = ctx.results.DISCOVER?.plan
           const { videoId, uploadTitle, hashtags, nicheDecision } = ctx.results.UPLOAD
           const coverPath = ctx.results.C2PA?.path || ctx.results.THUMBNAIL?.selected?.path
           const buffer = fs.readFileSync(ctx.results.RENDER.finalPath)
@@ -582,7 +613,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             }
           } catch (e) { console.log(`[DISTRIBUTE] skipped (best-effort): ${e.message}`) }
 
-          // Pinned comment
+          // Pinned comment — use plan hook strategy for CTA
           let commentEvent = null
           if (videoId) {
             try {
@@ -591,7 +622,8 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
               const { postComment } = await import('../apps/api/publishers/youtube.js')
               const cta = new TopicCtaBuilder().build(article)
               const comment = new PinnedCommentBuilder().build(article)
-              console.log(`[CTA] topic=${cta.topic} mode=${cta.mode} "${cta.narration}"`)
+              const hookStyle = plan?.hookStrategy?.style || 'breaking'
+              console.log(`[CTA] topic=${cta.topic} mode=${cta.mode} hook=${hookStyle} "${cta.narration}"`)
               console.log(`[PIN COMMENT] "${comment.question}"`)
               const posted = await postComment(videoId, comment.question)
               console.log(`[COMMENT INSERT] ${posted?.id ? `success commentId=${posted.id}` : 'failed — post it manually in Studio and pin it, then set YOUTUBE_PARENT_COMMENT_ID to its ID'}`)
@@ -625,9 +657,10 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           return { verified: true, videoId }
         })
 
-        // ── ANALYTICS ──
+        // ── ANALYTICS — consumes plan via recordOutcome() feedback loop ──
         job.onStage('ANALYTICS', async (ctx) => {
           const { engine } = ctx.results.RENDER
+          const plan = ctx.results.DISCOVER?.plan
           const { videoId, uploadTitle, nicheDecision } = ctx.results.UPLOAD || {}
           const { commentEvent } = ctx.results.PUBLISH || {}
           const { retention, musicTrack, musicFamily } = ctx.results.RENDER
@@ -688,6 +721,30 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             mem.close()
             console.log(`[FEEDBACK] observation recorded: niche=${obs.niche} videoId=${obs.videoId}`)
           } catch (e) { console.log('[FEEDBACK] observation skipped:', e.message) }
+
+          // Record outcome through ProductionStrategyController for continuous learning
+          if (plan && videoId) {
+            try {
+              const { ProductionStrategyController } = await import('../src/ai/ProductionStrategyController.mjs')
+              const { PerformanceMemory } = await import('../src/production/PerformanceMemory.mjs')
+              const mem = new PerformanceMemory()
+              const controller = new ProductionStrategyController({ performanceMemory: mem })
+              controller.recordOutcome(plan, {
+                videoId,
+                success: true,
+                musicTrack: musicTrack || null,
+                analytics: {
+                  impressions: 0,
+                  views: 0,
+                  avgViewDuration: retention?.avgViewDuration || 0,
+                  avgPercentViewed: retention?.avgPercentViewed || 0,
+                },
+              })
+              mem.close()
+              console.log(`[STRATEGY] outcome recorded: videoId=${videoId} niche=${plan.niche.key}`)
+            } catch (e) { console.log(`[STRATEGY] recordOutcome skipped: ${e.message}`) }
+          }
+
           return { recorded: true }
         })
 
