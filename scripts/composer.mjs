@@ -371,7 +371,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
       // ── RENDER — consumes plan.sceneStrategy + plan.visualStrategy ──
       job.onStage('RENDER', async (ctx) => {
         const plan = ctx.results.DISCOVER?.plan
-        const renderOptions = { ...options, quick: !!process.env.QUICK_RENDER }
+        const renderOptions = { quick: !!process.env.QUICK_RENDER }
         // Pass plan strategy into render engine via options
         if (plan) {
           renderOptions.strategy = {

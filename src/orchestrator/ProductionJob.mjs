@@ -58,7 +58,8 @@ export class ProductionJob {
     })
 
     const resumeFrom = startFrom || this.store.resumeFrom()
-    const startIdx = resumeFrom ? stageIndex(resumeFrom.id) : 0
+    const rawIdx = resumeFrom ? stageIndex(resumeFrom.id) : 0
+    const startIdx = Number.isFinite(rawIdx) && rawIdx >= 0 ? rawIdx : 0
 
     for (let i = startIdx; i < STAGES.length; i++) {
       const stage = STAGES[i]

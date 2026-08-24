@@ -31,20 +31,22 @@ export class ExperimentManager {
     return `STRATEGY_AI_VS_BASELINE_${d.getFullYear()}_${String(d.getMonth() + 1).padStart(2, '0')}`
   }
 
-  /** Assign variant deterministically based on article title hash */
-  assignVariant(articleTitle) {
+  /** Assign variant deterministically based on article title + niche (stratified) */
+  assignVariant(articleTitle, niche) {
     if (!this.enabled) return { variant: 'control', reason: 'experiment_disabled' }
 
-    const hash = crypto.createHash('sha256').update(String(articleTitle)).digest('hex')
+    // Stratified: hash includes niche to balance within each niche cohort
+    const key = `${String(articleTitle || '')}:${String(niche || 'GENERAL')}`
+    const hash = crypto.createHash('sha256').update(key).digest('hex')
     const bucket = parseInt(hash.slice(0, 8), 16) % 100
     const variant = bucket < 50 ? 'control' : 'treatment'
-    return { variant, hash: hash.slice(0, 12), bucket }
+    return { variant, hash: hash.slice(0, 12), bucket, niche: niche || 'GENERAL' }
   }
 
   /** Should this production run use AI? */
-  shouldUseAI(articleTitle) {
+  shouldUseAI(articleTitle, niche) {
     if (!this.enabled) return false
-    const { variant } = this.assignVariant(articleTitle)
+    const { variant } = this.assignVariant(articleTitle, niche)
     return variant === 'treatment'
   }
 
@@ -139,11 +141,24 @@ export class ExperimentManager {
     return record
   }
 
-  /** Compute aggregated results comparing variants */
+  /** Compute aggregated results comparing variants, with stratification by niche */
   getResults() {
     const outcomes = this._data.outcomes
     const control = outcomes.filter(o => o.variant === 'control')
     const treatment = outcomes.filter(o => o.variant === 'treatment')
+
+    // Stratified by niche
+    const niches = [...new Set(outcomes.map(o => o.niche))]
+    const stratified = {}
+    for (const niche of niches) {
+      const nicheControl = control.filter(o => o.niche === niche)
+      const nicheTreatment = treatment.filter(o => o.niche === niche)
+      stratified[niche] = {
+        control: this._aggregate(nicheControl),
+        treatment: this._aggregate(nicheTreatment),
+        comparison: this._compare(nicheControl, nicheTreatment),
+      }
+    }
 
     return {
       experimentId: this.experimentId,
@@ -152,6 +167,23 @@ export class ExperimentManager {
       control: this._aggregate(control),
       treatment: this._aggregate(treatment),
       comparison: this._compare(control, treatment),
+      stratified,
+      engineeringValidation: this._engineeringValidation(outcomes),
+    }
+  }
+
+  /** Engineering validation: does the experiment wiring work? */
+  _engineeringValidation(outcomes) {
+    const control = outcomes.filter(o => o.variant === 'control')
+    const treatment = outcomes.filter(o => o.variant === 'treatment')
+    return {
+      totalControl: control.length,
+      totalTreatment: treatment.length,
+      balancedAssignment: Math.abs(control.length - treatment.length) <= Math.max(2, Math.floor(outcomes.length * 0.1)),
+      nichesRepresented: [...new Set(outcomes.map(o => o.niche))].length,
+      hasControlPlanSource: control.every(o => o.planSource !== 'ai_optimized'),
+      hasTreatmentWithAI: treatment.filter(o => o.aiProvider != null).length,
+      wiringValid: control.every(o => o.planSource !== 'ai_optimized') && treatment.some(o => o.aiProvider != null),
     }
   }
 

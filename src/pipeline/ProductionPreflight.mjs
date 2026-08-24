@@ -112,29 +112,90 @@ export const ProductionPreflight = Object.freeze({
 
     // ─── AI Strategy checks ───────────────────────────────────────────────
     const aiStrategyEnabled = process.env.AI_STRATEGY_ENABLED === 'true'
-    diagnostics.aiStrategyEnabled = aiStrategyEnabled
-    diagnostics.aiStrategyProvider = 'none'
-    diagnostics.aiStrategyFallback = 'deterministic'
+    diagnostics.aiStrategy = { enabled: aiStrategyEnabled, provider: 'none', fallback: 'deterministic', status: 'DEGRADED' }
 
     if (aiStrategyEnabled) {
-      // Probe for available providers
       try {
         const { ProviderChain } = await import('../src/ai/providers/ProviderChain.mjs')
         const chain = new ProviderChain()
         if (chain.providers.length > 0) {
-          diagnostics.aiStrategyProvider = chain.name
-          diagnostics.aiStrategyFallback = 'enabled'
+          diagnostics.aiStrategy.provider = chain.name
+          diagnostics.aiStrategy.fallback = 'enabled'
+          diagnostics.aiStrategy.status = 'READY'
           console.log(`[PREFLIGHT] AI strategy: ENABLED — provider: ${chain.name}`)
         } else {
-          diagnostics.aiStrategyProvider = 'none'
+          diagnostics.aiStrategy.status = 'DEGRADED'
           console.log('[PREFLIGHT] AI strategy: ENABLED but no providers — will use deterministic fallback')
         }
       } catch (e) {
-        diagnostics.aiStrategyProvider = `error: ${e.message}`
+        diagnostics.aiStrategy.provider = `error: ${e.message}`
+        diagnostics.aiStrategy.status = 'DEGRADED'
         console.log(`[PREFLIGHT] AI strategy: ENABLED but provider init failed: ${e.message}`)
       }
     } else {
+      diagnostics.aiStrategy.status = 'READY'
       console.log('[PREFLIGHT] AI strategy: DISABLED — deterministic mode')
+    }
+
+    // ─── YouTube checks ──────────────────────────────────────────────────
+    diagnostics.youtube = {
+      token: !!process.env.YOUTUBE_REFRESH_TOKEN,
+      clientId: !!process.env.YOUTUBE_CLIENT_ID,
+      clientSecret: !!process.env.YOUTUBE_CLIENT_SECRET,
+      status: process.env.YOUTUBE_REFRESH_TOKEN ? 'READY' : 'BLOCKED',
+    }
+    if (!process.env.YOUTUBE_REFRESH_TOKEN) {
+      errors.push('YOUTUBE_REFRESH_TOKEN not set — cannot publish')
+    }
+
+    // ─── Provider checks ─────────────────────────────────────────────────
+    diagnostics.providers = {
+      elevenlabs: !!process.env.ELEVENLABS_API_KEY ? 'configured' : 'missing',
+      gemini: !!process.env.GEMINI_API_KEY ? 'configured' : 'missing',
+      openai: !!process.env.OPENAI_API_KEY ? 'configured' : 'missing',
+      openrouter: !!process.env.OPENROUTER_API_KEY ? 'configured' : 'missing',
+      ollama: 'local',
+      newsapi: !!process.env.NEWSAPI_KEY ? 'configured' : 'missing',
+      pexels: !!process.env.PEXELS_API_KEY ? 'configured' : 'missing',
+    }
+    const activeProviders = Object.values(diagnostics.providers).filter(v => v === 'configured' || v === 'local').length
+    diagnostics.providers.status = activeProviders >= 2 ? 'READY' : activeProviders >= 1 ? 'DEGRADED' : 'BLOCKED'
+
+    // ─── Storage / asset registry ────────────────────────────────────────
+    const outDir = process.env.OUT_DIR || 'output'
+    diagnostics.storage = {
+      outDir,
+      exists: fs.existsSync(outDir),
+      assetRegistry: fs.existsSync(path.join(outDir, '.asset-registry.json')),
+      status: fs.existsSync(outDir) ? 'READY' : 'DEGRADED',
+    }
+
+    // ─── Experiment framework ────────────────────────────────────────────
+    diagnostics.experiment = {
+      enabled: process.env.AI_EXPERIMENT_ENABLED === 'true',
+      status: 'READY',
+    }
+
+    // ─── Scheduler ───────────────────────────────────────────────────────
+    diagnostics.scheduler = {
+      dailyTarget: Number(process.env.DAILY_TARGET) || 48,
+      maxConcurrency: Number(process.env.MAX_CONCURRENCY) || 2,
+      status: 'READY',
+    }
+
+    // ─── Compute overall readiness ───────────────────────────────────────
+    const allStatuses = [
+      diagnostics.aiStrategy?.status,
+      diagnostics.youtube?.status,
+      diagnostics.providers?.status,
+      diagnostics.storage?.status,
+    ]
+    if (allStatuses.includes('BLOCKED')) {
+      diagnostics.overallStatus = 'BLOCKED'
+    } else if (allStatuses.includes('DEGRADED')) {
+      diagnostics.overallStatus = 'DEGRADED'
+    } else {
+      diagnostics.overallStatus = 'READY'
     }
 
     // ─── Print diagnostic ──────────────────────────────────────────────────
@@ -145,23 +206,35 @@ export const ProductionPreflight = Object.freeze({
 
   // ─── _print ─────────────────────────────────────────────────────────────
   _print(d, effectiveProduction) {
+    const ai = d.aiStrategy || {}
+    const yt = d.youtube || {}
+    const pr = d.providers || {}
+    const st = d.storage || {}
+    const exp = d.experiment || {}
+    const sc = d.scheduler || {}
     const lines = [
-      '┌─────────────────────────────────────────┐',
-      '│  C2PA Production Preflight               │',
-      '├─────────────────────────────────────────┤',
-      `│  Environment:          ${(d.environment || '').padEnd(19)}│`,
-      `│  C2PA enabled:         ${String(d.c2paEnabled).padEnd(19)}│`,
-      `│  C2PA required:        ${String(d.c2paRequired).padEnd(19)}│`,
-      `│  Certificate:          ${d.certificate.padEnd(19)}│`,
-      `│  Certificate type:     ${d.certificateType.padEnd(19)}│`,
-      `│  Certificate expiry:   ${d.certificateExpiry.padEnd(19)}│`,
-      `│  Certificate fingerprint: ${d.certificateFingerprint.slice(0, 16).padEnd(16)}│`,
-      `│  Trust chain:          ${d.trustChain.padEnd(19)}│`,
-      '├─────────────────────────────────────────┤',
-      `│  AI strategy:          ${String(d.aiStrategyEnabled).padEnd(19)}│`,
-      `│  AI provider:          ${String(d.aiStrategyProvider).slice(0, 19).padEnd(19)}│`,
-      `│  AI fallback:          ${String(d.aiStrategyFallback).padEnd(19)}│`,
-      '└─────────────────────────────────────────┘',
+      '┌─────────────────────────────────────────────────────┐',
+      '│  NEWS-MONSTER Production Preflight                   │',
+      '├─────────────────────────────────────────────────────┤',
+      `│  Overall:    ${(d.overallStatus || 'UNKNOWN').padEnd(39)}│`,
+      '├─────────────────────────────────────────────────────┤',
+      `│  Environment:     ${(d.environment || '').padEnd(34)}│`,
+      `│  C2PA enabled:    ${String(d.c2paEnabled).padEnd(34)}│`,
+      `│  C2PA required:   ${String(d.c2paRequired).padEnd(34)}│`,
+      `│  Certificate:     ${(d.certificate || '').padEnd(34)}│`,
+      `│  Certificate type:${(d.certificateType || '').padEnd(34)}│`,
+      `│  Trust chain:     ${(d.trustChain || '').padEnd(34)}│`,
+      '├─────────────────────────────────────────────────────┤',
+      `│  AI strategy:     ${((ai.enabled ? 'ENABLED' : 'DISABLED')).padEnd(34)}│`,
+      `│  AI provider:     ${(ai.provider || 'none').slice(0, 34).padEnd(34)}│`,
+      `│  AI status:       ${(ai.status || 'UNKNOWN').padEnd(34)}│`,
+      '├─────────────────────────────────────────────────────┤',
+      `│  YouTube:         ${(yt.status || 'UNKNOWN').padEnd(34)}│`,
+      `│  Providers:       ${(pr.status || 'UNKNOWN').padEnd(34)}│`,
+      `│  Storage:         ${(st.status || 'UNKNOWN').padEnd(34)}│`,
+      `│  Experiment:      ${(exp.enabled ? 'ENABLED' : 'DISABLED').padEnd(34)}│`,
+      `│  Scheduler:       ${`target=${sc.dailyTarget || 48}`.padEnd(34)}│`,
+      '└─────────────────────────────────────────────────────┘',
     ]
     const prefix = effectiveProduction ? '[PREFLIGHT]' : '[PREFLIGHT-DEV]'
     for (const line of lines) console.log(`${prefix} ${line}`)
