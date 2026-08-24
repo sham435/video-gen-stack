@@ -7,6 +7,8 @@ import { NewsBroadcastEngine } from '../src/index.mjs'
 import { validateRenderOutput } from '../src/video/validateOutput.mjs'
 import { resolveRenderManifest, resolveRenderGates } from '../src/pipeline/RenderManifest.mjs'
 
+// ── Experiment + Metrics + Manifest (loaded per-run when enabled) ─────
+
 async function assertValidRender(file, stage) {
   const res = await validateRenderOutput(file, { requireAudio: true })
   if (res.ok) {
@@ -244,6 +246,24 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
 
       console.log(`\nProcessing: "${article.title?.slice(0, 80)}..."`)
 
+      // ── Experiment + Metrics collection ──
+      let experimentManager = null
+      let metrics = null
+      let experimentId = null
+      let variant = 'control'
+      try {
+        const { ExperimentManager } = await import('../src/experiment/ExperimentManager.mjs')
+        const { MetricsCollector } = await import('../src/experiment/MetricsCollector.mjs')
+        experimentManager = new ExperimentManager({ outDir })
+        metrics = new MetricsCollector()
+        experimentId = experimentManager.experimentId
+        const assignment = experimentManager.assignVariant(article.title)
+        variant = assignment.variant
+        if (assignment.hash) {
+          console.log(`[EXPERIMENT] ${experimentId} variant=${variant} hash=${assignment.hash}`)
+        }
+      } catch { /* experiment tracking unavailable */ }
+
       // ── ProductionJob orchestrator — stage checkpoints + retry + quarantine ──
       const job = new ProductionJob(article, { outDir, governor })
 
@@ -278,12 +298,74 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           assetRegistry,
         })
 
+        // Inject AI strategy layer when enabled
+        let aiLayer = null
+        const aiEnabled = process.env.AI_STRATEGY_ENABLED === 'true'
+        if (aiEnabled) {
+          try {
+            const { AiStrategyLayer } = await import('../src/ai/AiStrategyLayer.mjs')
+            const { ProviderChain } = await import('../src/ai/providers/ProviderChain.mjs')
+            const chain = new ProviderChain()
+            if (chain.providers.length > 0) {
+              aiLayer = new AiStrategyLayer({ providerChain: chain })
+              console.log(`[AI-STRATEGY] ENABLED — providers: ${chain.name}`)
+            } else {
+              console.log('[AI-STRATEGY] ENABLED but no providers available — using deterministic fallback')
+            }
+          } catch (e) {
+            console.log(`[AI-STRATEGY] ENABLED but init failed: ${e.message} — using deterministic fallback`)
+          }
+        } else {
+          console.log('[AI-STRATEGY] DISABLED — using deterministic strategy')
+        }
+
+        // Rebuild controller with AI layer if available
+        const finalController = aiLayer
+          ? new ProductionStrategyController({
+              performanceMemory,
+              profileOptimizer,
+              resourceGovernor: governor || null,
+              assetRegistry,
+              aiLayer,
+            })
+          : controller
+
         // Produce strategy plan
-        const plan = await controller.planProduction(article, { jobId: ctx.jobId })
-        console.log(`[STRATEGY] niche=${plan.niche.key} hook=${plan.hookStrategy.style} thumbnail=${plan.thumbnailStrategy.layout} confidence=${plan.confidence}`)
+        const plan = await finalController.planProduction(article, { jobId: ctx.jobId })
+        const decisionTrace = finalController.getDecisionTrace()
+        console.log(`[STRATEGY] source=${plan.hookStrategy.source} niche=${plan.niche.key} hook=${plan.hookStrategy.style} thumbnail=${plan.thumbnailStrategy.layout} confidence=${plan.confidence}`)
+        if (decisionTrace.aiCalled) {
+          console.log(`[STRATEGY] AI provider=${decisionTrace.aiProvider} latency=${decisionTrace.aiLatencyMs}ms received=${decisionTrace.recommendationsReceived} accepted=${decisionTrace.recommendationsAccepted} rejected=${decisionTrace.recommendationsRejected}`)
+        }
         console.log(`[STRATEGY] reasoning: ${plan.reasoning}`)
 
-        return { plan, strategy: plan.hookStrategy.style, niche: plan.niche.key }
+        // Record metrics
+        if (metrics) {
+          metrics.setMetadata('niche', plan.niche.key)
+          metrics.setMetadata('hookStyle', plan.hookStrategy.style)
+          metrics.setMetadata('planSource', plan.hookStrategy.source)
+          if (decisionTrace.aiCalled) {
+            metrics.recordAI({
+              provider: decisionTrace.aiProvider,
+              latencyMs: decisionTrace.aiLatencyMs,
+              fallback: decisionTrace.fallbackUsed,
+              recommendationsReceived: decisionTrace.recommendationsReceived,
+              recommendationsAccepted: decisionTrace.recommendationsAccepted,
+              recommendationsRejected: decisionTrace.recommendationsRejected,
+              rejectionReasons: decisionTrace.rejectionReasons,
+            })
+          }
+        }
+
+        return {
+          plan,
+          strategy: plan.hookStrategy.style,
+          niche: plan.niche.key,
+          decisionTrace,
+          controller: finalController,
+          aiEnabled: !!aiLayer,
+          variant,
+        }
       })
 
       // ── RENDER — consumes plan.sceneStrategy + plan.visualStrategy ──
@@ -752,6 +834,94 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         const result = await job.run()
         if (!result.success) {
           console.error(`[JOB] Article quarantined: ${result.quarantineReason}`)
+        }
+
+        // ── ProductionManifest — immutable per-video provenance ──
+        try {
+          const { ProductionManifest } = await import('../src/experiment/ProductionManifest.mjs')
+          const pm = new ProductionManifest({ outDir })
+          const discoverResult = result.results?.DISCOVER || {}
+          const renderResult = result.results?.RENDER || {}
+          const thumbResult = result.results?.THUMBNAIL || {}
+          const c2paResult = result.results?.C2PA || {}
+          const uniquenessResult = result.results?.UNIQUENESS || {}
+          const uploadResult = result.results?.UPLOAD || {}
+          const publishResult = result.results?.PUBLISH || {}
+          const verifyResult = result.results?.VERIFY || {}
+          const analyticsResult = result.results?.ANALYTICS || {}
+
+          const manifest = pm.create({
+            article,
+            niche: discoverResult.plan?.niche || { key: 'GENERAL' },
+            plan: discoverResult.plan || {},
+            decisionTrace: discoverResult.decisionTrace || {},
+            experimentId,
+            variant,
+            stages: {
+              discover: { status: result.stages?.DISCOVER || 'unknown', durationMs: 0 },
+              render: {
+                status: result.stages?.RENDER || 'unknown',
+                durationMs: renderResult.renderTimeMs || 0,
+                sceneCount: discoverResult.plan?.sceneStrategy?.sceneCount || 0,
+              },
+              thumbnail: {
+                status: result.stages?.THUMBNAIL || 'unknown',
+                layout: thumbResult.strategy || null,
+                candidatesGenerated: thumbResult.candidates?.length || 0,
+              },
+              c2pa: { status: result.stages?.C2PA || 'unknown', signed: c2paResult.signed || false },
+              uniqueness: {
+                status: result.stages?.UNIQUENESS || 'unknown',
+                passed: uniquenessResult.passed !== false,
+                rejections: uniquenessResult.rejections || 0,
+              },
+              upload: {
+                status: result.stages?.UPLOAD || 'unknown',
+                provider: 'youtube',
+                videoId: uploadResult.videoId || null,
+              },
+              publish: { status: result.stages?.PUBLISH || 'unknown', platform: 'youtube' },
+              verify: { status: result.stages?.VERIFY || 'unknown', passed: verifyResult.verified || false },
+              analytics: { status: result.stages?.ANALYTICS || 'unknown' },
+            },
+            providers: {
+              ai: discoverResult.decisionTrace?.aiProvider || null,
+              tts: 'elevenlabs',
+              rendering: 'remotion',
+              imageSearch: 'pexels',
+            },
+          })
+          const manifestPath = pm.write(manifest)
+          console.log(`[MANIFEST] ${manifest.artifactId} → ${manifestPath}`)
+        } catch (e) {
+          console.log(`[MANIFEST] skipped: ${e.message}`)
+        }
+
+        // ── Experiment outcome recording ──
+        if (experimentManager && metrics) {
+          try {
+            const discoverResult = result.results?.DISCOVER || {}
+            const uploadResult = result.results?.UPLOAD || {}
+            const record = metrics.toExperimentRecord({
+              experimentId,
+              variant,
+              planSource: discoverResult.plan?.hookStrategy?.source || 'unknown',
+              artifactId: result.results?.DISCOVER?.artifactId || `vid-${Date.now().toString(36)}`,
+              niche: discoverResult.plan?.niche?.key || 'GENERAL',
+              articleTitle: article.title?.slice(0, 100) || '',
+              hookStrategy: discoverResult.plan?.hookStrategy || null,
+              sceneStrategy: discoverResult.plan?.sceneStrategy || null,
+              visualStrategy: discoverResult.plan?.visualStrategy || null,
+              musicStrategy: discoverResult.plan?.musicStrategy || null,
+              thumbnailStrategy: discoverResult.plan?.thumbnailStrategy || null,
+            })
+            record.youtube = { videoId: uploadResult.videoId || null }
+            experimentManager.recordOutcome(record)
+            const summary = experimentManager.getSummary()
+            console.log(`[EXPERIMENT] recorded: total=${summary.total} control=${summary.controlCount} treatment=${summary.treatmentCount}`)
+          } catch (e) {
+            console.log(`[EXPERIMENT] recording skipped: ${e.message}`)
+          }
         }
       } else {
         // No YouTube token — render only (no upload stages)

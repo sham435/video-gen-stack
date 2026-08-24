@@ -110,6 +110,33 @@ export const ProductionPreflight = Object.freeze({
       diagnostics.certificate = 'disabled'
     }
 
+    // ─── AI Strategy checks ───────────────────────────────────────────────
+    const aiStrategyEnabled = process.env.AI_STRATEGY_ENABLED === 'true'
+    diagnostics.aiStrategyEnabled = aiStrategyEnabled
+    diagnostics.aiStrategyProvider = 'none'
+    diagnostics.aiStrategyFallback = 'deterministic'
+
+    if (aiStrategyEnabled) {
+      // Probe for available providers
+      try {
+        const { ProviderChain } = await import('../src/ai/providers/ProviderChain.mjs')
+        const chain = new ProviderChain()
+        if (chain.providers.length > 0) {
+          diagnostics.aiStrategyProvider = chain.name
+          diagnostics.aiStrategyFallback = 'enabled'
+          console.log(`[PREFLIGHT] AI strategy: ENABLED — provider: ${chain.name}`)
+        } else {
+          diagnostics.aiStrategyProvider = 'none'
+          console.log('[PREFLIGHT] AI strategy: ENABLED but no providers — will use deterministic fallback')
+        }
+      } catch (e) {
+        diagnostics.aiStrategyProvider = `error: ${e.message}`
+        console.log(`[PREFLIGHT] AI strategy: ENABLED but provider init failed: ${e.message}`)
+      }
+    } else {
+      console.log('[PREFLIGHT] AI strategy: DISABLED — deterministic mode')
+    }
+
     // ─── Print diagnostic ──────────────────────────────────────────────────
     ProductionPreflight._print(diagnostics, effectiveProduction)
 
@@ -130,6 +157,10 @@ export const ProductionPreflight = Object.freeze({
       `│  Certificate expiry:   ${d.certificateExpiry.padEnd(19)}│`,
       `│  Certificate fingerprint: ${d.certificateFingerprint.slice(0, 16).padEnd(16)}│`,
       `│  Trust chain:          ${d.trustChain.padEnd(19)}│`,
+      '├─────────────────────────────────────────┤',
+      `│  AI strategy:          ${String(d.aiStrategyEnabled).padEnd(19)}│`,
+      `│  AI provider:          ${String(d.aiStrategyProvider).slice(0, 19).padEnd(19)}│`,
+      `│  AI fallback:          ${String(d.aiStrategyFallback).padEnd(19)}│`,
       '└─────────────────────────────────────────┘',
     ]
     const prefix = effectiveProduction ? '[PREFLIGHT]' : '[PREFLIGHT-DEV]'
