@@ -247,6 +247,45 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
       // ── ProductionJob orchestrator — stage checkpoints + retry + quarantine ──
       const job = new ProductionJob(article, { outDir, governor })
 
+      // ── DISCOVER — AI production strategy + deterministic preflight ──
+      job.onStage('DISCOVER', async (ctx) => {
+        const { ProductionStrategyController } = await import('../src/ai/ProductionStrategyController.mjs')
+        const { AssetRegistry } = await import('../src/uniqueness/AssetRegistry.mjs')
+
+        // Build controller with available intelligence
+        let performanceMemory = null
+        let profileOptimizer = null
+        try {
+          const { PerformanceMemory } = await import('../src/production/PerformanceMemory.mjs')
+          performanceMemory = new PerformanceMemory()
+        } catch { /* memory unavailable */ }
+
+        try {
+          const { ProfileOptimizer } = await import('../src/production/ProfileOptimizer.mjs')
+          profileOptimizer = new ProfileOptimizer()
+        } catch { /* optimizer unavailable */ }
+
+        const registryPath = path.join(outDir, '.asset-registry.json')
+        let assetRegistry = null
+        try {
+          assetRegistry = new AssetRegistry({ filePath: registryPath })
+        } catch { /* registry unavailable */ }
+
+        const controller = new ProductionStrategyController({
+          performanceMemory,
+          profileOptimizer,
+          resourceGovernor: governor || null,
+          assetRegistry,
+        })
+
+        // Produce strategy plan
+        const plan = await controller.planProduction(article, { jobId: ctx.jobId })
+        console.log(`[STRATEGY] niche=${plan.niche.key} hook=${plan.hookStrategy.style} thumbnail=${plan.thumbnailStrategy.layout} confidence=${plan.confidence}`)
+        console.log(`[STRATEGY] reasoning: ${plan.reasoning}`)
+
+        return { plan, strategy: plan.hookStrategy.style, niche: plan.niche.key }
+      })
+
       // ── RENDER ──
       job.onStage('RENDER', async (ctx) => {
         const renderStart = Date.now()
