@@ -52,6 +52,11 @@ export class ThumbnailJudge {
         return { ...c, eligible: false, compositeScore: 0, reason: 'not rendered' }
       }
 
+      // Respect composition preflight rejection
+      if (c.eligible === false && c.compositionErrors) {
+        return { ...c, compositeScore: 0, reason: `composition rejected: ${c.compositionErrors.join('; ')}` }
+      }
+
       let buffer
       try {
         buffer = readFileSync(c.path)

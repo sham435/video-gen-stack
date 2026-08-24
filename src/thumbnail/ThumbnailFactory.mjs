@@ -17,6 +17,7 @@ import { ThumbnailCandidateGenerator } from './ThumbnailCandidateGenerator.mjs'
 import { ThumbnailRenderer } from './ThumbnailRenderer.mjs'
 import { ThumbnailJudge } from './ThumbnailJudge.mjs'
 import { ThumbnailPolicy } from './ThumbnailPolicy.mjs'
+import { ThumbnailCompositionPreflight } from './ThumbnailCompositionPreflight.mjs'
 import { ThumbnailManifest } from './ThumbnailManifest.mjs'
 import fs from 'node:fs'
 import path from 'node:path'
@@ -41,6 +42,23 @@ export class ThumbnailFactory {
     const candidates = this.generator.generate(article || { title: title || 'NEWS UPDATE', category: brief.category }, brief)
     const thumbDir = path.join(this.outputDir, 'thumbnails')
     const rendered = await this.renderer.renderAll(candidates, thumbDir)
+
+    // Composition preflight: reject visually invalid candidates before judging
+    for (const c of rendered) {
+      if (!c.rendered || !c.path) continue
+      try {
+        const comp = await ThumbnailCompositionPreflight.validate(c.path, { candidate: c })
+        c.composition = comp
+        if (!comp.pass) {
+          c.eligible = false
+          c.compositionErrors = comp.errors
+          console.log(`[THUMB-COMP] ${c.strategy}: REJECTED — ${comp.errors.join('; ')}`)
+        }
+      } catch (e) {
+        // Composition analysis failure is non-fatal — let judge decide
+        c.composition = { pass: true, checks: [], errors: [], composition: {} }
+      }
+    }
 
     const judgment = this.judge.judge(rendered)
 

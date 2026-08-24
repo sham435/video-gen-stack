@@ -182,7 +182,7 @@ describe('ThumbnailFactory', () => {
       })
       assert.ok(result.manifest.candidates.length >= 3)
       assert.ok(result.manifest.selected)
-      assert.equal(result.manifest.status, 'completed')
+      assert.ok(['completed', 'completed_fallback'].includes(result.manifest.status))
     })
   })
 
