@@ -18,6 +18,7 @@ import { ThumbnailRenderer } from './ThumbnailRenderer.mjs'
 import { ThumbnailJudge } from './ThumbnailJudge.mjs'
 import { ThumbnailPolicy } from './ThumbnailPolicy.mjs'
 import { ThumbnailCompositionPreflight } from './ThumbnailCompositionPreflight.mjs'
+import { CandidateDiversityGate } from './CandidateDiversityGate.mjs'
 import { ThumbnailManifest } from './ThumbnailManifest.mjs'
 import fs from 'node:fs'
 import path from 'node:path'
@@ -60,7 +61,22 @@ export class ThumbnailFactory {
       }
     }
 
-    const judgment = this.judge.judge(rendered)
+    // Diversity gate: filter near-duplicate candidates before judging
+    const eligibleForDiversity = rendered.filter(c => c.eligible !== false && c.rendered && c.path)
+    let diverseCandidates = rendered
+    let diversityResult = { diverse: eligibleForDiversity, rejected: [], pairs: [], relaxed: false }
+    if (eligibleForDiversity.length > 1) {
+      diversityResult = await CandidateDiversityGate.filter(eligibleForDiversity)
+      // Mark rejected candidates as ineligible, keep diverse ones + already-rejected
+      const diverseStrategies = new Set(diverseResult.diverse.map(c => c.strategy))
+      diverseCandidates = rendered.map(c => {
+        if (c.eligible === false) return c // already rejected by composition
+        if (diverseStrategies.has(c.strategy)) return c
+        return { ...c, eligible: false, diversityRejected: true }
+      })
+    }
+
+    const judgment = this.judge.judge(diverseCandidates)
 
     // Record all candidates in manifest
     const manifest = new ThumbnailManifest(`thumb_${Date.now()}`)

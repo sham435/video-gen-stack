@@ -32,7 +32,7 @@ export class AssetRegistry {
     try {
       if (fs.existsSync(this.filePath)) return JSON.parse(fs.readFileSync(this.filePath, 'utf-8'))
     } catch { /* corrupt file — reset */ }
-    return { scripts: {}, images: {}, music: {}, publishedVideos: [], reservations: {} }
+    return { scripts: {}, images: {}, music: {}, thumbnails: {}, publishedVideos: [], reservations: {} }
   }
 
   _save() {
@@ -52,7 +52,7 @@ export class AssetRegistry {
    */
   reserve(jobId, manifest) {
     if (!jobId) throw new Error('reserve() requires a jobId')
-    if (!manifest?.scriptHash && !manifest?.imageHashes?.length && !manifest?.musicTrackId) {
+    if (!manifest?.scriptHash && !manifest?.imageHashes?.length && !manifest?.musicTrackId && !manifest?.thumbnailHash && !manifest?.thumbnailCompositionHash) {
       return { reserved: true, conflict: null }
     }
 
@@ -64,6 +64,8 @@ export class AssetRegistry {
       scriptHash: manifest.scriptHash || null,
       imageHashes: manifest.imageHashes || [],
       musicTrackId: manifest.musicTrackId || null,
+      thumbnailHash: manifest.thumbnailHash || null,
+      thumbnailCompositionHash: manifest.thumbnailCompositionHash || null,
       reservedAt: new Date().toISOString(),
     }
     this._save()
@@ -88,6 +90,12 @@ export class AssetRegistry {
     if (res.musicTrackId) {
       this._recordMusic(res.musicTrackId, { jobId })
     }
+    if (res.thumbnailHash || res.thumbnailCompositionHash) {
+      this._recordThumbnail({
+        compositionHash: res.thumbnailCompositionHash || res.thumbnailHash,
+        perceptualHash: res.thumbnailHash,
+      }, { jobId })
+    }
 
     // Record the published video in the rolling window
     this.state.publishedVideos.push({
@@ -95,6 +103,8 @@ export class AssetRegistry {
       scriptHash: res.scriptHash,
       imageHashes: res.imageHashes,
       musicTrackId: res.musicTrackId,
+      thumbnailCompositionHash: res.thumbnailCompositionHash || null,
+      thumbnailPerceptualHash: res.thumbnailHash || null,
       jobId,
       category: category || null,
       publishedAt: new Date().toISOString(),
@@ -146,6 +156,12 @@ export class AssetRegistry {
         if (overlap.length > 0) {
           return `IMAGE ${overlap[0]} reserved by job ${jid}`
         }
+      }
+      if (manifest.thumbnailHash && res.thumbnailHash === manifest.thumbnailHash) {
+        return `THUMBNAIL reserved by job ${jid}`
+      }
+      if (manifest.thumbnailCompositionHash && res.thumbnailCompositionHash === manifest.thumbnailCompositionHash) {
+        return `THUMBNAIL_COMPOSITION reserved by job ${jid}`
       }
     }
     return null
@@ -280,11 +296,65 @@ export class AssetRegistry {
     return false
   }
 
+  // ── Thumbnail tracking (committed) ────────────────────────────────────
+
+  _recordThumbnail({ compositionHash, perceptualHash }, { jobId } = {}) {
+    const key = compositionHash || perceptualHash
+    if (!key) return
+    const existing = this.state.thumbnails[key]
+    this.state.thumbnails[key] = {
+      compositionHash: compositionHash || null,
+      perceptualHash: perceptualHash || null,
+      firstUsed: existing?.firstUsed || new Date().toISOString(),
+      lastUsed: new Date().toISOString(),
+      jobId: jobId || null,
+      usageCount: (existing?.usageCount || 0) + 1,
+    }
+  }
+
+  /**
+   * Public convenience: record a thumbnail directly (for testing / one-off use).
+   */
+  recordThumbnail({ compositionHash, perceptualHash }, opts) {
+    this._recordThumbnail({ compositionHash, perceptualHash }, opts)
+    this._save()
+  }
+
+  /**
+   * Check if a thumbnail composition hash was used within the rolling window.
+   */
+  isThumbnailDuplicate(compositionHash, excludeJobId = null) {
+    if (!compositionHash) return false
+    if (this.state.publishedVideos.slice(-this.rollingWindow).some(v => v.thumbnailCompositionHash === compositionHash)) {
+      return true
+    }
+    for (const [jid, res] of Object.entries(this.state.reservations)) {
+      if (jid === excludeJobId) continue
+      if (res.thumbnailCompositionHash === compositionHash) return true
+    }
+    return false
+  }
+
+  /**
+   * Check if a thumbnail perceptual hash was used within the rolling window.
+   */
+  isThumbnailPerceptualDuplicate(perceptualHash, excludeJobId = null) {
+    if (!perceptualHash) return false
+    if (this.state.publishedVideos.slice(-this.rollingWindow).some(v => v.thumbnailPerceptualHash === perceptualHash)) {
+      return true
+    }
+    for (const [jid, res] of Object.entries(this.state.reservations)) {
+      if (jid === excludeJobId) continue
+      if (res.thumbnailHash === perceptualHash) return true
+    }
+    return false
+  }
+
   /**
    * Public convenience: record a published video directly (for testing / one-off use).
    * Prefer reserve() + commit() for production pipeline.
    */
-  recordPublishedVideo(videoId, { scriptHash, imageHashes, musicTrackId, articleHash, jobId, category } = {}) {
+  recordPublishedVideo(videoId, { scriptHash, imageHashes, musicTrackId, articleHash, jobId, category, thumbnailCompositionHash, thumbnailPerceptualHash } = {}) {
     this.state.publishedVideos.push({
       videoId,
       scriptHash: scriptHash || null,
@@ -293,6 +363,8 @@ export class AssetRegistry {
       articleHash: articleHash || null,
       jobId: jobId || null,
       category: category || null,
+      thumbnailCompositionHash: thumbnailCompositionHash || null,
+      thumbnailPerceptualHash: thumbnailPerceptualHash || null,
       publishedAt: new Date().toISOString(),
     })
     if (this.state.publishedVideos.length > this.rollingWindow) {
@@ -308,6 +380,7 @@ export class AssetRegistry {
       scripts: Object.keys(this.state.scripts).length,
       images: Object.keys(this.state.images).length,
       music: Object.keys(this.state.music).length,
+      thumbnails: Object.keys(this.state.thumbnails).length,
       publishedVideos: this.state.publishedVideos.length,
       activeReservations: Object.keys(this.state.reservations).length,
       rollingWindow: this.rollingWindow,
@@ -322,7 +395,7 @@ export class AssetRegistry {
   }
 
   cleanup() {
-    this.state = { scripts: {}, images: {}, music: {}, publishedVideos: [], reservations: {} }
+    this.state = { scripts: {}, images: {}, music: {}, thumbnails: {}, publishedVideos: [], reservations: {} }
     try { fs.unlinkSync(this.filePath) } catch { /* ok */ }
   }
 }

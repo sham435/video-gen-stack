@@ -342,14 +342,14 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           const { engine } = ctx.results.RENDER
           const { AssetRegistry } = await import('../src/uniqueness/AssetRegistry.mjs')
           const { ProductionUniquenessManifest } = await import('../src/uniqueness/ProductionUniquenessManifest.mjs')
-          const { UniquenessPreflight } = await import('../src/uniqueness/UniquenessPreflight.mjs')
+          const { GlobalAssetUniquenessGate } = await import('../src/uniqueness/GlobalAssetUniquenessGate.mjs')
           const { ImageDatabase } = await import('../src/assets/ImageDatabase.mjs')
 
           const registryPath = path.join(outDir, '.asset-registry.json')
           const imageDbPath = path.join(outDir, 'image-index.db')
           const registry = new AssetRegistry({ filePath: registryPath })
           const imageDb = fs.existsSync(imageDbPath) ? new ImageDatabase(imageDbPath) : null
-          const preflight = new UniquenessPreflight(registry, imageDb)
+          const gate = new GlobalAssetUniquenessGate(registry, imageDb)
 
           const scenes = engine?.productionContext?.scenes || []
           const narrationScript = engine?.productionContext?.narrationScript || ''
@@ -357,6 +357,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           const musicFamily = ctx.results.RENDER.musicFamily
           const thumbnail = ctx.results.THUMBNAIL?.selected || null
 
+          // Build uniqueness manifest
           const manifest = new ProductionUniquenessManifest()
             .setArticle(article)
             .setScript(narrationScript)
@@ -370,32 +371,63 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             })
           }
           if (musicTrack) manifest.setMusic(musicTrack, { family: musicFamily })
+
+          // Thumbnail hashes for cross-video uniqueness
+          let thumbCompositionHash = null
+          let thumbPerceptualHash = null
           if (thumbnail?.path && fs.existsSync(thumbnail.path)) {
-            const thumbHash = AssetRegistry.hash(fs.readFileSync(thumbnail.path).toString('base64').slice(0, 4096))
-            manifest.setThumbnail(thumbHash)
+            const thumbData = fs.readFileSync(thumbnail.path)
+            thumbCompositionHash = AssetRegistry.hash(thumbData.toString('base64').slice(0, 4096))
+            thumbPerceptualHash = AssetRegistry.hash(thumbData.toString('base64').slice(0, 2048))
+            manifest.setThumbnail(thumbCompositionHash)
           }
 
-          const result = preflight.validate(manifest, { jobId: ctx.jobId })
+          // Run full 6-scope uniqueness validation
+          const builtManifest = manifest.build()
+          const validation = await gate.validate(builtManifest, {
+            jobId: ctx.jobId,
+            thumbnailPath: thumbnail?.path,
+            scenes,
+          })
 
-          if (!result.pass) {
-            console.log(`[UNIQUENESS] BLOCKED — ${result.violations.length} violations:`)
-            for (const v of result.violations) {
-              console.log(`  - ${v.type}: ${v.reason}`)
+          // Log scope results
+          for (const s of validation.scopeResults) {
+            const icon = s.pass ? 'PASS' : (s.enforcement === 'BEST_EFFORT' ? 'WARN' : 'FAIL')
+            console.log(`[UNIQUENESS] ${s.scope}: ${icon} — ${s.detail}`)
+          }
+
+          if (!validation.pass) {
+            console.log(`[UNIQUENESS] BLOCKED — ${validation.violations.length} violations:`)
+            for (const v of validation.violations) {
+              console.log(`  - ${v.type}: ${v.detail || v.reason}`)
+            }
+            if (validation.warnings.length) {
+              console.log(`[UNIQUENESS] ${validation.warnings.length} best-effort warnings (non-blocking)`)
             }
             const quarantineId = `unq-${ctx.jobId}-${Date.now()}`
-            return { pass: false, violations: result.violations, quarantineId, manifest: result.details }
+            return { pass: false, violations: validation.violations, quarantineId, scopeResults: validation.scopeResults }
+          }
+
+          if (validation.warnings.length) {
+            console.log(`[UNIQUENESS] ${validation.warnings.length} best-effort warnings (non-blocking)`)
           }
 
           // Reserve assets — blocks other jobs until commit() or release()
-          const reservation = preflight.reserve(manifest, { jobId: ctx.jobId })
+          const reservation = gate.reserve(ctx.jobId, {
+            scriptHash: builtManifest.scriptHash,
+            imageHashes: builtManifest.scenes?.map(s => s.imageHash).filter(Boolean) || [],
+            musicTrackId: builtManifest.music?.trackId,
+            thumbnailHash: thumbPerceptualHash,
+            thumbnailCompositionHash: thumbCompositionHash,
+          })
           if (!reservation.reserved) {
             console.log(`[UNIQUENESS] RESERVE CONFLICT — ${reservation.conflict}`)
-            return { pass: false, violations: [{ type: 'RESERVATION', reason: reservation.conflict }], manifest: result.details }
+            return { pass: false, violations: [{ type: 'RESERVATION', reason: reservation.conflict }], scopeResults: validation.scopeResults }
           }
 
-          console.log(`[UNIQUENESS] PASS + RESERVED — ${scenes.length} scenes + music + script locked for job ${ctx.jobId}`)
+          console.log(`[UNIQUENESS] PASS + RESERVED — ${scenes.length} scenes + music + script + thumbnail locked for job ${ctx.jobId}`)
           if (imageDb) { try { imageDb.close() } catch {} }
-          return { pass: true, reserved: true, violations: [], manifest: result.details }
+          return { pass: true, reserved: true, violations: [], scopeResults: validation.scopeResults, thumbnailHash: thumbCompositionHash }
         })
 
         // ── UPLOAD ──
