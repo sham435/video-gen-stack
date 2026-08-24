@@ -9,7 +9,7 @@
 // production directly.
 //
 // Fallback chain:
-//   AI recommendation → CategoryProductionProfile → global defaults → quarantine
+//   AI recommendation → validated AI → memory optimization → CategoryProductionProfile → global defaults
 //
 // Consumes:
 //   - Article/topic
@@ -18,17 +18,31 @@
 //   - PerformanceMemory (historical analytics per niche/hook/thumbnail)
 //   - ResourceGovernor (quota state per provider)
 //   - AssetRegistry (recent asset usage for diversity)
+//   - AiStrategyLayer (optional — LLM-based strategy via ProviderChain)
 //
 // Produces:
 //   - ProductionPlan (immutable strategy object)
-//   - Decision trace (why this plan was selected)
+//   - Decision trace (structured record of why this plan was selected)
 
 import { getProfile } from '../production/CategoryProductionProfiles.mjs'
 import { resolveNicheSync } from '../pipeline/NicheResolver.mjs'
-import crypto from 'node:crypto'
+import { StrategyValidator } from './StrategyValidator.mjs'
+import { StrategyContextBuilder } from './StrategyContextBuilder.mjs'
 
 const CONFIDENCE_THRESHOLD = 0.60
 const MIN_SAMPLES_FOR_LEARNING = 3
+
+// Fields that AI recommendations can modify
+const AI_MODIFIABLE_FIELDS = new Set([
+  'hookStrategy.style',
+  'thumbnailStrategy.layout',
+  'sceneStrategy.density',
+  'sceneStrategy.motion',
+  'musicStrategy.mood',
+  'musicStrategy.tone',
+  'visualStrategy.composition',
+  'visualStrategy.searchQuery',
+])
 
 export class ProductionStrategyController {
   constructor(options = {}) {
@@ -36,7 +50,9 @@ export class ProductionStrategyController {
     this.profileOptimizer = options.profileOptimizer || null
     this.resourceGovernor = options.resourceGovernor || null
     this.assetRegistry = options.assetRegistry || null
+    this.aiLayer = options.aiLayer || null
     this.now = options.now || (() => Date.now())
+    this._decisionTrace = null
   }
 
   /**
@@ -65,7 +81,7 @@ export class ProductionStrategyController {
     // ── 3. Performance signals from memory ──
     const memorySignals = this._gatherMemorySignals(niche.key, profile)
 
-    // ── 4. Strategy decisions (each with fallback chain) ──
+    // ── 4. Base strategy decisions (deterministic fallback chain) ──
     const hookStrategy = this._selectHookStrategy(profile, memorySignals)
     const sceneStrategy = this._selectSceneStrategy(profile, memorySignals)
     const visualStrategy = this._selectVisualStrategy(profile, memorySignals, article)
@@ -75,7 +91,8 @@ export class ProductionStrategyController {
     const qualityTargets = this._selectQualityTargets(profile, memorySignals)
     const diversityConstraints = this._selectDiversityConstraints()
 
-    const plan = {
+    // ── 5. AI optimization (if available) ──
+    let plan = {
       jobId,
       niche: { key: niche.key, source: niche.source, confidence: niche.confidence },
       profile: { ...profile },
@@ -87,25 +104,119 @@ export class ProductionStrategyController {
       providerPreferences,
       qualityTargets,
       diversityConstraints,
-      reasoning: this._buildReasoning(niche, profile, memorySignals, {
-        hookStrategy, sceneStrategy, visualStrategy, musicStrategy, thumbnailStrategy,
-      }),
-      confidence: this._computeConfidence(niche, memorySignals),
+      reasoning: '',
+      confidence: 0,
       memorySignals: memorySignals.summary,
       rejectedStrategies: memorySignals.rejected,
       createdAt: new Date().toISOString(),
-      planDurationMs: this.now() - startTime,
+      planDurationMs: 0,
     }
+
+    const decision = {
+      source: memorySignals.bestHookStyle || memorySignals.bestThumbnailStyle ? 'memory_optimized' : 'profile',
+      aiCalled: false,
+      aiProvider: null,
+      aiLatencyMs: 0,
+      recommendationsReceived: 0,
+      recommendationsAccepted: 0,
+      recommendationsRejected: 0,
+      rejectionReasons: [],
+      fallbackUsed: false,
+      validationPassed: true,
+    }
+
+    if (this.aiLayer && typeof this.aiLayer.optimize === 'function') {
+      decision.aiCalled = true
+      try {
+        const context = StrategyContextBuilder.build({
+          article,
+          nicheDecision: niche,
+          profile: canonicalProfile,
+          performanceMemory: this.performanceMemory,
+          assetRegistry: this.assetRegistry,
+          resourceGovernor: this.resourceGovernor,
+          currentVideoId: opts.currentVideoId || null,
+        })
+
+        const aiResult = await this.aiLayer.optimize(context)
+
+        decision.aiProvider = aiResult.provider
+        decision.aiLatencyMs = aiResult.latencyMs
+        decision.recommendationsReceived = aiResult.recommendations.length
+
+        if (aiResult.recommendations.length > 0) {
+          // Apply valid AI recommendations to base strategy
+          const { accepted, rejected } = this._applyRecommendations(plan, aiResult.recommendations)
+          decision.recommendationsAccepted = accepted.length
+          decision.recommendationsRejected = rejected.length
+          decision.rejectionReasons = rejected.map(r => r.error || `rejected: ${r.rec?.field}`)
+
+          if (accepted.length > 0) {
+            decision.source = 'ai_optimized'
+          }
+        }
+
+        if (aiResult.error) {
+          decision.fallbackUsed = true
+          decision.rejectionReasons.push(`ai_error: ${aiResult.error}`)
+        }
+      } catch (e) {
+        decision.fallbackUsed = true
+        decision.rejectionReasons.push(`ai_exception: ${e.message}`)
+      }
+    }
+
+    // ── 6. Validate final plan ──
+    const validation = StrategyValidator.validate(plan)
+    if (!validation.valid) {
+      // If AI changed anything and validation fails, strip AI changes
+      if (decision.recommendationsAccepted > 0) {
+        // Rebuild plan from deterministic base
+        plan = this._rebuildDeterministicPlan(jobId, niche, profile, memorySignals, article)
+        decision.recommendationsAccepted = 0
+        decision.rejectionReasons.push('ai_recommendations_invalid: stripped and reverted to deterministic plan')
+        decision.source = memorySignals.bestHookStyle || memorySignals.bestThumbnailStyle ? 'memory_optimized' : 'profile'
+
+        // Re-validate the deterministic plan
+        const revalidation = StrategyValidator.validate(plan)
+        decision.validationPassed = revalidation.valid
+        if (!revalidation.valid) {
+          decision.fallbackUsed = true
+        }
+      } else {
+        decision.validationPassed = false
+        decision.fallbackUsed = true
+      }
+    }
+
+    // ── 7. Finalize plan ──
+    plan.reasoning = this._buildReasoning(niche, profile, memorySignals, {
+      hookStrategy: plan.hookStrategy,
+      sceneStrategy: plan.sceneStrategy,
+      visualStrategy: plan.visualStrategy,
+      musicStrategy: plan.musicStrategy,
+      thumbnailStrategy: plan.thumbnailStrategy,
+    }, decision)
+    plan.confidence = this._computeConfidence(niche, memorySignals, decision)
+    plan.planDurationMs = this.now() - startTime
+
+    // Store decision trace for ProductionTrace
+    this._decisionTrace = { ...decision, confidence: plan.confidence, memorySignals: memorySignals.summary }
 
     return Object.freeze(plan)
   }
 
   /**
+   * Get the structured decision trace from the last planProduction() call.
+   * @returns {object|null}
+   */
+  getDecisionTrace() {
+    return this._decisionTrace
+  }
+
+  /**
    * Record production outcome for future learning.
    * Feeds results back into PerformanceMemory.
-   *
-   * @param {ProductionPlan} plan — the plan that was executed
-   * @param {object} outcome — { videoId, analytics, success, errors }
    */
   recordOutcome(plan, outcome) {
     if (!this.performanceMemory || !outcome?.videoId) return
@@ -129,16 +240,75 @@ export class ProductionStrategyController {
     }
   }
 
+  // ── AI recommendation application ──────────────────────────────────
+
+  _applyRecommendations(plan, recommendations) {
+    const accepted = []
+    const rejected = []
+
+    for (const rec of recommendations) {
+      if (!AI_MODIFIABLE_FIELDS.has(rec.field)) {
+        rejected.push({ rec, error: `field ${rec.field} not modifiable by AI` })
+        continue
+      }
+
+      // Apply the recommendation
+      const applied = this._applySingleRecommendation(plan, rec)
+      if (applied) {
+        accepted.push(rec)
+      } else {
+        rejected.push({ rec, error: `failed to apply ${rec.field}=${rec.suggestedValue}` })
+      }
+    }
+
+    return { accepted, rejected }
+  }
+
+  _applySingleRecommendation(plan, rec) {
+    const parts = rec.field.split('.')
+    if (parts.length !== 2) return false
+
+    const [section, key] = parts
+    if (!plan[section] || typeof plan[section] !== 'object') return false
+
+    plan[section] = { ...plan[section] }
+    plan[section][key] = rec.suggestedValue
+    plan[section].source = 'ai_optimized'
+    plan[section].reason = `ai: ${rec.reason}`
+    plan[section].confidence = rec.confidence
+
+    return true
+  }
+
+  // ── Rebuild deterministic plan (strip all AI changes) ───────────────
+
+  _rebuildDeterministicPlan(jobId, niche, profile, memorySignals, article) {
+    return {
+      jobId,
+      niche: { key: niche.key, source: niche.source, confidence: niche.confidence },
+      profile: { ...profile },
+      hookStrategy: this._selectHookStrategy(profile, memorySignals),
+      sceneStrategy: this._selectSceneStrategy(profile, memorySignals),
+      visualStrategy: this._selectVisualStrategy(profile, memorySignals, article),
+      musicStrategy: this._selectMusicStrategy(profile, memorySignals),
+      thumbnailStrategy: this._selectThumbnailStrategy(profile, memorySignals),
+      providerPreferences: this._selectProviderPreferences(),
+      qualityTargets: this._selectQualityTargets(profile, memorySignals),
+      diversityConstraints: this._selectDiversityConstraints(),
+      reasoning: '',
+      confidence: 0,
+      memorySignals: memorySignals.summary,
+      rejectedStrategies: memorySignals.rejected,
+      createdAt: new Date().toISOString(),
+      planDurationMs: 0,
+    }
+  }
+
   // ── Strategy selectors (each follows fallback chain) ─────────────────
 
-  /**
-   * Hook strategy: how to open the video.
-   * Fallback: profile.hookStyle → 'breaking'
-   */
   _selectHookStrategy(profile, memorySignals) {
     const profileStyle = profile.hookStyle || 'breaking'
 
-    // If memory shows a better-performing hook style for this niche, consider it
     if (memorySignals.bestHookStyle && memorySignals.bestHookStyle !== profileStyle) {
       if (memorySignals.hookConfidence >= CONFIDENCE_THRESHOLD) {
         return {
@@ -158,10 +328,6 @@ export class ProductionStrategyController {
     }
   }
 
-  /**
-   * Scene strategy: pacing, density, count.
-   * Fallback: profile.visualDensity → 'medium'
-   */
   _selectSceneStrategy(profile, memorySignals) {
     const density = profile.visualDensity || 'medium'
     const motion = profile.motion || 'smooth'
@@ -180,14 +346,8 @@ export class ProductionStrategyController {
     }
   }
 
-  /**
-   * Visual strategy: image search, selection, diversity.
-   * Fallback: profile.preferredVisuals → ['newsroom', 'technology']
-   */
   _selectVisualStrategy(profile, memorySignals, article) {
     const preferredVisuals = profile.preferredVisuals || ['newsroom', 'technology']
-
-    // Enrich with article-specific keywords
     const articleKeywords = extractKeywords(article.title || '')
     const searchQuery = [...preferredVisuals.slice(0, 2), ...articleKeywords.slice(0, 2)].join(' ')
 
@@ -202,17 +362,9 @@ export class ProductionStrategyController {
     }
   }
 
-  /**
-   * Music strategy: track selection, uniqueness.
-   * Fallback: category-based mood matching.
-   */
   _selectMusicStrategy(profile, memorySignals) {
     const tone = profile.tone || 'authoritative'
-    const moodMap = {
-      excited: 'energetic',
-      analytical: 'ambient',
-      authoritative: 'cinematic',
-    }
+    const moodMap = { excited: 'energetic', analytical: 'ambient', authoritative: 'cinematic' }
     const mood = moodMap[tone] || 'cinematic'
 
     return {
@@ -226,15 +378,10 @@ export class ProductionStrategyController {
     }
   }
 
-  /**
-   * Thumbnail strategy: layout, text, diversity.
-   * Fallback: profile.coverStyle → 'breaking'
-   */
   _selectThumbnailStrategy(profile, memorySignals) {
     const coverStyle = profile.coverStyle || 'breaking'
     const hookStyle = profile.hookStyle || 'breaking'
 
-    // If memory shows a better thumbnail style, consider it
     if (memorySignals.bestThumbnailStyle && memorySignals.thumbConfidence >= CONFIDENCE_THRESHOLD) {
       return {
         layout: memorySignals.bestThumbnailStyle,
@@ -258,37 +405,20 @@ export class ProductionStrategyController {
     }
   }
 
-  /**
-   * Provider preferences: which AI/rendering providers to use.
-   * Consults ResourceGovernor for quota state.
-   */
   _selectProviderPreferences() {
-    const preferences = {
-      ai: 'auto',
-      rendering: 'local',
-      tts: 'auto',
-      imageSearch: 'auto',
-    }
+    const preferences = { ai: 'auto', rendering: 'local', tts: 'auto', imageSearch: 'auto' }
 
     if (this.resourceGovernor) {
       try {
         const govStatus = this.resourceGovernor.statusAll()
-        // If primary provider is quota-limited, prefer fallback
-        if (govStatus?.gemini?.remaining?.daily <= 0) {
-          preferences.ai = 'ollama'
-        }
-        if (govStatus?.elevenlabs?.remaining?.daily <= 0) {
-          preferences.tts = 'fallback'
-        }
+        if (govStatus?.gemini?.remaining?.daily <= 0) preferences.ai = 'ollama'
+        if (govStatus?.elevenlabs?.remaining?.daily <= 0) preferences.tts = 'fallback'
       } catch { /* governor unavailable — use defaults */ }
     }
 
     return { ...preferences, source: 'governor_aware', confidence: 0.70 }
   }
 
-  /**
-   * Quality targets: minimum thresholds for passing gates.
-   */
   _selectQualityTargets(profile, memorySignals) {
     return {
       compositionScore: 70,
@@ -301,9 +431,6 @@ export class ProductionStrategyController {
     }
   }
 
-  /**
-   * Diversity constraints: how to prevent repetition.
-   */
   _selectDiversityConstraints() {
     return {
       imageReuseWindow: 50,
@@ -337,14 +464,12 @@ export class ProductionStrategyController {
     }
 
     try {
-      // Niche performance stats
       const nicheStats = this.performanceMemory.nicheStats()
       if (nicheStats[nicheKey]) {
         signals.nichePerformance = nicheStats[nicheKey]
         signals.summary.push(`niche ${nicheKey}: grade=${nicheStats[nicheKey].grade} samples=${nicheStats[nicheKey].sampleCount}`)
       }
 
-      // Hook style performance
       const hookStats = this.performanceMemory.hookStats()
       let bestHook = null
       let bestHookGrade = 'F'
@@ -360,7 +485,6 @@ export class ProductionStrategyController {
         signals.summary.push(`hook optimization: ${bestHook} (${bestHookGrade}) > ${profile.hookStyle}`)
       }
 
-      // Thumbnail style performance
       const thumbStats = this.performanceMemory.thumbnailStats()
       let bestThumb = null
       let bestThumbGrade = 'F'
@@ -376,7 +500,6 @@ export class ProductionStrategyController {
         signals.summary.push(`thumbnail optimization: ${bestThumb} (${bestThumbGrade}) > ${profile.coverStyle}`)
       }
 
-      // Recent topics for dedup
       const recent = this.performanceMemory.recent(20)
       signals.recentTopics = recent.map(r => r.articleId).filter(Boolean)
 
@@ -392,11 +515,15 @@ export class ProductionStrategyController {
 
   // ── Reasoning + confidence ───────────────────────────────────────────
 
-  _buildReasoning(niche, profile, memorySignals, strategies) {
+  _buildReasoning(niche, profile, memorySignals, strategies, decision) {
     const parts = []
     parts.push(`niche=${niche.key} (source=${niche.source}, confidence=${niche.confidence})`)
     parts.push(`profile.hookStyle=${profile.hookStyle} → strategy=${strategies.hookStrategy.style} (${strategies.hookStrategy.source})`)
     parts.push(`profile.coverStyle=${profile.coverStyle} → thumbnail=${strategies.thumbnailStrategy.layout} (${strategies.thumbnailStrategy.source})`)
+
+    if (decision?.aiCalled) {
+      parts.push(`ai: ${decision.recommendationsAccepted}/${decision.recommendationsReceived} accepted (provider=${decision.aiProvider}, latency=${decision.aiLatencyMs}ms)`)
+    }
 
     if (memorySignals.summary.length) {
       parts.push(`memory: ${memorySignals.summary.join('; ')}`)
@@ -405,17 +532,20 @@ export class ProductionStrategyController {
     return parts.join(' | ')
   }
 
-  _computeConfidence(niche, memorySignals) {
+  _computeConfidence(niche, memorySignals, decision) {
     let base = niche.confidence || 0.70
 
-    // Boost if memory has good data
     if (memorySignals.nichePerformance?.sufficientData) {
       base = Math.min(0.95, base + 0.10)
     }
 
-    // Reduce if memory signals conflict
     if (memorySignals.rejected.length > 0) {
       base = Math.max(0.40, base - 0.05 * memorySignals.rejected.length)
+    }
+
+    // Boost slightly if AI optimization was accepted
+    if (decision?.recommendationsAccepted > 0 && decision?.validationPassed) {
+      base = Math.min(0.95, base + 0.05)
     }
 
     return Number(base.toFixed(3))
@@ -423,11 +553,6 @@ export class ProductionStrategyController {
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────
-
-function niche_confidence(profile, memorySignals) {
-  if (memorySignals.nichePerformance?.sufficientData) return 0.85
-  return 0.75
-}
 
 function _gradeBetter(gradeA, gradeB) {
   const order = { A: 0, B: 1, C: 2, D: 3, F: 4 }

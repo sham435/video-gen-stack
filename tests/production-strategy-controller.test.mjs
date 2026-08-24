@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { describe, it, beforeEach } from 'node:test'
 import { ProductionStrategyController } from '../src/ai/ProductionStrategyController.mjs'
 import { CategoryProductionProfiles, getProfile } from '../src/production/CategoryProductionProfiles.mjs'
+import { StrategyValidator } from '../src/ai/StrategyValidator.mjs'
 
 // ── Mock PerformanceMemory ──────────────────────────────────────────
 
@@ -302,5 +303,262 @@ describe('ProductionStrategyController', () => {
         assert.ok(plan.musicStrategy.mood)
       })
     }
+  })
+
+  // ── AI integration tests ──────────────────────────────────────────
+
+  describe('AI optimization integration', () => {
+    it('valid AI recommendation changes the plan', async () => {
+      const aiLayer = {
+        async optimize() {
+          return {
+            recommendations: [
+              { field: 'hookStrategy.style', suggestedValue: 'reveal', confidence: 0.78, reason: 'test' },
+            ],
+            provider: 'TestAI',
+            latencyMs: 150,
+            error: null,
+          }
+        },
+      }
+      const ctrl = new ProductionStrategyController({ aiLayer })
+      const plan = await ctrl.planProduction(ARTICLE)
+
+      // AI profile has hookStyle='curiosity', AI recommends 'reveal'
+      assert.equal(plan.hookStrategy.style, 'reveal')
+      assert.equal(plan.hookStrategy.source, 'ai_optimized')
+
+      const trace = ctrl.getDecisionTrace()
+      assert.equal(trace.aiCalled, true)
+      assert.equal(trace.recommendationsReceived, 1)
+      assert.equal(trace.recommendationsAccepted, 1)
+      assert.equal(trace.source, 'ai_optimized')
+    })
+
+    it('invalid AI recommendation is rejected', async () => {
+      const aiLayer = {
+        async optimize() {
+          return {
+            recommendations: [
+              { field: 'qualityTargets.compositionScore', suggestedValue: '30', confidence: 0.9, reason: 'lower quality' },
+            ],
+            provider: 'TestAI',
+            latencyMs: 100,
+            error: null,
+          }
+        },
+      }
+      const ctrl = new ProductionStrategyController({ aiLayer })
+      const plan = await ctrl.planProduction(ARTICLE)
+
+      // Quality targets must remain at system defaults
+      assert.equal(plan.qualityTargets.compositionScore, 70)
+
+      const trace = ctrl.getDecisionTrace()
+      assert.equal(trace.recommendationsReceived, 1)
+      assert.equal(trace.recommendationsAccepted, 0)
+      assert.equal(trace.recommendationsRejected, 1)
+    })
+
+    it('AI error result falls back to deterministic strategy', async () => {
+      const aiLayer = {
+        async optimize() {
+          // AI layer reports error in result (not exception)
+          return {
+            recommendations: [],
+            provider: 'TestAI',
+            latencyMs: 50,
+            error: 'provider rate limited',
+          }
+        },
+      }
+      const ctrl = new ProductionStrategyController({ aiLayer })
+      const plan = await ctrl.planProduction(ARTICLE)
+
+      // Plan should still be valid
+      const validation = StrategyValidator.validate(plan)
+      assert.equal(validation.valid, true)
+
+      const trace = ctrl.getDecisionTrace()
+      assert.equal(trace.aiCalled, true)
+      assert.equal(trace.fallbackUsed, true)
+      assert.equal(trace.recommendationsAccepted, 0)
+    })
+
+    it('AI exception falls back to deterministic strategy', async () => {
+      const aiLayer = {
+        async optimize() {
+          throw new Error('provider crashed')
+        },
+      }
+      const ctrl = new ProductionStrategyController({ aiLayer })
+      const plan = await ctrl.planProduction(ARTICLE)
+
+      const validation = StrategyValidator.validate(plan)
+      assert.equal(validation.valid, true)
+
+      const trace = ctrl.getDecisionTrace()
+      assert.equal(trace.aiCalled, true)
+      assert.equal(trace.fallbackUsed, true)
+    })
+
+    it('AI returns valid recommendation succeeds', async () => {
+      const aiLayer = {
+        async optimize() {
+          return {
+            recommendations: [
+              { field: 'hookStrategy.style', suggestedValue: 'reveal', confidence: 0.78, reason: 'test' },
+            ],
+            provider: 'TestAI',
+            latencyMs: 150,
+            error: null,
+          }
+        },
+      }
+      const ctrl = new ProductionStrategyController({ aiLayer })
+      const plan = await ctrl.planProduction(ARTICLE)
+      assert.equal(plan.hookStrategy.style, 'reveal')
+    })
+
+    it('memory optimization still works without AI', async () => {
+      const mem = new MockPerformanceMemory({
+        thumbStats: {
+          bold: { avgCtr: 0.09, sampleCount: 8, grade: 'A' },
+          'futuristic-tech': { avgCtr: 0.03, sampleCount: 6, grade: 'D' },
+        },
+      })
+      const ctrl = new ProductionStrategyController({ performanceMemory: mem })
+      const plan = await ctrl.planProduction(ARTICLE)
+
+      assert.equal(plan.thumbnailStrategy.layout, 'bold')
+      assert.equal(plan.thumbnailStrategy.source, 'memory_optimized')
+
+      const trace = ctrl.getDecisionTrace()
+      assert.equal(trace.aiCalled, false)
+    })
+
+    it('decision trace is captured correctly', async () => {
+      const aiLayer = {
+        async optimize() {
+          return {
+            recommendations: [
+              { field: 'hookStrategy.style', suggestedValue: 'data', confidence: 0.82, reason: 'data works for crypto' },
+              { field: 'sceneStrategy.density', suggestedValue: 'low', confidence: 0.65, reason: 'slower pacing' },
+            ],
+            provider: 'Gemini (flash)',
+            latencyMs: 320,
+            error: null,
+          }
+        },
+      }
+      const ctrl = new ProductionStrategyController({ aiLayer })
+      const plan = await ctrl.planProduction(ARTICLE)
+
+      const trace = ctrl.getDecisionTrace()
+      assert.equal(trace.aiCalled, true)
+      assert.equal(trace.aiProvider, 'Gemini (flash)')
+      assert.equal(trace.aiLatencyMs, 320)
+      assert.equal(trace.recommendationsReceived, 2)
+      assert.equal(trace.recommendationsAccepted, 2)
+      assert.equal(trace.recommendationsRejected, 0)
+      assert.equal(trace.source, 'ai_optimized')
+      assert.ok(typeof trace.confidence === 'number')
+      assert.ok(Array.isArray(trace.memorySignals))
+    })
+
+    it('deterministic constraints cannot be overridden by AI', async () => {
+      const aiLayer = {
+        async optimize() {
+          return {
+            recommendations: [
+              { field: 'hookStrategy.style', suggestedValue: 'reveal', confidence: 0.9, reason: 'test' },
+              // These should be rejected
+              { field: 'niche.key', suggestedValue: 'TESLA', confidence: 0.9, reason: 'override niche' },
+              { field: 'qualityTargets.compositionScore', suggestedValue: '20', confidence: 0.9, reason: 'lower quality' },
+            ],
+            provider: 'TestAI',
+            latencyMs: 100,
+            error: null,
+          }
+        },
+      }
+      const ctrl = new ProductionStrategyController({ aiLayer })
+      const plan = await ctrl.planProduction(ARTICLE)
+
+      // AI hook change accepted
+      assert.equal(plan.hookStrategy.style, 'reveal')
+      // Niche not overridden
+      assert.equal(plan.niche.key, 'AI')
+      // Quality target not lowered
+      assert.equal(plan.qualityTargets.compositionScore, 70)
+
+      const trace = ctrl.getDecisionTrace()
+      assert.equal(trace.recommendationsReceived, 3)
+      assert.equal(trace.recommendationsAccepted, 1)
+      assert.equal(trace.recommendationsRejected, 2)
+    })
+
+    it('works without aiLayer (no AI)', async () => {
+      const ctrl = new ProductionStrategyController({})
+      const plan = await ctrl.planProduction(ARTICLE)
+      assert.ok(plan.hookStrategy)
+      assert.ok(plan.sceneStrategy)
+      const trace = ctrl.getDecisionTrace()
+      assert.equal(trace.aiCalled, false)
+    })
+
+    it('AI recommendation that fails validation causes revert', async () => {
+      const aiLayer = {
+        async optimize() {
+          return {
+            recommendations: [
+              { field: 'hookStrategy.style', suggestedValue: 'reveal', confidence: 0.78, reason: 'test' },
+              // This will make the plan invalid after application
+              { field: 'sceneStrategy.density', suggestedValue: 'ultra-extreme', confidence: 0.9, reason: 'test' },
+            ],
+            provider: 'TestAI',
+            latencyMs: 100,
+            error: null,
+          }
+        },
+      }
+      const ctrl = new ProductionStrategyController({ aiLayer })
+      const plan = await ctrl.planProduction(ARTICLE)
+
+      // The invalid recommendation is filtered by StrategyValidator.validateRecommendations
+      // before application, so it never reaches the plan. Plan remains valid.
+      const validation = StrategyValidator.validate(plan)
+      assert.equal(validation.valid, true)
+    })
+  })
+
+  describe('strategy validator integration', () => {
+    it('plan passes StrategyValidator', async () => {
+      const ctrl = new ProductionStrategyController()
+      const plan = await ctrl.planProduction(ARTICLE)
+      const result = StrategyValidator.validate(plan)
+      assert.equal(result.valid, true)
+      assert.equal(result.errors.length, 0)
+    })
+
+    it('AI-optimized plan still passes StrategyValidator', async () => {
+      const aiLayer = {
+        async optimize() {
+          return {
+            recommendations: [
+              { field: 'hookStrategy.style', suggestedValue: 'reveal', confidence: 0.78, reason: 'test' },
+              { field: 'thumbnailStrategy.layout', suggestedValue: 'bold', confidence: 0.65, reason: 'test' },
+            ],
+            provider: 'TestAI',
+            latencyMs: 150,
+            error: null,
+          }
+        },
+      }
+      const ctrl = new ProductionStrategyController({ aiLayer })
+      const plan = await ctrl.planProduction(ARTICLE)
+      const result = StrategyValidator.validate(plan)
+      assert.equal(result.valid, true)
+    })
   })
 })

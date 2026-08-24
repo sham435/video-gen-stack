@@ -42,6 +42,21 @@ export class ProductionTrace {
         certExpiry: null, certRemainingDays: null,
       }),
       render: Object.seal({ frames: 0, durationSec: 0, sizeBytes: 0 }),
+      strategy: Object.seal({
+        source: 'profile',
+        aiCalled: false,
+        aiProvider: null,
+        aiLatencyMs: 0,
+        recommendationsReceived: 0,
+        recommendationsAccepted: 0,
+        recommendationsRejected: 0,
+        rejectionReasons: [],
+        fallbackUsed: false,
+        validationPassed: true,
+        confidence: 0,
+        memorySignals: [],
+        strategyVersion: '1.0',
+      }),
       status: 'pending',
     })
   }
@@ -101,6 +116,24 @@ export class ProductionTrace {
     if (certSerial != null) this.record.provenance.certSerial = certSerial
     if (certExpiry != null) this.record.provenance.certExpiry = certExpiry
     if (certRemainingDays != null) this.record.provenance.certRemainingDays = certRemainingDays
+  }
+
+  // ─── strategy ──────────────────────────────────────────────────────
+  setStrategy(decision) {
+    if (!decision || typeof decision !== 'object') return
+    const s = this.record.strategy
+    if (decision.source) s.source = decision.source
+    if (decision.aiCalled != null) s.aiCalled = decision.aiCalled
+    if (decision.aiProvider != null) s.aiProvider = decision.aiProvider
+    if (decision.aiLatencyMs != null) s.aiLatencyMs = decision.aiLatencyMs
+    if (decision.recommendationsReceived != null) s.recommendationsReceived = decision.recommendationsReceived
+    if (decision.recommendationsAccepted != null) s.recommendationsAccepted = decision.recommendationsAccepted
+    if (decision.recommendationsRejected != null) s.recommendationsRejected = decision.recommendationsRejected
+    if (Array.isArray(decision.rejectionReasons)) s.rejectionReasons = decision.rejectionReasons
+    if (decision.fallbackUsed != null) s.fallbackUsed = decision.fallbackUsed
+    if (decision.validationPassed != null) s.validationPassed = decision.validationPassed
+    if (decision.confidence != null) s.confidence = decision.confidence
+    if (Array.isArray(decision.memorySignals)) s.memorySignals = decision.memorySignals
   }
 
   // ─── render ─────────────────────────────────────────────────────────────
