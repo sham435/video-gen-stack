@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-24T12:47:54.575Z",
+  "updatedAt": "2026-08-24T13:54:09.833Z",
   "videos": [
+    {
+      "id": "aHbHa7pfdyg",
+      "title": "Tesla Semi wreszcie jedzie do Europy. Wielki debiut już we wrześniu | NEWS-MONSTER",
+      "publishedAt": "2026-08-24T12:48:13+00:00",
+      "publishedLabel": "Aug 24, 12:48 PM",
+      "thumbnail": "https://i2.ytimg.com/vi/aHbHa7pfdyg/hqdefault.jpg"
+    },
     {
       "id": "fD82a4jGZOs",
       "title": "PlayStation Blasts Out Poorly Timed Reminder About Digital Games - Kotaku | NEWS-MONSTER",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-23T14:54:24+00:00",
       "publishedLabel": "Aug 23, 02:54 PM",
       "thumbnail": "https://i2.ytimg.com/vi/5Tc1gZwOFPY/hqdefault.jpg"
-    },
-    {
-      "id": "sG8CzeyWh9g",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-23T14:27:26+00:00",
-      "publishedLabel": "Aug 23, 02:27 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/sG8CzeyWh9g/hqdefault.jpg"
     }
   ]
 }
