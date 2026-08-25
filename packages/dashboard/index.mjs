@@ -1262,9 +1262,9 @@ _scheduler.setOnAutoExecute(async (items) => {
       const engine = new NewsBroadcastEngine()
       const job = new ProductionJob({ title: item.topic, category: item.category })
       job.contract = item.contract
-      const result = await engine.generateFromArticle({ title: item.topic, category: item.category }, 'output', job, { contract: item.contract })
+      const result = await engine.generateFromArticle({ title: item.topic, category: item.category }, 'output', { contract: item.contract })
       const videoPath = typeof result === 'string' ? result : result.videoPath
-      const pub = await publishToYouTube(videoPath, item.topic, item.category, item.contract, job)
+      const pub = await publishToYouTube(videoPath, item.topic, item.category, item.contract)
       console.log(`[AutoExecute] ${item.topic} → ${pub.status}`)
       _scheduler.complete(item.id, { status: pub.status, url: pub.url || null })
     } catch (e) {
@@ -1448,32 +1448,28 @@ app.post('/api/production/run', async (req, res) => {
     const engine = new NewsBroadcastEngine()
     const job = new (await import('../../src/video-studio/ProductionJob.mjs')).ProductionJob(article)
     job.contract = optimizedContract
-    const result = await engine.generateFromArticle(article, 'output', job, { contract: optimizedContract })
+    const result = await engine.generateFromArticle(article, 'output', { contract: optimizedContract })
 
     // Phase 2b: Autonomous quality auto-fix — if quality fails, retry with AI optimization
-    const qStage = result.job.stages.quality
-    if (qStage && qStage.status === 'failed') {
+    const qScore = result.engine?.lastQualityScore ?? 0
+    if (qScore < 60) {
       phase('quality failed — running AI auto-fix retry...')
       const { AIOptimizer } = await import('../../src/video-studio/AIOptimizer.mjs')
       const optimizer = new AIOptimizer(dashboardAI?.isEnabled ? dashboardAI.aiProvider : null)
       const fixed = await optimizer.optimize(optimizedContract, { ctr: council.ctr_score })
-      const retryJob = new (await import('../../src/video-studio/ProductionJob.mjs')).ProductionJob(article)
-      retryJob.contract = fixed
-      const retryResult = await engine.generateFromArticle({ ...article, title: fixed.story?.headline || article.title }, 'output', retryJob, { contract: fixed })
-      const retryQ = retryResult.job.stages.quality
-      if (retryQ?.status === 'success') {
-        phase(`quality auto-fixed on retry: ${retryQ.score}`)
+      const retryResult = await engine.generateFromArticle({ ...article, title: fixed.story?.headline || article.title }, 'output', { contract: fixed })
+      const retryQ = retryResult.engine?.lastQualityScore ?? 0
+      if (retryQ >= 60) {
+        phase(`quality auto-fixed on retry: ${retryQ}`)
         optimizationChanges = [...optimizationChanges, ...(fixed.changes || []), '✓ Quality passed on auto-fix retry']
-        const retryPublish = await publishToYouTube(retryResult.videoPath, fixed.story?.headline, category, fixed, retryJob)
+        const retryPublish = await publishToYouTube(retryResult.videoPath, fixed.story?.headline, category, fixed)
         try {
           const { AnalyticsFeedback } = await import('../../src/video-studio/AnalyticsFeedback.mjs')
           new AnalyticsFeedback().record({ title: article.title, category }, { ctr: finalCouncil.ctr_score, retention30s: finalCouncil.retention_score })
-          retryJob.markDone('analytics', { detail: 'metrics recorded', score: finalCouncil.final_score })
         } catch { /* ignore */ }
         return res.json({
           status: 'success',
           autoFixed: true,
-          job: retryResult.job.toJSON(),
           contract: fixed,
           council: finalCouncil,
           videoPath: retryResult.videoPath,
@@ -1482,14 +1478,14 @@ app.post('/api/production/run', async (req, res) => {
           publish: retryPublish,
         })
       }
-      return res.status(422).json({ error: 'Quality failed after auto-fix retry', job: retryResult.job.toJSON() })
+      return res.status(422).json({ error: 'Quality failed after auto-fix retry' })
     }
 
     phase(`done: ${result.videoPath}`)
 
     // Phase 3: Publish — upload video + cover to YouTube when configured
     phase('publishing to YouTube...')
-    const publishResult = await publishToYouTube(result.videoPath, optimizedContract.story?.headline, category, optimizedContract, job)
+    const publishResult = await publishToYouTube(result.videoPath, optimizedContract.story?.headline, category, optimizedContract)
     if (publishResult.status === 'published') phase(`published: ${publishResult.url}`)
     else if (publishResult.status === 'failed') phase(`publish failed: ${publishResult.reason}`)
 
@@ -1498,14 +1494,12 @@ app.post('/api/production/run', async (req, res) => {
       const { AnalyticsFeedback } = await import('../../src/video-studio/AnalyticsFeedback.mjs')
       const fb = new AnalyticsFeedback()
       fb.record(article, { ctr: finalCouncil.ctr_score, retention30s: finalCouncil.retention_score })
-      job.markDone('analytics', { detail: 'metrics recorded', score: finalCouncil.final_score })
     } catch (e) {
       console.warn(`[PipelineRun] analytics record failed: ${e.message}`)
     }
 
     res.json({
       status: 'success',
-      job: result.job.toJSON(),
       contract: optimizedContract,
       council: finalCouncil,
       videoPath: result.videoPath,

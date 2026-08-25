@@ -36,7 +36,7 @@ export async function composeVideo(articles, outDir = 'output', options = {}) {
   }
 
   const engine = new NewsBroadcastEngine()
-  const result = await engine.generateFromArticle(article, outDir, null, { ...options, quick: !!process.env.QUICK_RENDER })
+  const result = await engine.generateFromArticle(article, outDir, { ...options, quick: !!process.env.QUICK_RENDER })
   const broadcastPath = typeof result === 'string' ? result : result.videoPath
 
   const finalPath = `${outDir}/final.mp4`
@@ -232,7 +232,6 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
       }
     }
 
-    let uploadCount = 0
     for (const rawArticle of articles) {
       const article = {
         title: rawArticle.title,
@@ -396,34 +395,24 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         }
       })
 
-      if (process.env.YOUTUBE_REFRESH_TOKEN && uploadCount === 0) {
-        uploadCount++
-        console.log('Uploading to YouTube...')
-
-        // ── THUMBNAIL — consumes plan.thumbnailStrategy ──
+      // ── THUMBNAIL — mandatory production stage, always executes ──
         job.onStage('THUMBNAIL', async (ctx) => {
           const { engine } = ctx.results.RENDER
-          const plan = ctx.results.DISCOVER?.plan
-          const { ThumbnailFactory } = await import('../src/thumbnail/ThumbnailFactory.mjs')
-          const factory = new ThumbnailFactory({ outputDir: outDir })
-          const thumbOpts = {
-            article,
-            title: article.title,
-            category: category || engine?.productionContext?.niche?.key || 'technology',
-            productionProfile: engine?.productionContext?.profile || null,
-            heroImage: article.imageUrl || null,
-            hideBranding: false,
-            nicheProfile: engine?.productionContext?.niche || null,
+          const thumbPath = `${outDir}/thumbnail.png`
+          const coverPath = `${outDir}/cover.png`
+          // Prefer the 16:9 YouTube thumbnail; fall back to cover if missing
+          const selected = fs.existsSync(thumbPath)
+            ? { path: thumbPath, width: 1280, height: 720 }
+            : fs.existsSync(coverPath)
+              ? { path: coverPath, width: 1080, height: 1920 }
+              : null
+          if (!selected) {
+            console.warn('[THUMBNAIL] no thumbnail produced by engine — upload will proceed without custom thumbnail')
+            return { candidates: [], selected: null, strategy: 'none' }
           }
-          // Apply plan thumbnail strategy if available
-          if (plan?.thumbnailStrategy) {
-            thumbOpts.thumbnailStrategy = plan.thumbnailStrategy
-            console.log(`[THUMBNAIL] consuming plan: layout=${plan.thumbnailStrategy.layout}, text=${plan.thumbnailStrategy.textStrategy}, diversity=${plan.thumbnailStrategy.diversityRequired}`)
-          }
-          const thumbResult = await factory.produce(thumbOpts)
-          console.log(`[Thumbnail] Factory: ${thumbResult.candidates.length} candidates → winner="${thumbResult.strategy}" (${thumbResult.selected.width}x${thumbResult.selected.height})`)
+          console.log(`[THUMBNAIL] consumed engine output: ${selected.path} (${selected.width}x${selected.height})`)
           if (engine?.productionTrace) engine.productionTrace.setThumbnailGenerated()
-          return { ...thumbResult }
+          return { candidates: [selected], selected, strategy: 'engine-generated' }
         })
 
         // ── C2PA ──
@@ -575,6 +564,13 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         job.onStage('UPLOAD', async (ctx) => {
           const { engine } = ctx.results.RENDER
           const plan = ctx.results.DISCOVER?.plan
+
+          // Hard invariant: UPLOAD requires both video and thumbnail
+          const video = ctx.results.RENDER.finalPath
+          const thumbnail = ctx.results.THUMBNAIL?.selected?.path
+          if (!video) throw new Error('UPLOAD_REQUIRES_VIDEO')
+          if (!thumbnail) throw new Error('UPLOAD_REQUIRES_THUMBNAIL — thumbnail generation must succeed before upload')
+
           const { ProductionPreflight } = await import('../src/ai/ProductionPreflight.mjs')
           const publishPreflight = await ProductionPreflight.check({}, { outDir, stage: 'publish' })
           if (!publishPreflight.ready) throw new Error(`Publish preflight failed: ${publishPreflight.errors.join(', ')}`)
@@ -923,13 +919,6 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             console.log(`[EXPERIMENT] recording skipped: ${e.message}`)
           }
         }
-      } else {
-        // No YouTube token — render only (no upload stages)
-        const renderResult = await job.run('RENDER')
-        if (!renderResult.success) {
-          console.error(`[JOB] Render failed: ${renderResult.quarantineReason}`)
-        }
-      }
     }
 
     console.log('\nNEWS-MONSTER Broadcast Pipeline Complete')

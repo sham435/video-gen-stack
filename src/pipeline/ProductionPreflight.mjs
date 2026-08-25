@@ -10,6 +10,7 @@
 // Returns { ok, diagnostics, errors[] }.
 
 import fs from 'node:fs'
+import path from 'node:path'
 import { CertificateManager } from './CertificateManager.mjs'
 
 export const ProductionPreflight = Object.freeze({

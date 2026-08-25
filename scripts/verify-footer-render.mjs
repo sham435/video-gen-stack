@@ -31,7 +31,7 @@ engine.storyDirector.plan = async () => ({
 })
 engine.visualReasoner.select = async () => null
 engine.audioMixer.ensureMusicExists = async () => {}
-engine.coverGenerator = null
+engine.coverGenerator = { generateTournament: async () => ({ winner: null, winnerCtr: 0, variants: [], path: null, brief: null }), generateThumbnail: async () => ({}) }
 engine.voiceSync.generateTTS = async (_script, voicePath) => {
   execFileSync('ffmpeg', ['-y', '-f', 'lavfi', '-i', 'anullsrc=r=44100:cl=mono', '-t', '5', voicePath], { stdio: 'pipe' })
 }
@@ -43,8 +43,11 @@ const article = {
   source: 'Tech News', url: 'https://example.com/ai-model', category: 'technology',
 }
 
+const { ProductionJob } = await import('../src/video-studio/ProductionJob.mjs')
+const job = new ProductionJob(article, { outDir })
+job._persist = () => {}
 console.log('Rendering real video via canvas pipeline (default manifest footer=canvas)...')
-const { videoPath } = await engine.generateFromArticle(article, outDir, null, { quick: true })
+const { videoPath } = await engine.generateFromArticle(article, outDir, { quick: true })
 console.log('video:', videoPath, existsSync(videoPath) ? `(${(statSync(videoPath).size / 1e6).toFixed(1)}MB)` : 'MISSING')
 
 const framePath = join(outDir, 'probe.png')

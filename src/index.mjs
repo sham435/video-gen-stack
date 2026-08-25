@@ -31,7 +31,6 @@ import { ProductionEffectEngine } from './video/effects/ProductionEffectEngine.m
 import { RetentionDirector } from './video/RetentionDirector.mjs'
 import { SceneProductionScore } from './video/scoring/SceneProductionScore.mjs'
 import { CoverGenerator } from './video-studio/CoverGenerator.mjs'
-import { ProductionJob } from './video-studio/ProductionJob.mjs'
 import { ScriptContract } from './video-studio/ScriptContract.mjs'
 import { VoiceSync } from './audio/VoiceSync.mjs'
 import { SoundFX } from './audio/SoundFX.mjs'
@@ -143,7 +142,7 @@ export class NewsBroadcastEngine {
     return JSON.parse(raw)
   }
 
-  async generateFromArticle(article, outDir = 'output', job = null, options = {}) {
+  async generateFromArticle(article, outDir = 'output', options = {}) {
     // Production trace — structured JSON record for this run
     const { ProductionTrace } = await import('./pipeline/ProductionTrace.mjs')
     const trace = new ProductionTrace(article?.id || article?.headline?.slice(0, 40))
@@ -155,7 +154,6 @@ export class NewsBroadcastEngine {
     const preflight = await ProductionPreflight.check({ article, category: article?.category }, { outDir, bypassYoutube: true, stage: 'article' })
     if (!preflight.ready) {
       console.error(`[Preflight] blocked: ${preflight.errors.join(', ')}`)
-      if (job) job.markFailed('collector', `preflight: ${preflight.errors.join(', ')}`)
       throw new Error(`Production preflight failed: ${preflight.errors.join(', ')}`)
     }
 
@@ -210,7 +208,6 @@ export class NewsBroadcastEngine {
       fs.rmSync(`${outDir}/${stale}`, { force: true })
     }
     fs.mkdirSync(framesDir, { recursive: true })
-    if (!job) job = new ProductionJob(article)
 
     // Per-video id for asset reuse tracking ("last N videos" policy). Built
     // from the headline BEFORE packaging may rewrite it, so every pipeline
@@ -226,10 +223,8 @@ export class NewsBroadcastEngine {
     await this.audioMixer.ensureMusicExists()
 
     console.log('StoryDirector planning...')
-    job.markStart('story')
     const directorStory = await this.storyDirector.plan(article)
     console.log(`Story: ${directorStory.headline} (${directorStory.scenePlan.length} scenes, hook: ${directorStory.hookStrategy})`)
-    job.markDone('story', { detail: `${directorStory.scenePlan.length} scenes planned`, score: 80 })
 
     // Channel Growth Optimizer — ThumbnailBrandOptimizer packaging judge.
     // Detects repetitive brand patterns (HIDDEN/REVEALED/SECRET/SHOCKING),
@@ -237,7 +232,6 @@ export class NewsBroadcastEngine {
     // and swaps in the strongest curiosity-gap title before the contract,
     // cover, and publish title are built. BrandPerformanceMemory makes the
     // avoidance automatic once real CTR data proves a pattern weak.
-    job.markStart('packaging')
     const packaging = this.thumbnailBrandOptimizer.judge(article, this.contract?.cover || null, article.title)
     if (packaging.selected && packaging.selected.title !== article.title) {
       console.log(`Packaging: "${article.title}" → "${packaging.selected.title}" (${packaging.selected.score}/100, ${packaging.selected.angle || 'curiosity'})`)
@@ -249,7 +243,6 @@ export class NewsBroadcastEngine {
       console.log(`Packaging: "${article.title}" cleared (${packaging.score}/100)`)
     }
     this.packaging = packaging
-    job.markDone('packaging', { detail: packaging.selected ? `selected "${packaging.selected.title.slice(0, 60)}" ${packaging.score}/100` : `no replacement (${packaging.score}/100)`, score: packaging.score })
 
     // Structured Script Contract — single source of truth for all downstream engines
     // Use the pre-built optimized contract when provided (from AutonomousOrchestrator/AIOptimizer)
@@ -258,7 +251,6 @@ export class NewsBroadcastEngine {
     } else {
       this.contract = this.scriptContract.build(article, directorStory)
     }
-    job.contract = this.contract
 
     // Phase 3: Contract enforcement — validate before any rendering work
     const { ContractValidator } = await import('./video-studio/ContractValidator.mjs')
@@ -267,7 +259,6 @@ export class NewsBroadcastEngine {
     const validation = cv.validate(this.contract)
     if (!validation.valid) {
       console.error(`CONTRACT INVALID: ${validation.missing.join(', ')} ${validation.errors.join('; ')}`)
-      job.markFailed('story', `contract invalid: ${validation.errors.slice(0, 2).join('; ') || validation.missing.join(', ')}`)
       throw new Error(`Contract validation failed: ${validation.errors.slice(0, 3).join('; ')}`)
     }
     // Phase 6: Agent Council scoring gate (skip re-score if contract already carries council)
@@ -275,7 +266,6 @@ export class NewsBroadcastEngine {
       const council = new AgentCouncil()
       const scores = council.score(this.contract, article)
       this.contract.council = scores
-      job.contract = this.contract
       console.log(`Council: story ${scores.story_score} / ctr ${scores.ctr_score} / retention ${scores.retention_score} → final ${scores.final_score} (${scores.passed ? 'PASS' : 'BELOW THRESHOLD'})`)
     }
 
@@ -523,15 +513,12 @@ export class NewsBroadcastEngine {
         ...prodFailing.map(f => `scene ${f.scene.id}: ${f.prod.reason}`),
       ].join(' | ')
       console.warn(`Scene production: ${scored.length - prodFailing.length}/${scored.length} passed (${reasons})`)
-      job.markDone('assets', { ok: prodFailing.length === 0, detail: reasons.slice(0, 120), score: Math.round(((scored.length - prodFailing.length) / scored.length) * 100) })
     } else {
       const avgProd = Math.round(prodScored.reduce((s, x) => s + x.prod.overall, 0) / prodScored.length)
       console.log(`Scene production: all ${scored.length} scenes passed (avg ${avgProd}/100)`)
-      job.markDone('assets', { detail: `${scenes.length} scenes, production ${avgProd}`, score: avgProd })
     }
 
     // Stage 5b: Cover generation — CoverDirector + Composer + mandatory validation gate
-    job.markStart('cover')
     try {
       // Pass contract cover metadata (headline/subheadline/subject) into the article
       // so the CoverDirector produces a story-aligned cover. Include the niche profile
@@ -556,14 +543,11 @@ export class NewsBroadcastEngine {
       }
       if (coverResult.winner) {
         console.log(`Cover tournament: winner "${coverResult.winner}" (CTR ${coverResult.winnerCtr})`)
-        job.markDone('cover', { detail: `winner "${coverResult.winner}" CTR ${coverResult.winnerCtr}`, score: coverResult.winnerCtr })
       } else {
         console.warn(`Cover tournament failed: ${coverResult.variants?.filter(v => !v.ok).map(v => v.reason).join('; ') || 'unknown'}`)
-        job.markDone('cover', { ok: false, detail: 'cover tournament failed' })
       }
     } catch (e) {
       console.warn(`Cover generation skipped: ${e.message}`)
-      job.markDone('cover', { ok: false, detail: e.message })
       this.coverPath = null
     }
 
@@ -573,7 +557,6 @@ export class NewsBroadcastEngine {
     const captionScript = this.scenePlanner.buildNarrationScript(timedScenes)
     const rawDuration = timedScenes.length > 0 ? timedScenes[timedScenes.length - 1].end : 30
     let totalDuration = (!rawDuration || isNaN(rawDuration) || Number(rawDuration) < 15) ? 30 : Number(rawDuration)
-    job.markStart('voice')
     const voicePath = `${outDir}/narration.mp3`
     // Premium narration or FAIL. generateTTS refuses espeak — a robotic voice
     // must never reach the render/publish stage (see src/audio/VoiceSync.mjs).
@@ -626,7 +609,6 @@ export class NewsBroadcastEngine {
         console.warn(`Narration padding skipped: ${e.message}`)
       }
     }
-    job.markDone('voice', { detail: `${totalDuration.toFixed(1)}s narration (${voiceReport.provider || 'tts'})`, score: finalVoiceDur >= 1 ? 85 : 40 })
 
     const totalFrames = Math.ceil(totalDuration * this.renderFps)
     const reportEvery = Math.max(1, Math.floor(totalFrames / 20))
@@ -643,7 +625,6 @@ export class NewsBroadcastEngine {
     const renderManifest = resolveRenderManifest(options)
     const renderGates = resolveRenderGates(options, renderManifest)
     console.log(`Rendering ${totalFrames} frames at ${this.renderFps}fps (output: ${this.outputFps}fps)...`)
-    job.markStart('render')
 
     for (let frame = 0; frame < totalFrames; frame++) {
       const { scene, progress, time } = this.timeline.getSceneForFrame(frame)
@@ -666,16 +647,14 @@ export class NewsBroadcastEngine {
 
     const videoPath = await this.executor.execute(
       () => this.assembleVideo(framesDir, voicePath, timedScenes, totalDuration, outDir, renderManifest, renderGates),
-      { jobId: job?.id, category: article?.category }
+      { category: article?.category }
     )
-    job.markDone('render', { detail: `${totalFrames} frames → ${path.basename(videoPath)}`, score: 88 })
 
-    job.markStart('quality')
     const qc = await this.qualityChecker.analyzeRenderedVideo(videoPath)
     const qScore = qc?.overallScore
       ?? (typeof qc?.checks === 'object' ? (qc.checks.score ?? qc.checks.overall ?? 80) : 80)
       ?? 80
-    job.markDone('quality', { detail: `Quality ${qScore}/100`, score: qScore })
+    this.lastQualityScore = qScore
 
     // Post-render Quality Guardian — pixel-level verification of what
     // actually rendered (contrast, safe margins, subject presence, blank
@@ -690,7 +669,6 @@ export class NewsBroadcastEngine {
       } else {
         console.log(`Quality Guardian: frame analysis passed (${guardian.score}/100)`)
       }
-      job.markDone('quality', { detail: `Guardian ${guardian.score}/100`, score: guardian.score })
     } catch (e) {
       console.warn(`Quality Guardian skipped: ${e.message}`)
     }
@@ -711,7 +689,7 @@ export class NewsBroadcastEngine {
       console.warn(`[INVARIANT] resolveNiche called ${this._resolveNicheCallCount}x — expected exactly 1`)
     }
 
-    return { videoPath, job, trace: trace.finish('published') }
+    return { videoPath, engine: this, productionContext: this.productionContext, thumbnailPath: this.thumbnailPath, coverPath: this.coverPath, contract: this.contract, trace: trace.finish('published') }
   }
 
   buildScenesFromAnalysis(template, article, analysis) {
@@ -899,10 +877,9 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
       category: 'technology',
     }
     console.log('Generating broadcast for:', article.title)
-    const { videoPath, job } = await engine.generateFromArticle(article)
+    const { videoPath } = await engine.generateFromArticle(article)
     await engine.verifyQuality(videoPath)
     console.log('Done:', videoPath)
-    console.log('Job:', job.status, '—', Object.entries(job.stages).map(([k, v]) => `${k}:${v.status}`).join(' | '))
   }
   run().catch(e => {
     console.error('Fatal:', e)

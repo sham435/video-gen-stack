@@ -106,7 +106,7 @@ test('pipeline: end-to-end render produces mp4', { timeout: 240000 }, async () =
 
   const outDir = mkdtempSync(join(tmpdir(), 'pipe-'))
   try {
-    const { videoPath } = await engine.generateFromArticle(mockArticle(), outDir, null, { quick: true })
+    const { videoPath } = await engine.generateFromArticle(mockArticle(), outDir, { quick: true })
     assert.ok(videoPath, 'videoPath returned')
     assert.ok(existsSync(videoPath), `mp4 exists: ${videoPath}`)
     assert.ok(existsSync(join(outDir, 'final.mp4')) || existsSync(videoPath), 'final output present')
