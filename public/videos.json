@@ -1,7 +1,29 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-26T21:28:45.203Z",
+  "updatedAt": "2026-08-26T21:52:41.804Z",
+  "source": "youtube-rss",
   "videos": [
+    {
+      "id": "xfD9uqrr4DI",
+      "title": "Falcon 9 rocket launch creates unusual jellyfish cloud over East Coast - The Washington Po | NEWS-MO",
+      "publishedAt": "2026-08-26T21:48:56+00:00",
+      "publishedLabel": "Aug 26, 09:48 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/xfD9uqrr4DI/hqdefault.jpg"
+    },
+    {
+      "id": "JiHeOoU7wPg",
+      "title": "Scientists Just Set Up What Comes Next | NEWS-MONSTER",
+      "publishedAt": "2026-08-26T21:44:20+00:00",
+      "publishedLabel": "Aug 26, 09:44 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/JiHeOoU7wPg/hqdefault.jpg"
+    },
+    {
+      "id": "D7DauSvTYY4",
+      "title": "Opening Night Live 2026: All the Announcements, Trailers and News Direct From gamescom - I | NEWS-MO",
+      "publishedAt": "2026-08-26T21:28:52+00:00",
+      "publishedLabel": "Aug 26, 09:28 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/D7DauSvTYY4/hqdefault.jpg"
+    },
     {
       "id": "rBK_yit78so",
       "title": "How DLSS Changed Overnight | NEWS-MONSTER",
@@ -85,27 +107,6 @@
       "publishedAt": "2026-08-23T17:24:12+00:00",
       "publishedLabel": "Aug 23, 05:24 PM",
       "thumbnail": "https://i3.ytimg.com/vi/RKEVFOZCwG8/hqdefault.jpg"
-    },
-    {
-      "id": "Etsw3dpR8Oo",
-      "title": "Todo lo que puedes hacer con OpenClaw gracias a su app para iPhone y Android | NEWS-MONSTER",
-      "publishedAt": "2026-08-23T16:26:59+00:00",
-      "publishedLabel": "Aug 23, 04:26 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/Etsw3dpR8Oo/hqdefault.jpg"
-    },
-    {
-      "id": "kiMOWj_FYfY",
-      "title": "Maior recall automotivo da China envolve 4,3 milhões de carros de pelo menos 12 marcas | NEWS-MONSTE",
-      "publishedAt": "2026-08-23T12:38:45+00:00",
-      "publishedLabel": "Aug 23, 12:38 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/kiMOWj_FYfY/hqdefault.jpg"
-    },
-    {
-      "id": "tgK_aDHWk6w",
-      "title": "Todo lo que puedes hacer con OpenClaw gracias a su app para iPhone y Android | NEWS-MONSTER",
-      "publishedAt": "2026-08-23T10:25:48+00:00",
-      "publishedLabel": "Aug 23, 10:25 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/tgK_aDHWk6w/hqdefault.jpg"
     }
   ]
 }
