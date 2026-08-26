@@ -1,7 +1,21 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-26T20:32:34.978Z",
+  "updatedAt": "2026-08-26T21:13:59.247Z",
   "videos": [
+    {
+      "id": "6WB1ABMHwRI",
+      "title": "Nothing’s Android 17 update debuts this week with redesigns, new apps, 3D emoji [Gallery]  | NEWS-MO",
+      "publishedAt": "2026-08-26T21:09:20+00:00",
+      "publishedLabel": "Aug 26, 09:09 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/6WB1ABMHwRI/hqdefault.jpg"
+    },
+    {
+      "id": "g_Hxl8m2rl8",
+      "title": "Nobody Expected This About iPhone | NEWS-MONSTER",
+      "publishedAt": "2026-08-26T21:04:21+00:00",
+      "publishedLabel": "Aug 26, 09:04 PM",
+      "thumbnail": "https://i4.ytimg.com/vi/g_Hxl8m2rl8/hqdefault.jpg"
+    },
     {
       "id": "zQ8NA52zeeo",
       "title": "Italy’s Monte dei Paschi Makes $40 Billion Move to Buy Rival Banks | NEWS-MONSTER",
@@ -92,20 +106,6 @@
       "publishedAt": "2026-08-23T06:00:01+00:00",
       "publishedLabel": "Aug 23, 06:00 AM",
       "thumbnail": "https://i1.ytimg.com/vi/h2ctrGwakw0/hqdefault.jpg"
-    },
-    {
-      "id": "IHqc_aVaV-o",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-23T05:31:51+00:00",
-      "publishedLabel": "Aug 23, 05:31 AM",
-      "thumbnail": "https://i2.ytimg.com/vi/IHqc_aVaV-o/hqdefault.jpg"
-    },
-    {
-      "id": "Ci5YOj1SRhY",
-      "title": "Experts Disagree On GTA",
-      "publishedAt": "2026-08-22T15:22:52+00:00",
-      "publishedLabel": "Aug 22, 03:22 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/Ci5YOj1SRhY/hqdefault.jpg"
     }
   ]
 }
