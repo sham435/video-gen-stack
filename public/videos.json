@@ -1,7 +1,14 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-26T21:13:59.247Z",
+  "updatedAt": "2026-08-26T21:28:45.203Z",
   "videos": [
+    {
+      "id": "rBK_yit78so",
+      "title": "How DLSS Changed Overnight | NEWS-MONSTER",
+      "publishedAt": "2026-08-26T21:14:22+00:00",
+      "publishedLabel": "Aug 26, 09:14 PM",
+      "thumbnail": "https://i3.ytimg.com/vi/rBK_yit78so/hqdefault.jpg"
+    },
     {
       "id": "6WB1ABMHwRI",
       "title": "Nothing’s Android 17 update debuts this week with redesigns, new apps, 3D emoji [Gallery]  | NEWS-MO",
@@ -99,13 +106,6 @@
       "publishedAt": "2026-08-23T10:25:48+00:00",
       "publishedLabel": "Aug 23, 10:25 AM",
       "thumbnail": "https://i1.ytimg.com/vi/tgK_aDHWk6w/hqdefault.jpg"
-    },
-    {
-      "id": "h2ctrGwakw0",
-      "title": "E. coli and salmonella outbreak linked to alfalfa sprouts sickens dozens across multiple s | NEWS-MO",
-      "publishedAt": "2026-08-23T06:00:01+00:00",
-      "publishedLabel": "Aug 23, 06:00 AM",
-      "thumbnail": "https://i1.ytimg.com/vi/h2ctrGwakw0/hqdefault.jpg"
     }
   ]
 }
