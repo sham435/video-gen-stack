@@ -768,12 +768,14 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         return { commentEvent }
       })
 
-      // ── VERIFY (YouTube thumbnail state + uniqueness commit) ──
+      // ── VERIFY — post-publication verification chain ──
+      // Verifies: video reachable, visibility public, thumbnail available,
+      // title matches, local thumbnail exists. Records to PublicationLedger.
       job.onStage('VERIFY', async (ctx) => {
-        const { videoId } = ctx.results.UPLOAD || {}
+        const { videoId, uploadTitle } = ctx.results.UPLOAD || {}
         if (!videoId) return { verified: false, reason: 'no videoId' }
 
-        // Commit uniqueness reservation — assets are now permanently recorded
+        // 1. Uniqueness reservation commit
         if (ctx.results.UNIQUENESS?.reserved) {
           try {
             const { AssetRegistry } = await import('../src/uniqueness/AssetRegistry.mjs')
@@ -789,7 +791,51 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           }
         }
 
-        return { verified: true, videoId }
+        // 2. Post-publish verification chain
+        let verification = { passed: false, reason: 'skipped' }
+        try {
+          const { PostPublishVerifier } = await import('../src/publishing/PostPublishVerifier.mjs')
+          const verifier = new PostPublishVerifier()
+          const thumbPath = ctx.results.THUMBNAIL?.selected?.path || ctx.results.C2PA?.path || null
+          verification = await verifier.verify({
+            videoId,
+            expectedTitle: uploadTitle || title,
+            expectedVisibility: 'public',
+            thumbnailPath: thumbPath,
+            jobId: ctx.jobId,
+          })
+          const status = verification.passed ? 'PASS' : 'FAIL'
+          console.log(`[VERIFY] ${status} — videoId=${videoId} checks=${Object.keys(verification.checks).join(',')} (${verification.durationMs}ms)`)
+          if (!verification.passed) {
+            console.log(`[VERIFY] failures: ${verification.failures.join('; ')}`)
+          }
+        } catch (e) {
+          verification = { passed: false, reason: e.message }
+          console.log(`[VERIFY] error: ${e.message}`)
+        }
+
+        // 3. Record to PublicationLedger
+        try {
+          const { PublicationLedger } = await import('../src/publishing/PublicationLedger.mjs')
+          const ledgerPath = path.join(outDir, 'data', 'publication-ledger.json')
+          const ledger = new PublicationLedger({ filePath: ledgerPath })
+          ledger.record({
+            videoId,
+            jobId: ctx.jobId,
+            title: uploadTitle || title,
+            category: category || 'technology',
+            thumbnail: ctx.results.THUMBNAIL?.selected?.path || null,
+            visibility: 'public',
+            verifiedAt: verification.verifiedAt,
+            checks: verification.checks,
+            publishedAt: new Date().toISOString(),
+          })
+          console.log(`[LEDGER] recorded ${videoId} — verified=${verification.passed}`)
+        } catch (e) {
+          console.log(`[LEDGER] record failed (non-fatal): ${e.message}`)
+        }
+
+        return { verified: verification.passed, verification, videoId }
       })
 
       // ── ANALYTICS — consumes plan via recordOutcome() feedback loop ──
