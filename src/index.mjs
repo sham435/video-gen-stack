@@ -443,7 +443,7 @@ export class NewsBroadcastEngine {
     // Thread hideBranding through every scene so layers skip branding elements.
     if (options.hideBranding) scenes.forEach(sc => { sc.hideBranding = true })
 
-    const timedScenes = this.scenePlanner.assignTimestamps(scenes)
+    let timedScenes = this.scenePlanner.assignTimestamps(scenes)
     this.validateTemplate(timedScenes)
 
     // Stage 2: Scene preflight — scenes must exist before scoring/render prep
