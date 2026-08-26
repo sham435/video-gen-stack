@@ -569,15 +569,6 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         const publishPreflight = await ProductionPreflight.check({}, { outDir, stage: 'publish' })
         if (!publishPreflight.ready) throw new Error(`Publish preflight failed: ${publishPreflight.errors.join(', ')}`)
 
-        // Governor-aware provider check before upload
-        if (ctx.governor && plan?.providerPreferences) {
-          const quota = ctx.governor.canExecute('youtube', ctx.jobId)
-          if (!quota.allowed) {
-            console.log(`[UPLOAD] blocked by governor: ${quota.reason}`)
-            return { uploadTitle: null, blocked: true, reason: quota.reason }
-          }
-        }
-
         const { publishVideo } = await import('../apps/api/publishers/youtube.js')
         const buffer = fs.readFileSync(videoPath)
         const uploadTitle = `${article.title?.slice(0, 90) || 'News Update'} | NEWS-MONSTER`
@@ -633,16 +624,22 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         return { uploadTitle, hashtags, nicheDecision, ...result }
       })
 
-      // ── PUBLISH — gate check + cross-platform distribution ──
-      job.onStage('PUBLISH', async (ctx) => {
-        const { PublishabilityGate, ProductionError } = await import('../src/orchestrator/PublishabilityGate.mjs')
-        const gate = new PublishabilityGate()
-        const gateResult = gate.evaluate(ctx.results)
-        if (!gateResult.valid) {
-          throw new ProductionError('PUBLISHABILITY_GATE_FAILED', gateResult.missing)
-        }
-        console.log(`[PUBLISH-GATE] PASS — ${gateResult.missing.length === 0 ? 'all checks passed' : gateResult.missing.join(', ')}`)
+      // ── PUBLISH — gated by publishability, then cross-platform distribution ──
+      // The gate is a precondition, not the first lines of the handler: if any
+      // predicate is false the handler is never invoked and the trace records
+      // exactly which predicates failed.
+      {
+        const { PublishabilityGate } = await import('../src/orchestrator/PublishabilityGate.mjs')
+        const publishability = new PublishabilityGate()
+        job.onPrecondition('PUBLISH', (ctx) => {
+          const gateResult = publishability.evaluate(ctx.results)
+          if (gateResult.valid) console.log('[PUBLISH-GATE] PASS — all publishability checks passed')
+          else console.error(`[PUBLISH-GATE] BLOCK — failed: ${gateResult.missing.join(', ')}`)
+          return gateResult
+        })
+      }
 
+      job.onStage('PUBLISH', async (ctx) => {
         const { engine } = ctx.results.RENDER
         const plan = ctx.results.DISCOVER?.plan
         const { videoId, uploadTitle, hashtags, nicheDecision } = ctx.results.UPLOAD
@@ -833,7 +830,8 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
       // Run the orchestrator
       const result = await job.run()
       if (!result.success) {
-        console.error(`[JOB] Article quarantined: ${result.quarantineReason}`)
+        const reason = result.quarantineReason || result.reason || 'unknown'
+        console.error(`[JOB] Article quarantined: ${reason}`)
       }
 
       // ── ProductionManifest — immutable per-video provenance ──

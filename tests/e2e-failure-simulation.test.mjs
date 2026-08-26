@@ -56,15 +56,15 @@ describe('E2E: Crash Recovery', () => {
     j1.onStage('RENDER', () => ({ path: '/out/video.mp4' }))
     j1.onStage('UPLOAD', async (ctx) => {
       uploadCount++
-      journal.start(ctx.jobId, 'youtube.upload', 'youtube')
-      journal.complete(ctx.jobId, 'youtube.upload', 'fake-video-id', 'uploaded', 1000)
+      journal.start(ctx.jobId, 'upload', 'local')
+      journal.complete(ctx.jobId, 'upload', 'fake-video-id', 'uploaded', 1000)
       throw new Error('CRASH: after upload, before checkpoint')
     })
     const r1 = await j1.run()
     assert.equal(r1.success, false)
     assert.ok(uploadCount >= 2, 'UPLOAD retried before quarantine')
 
-    const prior = journal.alreadyCompleted(j1.jobId, 'youtube.upload')
+    const prior = journal.alreadyCompleted(j1.jobId, 'upload')
     assert.ok(prior)
     assert.equal(prior.remote_id, 'fake-video-id')
 
@@ -153,13 +153,19 @@ describe('E2E: Quota Enforcement', () => {
 
     const job = new ProductionJob(ARTICLE, { checkpointDir: tmpDir, governor: gov })
     job.onStage('DISCOVER', () => ({}))
-    job.onStage('UPLOAD', () => { throw new Error('should never be called') })
+    job.onStage('RENDER', () => ({}))
+    job.onStage('THUMBNAIL', () => ({}))
+    job.onStage('C2PA', () => ({}))
+    job.onStage('UNIQUENESS', () => ({}))
+    job.onStage('UPLOAD', () => ({ videoId: 'test' }))
+    // PUBLISH has provider: 'youtube', should hit WAITING_FOR_QUOTA
+    job.onStage('PUBLISH', () => { throw new Error('should never be called') })
 
     const result = await job.run()
     assert.equal(result.success, false)
     assert.equal(result.waiting, true)
     assert.ok(result.nextEligibleAt)
-    assert.equal(result.lastStage, 'UPLOAD')
+    assert.equal(result.lastStage, 'PUBLISH')
   })
 })
 

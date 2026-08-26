@@ -377,14 +377,19 @@ describe('ResourceGovernor + ProductionJob integration', () => {
 
     const job = new ProductionJob(SAMPLE_ARTICLE, { checkpointDir: tmpDir, governor: gov })
     job.onStage('DISCOVER', () => ({}))
-    // UPLOAD has provider: 'youtube', should hit WAITING_FOR_QUOTA
+    job.onStage('RENDER', () => ({}))
+    job.onStage('THUMBNAIL', () => ({}))
+    job.onStage('C2PA', () => ({}))
+    job.onStage('UNIQUENESS', () => ({}))
     job.onStage('UPLOAD', () => ({ videoId: 'test' }))
+    // PUBLISH has provider: 'youtube', should hit WAITING_FOR_QUOTA
+    job.onStage('PUBLISH', () => ({}))
 
     const result = await job.run()
     assert.equal(result.success, false)
     assert.equal(result.waiting, true)
     assert.ok(result.nextEligibleAt)
-    assert.equal(result.lastStage, 'UPLOAD')
+    assert.equal(result.lastStage, 'PUBLISH')
   })
 })
 
@@ -393,9 +398,9 @@ describe('WAITING_FOR_QUOTA in StageStatus', () => {
     assert.equal(StageStatus.WAITING_FOR_QUOTA, 'WAITING_FOR_QUOTA')
   })
 
-  it('UPLOAD stage has provider youtube', () => {
+  it('UPLOAD stage has no provider (file staging only, no external API)', () => {
     const stage = getStage('UPLOAD')
-    assert.equal(stage.provider, 'youtube')
+    assert.equal(stage.provider, null)
   })
 
   it('RENDER stage has no provider', () => {

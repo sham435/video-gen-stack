@@ -61,11 +61,11 @@ export const STAGES = Object.freeze([
   },
   {
     id: 'UPLOAD',
-    description: 'YouTube video upload + thumbnail set',
+    description: 'Staging video + thumbnail for publish (no external API call)',
     failureClass: FailureClass.RATE_LIMITED,
     maxRetries: 3,
     backoffMs: 5000,
-    provider: 'youtube',
+    provider: null,
   },
   {
     id: 'PUBLISH',
