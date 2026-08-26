@@ -123,14 +123,10 @@ export class ProductionJob {
   async _executeStage(stage) {
     const handler = this.stageHandlers[stage.id]
     if (!handler) {
-      // No handler = pass-through. Do NOT write to checkpoint so resume
-      // treats it as not-yet-run and re-executes on next attempt.
       return true
     }
 
-    // ── Crash recovery: check if this external operation was already completed ──
-    // This must run BEFORE the governor gate — recovery is a local journal read,
-    // no API call, and should succeed even if quota is exhausted or cooldown active.
+    // ── Crash recovery ──
     if (this.governor && stage.provider) {
       const operationType = `${stage.provider}.${stage.id.toLowerCase()}`
       const prior = this.governor.wasCompleted(this.jobId, operationType)
@@ -138,11 +134,12 @@ export class ProductionJob {
         console.log(`[JOB] ${stage.id}: RECOVERY — operation already completed remotely (remote_id=${prior.remote_id})`)
         this.results[stage.id] = { remote_id: prior.remote_id, remote_state: prior.remote_state, recovered: true }
         this.store.markStageCompleted(stage.id, this.results[stage.id])
+        this._trace(stage.id, 0, 'SUCCEEDED', 0, [], null, { recovered: true, remoteId: prior.remote_id })
         return true
       }
     }
 
-    // ── Governor gate: check quota BEFORE attempting the stage ──
+    // ── Governor gate ──
     if (this.governor && stage.provider) {
       const quota = this.governor.canExecute(stage.provider, this.jobId)
       if (!quota.allowed) {
@@ -156,7 +153,6 @@ export class ProductionJob {
         console.log(`[JOB] ${stage.id}: WAITING_FOR_QUOTA — ${quota.reason} (next eligible: ${quota.nextEligibleAt})`)
         return { waiting: true, nextEligibleAt: quota.nextEligibleAt, reason: quota.reason }
       }
-      // Reserve slot before execution
       this.governor.reserve(stage.provider)
     }
 
@@ -172,6 +168,9 @@ export class ProductionJob {
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       if (attempt > 0) retries++
 
+      const attemptStart = Date.now()
+      this._trace(stage.id, attempt, 'RUNNING', null, [], null, { maxRetries })
+
       try {
         const ctx = {
           jobId: this.jobId,
@@ -186,12 +185,16 @@ export class ProductionJob {
         const result = await handler(ctx)
         this.results[stage.id] = result || {}
         this.store.markStageCompleted(stage.id, result)
+        const durationMs = Date.now() - attemptStart
+        const artifactIds = this._extractArtifactIds(stage.id, result)
+        this._trace(stage.id, attempt, 'SUCCEEDED', durationMs, artifactIds, null)
         console.log(`[JOB] ${stage.id}: COMPLETED (attempt ${attempt + 1})`)
         return true
 
       } catch (error) {
         lastError = error
         const failureClass = classifyError(error, stage)
+        const durationMs = Date.now() - attemptStart
 
         this.store.updateStage(stage.id, {
           status: StageStatus.RETRYING,
@@ -200,14 +203,17 @@ export class ProductionJob {
           failureClass,
         })
 
-        if (failureClass === FailureClass.PERMANENT) {
-          this.quarantineReason = `${stage.id} quarantined: permanent failure (last error: ${error.message})`
+        if (failureClass === FailureClass.PERMANENT || failureClass === FailureClass.CONFIGURATION) {
+          this.quarantineReason = `${stage.id} quarantined: ${failureClass.toLowerCase()} failure (last error: ${error.message})`
           this.store.markStageQuarantined(stage.id, this.quarantineReason)
+          this._trace(stage.id, attempt, 'QUARANTINED', durationMs, [], failureClass, { error: error.message })
           console.error(`[JOB] ${stage.id}: QUARANTINED — ${this.quarantineReason}`)
           if (this.governor && stage.provider) this.governor.release(stage.provider)
           this._releaseUniquenessReservation()
           return false
         }
+
+        this._trace(stage.id, attempt, 'FAILED', durationMs, [], failureClass, { error: error.message })
 
         if (retries >= maxRetries) break
 
@@ -223,10 +229,38 @@ export class ProductionJob {
 
     this.quarantineReason = `${stage.id} quarantined: exhausted ${maxRetries} retries (last error: ${lastError?.message})`
     this.store.markStageQuarantined(stage.id, this.quarantineReason)
+    this._trace(stage.id, maxRetries, 'QUARANTINED', 0, [], FailureClass.TRANSIENT, { error: lastError?.message, exhaustedRetries: true })
     console.error(`[JOB] ${stage.id}: QUARANTINED — ${this.quarantineReason}`)
     if (this.governor && stage.provider) this.governor.release(stage.provider)
     this._releaseUniquenessReservation()
     return false
+  }
+
+  _trace(stageId, attempt, status, durationMs, artifactIds = [], errorClassification = null, metadata = {}) {
+    this.store.appendTrace({
+      jobId: this.jobId,
+      stage: stageId,
+      attempt,
+      startedAt: new Date().toISOString(),
+      completedAt: status !== 'RUNNING' ? new Date().toISOString() : undefined,
+      status,
+      durationMs,
+      artifactIds,
+      errorClassification,
+      metadata,
+    })
+  }
+
+  _extractArtifactIds(stageId, result) {
+    if (!result) return []
+    const ids = []
+    if (result.videoPath) ids.push(`video:${result.videoPath}`)
+    if (result.thumbnailPath) ids.push(`thumbnail:${result.thumbnailPath}`)
+    if (result.path) ids.push(`file:${result.path}`)
+    if (result.videoId) ids.push(`youtube:${result.videoId}`)
+    if (result.remote_id) ids.push(`remote:${result.remote_id}`)
+    if (result.manifestId) ids.push(`c2pa:${result.manifestId}`)
+    return ids
   }
 
   _restoreResults(saved) {

@@ -633,8 +633,16 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         return { uploadTitle, hashtags, nicheDecision, ...result }
       })
 
-      // ── PUBLISH — consumes plan.hookStrategy for CTA/comment strategy ──
+      // ── PUBLISH — gate check + cross-platform distribution ──
       job.onStage('PUBLISH', async (ctx) => {
+        const { PublishabilityGate, ProductionError } = await import('../src/orchestrator/PublishabilityGate.mjs')
+        const gate = new PublishabilityGate()
+        const gateResult = gate.evaluate(ctx.results)
+        if (!gateResult.valid) {
+          throw new ProductionError('PUBLISHABILITY_GATE_FAILED', gateResult.missing)
+        }
+        console.log(`[PUBLISH-GATE] PASS — ${gateResult.missing.length === 0 ? 'all checks passed' : gateResult.missing.join(', ')}`)
+
         const { engine } = ctx.results.RENDER
         const plan = ctx.results.DISCOVER?.plan
         const { videoId, uploadTitle, hashtags, nicheDecision } = ctx.results.UPLOAD

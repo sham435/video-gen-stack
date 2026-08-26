@@ -10,10 +10,12 @@ export const StageStatus = Object.freeze({
 })
 
 export const FailureClass = Object.freeze({
-  TRANSIENT: 'TRANSIENT',       // network timeout, ffmpeg glitch → retry
-  RATE_LIMITED: 'RATE_LIMITED', // 429 → backoff
-  INVALID_ARTIFACT: 'INVALID',  // bad render, corrupt file → regenerate
-  PERMANENT: 'PERMANENT',       // auth failure, quota → quarantine
+  TRANSIENT: 'TRANSIENT',         // network timeout, ffmpeg glitch → retry
+  RATE_LIMITED: 'RATE_LIMITED',   // 429 → backoff
+  INVALID_ARTIFACT: 'INVALID',    // bad render, corrupt file → regenerate
+  PERMANENT: 'PERMANENT',         // auth failure, quota → quarantine
+  DEPENDENCY: 'DEPENDENCY',       // upstream stage output missing → retry
+  CONFIGURATION: 'CONFIGURATION', // missing env var, invalid config → quarantine
 })
 
 export const STAGES = Object.freeze([
@@ -116,6 +118,12 @@ export function classifyError(error, stage) {
   }
   if (msg.includes('render validation failed') || msg.includes('corrupt') || msg.includes('invalid artifact') || msg.includes('moov atom')) {
     return FailureClass.INVALID_ARTIFACT
+  }
+  if (msg.includes('requires_') || msg.includes('dependency') || msg.includes('upstream') || msg.includes('required by')) {
+    return FailureClass.DEPENDENCY
+  }
+  if (msg.includes('missing env') || msg.includes('not configured') || msg.includes('configuration') || msg.includes('config')) {
+    return FailureClass.CONFIGURATION
   }
 
   return stage.failureClass || FailureClass.TRANSIENT

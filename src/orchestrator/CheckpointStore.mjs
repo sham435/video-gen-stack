@@ -76,6 +76,34 @@ export class CheckpointStore {
     })
   }
 
+  appendTrace(record) {
+    const state = this.load() || { stages: {} }
+    if (!state.stageTrace) state.stageTrace = []
+    state.stageTrace.push(record)
+    this.save(state)
+    return record
+  }
+
+  getTrace() {
+    const state = this.load()
+    return state?.stageTrace || []
+  }
+
+  getStageTrace(stageId) {
+    return this.getTrace().filter(r => r.stage === stageId)
+  }
+
+  getArtifacts() {
+    const state = this.load()
+    return state?.artifacts || {}
+  }
+
+  setArtifacts(artifacts) {
+    const state = this.load() || { stages: {} }
+    state.artifacts = { ...(state.artifacts || {}), ...artifacts }
+    this.save(state)
+  }
+
   getStageResult(stageId) {
     const state = this.load()
     return state?.stages?.[stageId] || null
