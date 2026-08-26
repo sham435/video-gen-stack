@@ -104,19 +104,19 @@ describe('GlobalAssetUniquenessGate', () => {
     return new AssetRegistry({ filePath: path.join(tmpDir, 'registry.json'), rollingWindow: 50 })
   }
 
-  it('getScopes returns all 6 scopes', () => {
+  it('getScopes returns all 8 scopes', () => {
     const scopes = GlobalAssetUniquenessGate.getScopes()
-    assert.equal(scopes.length, 6)
+    assert.equal(scopes.length, 8)
     assert.ok(scopes.every(s => s.enforcement))
   })
 
   it('getEnforcementStatus returns ENFORCED/BEST_EFFORT per scope', () => {
     const gate = new GlobalAssetUniquenessGate(makeRegistry())
     const status = gate.getEnforcementStatus()
-    assert.equal(status.length, 6)
+    assert.equal(status.length, 8)
     const enforced = status.filter(s => s.enforcement === ScopeEnforcement.ENFORCED)
     const bestEffort = status.filter(s => s.enforcement === ScopeEnforcement.BEST_EFFORT)
-    assert.ok(enforced.length >= 4, `expected >=4 ENFORCED, got ${enforced.length}`)
+    assert.ok(enforced.length >= 6, `expected >=6 ENFORCED, got ${enforced.length}`)
     assert.ok(bestEffort.length >= 1, `expected >=1 BEST_EFFORT, got ${bestEffort.length}`)
   })
 
@@ -232,7 +232,7 @@ describe('GlobalAssetUniquenessGate', () => {
   it('scope results include enforcement level', async () => {
     const gate = new GlobalAssetUniquenessGate(makeRegistry())
     const r = await gate.validate({})
-    assert.ok(r.scopeResults.length === 6)
+    assert.ok(r.scopeResults.length === 8)
     for (const s of r.scopeResults) {
       assert.ok(['ENFORCED', 'BEST_EFFORT', 'NOT_IMPLEMENTED'].includes(s.enforcement))
     }

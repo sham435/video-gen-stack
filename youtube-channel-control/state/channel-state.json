@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "channelId": "UC sham435",
+  "timezone": "Asia/Colombo",
+  "day": "2026-08-27",
+  "allocations": {
+    "news": 6,
+    "music": 10
+  },
+  "quota": {
+    "dailyLimit": 16,
+    "news": { "limit": 6, "used": 0 },
+    "music": { "limit": 10, "used": 0 },
+    "used": 0,
+    "remaining": 16
+  },
+  "lease": null,
+  "publications": []
+}

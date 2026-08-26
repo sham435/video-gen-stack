@@ -62,6 +62,7 @@ export class AssetRegistry {
 
     this.state.reservations[jobId] = {
       scriptHash: manifest.scriptHash || null,
+      scriptText: manifest.scriptText || null,
       imageHashes: manifest.imageHashes || [],
       musicTrackId: manifest.musicTrackId || null,
       thumbnailHash: manifest.thumbnailHash || null,
@@ -82,7 +83,7 @@ export class AssetRegistry {
 
     // Record to permanent indexes
     if (res.scriptHash) {
-      this._recordScript(res.scriptHash, { jobId })
+      this._recordScript(res.scriptHash, { jobId, text: res.scriptText || null })
     }
     for (const h of res.imageHashes) {
       this._recordImage(h, { jobId })
@@ -101,6 +102,7 @@ export class AssetRegistry {
     this.state.publishedVideos.push({
       videoId: videoId || `job-${jobId}`,
       scriptHash: res.scriptHash,
+      scriptText: res.scriptText || null,
       imageHashes: res.imageHashes,
       musicTrackId: res.musicTrackId,
       thumbnailCompositionHash: res.thumbnailCompositionHash || null,
@@ -169,13 +171,14 @@ export class AssetRegistry {
 
   // ── Script tracking (committed) ────────────────────────────────────────
 
-  _recordScript(hash, { jobId, title } = {}) {
+  _recordScript(hash, { jobId, title, text } = {}) {
     const existing = this.state.scripts[hash]
     this.state.scripts[hash] = {
       firstUsed: existing?.firstUsed || new Date().toISOString(),
       lastUsed: new Date().toISOString(),
       jobId: jobId || null,
       title: title || null,
+      text: text || existing?.text || null,
       usageCount: (existing?.usageCount || 0) + 1,
     }
   }

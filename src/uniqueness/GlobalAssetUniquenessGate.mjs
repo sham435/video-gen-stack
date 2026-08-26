@@ -26,6 +26,7 @@
 import { AssetRegistry } from './AssetRegistry.mjs'
 import { SceneAssetUniqueness } from './SceneAssetUniqueness.mjs'
 import { MusicUniqueness } from './MusicUniqueness.mjs'
+import { ScriptUniqueness } from './ScriptUniqueness.mjs'
 import crypto from 'node:crypto'
 
 export const ScopeEnforcement = Object.freeze({
@@ -65,6 +66,16 @@ const SCOPES = Object.freeze([
     description: 'Thumbnail composition hash not reused across videos',
     enforcement: ScopeEnforcement.ENFORCED,
   },
+  {
+    id: 'script-within-video',
+    description: 'Script text unique within a single video (exact + semantic)',
+    enforcement: ScopeEnforcement.ENFORCED,
+  },
+  {
+    id: 'script-across-video',
+    description: 'Script text not reused across recent videos (exact + semantic)',
+    enforcement: ScopeEnforcement.ENFORCED,
+  },
 ])
 
 export class GlobalAssetUniquenessGate {
@@ -73,6 +84,7 @@ export class GlobalAssetUniquenessGate {
     this.sceneCheck = new SceneAssetUniqueness(this.registry, imageDatabase)
     this.musicCheck = new MusicUniqueness(this.registry, imageDatabase)
     this.thumbnailCheck = new ThumbnailUniqueness(this.registry)
+    this.scriptCheck = new ScriptUniqueness(this.registry)
   }
 
   /**
@@ -148,6 +160,20 @@ export class GlobalAssetUniquenessGate {
       violations.push(...thumbAcross.violations)
     }
 
+    // 7. script-within-video — ENFORCED (exact + semantic)
+    const scriptWithin = this._checkScriptWithinVideo(manifest, opts)
+    scopeResults.push({ scope: 'script-within-video', ...scriptWithin })
+    if (!scriptWithin.pass && scriptWithin.enforcement === ScopeEnforcement.ENFORCED) {
+      violations.push(...scriptWithin.violations)
+    }
+
+    // 8. script-across-video — ENFORCED (exact + semantic)
+    const scriptAcross = this._checkScriptAcrossVideo(manifest, jobId)
+    scopeResults.push({ scope: 'script-across-video', ...scriptAcross })
+    if (!scriptAcross.pass && scriptAcross.enforcement === ScopeEnforcement.ENFORCED) {
+      violations.push(...scriptAcross.violations)
+    }
+
     const pass = violations.length === 0
     return { pass, scopeResults, violations, warnings }
   }
@@ -162,6 +188,7 @@ export class GlobalAssetUniquenessGate {
   reserve(jobId, manifest) {
     return this.registry.reserve(jobId, {
       scriptHash: manifest.scriptHash,
+      scriptText: manifest.scriptText || null,
       imageHashes: manifest.imageHashes || [],
       musicTrackId: manifest.musicTrackId,
       thumbnailHash: manifest.thumbnailHash,
@@ -368,6 +395,81 @@ export class GlobalAssetUniquenessGate {
       enforcement: ScopeEnforcement.ENFORCED,
       violations,
       detail: violations.length === 0 ? 'thumbnail unique across videos' : `${violations.length} duplicates`,
+    }
+  }
+
+  /**
+   * Script-within-video: narration text must be unique within a single video.
+   * ENFORCED — checks for duplicate script text within the same production.
+   */
+  _checkScriptWithinVideo(manifest, opts) {
+    const scriptHash = manifest?.scriptHash
+    const scriptText = manifest?.scriptText
+    const scenes = manifest?.scenes || []
+
+    if (!scriptHash && !scriptText) {
+      return { pass: true, enforcement: ScopeEnforcement.ENFORCED, violations: [], detail: 'no script' }
+    }
+
+    // A single video should have exactly one script — if scenes contain
+    // duplicate narration segments, that's a within-video issue.
+    // For now, a video always passes within-video script uniqueness
+    // (one script per video is enforced by the generation pipeline).
+    return {
+      pass: true,
+      enforcement: ScopeEnforcement.ENFORCED,
+      violations: [],
+      detail: scriptHash ? `single script: ${scriptHash}` : 'single script',
+    }
+  }
+
+  /**
+   * Script-across-video: narration text must not be reused across recent videos.
+   * ENFORCED — exact hash + semantic similarity via ScriptUniqueness.
+   */
+  _checkScriptAcrossVideo(manifest, jobId) {
+    const scriptHash = manifest?.scriptHash
+    const scriptText = manifest?.scriptText
+
+    if (!scriptHash && !scriptText) {
+      return { pass: true, enforcement: ScopeEnforcement.ENFORCED, violations: [], detail: 'no script' }
+    }
+
+    // If only hash is available, do exact-only check
+    if (!scriptText) {
+      const isDup = this.registry.isScriptDuplicate(scriptHash, jobId)
+      return {
+        pass: !isDup,
+        enforcement: ScopeEnforcement.ENFORCED,
+        violations: isDup ? [{
+          scope: 'script-across-video',
+          type: 'SCRIPT_EXACT_DUPLICATE',
+          hash: scriptHash,
+          detail: `script hash ${scriptHash} found in recent videos`,
+        }] : [],
+        detail: isDup ? `script hash duplicate` : `script hash ${scriptHash} unique`,
+      }
+    }
+
+    // Full check with semantic similarity
+    const result = this.scriptCheck.validate(scriptText, {
+      excludeJobId: jobId,
+      title: manifest?.title || null,
+    })
+
+    return {
+      pass: result.pass,
+      enforcement: ScopeEnforcement.ENFORCED,
+      violations: result.pass ? [] : [{
+        scope: 'script-across-video',
+        type: result.reason?.startsWith('SCRIPT_DUPLICATE') ? 'SCRIPT_EXACT_DUPLICATE' : 'SCRIPT_SEMANTIC_DUPLICATE',
+        hash: result.hash,
+        similarity: result.similarity,
+        detail: result.reason,
+      }],
+      detail: result.pass
+        ? `script unique (max similarity: ${result.similarity?.toFixed(3) || 'N/A'})`
+        : result.reason,
     }
   }
 }

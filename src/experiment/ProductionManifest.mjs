@@ -148,6 +148,18 @@ export class ProductionManifest {
         comments: data.youtube?.comments || null,
         shares: data.youtube?.shares || null,
       }),
+
+      // Capacity evidence (audit trail per production)
+      capacity: data.capacity ? Object.freeze({
+        targetVideosPerDay: data.capacity.targetVideosPerDay || 48,
+        theoreticalCapacity: data.capacity.theoreticalCapacity || 0,
+        demonstratedCapacity: data.capacity.demonstratedCapacity || 0,
+        safeCapacity: data.capacity.safeCapacity || 0,
+        bottleneck: data.capacity.bottleneck || 'unknown',
+        evidenceWindow: data.capacity.evidenceWindow || null,
+        sampleSize: data.capacity.sampleSize || 0,
+        gateStatus: data.capacity.gateStatus || 'unknown',
+      }) : null,
     })
 
     return manifest

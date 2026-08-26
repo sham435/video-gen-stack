@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "channel-state-v1",
+  "title": "YouTube Channel Control State",
+  "description": "Shared coordination state for multi-pipeline YouTube publishing",
+  "type": "object",
+  "required": ["version", "day", "allocations", "quota", "lease", "publications"],
+  "properties": {
+    "version": { "type": "integer", "const": 1 },
+    "channelId": { "type": "string" },
+    "timezone": { "type": "string" },
+    "day": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "allocations": {
+      "type": "object",
+      "description": "Content allocation policy — change without modifying scheduler code",
+      "properties": {
+        "news": { "type": "integer", "minimum": 0 },
+        "music": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": { "type": "integer", "minimum": 0 }
+    },
+    "quota": {
+      "type": "object",
+      "required": ["dailyLimit", "used", "remaining"],
+      "properties": {
+        "dailyLimit": { "type": "integer" },
+        "news": { "$ref": "#/$defs/pipelineQuota" },
+        "music": { "$ref": "#/$defs/pipelineQuota" },
+        "used": { "type": "integer" },
+        "remaining": { "type": "integer" }
+      }
+    },
+    "lease": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/lease" }
+      ]
+    },
+    "publications": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/publication" }
+    }
+  },
+  "$defs": {
+    "pipelineQuota": {
+      "type": "object",
+      "required": ["limit", "used"],
+      "properties": {
+        "limit": { "type": "integer", "minimum": 0 },
+        "used": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "lease": {
+      "type": "object",
+      "required": ["jobId", "pipeline", "acquiredAt", "expiresAt", "status"],
+      "properties": {
+        "jobId": { "type": "string" },
+        "pipeline": { "type": "string" },
+        "acquiredAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["ACTIVE", "EXPIRED", "COMMITTED", "RELEASED"] }
+      }
+    },
+    "publication": {
+      "type": "object",
+      "required": ["publicationId", "jobId", "pipeline", "youtubeVideoId", "publishedAt"],
+      "properties": {
+        "publicationId": { "type": "string" },
+        "jobId": { "type": "string" },
+        "pipeline": { "type": "string" },
+        "channelId": { "type": "string" },
+        "artifactId": { "type": "string" },
+        "youtubeVideoId": { "type": "string" },
+        "title": { "type": "string" },
+        "publishedAt": { "type": "string", "format": "date-time" },
+        "quotaClass": { "type": "string" }
+      }
+    }
+  }
+}

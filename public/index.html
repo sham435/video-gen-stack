@@ -3,499 +3,482 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEWS-MONSTER — Breaking News, Every 30 Minutes</title>
-<meta name="description" content="NEWS-MONSTER — breaking news shorts on technology, Tesla, Apple, business and more. A fresh drop every 30 minutes.">
+<title>NEWS-MONSTER — The Collection</title>
+<meta name="description" content="NEWS-MONSTER — autonomous news & music video shorts. A fresh drop every 30 minutes.">
 <link rel="preconnect" href="https://www.youtube-nocookie.com">
 <link rel="preconnect" href="https://i.ytimg.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --red: #E10600;
-  --cyan: #00E5FF;
-  --bg: #050505;
-  --panel: #101014;
-  --border: #24242c;
-  --text: #FFFFFF;
-  --muted: #9a9aa6;
-  --card-w: 180px;
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#050505;--surface:#0a0a0c;--card:#111114;--border:rgba(255,255,255,.06);
+  --text:#f0ece4;--muted:#7a7a8a;--gold:#c9a84c;--gold-dim:rgba(201,168,76,.15);
+  --red:#e03030;
+  --font:'Inter',-apple-system,'Segoe UI',Roboto,sans-serif;
 }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
-  min-height: 100vh;
-}
-.veil {
-  position: fixed; inset: 0;
-  background:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(225,6,0,0.18), transparent 60%),
-    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(0,229,255,0.08), transparent 60%);
-  pointer-events: none; z-index: 0;
-}
-.wrap { position: relative; z-index: 1; max-width: 1040px; margin: 0 auto; padding: 28px 20px 60px; }
+html{font-size:16px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;overflow-x:hidden}
 
-/* ── Header ─────────────────────────────────────────────── */
-header { display: flex; align-items: center; gap: 16px; padding: 8px 0 32px; }
-.logo {
-  width: 58px; height: 58px; border-radius: 10px; background: var(--red);
-  display: grid; place-items: center;
-  font-family: 'Anton', Impact, sans-serif; font-size: 22px; font-weight: 900;
-  box-shadow: 0 0 28px rgba(225,6,0,0.55);
-}
-header h1 { font-family: 'Anton', Impact, sans-serif; font-size: 26px; letter-spacing: 1px; font-weight: 900; }
-header .tag { color: var(--muted); font-size: 13px; margin-top: 2px; }
-
-/* ── Hero ───────────────────────────────────────────────── */
-.hero { text-align: center; padding: 42px 0 48px; }
-.hero .badge {
-  display: inline-block; padding: 6px 16px; border: 1px solid var(--cyan);
-  color: var(--cyan); border-radius: 999px; font-size: 13px; font-weight: 700;
-  letter-spacing: 2px; margin-bottom: 22px;
-}
-.hero h2 {
-  font-family: 'Anton', Impact, sans-serif; font-weight: 900;
-  font-size: clamp(40px, 8vw, 72px); line-height: 1.05;
-}
-.hero h2 span { color: var(--red); }
-.hero p { color: var(--muted); font-size: 17px; max-width: 560px; margin: 18px auto 0; }
-
-.sub-row { margin-top: 34px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
-#subBtn {
-  display: inline-flex; align-items: center; gap: 10px;
-  background: var(--red); color: #fff; border: none;
-  font-size: 20px; font-weight: 800; letter-spacing: 0.5px;
-  padding: 16px 44px; border-radius: 999px; cursor: pointer;
-  box-shadow: 0 8px 34px rgba(225,6,0,0.45);
-  transition: transform .15s ease, box-shadow .15s ease;
-}
-#subBtn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(225,6,0,0.6); }
-#subBtn .icon { font-size: 24px; }
-.sub-note { color: var(--muted); font-size: 13px; }
-.official-wrap, .li-wrap {
-  margin-top: 4px; color: var(--cyan); font-size: 14px; font-weight: 600;
-  text-decoration: none; border: 1px solid rgba(0,229,255,0.35);
-  padding: 8px 20px; border-radius: 999px; transition: background .15s ease;
-}
-.official-wrap:hover, .li-wrap:hover { background: rgba(0,229,255,0.12); }
-
-.stats { display: flex; gap: 40px; justify-content: center; margin-top: 40px; }
-.stat { text-align: center; }
-.stat b { display: block; font-family: 'Anton', Impact, sans-serif; font-size: 30px; }
-.stat small { color: var(--muted); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
-
-/* ── Section Header ─────────────────────────────────────── */
-.section-title {
-  font-family: 'Anton', Impact, sans-serif; font-weight: 900; font-size: 32px;
-  margin: 56px 0 6px; display: flex; align-items: center; gap: 12px;
-}
-.section-title .live {
-  display: inline-block; font-family: 'Inter', sans-serif; font-weight: 800;
-  font-size: 13px; color: #fff; background: var(--red);
-  padding: 4px 12px; border-radius: 999px; letter-spacing: 1px;
-  animation: pulse 1.6s infinite;
-}
-@keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .45 } }
-.section-sub { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
-
-/* ── Carousel ───────────────────────────────────────────── */
-.carousel-wrap { position: relative; }
-.carousel {
-  display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory;
-  scroll-behavior: smooth; -webkit-overflow-scrolling: touch;
-  padding: 4px 0 20px; scrollbar-width: none;
-}
-.carousel::-webkit-scrollbar { display: none; }
-
-/* ── Card ───────────────────────────────────────────────── */
-.vid {
-  flex: 0 0 var(--card-w); scroll-snap-align: start;
-  background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
-  overflow: hidden; transition: transform .15s ease, box-shadow .15s ease;
-  position: relative;
-}
-.vid:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
-
-/* ── Skeleton (reserved dimensions, no CLS) ─────────────── */
-.skeleton {
-  width: 100%; aspect-ratio: 9 / 16; background: linear-gradient(110deg, #18181f 30%, #22222c 50%, #18181f 70%);
-  background-size: 200% 100%; animation: shimmer 1.5s infinite linear;
-}
-@keyframes shimmer { from { background-position: 200% 0 } to { background-position: -200% 0 } }
-
-/* ── YouTube Facade ─────────────────────────────────────── */
-.youtube-player {
-  position: relative; width: 100%; aspect-ratio: 9 / 16;
-  cursor: pointer; overflow: hidden; background: #000;
-}
-.youtube-player img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  transition: transform .25s ease, filter .25s ease;
-}
-.vid:hover .youtube-player img { transform: scale(1.04); filter: brightness(0.7); }
-
-/* ── Play Button ────────────────────────────────────────── */
-.youtube-player .play-btn {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  width: 54px; height: 54px; border-radius: 50%; border: none;
-  background: rgba(225,6,0,0.85); color: #fff; font-size: 22px;
-  display: grid; place-items: center; cursor: pointer;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-  transition: transform .15s ease, opacity .15s ease;
-  opacity: 0;
-}
-.vid:hover .play-btn { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-.youtube-player .play-btn:hover { transform: translate(-50%, -50%) scale(1.15) !important; }
-
-/* ── Quick-Action Overlay (hover) ───────────────────────── */
-.quick-actions {
-  position: absolute; top: 8px; right: 8px; display: flex; flex-direction: column; gap: 6px;
-  opacity: 0; transform: translateX(8px); transition: opacity .15s ease, transform .15s ease;
-  z-index: 3;
-}
-.vid:hover .quick-actions { opacity: 1; transform: translateX(0); }
-.quick-actions button {
-  width: 32px; height: 32px; border-radius: 8px; border: none;
-  background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
-  color: #fff; font-size: 14px; cursor: pointer; display: grid; place-items: center;
-  transition: background .12s ease;
-}
-.quick-actions button:hover { background: var(--red); }
-.quick-actions button[title]::after {
-  content: attr(title); position: absolute; right: 38px; top: 50%; transform: translateY(-50%);
-  background: rgba(0,0,0,0.85); color: #fff; font-size: 11px; white-space: nowrap;
-  padding: 4px 8px; border-radius: 6px; pointer-events: none; opacity: 0;
-  transition: opacity .12s ease;
-}
-.quick-actions button:hover[title]::after { opacity: 1; }
-
-/* ── Status Pill (processing / algo badge) ──────────────── */
-.status-pill {
-  position: absolute; bottom: 8px; left: 8px; z-index: 3;
-  display: inline-flex; align-items: center; gap: 5px;
-  background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
-  border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 600;
-  color: var(--cyan); letter-spacing: 0.3px;
-}
-.status-pill.rendering {
-  color: var(--red);
-}
-.status-pill.rendering::before {
-  content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--red);
-  animation: blink 1s infinite;
-}
-@keyframes blink { 0%,100% { opacity: 1 } 50% { opacity: .3 } }
-
-/* ── Meta ───────────────────────────────────────────────── */
-.vid .meta { padding: 10px 12px; }
-.vid .t {
-  font-size: 13px; font-weight: 600; line-height: 1.35;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
-.vid .d { color: var(--muted); font-size: 11px; margin-top: 6px; }
-.vid .tags { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
-.vid .tags span {
-  font-size: 10px; padding: 2px 6px; border-radius: 4px;
-  background: rgba(255,255,255,0.06); color: var(--muted); white-space: nowrap;
+/* ── Ambient Veil ────────────────────────────────────────── */
+.veil{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 70% 45% at 50% -8%,rgba(201,168,76,.06),transparent 55%),
+             radial-gradient(ellipse 50% 35% at 85% 100%,rgba(224,48,48,.04),transparent 55%);
 }
 
-/* ── Iframe (loaded on click) ─────────────────────────────
-   The shorts player renders its own channel bar (avatar, @sham435,
-   Subscribe) at the bottom — YouTube provides no embed parameter to
-   hide it. We clip it: the iframe hangs ~96px below the container's
-   bottom edge and overflow:hidden on .youtube-player crops the bar
-   (slight bottom crop of the video frame is the tradeoff). */
-.youtube-player iframe {
-  position: absolute; top: 0; left: 0; width: 100%;
-  height: calc(100% + 96px); border: 0; display: block;
-}
-.youtube-player iframe:-webkit-full-screen { width: 100%; height: 100%; }
-.youtube-player iframe:fullscreen { width: 100%; height: 100%; }
+/* ── Layout ──────────────────────────────────────────────── */
+.app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column}
 
-.loading, .empty { color: var(--muted); text-align: center; padding: 40px 0; }
+/* ── Header ──────────────────────────────────────────────── */
+header{display:flex;align-items:center;justify-content:space-between;padding:28px 48px 0}
+.logo{display:flex;align-items:center;gap:14px}
+.logo-mark{width:42px;height:42px;border-radius:8px;background:var(--red);display:grid;place-items:center;
+  font-weight:800;font-size:15px;letter-spacing:.5px;box-shadow:0 0 24px rgba(224,48,48,.4)}
+.logo-text{font-weight:700;font-size:18px;letter-spacing:1.5px;text-transform:uppercase}
+nav{display:flex;gap:32px;align-items:center}
+nav a{color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;letter-spacing:.8px;
+  text-transform:uppercase;transition:color .2s}
+nav a:hover{color:var(--text)}
 
-/* ── Nav Arrows ─────────────────────────────────────────── */
-.carousel-nav {
-  position: absolute; top: 50%; transform: translateY(-50%); z-index: 4;
-  width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border);
-  background: var(--panel); color: var(--text); font-size: 16px;
-  display: grid; place-items: center; cursor: pointer;
-  opacity: 0; transition: opacity .15s ease;
-}
-.carousel-wrap:hover .carousel-nav { opacity: 1; }
-.carousel-nav:hover { background: var(--red); border-color: var(--red); }
-.carousel-nav.prev { left: -18px; }
-.carousel-nav.next { right: -18px; }
+/* ── Hero ────────────────────────────────────────────────── */
+.hero{text-align:center;padding:72px 24px 48px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 18px;border:1px solid var(--gold-dim);
+  border-radius:999px;font-size:11px;font-weight:600;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:28px}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-weight:300;font-size:clamp(36px,6vw,64px);line-height:1.1;letter-spacing:-.5px;margin-bottom:16px}
+.hero h1 em{font-style:normal;font-weight:700;color:var(--gold)}
+.hero p{color:var(--muted);font-size:15px;max-width:480px;margin:0 auto;line-height:1.6}
 
-/* ── Footer ─────────────────────────────────────────────── */
-footer { margin-top: 72px; padding-top: 26px; border-top: 1px solid var(--border); text-align: center; color: var(--muted); font-size: 13px; }
-footer b { color: var(--text); }
+/* ── Filter Tabs ─────────────────────────────────────────── */
+.filters{display:flex;justify-content:center;gap:4px;margin:40px auto 0;padding:4px;
+  background:var(--surface);border:1px solid var(--border);border-radius:999px;width:fit-content}
+.filter-btn{padding:8px 24px;border:none;background:transparent;color:var(--muted);font-family:var(--font);
+  font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-radius:999px;cursor:pointer;
+  transition:all .25s}
+.filter-btn:hover{color:var(--text)}
+.filter-btn.active{background:var(--gold);color:#0a0a0c}
 
-/* ── Subscribe Modal ────────────────────────────────────── */
-#thanks {
-  position: fixed; inset: 0; z-index: 10; display: none;
-  align-items: center; justify-content: center; padding: 20px;
-  background: rgba(5,5,5,0.82); backdrop-filter: blur(4px);
-}
-#thanks.show { display: flex; }
-.card {
-  max-width: 420px; width: 100%; background: var(--panel);
-  border: 1px solid var(--border); border-radius: 20px; padding: 40px 32px;
-  text-align: center; animation: pop .28s ease;
-}
-@keyframes pop { from { transform: scale(.92); opacity: 0 } to { transform: scale(1); opacity: 1 } }
-.card .emoji { font-size: 54px; }
-.card h3 { font-family: 'Anton', Impact, sans-serif; font-size: 30px; margin: 14px 0 8px; }
-.card p { color: var(--muted); font-size: 15px; line-height: 1.5; }
-.card button {
-  margin-top: 24px; background: var(--cyan); color: #000; border: none;
-  font-weight: 800; font-size: 14px; padding: 12px 34px; border-radius: 999px; cursor: pointer;
-}
+/* ── Carousel Section ────────────────────────────────────── */
+.carousel-section{flex:1;padding:48px 0 80px}
+.section-header{display:flex;align-items:baseline;justify-content:space-between;max-width:1200px;margin:0 auto 32px;padding:0 48px}
+.section-title{font-weight:300;font-size:28px;letter-spacing:-.3px}
+.section-count{color:var(--muted);font-size:13px;font-weight:500}
 
-/* ── Responsive Breakpoints ─────────────────────────────── */
-@media (max-width: 480px) {
-  :root { --card-w: 150px; }
-  .carousel { gap: 10px; padding-left: 4px; }
-  .section-title { font-size: 24px; }
+/* ── 3D Carousel ─────────────────────────────────────────── */
+.carousel-viewport{perspective:1200px;overflow:hidden;padding:40px 0 60px;position:relative}
+.carousel-track{display:flex;justify-content:center;align-items:center;gap:0;position:relative;
+  transform-style:preserve-3d;transition:transform .5s cubic-bezier(.25,.1,.25,1);min-height:480px}
+
+/* ── Card ────────────────────────────────────────────────── */
+.card{position:absolute;width:280px;border-radius:16px;overflow:hidden;background:var(--card);
+  border:1px solid var(--border);cursor:pointer;transition:all .5s cubic-bezier(.25,.1,.25,1);
+  transform-style:preserve-3d;will-change:transform,opacity}
+.card.active{z-index:10;transform:translateX(0) scale(1) rotateY(0);opacity:1;
+  box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 0 1px rgba(201,168,76,.12)}
+.card.prev{z-index:5;transform:translateX(-340px) scale(.72) rotateY(18deg);opacity:.5;filter:brightness(.5)}
+.card.next{z-index:5;transform:translateX(340px) scale(.72) rotateY(-18deg);opacity:.5;filter:brightness(.5)}
+.card.far-prev{z-index:2;transform:translateX(-560px) scale(.5) rotateY(25deg);opacity:0;pointer-events:none}
+.card.far-next{z-index:2;transform:translateX(560px) scale(.5) rotateY(-25deg);opacity:0;pointer-events:none}
+.card.hidden{opacity:0;pointer-events:none;transform:translateX(0) scale(.3)}
+
+.card-thumb{position:relative;width:100%;aspect-ratio:9/16;overflow:hidden;background:#0d0d10}
+.card-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease,filter .4s ease}
+.card.active .card-thumb img{transform:scale(1.03)}
+.card:hover .card-thumb img{filter:brightness(.65)}
+
+/* Play overlay */
+.play-overlay{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transition:opacity .3s}
+.card:hover .play-overlay{opacity:1}
+.play-circle{width:64px;height:64px;border-radius:50%;background:rgba(201,168,76,.9);display:grid;place-items:center;
+  box-shadow:0 4px 24px rgba(0,0,0,.5);transition:transform .2s}
+.play-circle svg{width:24px;height:24px;fill:#0a0a0c;margin-left:3px}
+.card:hover .play-circle{transform:scale(1.08)}
+
+/* Quality badge */
+.quality-badge{position:absolute;top:12px;right:12px;padding:4px 10px;border-radius:6px;
+  background:rgba(0,0,0,.65);backdrop-filter:blur(8px);font-size:10px;font-weight:700;
+  letter-spacing:.5px;color:var(--gold);border:1px solid rgba(201,168,76,.2)}
+
+/* Duration */
+.duration-badge{position:absolute;bottom:12px;right:12px;padding:4px 10px;border-radius:6px;
+  background:rgba(0,0,0,.65);backdrop-filter:blur(8px);font-size:11px;font-weight:600;color:#fff}
+
+/* Card meta */
+.card-meta{padding:16px 18px}
+.card-title{font-size:14px;font-weight:600;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;
+  -webkit-box-orient:vertical;overflow:hidden;margin-bottom:8px}
+.card-info{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted)}
+.card-info .cat{color:var(--gold);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.card-info .sep{opacity:.3}
+
+/* ── Carousel Controls ───────────────────────────────────── */
+.carousel-controls{display:flex;align-items:center;justify-content:center;gap:24px;margin-top:12px}
+.carousel-btn{width:48px;height:48px;border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--text);font-size:20px;cursor:pointer;display:grid;place-items:center;transition:all .2s}
+.carousel-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+.carousel-btn:disabled{opacity:.25;cursor:default;border-color:var(--border);color:var(--muted)}
+.dots{display:flex;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .25s}
+.dot.active{background:var(--gold);width:24px;border-radius:4px}
+
+/* ── Drag Hint ───────────────────────────────────────────── */
+.drag-hint{text-align:center;color:var(--muted);font-size:12px;letter-spacing:1px;margin-top:16px;opacity:.5}
+
+/* ── Player Modal ────────────────────────────────────────── */
+.player-modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;
+  background:rgba(5,5,5,.92);backdrop-filter:blur(12px);opacity:0;transition:opacity .4s}
+.player-modal.open{display:flex;opacity:1}
+.player-inner{width:90vw;max-width:900px;position:relative;animation:playerIn .4s cubic-bezier(.25,.1,.25,1)}
+@keyframes playerIn{from{transform:scale(.9) translateY(20px);opacity:0}to{transform:none;opacity:1}}
+.player-video{width:100%;aspect-ratio:9/16;max-height:80vh;border-radius:16px;overflow:hidden;
+  background:#000;position:relative;margin:0 auto}
+.player-video iframe,.player-video video{width:100%;height:100%;border:0;display:block}
+.player-close{position:absolute;top:-48px;right:0;width:40px;height:40px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#fff;font-size:18px;
+  cursor:pointer;display:grid;place-items:center;transition:all .2s}
+.player-close:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}
+.player-info{margin-top:20px;text-align:center}
+.player-title{font-size:20px;font-weight:600;margin-bottom:8px}
+.player-meta{color:var(--muted);font-size:13px;display:flex;align-items:center;justify-content:center;gap:12px}
+.player-meta .gold{color:var(--gold);font-weight:600}
+.player-actions{display:flex;gap:12px;justify-content:center;margin-top:16px}
+.player-action{padding:8px 20px;border-radius:999px;border:1px solid var(--border);background:transparent;
+  color:var(--text);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;text-decoration:none}
+.player-action:hover{border-color:var(--gold);color:var(--gold)}
+.player-action.primary{background:var(--gold);color:#0a0a0c;border-color:var(--gold)}
+.player-action.primary:hover{background:#d4b354}
+
+/* ── Footer ──────────────────────────────────────────────── */
+footer{padding:32px 48px;border-top:1px solid var(--border);display:flex;align-items:center;
+  justify-content:space-between;color:var(--muted);font-size:12px}
+footer a{color:var(--gold);text-decoration:none;transition:opacity .2s}
+footer a:hover{opacity:.7}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media(max-width:768px){
+  header{padding:20px 24px 0}
+  nav{gap:20px}
+  nav a{font-size:11px}
+  .hero{padding:48px 20px 32px}
+  .hero h1{font-size:32px}
+  .card{width:220px}
+  .card.prev{transform:translateX(-260px) scale(.7) rotateY(15deg)}
+  .card.next{transform:translateX(260px) scale(.7) rotateY(-15deg)}
+  .section-header{padding:0 24px}
+  .filters{margin:24px 16px 0}
+  footer{flex-direction:column;gap:12px;text-align:center;padding:24px}
 }
-@media (min-width: 481px) and (max-width: 768px) {
-  :root { --card-w: 165px; }
-  .carousel { gap: 14px; }
-}
-@media (min-width: 769px) and (max-width: 1024px) {
-  :root { --card-w: 190px; }
-}
-@media (min-width: 1025px) {
-  :root { --card-w: 195px; }
+@media(max-width:480px){
+  .card{width:180px}
+  .card.prev{transform:translateX(-210px) scale(.65) rotateY(12deg)}
+  .card.next{transform:translateX(210px) scale(.65) rotateY(-12deg)}
+  .card.far-prev,.card.far-next{display:none}
 }
 </style>
 </head>
 <body>
 <div class="veil"></div>
 
-<div id="thanks">
-  <div class="card">
-    <div class="emoji">🎉</div>
-    <h3>Thanks for subscribing!</h3>
-    <p>You're now part of NEWS-MONSTER. New video news drops here every 30 minutes — hit the bell 🔔 on our channel so you never miss one.</p>
-    <button onclick="document.getElementById('thanks').classList.remove('show')">Awesome!</button>
-  </div>
-</div>
-
-<div class="wrap">
+<div class="app">
   <header>
-    <div class="logo">NM</div>
-    <div>
-      <h1>NEWS-MONSTER</h1>
-      <div class="tag">Breaking News Network</div>
+    <div class="logo">
+      <div class="logo-mark">NM</div>
+      <div class="logo-text">NEWS-MONSTER</div>
     </div>
+    <nav>
+      <a href="https://www.youtube.com/channel/UC4UC7z16EtqtI-TJzeGZKjQ" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://www.linkedin.com/company/106599590" target="_blank" rel="noopener">LinkedIn</a>
+    </nav>
   </header>
 
   <section class="hero">
-    <div class="badge">⚡ NEW VIDEO EVERY 30 MINUTES</div>
-    <h2>BREAKING NEWS,<br><span>AROUND THE CLOCK</span></h2>
-    <p>Video news shorts — technology, Tesla, Apple, Wall Street & more. The world moves fast. NEWS-MONSTER keeps up for you.</p>
-
-    <div class="sub-row">
-      <button id="subBtn"><span class="icon">▶</span> SUBSCRIBE</button>
-      <a class="official-wrap" href="https://www.youtube.com/channel/UC4UC7z16EtqtI-TJzeGZKjQ" target="_blank" rel="noopener">Open on YouTube</a>
-      <a class="li-wrap" href="https://www.linkedin.com/company/106599590" target="_blank" rel="noopener">Follow on LinkedIn</a>
-      <div class="sub-note">Tap subscribe — you'll get a shout-out next upload 🚀</div>
-    </div>
-
-    <div class="stats">
-      <div class="stat"><b>48</b><small>Videos / day</small></div>
-      <div class="stat"><b>6</b><small>Categories</small></div>
-      <div class="stat"><b>24/7</b><small>Live Coverage</small></div>
-    </div>
+    <div class="hero-badge"><span class="dot"></span> AUTONOMOUS VIDEO FACTORY</div>
+    <h1>The <em>Collection</em></h1>
+    <p>News and music, produced autonomously. Every 30 minutes, a new drop.</p>
   </section>
 
-  <section>
-    <div class="section-title">LATEST DROPS <span class="live">LIVE</span></div>
-    <div class="section-sub">Fresh drops every 30 minutes — what will change next?</div>
-    <div class="carousel-wrap">
-      <button class="carousel-nav prev" aria-label="Scroll left">&#8249;</button>
-      <div id="videos" class="carousel">
-        <div class="vid"><div class="skeleton"></div><div class="meta"><div class="skeleton" style="height:14px;width:70%;border-radius:4px;margin-bottom:6px"></div><div class="skeleton" style="height:10px;width:40%;border-radius:4px"></div></div></div>
-        <div class="vid"><div class="skeleton"></div><div class="meta"><div class="skeleton" style="height:14px;width:70%;border-radius:4px;margin-bottom:6px"></div><div class="skeleton" style="height:10px;width:40%;border-radius:4px"></div></div></div>
-        <div class="vid"><div class="skeleton"></div><div class="meta"><div class="skeleton" style="height:14px;width:70%;border-radius:4px;margin-bottom:6px"></div><div class="skeleton" style="height:10px;width:40%;border-radius:4px"></div></div></div>
-        <div class="vid"><div class="skeleton"></div><div class="meta"><div class="skeleton" style="height:14px;width:70%;border-radius:4px;margin-bottom:6px"></div><div class="skeleton" style="height:10px;width:40%;border-radius:4px"></div></div></div>
-        <div class="vid"><div class="skeleton"></div><div class="meta"><div class="skeleton" style="height:14px;width:70%;border-radius:4px;margin-bottom:6px"></div><div class="skeleton" style="height:10px;width:40%;border-radius:4px"></div></div></div>
-      </div>
-      <button class="carousel-nav next" aria-label="Scroll right">&#8250;</button>
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="news">News</button>
+    <button class="filter-btn" data-filter="music">Music</button>
+  </div>
+
+  <section class="carousel-section">
+    <div class="section-header">
+      <div class="section-title" id="sectionTitle">Latest Drops</div>
+      <div class="section-count" id="sectionCount"></div>
     </div>
+
+    <div class="carousel-viewport">
+      <div class="carousel-track" id="track"></div>
+    </div>
+
+    <div class="carousel-controls">
+      <button class="carousel-btn" id="prevBtn" aria-label="Previous">&#8249;</button>
+      <div class="dots" id="dots"></div>
+      <button class="carousel-btn" id="nextBtn" aria-label="Next">&#8250;</button>
+    </div>
+    <div class="drag-hint">DRAG OR SWIPE TO BROWSE</div>
   </section>
 
   <footer>
-    <div><b>NEWS-MONSTER</b> · <a href="https://www.youtube.com/channel/UC4UC7z16EtqtI-TJzeGZKjQ" style="color:var(--cyan);text-decoration:none">YouTube Channel</a> · <a href="https://www.linkedin.com/company/106599590" style="color:var(--cyan);text-decoration:none">LinkedIn</a></div>
-    <div style="margin-top:6px">Technology, Science, Sports, Politics & Future Tech</div>
+    <div><strong>NEWS-MONSTER</strong> &middot; Autonomous Video Factory</div>
+    <div><a href="https://www.youtube.com/channel/UC4UC7z16EtqtI-TJzeGZKjQ">Subscribe on YouTube</a></div>
   </footer>
 </div>
 
+<!-- Player Modal -->
+<div class="player-modal" id="playerModal">
+  <div class="player-inner">
+    <button class="player-close" id="playerClose">&times;</button>
+    <div class="player-video" id="playerVideo"></div>
+    <div class="player-info">
+      <div class="player-title" id="playerTitle"></div>
+      <div class="player-meta" id="playerMeta"></div>
+      <div class="player-actions" id="playerActions"></div>
+    </div>
+  </div>
+</div>
+
 <script>
-const CHANNEL_ID = 'UC4UC7z16EtqtI-TJzeGZKjQ'
-const CHANNEL_URL = 'https://www.youtube.com/channel/' + CHANNEL_ID
+(function() {
+  'use strict';
 
-const subBtn = document.getElementById('subBtn')
-let openedSub = false
-function thanks() { document.getElementById('thanks').classList.add('show') }
-subBtn.addEventListener('click', () => { openedSub = true; window.open(CHANNEL_URL + '?sub_confirmation=1', '_blank'); setTimeout(thanks, 9000) })
-window.addEventListener('focus', () => { if (openedSub) { openedSub = false; thanks() } })
-document.addEventListener('visibilitychange', () => { if (!document.hidden && openedSub) { openedSub = false; thanks() } })
+  // ── State ──────────────────────────────────────────────
+  let allVideos = [];
+  let filtered = [];
+  let currentIndex = 0;
+  let activeFilter = 'all';
+  let isDragging = false;
+  let startX = 0;
+  let dragOffset = 0;
 
-// ── Carousel Nav ──────────────────────────────────────────
-const carousel = document.getElementById('videos')
-const prevBtn = document.querySelector('.carousel-nav.prev')
-const nextBtn = document.querySelector('.carousel-nav.next')
-const scrollAmt = () => carousel.querySelector('.vid')?.offsetWidth + 16 || 200
+  const track = document.getElementById('track');
+  const dots = document.getElementById('dots');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const playerModal = document.getElementById('playerModal');
+  const playerVideo = document.getElementById('playerVideo');
+  const playerTitle = document.getElementById('playerTitle');
+  const playerMeta = document.getElementById('playerMeta');
+  const playerActions = document.getElementById('playerActions');
+  const playerClose = document.getElementById('playerClose');
+  const sectionTitle = document.getElementById('sectionTitle');
+  const sectionCount = document.getElementById('sectionCount');
 
-// Snap-aligned scroll: round to nearest card boundary so snap points
-// never land between cards (Safari edge case with smooth behavior).
-function snapScroll(dir) {
-  const cardW = scrollAmt()
-  const current = carousel.scrollLeft
-  const target = dir === 'next'
-    ? Math.ceil(current / cardW) * cardW
-    : Math.floor(current / cardW) * cardW
-  carousel.scrollTo({ left: target, behavior: 'smooth' })
-}
-prevBtn.addEventListener('click', () => snapScroll('prev'))
-nextBtn.addEventListener('click', () => snapScroll('next'))
-
-// ── Load Videos ───────────────────────────────────────────
-let allVideos = []
-async function loadVideos() {
-  try {
-    const res = await fetch('videos.json?ts=' + Date.now())
-    if (!res.ok) throw new Error(res.status)
-    const data = await res.json()
-    allVideos = data.videos || []
-    if (!allVideos.length) {
-      carousel.innerHTML = '<div class="empty">No videos yet — first drop is coming 🚀</div>'
-      return
+  // ── Load Videos ────────────────────────────────────────
+  async function loadVideos() {
+    try {
+      const res = await fetch('videos.json?ts=' + Date.now());
+      if (!res.ok) throw new Error(res.status);
+      const data = await res.json();
+      allVideos = (data.videos || []).map(v => ({
+        ...v,
+        type: detectType(v),
+        quality: detectQuality(v),
+      }));
+      filtered = [...allVideos];
+      buildCarousel();
+    } catch {
+      track.innerHTML = '<div style="color:var(--muted);text-align:center;padding:60px 0;width:100%">Could not load videos.</div>';
     }
-    renderVideos(allVideos)
-    document.title = 'NEWS-MONSTER — ' + allVideos.length + ' recent videos'
-  } catch (e) {
-    carousel.innerHTML = '<div class="empty">Could not load videos right now.</div>'
   }
-}
 
-function renderVideos(videos) {
-  carousel.innerHTML = videos.map((v, i) => {
-    const tags = buildTags(v)
-    return `
-    <div class="vid" data-index="${i}">
-      <div class="youtube-player" data-id="${v.id}">
-        <img src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" alt="${escHtml(v.title)}" loading="lazy">
-        <button class="play-btn" aria-label="Play Video">&#9654;</button>
-        <div class="quick-actions">
-          <button onclick="event.stopPropagation();copyLink('${v.id}')" title="Copy Link">🔗</button>
-          <button onclick="event.stopPropagation();openYouTube('${v.id}')" title="Open on YT">↗</button>
+  function detectType(v) {
+    const t = (v.title || '').toLowerCase();
+    if (t.includes('music') || t.includes('beat') || t.includes('lofi') || t.includes('synth') || t.includes('ambient')) return 'music';
+    return 'news';
+  }
+
+  function detectQuality(v) {
+    const t = (v.title || '').toLowerCase();
+    if (t.includes('8k')) return '8K';
+    if (t.includes('4k')) return '4K';
+    return 'HD';
+  }
+
+  // ── Filter ─────────────────────────────────────────────
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelector('.filter-btn.active').classList.remove('active');
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      filtered = activeFilter === 'all' ? [...allVideos] : allVideos.filter(v => v.type === activeFilter);
+      currentIndex = 0;
+      sectionTitle.textContent = activeFilter === 'all' ? 'Latest Drops'
+        : activeFilter === 'news' ? 'News Collection' : 'Music Collection';
+      sectionCount.textContent = filtered.length + ' video' + (filtered.length !== 1 ? 's' : '');
+      buildCarousel();
+    });
+  });
+
+  // ── Build Carousel ─────────────────────────────────────
+  function buildCarousel() {
+    if (!filtered.length) {
+      track.innerHTML = '<div style="color:var(--muted);text-align:center;padding:60px 0;width:100%">No videos in this category.</div>';
+      dots.innerHTML = '';
+      return;
+    }
+
+    track.innerHTML = filtered.map((v, i) => `
+      <div class="card ${i === 0 ? 'active' : i === 1 ? 'next' : i === filtered.length - 1 ? 'prev' : 'hidden'}"
+           data-index="${i}" data-id="${v.id}">
+        <div class="card-thumb">
+          <img src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" alt="${esc(v.title)}" loading="${i < 3 ? 'eager' : 'lazy'}">
+          <div class="play-overlay"><div class="play-circle"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div></div>
+          <div class="quality-badge">${v.quality}</div>
+          <div class="duration-badge">${v.publishedLabel || ''}</div>
         </div>
-        <div class="status-pill">${v.publishedLabel || 'LIVE'}</div>
+        <div class="card-meta">
+          <div class="card-title">${esc(v.title)}</div>
+          <div class="card-info">
+            <span class="cat">${v.type}</span>
+            <span class="sep">&middot;</span>
+            <span>${v.quality}</span>
+          </div>
+        </div>
       </div>
-      <div class="meta">
-        <div class="t">${escHtml(v.title)}</div>
-        <div class="tags">${tags}</div>
-      </div>
-    </div>`
-  }).join('')
-}
+    `).join('');
 
-function buildTags(v) {
-  const t = []
-  const title = (v.title || '').toLowerCase()
-  if (title.includes('ai') || title.includes('gpt') || title.includes('openai')) t.push('AI')
-  if (title.includes('tesla') || title.includes('elon')) t.push('Tesla')
-  if (title.includes('apple') || title.includes('iphone')) t.push('Apple')
-  if (title.includes('stock') || title.includes('market') || title.includes('s&p')) t.push('Markets')
-  if (title.includes('crypto') || title.includes('bitcoin')) t.push('Crypto')
-  if (title.includes('nasa') || title.includes('space') || title.includes('mars')) t.push('Space')
-  if (title.includes('robot')) t.push('Robotics')
-  if (t.length === 0) t.push('News')
-  return t.slice(0, 3).map(tag => `<span>${tag}</span>`).join('')
-}
+    // Build dots
+    const maxDots = Math.min(filtered.length, 12);
+    dots.innerHTML = Array.from({length: maxDots}, (_, i) =>
+      `<div class="dot ${i === 0 ? 'active' : ''}" data-index="${i}"></div>`
+    ).join('');
 
-function escHtml(s) { return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') }
-
-// ── Facade: load iframe on click ──────────────────────────
-document.addEventListener('click', function(e) {
-  const player = e.target.closest('.youtube-player')
-  if (!player || e.target.closest('.quick-actions')) return
-  const id = player.dataset.id
-  const iframe = document.createElement('iframe')
-  iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`
-  iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-  iframe.allowFullscreen = true
-  iframe.referrerPolicy = 'strict-origin-when-cross-origin'
-  iframe.title = player.querySelector('img')?.alt || 'YouTube video'
-  player.innerHTML = ''
-  player.appendChild(iframe)
-})
-
-// ── Quick Actions ─────────────────────────────────────────
-function copyLink(id) {
-  navigator.clipboard?.writeText(`https://youtube.com/shorts/${id}`)
-}
-function openYouTube(id) {
-  window.open(`https://youtube.com/shorts/${id}`, '_blank')
-}
-
-// ── Hover-to-Play Preview (lightweight) ───────────────────
-let hoverTimer = null
-let currentPreview = null
-
-document.addEventListener('mouseenter', function(e) {
-  const player = e.target.closest('.youtube-player')
-  if (!player || player.querySelector('iframe')) return
-  const id = player.dataset.id
-  clearTimeout(hoverTimer)
-  hoverTimer = setTimeout(() => {
-    if (player.querySelector('iframe')) return
-    const img = player.querySelector('img')
-    if (img) {
-      img.src = `https://i.ytimg.com/vi/${id}/mqdefault.jpg`
-    }
-  }, 400)
-}, true)
-
-document.addEventListener('mouseleave', function(e) {
-  const player = e.target.closest('.youtube-player')
-  if (!player) return
-  clearTimeout(hoverTimer)
-  if (!player.querySelector('iframe')) {
-    const img = player.querySelector('img')
-    if (img) img.src = `https://i.ytimg.com/vi/${player.dataset.id}/hqdefault.jpg`
+    updatePositions();
+    bindCardClicks();
   }
-}, true)
 
-// ── Dynamic Prefetch (70% scroll) ─────────────────────────
-let prefetched = false
-let hasScrolled = false
-carousel.addEventListener('scroll', () => { hasScrolled = true }, { passive: true, once: true })
+  // ── Position Cards ─────────────────────────────────────
+  function updatePositions() {
+    const cards = track.querySelectorAll('.card');
+    cards.forEach((card, i) => {
+      card.className = 'card';
+      const diff = i - currentIndex;
+      if (diff === 0) card.classList.add('active');
+      else if (diff === 1) card.classList.add('next');
+      else if (diff === -1) card.classList.add('prev');
+      else if (diff > 1 && diff <= 3) card.classList.add('far-next');
+      else if (diff < -1 && diff >= -3) card.classList.add('far-prev');
+      else card.classList.add('hidden');
+    });
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    // Only prefetch after user has actually scrolled — prevents firing on
-    // wide screens where 70% of cards are visible on initial render.
-    if (entry.isIntersecting && hasScrolled && !prefetched) {
-      const idx = parseInt(entry.target.dataset.index || '0')
-      if (idx >= allVideos.length * 0.7) {
-        prefetched = true
-        observer.disconnect()
-      }
+    // Update dots
+    const maxDots = Math.min(filtered.length, 12);
+    const dotScale = filtered.length > 12 ? Math.floor(currentIndex / filtered.length * maxDots) : currentIndex;
+    dots.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('active', i === Math.min(dotScale, maxDots - 1));
+    });
+
+    prevBtn.disabled = currentIndex <= 0;
+    nextBtn.disabled = currentIndex >= filtered.length - 1;
+  }
+
+  // ── Navigation ─────────────────────────────────────────
+  function goTo(idx) {
+    currentIndex = Math.max(0, Math.min(filtered.length - 1, idx));
+    updatePositions();
+  }
+
+  prevBtn.addEventListener('click', () => goTo(currentIndex - 1));
+  nextBtn.addEventListener('click', () => goTo(currentIndex + 1));
+
+  dots.addEventListener('click', e => {
+    const dot = e.target.closest('.dot');
+    if (dot) goTo(parseInt(dot.dataset.index));
+  });
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (playerModal.classList.contains('open')) {
+      if (e.key === 'Escape') closePlayer();
+      return;
     }
-  })
-}, { threshold: 0.5, root: carousel })
+    if (e.key === 'ArrowLeft') goTo(currentIndex - 1);
+    if (e.key === 'ArrowRight') goTo(currentIndex + 1);
+  });
 
-// Observe last 3 cards for prefetch trigger
-function observePrefetch() {
-  const vids = carousel.querySelectorAll('.vid')
-  const start = Math.max(0, vids.length - 3)
-  for (let i = start; i < vids.length; i++) observer.observe(vids[i])
-}
+  // ── Drag / Swipe ───────────────────────────────────────
+  const viewport = document.querySelector('.carousel-viewport');
 
-loadVideos().then(() => setTimeout(observePrefetch, 500))
+  viewport.addEventListener('mousedown', e => { isDragging = true; startX = e.clientX; dragOffset = 0; });
+  viewport.addEventListener('mousemove', e => { if (!isDragging) return; dragOffset = e.clientX - startX; });
+  viewport.addEventListener('mouseup', () => { if (!isDragging) return; isDragging = false; handleDragEnd(); });
+  viewport.addEventListener('mouseleave', () => { if (isDragging) { isDragging = false; handleDragEnd(); } });
+
+  viewport.addEventListener('touchstart', e => { startX = e.touches[0].clientX; dragOffset = 0; }, { passive: true });
+  viewport.addEventListener('touchmove', e => { dragOffset = e.touches[0].clientX - startX; }, { passive: true });
+  viewport.addEventListener('touchend', handleDragEnd);
+
+  function handleDragEnd() {
+    if (Math.abs(dragOffset) > 50) {
+      goTo(currentIndex + (dragOffset < 0 ? 1 : -1));
+    }
+    dragOffset = 0;
+  }
+
+  // Mouse wheel
+  let wheelTimeout;
+  viewport.addEventListener('wheel', e => {
+    e.preventDefault();
+    clearTimeout(wheelTimeout);
+    wheelTimeout = setTimeout(() => {
+      goTo(currentIndex + (e.deltaY > 0 || e.deltaX > 0 ? 1 : -1));
+    }, 50);
+  }, { passive: false });
+
+  // ── Card Click → Player ────────────────────────────────
+  function bindCardClicks() {
+    track.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', e => {
+        if (e.target.closest('.play-overlay') || e.target.closest('.card-thumb') || e.target.closest('.card')) {
+          openPlayer(parseInt(card.dataset.index));
+        }
+      });
+    });
+  }
+
+  // ── Player Modal ───────────────────────────────────────
+  function openPlayer(idx) {
+    const v = filtered[idx];
+    if (!v) return;
+
+    playerVideo.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0"
+      allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;web-share"
+      allowfullscreen referrerpolicy="strict-origin-when-cross-origin" title="${esc(v.title)}"></iframe>`;
+
+    playerTitle.textContent = v.title;
+    playerMeta.innerHTML = `<span class="gold">${v.type.toUpperCase()}</span>
+      <span>&middot;</span><span>${v.quality}</span>
+      <span>&middot;</span><span>${v.publishedLabel || ''}</span>`;
+
+    playerActions.innerHTML = `
+      <a class="player-action primary" href="https://youtube.com/shorts/${v.id}" target="_blank" rel="noopener">Watch on YouTube</a>
+      <button class="player-action" onclick="navigator.clipboard?.writeText('https://youtube.com/shorts/${v.id}')">Copy Link</button>
+    `;
+
+    playerModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePlayer() {
+    playerModal.classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(() => { playerVideo.innerHTML = ''; }, 400);
+  }
+
+  playerClose.addEventListener('click', closePlayer);
+  playerModal.addEventListener('click', e => { if (e.target === playerModal) closePlayer(); });
+
+  // ── Utility ────────────────────────────────────────────
+  function esc(s) { return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  // ── Init ───────────────────────────────────────────────
+  loadVideos();
+})();
 </script>
 </body>
 </html>

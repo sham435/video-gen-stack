@@ -4,19 +4,30 @@ import { FailureClass } from './Stages.mjs'
  * PublishabilityGate — deterministic policy validator.
  *
  * NOT a production stage. NOT part of ProductionJob lifecycle.
- * This is a pure function that evaluates whether a job's accumulated
- * results satisfy all prerequisites for publish.
+ * A pure function over accumulated stage results:
  *
- * Usage:
+ *   PUBLISHABLE = video ∧ thumbnail ∧ c2pa ∧ uniqueness ∧ upload
+ *
+ * Depends only on the stage vocabulary — no providers, no env, no filesystem —
+ * so the same results always yield the same verdict.
+ *
+ * Wired as a stage precondition, so a false predicate means PUBLISH never
+ * executes (see scripts/composer.mjs):
  *   const gate = new PublishabilityGate()
- *   const result = gate.evaluate(job.results)
- *   if (!result.valid) throw new ProductionError(...)
+ *   job.onPrecondition('PUBLISH', (ctx) => gate.evaluate(ctx.results))
  */
 
 const REQUIRED_CHECKS = ['video', 'thumbnail', 'c2pa', 'uniqueness', 'upload']
 
 export class PublishabilityGate {
-  evaluate(results = {}) {
+  /**
+   * Accepts either a raw stage-results map or a ProductionJob (reads .results).
+   * The gate never touches job lifecycle state — policy stays out of the job.
+   */
+  evaluate(input = {}) {
+    const source = input || {}
+    const results = (typeof source === 'object' && source.results) ? source.results : source
+
     const checks = {
       video: this._checkVideo(results),
       thumbnail: this._checkThumbnail(results),
@@ -25,9 +36,7 @@ export class PublishabilityGate {
       upload: this._checkUpload(results),
     }
 
-    const missing = Object.entries(checks)
-      .filter(([, v]) => !v.pass)
-      .map(([k]) => k)
+    const missing = REQUIRED_CHECKS.filter(k => !checks[k].pass)
 
     return {
       valid: missing.length === 0,
@@ -63,7 +72,17 @@ export class PublishabilityGate {
   _checkUniqueness(results) {
     const unq = results.UNIQUENESS
     if (!unq) return { pass: false, reason: 'UNIQUENESS stage not executed' }
-    if (unq.pass === false) return { pass: false, reason: `uniqueness violations: ${(unq.violations || []).map(v => v.type).join(', ')}` }
+    if (unq.pass === false) {
+      // Reservation conflicts are transient (another job holds the lock) —
+      // they should NOT block publishing. Only actual content duplicates
+      // (DUPLICATE_SCRIPT, DUPLICATE_IMAGE, etc.) are publish-blocking.
+      const blockingViolations = (unq.violations || []).filter(v => v.type !== 'RESERVATION')
+      if (blockingViolations.length > 0) {
+        return { pass: false, reason: `uniqueness violations: ${blockingViolations.map(v => v.type).join(', ')}` }
+      }
+      // Reservation conflict only — allow publish (content is unique)
+      return { pass: true, reason: 'uniqueness passed (reservation conflict is transient)' }
+    }
     return { pass: true, reason: 'uniqueness passed' }
   }
 

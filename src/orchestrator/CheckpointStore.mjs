@@ -76,10 +76,18 @@ export class CheckpointStore {
     })
   }
 
-  appendTrace(record) {
+  /**
+   * Append a trace record, optionally merging artifacts in the same atomic write.
+   * One write keeps trace + artifacts consistent: a crash can never leave an
+   * artifact registered without the trace record that produced it.
+   */
+  appendTrace(record, artifacts = null) {
     const state = this.load() || { stages: {} }
     if (!state.stageTrace) state.stageTrace = []
     state.stageTrace.push(record)
+    if (artifacts && Object.keys(artifacts).length > 0) {
+      state.artifacts = { ...(state.artifacts || {}), ...artifacts }
+    }
     this.save(state)
     return record
   }

@@ -6,6 +6,7 @@ import { fetchBestImage } from './pexels.mjs'
 import { NewsBroadcastEngine } from '../src/index.mjs'
 import { validateRenderOutput } from '../src/video/validateOutput.mjs'
 import { resolveRenderManifest, resolveRenderGates } from '../src/pipeline/RenderManifest.mjs'
+import { ChannelController } from '../src/governor/ChannelController.mjs'
 
 // ── Experiment + Metrics + Manifest (loaded per-run when enabled) ─────
 
@@ -262,6 +263,13 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
 
       // ── ProductionJob orchestrator — stage checkpoints + retry + quarantine ──
       const job = new ProductionJob(article, { outDir, governor })
+
+      // ── Channel control plane — shared YouTube quota coordination ──
+      let channel = null
+      let channelReservation = null
+      try {
+        channel = new ChannelController()
+      } catch { /* channel control unavailable — proceed without coordination */ }
 
       // ── DISCOVER — AI production strategy + deterministic preflight ──
       job.onStage('DISCOVER', async (ctx) => {
@@ -555,6 +563,24 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
       })
 
       // ── UPLOAD — consumes plan.providerPreferences for governor-aware selection ──
+      // Channel reservation: reserve slot just before external upload (after UNIQUENESS)
+      if (channel) {
+        job.onPrecondition('UPLOAD', async (ctx) => {
+          try {
+            const check = await channel.canReserve('news')
+            if (!check.allowed) {
+              console.log(`[CHANNEL] BLOCK — ${check.reason}`)
+              return { valid: false, checks: { channel: false }, missing: [`channel: ${check.reason}`] }
+            }
+            console.log(`[CHANNEL] PASS — ${check.remaining} slots remaining for news`)
+            return { valid: true, checks: { channel: true }, missing: [] }
+          } catch (e) {
+            console.warn(`[CHANNEL] precondition check failed (proceeding): ${e.message}`)
+            return { valid: true, checks: { channel: true }, missing: [] }
+          }
+        })
+      }
+
       job.onStage('UPLOAD', async (ctx) => {
         const { engine } = ctx.results.RENDER
         const plan = ctx.results.DISCOVER?.plan
@@ -602,14 +628,31 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         const uploadStart = Date.now()
         let result
         try {
+          // Channel reservation: claim slot before external upload
+          if (channel) {
+            try {
+              channelReservation = await channel.reserve('news', ctx.jobId, { title: uploadTitle })
+              console.log(`[CHANNEL] RESERVED slot ${channelReservation.publicationId} for job ${ctx.jobId}`)
+            } catch (e) {
+              console.warn(`[CHANNEL] reserve failed (proceeding without coordination): ${e.message}`)
+            }
+          }
+
           result = await publishVideo({
             videoUrl: `data:video/mp4;base64,${buffer.toString('base64')}`,
             title: uploadTitle, description: desc,
             privacy: process.env.YOUTUBE_PRIVACY || 'public',
-            thumbnailPath: ctx.results.C2PA?.path || ctx.results.THUMBNAIL?.selected?.path,
+            // Always use the ORIGINAL thumbnail for YouTube — C2PA-signed PNGs
+            // have embedded manifest data that YouTube's thumbnail API can't render.
+            thumbnailPath: ctx.results.THUMBNAIL?.selected?.path || ctx.results.C2PA?.path,
             niche: nicheDecision?.key || null,
           })
         } catch (uploadErr) {
+          // Release channel slot on failure
+          if (channel && channelReservation) {
+            try { await channel.release('news', ctx.jobId) } catch { /* best-effort */ }
+            channelReservation = null
+          }
           if (ctx.governor) ctx.governor.recordFail(ctx.jobId, 'youtube.upload', 'youtube', uploadErr, Date.now() - uploadStart)
           throw uploadErr
         }
@@ -617,6 +660,21 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         // Journal: record remote_id immediately after successful upload
         if (ctx.governor) {
           ctx.governor.recordComplete(ctx.jobId, 'youtube.upload', 'youtube', result.videoId, 'uploaded', Date.now() - uploadStart)
+        }
+
+        // Commit channel reservation
+        if (channel && channelReservation) {
+          try {
+            await channel.commit('news', ctx.jobId, channelReservation.publicationId, {
+              youtubeVideoId: result.videoId,
+              title: uploadTitle,
+              artifactId: `artifact:video:${ctx.jobId}`,
+            })
+            console.log(`[CHANNEL] COMMITTED publication ${channelReservation.publicationId} → ${result.videoId}`)
+          } catch (e) {
+            console.warn(`[CHANNEL] commit failed (upload succeeded): ${e.message}`)
+          }
+          channelReservation = null
         }
 
         console.log(`[UPLOAD] videoId=${result.videoId} url=${result.url} niche=${result.niche || 'none'} thumbnail=${result.thumbnailUploaded ? 'uploaded' : result.lastError ? 'FAILED: ' + result.lastError : 'skipped'}`)
