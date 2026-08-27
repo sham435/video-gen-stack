@@ -802,38 +802,27 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           }
         }
 
-        // 2. YouTube thumbnail verification (read-only — upload already done in UPLOAD stage)
-        let thumbnailResult = { ok: false, reason: 'skipped' }
+        // 2. YouTube thumbnail verification (propagation-aware with retries)
+        let thumbnailResult = { state: 'VIDEO_NOT_VISIBLE_YET', hasCustomThumbnail: false, verifiedUrl: null }
         const masterThumb = ctx.results.THUMBNAIL?.selected?.path || null
         if (masterThumb && process.env.YOUTUBE_OAUTH_TOKEN) {
           try {
-            // Verify YouTube accepted the custom thumbnail via videos.list
-            const verifyRes = await fetch(
-              `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,snippet&id=${videoId}`,
-              {
-                headers: { 'Authorization': `Bearer ${process.env.YOUTUBE_OAUTH_TOKEN}` },
-                signal: AbortSignal.timeout(10000),
-              }
-            )
-            const verifyData = await verifyRes.json()
-            const video = verifyData.items?.[0]
-            if (video) {
-              const hasCustom = video.contentDetails?.hasCustomThumbnail === true
-              const thumbs = video.snippet?.thumbnails || {}
-              const verifiedUrl = thumbs.maxres?.url || thumbs.standard?.url || thumbs.high?.url || null
-              thumbnailResult = { ok: hasCustom, hasCustomThumbnail: hasCustom, verifiedUrl }
-              if (hasCustom) {
-                console.log(`[THUMBNAIL] VERIFIED — hasCustomThumbnail=true for ${videoId}`)
-                if (verifiedUrl) console.log(`   verified URL: ${verifiedUrl}`)
-              } else {
-                console.warn(`[THUMBNAIL] REJECTED — hasCustomThumbnail=false for ${videoId}`)
-              }
+            const { YouTubePropagationVerifier, VerifyState } = await import('../src/publishing/YouTubePropagationVerifier.mjs')
+            const verifier = new YouTubePropagationVerifier()
+            thumbnailResult = await verifier.verify({ videoId })
+
+            if (thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_ACCEPTED) {
+              console.log(`[THUMBNAIL] ${VerifyState.CUSTOM_THUMBNAIL_ACCEPTED} — hasCustomThumbnail=true for ${videoId}`)
+              if (thumbnailResult.verifiedUrl) console.log(`   verified URL: ${thumbnailResult.verifiedUrl}`)
+            } else if (thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_REJECTED) {
+              console.warn(`[THUMBNAIL] ${VerifyState.CUSTOM_THUMBNAIL_REJECTED} — video visible but no custom thumbnail`)
+            } else if (thumbnailResult.state === VerifyState.VIDEO_NOT_VISIBLE_YET) {
+              console.warn(`[THUMBNAIL] ${VerifyState.VIDEO_NOT_VISIBLE_YET} — ${thumbnailResult.attempts.length} attempts, ${thumbnailResult.durationMs}ms`)
             } else {
-              thumbnailResult = { ok: false, reason: 'video not found' }
-              console.warn(`[THUMBNAIL] verification failed — video ${videoId} not found`)
+              console.warn(`[THUMBNAIL] ${thumbnailResult.state}`)
             }
           } catch (e) {
-            thumbnailResult = { ok: false, reason: e.message }
+            thumbnailResult = { state: 'VERIFICATION_FAILED', error: e.message, hasCustomThumbnail: false, verifiedUrl: null }
             console.log(`[THUMBNAIL] verification error: ${e.message}`)
           }
         }
@@ -863,6 +852,8 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
 
         // 4. Record to PublicationLedger with verified thumbnail URL
         const verifiedThumbnailUrl = thumbnailResult.verifiedUrl || null
+        const thumbnailState = thumbnailResult.state || 'NOT_CHECKED'
+        const thumbnailAccepted = thumbnailState === 'CUSTOM_THUMBNAIL_ACCEPTED'
         try {
           const { PublicationLedger } = await import('../src/publishing/PublicationLedger.mjs')
           const ledgerPath = path.join(outDir, 'data', 'publication-ledger.json')
@@ -875,10 +866,10 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             thumbnail: verifiedThumbnailUrl || `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`,
             visibility: 'public',
             verifiedAt: verification.verifiedAt,
-            checks: { ...verification.checks, thumbnailAccepted: thumbnailResult.hasCustomThumbnail || false },
+            checks: { ...verification.checks, thumbnailState, thumbnailAccepted },
             publishedAt: new Date().toISOString(),
           })
-          console.log(`[LEDGER] recorded ${videoId} — verified=${verification.passed} thumbnail=${verifiedThumbnailUrl ? 'verified' : 'fallback'}`)
+          console.log(`[LEDGER] recorded ${videoId} — verified=${verification.passed} thumbnail=${thumbnailState}`)
         } catch (e) {
           console.log(`[LEDGER] record failed (non-fatal): ${e.message}`)
         }
