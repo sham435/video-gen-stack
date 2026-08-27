@@ -27,6 +27,7 @@ describe('E2E: Crash Recovery', () => {
     let renderCount = 0
     const j1 = new ProductionJob(ARTICLE, { checkpointDir: tmpDir })
     j1.onStage('DISCOVER', () => ({ article: 'ok' }))
+    j1.onStage('PREFLIGHT', () => ({ ok: true }))
     j1.onStage('RENDER', () => {
       renderCount++
       throw new Error('CRASH: process killed during render')
@@ -36,12 +37,13 @@ describe('E2E: Crash Recovery', () => {
     assert.ok(renderCount >= 2, 'RENDER retried before quarantine')
     assert.equal(r1.lastStage, 'RENDER')
 
-    // Resume: DISCOVER is completed, RENDER retries from checkpoint
+    // Resume: DISCOVER + PREFLIGHT completed, RENDER retries from checkpoint
     const beforeResume = renderCount
     const j2 = new ProductionJob(ARTICLE, { checkpointDir: tmpDir })
     j2.onStage('DISCOVER', () => { throw new Error('DISCOVER should not re-run') })
+    j2.onStage('PREFLIGHT', () => { throw new Error('PREFLIGHT should not re-run') })
     j2.onStage('RENDER', () => { renderCount++; return { path: '/out/video.mp4' } })
-    for (const s of STAGES.slice(2)) j2.onStage(s.id, () => ({}))
+    for (const s of STAGES.slice(3)) j2.onStage(s.id, () => ({}))
     const r2 = await j2.run()
     assert.equal(r2.success, true)
     assert.equal(renderCount, beforeResume + 1, 'RENDER ran exactly once on resume')

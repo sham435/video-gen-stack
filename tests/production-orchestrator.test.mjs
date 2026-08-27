@@ -17,10 +17,10 @@ const SAMPLE_ARTICLE = {
 }
 
 describe('Stages', () => {
-  it('has 9 stages in correct order', () => {
-    assert.equal(STAGES.length, 9)
+  it('has 11 stages in correct order', () => {
+    assert.equal(STAGES.length, 11)
     const ids = STAGES.map(s => s.id)
-    assert.deepEqual(ids, ['DISCOVER', 'RENDER', 'THUMBNAIL', 'C2PA', 'UNIQUENESS', 'UPLOAD', 'PUBLISH', 'VERIFY', 'ANALYTICS'])
+    assert.deepEqual(ids, ['DISCOVER', 'PREFLIGHT', 'RENDER', 'THUMBNAIL', 'C2PA', 'UNIQUENESS', 'UPLOAD', 'PUBLISH', 'DISTRIBUTE', 'VERIFY', 'ANALYTICS'])
   })
 
   it('every stage has a failureClass', () => {
@@ -43,12 +43,12 @@ describe('Stages', () => {
 
   it('stageIndex returns -1 for unknown', () => {
     assert.equal(stageIndex('DISCOVER'), 0)
-    assert.equal(stageIndex('ANALYTICS'), 8)
+    assert.equal(stageIndex('ANALYTICS'), 10)
     assert.equal(stageIndex('NOPE'), -1)
   })
 
   it('nextStage returns next or null', () => {
-    assert.equal(nextStage('DISCOVER').id, 'RENDER')
+    assert.equal(nextStage('DISCOVER').id, 'PREFLIGHT')
     assert.equal(nextStage('ANALYTICS'), null)
     assert.equal(nextStage('NONEXIST'), null)
   })
@@ -314,28 +314,31 @@ describe('ProductionJob', () => {
 
   it('skip completed stages on resume', async () => {
     const order = []
-    // First run: complete only DISCOVER + RENDER
+    // First run: complete only DISCOVER + PREFLIGHT + RENDER
     const j1 = new ProductionJob(SAMPLE_ARTICLE, { checkpointDir: tmpDir })
     j1.onStage('DISCOVER', () => ({ article: 'ok' }))
+    j1.onStage('PREFLIGHT', () => ({ ok: true }))
     j1.onStage('RENDER', () => ({ path: '/out/v.mp4' }))
     await j1.run()
 
-    // Second run: resume — DISCOVER + RENDER skipped, rest run
+    // Second run: resume — DISCOVER + PREFLIGHT + RENDER skipped, rest run
     const j2 = new ProductionJob(SAMPLE_ARTICLE, { checkpointDir: tmpDir })
     j2.onStage('DISCOVER', () => { order.push('DISCOVER'); return {} })
+    j2.onStage('PREFLIGHT', () => { order.push('PREFLIGHT'); return {} })
     j2.onStage('RENDER', () => { order.push('RENDER'); return {} })
-    for (const s of STAGES.slice(2)) j2.onStage(s.id, () => { order.push(s.id); return {} })
+    for (const s of STAGES.slice(3)) j2.onStage(s.id, () => { order.push(s.id); return {} })
 
     await j2.run()
-    assert.deepEqual(order, ['THUMBNAIL', 'C2PA', 'UNIQUENESS', 'UPLOAD', 'PUBLISH', 'VERIFY', 'ANALYTICS'])
+    assert.deepEqual(order, ['THUMBNAIL', 'C2PA', 'UNIQUENESS', 'UPLOAD', 'PUBLISH', 'DISTRIBUTE', 'VERIFY', 'ANALYTICS'])
   })
 
   it('results accumulate across stages', async () => {
     const job = new ProductionJob(SAMPLE_ARTICLE, { checkpointDir: tmpDir })
     job.onStage('DISCOVER', () => ({ article: 'test' }))
+    job.onStage('PREFLIGHT', () => ({ ok: true }))
     job.onStage('RENDER', (ctx) => ({ path: '/out/video.mp4', articleId: ctx.results.DISCOVER?.article }))
     job.onStage('THUMBNAIL', (ctx) => ({ strategy: 'hero-hook', videoPath: ctx.results.RENDER?.path }))
-    for (const s of STAGES.slice(3)) job.onStage(s.id, (ctx) => ({}))
+    for (const s of STAGES.slice(4)) job.onStage(s.id, (ctx) => ({}))
 
     const result = await job.run()
     assert.equal(result.success, true)
@@ -366,8 +369,9 @@ describe('ProductionJob', () => {
     let capturedCtx
     const job = new ProductionJob(SAMPLE_ARTICLE, { checkpointDir: tmpDir })
     job.onStage('DISCOVER', () => ({ article: 'ok' }))
+    job.onStage('PREFLIGHT', () => ({ ok: true }))
     job.onStage('RENDER', (ctx) => { capturedCtx = ctx; return {} })
-    for (const s of STAGES.slice(2)) job.onStage(s.id, () => ({}))
+    for (const s of STAGES.slice(3)) job.onStage(s.id, () => ({}))
 
     await job.run()
     assert.ok(capturedCtx)

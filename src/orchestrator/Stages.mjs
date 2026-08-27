@@ -28,6 +28,14 @@ export const STAGES = Object.freeze([
     provider: null,
   },
   {
+    id: 'PREFLIGHT',
+    description: 'OAuth scope + credentials validation before render/upload',
+    failureClass: FailureClass.CONFIGURATION,
+    maxRetries: 1,
+    backoffMs: 0,
+    provider: 'youtube',
+  },
+  {
     id: 'RENDER',
     description: 'Video rendering via NewsBroadcastEngine',
     failureClass: FailureClass.INVALID_ARTIFACT,
@@ -69,11 +77,19 @@ export const STAGES = Object.freeze([
   },
   {
     id: 'PUBLISH',
-    description: 'LinkedIn cross-post + social distribution + pinned comment',
+    description: 'Publication committed — artifact ready for distribution',
     failureClass: FailureClass.TRANSIENT,
     maxRetries: 2,
     backoffMs: 3000,
     provider: 'youtube',
+  },
+  {
+    id: 'DISTRIBUTE',
+    description: 'Parallel fan-out to YouTube, GitHub Pages, LinkedIn',
+    failureClass: FailureClass.TRANSIENT,
+    maxRetries: 3,
+    backoffMs: 5000,
+    provider: null,
   },
   {
     id: 'VERIFY',

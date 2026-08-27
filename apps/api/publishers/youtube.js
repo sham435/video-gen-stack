@@ -39,6 +39,31 @@ export async function getAccessToken() {
   return data.access_token
 }
 
+/**
+ * Validate that the OAuth token has all required scopes.
+ * Calls videos.list (requires youtube.readonly) to probe the token.
+ * Returns { ok: true } or { ok: false, error, missingScope }.
+ */
+export async function validateOAuthScopes() {
+  try {
+    const token = await getAccessToken()
+    if (!token) return { ok: false, error: 'no access token', missingScope: 'youtube.upload' }
+    const res = await fetch(`${BASE}/youtube/v3/videos?part=id&myRating=like&maxResults=1`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    if (res.ok) return { ok: true }
+    const body = await res.json().catch(() => ({}))
+    const reason = body?.error?.message || `HTTP ${res.status}`
+    const code = res.status
+    if (code === 401 || code === 403) {
+      return { ok: false, error: reason, missingScope: 'youtube.readonly', httpStatus: code }
+    }
+    return { ok: false, error: reason, httpStatus: code }
+  } catch (e) {
+    return { ok: false, error: e.message }
+  }
+}
+
 // ─── publishVideo ────────────────────────────────────────────────────────────
 // The production publishing contract: Video + Thumbnail → Published.
 //

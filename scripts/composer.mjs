@@ -779,6 +779,83 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         return { commentEvent }
       })
 
+      // ── DISTRIBUTE — parallel fan-out to YouTube, GitHub Pages, LinkedIn ──
+      // One artifact → all destinations. Each destination has independent state and retry.
+      job.onStage('DISTRIBUTE', async (ctx) => {
+        const { PublicationArtifact } = await import('../src/distribution/PublicationArtifact.mjs')
+        const { DistributionOrchestrator } = await import('../src/distribution/DistributionOrchestrator.mjs')
+        const { YouTubeDistributor } = await import('../src/distribution/YouTubeDistributor.mjs')
+        const { GitHubPagesDistributor } = await import('../src/distribution/GitHubPagesDistributor.mjs')
+        const { LinkedInDistributor } = await import('../src/distribution/LinkedInDistributor.mjs')
+
+        // Build canonical artifact from production results
+        const artifact = PublicationArtifact.fromProductionResults(ctx.results, outDir)
+        artifact.artifactId = ctx.results.UNIQUENESS?.assetId || ctx.results.UPLOAD?.videoId || artifact.artifactId
+
+        // YouTube already uploaded in PUBLISH — record its result
+        const pubResult = ctx.results.PUBLISH || {}
+        if (pubResult.videoId) {
+          artifact.destinations.youtube.state = 'SUCCESS'
+          artifact.destinations.youtube.videoId = pubResult.videoId
+          artifact.destinations.youtube.url = pubResult.url
+          artifact.destinations.youtube.thumbnail.state = pubResult.thumbnailUploaded ? 'SUCCESS' : 'FAILED'
+        }
+
+        // Channel controller for YouTube quota coordination
+        let channelController = null
+        try {
+          const { ChannelController } = await import('../src/governor/ChannelController.mjs')
+          channelController = new ChannelController()
+        } catch { /* channel control unavailable */ }
+
+        // Build distributors
+        const youtubeDist = new YouTubeDistributor({
+          publishVideo: async () => ({ videoId: artifact.destinations.youtube.videoId, url: artifact.destinations.youtube.url, thumbnailUploaded: artifact.destinations.youtube.thumbnail.state === 'SUCCESS' }),
+          channelController,
+        })
+
+        const githubPagesDist = new GitHubPagesDistributor({ publicDir: 'public' })
+
+        let linkedinDist = null
+        try {
+          const { LinkedInPostFactory } = await import('../src/publishing/LinkedInPostFactory.mjs')
+          const { shareImage } = await import('../apps/api/publishers/linkedin.js')
+          linkedinDist = new LinkedInDistributor({
+            shareImage,
+            postFactory: new LinkedInPostFactory(),
+          })
+        } catch { /* LinkedIn not configured */ }
+
+        // Fan-out distribution
+        const orchestrator = new DistributionOrchestrator({
+          youtube: youtubeDist,
+          githubPages: githubPagesDist,
+          linkedin: linkedinDist,
+        })
+
+        const distResult = await orchestrator.distribute(artifact, { jobId: ctx.jobId })
+
+        // Log per-destination results
+        for (const [dest, r] of Object.entries(distResult.results)) {
+          const status = r.state === 'SUCCESS' ? '✓' : r.state === 'SKIPPED' ? '○' : '✗'
+          console.log(`[DISTRIBUTE] ${status} ${dest}: ${r.state} (${r.durationMs}ms)`)
+          if (r.errors?.length) {
+            for (const err of r.errors) console.log(`   error: ${err.error} (${err.classification})`)
+          }
+        }
+
+        // Update channel state after successful YouTube distribution
+        if (channelController && distResult.results.youtube?.state === 'SUCCESS') {
+          try { await channelController.commit('news', artifact.destinations.youtube.videoId) } catch { /* non-fatal */ }
+        }
+
+        return {
+          artifact: artifact.toJSON(),
+          distributionState: distResult.state,
+          distributionResults: distResult.results,
+        }
+      })
+
       // ── VERIFY — post-publication verification chain ──
       // Verifies: video reachable, visibility public, hasCustomThumbnail,
       // title matches, thumbnail artifact consistency. Records to PublicationLedger.
@@ -877,6 +954,14 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           const { PublicationLedger } = await import('../src/publishing/PublicationLedger.mjs')
           const ledgerPath = path.join(outDir, 'data', 'publication-ledger.json')
           const ledger = new PublicationLedger({ filePath: ledgerPath })
+
+          // Include distribution state from DISTRIBUTE stage
+          const distribution = ctx.results.DISTRIBUTE?.distributionResults || {
+            youtube: { state: 'PENDING' },
+            githubPages: { state: 'PENDING' },
+            linkedin: { state: 'PENDING' },
+          }
+
           ledger.record({
             videoId,
             jobId: ctx.jobId,
@@ -890,6 +975,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             uploadState: 'SUCCESS',
             thumbnailState,
             verificationState,
+            distribution,
           })
           console.log(`[LEDGER] recorded ${videoId} — verified=${verification.passed} upload=SUCCESS thumbnail=${thumbnailState} verification=${verificationState}${thumbnailResult.errorType ? ` (${thumbnailResult.errorType})` : ''}`)
         } catch (e) {

@@ -23,11 +23,13 @@ describe('YouTubePropagationVerifier', () => {
     assert.ok(result.attempts.length >= 1)
   })
 
-  it('stops retrying when maxAttempts reached', async () => {
-    const verifier = new YouTubePropagationVerifier({ token: '', maxAttempts: 3, delays: [0, 0, 0] })
-    const result = await verifier.verify({ videoId: 'nonexistent' })
-    assert.equal(result.attempts.length, 3)
-    assert.ok(result.durationMs >= 0)
+  it('stops immediately on authorization error (no retry)', async () => {
+    const verifier = new YouTubePropagationVerifier({ token: '', maxAttempts: 5, delays: [0,0,0,0,0] })
+    const result = await verifier.verify({ videoId: 'test' })
+    // Empty token → 401/403 → AUTHORIZATION → stops after 1 attempt (no retry for auth)
+    assert.equal(result.state, 'VERIFICATION_FAILED')
+    assert.equal(result.errorType, 'AUTHORIZATION')
+    assert.equal(result.attempts.length, 1)
   })
 
   it('VerifyState enum has all states', () => {

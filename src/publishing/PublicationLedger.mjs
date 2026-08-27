@@ -12,6 +12,7 @@
 export const UploadState = { PENDING: 'PENDING', SUCCESS: 'SUCCESS', FAILED: 'FAILED' }
 export const ThumbnailState = { UPLOADED: 'UPLOADED', ACCEPTED: 'CUSTOM_THUMBNAIL_ACCEPTED', REJECTED: 'CUSTOM_THUMBNAIL_REJECTED', UNKNOWN: 'UNKNOWN' }
 export const VerificationState = { PENDING: 'PENDING', NOT_VISIBLE: 'VIDEO_NOT_VISIBLE_YET', VERIFIED: 'VERIFIED', REJECTED: 'REJECTED', API_UNAVAILABLE: 'API_UNAVAILABLE' }
+export const DistributionDestState = { PENDING: 'PENDING', IN_PROGRESS: 'IN_PROGRESS', SUCCESS: 'SUCCESS', FAILED: 'FAILED', SKIPPED: 'SKIPPED' }
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs'
 import { dirname } from 'node:path'
@@ -69,6 +70,12 @@ export class PublicationLedger {
       uploadState: verification.uploadState || UploadState.SUCCESS,
       thumbnailState: verification.thumbnailState || ThumbnailState.UNKNOWN,
       verificationState: verification.verificationState || VerificationState.PENDING,
+      // Distribution state
+      distribution: verification.distribution || {
+        youtube: { state: DistributionDestState.PENDING },
+        githubPages: { state: DistributionDestState.PENDING },
+        linkedin: { state: DistributionDestState.PENDING },
+      },
     }
     if (existing >= 0) {
       this._entries[existing] = entry
@@ -98,6 +105,7 @@ export class PublicationLedger {
         verified: e.verificationState === VerificationState.VERIFIED,
         verificationState: e.verificationState,
         thumbnailState: e.thumbnailState,
+        distribution: e.distribution || {},
       }))
     return {
       channelId,
