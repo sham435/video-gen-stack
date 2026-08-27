@@ -40,7 +40,14 @@ export function brandOutroScene(article = {}, cta = null) {
     motion: null,
     transition: 'fade',
     emotion: 'excitement',
-    caption: { focus: 'STAY WITH', fullText: 'STAY WITH NEWS-MONSTER' },
+    caption: { focus: 'STAY_WITH', fullText: 'STAY WITH NEWS-MONSTER' },
     outro: true,
+    // Hard boundary: the outro headline is rendered by InformationLayer only.
+    // Generic caption/text scheduling must never interpret this as story content.
+    textPolicy: {
+      allowStoryCaptions: false,
+      allowGenericCaptionScheduling: false,
+      allowEmphasisLayer: false,
+    },
   }
 }

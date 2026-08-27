@@ -2,7 +2,16 @@
  * PublicationLedger — append-only log of verified publications.
  * Single source of truth for gallery manifest. Every entry is verified
  * before being recorded. Gallery reads this, not YouTube RSS.
+ *
+ * Three-axis publication state:
+ *   uploadState:       PENDING | SUCCESS | FAILED
+ *   thumbnailState:    UPLOADED | CUSTOM_THUMBNAIL_ACCEPTED | CUSTOM_THUMBNAIL_REJECTED | UNKNOWN
+ *   verificationState: PENDING | VIDEO_NOT_VISIBLE_YET | VERIFIED | REJECTED | API_UNAVAILABLE
  */
+
+export const UploadState = { PENDING: 'PENDING', SUCCESS: 'SUCCESS', FAILED: 'FAILED' }
+export const ThumbnailState = { UPLOADED: 'UPLOADED', ACCEPTED: 'CUSTOM_THUMBNAIL_ACCEPTED', REJECTED: 'CUSTOM_THUMBNAIL_REJECTED', UNKNOWN: 'UNKNOWN' }
+export const VerificationState = { PENDING: 'PENDING', NOT_VISIBLE: 'VIDEO_NOT_VISIBLE_YET', VERIFIED: 'VERIFIED', REJECTED: 'REJECTED', API_UNAVAILABLE: 'API_UNAVAILABLE' }
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs'
 import { dirname } from 'node:path'
@@ -56,6 +65,10 @@ export class PublicationLedger {
       verifiedAt: verification.verifiedAt || new Date().toISOString(),
       checks: verification.checks || {},
       publishedAt: verification.publishedAt || null,
+      // 3-axis state
+      uploadState: verification.uploadState || UploadState.SUCCESS,
+      thumbnailState: verification.thumbnailState || ThumbnailState.UNKNOWN,
+      verificationState: verification.verificationState || VerificationState.PENDING,
     }
     if (existing >= 0) {
       this._entries[existing] = entry
@@ -66,19 +79,26 @@ export class PublicationLedger {
     return entry
   }
 
-  /** Generate gallery manifest from verified entries only. */
+  /** Generate gallery manifest from verified entries only.
+   *  Gallery includes entries where upload succeeded AND verification is not rejected.
+   *  API_UNAVAILABLE and VIDEO_NOT_VISIBLE_YET entries are included (publication is valid, verification pending).
+   */
   toGalleryManifest(channelId) {
-    const videos = this.all().map(e => ({
-      id: e.videoId,
-      title: e.title || `Video ${e.videoId}`,
-      category: e.category || 'general',
-      publishedAt: e.publishedAt || e.verifiedAt,
-      publishedLabel: e.publishedAt
-        ? new Date(e.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-        : '',
-      thumbnail: resolveThumbnailUrl(e.videoId, e.thumbnail),
-      verified: true,
-    }))
+    const videos = this.all()
+      .filter(e => e.uploadState === UploadState.SUCCESS && e.verificationState !== VerificationState.REJECTED)
+      .map(e => ({
+        id: e.videoId,
+        title: e.title || `Video ${e.videoId}`,
+        category: e.category || 'general',
+        publishedAt: e.publishedAt || e.verifiedAt,
+        publishedLabel: e.publishedAt
+          ? new Date(e.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+          : '',
+        thumbnail: resolveThumbnailUrl(e.videoId, e.thumbnail),
+        verified: e.verificationState === VerificationState.VERIFIED,
+        verificationState: e.verificationState,
+        thumbnailState: e.thumbnailState,
+      }))
     return {
       channelId,
       updatedAt: new Date().toISOString(),

@@ -101,6 +101,7 @@ describe('PublicationLedger', () => {
     ledger.record({
       videoId: 'vid1', title: 'Test', category: 'tech',
       publishedAt: '2026-08-26T21:00:00Z', thumbnail: 'https://example.com/t.jpg',
+      uploadState: 'SUCCESS', verificationState: 'VERIFIED',
     })
     const manifest = ledger.toGalleryManifest('UC123')
     assert.equal(manifest.channelId, 'UC123')

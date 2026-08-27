@@ -805,10 +805,12 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         // 2. YouTube thumbnail verification (propagation-aware with retries)
         let thumbnailResult = { state: 'VIDEO_NOT_VISIBLE_YET', hasCustomThumbnail: false, verifiedUrl: null }
         const masterThumb = ctx.results.THUMBNAIL?.selected?.path || null
-        if (masterThumb && process.env.YOUTUBE_OAUTH_TOKEN) {
+        if (masterThumb) {
           try {
+            const { getAccessToken } = await import('../apps/api/publishers/youtube.js')
             const { YouTubePropagationVerifier, VerifyState } = await import('../src/publishing/YouTubePropagationVerifier.mjs')
-            const verifier = new YouTubePropagationVerifier()
+            const token = await getAccessToken()
+            const verifier = new YouTubePropagationVerifier({ token })
             thumbnailResult = await verifier.verify({ videoId })
 
             if (thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_ACCEPTED) {
@@ -818,6 +820,8 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
               console.warn(`[THUMBNAIL] ${VerifyState.CUSTOM_THUMBNAIL_REJECTED} — video visible but no custom thumbnail`)
             } else if (thumbnailResult.state === VerifyState.VIDEO_NOT_VISIBLE_YET) {
               console.warn(`[THUMBNAIL] ${VerifyState.VIDEO_NOT_VISIBLE_YET} — ${thumbnailResult.attempts.length} attempts, ${thumbnailResult.durationMs}ms`)
+            } else if (thumbnailResult.errorType) {
+              console.warn(`[THUMBNAIL] ${thumbnailResult.state} (${thumbnailResult.errorType}) — ${thumbnailResult.reason || thumbnailResult.message}`)
             } else {
               console.warn(`[THUMBNAIL] ${thumbnailResult.state}`)
             }
@@ -851,9 +855,22 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         }
 
         // 4. Record to PublicationLedger with verified thumbnail URL
+        // Publication succeeds even if verification is API_UNAVAILABLE — the video is uploaded.
         const verifiedThumbnailUrl = thumbnailResult.verifiedUrl || null
-        const thumbnailState = thumbnailResult.state || 'NOT_CHECKED'
-        const thumbnailAccepted = thumbnailState === 'CUSTOM_THUMBNAIL_ACCEPTED'
+        const verificationState = thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_ACCEPTED
+          ? 'VERIFIED'
+          : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_REJECTED
+            ? 'REJECTED'
+            : thumbnailResult.state === VerifyState.VIDEO_NOT_VISIBLE_YET
+              ? 'VIDEO_NOT_VISIBLE_YET'
+              : thumbnailResult.state === VerifyState.VERIFICATION_FAILED && thumbnailResult.errorType
+                ? 'API_UNAVAILABLE'
+                : 'PENDING'
+        const thumbnailState = thumbnailResult.hasCustomThumbnail
+          ? 'CUSTOM_THUMBNAIL_ACCEPTED'
+          : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_REJECTED
+            ? 'CUSTOM_THUMBNAIL_REJECTED'
+            : 'UPLOADED'
         try {
           const { PublicationLedger } = await import('../src/publishing/PublicationLedger.mjs')
           const ledgerPath = path.join(outDir, 'data', 'publication-ledger.json')
@@ -866,10 +883,13 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             thumbnail: verifiedThumbnailUrl || `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`,
             visibility: 'public',
             verifiedAt: verification.verifiedAt,
-            checks: { ...verification.checks, thumbnailState, thumbnailAccepted },
+            checks: { ...verification.checks, thumbnailState, verificationState, verificationErrorType: thumbnailResult.errorType || null },
             publishedAt: new Date().toISOString(),
+            uploadState: 'SUCCESS',
+            thumbnailState,
+            verificationState,
           })
-          console.log(`[LEDGER] recorded ${videoId} — verified=${verification.passed} thumbnail=${thumbnailState}`)
+          console.log(`[LEDGER] recorded ${videoId} — verified=${verification.passed} upload=SUCCESS thumbnail=${thumbnailState} verification=${verificationState}${thumbnailResult.errorType ? ` (${thumbnailResult.errorType})` : ''}`)
         } catch (e) {
           console.log(`[LEDGER] record failed (non-fatal): ${e.message}`)
         }

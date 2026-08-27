@@ -59,13 +59,24 @@ export class TextTimelineScheduler {
   }
 
   // Non-hook scenes: a single focal layer with the word-sync caption below.
+  // Respects scene.textPolicy — outro scenes own their text exclusively.
   static sceneTimeline(scene, duration) {
     const layers = [{ id: 'footer', priority: PRIORITY.footer, start: 0, end: 1, allowOverlap: true, safeZone: 'footer', zIndex: 1 }]
+    const policy = scene.textPolicy || {}
+    const isOutro = scene.outro || scene.type === 'close' || scene.type === 'brand_close'
+
+    // Outro scenes: only hero (InformationLayer owns the headline stack).
+    // No ai, no caption — the outro text pipeline owns everything.
+    if (isOutro || policy.allowGenericCaptionScheduling === false) {
+      layers.push({ id: 'hero', priority: PRIORITY.hero, start: 0.05, end: 1, animationIn: 0.15, animationOut: 0, allowOverlap: false, safeZone: 'headline', zIndex: 2 })
+      return { type: scene.type || 'fact', layers }
+    }
+
     const focal = scene.type === 'fact' || scene.type === 'retention' ? 'hero'
       : scene.type === 'brand_close' ? 'hero'
       : 'ai'
     layers.push({ id: focal, priority: PRIORITY[focal], start: 0.05, end: 1, animationIn: 0.15, animationOut: 0, allowOverlap: false, safeZone: focal === 'ai' ? 'lower_third' : 'headline', zIndex: 2 })
-    if (scene.caption && scene.captionHidden !== true) {
+    if (scene.caption && scene.captionHidden !== true && policy.allowStoryCaptions !== false) {
       layers.push({ id: 'caption', priority: PRIORITY.caption, start: 0.1, end: 1, animationIn: 0.1, animationOut: 0, allowOverlap: true, safeZone: 'caption', zIndex: 3 })
     }
     return { type: scene.type || 'fact', layers }

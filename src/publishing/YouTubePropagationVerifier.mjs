@@ -2,6 +2,7 @@
  * YouTubePropagationVerifier — propagation-aware post-upload verification.
  *
  * Does NOT treat "video not yet visible" as "thumbnail rejected."
+ * Classifies API errors: authorization, quota, transient, propagation.
  *
  * States:
  *   VIDEO_NOT_VISIBLE_YET  — video hasn't propagated to videos.list yet
@@ -11,6 +12,7 @@
  *   VERIFICATION_FAILED — API error or max attempts exhausted
  *
  * Retry delays: 5s, 10s, 20s, 30s, 60s (configurable).
+ * Authorization/quota failures do NOT retry — they cannot resolve themselves.
  */
 
 export const VerifyState = {
@@ -23,7 +25,7 @@ export const VerifyState = {
 
 export class YouTubePropagationVerifier {
   constructor(options = {}) {
-    this.token = options.token || process.env.YOUTUBE_OAUTH_TOKEN || ''
+    this.token = options.token || ''
     this.maxAttempts = options.maxAttempts || 5
     this.delays = options.delays || [5_000, 10_000, 20_000, 30_000, 60_000]
     this.timeout = options.timeout || 10_000
@@ -36,7 +38,7 @@ export class YouTubePropagationVerifier {
   /**
    * Verify video visibility and custom thumbnail acceptance with propagation retries.
    * @param {{ videoId: string }} params
-   * @returns {object} { state, video, hasCustomThumbnail, verifiedUrl, attempts, durationMs }
+   * @returns {object} { state, video, hasCustomThumbnail, verifiedUrl, errorType, attempts, durationMs }
    */
   async verify({ videoId }) {
     const startTime = Date.now()
@@ -50,13 +52,45 @@ export class YouTubePropagationVerifier {
           { headers: await this.headers(), signal: AbortSignal.timeout(this.timeout) }
         )
 
+        const data = await res.json().catch(() => ({}))
+
         if (!res.ok) {
-          attempts.push({ attempt, apiStatus: res.status, durationMs: Date.now() - attemptStart })
+          const reason = data?.error?.errors?.[0]?.reason || 'unknown'
+          const message = data?.error?.message || `HTTP ${res.status}`
+
+          attempts.push({
+            attempt, apiStatus: res.status, reason, message,
+            durationMs: Date.now() - attemptStart,
+          })
+
+          // Authorization failures — cannot retry, fail immediately
+          if (res.status === 401 || reason === 'authError' || reason === 'forbidden' || reason === 'insufficientPermissions') {
+            return {
+              state: VerifyState.VERIFICATION_FAILED,
+              errorType: 'AUTHORIZATION',
+              apiStatus: res.status, reason, message,
+              video: null, hasCustomThumbnail: false, verifiedUrl: null,
+              attempts, durationMs: Date.now() - startTime,
+            }
+          }
+
+          // Quota exceeded — cannot retry until quota resets
+          if (reason === 'quotaExceeded' || reason === 'dailyLimitExceeded') {
+            return {
+              state: VerifyState.VERIFICATION_FAILED,
+              errorType: 'QUOTA',
+              retryable: true,
+              apiStatus: res.status, reason, message,
+              video: null, hasCustomThumbnail: false, verifiedUrl: null,
+              attempts, durationMs: Date.now() - startTime,
+            }
+          }
+
+          // Transient API error — retry
           if (attempt < this.maxAttempts) await this._delay(attempt)
           continue
         }
 
-        const data = await res.json()
         const video = data.items?.[0]
 
         if (!video) {
@@ -99,6 +133,7 @@ export class YouTubePropagationVerifier {
       state: attempts.some(a => a.found === false)
         ? VerifyState.VIDEO_NOT_VISIBLE_YET
         : VerifyState.VERIFICATION_FAILED,
+      errorType: attempts.some(a => a.apiStatus) ? 'TRANSIENT' : null,
       video: null,
       hasCustomThumbnail: false,
       verifiedUrl: null,

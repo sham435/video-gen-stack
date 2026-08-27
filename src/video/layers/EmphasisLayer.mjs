@@ -34,10 +34,13 @@ export class EmphasisLayer {
     if (alpha <= 0.01) return
     const word = scene.caption_focus || scene.focus || ''
     if (!word) return
+    // Hard boundary: outro scenes own their text exclusively.
     // Non-hook scenes: caption visible -> the word is highlighted inside the
     // caption itself. Hook scenes schedule the AI accent as a dedicated phase
     // (after the secondary headline), so it renders regardless of the caption.
     if (scene.type !== 'hook' && !scene.captionHidden && scene.caption) return
+    const policy = scene.textPolicy || {}
+    if (policy.allowEmphasisLayer === false) return
 
     const layout = scene.emphasisLayout
     const accent = AI_ACCENT_BY_CATEGORY[category] || DesignSystem.brand.accent || '#00E5FF'

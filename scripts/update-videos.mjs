@@ -29,22 +29,26 @@ function resolveThumbnailUrl(videoId, thumbnailField) {
   return '/assets/placeholder-thumbnail.jpg'
 }
 
-/** Read verified videos from PublicationLedger */
+/** Read verified videos from PublicationLedger — uses 3-axis state model */
 function readLedger() {
   try {
     if (!existsSync(LEDGER_PATH)) return []
     const data = JSON.parse(readFileSync(LEDGER_PATH, 'utf-8'))
-    return (data.entries || []).reverse().map(e => ({
-      id: e.videoId,
-      title: e.title || `Video ${e.videoId}`,
-      category: e.category || 'general',
-      publishedAt: e.publishedAt || e.verifiedAt,
-      publishedLabel: e.publishedAt
-        ? new Date(e.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-        : '',
-      thumbnail: resolveThumbnailUrl(e.videoId, e.thumbnail),
-      verified: true,
-    }))
+    return (data.entries || []).reverse()
+      .filter(e => e.uploadState === 'SUCCESS' && e.verificationState !== 'REJECTED')
+      .map(e => ({
+        id: e.videoId,
+        title: e.title || `Video ${e.videoId}`,
+        category: e.category || 'general',
+        publishedAt: e.publishedAt || e.verifiedAt,
+        publishedLabel: e.publishedAt
+          ? new Date(e.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+          : '',
+        thumbnail: resolveThumbnailUrl(e.videoId, e.thumbnail),
+        verified: e.verificationState === 'VERIFIED',
+        verificationState: e.verificationState || 'PENDING',
+        thumbnailState: e.thumbnailState || 'UNKNOWN',
+      }))
   } catch {
     return []
   }
@@ -82,6 +86,9 @@ async function readRssFeed(channelId) {
         ? new Date(published).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
         : '',
       thumbnail: resolveThumbnailUrl(id, null),
+      verified: false,
+      verificationState: 'RSS_FALLBACK',
+      thumbnailState: 'UNKNOWN',
     }
   }).filter(v => v.id)
 }
