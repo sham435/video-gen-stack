@@ -1,157 +1,44 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-27T07:00:43.335Z",
-  "source": "youtube-rss",
+  "updatedAt": "2026-08-27T10:16:59.535Z",
+  "source": "production-ledger",
   "videos": [
     {
-      "id": "oVCpqzQEaNc",
-      "title": "Falcon 9 rocket launch creates unusual jellyfish cloud over East Coast - The Washington Po | NEWS-MO",
-      "publishedAt": "2026-08-27T06:56:31+00:00",
-      "publishedLabel": "Aug 27, 06:56 AM",
-      "thumbnail": "https://i.ytimg.com/vi/oVCpqzQEaNc/maxresdefault.jpg",
+      "id": "zaKdS-WHtX4",
+      "title": "Target faces renewed backlash for Halloween costume with 'minstrel show features' - NPR | NEWS-MONSTER",
+      "category": "apple",
+      "publishedAt": "2026-08-27T10:12:11.592Z",
+      "publishedLabel": "Aug 27, 10:12 AM",
+      "thumbnail": "/thumbnails/zaKdS-WHtX4.png",
+      "youtubeUrl": null,
       "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "Y-pPDO1MM7M",
-      "title": "Scientists Just Set Up What Comes Next | NEWS-MONSTER",
-      "publishedAt": "2026-08-27T06:52:08+00:00",
-      "publishedLabel": "Aug 27, 06:52 AM",
-      "thumbnail": "https://i.ytimg.com/vi/Y-pPDO1MM7M/maxresdefault.jpg",
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "MFN5AN_Wrek",
-      "title": "Despite weighing a massive 4 tonnes, this mammal can dive 2000 metres down, hold its breat | NEWS-MO",
-      "publishedAt": "2026-08-27T06:44:00+00:00",
-      "publishedLabel": "Aug 27, 06:44 AM",
-      "thumbnail": "https://i.ytimg.com/vi/MFN5AN_Wrek/maxresdefault.jpg",
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "Snz5ngKm3Bg",
-      "title": "Falcon 9 rocket launch creates unusual jellyfish cloud over East Coast - The Washington Po | NEWS-MO",
-      "publishedAt": "2026-08-27T06:39:17+00:00",
-      "publishedLabel": "Aug 27, 06:39 AM",
-      "thumbnail": "https://i.ytimg.com/vi/Snz5ngKm3Bg/maxresdefault.jpg",
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "hptBF0mJXu8",
-      "title": "Scientists Just Set Up What Comes Next | NEWS-MONSTER",
-      "publishedAt": "2026-08-27T06:34:41+00:00",
-      "publishedLabel": "Aug 27, 06:34 AM",
-      "thumbnail": "https://i.ytimg.com/vi/hptBF0mJXu8/maxresdefault.jpg",
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "j_Nq9SHnv4o",
-      "title": "Despite weighing a massive 4 tonnes, this mammal can dive 2000 metres down, hold its breat | NEWS-MO",
-      "publishedAt": "2026-08-27T06:25:18+00:00",
-      "publishedLabel": "Aug 27, 06:25 AM",
-      "thumbnail": "https://i.ytimg.com/vi/j_Nq9SHnv4o/maxresdefault.jpg",
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "kNlB6EvAvCU",
-      "title": "Falcon 9 rocket launch creates unusual jellyfish cloud over East Coast - The Washington Po | NEWS-MO",
-      "publishedAt": "2026-08-27T06:22:06+00:00",
-      "publishedLabel": "Aug 27, 06:22 AM",
-      "thumbnail": "https://i.ytimg.com/vi/kNlB6EvAvCU/maxresdefault.jpg",
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "4JWtyL0xE6A",
-      "title": "Scientists Just Set Up What Comes Next | NEWS-MONSTER",
-      "publishedAt": "2026-08-27T06:18:55+00:00",
-      "publishedLabel": "Aug 27, 06:18 AM",
-      "thumbnail": "https://i.ytimg.com/vi/4JWtyL0xE6A/maxresdefault.jpg",
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "IJ8hTzV48Mk",
-      "title": "Despite weighing a massive 4 tonnes, this mammal can dive 2000 metres down, hold its breat | NEWS-MO",
-      "publishedAt": "2026-08-27T05:28:12+00:00",
-      "publishedLabel": "Aug 27, 05:28 AM",
-      "thumbnail": "https://i.ytimg.com/vi/IJ8hTzV48Mk/maxresdefault.jpg",
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "t9EQGUpGD0o",
-      "title": "Falcon 9 rocket launch creates unusual jellyfish cloud over East Coast - The Washington Po | NEWS-MO",
-      "publishedAt": "2026-08-27T05:23:46+00:00",
-      "publishedLabel": "Aug 27, 05:23 AM",
-      "thumbnail": "https://i.ytimg.com/vi/t9EQGUpGD0o/maxresdefault.jpg",
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "B9ax5PimKmY",
-      "title": "Scientists Just Set Up What Comes Next | NEWS-MONSTER",
-      "publishedAt": "2026-08-27T05:19:17+00:00",
-      "publishedLabel": "Aug 27, 05:19 AM",
-      "thumbnail": "https://i.ytimg.com/vi/B9ax5PimKmY/maxresdefault.jpg",
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "baIEjwVbHlM",
-      "title": "Despite weighing a massive 4 tonnes, this mammal can dive 2000 metres down, hold its breat | NEWS-MO",
-      "publishedAt": "2026-08-27T05:07:22+00:00",
-      "publishedLabel": "Aug 27, 05:07 AM",
-      "thumbnail": "https://i.ytimg.com/vi/baIEjwVbHlM/maxresdefault.jpg",
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "rS_2KyHrW7I",
-      "title": "Falcon 9 rocket launch creates unusual jellyfish cloud over East Coast - The Washington Po | NEWS-MO",
-      "publishedAt": "2026-08-27T05:02:39+00:00",
-      "publishedLabel": "Aug 27, 05:02 AM",
-      "thumbnail": "https://i.ytimg.com/vi/rS_2KyHrW7I/maxresdefault.jpg",
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "7TlmARWCHAI",
-      "title": "Scientists Just Set Up What Comes Next | NEWS-MONSTER",
-      "publishedAt": "2026-08-27T04:57:50+00:00",
-      "publishedLabel": "Aug 27, 04:57 AM",
-      "thumbnail": "https://i.ytimg.com/vi/7TlmARWCHAI/maxresdefault.jpg",
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "UCIkWi_z7oM",
-      "title": "Despite weighing a massive 4 tonnes, this mammal can dive 2000 metres down, hold its breat | NEWS-MO",
-      "publishedAt": "2026-08-27T04:01:45+00:00",
-      "publishedLabel": "Aug 27, 04:01 AM",
-      "thumbnail": "https://i.ytimg.com/vi/UCIkWi_z7oM/maxresdefault.jpg",
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
+      "verificationState": "API_UNAVAILABLE",
+      "thumbnailState": "UPLOADED",
+      "distribution": {
+        "youtube": {
+          "state": "PENDING",
+          "videoId": null,
+          "url": null,
+          "thumbnail": {
+            "state": "PENDING",
+            "sha256": null
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 1
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
     }
   ]
 }
