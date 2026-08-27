@@ -741,13 +741,6 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         } else {
           console.log('[LINKEDIN] skipped — LINKEDIN_ACCESS_TOKEN/LINKEDIN_MEMBER_URN not set')
         }
-          } catch (e) {
-            console.log(`[LINKEDIN] skipped (best-effort): ${e.message}`)
-            if (engine?.productionTrace) engine.productionTrace.setLinkedIn({ attempted: true, success: false, error: e.message })
-          }
-        } else {
-          console.log('[LINKEDIN] skipped — LINKEDIN_ACCESS_TOKEN/LINKEDIN_MEMBER_URN not set')
-        }
 
         // Social distribution
         try {
