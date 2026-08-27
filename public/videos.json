@@ -1,8 +1,18 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-27T00:30:35.264Z",
+  "updatedAt": "2026-08-27T06:18:30.435Z",
   "source": "youtube-rss",
   "videos": [
+    {
+      "id": "4JWtyL0xE6A",
+      "youtubeId": null,
+      "title": "News Update",
+      "category": "general",
+      "youtubeUrl": null,
+      "thumbnailUrl": "/thumbnails/4JWtyL0xE6A.png",
+      "publishedAt": "2026-08-27T06:18:30.433Z",
+      "publishedLabel": "Aug 27, 06:18 AM"
+    },
     {
       "id": "tq9JDI_N7Gg",
       "title": "Experts Disagree On The | NEWS-MONSTER",
