@@ -77,11 +77,10 @@ export const STAGES = Object.freeze([
   },
   {
     id: 'VERIFY',
-    description: 'YouTube thumbnail + video state verification',
+    description: 'YouTube thumbnail + video state verification (read-only)',
     failureClass: FailureClass.TRANSIENT,
     maxRetries: 3,
     backoffMs: 10000,
-    provider: 'youtube',
   },
   {
     id: 'ANALYTICS',
