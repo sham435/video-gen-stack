@@ -22,6 +22,13 @@ const decodeHtml = (s = '') => s
   .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
   .replace(/&quot;/g, '"').replace(/&#39;/g, "'")
 
+/** Resolve thumbnail — deterministic, no guessing. Always returns a usable URL. */
+function resolveThumbnailUrl(videoId, thumbnailField) {
+  if (typeof thumbnailField === 'string' && thumbnailField.startsWith('http')) return thumbnailField
+  if (videoId) return `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`
+  return '/assets/placeholder-thumbnail.jpg'
+}
+
 /** Read verified videos from PublicationLedger */
 function readLedger() {
   try {
@@ -35,7 +42,7 @@ function readLedger() {
       publishedLabel: e.publishedAt
         ? new Date(e.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
         : '',
-      thumbnail: e.thumbnail || `https://i.ytimg.com/vi/${e.videoId}/hqdefault.jpg`,
+      thumbnail: resolveThumbnailUrl(e.videoId, e.thumbnail),
       verified: true,
     }))
   } catch {
@@ -68,14 +75,13 @@ async function readRssFeed(channelId) {
     const id = /yt:video:([A-Za-z0-9_-]+)/.exec(e)?.[1] || null
     const title = decodeHtml(/<title>([\s\S]*?)<\/title>/.exec(e)?.[1] || '')
     const published = /<published>([\s\S]*?)<\/published>/.exec(e)?.[1] || null
-    const thumb = /<media:thumbnail[^>]*url="([^"]+)"/.exec(e)?.[1] || null
     return {
       id, title,
       publishedAt: published || null,
       publishedLabel: published
         ? new Date(published).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
         : '',
-      thumbnail: thumb || (id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : null),
+      thumbnail: resolveThumbnailUrl(id, null),
     }
   }).filter(v => v.id)
 }

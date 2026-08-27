@@ -704,25 +704,43 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         const coverPath = ctx.results.C2PA?.path || ctx.results.THUMBNAIL?.selected?.path
         const buffer = fs.readFileSync(`${outDir}/final.mp4`)
 
-        // LinkedIn
+        // LinkedIn — luxury image post with thumbnail (not video base64)
         if (process.env.LINKEDIN_ACCESS_TOKEN && process.env.LINKEDIN_MEMBER_URN) {
           try {
-            const { shareVideo, updatePostCommentary } = await import('../apps/api/publishers/linkedin.js')
-            const body = `${uploadTitle}\n\nSource: ${article.source || 'NewsAPI'}\n\n${hashtags}\n\nhttps://www.youtube.com/shorts/${videoId}`
-            const li = await shareVideo(
+            const { shareImage, updatePostCommentary } = await import('../apps/api/publishers/linkedin.js')
+            const { LinkedInPostFactory } = await import('../src/publishing/LinkedInPostFactory.mjs')
+            const factory = new LinkedInPostFactory()
+            const thumbPath = ctx.results.THUMBNAIL?.selected?.path || ctx.results.C2PA?.path || 'output/cover.png'
+            const liPost = factory.videoPost({
+              title: article.title || uploadTitle,
+              summary: (article.description || '').slice(0, 200),
+              category: category || 'technology',
+              videoUrl: `https://youtu.be/${videoId}`,
+              youtubeShortsUrl: `https://www.youtube.com/shorts/${videoId}`,
+              hashtags: (hashtags || '').split(/\s+/).filter(Boolean),
+              thumbnailPath: thumbPath,
+            })
+            const li = await shareImage(
               process.env.LINKEDIN_ACCESS_TOKEN, process.env.LINKEDIN_MEMBER_URN,
-              `data:video/mp4;base64,${buffer.toString('base64')}`, body
+              `file://${thumbPath}`, liPost.commentary, `https://youtu.be/${videoId}`
             )
-            const postId = li?.id
+            const postId = li?.id || li?.urn
             if (postId) {
               try {
                 await updatePostCommentary(process.env.LINKEDIN_ACCESS_TOKEN, postId,
-                  `${body}\n\nhttps://www.linkedin.com/feed/update/${postId}`)
-                console.log(`[LINKEDIN] post=${postId} — shared https://www.linkedin.com/feed/update/${postId}`)
+                  `${liPost.commentary}\n\nhttps://www.linkedin.com/feed/update/${postId}`)
+                console.log(`[LINKEDIN] image post=${postId} — https://www.linkedin.com/feed/update/${postId}`)
               } catch (ue) { console.log(`[LINKEDIN] posted ${postId} (link append skipped: ${ue.message})`) }
             } else {
-              console.log(`[LINKEDIN] post=ok — shared https://www.linkedin.com/feed/update/${li?.id || li?.urn}`)
+              console.log(`[LINKEDIN] image post=ok — https://www.linkedin.com/feed/update/${li?.id || li?.urn}`)
             }
+          } catch (e) {
+            console.log(`[LINKEDIN] skipped (best-effort): ${e.message}`)
+            if (engine?.productionTrace) engine.productionTrace.setLinkedIn({ attempted: true, success: false, error: e.message })
+          }
+        } else {
+          console.log('[LINKEDIN] skipped — LINKEDIN_ACCESS_TOKEN/LINKEDIN_MEMBER_URN not set')
+        }
           } catch (e) {
             console.log(`[LINKEDIN] skipped (best-effort): ${e.message}`)
             if (engine?.productionTrace) engine.productionTrace.setLinkedIn({ attempted: true, success: false, error: e.message })
@@ -769,8 +787,8 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
       })
 
       // ── VERIFY — post-publication verification chain ──
-      // Verifies: video reachable, visibility public, thumbnail available,
-      // title matches, local thumbnail exists. Records to PublicationLedger.
+      // Verifies: video reachable, visibility public, hasCustomThumbnail,
+      // title matches, thumbnail artifact consistency. Records to PublicationLedger.
       job.onStage('VERIFY', async (ctx) => {
         const { videoId, uploadTitle } = ctx.results.UPLOAD || {}
         if (!videoId) return { verified: false, reason: 'no videoId' }
@@ -791,12 +809,39 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           }
         }
 
-        // 2. Post-publish verification chain
+        // 2. YouTube thumbnail verification (setThumbnail + videos.list check)
+        let thumbnailResult = { ok: false, reason: 'skipped' }
+        const masterThumb = ctx.results.THUMBNAIL?.selected?.path || null
+        if (masterThumb) {
+          try {
+            const { setThumbnail } = await import('../apps/api/publishers/youtube.js')
+            const { YouTubeThumbnailAdapter } = await import('../src/publishing/YouTubeThumbnailAdapter.mjs')
+
+            // Create youtube.jpg from master — separate branch from C2PA
+            const ytArtifact = YouTubeThumbnailAdapter.toYouTube(masterThumb, path.join(outDir, 'thumbnail'))
+            console.log(`[THUMBNAIL] youtube.jpg prepared: ${ytArtifact.path} (${(ytArtifact.size / 1024).toFixed(0)}KB)`)
+
+            // Upload youtube.jpg (not C2PA-signed master)
+            thumbnailResult = await setThumbnail(process.env.YOUTUBE_OAUTH_TOKEN, videoId, ytArtifact.path)
+            if (thumbnailResult.ok && thumbnailResult.hasCustomThumbnail) {
+              console.log(`[THUMBNAIL] VERIFIED — hasCustomThumbnail=true for ${videoId}`)
+            } else if (thumbnailResult.ok) {
+              console.log(`[THUMBNAIL] upload ok but hasCustomThumbnail not confirmed`)
+            } else {
+              console.warn(`[THUMBNAIL] REJECTED — ${thumbnailResult.reason}`)
+            }
+          } catch (e) {
+            thumbnailResult = { ok: false, reason: e.message }
+            console.log(`[THUMBNAIL] verification error: ${e.message}`)
+          }
+        }
+
+        // 3. Post-publish verification chain
         let verification = { passed: false, reason: 'skipped' }
         try {
           const { PostPublishVerifier } = await import('../src/publishing/PostPublishVerifier.mjs')
           const verifier = new PostPublishVerifier()
-          const thumbPath = ctx.results.THUMBNAIL?.selected?.path || ctx.results.C2PA?.path || null
+          const thumbPath = masterThumb || null
           verification = await verifier.verify({
             videoId,
             expectedTitle: uploadTitle || title,
@@ -814,7 +859,8 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           console.log(`[VERIFY] error: ${e.message}`)
         }
 
-        // 3. Record to PublicationLedger
+        // 4. Record to PublicationLedger with verified thumbnail URL
+        const verifiedThumbnailUrl = thumbnailResult.verifiedUrl || null
         try {
           const { PublicationLedger } = await import('../src/publishing/PublicationLedger.mjs')
           const ledgerPath = path.join(outDir, 'data', 'publication-ledger.json')
@@ -824,13 +870,13 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             jobId: ctx.jobId,
             title: uploadTitle || title,
             category: category || 'technology',
-            thumbnail: ctx.results.THUMBNAIL?.selected?.path || null,
+            thumbnail: verifiedThumbnailUrl || `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`,
             visibility: 'public',
             verifiedAt: verification.verifiedAt,
-            checks: verification.checks,
+            checks: { ...verification.checks, thumbnailAccepted: thumbnailResult.hasCustomThumbnail || false },
             publishedAt: new Date().toISOString(),
           })
-          console.log(`[LEDGER] recorded ${videoId} — verified=${verification.passed}`)
+          console.log(`[LEDGER] recorded ${videoId} — verified=${verification.passed} thumbnail=${verifiedThumbnailUrl ? 'verified' : 'fallback'}`)
         } catch (e) {
           console.log(`[LEDGER] record failed (non-fatal): ${e.message}`)
         }

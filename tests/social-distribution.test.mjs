@@ -35,6 +35,7 @@ const VIDEO = {
   videoId: 'abc123xyz',
   title: 'Mall rink closes after 60 years of skate dates | NEWS-MONSTER',
   videoUrl: 'https://youtu.be/abc123xyz',
+  youtubeShortsUrl: 'https://www.youtube.com/shorts/abc123xyz',
   thumbnailPath: null,
   category: 'business',
   hook: 'The rink where they fell in love is closing.',
@@ -47,7 +48,7 @@ test('post generator — post contains YouTube URL', () => {
   const g = new SocialPostGenerator()
   const post = g.build(VIDEO)
   assert.ok(post.videoUrl === 'https://youtu.be/abc123xyz')
-  assert.ok(post.platforms.linkedin.commentary.includes('https://youtu.be/abc123xyz'))
+  assert.ok(post.platforms.linkedin.commentary.includes('https://www.youtube.com/shorts/abc123xyz'))
   assert.ok(post.platforms.youtubeCommunity.text.includes('https://youtu.be/abc123xyz'))
 })
 
@@ -78,10 +79,16 @@ test('distribution — published video produces a LinkedIn promotional post', as
     accessToken: 'tok', memberUrn: 'urn:li:person:1',
     shareImage: async () => { calls++; return { id: 'urn:li:share:111', urn: 'urn:li:share:111' } },
   })
+  // Provide a real thumbnail so pickThumbnail finds it
+  const dir = mkdtempSync(join(tmpdir(), 'li-thumb-'))
+  const thumbPath = join(dir, 'cover.png')
+  writeFileSync(thumbPath, Buffer.from('fake-png'))
+  linkedIn._shareImage = async () => { calls++; return { id: 'urn:li:share:111', urn: 'urn:li:share:111' } }
+
   const yt = new YouTubeCommunityPublisher({ queueFile: makeQueueFile() })
   const mgr = new SocialDistributionManager({ store, linkedIn, youtubeCommunity: yt })
 
-  const out = await mgr.distribute(VIDEO)
+  const out = await mgr.distribute({ ...VIDEO, thumbnailPath: thumbPath })
   assert.equal(out.results.linkedin.status, 'published')
   assert.equal(out.results.linkedin.postId, 'urn:li:share:111')
   assert.equal(calls, 1)
@@ -137,18 +144,22 @@ test('distribution — LinkedIn failure never fails the video/other platforms', 
 test('distribution — second run does NOT re-post (idempotent per video)', async () => {
   const store = await makeStore()
   let calls = 0
+  const dir = mkdtempSync(join(tmpdir(), 'li-thumb-idempotent-'))
+  const thumbPath = join(dir, 'cover.png')
+  writeFileSync(thumbPath, Buffer.from('fake-png'))
   const linkedIn = new LinkedInPublisher({
     accessToken: 'tok', memberUrn: 'urn:li:person:1',
     shareImage: async () => { calls++; return { id: 'urn:li:share:222' } },
   })
+  linkedIn._shareImage = async () => { calls++; return { id: 'urn:li:share:222' } }
   const yt = new YouTubeCommunityPublisher({ queueFile: makeQueueFile() })
   const mgr = new SocialDistributionManager({ store, linkedIn, youtubeCommunity: yt })
 
-  const first = await mgr.distribute(VIDEO)
+  const first = await mgr.distribute({ ...VIDEO, thumbnailPath: thumbPath })
   assert.equal(first.results.linkedin.status, 'published')
   assert.equal(calls, 1)
 
-  const second = await mgr.distribute(VIDEO)
+  const second = await mgr.distribute({ ...VIDEO, thumbnailPath: thumbPath })
   assert.equal(second.results.linkedin.status, 'published')
   assert.equal(second.results.linkedin.duplicate, true)
   assert.equal(calls, 1, 'shareImage called once across both runs')

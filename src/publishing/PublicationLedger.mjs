@@ -7,6 +7,16 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs'
 import { dirname } from 'node:path'
 
+/** Resolve thumbnail URL — deterministic, no guessing. */
+export function resolveThumbnailUrl(videoId, thumbnailField) {
+  // 1. Explicit YouTube URL from production verification
+  if (typeof thumbnailField === 'string' && thumbnailField.startsWith('http')) return thumbnailField
+  // 2. YouTube verified fallback — maxres first
+  if (videoId) return `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`
+  // 3. Static placeholder
+  return '/assets/placeholder-thumbnail.jpg'
+}
+
 export class PublicationLedger {
   constructor(options = {}) {
     this.filePath = options.filePath || 'data/publication-ledger.json'
@@ -41,7 +51,7 @@ export class PublicationLedger {
       jobId: verification.jobId,
       title: verification.title || null,
       category: verification.category || null,
-      thumbnail: verification.thumbnail || null,
+      thumbnail: resolveThumbnailUrl(verification.videoId, verification.thumbnail),
       visibility: verification.visibility || 'public',
       verifiedAt: verification.verifiedAt || new Date().toISOString(),
       checks: verification.checks || {},
@@ -66,7 +76,7 @@ export class PublicationLedger {
       publishedLabel: e.publishedAt
         ? new Date(e.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
         : '',
-      thumbnail: e.thumbnail || `https://i.ytimg.com/vi/${e.videoId}/hqdefault.jpg`,
+      thumbnail: resolveThumbnailUrl(e.videoId, e.thumbnail),
       verified: true,
     }))
     return {

@@ -149,14 +149,26 @@ export async function setThumbnail(token, videoId, coverPath) {
   if (!coverPath) coverPath = 'output/cover.png'
   if (!existsSync(coverPath)) {
     console.warn(`⚠️  Cover image not found at ${coverPath} — skipping thumbnail`)
-    return
+    return { ok: false, reason: 'not found' }
   }
 
   const thumbBuffer = readFileSync(coverPath)
+  if (!thumbBuffer.length) {
+    console.warn(`⚠️  Cover image empty: ${coverPath} — skipping thumbnail`)
+    return { ok: false, reason: 'empty file' }
+  }
+
+  const ext = coverPath.toLowerCase().split('.').pop()
+  const MIME_BY_EXT = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg' }
+  const mimeType = MIME_BY_EXT[ext]
+  if (!mimeType) {
+    console.warn(`⚠️  Unsupported thumbnail format: ${ext} — skipping thumbnail`)
+    return { ok: false, reason: `unsupported format: ${ext}` }
+  }
 
   const boundary = 'thumb_boundary'
   const parts = [
-    new TextEncoder().encode(`--${boundary}\r\nContent-Type: image/png\r\n\r\n`),
+    new TextEncoder().encode(`--${boundary}\r\nContent-Type: ${mimeType}\r\n\r\n`),
     thumbBuffer,
     new TextEncoder().encode(`\r\n--${boundary}--\r\n`),
   ]
@@ -179,8 +191,41 @@ export async function setThumbnail(token, videoId, coverPath) {
   const data = await res.json()
   if (data.error) {
     console.warn(`⚠️  YouTube thumbnail upload failed: ${data.error.message}`)
-  } else {
-    console.log(`✅ YouTube thumbnail set: ${data.items?.length || 0} items`)
+    return { ok: false, reason: data.error.message }
+  }
+
+  // Critical: verify YouTube actually accepted the custom thumbnail
+  // via videos.list — do NOT trust HTTP 200 alone
+  try {
+    const verifyRes = await fetch(
+      `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,snippet&id=${videoId}`,
+      { headers: { 'Authorization': `Bearer ${token}` }, signal: AbortSignal.timeout(10000) }
+    )
+    const verifyData = await verifyRes.json()
+    const video = verifyData.items?.[0]
+    if (!video) {
+      console.warn(`⚠️  YouTube verification: video ${videoId} not found`)
+      return { ok: false, reason: 'video not found after upload' }
+    }
+
+    const hasCustom = video.contentDetails?.hasCustomThumbnail === true
+    if (!hasCustom) {
+      console.warn(`⚠️  YouTube rejected custom thumbnail for ${videoId} (hasCustomThumbnail=false)`)
+      return { ok: false, reason: 'hasCustomThumbnail=false', hasCustomThumbnail: false }
+    }
+
+    // Get verified thumbnail URL from YouTube's response
+    const thumbs = video.snippet?.thumbnails || {}
+    const verifiedUrl = thumbs.maxres?.url || thumbs.standard?.url || thumbs.high?.url || thumbs.medium?.url || null
+
+    console.log(`✅ YouTube thumbnail verified: hasCustomThumbnail=true (${mimeType})`)
+    if (verifiedUrl) console.log(`   verified URL: ${verifiedUrl}`)
+
+    return { ok: true, items: data.items?.length || 0, mimeType, hasCustomThumbnail: true, verifiedUrl }
+  } catch (e) {
+    // Upload succeeded but verification failed — log but don't fail
+    console.warn(`⚠️  YouTube thumbnail verification skipped: ${e.message}`)
+    return { ok: true, items: data.items?.length || 0, mimeType, verified: false }
   }
 }
 

@@ -1,16 +1,14 @@
 import { HashtagBuilder } from './HashtagBuilder.mjs'
 
-// SocialPostGenerator — builds the platform-specific promotional post from the
-// same published-video metadata.
+// SocialPostGenerator — builds platform-specific promotional posts from
+// published-video metadata. LinkedIn posts are luxury image posts with
+// thumbnail, YouTube link, and GitHub landing page link.
 //
 // Input shape (from the publish contract):
-//   { title, videoUrl, thumbnailPath, category, hook, summary, hashtags }
-//
-// The post is NOT the YouTube description — it is a curiosity-driven social
-// update with a hook, value statement, YouTube CTA, hashtags and branding.
+//   { title, videoUrl, videoId, thumbnailPath, category, hook, summary, hashtags }
 
-const LINKEDIN_MAX_COMMENTARY = 1500 // Posts API commentary cap
-const HOOK_PREFIXES = ['BREAKING:', 'JUST IN:', 'HUGE:', 'FYI:']
+const LINKEDIN_MAX_COMMENTARY = 1500
+const LANDING_PAGE = 'https://sham435.github.io/video-gen-stack/'
 
 function cleanTitle(title = '') {
   return title
@@ -19,65 +17,73 @@ function cleanTitle(title = '') {
     .trim()
 }
 
-/** Derive a curiosity hook from the title if not provided by the caller. */
-function deriveHook(title = '', summary = '') {
+/** Niche-style hook: "Scientists Just Set Up What Comes Next" */
+function nicheHook(title = '') {
   const words = title.replace(/[^a-zA-Z0-9 ]/g, ' ').trim().split(/\s+/).filter(Boolean)
-  if (words.length <= 3) return title || 'The story everyone missed.'
-  // "X just did Y" style curiosity line from the leading subject.
-  const subject = words.slice(0, Math.min(3, words.length)).join(' ')
-  return `${subject} — here's what just happened.`
+  if (words.length <= 4) return title || 'Breaking story from NEWS-MONSTER'
+  // Take leading subject as hook
+  return words.slice(0, Math.min(5, words.length)).join(' ')
 }
 
 export class SocialPostGenerator {
   build(video) {
     const title = cleanTitle(video.title || 'NEWS-MONSTER')
-    const videoUrl = video.videoUrl || `https://youtu.be/${video.videoId || ''}`
+    const videoId = video.videoId || null
+    const videoUrl = video.videoUrl || (videoId ? `https://youtu.be/${videoId}` : '')
+    const youtubeShortsUrl = videoId ? `https://www.youtube.com/shorts/${videoId}` : videoUrl
     const summary = video.summary || video.hook || ''
-    const hook = video.hook || deriveHook(title, summary)
+    const hook = nicheHook(title)
+    const category = video.category || 'news'
 
     const hashtags = Array.isArray(video.hashtags) && video.hashtags.length
       ? video.hashtags
       : HashtagBuilder.buildList({
-          topic: video.category || 'news',
-          category: video.category || 'news',
+          topic: category,
+          category,
           pipelineProfile: 'breaking',
           channel: 'NEWS-MONSTER',
         })
 
     return {
       title,
-      videoId: video.videoId || null,
+      videoId,
       videoUrl,
+      youtubeShortsUrl,
       thumbnailPath: video.thumbnailPath || null,
-      category: video.category || 'news',
+      category,
       hook,
       summary,
       hashtags,
       platforms: {
-        linkedin: { ...this.linkedinPost({ title, videoUrl, hook, summary, hashtags }), thumbnailPath: video.thumbnailPath || null },
+        linkedin: {
+          ...this.linkedinPost({ title, hook, summary, videoUrl, youtubeShortsUrl, hashtags, category }),
+          thumbnailPath: video.thumbnailPath || null,
+        },
         youtubeCommunity: { ...this.youtubeCommunityPost({ title, videoUrl, hook, summary, hashtags }), thumbnailPath: video.thumbnailPath || null },
       },
     }
   }
 
-  /** Colourful LinkedIn promotional post. */
-  linkedinPost({ title, videoUrl, hook, summary, hashtags }) {
+  /** Luxury LinkedIn image post with thumbnail + both links. */
+  linkedinPost({ title, hook, summary, videoUrl, youtubeShortsUrl, hashtags, category }) {
+    const ytLink = youtubeShortsUrl || videoUrl
     const lines = [
-      `🚨 NEW: ${hook}`,
+      `${hook}`,
       ``,
-      summary ? `${summary}` : `A ${title.toLowerCase()} story that's worth two minutes of your time.`,
+      summary ? `${summary.slice(0, 200)}` : `A ${category} story worth your time.`,
       ``,
-      `▶ Watch the full story:`,
-      `${videoUrl}`,
+      `▶ Watch on YouTube:`,
+      `${ytLink}`,
       ``,
-      `What do you think?`,
+      `🌐 Full gallery:`,
+      `${LANDING_PAGE}`,
       ``,
       hashtags.join(' '),
     ]
     const text = lines.join('\n')
     return {
       commentary: text.slice(0, LINKEDIN_MAX_COMMENTARY),
-      media: { url: videoUrl },
+      media: { url: ytLink },
       hashtags: hashtags.slice(0, 5),
     }
   }
@@ -87,7 +93,7 @@ export class SocialPostGenerator {
     const lines = [
       `🚨 NEW: ${hook}`,
       ``,
-      summary ? `${summary}` : `A ${title.toLowerCase()} story you should see.`,
+      summary ? `${summary.slice(0, 200)}` : `A ${title.toLowerCase()} story you should see.`,
       ``,
       `▶ Watch: ${videoUrl}`,
       ``,
@@ -96,7 +102,7 @@ export class SocialPostGenerator {
     return {
       title,
       text: lines.join('\n'),
-      thumbnailPath: null, // set by the manager when the asset exists
+      thumbnailPath: null,
       hashtags,
     }
   }
