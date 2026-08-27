@@ -802,26 +802,35 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           }
         }
 
-        // 2. YouTube thumbnail verification (setThumbnail + videos.list check)
+        // 2. YouTube thumbnail verification (read-only — upload already done in UPLOAD stage)
         let thumbnailResult = { ok: false, reason: 'skipped' }
         const masterThumb = ctx.results.THUMBNAIL?.selected?.path || null
-        if (masterThumb) {
+        if (masterThumb && process.env.YOUTUBE_OAUTH_TOKEN) {
           try {
-            const { setThumbnail } = await import('../apps/api/publishers/youtube.js')
-            const { YouTubeThumbnailAdapter } = await import('../src/publishing/YouTubeThumbnailAdapter.mjs')
-
-            // Create youtube.jpg from master — separate branch from C2PA
-            const ytArtifact = YouTubeThumbnailAdapter.toYouTube(masterThumb, path.join(outDir, 'thumbnail'))
-            console.log(`[THUMBNAIL] youtube.jpg prepared: ${ytArtifact.path} (${(ytArtifact.size / 1024).toFixed(0)}KB)`)
-
-            // Upload youtube.jpg (not C2PA-signed master)
-            thumbnailResult = await setThumbnail(process.env.YOUTUBE_OAUTH_TOKEN, videoId, ytArtifact.path)
-            if (thumbnailResult.ok && thumbnailResult.hasCustomThumbnail) {
-              console.log(`[THUMBNAIL] VERIFIED — hasCustomThumbnail=true for ${videoId}`)
-            } else if (thumbnailResult.ok) {
-              console.log(`[THUMBNAIL] upload ok but hasCustomThumbnail not confirmed`)
+            // Verify YouTube accepted the custom thumbnail via videos.list
+            const verifyRes = await fetch(
+              `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,snippet&id=${videoId}`,
+              {
+                headers: { 'Authorization': `Bearer ${process.env.YOUTUBE_OAUTH_TOKEN}` },
+                signal: AbortSignal.timeout(10000),
+              }
+            )
+            const verifyData = await verifyRes.json()
+            const video = verifyData.items?.[0]
+            if (video) {
+              const hasCustom = video.contentDetails?.hasCustomThumbnail === true
+              const thumbs = video.snippet?.thumbnails || {}
+              const verifiedUrl = thumbs.maxres?.url || thumbs.standard?.url || thumbs.high?.url || null
+              thumbnailResult = { ok: hasCustom, hasCustomThumbnail: hasCustom, verifiedUrl }
+              if (hasCustom) {
+                console.log(`[THUMBNAIL] VERIFIED — hasCustomThumbnail=true for ${videoId}`)
+                if (verifiedUrl) console.log(`   verified URL: ${verifiedUrl}`)
+              } else {
+                console.warn(`[THUMBNAIL] REJECTED — hasCustomThumbnail=false for ${videoId}`)
+              }
             } else {
-              console.warn(`[THUMBNAIL] REJECTED — ${thumbnailResult.reason}`)
+              thumbnailResult = { ok: false, reason: 'video not found' }
+              console.warn(`[THUMBNAIL] verification failed — video ${videoId} not found`)
             }
           } catch (e) {
             thumbnailResult = { ok: false, reason: e.message }
