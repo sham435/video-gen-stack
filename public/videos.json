@@ -1,8 +1,15 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-26T21:52:41.804Z",
+  "updatedAt": "2026-08-27T00:30:35.264Z",
   "source": "youtube-rss",
   "videos": [
+    {
+      "id": "tq9JDI_N7Gg",
+      "title": "Experts Disagree On The | NEWS-MONSTER",
+      "publishedAt": "2026-08-26T21:53:06+00:00",
+      "publishedLabel": "Aug 26, 09:53 PM",
+      "thumbnail": "https://i1.ytimg.com/vi/tq9JDI_N7Gg/hqdefault.jpg"
+    },
     {
       "id": "xfD9uqrr4DI",
       "title": "Falcon 9 rocket launch creates unusual jellyfish cloud over East Coast - The Washington Po | NEWS-MO",
@@ -100,13 +107,6 @@
       "publishedAt": "2026-08-23T17:50:21+00:00",
       "publishedLabel": "Aug 23, 05:50 PM",
       "thumbnail": "https://i4.ytimg.com/vi/CI_ThnNgP1Y/hqdefault.jpg"
-    },
-    {
-      "id": "RKEVFOZCwG8",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-23T17:24:12+00:00",
-      "publishedLabel": "Aug 23, 05:24 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/RKEVFOZCwG8/hqdefault.jpg"
     }
   ]
 }
