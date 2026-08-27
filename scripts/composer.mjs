@@ -784,7 +784,6 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
       job.onStage('DISTRIBUTE', async (ctx) => {
         const { PublicationArtifact } = await import('../src/distribution/PublicationArtifact.mjs')
         const { DistributionOrchestrator } = await import('../src/distribution/DistributionOrchestrator.mjs')
-        const { YouTubeDistributor } = await import('../src/distribution/YouTubeDistributor.mjs')
         const { GitHubPagesDistributor } = await import('../src/distribution/GitHubPagesDistributor.mjs')
         const { LinkedInDistributor } = await import('../src/distribution/LinkedInDistributor.mjs')
 
@@ -792,7 +791,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         const artifact = PublicationArtifact.fromProductionResults(ctx.results, outDir)
         artifact.artifactId = ctx.results.UNIQUENESS?.assetId || ctx.results.UPLOAD?.videoId || artifact.artifactId
 
-        // YouTube already uploaded in PUBLISH — record its result
+        // YouTube already uploaded in PUBLISH — record its result as pre-distributed
         const pubResult = ctx.results.PUBLISH || {}
         if (pubResult.videoId) {
           artifact.destinations.youtube.state = 'SUCCESS'
@@ -801,19 +800,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           artifact.destinations.youtube.thumbnail.state = pubResult.thumbnailUploaded ? 'SUCCESS' : 'FAILED'
         }
 
-        // Channel controller for YouTube quota coordination
-        let channelController = null
-        try {
-          const { ChannelController } = await import('../src/governor/ChannelController.mjs')
-          channelController = new ChannelController()
-        } catch { /* channel control unavailable */ }
-
-        // Build distributors
-        const youtubeDist = new YouTubeDistributor({
-          publishVideo: async () => ({ videoId: artifact.destinations.youtube.videoId, url: artifact.destinations.youtube.url, thumbnailUploaded: artifact.destinations.youtube.thumbnail.state === 'SUCCESS' }),
-          channelController,
-        })
-
+        // Build distributors — only new destinations not handled by PUBLISH
         const githubPagesDist = new GitHubPagesDistributor({ publicDir: 'public' })
 
         let linkedinDist = null
@@ -826,9 +813,8 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           })
         } catch { /* LinkedIn not configured */ }
 
-        // Fan-out distribution
+        // Fan-out to new destinations (YouTube already distributed in PUBLISH)
         const orchestrator = new DistributionOrchestrator({
-          youtube: youtubeDist,
           githubPages: githubPagesDist,
           linkedin: linkedinDist,
         })
@@ -842,11 +828,6 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           if (r.errors?.length) {
             for (const err of r.errors) console.log(`   error: ${err.error} (${err.classification})`)
           }
-        }
-
-        // Update channel state after successful YouTube distribution
-        if (channelController && distResult.results.youtube?.state === 'SUCCESS') {
-          try { await channelController.commit('news', artifact.destinations.youtube.videoId) } catch { /* non-fatal */ }
         }
 
         return {
