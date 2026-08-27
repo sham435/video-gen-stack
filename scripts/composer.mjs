@@ -916,8 +916,11 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             : 'UPLOADED'
         try {
           const { PublicationLedger } = await import('../src/publishing/PublicationLedger.mjs')
-          const ledgerPath = path.join(outDir, 'data', 'publication-ledger.json')
-          const ledger = new PublicationLedger({ filePath: ledgerPath })
+          // Persist to run-scoped ledger AND top-level data/ (GitHub cache persists data/)
+          const ledgerPaths = [
+            path.join(outDir, 'data', 'publication-ledger.json'),
+            path.join('data', 'publication-ledger.json'),
+          ]
 
           // Include distribution state from DISTRIBUTE stage
           const distribution = ctx.results.DISTRIBUTE?.distributionResults || {
@@ -926,12 +929,13 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             linkedin: { state: 'PENDING' },
           }
 
-          ledger.record({
+          const record = {
             videoId,
             jobId: ctx.jobId,
             title: uploadTitle || title,
             category: category || 'technology',
             thumbnail: verifiedThumbnailUrl || `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`,
+            youtubeUrl: `https://youtu.be/${videoId}`,
             visibility: 'public',
             verifiedAt: verification.verifiedAt,
             checks: { ...verification.checks, thumbnailState, verificationState, verificationErrorType: thumbnailResult.errorType || null },
@@ -940,7 +944,14 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             thumbnailState,
             verificationState,
             distribution,
-          })
+          }
+
+          // Write to all ledger paths (idempotent upsert)
+          let ledgerEntry
+          for (const ledgerPath of ledgerPaths) {
+            const ledger = new PublicationLedger({ filePath: ledgerPath })
+            ledgerEntry = ledger.record(record)
+          }
           console.log(`[LEDGER] recorded ${videoId} — verified=${verification.passed} upload=SUCCESS thumbnail=${thumbnailState} verification=${verificationState}${thumbnailResult.errorType ? ` (${thumbnailResult.errorType})` : ''}`)
         } catch (e) {
           console.log(`[LEDGER] record failed (non-fatal): ${e.message}`)
