@@ -785,13 +785,12 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         const { PublicationArtifact } = await import('../src/distribution/PublicationArtifact.mjs')
         const { DistributionOrchestrator } = await import('../src/distribution/DistributionOrchestrator.mjs')
         const { GitHubPagesDistributor } = await import('../src/distribution/GitHubPagesDistributor.mjs')
-        const { LinkedInDistributor } = await import('../src/distribution/LinkedInDistributor.mjs')
 
         // Build canonical artifact from production results
         const artifact = PublicationArtifact.fromProductionResults(ctx.results, outDir)
         artifact.artifactId = ctx.results.UNIQUENESS?.assetId || ctx.results.UPLOAD?.videoId || artifact.artifactId
 
-        // YouTube already uploaded in PUBLISH — record its result as pre-distributed
+        // YouTube + LinkedIn already published in PUBLISH — record their results
         const pubResult = ctx.results.PUBLISH || {}
         if (pubResult.videoId) {
           artifact.destinations.youtube.state = 'SUCCESS'
@@ -799,41 +798,25 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           artifact.destinations.youtube.url = pubResult.url
           artifact.destinations.youtube.thumbnail.state = pubResult.thumbnailUploaded ? 'SUCCESS' : 'FAILED'
         }
-
-        // Build distributors — only new destinations not handled by PUBLISH
-        const githubPagesDist = new GitHubPagesDistributor({ publicDir: 'public' })
-
-        let linkedinDist = null
-        try {
-          const { LinkedInPostFactory } = await import('../src/publishing/LinkedInPostFactory.mjs')
-          const { shareImage } = await import('../apps/api/publishers/linkedin.js')
-          linkedinDist = new LinkedInDistributor({
-            shareImage,
-            postFactory: new LinkedInPostFactory(),
-          })
-        } catch { /* LinkedIn not configured */ }
-
-        // Fan-out to new destinations (YouTube already distributed in PUBLISH)
-        const orchestrator = new DistributionOrchestrator({
-          githubPages: githubPagesDist,
-          linkedin: linkedinDist,
-        })
-
-        const distResult = await orchestrator.distribute(artifact, { jobId: ctx.jobId })
-
-        // Log per-destination results
-        for (const [dest, r] of Object.entries(distResult.results)) {
-          const status = r.state === 'SUCCESS' ? '✓' : r.state === 'SKIPPED' ? '○' : '✗'
-          console.log(`[DISTRIBUTE] ${status} ${dest}: ${r.state} (${r.durationMs}ms)`)
-          if (r.errors?.length) {
-            for (const err of r.errors) console.log(`   error: ${err.error} (${err.classification})`)
-          }
+        if (pubResult.linkedinPostId) {
+          artifact.destinations.linkedin.state = 'SUCCESS'
+          artifact.destinations.linkedin.postId = pubResult.linkedinPostId
         }
+
+        // GitHub Pages — deterministic manifest + thumbnail copy
+        const githubPagesDist = new GitHubPagesDistributor({ publicDir: 'public' })
+        const distResult = await githubPagesDist.distribute(artifact, { jobId: ctx.jobId })
+
+        console.log(`[DISTRIBUTE] ${distResult.state === 'SUCCESS' ? '✓' : '✗'} githubPages: ${distResult.state} (${distResult.durationMs}ms)`)
 
         return {
           artifact: artifact.toJSON(),
           distributionState: distResult.state,
-          distributionResults: distResult.results,
+          distributionResults: {
+            youtube: artifact.destinations.youtube,
+            githubPages: distResult,
+            linkedin: artifact.destinations.linkedin,
+          },
         }
       })
 
