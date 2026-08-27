@@ -803,12 +803,12 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         }
 
         // 2. YouTube thumbnail verification (propagation-aware with retries)
-        let thumbnailResult = { state: 'VIDEO_NOT_VISIBLE_YET', hasCustomThumbnail: false, verifiedUrl: null }
+        const { YouTubePropagationVerifier, VerifyState } = await import('../src/publishing/YouTubePropagationVerifier.mjs')
+        let thumbnailResult = { state: VerifyState.VIDEO_NOT_VISIBLE_YET, hasCustomThumbnail: false, verifiedUrl: null }
         const masterThumb = ctx.results.THUMBNAIL?.selected?.path || null
         if (masterThumb) {
           try {
             const { getAccessToken } = await import('../apps/api/publishers/youtube.js')
-            const { YouTubePropagationVerifier, VerifyState } = await import('../src/publishing/YouTubePropagationVerifier.mjs')
             const token = await getAccessToken()
             const verifier = new YouTubePropagationVerifier({ token })
             thumbnailResult = await verifier.verify({ videoId })
@@ -826,16 +826,18 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
               console.warn(`[THUMBNAIL] ${thumbnailResult.state}`)
             }
           } catch (e) {
-            thumbnailResult = { state: 'VERIFICATION_FAILED', error: e.message, hasCustomThumbnail: false, verifiedUrl: null }
+            thumbnailResult = { state: VerifyState.VERIFICATION_FAILED, error: e.message, hasCustomThumbnail: false, verifiedUrl: null }
             console.log(`[THUMBNAIL] verification error: ${e.message}`)
           }
         }
 
-        // 3. Post-publish verification chain
+        // 3. Post-publish verification chain (propagation-aware, not quota-gated)
         let verification = { passed: false, reason: 'skipped' }
         try {
           const { PostPublishVerifier } = await import('../src/publishing/PostPublishVerifier.mjs')
-          const verifier = new PostPublishVerifier()
+          const { getAccessToken } = await import('../apps/api/publishers/youtube.js')
+          const token = await getAccessToken()
+          const verifier = new PostPublishVerifier({ token })
           const thumbPath = masterThumb || null
           verification = await verifier.verify({
             videoId,
