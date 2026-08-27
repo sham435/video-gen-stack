@@ -194,39 +194,11 @@ export async function setThumbnail(token, videoId, coverPath) {
     return { ok: false, reason: data.error.message }
   }
 
-  // Critical: verify YouTube actually accepted the custom thumbnail
-  // via videos.list — do NOT trust HTTP 200 alone
-  try {
-    const verifyRes = await fetch(
-      `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,snippet&id=${videoId}`,
-      { headers: { 'Authorization': `Bearer ${token}` }, signal: AbortSignal.timeout(10000) }
-    )
-    const verifyData = await verifyRes.json()
-    const video = verifyData.items?.[0]
-    if (!video) {
-      console.warn(`⚠️  YouTube verification: video ${videoId} not found`)
-      return { ok: false, reason: 'video not found after upload' }
-    }
-
-    const hasCustom = video.contentDetails?.hasCustomThumbnail === true
-    if (!hasCustom) {
-      console.warn(`⚠️  YouTube rejected custom thumbnail for ${videoId} (hasCustomThumbnail=false)`)
-      return { ok: false, reason: 'hasCustomThumbnail=false', hasCustomThumbnail: false }
-    }
-
-    // Get verified thumbnail URL from YouTube's response
-    const thumbs = video.snippet?.thumbnails || {}
-    const verifiedUrl = thumbs.maxres?.url || thumbs.standard?.url || thumbs.high?.url || thumbs.medium?.url || null
-
-    console.log(`✅ YouTube thumbnail verified: hasCustomThumbnail=true (${mimeType})`)
-    if (verifiedUrl) console.log(`   verified URL: ${verifiedUrl}`)
-
-    return { ok: true, items: data.items?.length || 0, mimeType, hasCustomThumbnail: true, verifiedUrl }
-  } catch (e) {
-    // Upload succeeded but verification failed — log but don't fail
-    console.warn(`⚠️  YouTube thumbnail verification skipped: ${e.message}`)
-    return { ok: true, items: data.items?.length || 0, mimeType, verified: false }
-  }
+  console.log(`✅ YouTube thumbnail set: ${data.items?.length || 0} items (${mimeType})`)
+  // Note: hasCustomThumbnail verification happens in the VERIFY stage
+  // (PostPublishVerifier) — not here, because the video may not have
+  // propagated to videos.list immediately after upload.
+  return { ok: true, items: data.items?.length || 0, mimeType }
 }
 
 // Find the channel's own top-level comment on a video (e.g. manually pinned
