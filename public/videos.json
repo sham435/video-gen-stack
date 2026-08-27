@@ -1,122 +1,157 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-27T06:18:30.435Z",
+  "updatedAt": "2026-08-27T06:43:54.103Z",
   "source": "youtube-rss",
   "videos": [
     {
-      "id": "4JWtyL0xE6A",
-      "youtubeId": null,
-      "title": "News Update",
-      "category": "general",
-      "youtubeUrl": null,
-      "thumbnailUrl": "/thumbnails/4JWtyL0xE6A.png",
-      "publishedAt": "2026-08-27T06:18:30.433Z",
-      "publishedLabel": "Aug 27, 06:18 AM"
-    },
-    {
-      "id": "tq9JDI_N7Gg",
-      "title": "Experts Disagree On The | NEWS-MONSTER",
-      "publishedAt": "2026-08-26T21:53:06+00:00",
-      "publishedLabel": "Aug 26, 09:53 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/tq9JDI_N7Gg/hqdefault.jpg"
-    },
-    {
-      "id": "xfD9uqrr4DI",
+      "id": "Snz5ngKm3Bg",
       "title": "Falcon 9 rocket launch creates unusual jellyfish cloud over East Coast - The Washington Po | NEWS-MO",
-      "publishedAt": "2026-08-26T21:48:56+00:00",
-      "publishedLabel": "Aug 26, 09:48 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/xfD9uqrr4DI/hqdefault.jpg"
+      "publishedAt": "2026-08-27T06:39:17+00:00",
+      "publishedLabel": "Aug 27, 06:39 AM",
+      "thumbnail": "https://i.ytimg.com/vi/Snz5ngKm3Bg/maxresdefault.jpg",
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
-      "id": "JiHeOoU7wPg",
+      "id": "hptBF0mJXu8",
       "title": "Scientists Just Set Up What Comes Next | NEWS-MONSTER",
-      "publishedAt": "2026-08-26T21:44:20+00:00",
-      "publishedLabel": "Aug 26, 09:44 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/JiHeOoU7wPg/hqdefault.jpg"
+      "publishedAt": "2026-08-27T06:34:41+00:00",
+      "publishedLabel": "Aug 27, 06:34 AM",
+      "thumbnail": "https://i.ytimg.com/vi/hptBF0mJXu8/maxresdefault.jpg",
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
-      "id": "D7DauSvTYY4",
-      "title": "Opening Night Live 2026: All the Announcements, Trailers and News Direct From gamescom - I | NEWS-MO",
-      "publishedAt": "2026-08-26T21:28:52+00:00",
-      "publishedLabel": "Aug 26, 09:28 PM",
-      "thumbnail": "https://i1.ytimg.com/vi/D7DauSvTYY4/hqdefault.jpg"
+      "id": "j_Nq9SHnv4o",
+      "title": "Despite weighing a massive 4 tonnes, this mammal can dive 2000 metres down, hold its breat | NEWS-MO",
+      "publishedAt": "2026-08-27T06:25:18+00:00",
+      "publishedLabel": "Aug 27, 06:25 AM",
+      "thumbnail": "https://i.ytimg.com/vi/j_Nq9SHnv4o/maxresdefault.jpg",
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
-      "id": "rBK_yit78so",
-      "title": "How DLSS Changed Overnight | NEWS-MONSTER",
-      "publishedAt": "2026-08-26T21:14:22+00:00",
-      "publishedLabel": "Aug 26, 09:14 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/rBK_yit78so/hqdefault.jpg"
+      "id": "kNlB6EvAvCU",
+      "title": "Falcon 9 rocket launch creates unusual jellyfish cloud over East Coast - The Washington Po | NEWS-MO",
+      "publishedAt": "2026-08-27T06:22:06+00:00",
+      "publishedLabel": "Aug 27, 06:22 AM",
+      "thumbnail": "https://i.ytimg.com/vi/kNlB6EvAvCU/maxresdefault.jpg",
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
-      "id": "6WB1ABMHwRI",
-      "title": "Nothing’s Android 17 update debuts this week with redesigns, new apps, 3D emoji [Gallery]  | NEWS-MO",
-      "publishedAt": "2026-08-26T21:09:20+00:00",
-      "publishedLabel": "Aug 26, 09:09 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/6WB1ABMHwRI/hqdefault.jpg"
+      "id": "4JWtyL0xE6A",
+      "title": "Scientists Just Set Up What Comes Next | NEWS-MONSTER",
+      "publishedAt": "2026-08-27T06:18:55+00:00",
+      "publishedLabel": "Aug 27, 06:18 AM",
+      "thumbnail": "https://i.ytimg.com/vi/4JWtyL0xE6A/maxresdefault.jpg",
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
-      "id": "g_Hxl8m2rl8",
-      "title": "Nobody Expected This About iPhone | NEWS-MONSTER",
-      "publishedAt": "2026-08-26T21:04:21+00:00",
-      "publishedLabel": "Aug 26, 09:04 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/g_Hxl8m2rl8/hqdefault.jpg"
+      "id": "IJ8hTzV48Mk",
+      "title": "Despite weighing a massive 4 tonnes, this mammal can dive 2000 metres down, hold its breat | NEWS-MO",
+      "publishedAt": "2026-08-27T05:28:12+00:00",
+      "publishedLabel": "Aug 27, 05:28 AM",
+      "thumbnail": "https://i.ytimg.com/vi/IJ8hTzV48Mk/maxresdefault.jpg",
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
-      "id": "zQ8NA52zeeo",
-      "title": "Italy’s Monte dei Paschi Makes $40 Billion Move to Buy Rival Banks | NEWS-MONSTER",
-      "publishedAt": "2026-08-24T13:54:30+00:00",
-      "publishedLabel": "Aug 24, 01:54 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/zQ8NA52zeeo/hqdefault.jpg"
+      "id": "t9EQGUpGD0o",
+      "title": "Falcon 9 rocket launch creates unusual jellyfish cloud over East Coast - The Washington Po | NEWS-MO",
+      "publishedAt": "2026-08-27T05:23:46+00:00",
+      "publishedLabel": "Aug 27, 05:23 AM",
+      "thumbnail": "https://i.ytimg.com/vi/t9EQGUpGD0o/maxresdefault.jpg",
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
-      "id": "aHbHa7pfdyg",
-      "title": "Tesla Semi wreszcie jedzie do Europy. Wielki debiut już we wrześniu | NEWS-MONSTER",
-      "publishedAt": "2026-08-24T12:48:13+00:00",
-      "publishedLabel": "Aug 24, 12:48 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/aHbHa7pfdyg/hqdefault.jpg"
+      "id": "B9ax5PimKmY",
+      "title": "Scientists Just Set Up What Comes Next | NEWS-MONSTER",
+      "publishedAt": "2026-08-27T05:19:17+00:00",
+      "publishedLabel": "Aug 27, 05:19 AM",
+      "thumbnail": "https://i.ytimg.com/vi/B9ax5PimKmY/maxresdefault.jpg",
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
-      "id": "fD82a4jGZOs",
-      "title": "PlayStation Blasts Out Poorly Timed Reminder About Digital Games - Kotaku | NEWS-MONSTER",
-      "publishedAt": "2026-08-23T21:24:18+00:00",
-      "publishedLabel": "Aug 23, 09:24 PM",
-      "thumbnail": "https://i3.ytimg.com/vi/fD82a4jGZOs/hqdefault.jpg"
+      "id": "baIEjwVbHlM",
+      "title": "Despite weighing a massive 4 tonnes, this mammal can dive 2000 metres down, hold its breat | NEWS-MO",
+      "publishedAt": "2026-08-27T05:07:22+00:00",
+      "publishedLabel": "Aug 27, 05:07 AM",
+      "thumbnail": "https://i.ytimg.com/vi/baIEjwVbHlM/maxresdefault.jpg",
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
-      "id": "w1l1Z1ECnkM",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONS",
-      "publishedAt": "2026-08-23T20:24:15+00:00",
-      "publishedLabel": "Aug 23, 08:24 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/w1l1Z1ECnkM/hqdefault.jpg"
+      "id": "rS_2KyHrW7I",
+      "title": "Falcon 9 rocket launch creates unusual jellyfish cloud over East Coast - The Washington Po | NEWS-MO",
+      "publishedAt": "2026-08-27T05:02:39+00:00",
+      "publishedLabel": "Aug 27, 05:02 AM",
+      "thumbnail": "https://i.ytimg.com/vi/rS_2KyHrW7I/maxresdefault.jpg",
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
-      "id": "yElPK-6fTWs",
-      "title": "Italy’s Monte dei Paschi Makes $40 Billion Move to Buy Rival Banks | NEWS-MONSTER",
-      "publishedAt": "2026-08-23T19:50:29+00:00",
-      "publishedLabel": "Aug 23, 07:50 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/yElPK-6fTWs/hqdefault.jpg"
+      "id": "7TlmARWCHAI",
+      "title": "Scientists Just Set Up What Comes Next | NEWS-MONSTER",
+      "publishedAt": "2026-08-27T04:57:50+00:00",
+      "publishedLabel": "Aug 27, 04:57 AM",
+      "thumbnail": "https://i.ytimg.com/vi/7TlmARWCHAI/maxresdefault.jpg",
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
-      "id": "9dBDuCgb5RA",
-      "title": "Todo lo que puedes hacer con OpenClaw gracias a su app para iPhone y Android | NEWS-MONSTER",
-      "publishedAt": "2026-08-23T19:27:54+00:00",
-      "publishedLabel": "Aug 23, 07:27 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/9dBDuCgb5RA/hqdefault.jpg"
+      "id": "UCIkWi_z7oM",
+      "title": "Despite weighing a massive 4 tonnes, this mammal can dive 2000 metres down, hold its breat | NEWS-MO",
+      "publishedAt": "2026-08-27T04:01:45+00:00",
+      "publishedLabel": "Aug 27, 04:01 AM",
+      "thumbnail": "https://i.ytimg.com/vi/UCIkWi_z7oM/maxresdefault.jpg",
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
-      "id": "M-ohAO1TcTM",
-      "title": "All Admin Panel Lobby Hack Codes For Free Rewards - IGN | NEWS-MONSTER",
-      "publishedAt": "2026-08-23T18:29:08+00:00",
-      "publishedLabel": "Aug 23, 06:29 PM",
-      "thumbnail": "https://i2.ytimg.com/vi/M-ohAO1TcTM/hqdefault.jpg"
+      "id": "Ut_9TP9Q9XY",
+      "title": "Falcon 9 rocket launch creates unusual jellyfish cloud over East Coast - The Washington Po | NEWS-MO",
+      "publishedAt": "2026-08-27T03:57:09+00:00",
+      "publishedLabel": "Aug 27, 03:57 AM",
+      "thumbnail": "https://i.ytimg.com/vi/Ut_9TP9Q9XY/maxresdefault.jpg",
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
-      "id": "CI_ThnNgP1Y",
-      "title": "Trump reshuffled his portfolio in June, selling names like Meta and buying Berkshire Hatha | NEWS-MO",
-      "publishedAt": "2026-08-23T17:50:21+00:00",
-      "publishedLabel": "Aug 23, 05:50 PM",
-      "thumbnail": "https://i4.ytimg.com/vi/CI_ThnNgP1Y/hqdefault.jpg"
+      "id": "s8Qd_hKekeA",
+      "title": "Scientists Just Set Up What Comes Next | NEWS-MONSTER",
+      "publishedAt": "2026-08-27T03:52:45+00:00",
+      "publishedLabel": "Aug 27, 03:52 AM",
+      "thumbnail": "https://i.ytimg.com/vi/s8Qd_hKekeA/maxresdefault.jpg",
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "s53hUc76rro",
+      "title": "Falcon 9 rocket launch creates unusual jellyfish cloud over East Coast - The Washington Po | NEWS-MO",
+      "publishedAt": "2026-08-27T03:15:36+00:00",
+      "publishedLabel": "Aug 27, 03:15 AM",
+      "thumbnail": "https://i.ytimg.com/vi/s53hUc76rro/maxresdefault.jpg",
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     }
   ]
 }
