@@ -1,24 +1,24 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-28T13:04:56.735Z",
+  "updatedAt": "2026-08-28T15:40:33.235Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "MrUG72FmfHU",
-      "title": "Viral AI startup Instinct has raised $350 million at a $2.5 billion valuation - TechCrunch | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-08-28T13:00:05.548Z",
-      "publishedLabel": "Aug 28, 01:00 PM",
-      "thumbnail": "/thumbnails/MrUG72FmfHU.png",
-      "youtubeUrl": "https://youtu.be/MrUG72FmfHU",
+      "id": "M38HIjD5QaE",
+      "title": "Tania Dacia zdeklasowała konkurencję. Tesla dopiero na 73. miejscu | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-08-28T15:35:28.988Z",
+      "publishedLabel": "Aug 28, 03:35 PM",
+      "thumbnail": "/thumbnails/M38HIjD5QaE.png",
+      "youtubeUrl": "https://youtu.be/M38HIjD5QaE",
       "verified": true,
       "verificationState": "VERIFIED",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "MrUG72FmfHU",
-          "url": "https://youtu.be/MrUG72FmfHU",
+          "videoId": "M38HIjD5QaE",
+          "url": "https://youtu.be/M38HIjD5QaE",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": null
