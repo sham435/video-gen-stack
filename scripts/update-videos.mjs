@@ -63,7 +63,7 @@ function readLedger() {
             ? new Date(e.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
             : '',
           thumbnail: resolveThumbnailUrl(e.videoId, e.thumbnail),
-          youtubeUrl: e.youtubeUrl || null,
+          youtubeUrl: e.youtubeUrl || e.distribution?.youtube?.url || (e.videoId ? `https://youtu.be/${e.videoId}` : null),
           verified: e.verificationState === 'VERIFIED',
           verificationState: e.verificationState || 'PENDING',
           thumbnailState: e.thumbnailState || 'UNKNOWN',

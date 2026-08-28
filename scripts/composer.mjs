@@ -705,6 +705,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         const buffer = fs.readFileSync(`${outDir}/final.mp4`)
 
         // LinkedIn — luxury image post with thumbnail (not video base64)
+        let linkedinPostId = null
         if (process.env.LINKEDIN_ACCESS_TOKEN && process.env.LINKEDIN_MEMBER_URN) {
           try {
             const { shareImage, updatePostCommentary } = await import('../apps/api/publishers/linkedin.js')
@@ -726,6 +727,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             )
             const postId = li?.id || li?.urn
             if (postId) {
+              linkedinPostId = postId
               try {
                 await updatePostCommentary(process.env.LINKEDIN_ACCESS_TOKEN, postId,
                   `${liPost.commentary}\n\nhttps://www.linkedin.com/feed/update/${postId}`)
@@ -776,7 +778,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             commentEvent = { text: comment.question, status: posted?.id ? 'published' : 'failed', commentId: posted?.id || null }
           } catch (e) { console.log('[PIN COMMENT] skipped:', e.message) }
         }
-        return { commentEvent }
+        return { commentEvent, videoId, url: `https://youtu.be/${videoId}`, youtubeUrl: `https://youtu.be/${videoId}`, linkedinPostId, uploaded: true }
       })
 
       // ── DISTRIBUTE — parallel fan-out to YouTube, GitHub Pages, LinkedIn ──
@@ -790,13 +792,16 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         const artifact = PublicationArtifact.fromProductionResults(ctx.results, outDir)
         artifact.artifactId = ctx.results.UNIQUENESS?.assetId || ctx.results.UPLOAD?.videoId || artifact.artifactId
 
-        // YouTube + LinkedIn already published in PUBLISH — record their results
+        // YouTube + LinkedIn already published in PUBLISH — record their results.
+        // YouTube videoId/url live on UPLOAD (PUBLISH returns only linkedinPostId).
+        const uploadResult = ctx.results.UPLOAD || {}
         const pubResult = ctx.results.PUBLISH || {}
-        if (pubResult.videoId) {
+        if (uploadResult.videoId) {
           artifact.destinations.youtube.state = 'SUCCESS'
-          artifact.destinations.youtube.videoId = pubResult.videoId
-          artifact.destinations.youtube.url = pubResult.url
-          artifact.destinations.youtube.thumbnail.state = pubResult.thumbnailUploaded ? 'SUCCESS' : 'FAILED'
+          artifact.destinations.youtube.videoId = uploadResult.videoId
+          artifact.destinations.youtube.url = uploadResult.url || `https://youtu.be/${uploadResult.videoId}`
+          artifact.artifactId = artifact.artifactId || uploadResult.videoId
+          artifact.destinations.youtube.thumbnail.state = uploadResult.thumbnailUploaded ? 'SUCCESS' : 'FAILED'
         }
         if (pubResult.linkedinPostId) {
           artifact.destinations.linkedin.state = 'SUCCESS'
