@@ -218,8 +218,13 @@ export class CoverComposer {
   //   niche-aware path: profile → accent → pill, rather than hardcoded #E10600.
   // ------------------------------------------------------------------
 
+  /**
+   * 9:16 vertical "Shorts" thumbnail (1080x1920) — same brand system as the
+   * portrait cover. Designed for the thumbnail, not a blind video-frame grab:
+   * brand bar top, top overlay, home headline, subject, bottom brand strip.
+   */
   async composeThumbnail(brief, heroImage, outPath) {
-    const TW = 1280, TH = 720
+    const TW = 1080, TH = 1920
     const canvas = createCanvas(TW, TH)
     const ctx = canvas.getContext('2d')
     // Niche profile overrides: profile.accent > brief.accent_color > default
@@ -252,33 +257,33 @@ export class CoverComposer {
     // 2. Brand bar (FIXED top)
     if (!brief.hideBranding) {
       ctx.fillStyle = 'rgba(0,0,0,0.6)'
-      ctx.fillRect(0, 0, TW, 84)
+      ctx.fillRect(0, 0, TW, 120)
       ctx.fillStyle = accent
-      ctx.fillRect(0, 0, TW, 6)
-      ctx.font = '900 30px Anton, Impact, sans-serif'
+      ctx.fillRect(0, 0, TW, 8)
+      ctx.font = '900 40px Anton, Impact, sans-serif'
       ctx.fillStyle = '#FFFFFF'
       ctx.textAlign = 'left'
       ctx.textBaseline = 'middle'
-      ctx.fillText(ANCHOR_CONFIG.label, 40, 42)
+      ctx.fillText(ANCHOR_CONFIG.label, 40, 60)
       // LIVE badge
-      const liveW = 92, liveH = 38
-      ctx.font = '900 22px Inter, sans-serif'
+      const liveW = 110, liveH = 46
+      ctx.font = '900 26px Inter, sans-serif'
       ctx.fillStyle = '#E10600'
       ctx.beginPath()
-      ctx.roundRect(TW - 40 - liveW, 23, liveW, liveH, 6)
+      ctx.roundRect(TW - 40 - liveW, 37, liveW, liveH, 8)
       ctx.fill()
       ctx.fillStyle = '#FFFFFF'
       ctx.textAlign = 'center'
-      ctx.fillText('LIVE', TW - 40 - liveW / 2, 42)
+      ctx.fillText('LIVE', TW - 40 - liveW / 2, 60)
     }
 
-    // algorithm badge (16:9 keeps it small — visible in desktop feed)
+    // algorithm badge (9:16 small — visible in Shorts feed)
     const algo = brief.algorithm || new BrandStyleResolver().resolve(brief.headline || '', 'technology').algorithm
     if (!brief.hideBranding && algo) {
-      ctx.font = '600 16px Inter, sans-serif'
+      ctx.font = '600 22px Inter, sans-serif'
       ctx.fillStyle = 'rgba(255,255,255,0.6)'
       ctx.textAlign = 'left'
-      ctx.fillText(`ALGO #${algo.number}/48 • ${algo.visual?.id || ''}`, 40, 72)
+      ctx.fillText(`ALGO #${algo.number}/48 • ${algo.visual?.id || ''}`, 40, 100)
       ctx.textAlign = 'center'
     }
 
@@ -301,18 +306,18 @@ export class CoverComposer {
       ? 'NOBODY EXPECTED THIS MOVE'
       : safeOverlay(brief.text_overlay?.top)
     ctx.textAlign = 'center'
-    ctx.font = '900 64px Anton, Impact, sans-serif'
+    ctx.font = '900 96px Anton, Impact, sans-serif'
     ctx.fillStyle = accent
     ctx.shadowColor = accent
-    ctx.shadowBlur = 30
-    ctx.fillText(topText, TW / 2, TH * 0.46)
+    ctx.shadowBlur = 40
+    ctx.fillText(topText, TW / 2, TH * 0.24)
     ctx.shadowBlur = 0
 
-    // 4. Headline — wrap to max 1280*0.92 width, max 3 lines, auto-scale
+    // 4. Headline — wrap to max 1080*0.92 width, max 4 lines, auto-scale
     const headline = (brief.headline || 'TECH NEWS').toUpperCase()
-    ctx.font = '900 84px Anton, Impact, sans-serif'
+    ctx.font = '900 120px Anton, Impact, sans-serif'
     const maxW = TW * 0.92
-    let hFontSize = headline.length > 70 ? 52 : headline.length > 45 ? 60 : headline.length > 28 ? 72 : 84
+    let hFontSize = headline.length > 70 ? 68 : headline.length > 45 ? 80 : headline.length > 28 ? 100 : 120
     const lines = []
     const wrap = () => {
       lines.length = 0
@@ -327,7 +332,7 @@ export class CoverComposer {
     }
     wrap()
     let guard = 0
-    while (lines.length > 3 && hFontSize > 32 && guard < 20) {
+    while (lines.length > 4 && hFontSize > 40 && guard < 24) {
       hFontSize -= 4
       wrap()
       guard++
@@ -335,39 +340,39 @@ export class CoverComposer {
     ctx.font = `900 ${hFontSize}px Anton, Impact, sans-serif`
     ctx.fillStyle = '#FFFFFF'
     ctx.shadowColor = 'rgba(0,0,0,0.95)'
-    ctx.shadowBlur = 14
+    ctx.shadowBlur = 18
     const lineH = hFontSize * 1.12
     const blockH = lines.length * lineH
-    const startY = TH * 0.60 - blockH / 2
+    const startY = TH * 0.38 - blockH / 2
     lines.forEach((l, i) => ctx.fillText(l, TW / 2, startY + i * lineH + hFontSize * 0.8))
     ctx.shadowBlur = 0
 
     // 5. Bottom accent badge — niche pill from profile takes priority
     const nicheText = profile?.label || null
     const bottomText = nicheText || safeOverlay(brief.text_overlay?.bottom, 'NEW DETAILS')
-    ctx.font = '900 34px Anton, Impact, sans-serif'
-    const bw = ctx.measureText(bottomText).width + 50
+    ctx.font = '900 44px Anton, Impact, sans-serif'
+    const bw = ctx.measureText(bottomText).width + 60
     ctx.fillStyle = accent
     ctx.beginPath()
-    ctx.roundRect(TW / 2 - bw / 2, TH * 0.80, bw, 56, 8)
+    ctx.roundRect(TW / 2 - bw / 2, TH * 0.70, bw, 68, 10)
     ctx.fill()
     ctx.fillStyle = '#FFFFFF'
-    ctx.fillText(bottomText, TW / 2, TH * 0.80 + 28)
+    ctx.fillText(bottomText, TW / 2, TH * 0.70 + 36)
     } // end legacy mode
 
     // 6. Bottom brand strip
     if (!brief.hideBranding) {
       ctx.fillStyle = 'rgba(0,0,0,0.6)'
-      ctx.fillRect(0, TH - 54, TW, 54)
-      ctx.font = '500 26px Inter, sans-serif'
+      ctx.fillRect(0, TH - 84, TW, 84)
+      ctx.font = '600 32px Inter, sans-serif'
       ctx.fillStyle = 'rgba(255,255,255,0.75)'
       ctx.textAlign = 'left'
       ctx.textBaseline = 'middle'
-      ctx.fillText(`Source: ${brief.source_label || 'NEWS-MONSTER'}`, 28, TH - 27)
+      ctx.fillText(`Source: ${brief.source_label || 'NEWS-MONSTER'}`, 36, TH - 42)
       ctx.textAlign = 'right'
       ctx.fillStyle = accent
-      ctx.font = '700 26px Inter, sans-serif'
-      ctx.fillText((brief.mood || 'BREAKING').toUpperCase(), TW - 28, TH - 27)
+      ctx.font = '700 32px Inter, sans-serif'
+      ctx.fillText((brief.mood || 'BREAKING').toUpperCase(), TW - 36, TH - 42)
     }
 
     fs.mkdirSync(path.dirname(outPath), { recursive: true })
@@ -376,14 +381,14 @@ export class CoverComposer {
   }
 
   _thumbnailGradient(ctx, accent) {
-    const W = 1280, H = 720
+    const W = 1080, H = 1920
     const grad = ctx.createLinearGradient(0, 0, 0, H)
     grad.addColorStop(0, '#0A0A0A')
     grad.addColorStop(0.5, '#101020')
     grad.addColorStop(1, '#050505')
     ctx.fillStyle = grad
     ctx.fillRect(0, 0, W, H)
-    const glow = ctx.createRadialGradient(W / 2, H * 0.5, 0, W / 2, H * 0.5, 520)
+    const glow = ctx.createRadialGradient(W / 2, H * 0.5, 0, W / 2, H * 0.5, 640)
     glow.addColorStop(0, `${accent}30`)
     glow.addColorStop(1, `${accent}00`)
     ctx.fillStyle = glow

@@ -53,8 +53,21 @@ export class GitHubPagesDistributor {
         category: artifact.metadata.category || 'general',
         youtubeUrl: artifact.destinations.youtube.url || null,
         thumbnailUrl: `/thumbnails/${artifact.artifactId}.png`,
+        thumbnailSha256: artifact.thumbnail.sha256 || null,
+        thumbnailWidth: artifact.thumbnail.width || null,
+        thumbnailHeight: artifact.thumbnail.height || null,
         publishedAt: artifact.createdAt,
         publishedLabel: new Date(artifact.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+      }
+
+      // Record canonical identity on the distribution result too.
+      result.thumbnail = {
+        sha256: artifact.thumbnail.sha256 || null,
+        width: artifact.thumbnail.width || null,
+        height: artifact.thumbnail.height || null,
+        mimeType: artifact.thumbnail.mimeType || null,
+        aspectRatio: artifact.thumbnail.aspectRatio || null,
+        path: destThumbPath,
       }
 
       const existingIdx = manifest.videos.findIndex(v => v.id === artifact.artifactId)

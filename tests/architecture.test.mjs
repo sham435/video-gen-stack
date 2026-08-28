@@ -126,8 +126,9 @@ describe('Architecture: thumbnail is unconditional', () => {
 
     // Find the THUMBNAIL handler and check it handles missing thumbnail gracefully
     const thumbHandler = source.indexOf("job.onStage('THUMBNAIL'")
-    const thumbBody = source.slice(thumbHandler, thumbHandler + 800)
-    assert.ok(thumbBody.includes('!selected'), 'THUMBNAIL must handle case where no thumbnail file exists')
+    const thumbEnd = source.indexOf("job.onStage('C2PA'", thumbHandler)
+    const thumbBody = source.slice(thumbHandler, thumbEnd > 0 ? thumbEnd : thumbHandler + 1400)
+    assert.ok(thumbBody.includes('candidate') || thumbBody.includes('!selected'), 'THUMBNAIL must handle case where no thumbnail file exists')
     assert.ok(thumbBody.includes("'none'"), 'THUMBNAIL must return strategy none when no thumbnail')
   })
 })
@@ -231,7 +232,8 @@ describe('Architecture: no ThumbnailFactory in orchestrator', () => {
     const source = readFileSync(join(process.cwd(), 'scripts/composer.mjs'), 'utf-8')
 
     const thumbHandler = source.indexOf("job.onStage('THUMBNAIL'")
-    const thumbBody = source.slice(thumbHandler, thumbHandler + 900)
+    const thumbEnd = source.indexOf("job.onStage('C2PA'", thumbHandler)
+    const thumbBody = source.slice(thumbHandler, thumbEnd > 0 ? thumbEnd : thumbHandler + 1400)
     assert.ok(thumbBody.includes('engine-generated'), 'THUMBNAIL strategy must be engine-generated')
     assert.ok(thumbBody.includes('fs.existsSync(thumbPath)'), 'THUMBNAIL reads from filesystem, not ThumbnailFactory')
   })

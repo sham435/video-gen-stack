@@ -7,6 +7,7 @@
 // window.
 import { DesignSystem } from '../../visuals/DesignSystem.mjs'
 import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
+import { canRenderText } from '../TextPolicy.mjs'
 
 // Category accent palette for the AI layer (per production spec):
 // technology = electric cyan / neon blue, business = emerald,
@@ -39,8 +40,7 @@ export class EmphasisLayer {
     // caption itself. Hook scenes schedule the AI accent as a dedicated phase
     // (after the secondary headline), so it renders regardless of the caption.
     if (scene.type !== 'hook' && !scene.captionHidden && scene.caption) return
-    const policy = scene.textPolicy || {}
-    if (policy.allowEmphasisLayer === false) return
+    if (!canRenderText(scene, 'emphasis')) return
 
     const layout = scene.emphasisLayout
     const accent = AI_ACCENT_BY_CATEGORY[category] || DesignSystem.brand.accent || '#00E5FF'

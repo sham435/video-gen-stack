@@ -63,6 +63,9 @@ function readLedger() {
             ? new Date(e.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
             : '',
           thumbnail: resolveThumbnailUrl(e.videoId, e.thumbnail),
+          thumbnailSha256: e.thumbnailSha256 || e.distribution?.youtube?.thumbnail?.sha256 || null,
+          thumbnailWidth: e.thumbnailWidth || e.distribution?.youtube?.thumbnail?.width || null,
+          thumbnailHeight: e.thumbnailHeight || e.distribution?.youtube?.thumbnail?.height || null,
           youtubeUrl: e.youtubeUrl || e.distribution?.youtube?.url || (e.videoId ? `https://youtu.be/${e.videoId}` : null),
           verified: e.verificationState === 'VERIFIED',
           verificationState: e.verificationState || 'PENDING',
@@ -109,6 +112,9 @@ async function readRssFeed(channelId) {
         ? new Date(published).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
         : '',
       thumbnail: resolveThumbnailUrl(id, null),
+      thumbnailSha256: null,
+      thumbnailWidth: null,
+      thumbnailHeight: null,
       verified: false,
       verificationState: 'RSS_FALLBACK',
       thumbnailState: 'UNKNOWN',

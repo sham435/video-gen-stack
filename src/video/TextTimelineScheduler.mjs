@@ -16,6 +16,8 @@
 // Layer contract: { id, priority, start, end, animationIn, animationOut,
 // allowOverlap: false, safeZone, zIndex }
 
+import { canRenderText } from './TextPolicy.mjs'
+
 export const PRIORITY = { banner: 1, hero: 2, secondary: 3, ai: 4, caption: 5, footer: 6 }
 
 const HOOK_FADE_IN = 0.10
@@ -52,7 +54,7 @@ export class TextTimelineScheduler {
     }
 
     layers.push({ id: 'ai', priority: PRIORITY.ai, start: secondaryEnd, end: 1, animationIn: 0.12, animationOut: 0.05, allowOverlap: false, safeZone: 'lower_third', zIndex: 5 })
-    if (scene.caption && scene.captionHidden !== true) {
+    if (scene.caption && scene.captionHidden !== true && canRenderText(scene, 'caption') && canRenderText(scene, 'generic')) {
       layers.push({ id: 'caption', priority: PRIORITY.caption, start: 0.30, end: 1, animationIn: 0.1, animationOut: 0, allowOverlap: true, safeZone: 'caption', zIndex: 6 })
     }
     return { type: 'hook', layers }
@@ -62,12 +64,11 @@ export class TextTimelineScheduler {
   // Respects scene.textPolicy — outro scenes own their text exclusively.
   static sceneTimeline(scene, duration) {
     const layers = [{ id: 'footer', priority: PRIORITY.footer, start: 0, end: 1, allowOverlap: true, safeZone: 'footer', zIndex: 1 }]
-    const policy = scene.textPolicy || {}
     const isOutro = scene.outro || scene.type === 'close' || scene.type === 'brand_close'
 
     // Outro scenes: only hero (InformationLayer owns the headline stack).
     // No ai, no caption — the outro text pipeline owns everything.
-    if (isOutro || policy.allowGenericCaptionScheduling === false) {
+    if (isOutro || !canRenderText(scene, 'generic')) {
       layers.push({ id: 'hero', priority: PRIORITY.hero, start: 0.05, end: 1, animationIn: 0.15, animationOut: 0, allowOverlap: false, safeZone: 'headline', zIndex: 2 })
       return { type: scene.type || 'fact', layers }
     }
@@ -76,7 +77,7 @@ export class TextTimelineScheduler {
       : scene.type === 'brand_close' ? 'hero'
       : 'ai'
     layers.push({ id: focal, priority: PRIORITY[focal], start: 0.05, end: 1, animationIn: 0.15, animationOut: 0, allowOverlap: false, safeZone: focal === 'ai' ? 'lower_third' : 'headline', zIndex: 2 })
-    if (scene.caption && scene.captionHidden !== true && policy.allowStoryCaptions !== false) {
+    if (scene.caption && scene.captionHidden !== true && canRenderText(scene, 'caption')) {
       layers.push({ id: 'caption', priority: PRIORITY.caption, start: 0.1, end: 1, animationIn: 0.1, animationOut: 0, allowOverlap: true, safeZone: 'caption', zIndex: 3 })
     }
     return { type: scene.type || 'fact', layers }

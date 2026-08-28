@@ -29,6 +29,20 @@ function findLedger() {
   return null
 }
 
+/** Resolve the canonical local thumbnail for a video (public/thumbnails/{id}.png). */
+async function resolveLocalThumb(videoId) {
+  if (!videoId) return null
+  const { resolve } = await import('node:path')
+  const candidates = [
+    resolve(process.cwd(), 'public', 'thumbnails', `${videoId}.png`),
+    resolve(process.cwd(), 'output', 'thumbnail.png'),
+  ]
+  for (const p of candidates) {
+    if (existsSync(p)) return p
+  }
+  return null
+}
+
 async function main() {
   console.log(`[VERIFY-RECOVERY] ${dryRun ? 'DRY RUN' : 'LIVE'} — ${new Date().toISOString()}`)
 
@@ -83,18 +97,23 @@ async function main() {
   for (const entry of needsRecovery) {
     console.log(`\n[VERIFY-RECOVERY] Verifying ${entry.videoId}...`)
 
-    // 1. Propagation verifier (thumbnail check)
+    // 1. Propagation verifier (thumbnail check) — pass canonical SHA-256 so
+    //    identity is proven (hasCustomThumbnail alone is insufficient).
+    const thumbPath = await resolveLocalThumb(entry.videoId)
+    const expectedSha = entry.thumbnailSha256
+      || entry.distribution?.youtube?.thumbnail?.sha256
+      || (thumbPath ? (await import('../src/thumbnail/ThumbnailMetadata.mjs')).sha256Thumbnail(thumbPath) : null)
     let thumbnailResult
     try {
       const verifier = new YouTubePropagationVerifier({ token })
-      thumbnailResult = await verifier.verify({ videoId: entry.videoId })
-      console.log(`  thumbnail: ${thumbnailResult.state} (${thumbnailResult.durationMs}ms)`)
+      thumbnailResult = await verifier.verify({ videoId: entry.videoId, sha256: expectedSha, thumbnailPath: thumbPath })
+      console.log(`  thumbnail: ${thumbnailResult.state}${expectedSha ? ` (remote ${thumbnailResult.thumbnailMatches === true ? 'MATCH' : thumbnailResult.thumbnailMatches === false ? 'MISMATCH' : 'n/a'})` : ''} (${thumbnailResult.durationMs}ms)`)
     } catch (e) {
       thumbnailResult = { state: VerifyState.VERIFICATION_FAILED, error: e.message }
       console.log(`  thumbnail: VERIFICATION_FAILED — ${e.message}`)
     }
 
-    // 2. Post-publish verifier (video reachable + title + visibility)
+    // 2. Post-publish verifier (video reachable + title + visibility + identity)
     let verification
     try {
       const verifier = new PostPublishVerifier({ token })
@@ -102,6 +121,8 @@ async function main() {
         videoId: entry.videoId,
         expectedTitle: entry.title,
         expectedVisibility: 'public',
+        thumbnailPath: thumbPath,
+        expectedThumbnailSha256: expectedSha || undefined,
         jobId: entry.jobId,
       })
       console.log(`  post-publish: ${verification.passed ? 'PASS' : 'FAIL'} (${verification.durationMs}ms)`)
@@ -114,19 +135,31 @@ async function main() {
     // 3. Determine new verification state
     const newVerificationState = thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_ACCEPTED
       ? 'VERIFIED'
-      : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_REJECTED
-        ? 'REJECTED'
-        : thumbnailResult.state === VerifyState.VERIFICATION_FAILED && thumbnailResult.errorType
-          ? 'API_UNAVAILABLE'
-          : thumbnailResult.state === VerifyState.VIDEO_NOT_VISIBLE_YET
-            ? 'VIDEO_NOT_VISIBLE_YET'
-            : 'PENDING'
+      : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_MISMATCH
+        ? 'THUMBNAIL_MISMATCH'
+        : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_REJECTED
+          ? 'REJECTED'
+          : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_PENDING
+            ? 'THUMBNAIL_PENDING'
+            : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_UNKNOWN
+              ? 'THUMBNAIL_UNKNOWN'
+              : thumbnailResult.state === VerifyState.VERIFICATION_FAILED && thumbnailResult.errorType
+                ? 'API_UNAVAILABLE'
+                : thumbnailResult.state === VerifyState.VIDEO_NOT_VISIBLE_YET
+                  ? 'VIDEO_NOT_VISIBLE_YET'
+                  : 'PENDING'
 
-    const newThumbnailState = thumbnailResult.hasCustomThumbnail
+    const newThumbnailState = thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_ACCEPTED
       ? 'CUSTOM_THUMBNAIL_ACCEPTED'
-      : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_REJECTED
-        ? 'CUSTOM_THUMBNAIL_REJECTED'
-        : 'UPLOADED'
+      : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_MISMATCH
+        ? 'CUSTOM_THUMBNAIL_MISMATCH'
+        : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_REJECTED
+          ? 'CUSTOM_THUMBNAIL_REJECTED'
+          : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_PENDING || thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_UNKNOWN
+            ? 'CUSTOM_THUMBNAIL_PENDING'
+            : thumbnailResult.hasCustomThumbnail
+              ? 'CUSTOM_THUMBNAIL_ACCEPTED'
+              : 'UPLOADED'
 
     console.log(`  → verificationState: ${entry.verificationState} → ${newVerificationState}`)
     console.log(`  → thumbnailState: ${entry.thumbnailState} → ${newThumbnailState}`)

@@ -8,6 +8,7 @@ import { BroadcastUILayer } from './layers/BroadcastUILayer.mjs'
 import { BrandingLayer } from './layers/BrandingLayer.mjs'
 import { PostProcessLayer } from './layers/PostProcessLayer.mjs'
 import { TextTimelineScheduler } from './TextTimelineScheduler.mjs'
+import { canRenderText } from './TextPolicy.mjs'
 import { getDirector } from '../ai/CategoryDirector.mjs'
 
 export class Compositor {
@@ -56,8 +57,8 @@ export class Compositor {
     }
 
     if (owned('headline')) await this.info.draw(ctx, scene, progress, category, timeline, time)
-    if (owned('emphasis')) this.emphasis.draw(ctx, scene, progress, category, env('ai'))
-    if (owned('caption')) this.captions.draw(ctx, scene, progress, wordIndex, env('caption'))
+    if (owned('emphasis') && canRenderText(scene, 'emphasis')) this.emphasis.draw(ctx, scene, progress, category, env('ai'))
+    if (owned('caption') && canRenderText(scene, 'caption')) this.captions.draw(ctx, scene, progress, wordIndex, env('caption'))
 
     // Cinematic grade (vignette, color grade, scan lines, noise) runs over the
     // CONTENT stack only. Chrome (LIVE, footer, ticker, bug) must be drawn
