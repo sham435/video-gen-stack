@@ -78,7 +78,7 @@ async function main() {
   const authUrl =
     `${BASE}?client_id=${encodeURIComponent(CLIENT_ID)}` +
     `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}` +
-    `&scope=${encodeURIComponent('https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube.force-ssl')}` +
+    `&scope=${encodeURIComponent('https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.force-ssl')}` +
     `&response_type=code&access_type=offline&prompt=consent&state=${encodeURIComponent(state)}`
   console.log('🔗 Open this URL, pick the channel, approve ALL screens, then copy the `code` param from the Railway URL and run:\n')
   console.log('    node scripts/youtube-oauth.mjs --code <the-code>')
