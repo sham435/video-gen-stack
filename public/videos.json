@@ -1,27 +1,34 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-28T17:40:38.132Z",
+  "updatedAt": "2026-08-28T23:30:39.677Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "SUjvAIuxdus",
-      "title": "Meta’s $18bn settlement: How social platforms will change for child users - Al Jazeera | NEWS-MONSTER",
-      "category": "business",
-      "publishedAt": "2026-08-28T17:40:37.451Z",
-      "publishedLabel": "Aug 28, 05:40 PM",
-      "thumbnail": "/thumbnails/SUjvAIuxdus.png",
-      "youtubeUrl": "https://youtu.be/SUjvAIuxdus",
-      "verified": true,
-      "verificationState": "VERIFIED",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "id": "Jr1GCBtO27o",
+      "title": "GTA 6 Sounds Like It Won't Be 60FPS At Launch - Kotaku | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-08-28T23:24:11.505Z",
+      "publishedLabel": "Aug 28, 11:24 PM",
+      "thumbnail": "/thumbnails/Jr1GCBtO27o.png",
+      "thumbnailSha256": "cb46fc669af972dd028328559620d9d22c1821f272c73399e9c3ef0463b6785a",
+      "thumbnailWidth": 1080,
+      "thumbnailHeight": 1920,
+      "youtubeUrl": "https://youtu.be/Jr1GCBtO27o",
+      "verified": false,
+      "verificationState": "THUMBNAIL_MISMATCH",
+      "thumbnailState": "CUSTOM_THUMBNAIL_MISMATCH",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "SUjvAIuxdus",
-          "url": "https://youtu.be/SUjvAIuxdus",
+          "videoId": "Jr1GCBtO27o",
+          "url": "https://youtu.be/Jr1GCBtO27o",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": null
+            "sha256": "cb46fc669af972dd028328559620d9d22c1821f272c73399e9c3ef0463b6785a",
+            "width": 1080,
+            "height": 1920,
+            "mimeType": "image/png",
+            "aspectRatio": "9:16"
           }
         },
         "githubPages": {
@@ -32,7 +39,15 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 1
+          "durationMs": 1,
+          "thumbnail": {
+            "sha256": "cb46fc669af972dd028328559620d9d22c1821f272c73399e9c3ef0463b6785a",
+            "width": 1080,
+            "height": 1920,
+            "mimeType": "image/png",
+            "aspectRatio": "9:16",
+            "path": "public/thumbnails/Jr1GCBtO27o.png"
+          }
         },
         "linkedin": {
           "state": "PENDING",
