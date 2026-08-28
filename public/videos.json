@@ -1,26 +1,26 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-28T12:49:37.933Z",
+  "updatedAt": "2026-08-28T13:04:56.735Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "8gY0_DZVy9o",
-      "title": "Partial lunar eclipse Aug. 27-28 live updates — tonight is the night! - Space | NEWS-MONSTER",
-      "category": "science",
-      "publishedAt": "2026-08-28T12:49:36.970Z",
-      "publishedLabel": "Aug 28, 12:49 PM",
-      "thumbnail": "/thumbnails/8gY0_DZVy9o.png",
-      "youtubeUrl": null,
+      "id": "MrUG72FmfHU",
+      "title": "Viral AI startup Instinct has raised $350 million at a $2.5 billion valuation - TechCrunch | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-08-28T13:00:05.548Z",
+      "publishedLabel": "Aug 28, 01:00 PM",
+      "thumbnail": "/thumbnails/MrUG72FmfHU.png",
+      "youtubeUrl": "https://youtu.be/MrUG72FmfHU",
       "verified": true,
       "verificationState": "VERIFIED",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
-          "state": "PENDING",
-          "videoId": null,
-          "url": null,
+          "state": "SUCCESS",
+          "videoId": "MrUG72FmfHU",
+          "url": "https://youtu.be/MrUG72FmfHU",
           "thumbnail": {
-            "state": "PENDING",
+            "state": "SUCCESS",
             "sha256": null
           }
         },
