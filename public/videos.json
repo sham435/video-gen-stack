@@ -1,24 +1,24 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-28T15:40:33.235Z",
+  "updatedAt": "2026-08-28T17:40:38.132Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "M38HIjD5QaE",
-      "title": "Tania Dacia zdeklasowała konkurencję. Tesla dopiero na 73. miejscu | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-08-28T15:35:28.988Z",
-      "publishedLabel": "Aug 28, 03:35 PM",
-      "thumbnail": "/thumbnails/M38HIjD5QaE.png",
-      "youtubeUrl": "https://youtu.be/M38HIjD5QaE",
+      "id": "SUjvAIuxdus",
+      "title": "Meta’s $18bn settlement: How social platforms will change for child users - Al Jazeera | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-08-28T17:40:37.451Z",
+      "publishedLabel": "Aug 28, 05:40 PM",
+      "thumbnail": "/thumbnails/SUjvAIuxdus.png",
+      "youtubeUrl": "https://youtu.be/SUjvAIuxdus",
       "verified": true,
       "verificationState": "VERIFIED",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "M38HIjD5QaE",
-          "url": "https://youtu.be/M38HIjD5QaE",
+          "videoId": "SUjvAIuxdus",
+          "url": "https://youtu.be/SUjvAIuxdus",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": null
