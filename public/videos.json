@@ -1,19 +1,19 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-28T05:22:08.973Z",
+  "updatedAt": "2026-08-28T12:49:37.933Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "RFmzHJXziIE",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONSTER",
-      "category": "techcrunch",
-      "publishedAt": "2026-08-28T05:11:11.288Z",
-      "publishedLabel": "Aug 28, 05:11 AM",
-      "thumbnail": "/thumbnails/RFmzHJXziIE.png",
+      "id": "8gY0_DZVy9o",
+      "title": "Partial lunar eclipse Aug. 27-28 live updates — tonight is the night! - Space | NEWS-MONSTER",
+      "category": "science",
+      "publishedAt": "2026-08-28T12:49:36.970Z",
+      "publishedLabel": "Aug 28, 12:49 PM",
+      "thumbnail": "/thumbnails/8gY0_DZVy9o.png",
       "youtubeUrl": null,
-      "verified": false,
-      "verificationState": "API_UNAVAILABLE",
-      "thumbnailState": "UPLOADED",
+      "verified": true,
+      "verificationState": "VERIFIED",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "PENDING",
