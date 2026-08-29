@@ -765,8 +765,13 @@ export class NewsBroadcastEngine {
     try {
       execFileSync(
         'ffmpeg',
-        ['-y', '-f', 'concat', '-safe', '0', '-i', listPath, '-vf', `scale=${outW}:${outH}:force_original_aspect_ratio=decrease,pad=${outW}:${outH}:(ow-iw)/2:(oh-ih)/2,format=yuv420p,fps=${this.outputFps}`, '-c:v', 'libx264', '-preset', 'medium', '-profile:v', 'high', '-pix_fmt', 'yuv420p', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-b:v', videoBitrate, '-maxrate', maxrate, '-bufsize', maxrate, '-r', this.outputFps, silentVideo],
-        { stdio: 'inherit', timeout: 180000 }
+        ['-y', '-f', 'concat', '-safe', '0', '-i', listPath, '-vf', `scale=${outW}:${outH}:force_original_aspect_ratio=decrease,pad=${outW}:${outH}:(ow-iw)/2:(oh-ih)/2,format=yuv420p,fps=${this.outputFps}`, '-c:v', 'libx264', '-preset', 'faster', '-profile:v', 'high', '-pix_fmt', 'yuv420p', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-b:v', videoBitrate, '-maxrate', maxrate, '-bufsize', maxrate, '-r', this.outputFps, silentVideo],
+        // 4K (2160x3840) x264 is slow (~5fps at medium preset); a 180s timeout
+        // killed the concat mid-encode and RENDER never completed. `faster`
+        // preset cuts encoding time substantially with no contract change
+        // (same high profile, yuv420p, bt709, bitrate). The timeout is raised
+        // to 20min as a safe ceiling so the master always finishes.
+        { stdio: 'inherit', timeout: 1200000 }
       )
     } catch (e) {
       console.error('FFmpeg concat failed. Checking frames...')
