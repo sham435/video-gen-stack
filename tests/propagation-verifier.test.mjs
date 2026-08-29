@@ -47,4 +47,68 @@ describe('YouTubePropagationVerifier', () => {
     assert.ok(result.attempts.length <= 5)
     assert.ok(result.durationMs >= 0)
   })
+
+  it('retries propagation when hasCustomThumbnail is false, then ACCEPTS', async () => {
+    // Simulates YouTube's async thumbnail propagation: the video is visible
+    // immediately but contentDetails.hasCustomThumbnail flips to true only
+    // after the first 2 attempts. The verifier must NOT reject instantly — it
+    // must wait out the propagation window (the exact race that failed the
+    // production run with a false CUSTOM_THUMBNAIL_REJECTED).
+    const realFetch = global.fetch
+    const realDelay = YouTubePropagationVerifier.prototype._delay
+    let calls = 0
+    YouTubePropagationVerifier.prototype._delay = async () => {}
+    const thumbBytes = Buffer.from('remote-thumb-content')
+    global.fetch = async (url) => {
+      if (String(url).startsWith('https://www.googleapis.com/youtube/v3/videos?')) {
+        calls++
+        const visible = calls >= 3
+        return {
+          ok: true,
+          json: async () => ({
+            items: [{
+              id: 'abc123',
+              contentDetails: { hasCustomThumbnail: visible },
+              snippet: {
+                title: 't',
+                thumbnails: { maxres: { url: 'https://example.com/thumb.jpg', width: 1080, height: 1920 } },
+              },
+            }],
+          }),
+        }
+      }
+      // thumbnail asset download
+      return { ok: true, status: 200, arrayBuffer: async () => thumbBytes.buffer.slice(thumbBytes.byteOffset, thumbBytes.byteOffset + thumbBytes.byteLength) }
+    }
+    const verifier = new YouTubePropagationVerifier({ token: 'tok', maxAttempts: 5, delays: [0,0,0,0,0], expectedAspectRatio: '9:16' })
+    const result = await verifier.verify({ videoId: 'abc123', sha256: null })
+    global.fetch = realFetch
+    YouTubePropagationVerifier.prototype._delay = realDelay
+    assert.equal(result.state, VerifyState.CUSTOM_THUMBNAIL_ACCEPTED)
+    assert.equal(result.hasCustomThumbnail, true)
+    assert.equal(result.identity, 'REENCODED')
+    assert.ok(calls >= 3, 'expected >=3 API calls (retried past rebootstrap), got ' + calls)
+  })
+
+  it('rejects only AFTER propagation window when hasCustomThumbnail never flips', async () => {
+    const realFetch = global.fetch
+    const realDelay = YouTubePropagationVerifier.prototype._delay
+    let calls = 0
+    YouTubePropagationVerifier.prototype._delay = async () => {}
+    global.fetch = async (url) => {
+      calls++
+      return {
+        ok: true,
+        json: async () => ({
+          items: [{ id: 'abc123', contentDetails: { hasCustomThumbnail: false }, snippet: { title: 't', thumbnails: {} } }],
+        }),
+      }
+    }
+    const verifier = new YouTubePropagationVerifier({ token: 'tok', maxAttempts: 3, delays: [0,0,0], expectedAspectRatio: '9:16' })
+    const result = await verifier.verify({ videoId: 'abc123', sha256: null })
+    global.fetch = realFetch
+    YouTubePropagationVerifier.prototype._delay = realDelay
+    assert.equal(result.state, VerifyState.CUSTOM_THUMBNAIL_REJECTED)
+    assert.equal(result.attempts.length, 3)
+  })
 })

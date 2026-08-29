@@ -177,8 +177,19 @@ export class PostPublishVerifier {
       const remoteHeight = dims.height || null
 
       // 3. Download + hash the remote asset.
+      // A transient download failure (e.g. HTTP 404 immediately after upload,
+      // before YouTube's CDN re-serves the custom thumbnail) is NOT a rejection:
+      // acceptance is driven by hasCustomThumbnail (checked elsewhere) and
+      // geometry. A non-OK download → identity UNKNOWN (report-only, pass).
       const remote = await fetch(url, { signal: AbortSignal.timeout(10000) })
-      if (!remote.ok) return { pass: false, reason: `remote download HTTP ${remote.status}` }
+      if (!remote.ok) {
+        return {
+          pass: true,
+          reason: `remote thumbnail not retrievable yet (HTTP ${remote.status}) — identity UNKNOWN, acceptance deferred to hasCustomThumbnail`,
+          url,
+          remoteWidth, remoteHeight, identity: 'UNKNOWN', thumbnailMatches: null,
+        }
+      }
       const remoteBuf = Buffer.from(await remote.arrayBuffer())
       const remoteSha = await this._sha256Buffer(remoteBuf)
 

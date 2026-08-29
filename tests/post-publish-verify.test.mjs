@@ -58,6 +58,49 @@ describe('PostPublishVerifier', () => {
     assert.ok(result.checks.localThumbnail.size > 0)
     rmSync(dir, { recursive: true })
   })
+
+  it('thumbnailIdentity does NOT fail when remote asset 404s (transient propagation)', async () => {
+    // Simulates YouTube serving a thumbnail URL that 404s immediately after
+    // upload (CDN not yet re-serving the custom thumbnail). This must be a
+    // pass with identity UNKNOWN, NOT a hard failure — acceptance is driven by
+    // hasCustomThumbnail, not by a successful re-download.
+    const dir = mkdtempSync(join(tmpdir(), 'verify-thumb-404-'))
+    const { writeFileSync } = await import('node:fs')
+    writeFileSync(join(dir, 'thumb.png'), 'local-thumbnail-bytes')
+    const { createHash } = await import('node:crypto')
+    const localSha = createHash('sha256').update('local-thumbnail-bytes').digest('hex')
+    const realFetch = global.fetch
+    global.fetch = async (url) => {
+      if (String(url).includes('/youtube/v3/videos?')) {
+        return {
+          ok: true,
+          json: async () => ({
+            items: [{
+              id: 'vid1',
+              contentDetails: { duration: 'PT1M' },
+              status: { privacyStatus: 'public' },
+              snippet: { title: 'T', thumbnails: { maxres: { url: 'https://example.com/custom.jpg', width: 1080, height: 1920 } } },
+            }],
+          }),
+        }
+      }
+      // the thumbnail asset itself → HTTP 404
+      return { ok: false, status: 404 }
+    }
+    const verifier = new PostPublishVerifier({ token: 'tok', expectedWidth: 2160, expectedHeight: 3840, expectedAspectRatio: '9:16' })
+    const result = await verifier.verify({
+      videoId: 'vid1',
+      expectedTitle: 'T',
+      thumbnailPath: join(dir, 'thumb.png'),
+      expectedThumbnailSha256: localSha,
+      jobId: 'job-005',
+    })
+    global.fetch = realFetch
+    assert.equal(result.checks.thumbnailIdentity.pass, true)
+    assert.equal(result.checks.thumbnailIdentity.identity, 'UNKNOWN')
+    assert.ok(String(result.checks.thumbnailIdentity.reason).includes('404'))
+    rmSync(dir, { recursive: true })
+  })
 })
 
 describe('PublicationLedger', () => {

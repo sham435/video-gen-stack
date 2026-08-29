@@ -762,17 +762,27 @@ export class NewsBroadcastEngine {
     const videoBitrate = is4k ? '40M' : '8M'
     const maxrate = is4k ? '45M' : '10M'
     console.log(`FFmpeg concat frames to video (${outW}x${outH}, profile=${this.renderProfile.type})...`)
+    const renderStartMs = Date.now()
     try {
       execFileSync(
         'ffmpeg',
         ['-y', '-f', 'concat', '-safe', '0', '-i', listPath, '-vf', `scale=${outW}:${outH}:force_original_aspect_ratio=decrease,pad=${outW}:${outH}:(ow-iw)/2:(oh-ih)/2,format=yuv420p,fps=${this.outputFps}`, '-c:v', 'libx264', '-preset', 'faster', '-profile:v', 'high', '-pix_fmt', 'yuv420p', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-b:v', videoBitrate, '-maxrate', maxrate, '-bufsize', maxrate, '-r', this.outputFps, silentVideo],
         // 4K (2160x3840) x264 is slow (~5fps at medium preset); a 180s timeout
-        // killed the concat mid-encode and RENDER never completed. `faster`
-        // preset cuts encoding time substantially with no contract change
-        // (same high profile, yuv420p, bt709, bitrate). The timeout is raised
-        // to 20min as a safe ceiling so the master always finishes.
+        // killed the concat mid-encode and RENDER never completed. This is an
+        // ENCODING-POLICY change: preset medium -> faster (lower compression
+        // efficiency / higher size at the same 40Mbps bitrate) with a 20min
+        // timeout ceiling. The media CONTRACT (2160x3840, high profile,
+        // yuv420p, bt709, 40M) is unchanged and QC (assertValidRender) gate
+        // vets the resulting master before any downstream stage consumes it.
         { stdio: 'inherit', timeout: 1200000 }
       )
+      const renderElapsedMs = Date.now() - renderStartMs
+      let renderBytes = 0
+      try { renderBytes = fs.existsSync(silentVideo) ? fs.statSync(silentVideo).size : 0 } catch { /* n/a */ }
+      // Production render certificate — unambiguous chain-of-evidence for the
+      // pipeline's output. Queues downstream even though it is informational.
+      console.log(`[RENDER] profile=${this.renderProfile.type} logical=${this.renderProfile.logical.width}x${this.renderProfile.logical.height} physical=${outW}x${outH} aspect=${this.renderProfile.aspectRatio} frames=${frameFiles.length} encoder=libx264 preset=faster codec=h264 pix_fmt=yuv420p color=bt709 fps=${this.outputFps} bitrate=${videoBitrate} maxrate=${maxrate} elapsedMs=${renderElapsedMs} outputBytes=${renderBytes}`)
+      console.log(`[RENDER] ${outW}x${outH} (${this.renderProfile.type}) concat + upscale PASS`)
     } catch (e) {
       console.error('FFmpeg concat failed. Checking frames...')
       const frameCount = fs.readdirSync(framesDir).filter(f => f.endsWith('.png')).length
@@ -780,6 +790,29 @@ export class NewsBroadcastEngine {
       if (fs.existsSync(listPath)) {
         const lines = fs.readFileSync(listPath, 'utf-8').split('\n').filter(Boolean)
         console.error(`List file lines: ${lines.length}, first: ${lines[0]?.slice(0, 80)}`)
+      }
+      // Classify the failure for the self-heal layer. A deterministic,
+      // non-retryable render failure (e.g. ffmpeg binary missing, invalid
+      // filtergraph, concat list corrupt) must NOT be retried — retrying would
+      // consume the whole run budget the way repeated ETIMEDOUT did. Tag the
+      // error with classification so the orchestrator can decide.
+      const msg = String(e?.message || e)
+      const isTimeout = /ETIMEDOUT|signal 15|timed out/i.test(msg)
+      const isRecoverable = isTimeout ? true : !/ffmpeg.*not found|Invalid argument|filtergraph|No such file|EACCES/i.test(msg)
+      console.error(`[RENDER] FAIL profile=${this.renderProfile.type} physical=${outW}x${outH} frames=${frameCount} encoder=libx264 preset=faster codec=h264 pix_fmt=yuv420p color=bt709 fps=${this.outputFps} timeoutMs=${1200000} elapsedMs=${Date.now() - renderStartMs} error=${msg.slice(0, 200)} recoverable=${isRecoverable}`)
+      e.renderRecoverable = isRecoverable
+      e.renderDiagnostic = {
+        profile: this.renderProfile.type,
+        physical: `${outW}x${outH}`,
+        frames: frameCount,
+        encoder: 'libx264',
+        preset: 'faster',
+        pixFmt: 'yuv420p',
+        color: 'bt709',
+        fps: this.outputFps,
+        timeoutMs: 1200000,
+        elapsedMs: Date.now() - renderStartMs,
+        recoverable: isRecoverable,
       }
       throw e
     }

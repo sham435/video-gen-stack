@@ -158,17 +158,14 @@ export class YouTubePropagationVerifier {
         const hasCustomThumbnail = video.contentDetails?.hasCustomThumbnail === true
 
         if (!hasCustomThumbnail) {
+          // Video is visible but the custom thumbnail has NOT propagated to
+          // contentDetails.hasCustomThumbnail YET. YouTube applies setThumbnail
+          // asynchronously — it can lag the upload API response by seconds to
+          // minutes. This is a TRANSIENT condition, NOT a terminal rejection:
+          // retry across the propagation window before declaring REJECTED.
           attempts.push({ attempt, found: true, hasCustomThumbnail: false, durationMs: Date.now() - attemptStart })
-          return {
-            state: VerifyState.CUSTOM_THUMBNAIL_REJECTED,
-            video,
-            hasCustomThumbnail: false,
-            source,
-            remote: null,
-            identity: null,
-            attempts,
-            durationMs: Date.now() - startTime,
-          }
+          if (attempt < this.maxAttempts) await this._delay(attempt)
+          continue
         }
 
         // C. Remote representation — authoritative URL + dimensions from the API.
@@ -261,11 +258,16 @@ export class YouTubePropagationVerifier {
       }
     }
 
-    // All attempts exhausted — video never propagated
+    // All attempts exhausted — video never propagated custom thumbnail.
+    // Distinguish: video found+visible but no custom thumbnail ever appeared
+    // (genuine REJECTED) vs video never became visible (VIDEO_NOT_VISIBLE_YET).
+    const sawVisible = attempts.some(a => a.found === true)
     return {
-      state: attempts.some(a => a.found === false)
-        ? VerifyState.VIDEO_NOT_VISIBLE_YET
-        : VerifyState.VERIFICATION_FAILED,
+      state: sawVisible
+        ? VerifyState.CUSTOM_THUMBNAIL_REJECTED
+        : attempts.some(a => a.found === false)
+          ? VerifyState.VIDEO_NOT_VISIBLE_YET
+          : VerifyState.VERIFICATION_FAILED,
       errorType: attempts.some(a => a.apiStatus) ? 'TRANSIENT' : null,
       video: null,
       hasCustomThumbnail: false,

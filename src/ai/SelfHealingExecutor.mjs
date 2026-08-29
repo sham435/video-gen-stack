@@ -21,6 +21,15 @@ export class SelfHealingExecutor {
         return result
       } catch (error) {
         lastError = error
+        // A deterministic, non-recoverable infrastructure failure (e.g. ffmpeg
+        // binary missing, invalid filtergraph, concat list corrupt) must NOT be
+        // retried. Retrying renews the whole task and, for slow stages like the
+        // 4K render, burns the entire run budget on a failure that will recur
+        // identically. The producer tags such errors with renderRecoverable=false.
+        if (error.renderRecoverable === false) {
+          console.error(`[SelfHeal] non-recoverable error (renderRecoverable=false) — aborting without retry: ${error.message}`)
+          throw new Error(`Non-recoverable render failure (not retried): ${error.message}`)
+        }
         this.guardian.recordAttempt()
         const recovery = await this.guardian.recover(error, context)
         console.log(`[SelfHeal] attempt ${attempt}/${maxAttempts} — recovery: ${recovery.diagnosis.action}`)
