@@ -127,13 +127,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if git diff --quiet public/videos.json; then
+          if git diff --quiet public/videos.json && ! git diff --quiet -- production/runs 2>/dev/null && ! git ls-files --others --exclude-standard production/runs | rg -q .; then
             echo "No feed change"
           else
             git config user.name "news-monster-bot"
             git config user.email "actions@users.noreply.github.com"
-            git add public/videos.json
-            git commit -m "chore: refresh landing page video feed"
+            git add public/videos.json production/runs
+            git commit -m "chore: refresh landing page video feed + production acceptance records"
             # Scheduled runs overlap (12min run vs 30min cadence) and other
             # commits can land on main mid-run, so a plain push races. The
             # composer also regenerates tracked output/ files (dirty tree),

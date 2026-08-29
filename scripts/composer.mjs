@@ -1019,6 +1019,55 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             ledgerEntry = ledger.record(record)
           }
           console.log(`[LEDGER] recorded ${videoId} — verified=${verification.passed} upload=SUCCESS thumbnail=${thumbnailState} verification=${verificationState}${thumbnailResult.errorType ? ` (${thumbnailResult.errorType})` : ''}`)
+
+          // Durable per-run acceptance record — a machine-readable, SSOT-only
+          // snapshot written to production/runs/<run-id>/publication.json so
+          // acceptance evidence survives GitHub log truncation and cache loss.
+          // Serializes ONLY fields the pipeline already produced (no parallel
+          // state model invented).
+          try {
+            const renderProfile = ctx.results.RENDER?.engine?.renderProfile
+            const renderGeo = renderProfile?.output
+              ? { width: renderProfile.output.width, height: renderProfile.output.height, profile: renderProfile.type, aspectRatio: renderProfile.aspectRatio }
+              : null
+            const runDir = path.join('production', 'runs', String(ctx.jobId || 'unknown'))
+            fs.mkdirSync(runDir, { recursive: true })
+            fs.writeFileSync(
+              path.join(runDir, 'publication.json'),
+              JSON.stringify({
+                runId: ctx.jobId,
+                videoId,
+                publishedAt: new Date().toISOString(),
+                render: renderGeo,
+                thumbnail: {
+                  source: {
+                    width: ctx.results.THUMBNAIL?.selected?.width ?? null,
+                    height: ctx.results.THUMBNAIL?.selected?.height ?? null,
+                    aspectRatio: (ctx.results.THUMBNAIL?.selected?.width && ctx.results.THUMBNAIL?.selected?.height)
+                      ? (ctx.results.THUMBNAIL.selected.width / ctx.results.THUMBNAIL.selected.height).toFixed(4)
+                      : null,
+                    sha256: masterThumbSha || null,
+                  },
+                  remote: thumbnailResult.remote
+                    ? { url: thumbnailResult.remote.url ?? null, width: thumbnailResult.remote.width ?? null, height: thumbnailResult.remote.height ?? null, sha256: thumbnailResult.remote.sha256 ?? null }
+                    : null,
+                  identity: thumbnailResult.identity || null,
+                  state: thumbnailState,
+                },
+                verification: {
+                  state: verificationState,
+                  passed: verification.passed,
+                  durationMs: verification.durationMs ?? null,
+                  failures: verification.failures || [],
+                },
+                upload: { state: record.uploadState, url: record.youtubeUrl },
+                distribution,
+              }, null, 2),
+            )
+            console.log(`[LEDGER] acceptance record → ${path.join(runDir, 'publication.json')}`)
+          } catch (e) {
+            console.log(`[LEDGER] acceptance record write failed (non-fatal): ${e.message}`)
+          }
         } catch (e) {
           console.log(`[LEDGER] record failed (non-fatal): ${e.message}`)
         }
