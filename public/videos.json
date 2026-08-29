@@ -1,30 +1,30 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-28T23:30:39.677Z",
+  "updatedAt": "2026-08-29T01:31:35.100Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "Jr1GCBtO27o",
-      "title": "GTA 6 Sounds Like It Won't Be 60FPS At Launch - Kotaku | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-08-28T23:24:11.505Z",
-      "publishedLabel": "Aug 28, 11:24 PM",
-      "thumbnail": "/thumbnails/Jr1GCBtO27o.png",
-      "thumbnailSha256": "cb46fc669af972dd028328559620d9d22c1821f272c73399e9c3ef0463b6785a",
+      "id": "mq4uDrl5_l0",
+      "title": "The Easiest Ways to Share Anything Between Android and iOS | NEWS-MONSTER",
+      "category": "apple",
+      "publishedAt": "2026-08-29T01:31:34.467Z",
+      "publishedLabel": "Aug 29, 01:31 AM",
+      "thumbnail": "/thumbnails/mq4uDrl5_l0.png",
+      "thumbnailSha256": "41a4b2458ecb2b5be8d296bee2f78afdbaa126b8aebaf6e5da52476d2b298a69",
       "thumbnailWidth": 1080,
       "thumbnailHeight": 1920,
-      "youtubeUrl": "https://youtu.be/Jr1GCBtO27o",
+      "youtubeUrl": "https://youtu.be/mq4uDrl5_l0",
       "verified": false,
       "verificationState": "THUMBNAIL_MISMATCH",
       "thumbnailState": "CUSTOM_THUMBNAIL_MISMATCH",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "Jr1GCBtO27o",
-          "url": "https://youtu.be/Jr1GCBtO27o",
+          "videoId": "mq4uDrl5_l0",
+          "url": "https://youtu.be/mq4uDrl5_l0",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "cb46fc669af972dd028328559620d9d22c1821f272c73399e9c3ef0463b6785a",
+            "sha256": "41a4b2458ecb2b5be8d296bee2f78afdbaa126b8aebaf6e5da52476d2b298a69",
             "width": 1080,
             "height": 1920,
             "mimeType": "image/png",
@@ -41,12 +41,12 @@
           "errors": [],
           "durationMs": 1,
           "thumbnail": {
-            "sha256": "cb46fc669af972dd028328559620d9d22c1821f272c73399e9c3ef0463b6785a",
+            "sha256": "41a4b2458ecb2b5be8d296bee2f78afdbaa126b8aebaf6e5da52476d2b298a69",
             "width": 1080,
             "height": 1920,
             "mimeType": "image/png",
             "aspectRatio": "9:16",
-            "path": "public/thumbnails/Jr1GCBtO27o.png"
+            "path": "public/thumbnails/mq4uDrl5_l0.png"
           }
         },
         "linkedin": {
