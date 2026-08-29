@@ -4,12 +4,97 @@ const CLIENT_ID = process.env.YOUTUBE_CLIENT_ID
 const CLIENT_SECRET = process.env.YOUTUBE_CLIENT_SECRET
 const REFRESH_TOKEN = process.env.YOUTUBE_REFRESH_TOKEN
 const REDIRECT_URI = process.env.YOUTUBE_REDIRECT_URI || 'https://video-gen-stack-production.up.railway.app/api/auth/youtube/callback'
-const BASE = 'https://www.googleapis.com'
 
-export const authUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${encodeURIComponent('https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.force-ssl')}&response_type=code&access_type=offline`
+const GOOGLE_OAUTH_BASE = 'https://accounts.google.com'
+const GOOGLE_API_BASE = 'https://www.googleapis.com'
+const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token'
+
+const YOUTUBE_SCOPES = [
+  'https://www.googleapis.com/auth/youtube.upload',
+  'https://www.googleapis.com/auth/youtube.readonly',
+  'https://www.googleapis.com/auth/youtube.force-ssl',
+]
+
+const REQUEST_TIMEOUT_MS = Number(process.env.YOUTUBE_REQUEST_TIMEOUT_MS || 60_000)
+
+const MIME_BY_EXT = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg' }
+
+/**
+ * --------------------------------------------------------------------------
+ * Configuration
+ * --------------------------------------------------------------------------
+ */
+
+function assertOAuthConfig() {
+  const missing = []
+  if (!CLIENT_ID) missing.push('YOUTUBE_CLIENT_ID')
+  if (!CLIENT_SECRET) missing.push('YOUTUBE_CLIENT_SECRET')
+  if (missing.length) throw new Error(`YOUTUBE_OAUTH_CONFIG_MISSING: ${missing.join(', ')}`)
+}
+
+function assertRefreshToken() {
+  if (!REFRESH_TOKEN) throw new Error('YOUTUBE_REFRESH_TOKEN_NOT_SET: complete OAuth authorization first')
+}
+
+/**
+ * --------------------------------------------------------------------------
+ * HTTP
+ * --------------------------------------------------------------------------
+ */
+
+async function fetchWithTimeout(url, options = {}, timeoutMs = REQUEST_TIMEOUT_MS) {
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), timeoutMs)
+  try {
+    return await fetch(url, { ...options, signal: controller.signal })
+  } catch (error) {
+    if (error?.name === 'AbortError') throw new Error(`YOUTUBE_REQUEST_TIMEOUT: ${timeoutMs}ms`)
+    throw error
+  } finally {
+    clearTimeout(timeout)
+  }
+}
+
+async function readJson(response) {
+  return response.json().catch(() => ({}))
+}
+
+function youtubeApiError(data, fallbackStatus) {
+  const error = data?.error
+  const message = error?.message || `HTTP ${fallbackStatus} ${error?.status || ''}`.trim() || 'unknown YouTube API error'
+  const err = new Error(`YOUTUBE_API_ERROR: ${message}`)
+  err.httpStatus = fallbackStatus
+  err.reason = error?.errors?.[0]?.reason || error?.status || null
+  err.youtubeError = error || null
+  return err
+}
+
+/**
+ * --------------------------------------------------------------------------
+ * OAuth
+ * --------------------------------------------------------------------------
+ */
+function buildAuthUrl() {
+  const url = new URL('/o/oauth2/v2/auth', GOOGLE_OAUTH_BASE)
+  url.search = new URLSearchParams({
+    client_id: CLIENT_ID,
+    redirect_uri: REDIRECT_URI,
+    response_type: 'code',
+    access_type: 'offline',
+    prompt: 'consent',
+    include_granted_scopes: 'true',
+    scope: YOUTUBE_SCOPES.join(' '),
+  }).toString()
+  return url.toString()
+}
+
+export const authUrl = buildAuthUrl()
 
 export async function exchangeCode(code) {
-  const res = await fetch(`${BASE}/oauth2/v4/token`, {
+  assertOAuthConfig()
+  if (!code) throw new Error('YOUTUBE_OAUTH_CODE_REQUIRED')
+
+  const response = await fetchWithTimeout(GOOGLE_TOKEN_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
@@ -20,12 +105,18 @@ export async function exchangeCode(code) {
       redirect_uri: REDIRECT_URI,
     }),
   })
-  return res.json()
+
+  const data = await readJson(response)
+  if (!response.ok) throw youtubeApiError(data, response.status)
+  if (!data.access_token) throw new Error('YOUTUBE_OAUTH_ACCESS_TOKEN_MISSING')
+  return data
 }
 
 export async function getAccessToken() {
-  if (!REFRESH_TOKEN) throw new Error('YOUTUBE_REFRESH_TOKEN not set. Complete OAuth first.')
-  const res = await fetch(`${BASE}/oauth2/v4/token`, {
+  assertOAuthConfig()
+  assertRefreshToken()
+
+  const response = await fetchWithTimeout(GOOGLE_TOKEN_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
@@ -35,50 +126,68 @@ export async function getAccessToken() {
       grant_type: 'refresh_token',
     }),
   })
-  const data = await res.json()
+
+  const data = await readJson(response)
+  if (!response.ok) throw youtubeApiError(data, response.status)
+  if (!data.access_token) throw new Error('YOUTUBE_ACCESS_TOKEN_MISSING')
   return data.access_token
 }
 
 /**
- * Validate that the OAuth token has all required scopes.
- * Calls videos.list (requires youtube.readonly) to probe the token.
- * Returns { ok: true } or { ok: false, error, missingScope }.
+ * Validate refresh token + actual granted OAuth scopes via Google tokeninfo.
+ * Separate from YouTube API authorization probing.
  */
 export async function validateOAuthScopes() {
   try {
     const token = await getAccessToken()
-    if (!token) return { ok: false, error: 'no access token', missingScope: 'youtube.upload' }
-    const res = await fetch(`${BASE}/youtube/v3/videos?part=id&myRating=like&maxResults=1`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    if (res.ok) return { ok: true }
-    const body = await res.json().catch(() => ({}))
-    const reason = body?.error?.message || `HTTP ${res.status}`
-    const code = res.status
-    if (code === 401 || code === 403) {
-      return { ok: false, error: reason, missingScope: 'youtube.readonly', httpStatus: code }
+    const response = await fetchWithTimeout(
+      `${GOOGLE_OAUTH_BASE}/oauth2/v3/tokeninfo?access_token=${encodeURIComponent(token)}`
+    )
+    const data = await readJson(response)
+    if (!response.ok) return { ok: false, error: data?.error_description || `HTTP ${response.status}`, httpStatus: response.status }
+
+    const grantedScopes = new Set(String(data.scope || '').split(/\s+/).map(s => s.trim()).filter(Boolean))
+    const missingScopes = YOUTUBE_SCOPES.filter(scope => !grantedScopes.has(scope))
+    if (missingScopes.length) {
+      return { ok: false, error: 'YOUTUBE_OAUTH_SCOPES_INCOMPLETE', missingScopes, grantedScopes: [...grantedScopes] }
     }
-    return { ok: false, error: reason, httpStatus: code }
-  } catch (e) {
-    return { ok: false, error: e.message }
+    return { ok: true, grantedScopes: [...grantedScopes] }
+  } catch (error) {
+    return { ok: false, error: error.message }
   }
 }
 
-// ─── publishVideo ────────────────────────────────────────────────────────────
-// The production publishing contract: Video + Thumbnail → Published.
-//
-// NOT transactional — video and thumbnail uploads are independent. If thumbnail
-// fails, the video remains published. Modelled as a state machine:
-//
-//   VIDEO_UPLOAD_PENDING → VIDEO_UPLOADED → THUMBNAIL_PENDING → PUBLISHED
-//                         ↓ (thumbnail fails)
-//                    THUMBNAIL_FAILED → Retry Queue
-//
-// Accepts either:
-//   publishVideo({ videoUrl, thumbnailPath, metadata, niche })
-//   publishVideo(videoUrl, title, description, privacy, coverPath)  // legacy
-//
-// Returns: PublishResult (state machine snapshot)
+/**
+ * --------------------------------------------------------------------------
+ * Thumbnail byte-signature validation (no native decoders)
+ * --------------------------------------------------------------------------
+ */
+function validateThumbnailBytes(buffer, mimeType) {
+  if (!buffer?.length) throw new Error('THUMBNAIL_EMPTY')
+
+  if (mimeType === 'image/png') {
+    const valid =
+      buffer.length >= 8 &&
+      buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4e && buffer[3] === 0x47 &&
+      buffer[4] === 0x0d && buffer[5] === 0x0a && buffer[6] === 0x1a && buffer[7] === 0x0a
+    if (!valid) throw new Error('THUMBNAIL_INVALID_PNG_SIGNATURE')
+    return
+  }
+
+  if (mimeType === 'image/jpeg') {
+    const valid = buffer.length >= 3 && buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff
+    if (!valid) throw new Error('THUMBNAIL_INVALID_JPEG_SIGNATURE')
+    return
+  }
+
+  throw new Error(`THUMBNAIL_UNSUPPORTED_MIME: ${mimeType}`)
+}
+
+/**
+ * --------------------------------------------------------------------------
+ * YouTube video upload
+ * --------------------------------------------------------------------------
+ */
 export async function publishVideo(inputOrUrl, titleOrOpts, description, privacy = 'public', coverPath = null) {
   let videoUrl, thumbnailPath, niche, _title, _description, _privacy
   if (typeof inputOrUrl === 'object' && inputOrUrl !== null) {
@@ -98,65 +207,71 @@ export async function publishVideo(inputOrUrl, titleOrOpts, description, privacy
     _privacy = privacy
   }
 
+  if (!videoUrl) throw new Error('YOUTUBE_VIDEO_URL_REQUIRED')
+  if (!['public', 'private', 'unlisted'].includes(_privacy)) throw new Error(`YOUTUBE_INVALID_PRIVACY_STATUS: ${_privacy}`)
+
   const token = await getAccessToken()
 
   // State: VIDEO_UPLOAD_PENDING
-  const videoResp = await fetch(videoUrl)
-  if (!videoResp.ok) throw new Error(`Failed to fetch video data: ${videoResp.status} ${videoResp.statusText}`)
-  const videoBuffer = await videoResp.arrayBuffer()
-  console.log(`📤 Uploading to YouTube: ${(videoBuffer.byteLength / 1024 / 1024).toFixed(1)}MB`)
+  console.log(`[YOUTUBE_VIDEO_UPLOAD] START`)
+  const videoResponse = await fetchWithTimeout(videoUrl)
+  if (!videoResponse.ok) throw new Error(`VIDEO_SOURCE_FETCH_FAILED: ${videoResponse.status} ${videoResponse.statusText}`)
+  const videoBuffer = await videoResponse.arrayBuffer()
+  if (!videoBuffer.byteLength) throw new Error('VIDEO_SOURCE_EMPTY')
+  console.log(`[YOUTUBE_VIDEO_UPLOAD] bytes=${videoBuffer.byteLength} sizeMB=${(videoBuffer.byteLength / 1024 / 1024).toFixed(1)}`)
 
-  const boundary = 'boundary123'
+  const boundary = `youtube-${Date.now()}-${Math.random().toString(16).slice(2)}`
   const meta = JSON.stringify({
     snippet: { title: String(_title || 'News Update').slice(0, 100), description: String(_description || '').slice(0, 5000) },
     status: { privacyStatus: _privacy, selfDeclaredMadeForKids: false },
   })
 
-  const body = [
-    `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${meta}\r\n`,
-    `--${boundary}\r\nContent-Type: video/mp4\r\n\r\n`,
-    new Uint8Array(videoBuffer),
-    `\r\n--${boundary}--\r\n`,
-  ].map(b => typeof b === 'string' ? new TextEncoder().encode(b) : b)
+  const parts = [
+    Buffer.from(`--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${meta}\r\n`),
+    Buffer.from(`--${boundary}\r\nContent-Type: video/mp4\r\n\r\n`),
+    Buffer.from(videoBuffer),
+    Buffer.from(`\r\n--${boundary}--\r\n`),
+  ]
+  const requestBody = Buffer.concat(parts)
 
-  const combined = new Uint8Array(body.reduce((acc, b) => acc + b.length, 0))
-  let offset = 0
-  for (const b of body) { combined.set(b, offset); offset += b.length }
+  const response = await fetchWithTimeout(
+    `${GOOGLE_API_BASE}/upload/youtube/v3/videos?part=snippet,status&uploadType=multipart`,
+    {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': `multipart/related; boundary=${boundary}` },
+      body: requestBody,
+    },
+    Math.max(REQUEST_TIMEOUT_MS, 120_000)
+  )
 
-  const res = await fetch(`${BASE}/upload/youtube/v3/videos?part=snippet,status&uploadType=multipart`, {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': `multipart/related; boundary=${boundary}` },
-    body: combined,
-  })
+  const data = await readJson(response)
+  if (!response.ok || data.error) throw youtubeApiError(data, response.status)
+  if (!data.id) throw new Error('YOUTUBE_VIDEO_UPLOAD_SUCCEEDED_WITHOUT_VIDEO_ID')
 
-  const data = await res.json()
-  if (data.error) throw new Error(`YouTube upload failed: ${data.error.message || JSON.stringify(data.error)}`)
-  if (!data.id) throw new Error('YouTube upload succeeded but no video ID returned')
+  const videoId = data.id
+  console.log(`[YOUTUBE_VIDEO_UPLOAD] success videoId=${videoId} url=https://youtu.be/${videoId}`)
 
-  // State: VIDEO_UPLOADED
-  console.log(`✅ YouTube upload complete: https://youtu.be/${data.id}`)
-
-  // State: THUMBNAIL_PENDING → attempt thumbnail upload (independent)
+  // State: THUMBNAIL_PENDING → attempt thumbnail upload (independent).
+  // thumbnailUploaded means only thumbnails.set succeeded — NOT that YouTube
+  // propagated the thumbnail. The propagation verifier owns that truth.
   let thumbnailUploaded = false
   let thumbnailAttempts = 0
   let lastThumbnailError = null
   if (thumbnailPath) {
-    thumbnailAttempts++
+    thumbnailAttempts = 1
     try {
-      await setThumbnail(token, data.id, thumbnailPath)
+      await setThumbnail(token, videoId, thumbnailPath)
       thumbnailUploaded = true
     } catch (e) {
       lastThumbnailError = e.message
-      console.warn(`⚠️  Thumbnail upload failed: ${e.message} (video still published, retry queued)`)
+      console.warn(`[YOUTUBE_THUMBNAIL] upload failed videoId=${videoId} error=${e.message} (video still published)`)
     }
   }
 
-  // Return state machine snapshot
   return {
-    videoId: data.id,
-    url: `https://youtu.be/${data.id}`,
+    videoId,
+    url: `https://youtu.be/${videoId}`,
     niche: niche || null,
-    // State machine fields
     videoUploaded: true,
     thumbnailUploaded,
     thumbnailAttempts,
@@ -170,127 +285,186 @@ export async function uploadShort(videoUrl, title, description, privacy = 'publi
   return publishVideo({ videoUrl, title, description, privacy, thumbnailPath: coverPath })
 }
 
-export async function setThumbnail(token, videoId, coverPath) {
-  if (!coverPath) coverPath = 'output/cover.png'
-  if (!existsSync(coverPath)) {
-    console.warn(`⚠️  Cover image not found at ${coverPath} — skipping thumbnail`)
-    return { ok: false, reason: 'not found' }
-  }
+/**
+ * Upload a custom thumbnail for a video.
+ *
+ * SSOT: the canonical LOCAL thumbnail artifact (2160x3840 PNG) is the only
+ * source uploaded here. NEVER pass a C2PA-signed PNG — C2PA PNGs carry embedded
+ * manifest data YouTube's thumbnail API cannot render; always the original
+ * canonical artifact.
+ *
+ * thumbnails.set is a MEDIA UPLOAD endpoint — the raw image bytes are the POST
+ * body (Content-Type: image/png), NOT multipart. No native image decoding (a
+ * decoder crash on the hot upload path is unacceptable); only byte-signature
+ * validation + SHA-256 preflight.
+ *
+ * A 2xx response is NOT authoritative acceptance. Propagation is confirmed by
+ * YouTubePropagationVerifier (hasCustomThumbnail + remote 9:16 geometry).
+ */
+export async function setThumbnail(token, videoId, thumbnailPath) {
+  if (!token) throw new Error('YOUTUBE_ACCESS_TOKEN_REQUIRED')
+  if (!videoId) throw new Error('YOUTUBE_VIDEO_ID_REQUIRED')
+  if (!thumbnailPath) throw new Error('THUMBNAIL_PATH_REQUIRED')
+  if (!existsSync(thumbnailPath)) throw new Error(`THUMBNAIL_NOT_FOUND: ${thumbnailPath}`)
 
-  const thumbBuffer = readFileSync(coverPath)
-  if (!thumbBuffer.length) {
-    console.warn(`⚠️  Cover image empty: ${coverPath} — skipping thumbnail`)
-    return { ok: false, reason: 'empty file' }
-  }
+  const thumbnailBuffer = readFileSync(thumbnailPath)
+  if (!thumbnailBuffer.length) throw new Error(`THUMBNAIL_EMPTY: ${thumbnailPath}`)
 
-  const ext = coverPath.toLowerCase().split('.').pop()
-  const MIME_BY_EXT = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg' }
+  const ext = thumbnailPath.toLowerCase().split('.').pop()
   const mimeType = MIME_BY_EXT[ext]
-  if (!mimeType) {
-    console.warn(`⚠️  Unsupported thumbnail format: ${ext} — skipping thumbnail`)
-    return { ok: false, reason: `unsupported format: ${ext}` }
-  }
+  if (!mimeType) throw new Error(`THUMBNAIL_UNSUPPORTED_FORMAT: ${ext}`)
 
-  const boundary = 'thumb_boundary'
-  const parts = [
-    new TextEncoder().encode(`--${boundary}\r\nContent-Type: ${mimeType}\r\n\r\n`),
-    thumbBuffer,
-    new TextEncoder().encode(`\r\n--${boundary}--\r\n`),
-  ]
-  const body = new Uint8Array(parts.reduce((acc, b) => acc + b.length, 0))
-  let offset = 0
-  for (const b of parts) { body.set(b, offset); offset += b.length }
+  validateThumbnailBytes(thumbnailBuffer, mimeType)
 
-  const res = await fetch(
-    `https://www.googleapis.com/upload/youtube/v3/thumbnails/set?videoId=${videoId}`,
+  const { sha256Thumbnail } = await import('../../../src/thumbnail/ThumbnailMetadata.mjs')
+  const thumbnailSha256 = sha256Thumbnail(thumbnailPath)
+
+  console.log(`[YOUTUBE_THUMBNAIL] videoId=${videoId} source=${thumbnailPath} mime=${mimeType} bytes=${thumbnailBuffer.length} sha256=${thumbnailSha256 ? thumbnailSha256.slice(0, 12) + '…' : 'unknown'} uploadMode=simple-media`)
+  console.log(`[YOUTUBE_THUMBNAIL_UPLOAD] START videoId=${videoId}`)
+
+  const response = await fetchWithTimeout(
+    `${GOOGLE_API_BASE}/upload/youtube/v3/thumbnails/set?videoId=${encodeURIComponent(videoId)}`,
     {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': `multipart/related; boundary=${boundary}`,
-      },
-      body,
-    }
+      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': mimeType },
+      body: thumbnailBuffer,
+    },
   )
 
-  const data = await res.json()
-  if (data.error) {
-    console.warn(`⚠️  YouTube thumbnail upload failed: ${data.error.message}`)
-    return { ok: false, reason: data.error.message }
+  const data = await readJson(response)
+  if (!response.ok || data.error) {
+    const error = youtubeApiError(data, response.status)
+    console.warn(`[YOUTUBE_THUMBNAIL_UPLOAD] FAIL videoId=${videoId} http=${response.status} error=${error.message}`)
+    throw new Error(`YOUTUBE_THUMBNAIL_UPLOAD_FAILED: ${error.message}`)
   }
 
-  console.log(`✅ YouTube thumbnail set: ${data.items?.length || 0} items (${mimeType})`)
-  // Note: hasCustomThumbnail verification happens in the VERIFY stage
-  // (PostPublishVerifier) — not here, because the video may not have
-  // propagated to videos.list immediately after upload.
-  return { ok: true, items: data.items?.length || 0, mimeType }
+  const items = data.items?.length || 0
+  const remoteThumbnail = data.items?.[0]?.snippet?.thumbnails?.maxres
+    || data.items?.[0]?.snippet?.thumbnails?.standard
+    || data.items?.[0]?.snippet?.thumbnails?.high
+    || null
+
+  console.log(`[YOUTUBE_THUMBNAIL_UPLOAD] SUCCESS videoId=${videoId} http=${response.status} items=${items} mime=${mimeType} bytes=${thumbnailBuffer.length} responseThumbnailUrl=${remoteThumbnail?.url || 'none'}`)
+
+  // Diagnostic only — never determines acceptance. Propagation verifier is authoritative.
+  try {
+    await verifyThumbnailRepresentation(token, videoId)
+  } catch (error) {
+    console.warn(`[YOUTUBE_THUMBNAIL_VERIFY] diagnostic failed: ${error.message}`)
+  }
+
+  return { ok: true, videoId, items, mimeType, bytes: thumbnailBuffer.length, sha256: thumbnailSha256 }
 }
 
-// Find the channel's own top-level comment on a video (e.g. manually pinned
-// in Studio) — used as the parent for API comment replies.
+/** Diagnostic representation check — authoritative propagation is YouTubePropagationVerifier's job. */
+async function verifyThumbnailRepresentation(token, videoId) {
+  const response = await fetchWithTimeout(
+    `${GOOGLE_API_BASE}/youtube/v3/videos?part=contentDetails,snippet&id=${encodeURIComponent(videoId)}`,
+    { headers: { 'Authorization': `Bearer ${token}` } },
+  )
+  const data = await readJson(response)
+  if (!response.ok) throw youtubeApiError(data, response.status)
+
+  const video = data.items?.[0]
+  if (!video) throw new Error(`YOUTUBE_VIDEO_NOT_VISIBLE: ${videoId}`)
+
+  const hasCustomThumbnail = video.contentDetails?.hasCustomThumbnail === true
+  const thumbnails = video.snippet?.thumbnails || {}
+  const remote = thumbnails.maxres || thumbnails.standard || thumbnails.high || thumbnails.medium || null
+  const remoteType = remote ? (Object.entries(thumbnails).find(([, v]) => v === remote)?.[0] || 'unknown') : 'none'
+  const width = remote?.width ?? null
+  const height = remote?.height ?? null
+
+  console.log(`[YOUTUBE_THUMBNAIL_VERIFY] videoId=${videoId} hasCustomThumbnail=${hasCustomThumbnail} remoteSource=${remoteType} remoteUrl=${remote?.url || 'none'} remoteWidth=${width} remoteHeight=${height} remoteAspectRatio=${width && height ? `${width}:${height}` : 'n/a'} apiStatus=${response.status}`)
+
+  return { hasCustomThumbnail, remote }
+}
+
+/**
+ * --------------------------------------------------------------------------
+ * Comments
+ * --------------------------------------------------------------------------
+ */
 async function findOwnTopLevelComment(token, videoId) {
-  const vres = await fetch(`${BASE}/youtube/v3/videos?part=snippet&id=${videoId}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  })
-  const vdata = await vres.json()
-  const channelId = vdata.items?.[0]?.snippet?.channelId
+  const videoResponse = await fetchWithTimeout(
+    `${GOOGLE_API_BASE}/youtube/v3/videos?part=snippet&id=${encodeURIComponent(videoId)}`,
+    { headers: { 'Authorization': `Bearer ${token}` } },
+  )
+  const videoData = await readJson(videoResponse)
+  if (!videoResponse.ok) throw youtubeApiError(videoData, videoResponse.status)
+  const channelId = videoData.items?.[0]?.snippet?.channelId
   if (!channelId) return null
 
-  const tres = await fetch(`${BASE}/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&maxResults=20`, {
-    headers: { Authorization: `Bearer ${token}` },
-  })
-  const tdata = await tres.json()
-  const own = (tdata.items || []).find(
-    (t) => t.snippet?.topLevelComment?.snippet?.authorChannelId?.value === channelId
+  const response = await fetchWithTimeout(
+    `${GOOGLE_API_BASE}/youtube/v3/commentThreads?part=snippet&videoId=${encodeURIComponent(videoId)}&maxResults=20`,
+    { headers: { 'Authorization': `Bearer ${token}` } },
   )
-  return own?.snippet?.topLevelComment?.id || null
+  const data = await readJson(response)
+  if (!response.ok) throw youtubeApiError(data, response.status)
+  const ownComment = (data.items || []).find(
+    t => t.snippet?.topLevelComment?.snippet?.authorChannelId?.value === channelId
+  )
+  return ownComment?.snippet?.topLevelComment?.id || null
 }
 
-// Post a comment on a published video (best-effort). YouTube's public API no
-// longer creates top-level comments, so the CTA is posted as a REPLY to the
-// channel's own comment — discovered automatically, or via
-// YOUTUBE_PARENT_COMMENT_ID (the pinned comment's ID in Studio).
+/**
+ * Post a CTA as a reply to the channel's own existing comment.
+ * YOUTUBE_PARENT_COMMENT_ID should normally be configured for deterministic
+ * behavior. A missing parent is an explicit state (PARENT_COMMENT_NOT_FOUND),
+ * never an attempt at an unsupported top-level comment.
+ */
 export async function postComment(videoId, text) {
   if (!videoId || !text) return null
-  const token = await getAccessToken()
-  let parentId = process.env.YOUTUBE_PARENT_COMMENT_ID
-  if (!parentId) {
-    try { parentId = await findOwnTopLevelComment(token, videoId) } catch { parentId = null }
-  }
-  const snippet = { videoId, textOriginal: text.slice(0, 500) }
-  if (parentId) snippet.parentId = parentId
 
-  const res = await fetch(`${BASE}/youtube/v3/comments?part=snippet`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ snippet }),
-  })
-  const data = await res.json()
-  if (data.error) {
-    if (String(data.error.message).includes('parentId')) {
-      console.warn('⚠️  Comment post failed: YouTube no longer allows API top-level comments. Pin one manually in Studio (https://support.google.com/youtube/answer/171664?hl=en), then set YOUTUBE_PARENT_COMMENT_ID to that comment\'s ID so the pipeline replies to it.')
-    } else {
-      console.warn(`⚠️  Comment post failed: ${data.error.message}`)
+  const token = await getAccessToken()
+  let parentId = process.env.YOUTUBE_PARENT_COMMENT_ID || null
+
+  if (!parentId) {
+    try {
+      parentId = await findOwnTopLevelComment(token, videoId)
+    } catch (error) {
+      console.warn(`[YOUTUBE_COMMENT] parent lookup failed: ${error.message}`)
     }
-    return null
   }
-  console.log(`${parentId ? '✅ Comment reply posted' : '✅ Comment posted'}: ${data.snippet?.textOriginal?.slice(0, 60)}...`)
+
+  if (!parentId) {
+    console.warn(`[YOUTUBE_COMMENT] skipped: no parent comment found videoId=${videoId}`)
+    return { ok: false, skipped: true, reason: 'PARENT_COMMENT_NOT_FOUND' }
+  }
+
+  const snippet = { videoId, parentId, textOriginal: String(text).slice(0, 500) }
+
+  const response = await fetchWithTimeout(
+    `${GOOGLE_API_BASE}/youtube/v3/comments?part=snippet`,
+    {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ snippet }),
+    },
+  )
+
+  const data = await readJson(response)
+  if (!response.ok || data.error) {
+    const error = youtubeApiError(data, response.status)
+    console.warn(`[YOUTUBE_COMMENT] FAIL videoId=${videoId} error=${error.message}`)
+    return { ok: false, skipped: false, error: error.message }
+  }
+
+  console.log(`[YOUTUBE_COMMENT] reply posted videoId=${videoId} commentId=${data.id || 'unknown'}`)
   return data
 }
 
 export async function deleteVideo(videoId) {
+  if (!videoId) throw new Error('YOUTUBE_VIDEO_ID_REQUIRED')
   const token = await getAccessToken()
-  const res = await fetch(`${BASE}/youtube/v3/videos?id=${videoId}`, {
-    method: 'DELETE',
-    headers: { 'Authorization': `Bearer ${token}` },
-  })
-  if (!res.ok) {
-    const err = await res.text()
-    throw new Error(`Delete failed (${res.status}): ${err}`)
+  const response = await fetchWithTimeout(
+    `${GOOGLE_API_BASE}/youtube/v3/videos?id=${encodeURIComponent(videoId)}`,
+    { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } },
+  )
+  if (!response.ok) {
+    const data = await readJson(response)
+    throw youtubeApiError(data, response.status)
   }
-  console.log(`🗑️  Deleted video ${videoId}`)
+  console.log(`[YOUTUBE_DELETE] deleted videoId=${videoId}`)
   return true
 }

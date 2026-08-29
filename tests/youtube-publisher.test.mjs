@@ -10,6 +10,9 @@ import { mkdtempSync, writeFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
+// Valid 8-byte PNG signature (satisfies setThumbnail's byte-signature check).
+const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]
+
 // Set env BEFORE any module import — youtube.js reads at top level.
 process.env.YOUTUBE_CLIENT_ID = 'test-client-id'
 process.env.YOUTUBE_CLIENT_SECRET = 'test-client-secret'
@@ -21,6 +24,41 @@ let mockFetch = null
 const OrigFetch = globalThis.fetch
 function mockTransport(handler) {
   mockFetch = async (url, opts) => {
+    // OAuth token endpoint: return a fresh access token by default unless the
+    // handler explicitly overrides it (covers the flow where getAccessToken()
+    // is called before the real API call).
+    if (String(url).includes('oauth2.googleapis.com/token')) {
+      const override = await handler(url, opts)
+      const isError = override?.ok === false || (override?.status && override.status >= 400)
+      if (isError && override.body) {
+        return {
+          ok: false,
+          status: override.status ?? 400,
+          statusText: override.statusText ?? 'Error',
+          json: async () => override.body ?? {},
+          arrayBuffer: async () => override.buffer ?? new ArrayBuffer(0),
+          text: async () => override.text ?? '',
+        }
+      }
+      if (override && override.body && override.body.access_token) {
+        return {
+          ok: override.ok ?? true,
+          status: override.status ?? 200,
+          statusText: override.statusText ?? 'OK',
+          json: async () => override.body ?? {},
+          arrayBuffer: async () => override.buffer ?? new ArrayBuffer(0),
+          text: async () => override.text ?? '',
+        }
+      }
+      return {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        json: async () => ({ access_token: 'auto-token' }),
+        arrayBuffer: async () => new ArrayBuffer(0),
+        text: async () => '',
+      }
+    }
     const result = await handler(url, opts)
     return {
       ok: result.ok ?? true,
@@ -78,12 +116,12 @@ test('exchangeCode — sends correct params', async () => {
   assert.equal(sentBody.get('client_id'), 'test-client-id')
 })
 
-test('exchangeCode — returns error from Google', async () => {
-  mockTransport(() => ({
-    body: { error: 'invalid_grant', error_description: 'Code expired' },
-  }))
-  const data = await youtube.exchangeCode('expired-code')
-  assert.equal(data.error, 'invalid_grant')
+test('exchangeCode — throws on error from Google', async () => {
+  mockTransport(() => ({ status: 400, body: { error: { message: 'invalid_grant', status: 'INVALID_GRANT' } } }))
+  await assert.rejects(
+    () => youtube.exchangeCode('expired-code'),
+    /invalid_grant/
+  )
 })
 
 // ── getAccessToken ───────────────────────────────────────────────────────
@@ -163,7 +201,7 @@ test('uploadShort — throws on video fetch failure', async () => {
 
   await assert.rejects(
     () => youtube.uploadShort('https://example.com/bad.mp4', 'T', 'D'),
-    /Failed to fetch video data: 404/
+    /VIDEO_SOURCE_FETCH_FAILED/
   )
 })
 
@@ -181,7 +219,7 @@ test('uploadShort — throws on YouTube API error', async () => {
 
   await assert.rejects(
     () => youtube.uploadShort('https://example.com/video.mp4', 'T', 'D'),
-    /YouTube upload failed: quotaExceeded/
+    /quotaExceeded/
   )
 })
 
@@ -199,7 +237,7 @@ test('uploadShort — throws if no video ID returned', async () => {
 
   await assert.rejects(
     () => youtube.uploadShort('https://example.com/video.mp4', 'T', 'D'),
-    /no video ID returned/
+    /YOUTUBE_VIDEO_UPLOAD_SUCCEEDED_WITHOUT_VIDEO_ID/
   )
 })
 
@@ -279,44 +317,71 @@ test('uploadShort — privacy status passed correctly', async () => {
 })
 
 // ── setThumbnail ─────────────────────────────────────────────────────────
-test('setThumbnail — sends multipart with image data', async () => {
+test('setThumbnail — sends raw media upload (not multipart)', async () => {
   const tmpDir = mkdtempSync(join(tmpdir(), 'yt-thumb-'))
   const coverPath = join(tmpDir, 'cover.png')
-  writeFileSync(coverPath, Buffer.from([0x89, 0x50, 0x4e, 0x47])) // fake PNG header
+  writeFileSync(coverPath, Buffer.from(PNG_SIGNATURE)) // valid PNG signature
 
   let capturedUrl = null
   let capturedAuth = null
+  let capturedType = null
+  let capturedBody = null
   mockTransport((url, opts) => {
-    capturedUrl = url
-    capturedAuth = opts.headers?.Authorization
-    return { body: { items: [{ id: 'thumb-id' }] } }
+    if (String(url).includes('thumbnails/set')) {
+      capturedUrl = url
+      capturedAuth = opts.headers?.Authorization
+      capturedType = opts.headers?.['Content-Type']
+      capturedBody = opts.body
+    }
+    return { body: { items: [{ id: 'thumb-id', snippet: {} }] } }
   })
 
   await youtube.setThumbnail('fake-token', 'vid-xyz', coverPath)
   assert.ok(capturedUrl?.includes('videoId=vid-xyz'))
   assert.equal(capturedAuth, 'Bearer fake-token')
+  // Raw media upload: the image bytes ARE the body, Content-Type is image/png.
+  assert.equal(capturedType, 'image/png')
+  assert.ok(!String(capturedType).includes('multipart'), 'must NOT be a multipart request')
+  assert.ok(capturedBody instanceof Uint8Array || Buffer.isBuffer(capturedBody), 'body is raw bytes')
+  assert.deepEqual(Array.from(capturedBody), PNG_SIGNATURE)
 
   rmSync(tmpDir, { recursive: true })
 })
 
-test('setThumbnail — skips if cover file not found', async () => {
+test('setThumbnail — throws THUMBNAIL_NOT_FOUND when file missing (no cover.png fallback)', async () => {
   let called = false
   mockTransport(() => { called = true; return { body: {} } })
 
-  await youtube.setThumbnail('tok', 'vid', '/nonexistent/path.png')
+  await assert.rejects(
+    () => youtube.setThumbnail('tok', 'vid', '/nonexistent/path.png'),
+    /THUMBNAIL_NOT_FOUND/
+  )
   assert.equal(called, false, 'should not call API when file missing')
 })
 
-test('setThumbnail — defaults to output/cover.png', async () => {
-  let capturedUrl = null
-  mockTransport((url) => {
-    capturedUrl = url
-    return { body: { items: [] } }
-  })
+test('setThumbnail — throws THUMBNAIL_PATH_REQUIRED when no path given', async () => {
+  let called = false
+  mockTransport(() => { called = true; return { body: { items: [] } } })
 
-  // Will skip because output/cover.png doesn't exist, but verifies default path logic
-  await youtube.setThumbnail('tok', 'vid', null)
-  // No assertion needed — just verifying no crash on null coverPath
+  // No cover.png fallback: a null path is a hard contract violation.
+  await assert.rejects(
+    () => youtube.setThumbnail('tok', 'vid', null),
+    /THUMBNAIL_PATH_REQUIRED/
+  )
+  assert.equal(called, false, 'must not silently fall back to legacy cover.png')
+})
+
+test('setThumbnail — throws YOUTUBE_THUMBNAIL_UPLOAD_FAILED on HTTP error', async () => {
+  const tmpDir = mkdtempSync(join(tmpdir(), 'yt-thumb-err-'))
+  const coverPath = join(tmpDir, 'cover.png')
+  writeFileSync(coverPath, Buffer.from(PNG_SIGNATURE))
+
+  mockTransport(() => ({ ok: false, status: 403, body: { error: { message: 'quota' } } }))
+  await assert.rejects(
+    () => youtube.setThumbnail('tok', 'vid', coverPath),
+    /YOUTUBE_THUMBNAIL_UPLOAD_FAILED.*quota/
+  )
+  rmSync(tmpDir, { recursive: true })
 })
 
 // ── postComment ──────────────────────────────────────────────────────────
@@ -379,12 +444,12 @@ test('postComment — returns null on API error', async () => {
   })
 
   const result = await youtube.postComment('v1', 'hello')
-  assert.equal(result, null)
+  assert.equal(result?.ok, false, 'returns structured failure, not null')
 
   delete process.env.YOUTUBE_PARENT_COMMENT_ID
 })
 
-test('postComment — warns about parentId error', async () => {
+test('postComment — PARENT_COMMENT_NOT_FOUND when no parent comment', async () => {
   delete process.env.YOUTUBE_PARENT_COMMENT_ID
   mockTransport((url) => {
     if (String(url).includes('/videos')) {
@@ -400,7 +465,8 @@ test('postComment — warns about parentId error', async () => {
   })
 
   const result = await youtube.postComment('v1', 'hello')
-  assert.equal(result, null)
+  assert.equal(result?.ok, false)
+  assert.equal(result?.reason, 'PARENT_COMMENT_NOT_FOUND')
 })
 
 // ── deleteVideo ──────────────────────────────────────────────────────────
@@ -411,10 +477,10 @@ test('deleteVideo — returns true on success', async () => {
 })
 
 test('deleteVideo — throws on failure', async () => {
-  mockTransport(() => ({ ok: false, status: 403, text: 'Forbidden' }))
+  mockTransport(() => ({ ok: false, status: 403, body: { error: { message: 'Forbidden' } } }))
   await assert.rejects(
     () => youtube.deleteVideo('vid-bad'),
-    /Delete failed \(403\): Forbidden/
+    /YOUTUBE_API_ERROR/
   )
 })
 
