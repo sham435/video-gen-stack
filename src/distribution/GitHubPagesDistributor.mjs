@@ -56,6 +56,7 @@ export class GitHubPagesDistributor {
         thumbnailSha256: artifact.thumbnail.sha256 || null,
         thumbnailWidth: artifact.thumbnail.width || null,
         thumbnailHeight: artifact.thumbnail.height || null,
+        thumbnailAspectRatio: artifact.thumbnail.aspectRatio || null,
         publishedAt: artifact.createdAt,
         publishedLabel: new Date(artifact.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
       }

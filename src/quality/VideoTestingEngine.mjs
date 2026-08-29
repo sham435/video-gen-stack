@@ -23,7 +23,10 @@ export class VideoTestingEngine {
       const fps = fpsMatch ? parseInt(fpsMatch[1]) / parseInt(fpsMatch[2]) : 0
       const codec = info.match(/codec_name=(\w+)/)?.[1]
 
-      results.resolution = { width, height, valid: width === 1080 && height === 1920 }
+      // Accept any 9:16 vertical Shorts resolution (logical 1080x1920 or the
+      // physical 2160x3840 master). Validate aspect-ratio, not a single size.
+      const validRes = (width === 1080 && height === 1920) || (width === 2160 && height === 3840)
+      results.resolution = { width, height, valid: validRes, aspectRatio: '9:16' }
       results.fps = { value: fps, valid: Math.abs(fps - 30) < 1 }
       results.codec = { value: codec, valid: codec === 'h264' }
 

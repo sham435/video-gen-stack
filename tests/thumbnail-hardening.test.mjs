@@ -26,33 +26,40 @@ describe('ThumbnailProfile', () => {
     ThumbnailValidationError = mod.ThumbnailValidationError
   })
 
-  it('exposes SHORT 1080x1920 9:16 and VIDEO 1280x720 16:9 profiles', () => {
-    assert.deepEqual(ThumbnailProfile.SHORT, { width: 1080, height: 1920, aspectRatio: '9:16', mediaType: 'short' })
-    assert.deepEqual(ThumbnailProfile.VIDEO, { width: 1280, height: 720, aspectRatio: '16:9', mediaType: 'video' })
+  it('exposes SHORT 2160x3840 9:16 and VIDEO 3840x2160 16:9 profiles', () => {
+    assert.deepEqual(ThumbnailProfile.SHORT, { width: 2160, height: 3840, aspectRatio: '9:16', mediaType: 'short' })
+    assert.deepEqual(ThumbnailProfile.VIDEO, { width: 3840, height: 2160, aspectRatio: '16:9', mediaType: 'video' })
   })
 
   it('resolves SHORT for vertical media / aspectRatio 9:16', () => {
-    assert.equal(resolveThumbnailProfile({ width: 1080, height: 1920 }).mediaType, 'short')
+    assert.equal(resolveThumbnailProfile({ width: 2160, height: 3840 }).mediaType, 'short')
     assert.equal(resolveThumbnailProfile({ aspectRatio: '9:16' }).mediaType, 'short')
     assert.equal(resolveThumbnailProfile({ type: 'short' }).mediaType, 'short')
   })
 
   it('enforces correct 9:16 thumbnail passes', () => {
-    const profile = enforceThumbnailProfile({ width: 1080, height: 1920 }, { width: 1080, height: 1920 })
+    const profile = enforceThumbnailProfile({ mediaType: 'short' }, { width: 2160, height: 3840 })
     assert.equal(profile.aspectRatio, '9:16')
   })
 
   it('throws THUMBNAIL_PROFILE_MISMATCH on stale 16:9 asset for a Short', () => {
     assert.throws(
-      () => enforceThumbnailProfile({ width: 1080, height: 1920 }, { width: 1280, height: 720 }),
+      () => enforceThumbnailProfile({ mediaType: 'short' }, { width: 3840, height: 2160 }),
       (e) => e instanceof ThumbnailValidationError && e.code === 'THUMBNAIL_PROFILE_MISMATCH'
     )
   })
 
   it('throws THUMBNAIL_METADATA_MISSING when geometry unavailable', () => {
     assert.throws(
-      () => enforceThumbnailProfile({ width: 1080, height: 1920 }, { width: null, height: null }),
+      () => enforceThumbnailProfile({ mediaType: 'short' }, { width: null, height: null }),
       (e) => e instanceof ThumbnailValidationError && e.code === 'THUMBNAIL_METADATA_MISSING'
+    )
+  })
+
+  it('throws THUMBNAIL_TOO_LARGE when file exceeds 45MB', () => {
+    assert.throws(
+      () => enforceThumbnailProfile({ mediaType: 'short' }, { width: 2160, height: 3840, bytes: 50 * 1024 * 1024 }),
+      (e) => e instanceof ThumbnailValidationError && e.code === 'THUMBNAIL_TOO_LARGE'
     )
   })
 })
@@ -69,10 +76,10 @@ describe('ThumbnailMetadata', () => {
 
   it('extracts sha256 + dimensions + mimeType from a PNG', async () => {
     dir = mkdtempSync(join(tmpdir(), 'thumb-meta-'))
-    const path = makePng(dir, 'thumb.png', 1080, 1920)
+    const path = makePng(dir, 'thumb.png', 2160, 3840)
     const meta = await inspectThumbnailFile(path)
-    assert.equal(meta.width, 1080)
-    assert.equal(meta.height, 1920)
+    assert.equal(meta.width, 2160)
+    assert.equal(meta.height, 3840)
     assert.equal(meta.mimeType, 'image/png')
     assert.equal(meta.aspectRatio, '9:16')
     assert.match(meta.sha256, /^[a-f0-9]{64}$/)
@@ -82,7 +89,7 @@ describe('ThumbnailMetadata', () => {
 
   it('sha256Thumbnail returns stable fingerprint and null for missing file', () => {
     dir = mkdtempSync(join(tmpdir(), 'thumb-meta2-'))
-    const path = makePng(dir, 'thumb.png', 1080, 1920)
+    const path = makePng(dir, 'thumb.png', 2160, 3840)
     assert.equal(sha256Thumbnail(path), sha256Thumbnail(path))
     assert.equal(sha256Thumbnail(join(dir, 'missing.png')), null)
     rmSync(dir, { recursive: true })
@@ -100,34 +107,41 @@ describe('PublicationArtifact blessDestinations', () => {
     const a = new PublicationArtifact({
       artifactId: 'abc',
       thumbnailSha256: 'deadbeef'.repeat(8),
-      thumbnailWidth: 1080,
-      thumbnailHeight: 1920,
+      thumbnailWidth: 2160,
+      thumbnailHeight: 3840,
       thumbnailMimeType: 'image/png',
       thumbnailAspectRatio: '9:16',
     })
     assert.equal(a.destinations.youtube.thumbnail.sha256, null)
     a.blessDestinations()
     assert.equal(a.destinations.youtube.thumbnail.sha256, 'deadbeef'.repeat(8))
-    assert.equal(a.destinations.youtube.thumbnail.width, 1080)
-    assert.equal(a.destinations.youtube.thumbnail.height, 1920)
+    assert.equal(a.destinations.youtube.thumbnail.width, 2160)
+    assert.equal(a.destinations.youtube.thumbnail.height, 3840)
     assert.equal(a.destinations.youtube.thumbnail.mimeType, 'image/png')
     const json = a.toJSON()
     assert.equal(json.destinations.youtube.thumbnail.sha256, 'deadbeef'.repeat(8))
   })
 })
 
-describe('VerifyState new states', () => {
-  let VerifyState
+describe('VerifyState + ThumbnailIdentity new states', () => {
+  let VerifyState, ThumbnailIdentity
 
   before(async () => {
-    ({ VerifyState } = await import('../src/publishing/YouTubePropagationVerifier.mjs'))
+    ({ VerifyState, ThumbnailIdentity } = await import('../src/publishing/YouTubePropagationVerifier.mjs'))
   })
 
-  it('exposes MISMATCH, PENDING, UNKNOWN states', () => {
-    assert.equal(VerifyState.CUSTOM_THUMBNAIL_MISMATCH, 'CUSTOM_THUMBNAIL_MISMATCH')
+  it('exposes ACCEPTED, PENDING, UNKNOWN states (MISMATCH removed)', () => {
     assert.equal(VerifyState.CUSTOM_THUMBNAIL_PENDING, 'CUSTOM_THUMBNAIL_PENDING')
     assert.equal(VerifyState.CUSTOM_THUMBNAIL_UNKNOWN, 'CUSTOM_THUMBNAIL_UNKNOWN')
     assert.equal(VerifyState.CUSTOM_THUMBNAIL_ACCEPTED, 'CUSTOM_THUMBNAIL_ACCEPTED')
+    assert.equal(VerifyState.CUSTOM_THUMBNAIL_REJECTED, 'CUSTOM_THUMBNAIL_REJECTED')
+    assert.equal(VerifyState.CUSTOM_THUMBNAIL_MISMATCH, undefined)
+  })
+
+  it('exposes EXACT / REENCODED / UNKNOWN identity qualifiers', () => {
+    assert.equal(ThumbnailIdentity.EXACT, 'EXACT')
+    assert.equal(ThumbnailIdentity.REENCODED, 'REENCODED')
+    assert.equal(ThumbnailIdentity.UNKNOWN, 'UNKNOWN')
   })
 })
 
@@ -177,16 +191,31 @@ describe('YouTubePropagationVerifier identity comparison', () => {
     assert.equal(r.thumbnailMatches, true)
   })
 
-  it('returns CUSTOM_THUMBNAIL_MISMATCH when remote sha differs', async () => {
+  it('returns CUSTOM_THUMBNAIL_ACCEPTED when remote sha matches artifact (identity EXACT)', async () => {
+    const bytes = new Uint8Array([1, 2, 3, 4])
+    const sha256 = await sha(bytes)
+    stubYouTube({ thumbnailUrl: 'https://i.ytimg.com/vi/x/maxres.jpg', remoteBytes: bytes, hasCustom: true })
+    const v = new YouTubePropagationVerifier({ token: 't', maxAttempts: 1, delays: [0], sha256Fn: (b) => sha(b) })
+    const r = await v.verify({ videoId: 'x', sha256 })
+    assert.equal(r.state, VerifyState.CUSTOM_THUMBNAIL_ACCEPTED)
+    assert.equal(r.thumbnailMatches, true)
+    assert.equal(r.identity, 'EXACT')
+  })
+
+  it('returns CUSTOM_THUMBNAIL_ACCEPTED with identity REENCODED when sha differs but geometry valid', async () => {
     stubYouTube({
-      thumbnailUrl: 'https://i.ytimg.com/vi/x/maxres.jpg',
+      thumbnailUrl: 'https://i.ytimg.com/vi/x/maxres_2160x3840.jpg',
       remoteBytes: new Uint8Array([9, 9, 9, 9]),
       hasCustom: true,
     })
-    const v = new YouTubePropagationVerifier({ token: 't', maxAttempts: 1, delays: [0], sha256Fn: (b) => sha(b) })
+    const v = new YouTubePropagationVerifier({
+      token: 't', maxAttempts: 1, delays: [0], sha256Fn: (b) => sha(b),
+      expectedWidth: 1080, expectedHeight: 1920, expectedAspectRatio: '9:16',
+    })
     const r = await v.verify({ videoId: 'x', sha256: 'a'.repeat(64) })
-    assert.equal(r.state, VerifyState.CUSTOM_THUMBNAIL_MISMATCH)
+    assert.equal(r.state, VerifyState.CUSTOM_THUMBNAIL_ACCEPTED)
     assert.equal(r.thumbnailMatches, false)
+    assert.equal(r.identity, 'REENCODED')
     assert.ok(r.remoteSha256)
   })
 

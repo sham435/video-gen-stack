@@ -11,8 +11,8 @@ export class PublicationArtifact {
     this.artifactId = options.artifactId || null
     this.media = {
       type: options.mediaType || 'short',
-      width: options.mediaWidth || 1080,
-      height: options.mediaHeight || 1920,
+      width: options.mediaWidth || 2160,
+      height: options.mediaHeight || 3840,
       aspectRatio: options.mediaAspectRatio || '9:16',
     }
     this.video = {
@@ -73,7 +73,7 @@ export class PublicationArtifact {
     const { resolveThumbnailProfile } = await import('../thumbnail/ThumbnailProfile.mjs')
     const media = results.RENDER?.engine?.productionContext?.media
       || results.THUMBNAIL?.selected
-      || { width: 1080, height: 1920 }
+      || { width: 2160, height: 3840 }
     const profile = resolveThumbnailProfile(media)
 
     const article = results.DISCOVER?.article || {}

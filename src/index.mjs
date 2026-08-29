@@ -48,6 +48,7 @@ import { ImageRanker } from './assets/ImageRanker.mjs'
 import { AssetUsageTracker } from './assets/AssetUsageTracker.mjs'
 import { ImagePerformanceMemory } from './analytics/ImagePerformanceMemory.mjs'
 import { SceneVisualPlanner } from './assets/SceneVisualPlanner.mjs'
+import { RenderProfiles, resolveRenderProfile } from './video/RenderProfile.mjs'
 
 const RENDER_FPS = 10
 const OUTPUT_FPS = 30
@@ -56,6 +57,15 @@ export class NewsBroadcastEngine {
   constructor(options = {}) {
     this.renderFps = options.renderFps || RENDER_FPS
     this.outputFps = options.outputFps || OUTPUT_FPS
+    // Canonical render contract: logical 1080x1920 design → physical
+    // 2160x3840 output for Shorts (9:16). The frames are composited in the
+    // logical space and upscaled to the physical output during concat.
+    this.renderProfile = resolveRenderProfile({
+      type: options.mediaType || 'short',
+      width: options.outputWidth,
+      height: options.outputHeight,
+      aspectRatio: options.aspectRatio || '9:16',
+    })
     this.sceneEngine = null
     this.timeline = null
     this.voiceSync = new VoiceSync()
@@ -650,7 +660,7 @@ export class NewsBroadcastEngine {
       { category: article?.category }
     )
 
-    const qc = await this.qualityChecker.analyzeRenderedVideo(videoPath)
+    const qc = await this.qualityChecker.analyzeRenderedVideo(videoPath, this.renderProfile.output)
     const qScore = qc?.overallScore
       ?? (typeof qc?.checks === 'object' ? (qc.checks.score ?? qc.checks.overall ?? 80) : 80)
       ?? 80
@@ -742,12 +752,21 @@ export class NewsBroadcastEngine {
     fs.writeFileSync(listPath, listContent)
 
     const silentVideo = `${outDir}/silent_broadcast.mp4`
-    console.log('FFmpeg concat frames to video...')
+    // Render contract: frames are composited in the LOGICAL space (e.g.
+    // 1080x1920) and upscaled to the PHYSICAL output (e.g. 2160x3840) here.
+    // This yields a valid 4K vertical master with more headroom for YouTube
+    // transcoding. Bitrate scales with output resolution.
+    const outW = this.renderProfile.output.width
+    const outH = this.renderProfile.output.height
+    const is4k = outH >= 3840
+    const videoBitrate = is4k ? '40M' : '8M'
+    const maxrate = is4k ? '45M' : '10M'
+    console.log(`FFmpeg concat frames to video (${outW}x${outH}, profile=${this.renderProfile.type})...`)
     try {
       execFileSync(
         'ffmpeg',
-        ['-y', '-f', 'concat', '-safe', '0', '-i', listPath, '-vf', `scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,format=yuv420p,fps=${this.outputFps}`, '-pix_fmt', 'yuv420p', silentVideo],
-        { stdio: 'inherit', timeout: 120000 }
+        ['-y', '-f', 'concat', '-safe', '0', '-i', listPath, '-vf', `scale=${outW}:${outH}:force_original_aspect_ratio=decrease,pad=${outW}:${outH}:(ow-iw)/2:(oh-ih)/2,format=yuv420p,fps=${this.outputFps}`, '-c:v', 'libx264', '-preset', 'medium', '-profile:v', 'high', '-pix_fmt', 'yuv420p', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-b:v', videoBitrate, '-maxrate', maxrate, '-bufsize', maxrate, '-r', this.outputFps, silentVideo],
+        { stdio: 'inherit', timeout: 180000 }
       )
     } catch (e) {
       console.error('FFmpeg concat failed. Checking frames...')

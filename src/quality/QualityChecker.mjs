@@ -35,7 +35,7 @@ export class QualityChecker {
     }
   }
 
-  checkRenderOutput(videoPath) {
+  checkRenderOutput(videoPath, expect = { width: 1080, height: 1920 }) {
     const checks = {}
 
     try {
@@ -44,7 +44,7 @@ export class QualityChecker {
         ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height,codec_name,r_frame_rate', '-of', 'default=noprint_wrappers=1', videoPath]
       ).toString().trim()
 
-      checks.resolution = this.parseResolution(info)
+      checks.resolution = this.parseResolution(info, expect)
       checks.codec = info.match(/codec_name=(\w+)/)?.[1]
       checks.fps = this.parseFPS(info)
     } catch {}
@@ -52,10 +52,10 @@ export class QualityChecker {
     return checks
   }
 
-  parseResolution(info) {
+  parseResolution(info, expect = { width: 1080, height: 1920 }) {
     const w = parseInt(info.match(/width=(\d+)/)?.[1] || '0')
     const h = parseInt(info.match(/height=(\d+)/)?.[1] || '0')
-    return { width: w, height: h, valid: w === 1080 && h === 1920 }
+    return { width: w, height: h, valid: w === expect.width && h === expect.height }
   }
 
   parseFPS(info) {
@@ -75,7 +75,7 @@ export class QualityChecker {
     return { valid: true }
   }
 
-  async analyzeRenderedVideo(videoPath) {
+  async analyzeRenderedVideo(videoPath, expect = { width: 1080, height: 1920 }) {
     const results = {
       path: videoPath,
       exists: fs.existsSync(videoPath),
@@ -88,7 +88,7 @@ export class QualityChecker {
       return results
     }
 
-    results.checks = this.checkRenderOutput(videoPath)
+    results.checks = this.checkRenderOutput(videoPath, expect)
 
     const size = fs.statSync(videoPath).size
     results.checks.fileSize = size

@@ -408,13 +408,13 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           console.warn('[THUMBNAIL] no thumbnail produced by engine — upload will fail')
           return { candidates: [], selected: null, strategy: 'none' }
         }
-        // Inspect the ACTUAL file (never hardcode 1280x720 — the canonical
-        // Short thumbnail is 9:16 1080x1920). This becomes the artifact's
+        // Inspect the ACTUAL file (never hardcode the geometry — the canonical
+        // Short thumbnail is 9:16 2160x3840). This becomes the artifact's
         // immutable identity (sha256 + dimensions + mime).
         const { inspectThumbnailFile } = await import('../src/thumbnail/ThumbnailMetadata.mjs')
         const meta = await inspectThumbnailFile(candidate)
         const selected = { path: candidate, width: meta.width, height: meta.height, mimeType: meta.mimeType, sha256: meta.sha256, aspectRatio: meta.aspectRatio }
-        // Enforce the Short thumbnail geometry contract (9:16 1080x1920).
+        // Enforce the Short thumbnail geometry contract (9:16 2160x3840).
         const { enforceThumbnailProfile, ThumbnailValidationError } = await import('../src/thumbnail/ThumbnailProfile.mjs')
         try {
           enforceThumbnailProfile(
@@ -866,25 +866,37 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         }
 
         // 2. YouTube thumbnail verification (propagation-aware with retries).
-        // Pass the canonical SHA-256 so the verifier downloads the remote asset
-        // and proves identity (hasCustomThumbnail=true alone is insufficient).
-        const { YouTubePropagationVerifier, VerifyState } = await import('../src/publishing/YouTubePropagationVerifier.mjs')
+        // Pass the canonical SHA-256 + expected geometry so the verifier
+        // downloads the remote asset and proves acceptance. Acceptance is
+        // geometry-based — YouTube may re-encode, so a differing remote SHA
+        // records identity 'REENCODED' rather than failing.
+        const { YouTubePropagationVerifier, VerifyState, ThumbnailIdentity } = await import('../src/publishing/YouTubePropagationVerifier.mjs')
         const { sha256Thumbnail } = await import('../src/thumbnail/ThumbnailMetadata.mjs')
+        const { ThumbnailProfile } = await import('../src/thumbnail/ThumbnailProfile.mjs')
         let thumbnailResult = { state: VerifyState.VIDEO_NOT_VISIBLE_YET, hasCustomThumbnail: false, verifiedUrl: null, remoteSha256: null, thumbnailMatches: false }
         const masterThumb = ctx.results.THUMBNAIL?.selected?.path || null
         const masterThumbSha = masterThumb ? sha256Thumbnail(masterThumb) : null
+        const shortProfile = ThumbnailProfile.SHORT
         if (masterThumb) {
           try {
             const { getAccessToken } = await import('../apps/api/publishers/youtube.js')
             const token = await getAccessToken()
-            const verifier = new YouTubePropagationVerifier({ token })
+            const verifier = new YouTubePropagationVerifier({
+              token,
+              expectedWidth: shortProfile.width,
+              expectedHeight: shortProfile.height,
+              expectedAspectRatio: shortProfile.aspectRatio,
+            })
             thumbnailResult = await verifier.verify({ videoId, sha256: masterThumbSha, thumbnailPath: masterThumb })
 
             if (thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_ACCEPTED) {
-              console.log(`[THUMBNAIL] ${VerifyState.CUSTOM_THUMBNAIL_ACCEPTED} — hasCustomThumbnail=true ${thumbnailResult.thumbnailMatches === false ? '' : `sha256 MATCH ${masterThumbSha?.slice(0, 12)}…`}for ${videoId}`)
+              const idLabel = thumbnailResult.identity === ThumbnailIdentity.EXACT
+                ? `sha256 MATCH ${masterThumbSha?.slice(0, 12)}…`
+                : thumbnailResult.identity === ThumbnailIdentity.REENCODED
+                  ? `accepted on geometry (remote ${thumbnailResult.remoteWidth || '?'}x${thumbnailResult.remoteHeight || '?'}, sha re-encoded: ${thumbnailResult.remoteSha256?.slice(0, 12)}…)`
+                  : ''
+              console.log(`[THUMBNAIL] ${VerifyState.CUSTOM_THUMBNAIL_ACCEPTED} — hasCustomThumbnail=true ${idLabel}for ${videoId} (identity=${thumbnailResult.identity || 'UNKNOWN'})`)
               if (thumbnailResult.verifiedUrl) console.log(`   verified URL: ${thumbnailResult.verifiedUrl}`)
-            } else if (thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_MISMATCH) {
-              console.warn(`[THUMBNAIL] ${VerifyState.CUSTOM_THUMBNAIL_MISMATCH} — hasCustomThumbnail=true but remote sha256 differs (${thumbnailResult.remoteSha256?.slice(0, 12)}… != ${masterThumbSha?.slice(0, 12)}…)`)
             } else if (thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_REJECTED) {
               console.warn(`[THUMBNAIL] ${VerifyState.CUSTOM_THUMBNAIL_REJECTED} — video visible but no custom thumbnail`)
             } else if (thumbnailResult.state === VerifyState.VIDEO_NOT_VISIBLE_YET) {
@@ -908,7 +920,12 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           const { PostPublishVerifier } = await import('../src/publishing/PostPublishVerifier.mjs')
           const { getAccessToken } = await import('../apps/api/publishers/youtube.js')
           const token = await getAccessToken()
-          const verifier = new PostPublishVerifier({ token })
+          const verifier = new PostPublishVerifier({
+            token,
+            expectedWidth: shortProfile.width,
+            expectedHeight: shortProfile.height,
+            expectedAspectRatio: shortProfile.aspectRatio,
+          })
           const thumbPath = masterThumb || null
           verification = await verifier.verify({
             videoId,
@@ -932,31 +949,29 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         // Publication succeeds even if verification is API_UNAVAILABLE — the video is uploaded.
         const verifiedThumbnailUrl = thumbnailResult.verifiedUrl || null
         const verificationState = thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_ACCEPTED
-          ? 'VERIFIED'
-          : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_MISMATCH
-            ? 'THUMBNAIL_MISMATCH'
-            : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_REJECTED
-              ? 'REJECTED'
-              : thumbnailResult.state === VerifyState.VIDEO_NOT_VISIBLE_YET
-                ? 'VIDEO_NOT_VISIBLE_YET'
-                : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_PENDING
-                  ? 'THUMBNAIL_PENDING'
-                  : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_UNKNOWN
-                    ? 'THUMBNAIL_UNKNOWN'
-                    : thumbnailResult.state === VerifyState.VERIFICATION_FAILED && thumbnailResult.errorType
-                      ? 'API_UNAVAILABLE'
-                      : 'PENDING'
+          ? thumbnailResult.identity === ThumbnailIdentity.REENCODED
+            ? 'VERIFIED (REENCODED)'
+            : 'VERIFIED'
+          : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_REJECTED
+            ? 'REJECTED'
+            : thumbnailResult.state === VerifyState.VIDEO_NOT_VISIBLE_YET
+              ? 'VIDEO_NOT_VISIBLE_YET'
+              : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_PENDING
+                ? 'THUMBNAIL_PENDING'
+                : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_UNKNOWN
+                  ? 'THUMBNAIL_UNKNOWN'
+                  : thumbnailResult.state === VerifyState.VERIFICATION_FAILED && thumbnailResult.errorType
+                    ? 'API_UNAVAILABLE'
+                    : 'PENDING'
         const thumbnailState = thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_ACCEPTED
           ? 'CUSTOM_THUMBNAIL_ACCEPTED'
-          : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_MISMATCH
-            ? 'CUSTOM_THUMBNAIL_MISMATCH'
-            : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_REJECTED
-              ? 'CUSTOM_THUMBNAIL_REJECTED'
-              : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_PENDING || thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_UNKNOWN
-                ? 'CUSTOM_THUMBNAIL_PENDING'
-                : thumbnailResult.hasCustomThumbnail
-                  ? 'CUSTOM_THUMBNAIL_ACCEPTED'
-                  : 'UPLOADED'
+          : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_REJECTED
+            ? 'CUSTOM_THUMBNAIL_REJECTED'
+            : thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_PENDING || thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_UNKNOWN
+              ? 'CUSTOM_THUMBNAIL_PENDING'
+              : thumbnailResult.hasCustomThumbnail
+                ? 'CUSTOM_THUMBNAIL_ACCEPTED'
+                : 'UPLOADED'
         try {
           const { PublicationLedger } = await import('../src/publishing/PublicationLedger.mjs')
           // Persist to run-scoped ledger AND top-level data/ (GitHub cache persists data/)
@@ -984,6 +999,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             thumbnailMimeType: ctx.results.THUMBNAIL?.selected?.mimeType || null,
             thumbnailRemoteSha256: thumbnailResult.remoteSha256 || null,
             thumbnailMatches: thumbnailResult.thumbnailMatches,
+            thumbnailIdentity: thumbnailResult.identity || null,
             youtubeUrl: `https://youtu.be/${videoId}`,
             visibility: 'public',
             verifiedAt: verification.verifiedAt,
