@@ -1,23 +1,25 @@
-// Thumbnail validation preflight — ensures output/cover.png is a valid,
-// upload-ready production artifact before touching the YouTube API.
+// Thumbnail validation preflight — ensures the canonical thumbnail artifact is
+// a valid, upload-ready production asset before touching the YouTube API.
 //
-// Validation checks:
+// SINGLE SOURCE OF TRUTH: the canonical geometry comes from ThumbnailProfile
+// (SHORT = 2160x3840 9:16 — the production default; VIDEO = 3840x2160 16:9).
+// This validator mirrors enforceThumbnailProfile, NOT the legacy 16:9-only
+// desktop contract. A Short thumbnail MUST match 2160x3840 exactly.
+//
+// Checks:
 //   1. File exists
 //   2. Readable
-//   3. Valid PNG signature (89 50 4E 47)
-//   4. Correct 16:9 aspect ratio (1280x720 or 1920x1080)
-//   5. Minimum resolution (≥ 640x360)
-//   6. File size within bounds (> 5KB, < 10MB)
+//   3. Valid PNG signature
+//   4. Exact canonical dimensions (2160x3840 for short / 3840x2160 for video)
+//   5. File size within bounds
 //
-// Returns { ok, errors[], width, height, sizeBytes }
+// Returns { ok, errors[], width, height, sizeBytes, aspectRatio }
 
 import { existsSync, readFileSync, statSync } from 'node:fs'
 
-const MIN_WIDTH = 640
-const MIN_HEIGHT = 360
-const MIN_SIZE_BYTES = 5 * 1024         // 5 KB
-const MAX_SIZE_BYTES = 10 * 1024 * 1024 // 10 MB
-const ASPECT_TOLERANCE = 0.05           // ±5% tolerance on 16:9
+import { ThumbnailProfile, MAX_THUMBNAIL_BYTES } from '../thumbnail/ThumbnailProfile.mjs'
+
+const MIN_SIZE_BYTES = 5 * 1024 // 5 KB
 
 // PNG header dimensions are at bytes 16-23 (width: 4 bytes BE, height: 4 bytes BE)
 function readPngDimensions(buffer) {
@@ -30,7 +32,13 @@ function readPngDimensions(buffer) {
   return { width, height }
 }
 
-export function validateThumbnail(filePath) {
+/**
+ * Validate a thumbnail against the canonical profile.
+ * @param {string} filePath
+ * @param {object} [opts] - { mediaType: 'short'|'video' } selects the profile.
+ */
+export function validateThumbnail(filePath, opts = {}) {
+  const profile = opts.mediaType === 'video' ? ThumbnailProfile.VIDEO : ThumbnailProfile.SHORT
   const errors = []
   let width = 0, height = 0, sizeBytes = 0
 
@@ -44,7 +52,7 @@ export function validateThumbnail(filePath) {
     const stat = statSync(filePath)
     sizeBytes = stat.size
     if (sizeBytes < MIN_SIZE_BYTES) errors.push(`file too small: ${sizeBytes} bytes (min ${MIN_SIZE_BYTES})`)
-    if (sizeBytes > MAX_SIZE_BYTES) errors.push(`file too large: ${(sizeBytes / 1024 / 1024).toFixed(1)}MB (max 10MB)`)
+    if (sizeBytes > MAX_THUMBNAIL_BYTES) errors.push(`file too large: ${(sizeBytes / 1024 / 1024).toFixed(1)}MB (max ${(MAX_THUMBNAIL_BYTES / 1024 / 1024).toFixed(0)}MB)`)
   } catch (e) {
     return { ok: false, errors: [`cannot stat file: ${e.message}`], width, height, sizeBytes }
   }
@@ -65,16 +73,9 @@ export function validateThumbnail(filePath) {
   width = dims.width
   height = dims.height
 
-  // 4. Resolution
-  if (width < MIN_WIDTH || height < MIN_HEIGHT) {
-    errors.push(`resolution too low: ${width}x${height} (min ${MIN_WIDTH}x${MIN_HEIGHT})`)
-  }
-
-  // 5. Aspect ratio (16:9)
-  const actualRatio = width / height
-  const expectedRatio = 16 / 9
-  if (Math.abs(actualRatio - expectedRatio) / expectedRatio > ASPECT_TOLERANCE) {
-    errors.push(`aspect ratio ${actualRatio.toFixed(3)} is not 16:9 (expected ${(16/9).toFixed(3)} ± ${(ASPECT_TOLERANCE * 100).toFixed(0)}%)`)
+  // 4. Exact canonical geometry.
+  if (width !== profile.width || height !== profile.height) {
+    errors.push(`dimensions ${width}x${height} do not match canonical ${profile.mediaType} profile ${profile.width}x${profile.height} (${profile.aspectRatio})`)
   }
 
   return {
@@ -83,14 +84,14 @@ export function validateThumbnail(filePath) {
     width,
     height,
     sizeBytes,
-    aspectRatio: actualRatio,
+    aspectRatio: width && height ? width / height : null,
     isPng: true,
   }
 }
 
 // Convenience: assert or throw
-export function assertValidThumbnail(filePath) {
-  const result = validateThumbnail(filePath)
+export function assertValidThumbnail(filePath, opts) {
+  const result = validateThumbnail(filePath, opts)
   if (!result.ok) {
     throw new Error(`Thumbnail validation failed: ${result.errors.join('; ')}`)
   }

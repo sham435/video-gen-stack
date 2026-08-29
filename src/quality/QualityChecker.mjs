@@ -35,7 +35,7 @@ export class QualityChecker {
     }
   }
 
-  checkRenderOutput(videoPath, expect = { width: 1080, height: 1920 }) {
+  checkRenderOutput(videoPath, expect = { width: 2160, height: 3840 }) {
     const checks = {}
 
     try {
@@ -52,7 +52,7 @@ export class QualityChecker {
     return checks
   }
 
-  parseResolution(info, expect = { width: 1080, height: 1920 }) {
+  parseResolution(info, expect = { width: 2160, height: 3840 }) {
     const w = parseInt(info.match(/width=(\d+)/)?.[1] || '0')
     const h = parseInt(info.match(/height=(\d+)/)?.[1] || '0')
     return { width: w, height: h, valid: w === expect.width && h === expect.height }
@@ -75,7 +75,7 @@ export class QualityChecker {
     return { valid: true }
   }
 
-  async analyzeRenderedVideo(videoPath, expect = { width: 1080, height: 1920 }) {
+  async analyzeRenderedVideo(videoPath, expect = { width: 2160, height: 3840 }) {
     const results = {
       path: videoPath,
       exists: fs.existsSync(videoPath),

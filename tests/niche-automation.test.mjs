@@ -175,25 +175,25 @@ test('validateThumbnail — rejects non-existent file', () => {
   assert.ok(r.errors[0].includes('not found'))
 })
 
-test('validateThumbnail — accepts a valid 1280x720 PNG', () => {
+test('validateThumbnail — accepts a valid canonical 2160x3840 (9:16 short) PNG', () => {
   const tmpFile = path.join(os.tmpdir(), `nm-test-${Date.now()}.png`)
-  fs.writeFileSync(tmpFile, makeValidPng(1280, 720))
+  fs.writeFileSync(tmpFile, makeValidPng(2160, 3840))
   try {
     const r = validateThumbnail(tmpFile)
     assert.equal(r.ok, true, `errors: ${r.errors.join('; ')}`)
-    assert.equal(r.width, 1280)
-    assert.equal(r.height, 720)
+    assert.equal(r.width, 2160)
+    assert.equal(r.height, 3840)
     assert.equal(r.isPng, true)
   } finally { fs.unlinkSync(tmpFile) }
 })
 
-test('validateThumbnail — rejects wrong aspect ratio', () => {
+test('validateThumbnail — rejects wrong (non-canonical) geometry', () => {
   const tmpFile = path.join(os.tmpdir(), `nm-test-${Date.now()}.png`)
   fs.writeFileSync(tmpFile, makeValidPng(1024, 1024))
   try {
     const r = validateThumbnail(tmpFile)
     assert.equal(r.ok, false)
-    assert.ok(r.errors.some(e => e.includes('aspect ratio')))
+    assert.ok(r.errors.some(e => e.includes('do not match canonical')))
   } finally { fs.unlinkSync(tmpFile) }
 })
 
@@ -203,7 +203,7 @@ test('validateThumbnail — rejects too-small resolution', () => {
   try {
     const r = validateThumbnail(tmpFile)
     assert.equal(r.ok, false)
-    assert.ok(r.errors.some(e => e.includes('resolution')))
+    assert.ok(r.errors.some(e => e.includes('do not match canonical')) || r.errors.some(e => e.includes('too small')))
   } finally { fs.unlinkSync(tmpFile) }
 })
 
@@ -211,12 +211,12 @@ test('assertValidThumbnail — throws on invalid file', () => {
   assert.throws(() => assertValidThumbnail('/tmp/nope.png'), /not found/)
 })
 
-test('assertValidThumbnail — returns result on valid file', () => {
+test('assertValidThumbnail — returns result on valid canonical file', () => {
   const tmpFile = path.join(os.tmpdir(), `nm-test-${Date.now()}.png`)
-  fs.writeFileSync(tmpFile, makeValidPng(1280, 720))
+  fs.writeFileSync(tmpFile, makeValidPng(2160, 3840))
   try {
     const r = assertValidThumbnail(tmpFile)
     assert.equal(r.ok, true)
-    assert.equal(r.width, 1280)
+    assert.equal(r.width, 2160)
   } finally { fs.unlinkSync(tmpFile) }
 })
