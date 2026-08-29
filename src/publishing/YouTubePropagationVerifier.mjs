@@ -4,26 +4,28 @@
  * Does NOT treat "video not yet visible" as "thumbnail rejected."
  * Classifies API errors: authorization, quota, transient, propagation.
  *
- * Two distinct concepts are kept separate:
- *   1. ARTIFACT INTEGRITY  — SHA-256 proves exactly what WE generated (local).
- *   2. YOUTUBE ACCEPTANCE  — hasCustomThumbnail=true + remote thumbnail exists
- *                            + remote dimensions/aspect are valid. YouTube may
- *                            re-encode the uploaded image, so byte-identity is
- *                            NOT the acceptance invariant. When hasCustomThumbnail
- *                            is true and remote geometry is valid, the thumbnail
- *                            is ACCEPTED even if the remote SHA differs (identity
- *                            is recorded as 'REENCODED').
+ * Three distinct contracts are kept separate:
+ *   A. SOURCE COMPLIANCE — the LOCAL canonical artifact is 2160x3840 (9:16),
+ *      < 45MB, PNG/JPEG, SHA-256. This proves what WE generated.
+ *   B. YOUTUBE ACCEPTANCE — hasCustomThumbnail === true (from videos.list).
+ *   C. REMOTE REPRESENTATION — the authoritative URL + dimensions returned by
+ *      video.snippet.thumbnails.* (YouTube's own endpoint — never construct
+ *      the URL or assume exact dimensions; YouTube resizes uploads).
+ *
+ * Identity (D): EXACT when remote SHA-256 equals the artifact, REENCODED when
+ * the remote is retrievable and aspect-compatible but the SHA differs (YouTube
+ * re-encoded/resized it). A SHA difference is expected and is NOT a failure.
+ *
+ * Acceptance is based primarily on hasCustomThumbnail === true + remote
+ * retrievable + aspect-compatible. It does NOT require remote width === 2160
+ * and height === 3840 — YouTube may downscale the representation.
  *
  * States:
- *   VIDEO_NOT_VISIBLE_YET  — video hasn't propagated to videos.list yet
- *   VIDEO_VISIBLE_THUMBNAIL_PENDING — video visible but hasCustomThumbnail not yet true
- *   CUSTOM_THUMBNAIL_PENDING — custom thumbnail set but remote asset not yet fetchable
- *   CUSTOM_THUMBNAIL_ACCEPTED — hasCustomThumbnail=true AND remote thumbnail exists with valid geometry
- *                               (identity == 'EXACT' when remote SHA-256 matches the artifact,
- *                                identity == 'REENCODED' when remote geometry is valid but SHA differs)
- *   CUSTOM_THUMBNAIL_REJECTED — video visible, hasCustomThumbnail=false
- *   CUSTOM_THUMBNAIL_UNKNOWN — remote thumbnail could not be fetched for comparison
- *   VERIFICATION_FAILED — API error or max attempts exhausted
+ *   CUSTOM_THUMBNAIL_PENDING  — custom thumbnail set but remote asset not yet fetchable
+ *   CUSTOM_THUMBNAIL_ACCEPTED — hasCustomThumbnail=true AND remote retrievable AND aspect-compatible
+ *   CUSTOM_THUMBNAIL_REJECTED — video visible, hasCustomThumbnail=false (or remote aspect incompatible)
+ *   CUSTOM_THUMBNAIL_UNKNOWN  — remote thumbnail could not be fetched for comparison
+ *   VIDEO_NOT_VISIBLE_YET / VIDEO_VISIBLE_THUMBNAIL_PENDING / VERIFICATION_FAILED
  *
  * Retry delays: 5s, 10s, 20s, 30s, 60s (configurable).
  * Authorization/quota failures do NOT retry — they cannot resolve themselves.
@@ -41,8 +43,21 @@ export const VerifyState = {
 
 export const ThumbnailIdentity = {
   EXACT: 'EXACT',         // remote SHA-256 matches the generated artifact
-  REENCODED: 'REENCODED', // remote geometry valid but SHA differs (YouTube processed it)
+  REENCODED: 'REENCODED', // remote retrievable + aspect-compatible but SHA differs
   UNKNOWN: 'UNKNOWN',     // remote could not be fetched
+}
+
+/** Resolve the authoritative remote thumbnail object from YouTube's response. */
+export function resolveRemoteThumbnail(video) {
+  const thumbnails = video?.snippet?.thumbnails ?? {}
+  return (
+    thumbnails.maxres ??
+    thumbnails.standard ??
+    thumbnails.high ??
+    thumbnails.medium ??
+    thumbnails.default ??
+    null
+  )
 }
 
 export class YouTubePropagationVerifier {
@@ -54,8 +69,8 @@ export class YouTubePropagationVerifier {
     this.sha256 = options.sha256 || null       // expected canonical fingerprint
     this.thumbnailPath = options.thumbnailPath || null // local canonical path
     this.sha256Fn = options.sha256Fn || this._defaultSha256
-    // Expected remote geometry (canonical profile). When the remote asset has
-    // these dimensions/aspect it is considered a valid YouTube-processed copy.
+    // SOURCE contract (LOCAL canonical): used for reporting, NOT to require the
+    // remote representation to equal these exact dimensions.
     this.expectedWidth = options.expectedWidth || null
     this.expectedHeight = options.expectedHeight || null
     this.expectedAspectRatio = options.expectedAspectRatio || null
@@ -68,17 +83,20 @@ export class YouTubePropagationVerifier {
   /**
    * Verify video visibility and custom thumbnail acceptance with propagation retries.
    * @param {{ videoId: string, sha256?: string, thumbnailPath?: string }} params
-   * @returns {object} { state, video, hasCustomThumbnail, verifiedUrl, remoteSha256,
-   *   remoteWidth, remoteHeight, remoteAspectRatio, identity, thumbnailMatches, errorType,
-   *   attempts, durationMs }
+   * @returns {object} state + source (local canonical) + remote + identity
    */
   async verify({ videoId, sha256, thumbnailPath }) {
     const startTime = Date.now()
     const attempts = []
     const expectedSha256 = sha256 || this.sha256 || null
-    const wantW = this.expectedWidth
-    const wantH = this.expectedHeight
     const wantAR = this.expectedAspectRatio
+
+    const source = {
+      width: this.expectedWidth,
+      height: this.expectedHeight,
+      aspectRatio: wantAR,
+      sha256: expectedSha256,
+    }
 
     for (let attempt = 1; attempt <= this.maxAttempts; attempt++) {
       const attemptStart = Date.now()
@@ -105,7 +123,7 @@ export class YouTubePropagationVerifier {
               state: VerifyState.VERIFICATION_FAILED,
               errorType: 'AUTHORIZATION',
               apiStatus: res.status, reason, message,
-              video: null, hasCustomThumbnail: false, verifiedUrl: null, remoteSha256: null, thumbnailMatches: false,
+              video: null, hasCustomThumbnail: false, source, remote: null, identity: null,
               attempts, durationMs: Date.now() - startTime,
             }
           }
@@ -117,7 +135,7 @@ export class YouTubePropagationVerifier {
               errorType: 'QUOTA',
               retryable: true,
               apiStatus: res.status, reason, message,
-              video: null, hasCustomThumbnail: false, verifiedUrl: null, remoteSha256: null, thumbnailMatches: false,
+              video: null, hasCustomThumbnail: false, source, remote: null, identity: null,
               attempts, durationMs: Date.now() - startTime,
             }
           }
@@ -136,100 +154,104 @@ export class YouTubePropagationVerifier {
           continue
         }
 
-        // Video is visible — check thumbnail
+        // B. YouTube acceptance — the primary signal.
         const hasCustomThumbnail = video.contentDetails?.hasCustomThumbnail === true
-        const thumbs = video.snippet?.thumbnails || {}
-        const verifiedUrl = thumbs.maxres?.url || thumbs.standard?.url || thumbs.high?.url || thumbs.medium?.url || null
 
         if (!hasCustomThumbnail) {
-          attempts.push({ attempt, found: true, hasCustomThumbnail: false, verifiedUrl, durationMs: Date.now() - attemptStart })
+          attempts.push({ attempt, found: true, hasCustomThumbnail: false, durationMs: Date.now() - attemptStart })
           return {
             state: VerifyState.CUSTOM_THUMBNAIL_REJECTED,
             video,
             hasCustomThumbnail: false,
-            verifiedUrl,
-            remoteSha256: null,
-            remoteWidth: null,
-            remoteHeight: null,
-            remoteAspectRatio: null,
+            source,
+            remote: null,
             identity: null,
-            thumbnailMatches: false,
             attempts,
             durationMs: Date.now() - startTime,
           }
         }
 
-        // hasCustomThumbnail=true → download the remote asset YouTube serves.
-        // Acceptance is geometry-based, NOT byte-identity: YouTube may re-encode
-        // the uploaded image. When the remote aspect/dimensions are valid the
-        // thumbnail is ACCEPTED; identity records EXACT (sha match) or REENCODED.
-        let remoteSha256 = null
-        let remoteWidth = null
-        let remoteHeight = null
-        let remoteAspectRatio = null
-        let identity = null
-        let thumbnailMatches = expectedSha256 ? false : null
-        let state = VerifyState.CUSTOM_THUMBNAIL_ACCEPTED
-        if (verifiedUrl) {
-          try {
-            const remote = await this._downloadThumbnail(verifiedUrl)
-            remoteSha256 = await this.sha256Fn(remote)
-            if (expectedSha256) {
-              thumbnailMatches = remoteSha256.toLowerCase() === expectedSha256.toLowerCase()
-            }
-            // Geometry — dimensions + aspect derived from the serving URL or, if
-            // absent, inferred from the aspect ratio in the canonical contract.
-            const geo = this._geoFromUrl(verifiedUrl)
-            remoteWidth = geo.width
-            remoteHeight = geo.height
-            if (remoteWidth && remoteHeight) {
-              const gcd = (a, b) => (b ? gcd(b, a % b) : a)
-              const g = gcd(remoteWidth, remoteHeight)
-              remoteAspectRatio = `${remoteWidth / g}:${remoteHeight / g}`
-            }
-            const geometryValid = this._geometryValid(remoteWidth, remoteHeight, remoteAspectRatio, wantW, wantH, wantAR)
-            if (thumbnailMatches) {
-              identity = ThumbnailIdentity.EXACT
-              state = VerifyState.CUSTOM_THUMBNAIL_ACCEPTED
-            } else if (geometryValid) {
-              // YouTube processed/re-encoded the image — still accepted on geometry.
-              identity = ThumbnailIdentity.REENCODED
-              state = VerifyState.CUSTOM_THUMBNAIL_ACCEPTED
-            } else {
-              // Remote asset exists but has invalid/wrong geometry.
-              identity = null
-              state = VerifyState.CUSTOM_THUMBNAIL_REJECTED
-            }
-          } catch (e) {
-            // Cannot fetch/hash the remote asset yet — treat as pending/unknown.
-            const transient = /timeout|network|fetch/i.test(String(e.message))
-            identity = null
-            state = transient
-              ? VerifyState.CUSTOM_THUMBNAIL_PENDING
-              : VerifyState.CUSTOM_THUMBNAIL_UNKNOWN
-            attempts.push({ attempt, found: true, hasCustomThumbnail: true, verifiedUrl, remoteError: e.message, durationMs: Date.now() - attemptStart })
-            if (transient && attempt < this.maxAttempts) { await this._delay(attempt); continue }
+        // C. Remote representation — authoritative URL + dimensions from the API.
+        const remoteThumb = resolveRemoteThumbnail(video)
+        if (!remoteThumb?.url) {
+          attempts.push({ attempt, found: true, hasCustomThumbnail: true, reason: 'no remote url', durationMs: Date.now() - attemptStart })
+          return {
+            state: VerifyState.CUSTOM_THUMBNAIL_PENDING,
+            video,
+            hasCustomThumbnail: true,
+            source,
+            remote: null,
+            identity: null,
+            attempts,
+            durationMs: Date.now() - startTime,
+          }
+        }
+        const remote = {
+          url: remoteThumb.url,
+          width: remoteThumb.width != null ? Number(remoteThumb.width) : null,
+          height: remoteThumb.height != null ? Number(remoteThumb.height) : null,
+          aspectRatio: (remoteThumb.width && remoteThumb.height)
+            ? this._ratioString(Number(remoteThumb.width), Number(remoteThumb.height))
+            : null,
+          sha256: null,
+        }
+
+        try {
+          const buf = await this._downloadThumbnail(remote.url)
+          remote.sha256 = await this.sha256Fn(buf)
+          remote.bytes = buf.length
+        } catch (e) {
+          // Cannot fetch/hash the remote asset yet.
+          const transient = /timeout|network|fetch/i.test(String(e.message))
+          attempts.push({ attempt, found: true, hasCustomThumbnail: true, remote: { url: remote.url }, remoteError: e.message, durationMs: Date.now() - attemptStart })
+          if (transient && attempt < this.maxAttempts) { await this._delay(attempt); continue }
+          return {
+            state: VerifyState.CUSTOM_THUMBNAIL_UNKNOWN,
+            video,
+            hasCustomThumbnail: true,
+            source,
+            remote: { ...remote, sha256: null },
+            identity: ThumbnailIdentity.UNKNOWN,
+            attempts,
+            durationMs: Date.now() - startTime,
           }
         }
 
+        // D. Identity — accept on hasCustomThumbnail + retrievable + aspect-compatible.
+        const aspectCompatible = this._aspectCompatible(remote.width, remote.height, wantAR)
+        if (aspectCompatible === false) {
+          return {
+            state: VerifyState.CUSTOM_THUMBNAIL_REJECTED,
+            video,
+            hasCustomThumbnail: true,
+            source,
+            remote,
+            identity: null,
+            reason: `remote aspect incompatible with ${wantAR} (${remote.width || '?'}x${remote.height || '?'})`,
+            attempts,
+            durationMs: Date.now() - startTime,
+          }
+        }
+
+        const matches = expectedSha256
+          ? remote.sha256.toLowerCase() === expectedSha256.toLowerCase()
+          : null
+        const identity = expectedSha256 ? (matches ? ThumbnailIdentity.EXACT : ThumbnailIdentity.REENCODED) : ThumbnailIdentity.REENCODED
+
         attempts.push({
-          attempt, found: true, hasCustomThumbnail, verifiedUrl, remoteSha256,
-          remoteWidth, remoteHeight, remoteAspectRatio, identity, thumbnailMatches,
+          attempt, found: true, hasCustomThumbnail, remote: { url: remote.url, width: remote.width, height: remote.height }, identity,
           expectedSha256: expectedSha256 ? expectedSha256.slice(0, 12) : null,
           durationMs: Date.now() - attemptStart,
         })
 
         return {
-          state,
+          state: VerifyState.CUSTOM_THUMBNAIL_ACCEPTED,
           video,
-          hasCustomThumbnail,
-          verifiedUrl,
-          remoteSha256,
-          remoteWidth,
-          remoteHeight,
-          remoteAspectRatio,
+          hasCustomThumbnail: true,
+          source,
+          remote,
           identity,
-          thumbnailMatches,
+          thumbnailMatches: matches,
           attempts,
           durationMs: Date.now() - startTime,
         }
@@ -247,43 +269,34 @@ export class YouTubePropagationVerifier {
       errorType: attempts.some(a => a.apiStatus) ? 'TRANSIENT' : null,
       video: null,
       hasCustomThumbnail: false,
-      verifiedUrl: null,
-      remoteSha256: null,
-      remoteWidth: null,
-      remoteHeight: null,
-      remoteAspectRatio: null,
+      source,
+      remote: null,
       identity: null,
-      thumbnailMatches: false,
       attempts,
       durationMs: Date.now() - startTime,
     }
   }
 
-  // A remote thumbnail is considered a valid YouTube-processed copy when its
-  // aspect ratio matches the canonical profile and, when dimensions are known,
-  // they are proportionally consistent (the serving URL may be a downscaled
-  // variant like 1080x1920 of a 2160x3840 source).
-  _geometryValid(width, height, aspectRatio, wantW, wantH, wantAR) {
-    if (aspectRatio) {
-      const norm = (s) => String(s || '').trim().toLowerCase()
-      if (norm(aspectRatio) === norm(wantAR)) return true
-    }
-    if (width && height && wantW && wantH) {
-      const ratio = width / height
-      const wantRatio = wantW / wantH
-      return Math.abs(ratio - wantRatio) < 0.001
-    }
-    // Unknown geometry — treat as unknown, not as rejection.
-    return null
+  // Remote is aspect-compatible with the canonical profile. It does NOT require
+  // exact width/height equality — YouTube may downscale the representation. A
+  // null result means "unknown geometry" → treated as compatible (don't reject).
+  _aspectCompatible(width, height, wantAR) {
+    if (!width || !height || !wantAR) return null
+    const actual = width / height
+    const want = this._ratioToFloat(wantAR)
+    if (!want) return null
+    return Math.abs(actual - want) < 0.05
   }
 
-  // Best-effort dimension extraction from the YouTube serving URL. YouTube
-  // encodes dimensions in some thumbnail URLs (e.g. .../hqdefault.jpg gives none),
-  // but maxres/standard variants sometimes embed them. Returns {} when unknown.
-  _geoFromUrl(url) {
-    const m = /([0-9]{3,4})x([0-9]{3,4})/.exec(String(url || ''))
-    if (m) return { width: Number(m[1]), height: Number(m[2]) }
-    return { width: null, height: null }
+  _ratioString(w, h) {
+    const gcd = (a, b) => (b ? gcd(b, a % b) : a)
+    const g = gcd(w, h)
+    return `${w / g}:${h / g}`
+  }
+
+  _ratioToFloat(s) {
+    const m = /^(\d+)\s*[:/]\s*(\d+)$/.exec(String(s || '').trim())
+    return m ? Number(m[1]) / Number(m[2]) : null
   }
 
   async _downloadThumbnail(url) {

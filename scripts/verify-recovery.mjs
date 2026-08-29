@@ -115,7 +115,7 @@ async function main() {
         expectedAspectRatio: shortProfile.aspectRatio,
       })
       thumbnailResult = await verifier.verify({ videoId: entry.videoId, sha256: expectedSha, thumbnailPath: thumbPath })
-      console.log(`  thumbnail: ${thumbnailResult.state}${expectedSha ? ` (identity=${thumbnailResult.identity || 'UNKNOWN'}, remote ${thumbnailResult.remoteWidth || '?'}x${thumbnailResult.remoteHeight || '?'})` : ''} (${thumbnailResult.durationMs}ms)`)
+      console.log(`  thumbnail: ${thumbnailResult.state}${expectedSha ? ` (identity=${thumbnailResult.identity || 'UNKNOWN'}, remote ${thumbnailResult.remote?.width || '?'}x${thumbnailResult.remote?.height || '?'})` : ''} (${thumbnailResult.durationMs}ms)`)
     } catch (e) {
       thumbnailResult = { state: VerifyState.VERIFICATION_FAILED, error: e.message }
       console.log(`  thumbnail: VERIFICATION_FAILED — ${e.message}`)

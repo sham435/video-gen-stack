@@ -890,13 +890,14 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             thumbnailResult = await verifier.verify({ videoId, sha256: masterThumbSha, thumbnailPath: masterThumb })
 
             if (thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_ACCEPTED) {
+              const remote = thumbnailResult.remote || {}
               const idLabel = thumbnailResult.identity === ThumbnailIdentity.EXACT
                 ? `sha256 MATCH ${masterThumbSha?.slice(0, 12)}…`
                 : thumbnailResult.identity === ThumbnailIdentity.REENCODED
-                  ? `accepted on geometry (remote ${thumbnailResult.remoteWidth || '?'}x${thumbnailResult.remoteHeight || '?'}, sha re-encoded: ${thumbnailResult.remoteSha256?.slice(0, 12)}…)`
+                  ? `accepted on geometry (remote ${remote.width || '?'}x${remote.height || '?'}, sha re-encoded: ${remote.sha256?.slice(0, 12)}…)`
                   : ''
               console.log(`[THUMBNAIL] ${VerifyState.CUSTOM_THUMBNAIL_ACCEPTED} — hasCustomThumbnail=true ${idLabel}for ${videoId} (identity=${thumbnailResult.identity || 'UNKNOWN'})`)
-              if (thumbnailResult.verifiedUrl) console.log(`   verified URL: ${thumbnailResult.verifiedUrl}`)
+              if (remote.url) console.log(`   verified URL: ${remote.url}`)
             } else if (thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_REJECTED) {
               console.warn(`[THUMBNAIL] ${VerifyState.CUSTOM_THUMBNAIL_REJECTED} — video visible but no custom thumbnail`)
             } else if (thumbnailResult.state === VerifyState.VIDEO_NOT_VISIBLE_YET) {
@@ -909,7 +910,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
               console.warn(`[THUMBNAIL] ${thumbnailResult.state}`)
             }
           } catch (e) {
-            thumbnailResult = { state: VerifyState.VERIFICATION_FAILED, error: e.message, hasCustomThumbnail: false, verifiedUrl: null, remoteSha256: null, thumbnailMatches: false }
+            thumbnailResult = { state: VerifyState.VERIFICATION_FAILED, error: e.message, hasCustomThumbnail: false, identity: null, thumbnailMatches: false, remote: null }
             console.log(`[THUMBNAIL] verification error: ${e.message}`)
           }
         }
@@ -947,7 +948,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
 
         // 4. Record to PublicationLedger with verified thumbnail URL
         // Publication succeeds even if verification is API_UNAVAILABLE — the video is uploaded.
-        const verifiedThumbnailUrl = thumbnailResult.verifiedUrl || null
+        const verifiedThumbnailUrl = thumbnailResult.remote?.url || null
         const verificationState = thumbnailResult.state === VerifyState.CUSTOM_THUMBNAIL_ACCEPTED
           ? thumbnailResult.identity === ThumbnailIdentity.REENCODED
             ? 'VERIFIED (REENCODED)'
@@ -997,7 +998,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             thumbnailWidth: ctx.results.THUMBNAIL?.selected?.width || null,
             thumbnailHeight: ctx.results.THUMBNAIL?.selected?.height || null,
             thumbnailMimeType: ctx.results.THUMBNAIL?.selected?.mimeType || null,
-            thumbnailRemoteSha256: thumbnailResult.remoteSha256 || null,
+            thumbnailRemoteSha256: thumbnailResult.remote?.sha256 || null,
             thumbnailMatches: thumbnailResult.thumbnailMatches,
             thumbnailIdentity: thumbnailResult.identity || null,
             youtubeUrl: `https://youtu.be/${videoId}`,

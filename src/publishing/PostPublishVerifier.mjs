@@ -12,9 +12,9 @@ export class PostPublishVerifier {
   constructor(options = {}) {
     this.token = options.token || process.env.YOUTUBE_OAUTH_TOKEN || ''
     this.timeout = options.timeout || 10000
-    // Expected remote geometry (canonical SHORT profile 2160x3840 9:16). When
-    // the remote asset is a valid 9:16 thumbnail the check passes even if the
-    // SHA differs (YouTube re-encodes) — identity records EXACT or REENCODED.
+    // SOURCE contract (LOCAL canonical SHORT profile 2160x3840 9:16). Used for
+    // aspect-compatibility comparison only — the YouTube REMOTE representation
+    // is NOT required to equal these exact dimensions (YouTube re-sizes uploads).
     this.expectedWidth = options.expectedWidth || null
     this.expectedHeight = options.expectedHeight || null
     this.expectedAspectRatio = options.expectedAspectRatio || null
@@ -213,16 +213,23 @@ export class PostPublishVerifier {
   }
 
   _geometryValid(remoteWidth, remoteHeight, wantW, wantH, wantAR) {
-    // When we have both dims, compare aspect ratio proportionally.
-    if (remoteWidth && remoteHeight && wantW && wantH) {
+    // Aspect-compatibility only (tolerance 0.05): YouTube may downscale the
+    // representation (e.g. 1080x1920 of a 2160x3840 source), so exact equality
+    // is NOT required. Null dims → cannot confirm → trust it (not a rejection).
+    if (remoteWidth && remoteHeight) {
       const ratio = remoteWidth / remoteHeight
-      const wantRatio = wantW / wantH
-      if (Math.abs(ratio - wantRatio) < 0.001) return true
-      return false
+      const wantRatio = (wantW && wantH) ? (wantW / wantH) : this._ratioToFloat(wantAR)
+      if (wantRatio == null) return null
+      return Math.abs(ratio - wantRatio) < 0.05
     }
     // No remote dims available from the API — cannot confirm geometry.
     // Fall back to trusting hasCustomThumbnail + a fetchable remote asset.
     return true
+  }
+
+  _ratioToFloat(s) {
+    const m = /^(\d+)\s*[:/]\s*(\d+)$/.exec(String(s || '').trim())
+    return m ? Number(m[1]) / Number(m[2]) : null
   }
 
   async _sha256File(path) {

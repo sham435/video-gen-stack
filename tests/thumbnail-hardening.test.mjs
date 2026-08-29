@@ -202,21 +202,26 @@ describe('YouTubePropagationVerifier identity comparison', () => {
     assert.equal(r.identity, 'EXACT')
   })
 
-  it('returns CUSTOM_THUMBNAIL_ACCEPTED with identity REENCODED when sha differs but geometry valid', async () => {
+  it('returns CUSTOM_THUMBNAIL_ACCEPTED with identity REENCODED when sha differs but geometry (aspect) compatible', async () => {
     stubYouTube({
-      thumbnailUrl: 'https://i.ytimg.com/vi/x/maxres_2160x3840.jpg',
+      thumbnailUrl: 'https://i.ytimg.com/vi/x/maxres.jpg',
       remoteBytes: new Uint8Array([9, 9, 9, 9]),
       hasCustom: true,
     })
     const v = new YouTubePropagationVerifier({
       token: 't', maxAttempts: 1, delays: [0], sha256Fn: (b) => sha(b),
-      expectedWidth: 1080, expectedHeight: 1920, expectedAspectRatio: '9:16',
+      expectedWidth: 2160, expectedHeight: 3840, expectedAspectRatio: '9:16',
     })
     const r = await v.verify({ videoId: 'x', sha256: 'a'.repeat(64) })
     assert.equal(r.state, VerifyState.CUSTOM_THUMBNAIL_ACCEPTED)
     assert.equal(r.thumbnailMatches, false)
     assert.equal(r.identity, 'REENCODED')
-    assert.ok(r.remoteSha256)
+    // Remote representation is 1080x1920 (YouTube downscaled) — still accepted.
+    assert.equal(r.remote.width, 1080)
+    assert.equal(r.remote.height, 1920)
+    assert.ok(r.remote.sha256)
+    assert.equal(r.source.width, 2160)
+    assert.equal(r.source.height, 3840)
   })
 
   it('returns CUSTOM_THUMBNAIL_REJECTED when no custom thumbnail', async () => {

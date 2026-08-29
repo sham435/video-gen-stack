@@ -8,7 +8,7 @@ describe('YouTubePropagationVerifier', () => {
     const result = await verifier.verify({ videoId: 'test123' })
     assert.equal(result.state, VerifyState.VERIFICATION_FAILED)
     assert.equal(result.hasCustomThumbnail, false)
-    assert.equal(result.verifiedUrl, null)
+    assert.deepEqual(result.remote, null)
     assert.ok(result.durationMs >= 0)
     assert.equal(result.attempts.length, 1)
   })
@@ -19,7 +19,7 @@ describe('YouTubePropagationVerifier', () => {
     // API returns error (401/403) → not VIDEO_NOT_VISIBLE_YET (that's empty items)
     assert.equal(result.state, VerifyState.VERIFICATION_FAILED)
     assert.equal(result.hasCustomThumbnail, false)
-    assert.equal(result.verifiedUrl, null)
+    assert.deepEqual(result.remote, null)
     assert.ok(result.attempts.length >= 1)
   })
 

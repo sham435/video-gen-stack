@@ -70,11 +70,23 @@ export class PublicationArtifact {
       }
     }
 
-    const { resolveThumbnailProfile } = await import('../thumbnail/ThumbnailProfile.mjs')
-    const media = results.RENDER?.engine?.productionContext?.media
-      || results.THUMBNAIL?.selected
-      || { width: 2160, height: 3840 }
-    const profile = resolveThumbnailProfile(media)
+    // The artifact's media contract must reflect what was ACTUALLY rendered,
+    // proven by the render engine's RenderProfile — not assumed from the
+    // thumbnail or a hardcoded default. If the render profile (and therefore
+    // the physical output it produced) is unavailable, fail rather than guess.
+    const { resolveRenderProfile } = await import('../video/RenderProfile.mjs')
+    const engine = results.RENDER?.engine
+    const renderedOutput = engine?.renderProfile?.output
+      || resolveRenderProfile(engine?.renderProfile || {}).output
+    if (!renderedOutput || !renderedOutput.width || !renderedOutput.height) {
+      throw new Error('RENDER_MEDIA_METADATA_MISSING: could not resolve the rendered video geometry')
+    }
+    const profile = {
+      mediaType: engine?.renderProfile?.type === 'video' ? 'video' : 'short',
+      width: renderedOutput.width,
+      height: renderedOutput.height,
+      aspectRatio: engine?.renderProfile?.aspectRatio || `${renderedOutput.width}:${renderedOutput.height}`,
+    }
 
     const article = results.DISCOVER?.article || {}
     return new PublicationArtifact({
