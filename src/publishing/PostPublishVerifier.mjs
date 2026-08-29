@@ -68,7 +68,7 @@ export class PostPublishVerifier {
     //       invariant. When geometry is valid the check passes (identity EXACT
     //       or REENCODED); it only fails on genuinely invalid/missing geometry.
     if (expectedThumbnailSha256) {
-      checks.thumbnailIdentity = await this._checkThumbnailIdentity(videoId, thumbnailPath, expectedThumbnailSha256, this.expectedWidth, this.expectedHeight, this.expectedAspectRatio)
+      checks.thumbnailIdentity = await this._checkThumbnailIdentity(videoId, thumbnailPath, expectedThumbnailSha256)
     }
 
     const durationMs = Date.now() - startTime
@@ -145,16 +145,20 @@ export class PostPublishVerifier {
   }
 
   /**
-   * Prove the remote thumbnail YouTube serves is a valid 9:16 custom thumbnail.
+   * Prove the remote thumbnail YouTube serves is a YouTube-processed copy of
+   * our custom thumbnail.
    *
    * ARTIFACT INTEGRITY is SHA-256 (what WE generated). YOUTUBE ACCEPTANCE is
-   * geometry-based: hasCustomThumbnail=true + remote asset exists with valid
-   * dimensions/aspect. YouTube may re-encode the uploaded image, so a differing
+   * hasCustomThumbnail=true (checked via YouTubePropagationVerifier) + a remote
+   * representation that is fetchable/hashable. Remote geometry is decoupled from
+   * the local 9:16 artifact — YouTube serves vertical Shorts thumbnails inside
+   * a 16:9 `maxresdefault.jpg` (1280x720) container, so the remote aspect will
+   * never equal the source. YouTube may also re-encode the image, so a differing
    * remote SHA is expected and does NOT fail the check — identity records
-   * 'REENCODED'. It only fails on genuinely missing/invalid geometry, or when
-   * the local artifact itself disagrees with the expected hash.
+   * 'REENCODED'. It only fails when the local artifact disagrees with the
+   * expected hash, or the remote cannot be retrieved/hashed.
    */
-  async _checkThumbnailIdentity(videoId, localPath, expectedSha256, wantW, wantH, wantAR) {
+  async _checkThumbnailIdentity(videoId, localPath, expectedSha256) {
     try {
       // 1. Local canonical hash (the artifact identity).
       const localSha = await this._sha256File(localPath)
@@ -194,17 +198,12 @@ export class PostPublishVerifier {
       const remoteSha = await this._sha256Buffer(remoteBuf)
 
       const matches = remoteSha.toLowerCase() === expectedSha256.toLowerCase()
-      // Geometry acceptance: valid aspect/dimensions → accepted as a
-      // YouTube-processed copy even when the SHA differs.
-      const geometryValid = this._geometryValid(remoteWidth, remoteHeight, wantW, wantH, wantAR)
-      if (geometryValid === false) {
-        return {
-          pass: false,
-          reason: `remote thumbnail geometry invalid (${remoteWidth || '?'}x${remoteHeight || '?'}, expected ${wantAR || '9:16'})`,
-          remoteSha256: remoteSha, localSha256: localSha, url,
-          remoteWidth, remoteHeight, identity: null,
-        }
-      }
+      // Acceptance is driven by remote presence, NOT geometry. YouTube serves
+      // vertical Shorts thumbnails inside a 16:9 `maxresdefault.jpg` container
+      // (1280x720), so remote aspect will never equal the source 9:16. A remote
+      // asset that fetchable + hashes IS the YouTube acceptance (hasCustomThumbnail
+      // is checked separately). We accept a YouTube-processed copy even when the
+      // SHA differs (platform re-encode) — identity records REENCODED.
       const identity = matches ? 'EXACT' : 'REENCODED'
       return {
         pass: true,
@@ -221,26 +220,6 @@ export class PostPublishVerifier {
     } catch (e) {
       return { pass: false, reason: e.message }
     }
-  }
-
-  _geometryValid(remoteWidth, remoteHeight, wantW, wantH, wantAR) {
-    // Aspect-compatibility only (tolerance 0.05): YouTube may downscale the
-    // representation (e.g. 1080x1920 of a 2160x3840 source), so exact equality
-    // is NOT required. Null dims → cannot confirm → trust it (not a rejection).
-    if (remoteWidth && remoteHeight) {
-      const ratio = remoteWidth / remoteHeight
-      const wantRatio = (wantW && wantH) ? (wantW / wantH) : this._ratioToFloat(wantAR)
-      if (wantRatio == null) return null
-      return Math.abs(ratio - wantRatio) < 0.05
-    }
-    // No remote dims available from the API — cannot confirm geometry.
-    // Fall back to trusting hasCustomThumbnail + a fetchable remote asset.
-    return true
-  }
-
-  _ratioToFloat(s) {
-    const m = /^(\d+)\s*[:/]\s*(\d+)$/.exec(String(s || '').trim())
-    return m ? Number(m[1]) / Number(m[2]) : null
   }
 
   async _sha256File(path) {

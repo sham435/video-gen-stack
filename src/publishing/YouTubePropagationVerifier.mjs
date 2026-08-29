@@ -13,17 +13,20 @@
  *      the URL or assume exact dimensions; YouTube resizes uploads).
  *
  * Identity (D): EXACT when remote SHA-256 equals the artifact, REENCODED when
- * the remote is retrievable and aspect-compatible but the SHA differs (YouTube
- * re-encoded/resized it). A SHA difference is expected and is NOT a failure.
+ * the remote is retrievable but the SHA differs (YouTube re-encoded/resized
+ * it). A SHA difference is expected and is NOT a failure.
  *
- * Acceptance is based primarily on hasCustomThumbnail === true + remote
- * retrievable + aspect-compatible. It does NOT require remote width === 2160
- * and height === 3840 — YouTube may downscale the representation.
+ * Acceptance is based on hasCustomThumbnail === true + remote retrievable.
+ * REMOTE geometry is deliberately decoupled from the LOCAL canonical artifact:
+ * YouTube serves vertical Shorts thumbnails inside a 16:9 `maxresdefault.jpg`
+ * container (1280x720), so remote aspect will never equal the source 9:16.
+ * The local 2160x3840 geometry validates the artifact; hasCustomThumbnail +
+ * remote presence validates propagation; remote geometry validates NEITHER.
  *
  * States:
  *   CUSTOM_THUMBNAIL_PENDING  — custom thumbnail set but remote asset not yet fetchable
- *   CUSTOM_THUMBNAIL_ACCEPTED — hasCustomThumbnail=true AND remote retrievable AND aspect-compatible
- *   CUSTOM_THUMBNAIL_REJECTED — video visible, hasCustomThumbnail=false (or remote aspect incompatible)
+ *   CUSTOM_THUMBNAIL_ACCEPTED — hasCustomThumbnail=true AND remote retrievable
+ *   CUSTOM_THUMBNAIL_REJECTED — video visible, hasCustomThumbnail=false
  *   CUSTOM_THUMBNAIL_UNKNOWN  — remote thumbnail could not be fetched for comparison
  *   VIDEO_NOT_VISIBLE_YET / VIDEO_VISIBLE_THUMBNAIL_PENDING / VERIFICATION_FAILED
  *
@@ -214,22 +217,13 @@ export class YouTubePropagationVerifier {
           }
         }
 
-        // D. Identity — accept on hasCustomThumbnail + retrievable + aspect-compatible.
-        const aspectCompatible = this._aspectCompatible(remote.width, remote.height, wantAR)
-        if (aspectCompatible === false) {
-          return {
-            state: VerifyState.CUSTOM_THUMBNAIL_REJECTED,
-            video,
-            hasCustomThumbnail: true,
-            source,
-            remote,
-            identity: null,
-            reason: `remote aspect incompatible with ${wantAR} (${remote.width || '?'}x${remote.height || '?'})`,
-            attempts,
-            durationMs: Date.now() - startTime,
-          }
-        }
-
+        // D. Identity — accept on hasCustomThumbnail + remote representation
+        // exists. The REMOTE geometry is decoupled from the LOCAL canonical
+        // 9:16 artifact: YouTube serves vertical Shorts thumbnails inside a
+        // 16:9 `maxresdefault.jpg` (1280x720) container, so remote aspect will
+        // NEVER be 9:16. hasCustomThumbnail=true + a fetchable remote IS the
+        // authoritative YouTube-acceptance signal. Remote geometry is reported
+        // for trace only and is NOT a rejection criterion.
         const matches = expectedSha256
           ? remote.sha256.toLowerCase() === expectedSha256.toLowerCase()
           : null
@@ -279,26 +273,10 @@ export class YouTubePropagationVerifier {
     }
   }
 
-  // Remote is aspect-compatible with the canonical profile. It does NOT require
-  // exact width/height equality — YouTube may downscale the representation. A
-  // null result means "unknown geometry" → treated as compatible (don't reject).
-  _aspectCompatible(width, height, wantAR) {
-    if (!width || !height || !wantAR) return null
-    const actual = width / height
-    const want = this._ratioToFloat(wantAR)
-    if (!want) return null
-    return Math.abs(actual - want) < 0.05
-  }
-
   _ratioString(w, h) {
     const gcd = (a, b) => (b ? gcd(b, a % b) : a)
     const g = gcd(w, h)
     return `${w / g}:${h / g}`
-  }
-
-  _ratioToFloat(s) {
-    const m = /^(\d+)\s*[:/]\s*(\d+)$/.exec(String(s || '').trim())
-    return m ? Number(m[1]) / Number(m[2]) : null
   }
 
   async _downloadThumbnail(url) {

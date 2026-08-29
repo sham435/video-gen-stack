@@ -154,7 +154,7 @@ describe('YouTubePropagationVerifier identity comparison', () => {
   })
   after(() => { globalThis.fetch = realFetch })
 
-  function stubYouTube({ thumbnailUrl, remoteBytes, hasCustom }) {
+  function stubYouTube({ thumbnailUrl, remoteBytes, hasCustom, width = 1080, height = 1920 }) {
     globalThis.fetch = async (url) => {
       if (String(url).includes('googleapis.com/youtube/v3/videos')) {
         return {
@@ -163,7 +163,7 @@ describe('YouTubePropagationVerifier identity comparison', () => {
           json: async () => ({
             items: [{
               contentDetails: { hasCustomThumbnail: hasCustom },
-              snippet: { thumbnails: { maxres: { url: thumbnailUrl, width: 1080, height: 1920 } } },
+              snippet: { thumbnails: { maxres: { url: thumbnailUrl, width, height } } },
             }],
           }),
         }
@@ -222,6 +222,48 @@ describe('YouTubePropagationVerifier identity comparison', () => {
     assert.ok(r.remote.sha256)
     assert.equal(r.source.width, 2160)
     assert.equal(r.source.height, 3840)
+  })
+
+  it('REG: hasCustomThumbnail=true + 1280x720 maxres container → CUSTOM_THUMBNAIL_ACCEPTED (REENCODED)', async () => {
+    // Production case from run 33264248500 (video Cc-zHdkow5A): YouTube serves
+    // the vertical Shorts custom thumbnail inside a 16:9 maxresdefault.jpg
+    // (1280x720) container. Remote is NEVER 9:16 → must NOT be rejected on
+    // geometry. hasCustomThumbnail=true + remote representation = ACCEPTED.
+    stubYouTube({
+      thumbnailUrl: 'https://i.ytimg.com/vi/example/maxresdefault.jpg',
+      remoteBytes: new Uint8Array([7, 7, 7, 7]),
+      hasCustom: true,
+      width: 1280, height: 720,
+    })
+    const v = new YouTubePropagationVerifier({
+      token: 't', maxAttempts: 1, delays: [0], sha256Fn: (b) => sha(b),
+      expectedWidth: 2160, expectedHeight: 3840, expectedAspectRatio: '9:16',
+    })
+    const r = await v.verify({ videoId: 'example', sha256: 'a'.repeat(64) })
+    assert.equal(r.state, VerifyState.CUSTOM_THUMBNAIL_ACCEPTED)
+    assert.equal(r.identity, 'REENCODED')
+    assert.equal(r.thumbnailMatches, false)
+    assert.equal(r.remote.width, 1280)
+    assert.equal(r.remote.height, 720)
+    assert.equal(r.remote.aspectRatio, '16:9')
+    assert.equal(r.source.width, 2160)
+    assert.equal(r.source.height, 3840)
+  })
+
+  it('REG: hasCustomThumbnail=false + 480x360 default → CUSTOM_THUMBNAIL_REJECTED', async () => {
+    // Production case from run 33264248500 (video A8XkUDEShdk): hqdefault
+    // (480x360) + hasCustomThumbnail=false = YouTube-GENERATED default, NOT our
+    // custom thumbnail. Must stay REJECTED (do not weaken to accept).
+    stubYouTube({
+      thumbnailUrl: 'https://i.ytimg.com/vi/example/hqdefault.jpg',
+      remoteBytes: new Uint8Array([3, 3, 3]),
+      hasCustom: false,
+      width: 480, height: 360,
+    })
+    const v = new YouTubePropagationVerifier({ token: 't', maxAttempts: 1, delays: [0], sha256Fn: (b) => sha(b) })
+    const r = await v.verify({ videoId: 'example', sha256: 'a'.repeat(64) })
+    assert.equal(r.state, VerifyState.CUSTOM_THUMBNAIL_REJECTED)
+    assert.equal(r.hasCustomThumbnail, false)
   })
 
   it('returns CUSTOM_THUMBNAIL_REJECTED when no custom thumbnail', async () => {
