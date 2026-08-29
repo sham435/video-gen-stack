@@ -1,8 +1,22 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-29T10:50:31.886Z",
+  "updatedAt": "2026-08-29T13:55:24.528Z",
   "source": "youtube-rss",
   "videos": [
+    {
+      "id": "tiJIFSmScLM",
+      "title": "People are itching to create the Gen Z version of Friends. Here's five reasons it's imposs | NEWS-MO",
+      "publishedAt": "2026-08-29T13:53:43+00:00",
+      "publishedLabel": "Aug 29, 01:53 PM",
+      "thumbnail": "/thumbnails/tiJIFSmScLM.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
     {
       "id": "mq4uDrl5_l0",
       "title": "The Easiest Ways to Share Anything Between Android and iOS | NEWS-MONSTER",
@@ -191,20 +205,6 @@
       "publishedAt": "2026-08-27T20:55:14+00:00",
       "publishedLabel": "Aug 27, 08:55 PM",
       "thumbnail": "https://i.ytimg.com/vi/Gj3CWq7poW4/maxresdefault.jpg",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "jcnvOrwcIfw",
-      "title": "Salesforce stock jumps 14% on AI growth and Anthropic investment gain - CNBC | NEWS-MONSTER",
-      "publishedAt": "2026-08-27T20:50:41+00:00",
-      "publishedLabel": "Aug 27, 08:50 PM",
-      "thumbnail": "https://i.ytimg.com/vi/jcnvOrwcIfw/maxresdefault.jpg",
       "thumbnailSha256": null,
       "thumbnailWidth": null,
       "thumbnailHeight": null,
