@@ -1,0 +1,76 @@
+{
+  "runId": "job-art-89ffe1fb1272de1e",
+  "videoId": "Cc-zHdkow5A",
+  "publishedAt": "2026-08-29T17:04:08.038Z",
+  "render": {
+    "width": 2160,
+    "height": 3840,
+    "profile": "SHORT",
+    "aspectRatio": "9:16"
+  },
+  "thumbnail": {
+    "source": {
+      "width": 2160,
+      "height": 3840,
+      "aspectRatio": "0.5625",
+      "sha256": "65085727cbaf6ce747ea5636e3546776f36f7b017012875b74c92d75cf6a50fd"
+    },
+    "remote": {
+      "url": "https://i.ytimg.com/vi/Cc-zHdkow5A/maxresdefault.jpg",
+      "width": 1280,
+      "height": 720,
+      "sha256": "82b45873cd463abdab4d41a25e8f4e0c0edbbdac922abe93d9d1411d562887c5"
+    },
+    "identity": null,
+    "state": "CUSTOM_THUMBNAIL_REJECTED"
+  },
+  "verification": {
+    "state": "REJECTED",
+    "passed": false,
+    "durationMs": 399,
+    "failures": [
+      "thumbnailIdentity: remote thumbnail geometry invalid (1280x720, expected 9:16)"
+    ]
+  },
+  "upload": {
+    "state": "SUCCESS",
+    "url": "https://youtu.be/Cc-zHdkow5A"
+  },
+  "distribution": {
+    "youtube": {
+      "state": "SUCCESS",
+      "videoId": "Cc-zHdkow5A",
+      "url": "https://youtu.be/Cc-zHdkow5A",
+      "thumbnail": {
+        "state": "SUCCESS",
+        "sha256": "65085727cbaf6ce747ea5636e3546776f36f7b017012875b74c92d75cf6a50fd",
+        "width": 2160,
+        "height": 3840,
+        "mimeType": "image/png",
+        "aspectRatio": "9:16"
+      }
+    },
+    "githubPages": {
+      "destination": "githubPages",
+      "state": "SUCCESS",
+      "deployment": "committed",
+      "thumbnailCopied": true,
+      "manifestUpdated": true,
+      "attempts": 1,
+      "errors": [],
+      "durationMs": 1,
+      "thumbnail": {
+        "sha256": "65085727cbaf6ce747ea5636e3546776f36f7b017012875b74c92d75cf6a50fd",
+        "width": 2160,
+        "height": 3840,
+        "mimeType": "image/png",
+        "aspectRatio": "9:16",
+        "path": "public/thumbnails/Cc-zHdkow5A.png"
+      }
+    },
+    "linkedin": {
+      "state": "PENDING",
+      "postId": null
+    }
+  }
+}
