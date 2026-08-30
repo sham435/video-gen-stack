@@ -11,9 +11,12 @@
 // and reported with a machine-readable reason so the caller can decide whether
 // to REGENERATE (invalid media) or QUARANTINE.
 //
-// The canonical Short thumbnail is 2160x3840 (9:16) PNG. Geometry/profile
-// enforcement for the destination is a SEPARATE concern (ThumbnailProfile) —
-// this validator only cares whether the bytes are a structurally valid PNG.
+// Validator is aspect-agnostic: it reads the actual width/height from the PNG
+// IHDR chunk, so it accepts 16:9 landscape (3840x2160, the default for standard
+// YouTube) as well as 9:16 portrait (2160x3840) without any dimension check.
+// Geometry/profile enforcement for the destination is a SEPARATE concern
+// (ThumbnailProfile) — this validator only cares whether the bytes are a
+// structurally valid PNG.
 
 const CRC_TABLE = (() => {
   const table = new Int32Array(256)
