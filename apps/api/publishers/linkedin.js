@@ -139,7 +139,9 @@ export async function shareImage(token, memberUrn, imageUrl, commentary, linkUrl
     method: 'POST',
     headers: apiHeaders(token),
     body: JSON.stringify({
-      initializeUploadRequest: { owner, fileSizeBytes: buffer.byteLength, uploadCaptions: false },
+      // NOTE: fileSizeBytes intentionally omitted — LinkedIn's Images API
+      // (2026) rejects it with "unrecognized field found but not allowed".
+      initializeUploadRequest: { owner, uploadCaptions: false },
     }),
   })
   const initData = await init.json()
