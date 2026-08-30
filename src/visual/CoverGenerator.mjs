@@ -23,10 +23,7 @@ export class CoverGenerator {
   async generate(article, outPath, options = {}) {
     const concept = await this.conceptEngine.generate(article, options)
     const hero = await this.resolveHero(article, concept)
-    return this.renderer.render({ ...concept, heroImage: hero }, article, outPath, {
-      width: options.width,
-      height: options.height,
-    })
+    return this.renderer.render({ ...concept, heroImage: hero }, article, outPath)
   }
 
   _loadRecent() {

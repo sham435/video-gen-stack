@@ -1,35 +1,35 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-30T12:16:01.509Z",
+  "updatedAt": "2026-08-30T14:23:36.075Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "bp79GxiplR4",
+      "id": "bQaEwsb613Q",
       "title": "Fatal Fury: City of the Wolves is free to play for the weekend though only on one platform | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-08-30T12:16:00.761Z",
-      "publishedLabel": "Aug 30, 12:16 PM",
-      "thumbnail": "/thumbnails/bp79GxiplR4.png",
-      "thumbnailSha256": "f4eef7eb24248e17253e8b2529420504dfa8fcc2ebf2f6fe5e88d01470783145",
-      "thumbnailWidth": 2160,
-      "thumbnailHeight": 3840,
-      "thumbnailAspectRatio": "9:16",
-      "youtubeUrl": "https://youtu.be/bp79GxiplR4",
+      "publishedAt": "2026-08-30T14:23:35.137Z",
+      "publishedLabel": "Aug 30, 02:23 PM",
+      "thumbnail": "/thumbnails/bQaEwsb613Q.png",
+      "thumbnailSha256": "0888e99815868a8a53bffac8986eeafe3583f761fc22338d4bda86e06a708ef8",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/bQaEwsb613Q",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "bp79GxiplR4",
-          "url": "https://youtu.be/bp79GxiplR4",
+          "videoId": "bQaEwsb613Q",
+          "url": "https://youtu.be/bQaEwsb613Q",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "f4eef7eb24248e17253e8b2529420504dfa8fcc2ebf2f6fe5e88d01470783145",
-            "width": 2160,
-            "height": 3840,
+            "sha256": "0888e99815868a8a53bffac8986eeafe3583f761fc22338d4bda86e06a708ef8",
+            "width": 3840,
+            "height": 2160,
             "mimeType": "image/png",
-            "aspectRatio": "9:16"
+            "aspectRatio": "16:9"
           }
         },
         "githubPages": {
@@ -42,12 +42,65 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "f4eef7eb24248e17253e8b2529420504dfa8fcc2ebf2f6fe5e88d01470783145",
-            "width": 2160,
-            "height": 3840,
+            "sha256": "0888e99815868a8a53bffac8986eeafe3583f761fc22338d4bda86e06a708ef8",
+            "width": 3840,
+            "height": 2160,
             "mimeType": "image/png",
-            "aspectRatio": "9:16",
-            "path": "public/thumbnails/bp79GxiplR4.png"
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/bQaEwsb613Q.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "_xtp7R0L_DI",
+      "title": "‘Force Restart’—Microsoft Changes Windows Update Next Month - Forbes | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-08-30T14:15:11.287Z",
+      "publishedLabel": "Aug 30, 02:15 PM",
+      "thumbnail": "/thumbnails/_xtp7R0L_DI.png",
+      "thumbnailSha256": "27e0b069c7cdbd068a89c357b94128bd8e35bdbb542d1b79ee961f96a7311190",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/_xtp7R0L_DI",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "_xtp7R0L_DI",
+          "url": "https://youtu.be/_xtp7R0L_DI",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "27e0b069c7cdbd068a89c357b94128bd8e35bdbb542d1b79ee961f96a7311190",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 3,
+          "thumbnail": {
+            "sha256": "27e0b069c7cdbd068a89c357b94128bd8e35bdbb542d1b79ee961f96a7311190",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/_xtp7R0L_DI.png"
           }
         },
         "linkedin": {
