@@ -1,84 +1,31 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-30T19:46:45.295Z",
+  "updatedAt": "2026-08-30T21:05:01.137Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "tLrjkhEoDTQ",
-      "title": "Jameson Maker Pernod Ricard Warns of Sales Hit as Americans Ease Off on Drinking | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-08-30T19:46:44.481Z",
-      "publishedLabel": "Aug 30, 07:46 PM",
-      "thumbnail": "/thumbnails/tLrjkhEoDTQ.png",
-      "thumbnailSha256": "416046b0f3d1dd2e09079dceac882a2f77224533e2377acad15bca8e1cdd2c37",
+      "id": "16SRUsKxFIQ",
+      "title": "Apple's iOS 27 and Siri AI are coming soon: Everything we know so far - Mashable | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-08-30T21:05:00.647Z",
+      "publishedLabel": "Aug 30, 09:05 PM",
+      "thumbnail": "/thumbnails/16SRUsKxFIQ.png",
+      "thumbnailSha256": "93283249662d6a40f8a609f573aa7cdecdb5103b643a9c1c6c15198ac23eee9a",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/tLrjkhEoDTQ",
+      "youtubeUrl": "https://youtu.be/16SRUsKxFIQ",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "tLrjkhEoDTQ",
-          "url": "https://youtu.be/tLrjkhEoDTQ",
+          "videoId": "16SRUsKxFIQ",
+          "url": "https://youtu.be/16SRUsKxFIQ",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "416046b0f3d1dd2e09079dceac882a2f77224533e2377acad15bca8e1cdd2c37",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 1,
-          "thumbnail": {
-            "sha256": "416046b0f3d1dd2e09079dceac882a2f77224533e2377acad15bca8e1cdd2c37",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/tLrjkhEoDTQ.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "Ur7JLR1_tWE",
-      "title": "Global Bond Yields Rise Ahead of Fed’s Warsh Speech; 10-Year Bund Yield Hits 15-Year High | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-08-30T19:44:22.575Z",
-      "publishedLabel": "Aug 30, 07:44 PM",
-      "thumbnail": "/thumbnails/Ur7JLR1_tWE.png",
-      "thumbnailSha256": "11de636551debd10beec53d3f27510cca1db65a05fa2d2783e3f1419a191f5ad",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/Ur7JLR1_tWE",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "Ur7JLR1_tWE",
-          "url": "https://youtu.be/Ur7JLR1_tWE",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "11de636551debd10beec53d3f27510cca1db65a05fa2d2783e3f1419a191f5ad",
+            "sha256": "93283249662d6a40f8a609f573aa7cdecdb5103b643a9c1c6c15198ac23eee9a",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,65 +42,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "11de636551debd10beec53d3f27510cca1db65a05fa2d2783e3f1419a191f5ad",
+            "sha256": "93283249662d6a40f8a609f573aa7cdecdb5103b643a9c1c6c15198ac23eee9a",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/Ur7JLR1_tWE.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "ydI58LStMqQ",
-      "title": "Stocks Lower as Fed’s Warsh Comments Boost Rate-Hike Bets | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-08-30T19:41:54.393Z",
-      "publishedLabel": "Aug 30, 07:41 PM",
-      "thumbnail": "/thumbnails/ydI58LStMqQ.png",
-      "thumbnailSha256": "3a8feb9e95d4410053d3ef6d338691a10d53ff67bd2d952cf7c3a32835a9aaec",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/ydI58LStMqQ",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "ydI58LStMqQ",
-          "url": "https://youtu.be/ydI58LStMqQ",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "3a8feb9e95d4410053d3ef6d338691a10d53ff67bd2d952cf7c3a32835a9aaec",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "3a8feb9e95d4410053d3ef6d338691a10d53ff67bd2d952cf7c3a32835a9aaec",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/ydI58LStMqQ.png"
+            "path": "public/thumbnails/16SRUsKxFIQ.png"
           }
         },
         "linkedin": {
