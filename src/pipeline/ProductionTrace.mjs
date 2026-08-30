@@ -12,7 +12,8 @@
 //     niche: { key, source, confidence },
 //     profile: "TESLA",
 //     thumbnail: { generated, preflight, uploaded, error },
-//     youtube: { videoUploaded, videoId, thumbnailUploaded, thumbnailAttempts, lastError },
+//     youtube: { videoUploaded, videoId, thumbnailUploaded, thumbnailAttempts, lastError,
+//               thumbnailUpload: { path, width, height, bytes, sha256, transformation } },
 //     linkedin: { attempted, success, error },
 //     provenance: { c2paSigned, c2paVerified, manifestId, error,
 //                    signMs, verifyMs, reason, validationState, failures,
@@ -31,7 +32,10 @@ export class ProductionTrace {
       niche: Object.seal({ key: 'GENERAL', source: 'fallback', confidence: 0 }),
       profile: 'GENERAL',
       thumbnail: Object.seal({ generated: false, preflight: 'skipped', uploaded: false, error: null }),
-      youtube: Object.seal({ videoUploaded: false, videoId: null, thumbnailUploaded: false, thumbnailAttempts: 0, lastError: null }),
+      youtube: Object.seal({
+        videoUploaded: false, videoId: null, thumbnailUploaded: false, thumbnailAttempts: 0, lastError: null,
+        thumbnailUpload: Object.seal({ path: null, width: null, height: null, bytes: 0, sha256: null, transformation: null }),
+      }),
       linkedin: Object.seal({ attempted: false, success: false, error: null }),
       provenance: Object.seal({
         c2paSigned: false, c2paVerified: false, manifestId: null, error: null,
@@ -87,6 +91,14 @@ export class ProductionTrace {
     this.record.youtube.thumbnailUploaded = result.thumbnailUploaded || false
     this.record.youtube.thumbnailAttempts = result.thumbnailAttempts || 0
     this.record.youtube.lastError = result.lastError || null
+    if (result.thumbnailUpload && typeof result.thumbnailUpload === 'object') {
+      this.record.youtube.thumbnailUpload.path = result.thumbnailUpload.path || null
+      this.record.youtube.thumbnailUpload.width = result.thumbnailUpload.width ?? null
+      this.record.youtube.thumbnailUpload.height = result.thumbnailUpload.height ?? null
+      this.record.youtube.thumbnailUpload.bytes = result.thumbnailUpload.bytes || 0
+      this.record.youtube.thumbnailUpload.sha256 = result.thumbnailUpload.sha256 || null
+      this.record.youtube.thumbnailUpload.transformation = result.thumbnailUpload.transformation || null
+    }
   }
 
   // ─── linkedin ───────────────────────────────────────────────────────────

@@ -1,0 +1,11 @@
+[
+  {
+    "id": "msxe8ad3",
+    "area": "performance",
+    "priority": "high",
+    "message": "execSync blocks event loop in src/agent/ResumeManager.mjs",
+    "file": "src/agent/ResumeManager.mjs",
+    "createdAt": "2026-08-17T15:33:20.631Z",
+    "resolved": false
+  }
+]

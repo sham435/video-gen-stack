@@ -21,6 +21,13 @@
 
 import crypto from 'node:crypto'
 
+// The 16-char sha256 prefix of the empty string. A script identity that
+// resolves to this is NOT a legitimate content artifact — it means the script
+// was missing/empty at generation time. It must never be reserved or compared
+// as though it were a real script identity (prevents false "duplicate" when
+// two jobs both failed to produce a script).
+export const EMPTY_SCRIPT_HASH = crypto.createHash('sha256').update('').digest('hex').slice(0, 16)
+
 export const SCRIPT_UNIQUENESS_POLICY = Object.freeze({
   exactDuplicate: 0.0,       // exact hash match → reject
   semanticSimilarityMax: 0.55, // weighted overlap threshold (lower than visual 0.82)
@@ -44,7 +51,7 @@ export class ScriptUniqueness {
   validate(narrationText, context = {}) {
     const hash = this._hash(narrationText)
 
-    if (!hash || hash === this._hash('')) {
+    if (!hash || hash === EMPTY_SCRIPT_HASH) {
       return { pass: false, hash, reason: 'EMPTY_SCRIPT', duplicateOf: null, similarity: null }
     }
 

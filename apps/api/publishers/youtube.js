@@ -70,6 +70,40 @@ function youtubeApiError(data, fallbackStatus) {
 }
 
 /**
+ * Classify a YouTube thumbnails.set failure.
+ *
+ *  - HTTP 400 invalidImage ("The provided image content is invalid.") is a media
+ *    defect → THUMBNAIL_INVALID_MEDIA, action REGENERATE. It is NOT a policy
+ *    violation by itself.
+ *  - Explicit policy-ish rejection (e.g. adult/inappropriate in the error
+ *    domain) → THUMBNAIL_POLICY_REJECTED, action QUARANTINE.
+ *  - Any other/unknown 400 → THUMBNAIL_UPLOAD_FAILED, action QUARANTINE.
+ */
+export function classifyThumbnailUploadError(error, httpStatus) {
+  const status = Number(httpStatus || error?.httpStatus || 0)
+  const reason = String(error?.reason || '')
+  const message = String(error?.message || '')
+  const body = JSON.stringify(error?.youtubeError || '')
+
+  if (status === 400) {
+    const invalidImage =
+      /invalidImage|invalid image|not a valid image|image content is invalid|badImageData|mediaTypeNotSupported/i.test(reason + ' ' + body)
+    const policyRejected =
+      /adult|sexual|inappropriate|policy|misleading|impersonat/i.test(reason + ' ' + message)
+    if (invalidImage) {
+      return { class: 'THUMBNAIL_INVALID_MEDIA', action: 'REGENERATE', reason: 'image not valid/decodable media' }
+    }
+    if (policyRejected) {
+      return { class: 'THUMBNAIL_POLICY_REJECTED', action: 'QUARANTINE', reason: 'policy-related rejection' }
+    }
+    return { class: 'THUMBNAIL_UPLOAD_FAILED', action: 'QUARANTINE', reason: 'unknown 400' }
+  }
+
+  // Non-400 (network, quota, auth, etc.) → quarantine for diagnosis.
+  return { class: 'THUMBNAIL_UPLOAD_FAILED', action: 'QUARANTINE', reason: `http ${status}` }
+}
+
+/**
  * --------------------------------------------------------------------------
  * OAuth
  * --------------------------------------------------------------------------
@@ -257,11 +291,13 @@ export async function publishVideo(inputOrUrl, titleOrOpts, description, privacy
   let thumbnailUploaded = false
   let thumbnailAttempts = 0
   let lastThumbnailError = null
+  let thumbnailUpload = null
   if (thumbnailPath) {
     thumbnailAttempts = 1
     try {
-      await setThumbnail(token, videoId, thumbnailPath)
+      const thumbResult = await setThumbnail(token, videoId, thumbnailPath)
       thumbnailUploaded = true
+      thumbnailUpload = thumbResult.upload || null
     } catch (e) {
       lastThumbnailError = e.message
       console.warn(`[YOUTUBE_THUMBNAIL] upload failed videoId=${videoId} error=${e.message} (video still published)`)
@@ -276,6 +312,7 @@ export async function publishVideo(inputOrUrl, titleOrOpts, description, privacy
     thumbnailUploaded,
     thumbnailAttempts,
     lastError: lastThumbnailError,
+    thumbnailUpload,
     metadata: { title: String(_title).slice(0, 100), privacy: _privacy },
   }
 }
@@ -301,25 +338,38 @@ export async function uploadShort(videoUrl, title, description, privacy = 'publi
  * A 2xx response is NOT authoritative acceptance. Propagation is confirmed by
  * YouTubePropagationVerifier (hasCustomThumbnail + remote 9:16 geometry).
  */
-export async function setThumbnail(token, videoId, thumbnailPath) {
+export async function setThumbnail(token, videoId, thumbnailPath, options = {}) {
   if (!token) throw new Error('YOUTUBE_ACCESS_TOKEN_REQUIRED')
   if (!videoId) throw new Error('YOUTUBE_VIDEO_ID_REQUIRED')
   if (!thumbnailPath) throw new Error('THUMBNAIL_PATH_REQUIRED')
   if (!existsSync(thumbnailPath)) throw new Error(`THUMBNAIL_NOT_FOUND: ${thumbnailPath}`)
 
-  const thumbnailBuffer = readFileSync(thumbnailPath)
+  // The canonical artifact is never mutated. Produce a bounded UPLOAD COPY that
+  // is guaranteed ≤ 2 MiB (YouTube's thumbnails.set hard limit). When the
+  // canonical already fits it is used unchanged (transformation NONE).
+  const { prepareUploadThumbnail, UploadTransformation } = await import('../../../src/thumbnail/ThumbnailUploadArtifact.mjs')
+  const uploadArtifact = await prepareUploadThumbnail({
+    path: thumbnailPath,
+    outDir: options.outDir || null,
+  })
+
+  const thumbnailBuffer = readFileSync(uploadArtifact.path)
   if (!thumbnailBuffer.length) throw new Error(`THUMBNAIL_EMPTY: ${thumbnailPath}`)
 
-  const ext = thumbnailPath.toLowerCase().split('.').pop()
-  const mimeType = MIME_BY_EXT[ext]
+  const ext = (uploadArtifact.path || thumbnailPath).toLowerCase().split('.').pop()
+  const mimeType = MIME_BY_EXT[ext] || MIME_BY_EXT['png']
   if (!mimeType) throw new Error(`THUMBNAIL_UNSUPPORTED_FORMAT: ${ext}`)
 
   validateThumbnailBytes(thumbnailBuffer, mimeType)
 
   const { sha256Thumbnail } = await import('../../../src/thumbnail/ThumbnailMetadata.mjs')
-  const thumbnailSha256 = sha256Thumbnail(thumbnailPath)
+  const thumbnailSha256 = uploadArtifact.sha256 || sha256Thumbnail(thumbnailPath)
 
-  console.log(`[YOUTUBE_THUMBNAIL] videoId=${videoId} source=${thumbnailPath} mime=${mimeType} bytes=${thumbnailBuffer.length} sha256=${thumbnailSha256 ? thumbnailSha256.slice(0, 12) + '…' : 'unknown'} uploadMode=simple-media`)
+  const transformation = uploadArtifact.transformation
+  const uploadDims = uploadArtifact.width && uploadArtifact.height
+    ? `${uploadArtifact.width}x${uploadArtifact.height}`
+    : '2160x3840 (canonical)'
+  console.log(`[YOUTUBE_THUMBNAIL] videoId=${videoId} source=${thumbnailPath} uploadCopy=${transformation} mime=${mimeType} bytes=${thumbnailBuffer.length} dims=${uploadDims} sha256=${(thumbnailSha256 || '').slice(0, 12)}… uploadMode=simple-media`)
   console.log(`[YOUTUBE_THUMBNAIL_UPLOAD] START videoId=${videoId}`)
 
   const response = await fetchWithTimeout(
@@ -334,7 +384,12 @@ export async function setThumbnail(token, videoId, thumbnailPath) {
   const data = await readJson(response)
   if (!response.ok || data.error) {
     const error = youtubeApiError(data, response.status)
-    console.warn(`[YOUTUBE_THUMBNAIL_UPLOAD] FAIL videoId=${videoId} http=${response.status} error=${error.message}`)
+    // Classify the failure so the orchestrator can REGENERATE vs QUARANTINE.
+    // A 400 = THUMBNAIL_INVALID_MEDIA (regenerate) is a genuinely malformed/
+    // unsupported image; policy-related or unknown rejections → quarantine.
+    const failed = classifyThumbnailUploadError(error, response.status)
+    error.thumbnailFailure = failed
+    console.warn(`[YOUTUBE_THUMBNAIL_UPLOAD] FAIL videoId=${videoId} http=${response.status} class=${failed.class} action=${failed.action} error=${error.message}`)
     throw new Error(`YOUTUBE_THUMBNAIL_UPLOAD_FAILED: ${error.message}`)
   }
 
@@ -344,7 +399,7 @@ export async function setThumbnail(token, videoId, thumbnailPath) {
     || data.items?.[0]?.snippet?.thumbnails?.high
     || null
 
-  console.log(`[YOUTUBE_THUMBNAIL_UPLOAD] SUCCESS videoId=${videoId} http=${response.status} items=${items} mime=${mimeType} bytes=${thumbnailBuffer.length} responseThumbnailUrl=${remoteThumbnail?.url || 'none'}`)
+  console.log(`[YOUTUBE_THUMBNAIL_UPLOAD] SUCCESS videoId=${videoId} http=${response.status} items=${items} mime=${mimeType} bytes=${thumbnailBuffer.length} transformation=${transformation} responseThumbnailUrl=${remoteThumbnail?.url || 'none'}`)
 
   // Diagnostic only — never determines acceptance. Propagation verifier is authoritative.
   try {
@@ -353,7 +408,18 @@ export async function setThumbnail(token, videoId, thumbnailPath) {
     console.warn(`[YOUTUBE_THUMBNAIL_VERIFY] diagnostic failed: ${error.message}`)
   }
 
-  return { ok: true, videoId, items, mimeType, bytes: thumbnailBuffer.length, sha256: thumbnailSha256 }
+  return {
+    ok: true, videoId, items, mimeType, bytes: thumbnailBuffer.length, sha256: thumbnailSha256,
+    upload: {
+      path: uploadArtifact.path,
+      width: uploadArtifact.width,
+      height: uploadArtifact.height,
+      bytes: uploadArtifact.bytes,
+      sha256: uploadArtifact.sha256,
+      transformation,
+      transformationKey: uploadArtifact.transformation,
+    },
+  }
 }
 
 /** Diagnostic representation check — authoritative propagation is YouTubePropagationVerifier's job. */

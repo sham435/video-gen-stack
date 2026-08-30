@@ -26,7 +26,7 @@
 import { AssetRegistry } from './AssetRegistry.mjs'
 import { SceneAssetUniqueness } from './SceneAssetUniqueness.mjs'
 import { MusicUniqueness } from './MusicUniqueness.mjs'
-import { ScriptUniqueness } from './ScriptUniqueness.mjs'
+import { ScriptUniqueness, EMPTY_SCRIPT_HASH } from './ScriptUniqueness.mjs'
 import crypto from 'node:crypto'
 
 export const ScopeEnforcement = Object.freeze({
@@ -187,7 +187,9 @@ export class GlobalAssetUniquenessGate {
    */
   reserve(jobId, manifest) {
     return this.registry.reserve(jobId, {
-      scriptHash: manifest.scriptHash,
+      // An empty/missing script is NOT a legitimate content identity — do not
+      // reserve it, or two empty scripts would falsely conflict as duplicates.
+      scriptHash: isInvalidScript(manifest.scriptHash, manifest.scriptText) ? null : manifest.scriptHash,
       scriptText: manifest.scriptText || null,
       imageHashes: manifest.imageHashes || [],
       musicTrackId: manifest.musicTrackId,
@@ -411,6 +413,17 @@ export class GlobalAssetUniquenessGate {
       return { pass: true, enforcement: ScopeEnforcement.ENFORCED, violations: [], detail: 'no script' }
     }
 
+    // An empty/missing script is NOT a legitimate content artifact. It must not
+    // be reserved, hashed-as-unique, or compared as a real identity.
+    if (isInvalidScript(scriptHash, scriptText)) {
+      return {
+        pass: true,
+        enforcement: ScopeEnforcement.ENFORCED,
+        violations: [],
+        detail: 'INVALID_SCRIPT_ARTIFACT: script missing/empty — not a unique content identity',
+      }
+    }
+
     // A single video should have exactly one script — if scenes contain
     // duplicate narration segments, that's a within-video issue.
     // For now, a video always passes within-video script uniqueness
@@ -433,6 +446,18 @@ export class GlobalAssetUniquenessGate {
 
     if (!scriptHash && !scriptText) {
       return { pass: true, enforcement: ScopeEnforcement.ENFORCED, violations: [], detail: 'no script' }
+    }
+
+    // An empty/missing script is NOT a legitimate content artifact. Do not
+    // compare its sha256("") identity against other jobs — that produces a
+    // false "duplicate" when multiple videos all fail to produce a script.
+    if (isInvalidScript(scriptHash, scriptText)) {
+      return {
+        pass: true,
+        enforcement: ScopeEnforcement.ENFORCED,
+        violations: [],
+        detail: 'INVALID_SCRIPT_ARTIFACT: script missing/empty — not a unique content identity',
+      }
     }
 
     // If only hash is available, do exact-only check
@@ -475,6 +500,17 @@ export class GlobalAssetUniquenessGate {
 }
 
 // ── ThumbnailUniqueness — composition + perceptual hash for thumbnails ──
+
+/**
+ * An empty/missing script resolves to sha256("") and must never be treated as
+ * a real content identity. Blocks reservation, exact-duplicate comparison, and
+ * semantic checks so that two videos which both failed to produce a script are
+ * NOT misclassified as duplicates.
+ */
+function isInvalidScript(scriptHash, scriptText) {
+  const textIsEmpty = !scriptText || String(scriptText).trim().length === 0
+  return textIsEmpty && (!scriptHash || scriptHash === EMPTY_SCRIPT_HASH)
+}
 
 class ThumbnailUniqueness {
   constructor(registry) {

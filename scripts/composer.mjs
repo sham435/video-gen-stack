@@ -412,10 +412,35 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         // Short thumbnail is 9:16 2160x3840). This becomes the artifact's
         // immutable identity (sha256 + dimensions + mime).
         const { inspectThumbnailFile } = await import('../src/thumbnail/ThumbnailMetadata.mjs')
+        const { validateThumbnailMediaFile, MediaValidationState } = await import('../src/thumbnail/ThumbnailMediaValidator.mjs')
+
+        // MEDIA_VALID gate — pure-buffer PNG structural validation (safe, no
+        // native decode). Malformed/unsupported PNGs are caught HERE, before
+        // upload, never reaching YouTube's thumbnails.set. Failures are
+        // classified so the caller knows to REGENERATE vs QUARANTINE.
+        const media = await validateThumbnailMediaFile(candidate, { maxBytes: MAX_THUMBNAIL_BYTES })
+        if (!media.valid) {
+          const action = media.state === MediaValidationState.TOO_LARGE
+            || media.state === MediaValidationState.INVALID_SIGNATURE
+            || media.state === MediaValidationState.INVALID_IHDR
+            || media.state === MediaValidationState.UNSUPPORTED_BIT_DEPTH
+            || media.state === MediaValidationState.UNSUPPORTED_COLOR_TYPE
+            || media.state === MediaValidationState.MALFORMED_CHUNK
+            || media.state === MediaValidationState.CRC_MISMATCH
+            ? 'REGENERATE' : 'QUARANTINE'
+          console.warn(`[THUMBNAIL] MEDIA_INVALID state=${media.state} action=${action} reason=${media.reason} — not uploadable`)
+          return {
+            candidates: [],
+            selected: null,
+            strategy: 'none',
+            mediaInvalid: { state: media.state, action, reason: media.reason },
+          }
+        }
+
         const meta = await inspectThumbnailFile(candidate)
         const selected = { path: candidate, width: meta.width, height: meta.height, mimeType: meta.mimeType, sha256: meta.sha256, aspectRatio: meta.aspectRatio }
         // Enforce the Short thumbnail geometry contract (9:16 2160x3840).
-        const { enforceThumbnailProfile, ThumbnailValidationError } = await import('../src/thumbnail/ThumbnailProfile.mjs')
+        const { enforceThumbnailProfile, ThumbnailValidationError, MAX_THUMBNAIL_BYTES } = await import('../src/thumbnail/ThumbnailProfile.mjs')
         try {
           enforceThumbnailProfile(
             { width: selected.width, height: selected.height },

@@ -384,6 +384,47 @@ test('setThumbnail — throws YOUTUBE_THUMBNAIL_UPLOAD_FAILED on HTTP error', as
   rmSync(tmpDir, { recursive: true })
 })
 
+// ── classifyThumbnailUploadError ─────────────────────────────────────────
+test('classify 400 invalidImage as THUMBNAIL_INVALID_MEDIA / REGENERATE', async () => {
+  const { classifyThumbnailUploadError } = await import('../apps/api/publishers/youtube.js')
+  const err = new Error('YOUTUBE_API_ERROR: The provided image content is invalid.')
+  err.httpStatus = 400
+  err.reason = 'invalidImage'
+  const c = classifyThumbnailUploadError(err, 400)
+  assert.equal(c.class, 'THUMBNAIL_INVALID_MEDIA')
+  assert.equal(c.action, 'REGENERATE')
+})
+
+test('classify 400 policy rejection as THUMBNAIL_POLICY_REJECTED / QUARANTINE', async () => {
+  const { classifyThumbnailUploadError } = await import('../apps/api/publishers/youtube.js')
+  const err = new Error('YOUTUBE_API_ERROR: Violates community guidelines')
+  err.httpStatus = 400
+  err.reason = 'violation'
+  err.message = 'The image contains misleading or inappropriate content'
+  const c = classifyThumbnailUploadError(err, 400)
+  assert.equal(c.class, 'THUMBNAIL_POLICY_REJECTED')
+  assert.equal(c.action, 'QUARANTINE')
+})
+
+test('classify unknown 400 as THUMBNAIL_UPLOAD_FAILED / QUARANTINE', async () => {
+  const { classifyThumbnailUploadError } = await import('../apps/api/publishers/youtube.js')
+  const err = new Error('YOUTUBE_API_ERROR: something else')
+  err.httpStatus = 400
+  err.reason = 'quotaExceeded'
+  const c = classifyThumbnailUploadError(err, 400)
+  assert.equal(c.class, 'THUMBNAIL_UPLOAD_FAILED')
+  assert.equal(c.action, 'QUARANTINE')
+})
+
+test('classify non-400 as THUMBNAIL_UPLOAD_FAILED / QUARANTINE', async () => {
+  const { classifyThumbnailUploadError } = await import('../apps/api/publishers/youtube.js')
+  const err = new Error('YOUTUBE_API_ERROR: quota exceeded')
+  err.httpStatus = 403
+  const c = classifyThumbnailUploadError(err, 403)
+  assert.equal(c.class, 'THUMBNAIL_UPLOAD_FAILED')
+  assert.equal(c.action, 'QUARANTINE')
+})
+
 // ── postComment ──────────────────────────────────────────────────────────
 test('postComment — returns null for missing videoId', async () => {
   const result = await youtube.postComment(null, 'hello')

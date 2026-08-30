@@ -1,0 +1,2125 @@
+▗ ▗   ▖ ▖  Claude Code v2.1.218
+           claude-opus-5 · API Usage Billing
+  ▘▘ ▝▝    ~/vedio_genspark
+
+  ⎿  Interrupted · What should Claude do instead?
+
+❯ continue                                                                      
+
+  Searched for 1 pattern, read 1 file, ran 2 shell commands (ctrl+o to expand)
+  ⎿  Interrupted · What should Claude do instead?
+
+❯ retry                                                                         
+
+❯ The refactor is now at a good architectural checkpoint.                       
+                                                                                
+  Baseline                                                                      
+  Commit: b46a85a                                                               
+  Branch: origin/main                                                           
+                                                                                
+  Production pipeline:                                                          
+  DISCOVER                                                                      
+    ↓                                                                           
+  RENDER                                                                        
+    ↓                                                                           
+  THUMBNAIL                                                                     
+    ↓                                                                           
+  C2PA                                                                          
+    ↓                                                                           
+  UNIQUENESS                                                                    
+    ↓                                                                           
+  UPLOAD                                                                        
+    ↓                                                                           
+  PUBLISH                                                                       
+    ↓                                                                           
+  VERIFY                                                                        
+    ↓                                                                           
+  ANALYTICS                                                                     
+  Verified invariants                                                           
+  1 ProductionJob owns the production lifecycle.                                
+  generateFromArticle() is completely job-free.                                 
+  RENDER produces the canonical video artifact.                                 
+  THUMBNAIL is mandatory and consumes/registers the engine-produced thumbnail.  
+  No ThumbnailFactory duplication.                                              
+  No YOUTUBE_REFRESH_TOKEN thumbnail gate.                                      
+  UPLOAD requires both video and thumbnail.                                     
+  Checkpoint state belongs to the orchestrator.                                 
+  Architecture tests: 17/17 passing.                                            
+  Refactor regressions: 0.                                                      
+  Commit pushed: b46a85a.                                                       
+  Test accounting                                                               
+  Result    Count                                                               
+  Total    924                                                                  
+  Passing    922                                                                
+  Known environment failures    2                                               
+  Architecture tests    17/17                                                   
+  Refactor regressions    0                                                     
+                                                                                
+  The two LinkedIn/social-distribution failures should remain tracked           
+  separately as environment/credential prerequisites, not be mixed into this    
+  architectural commit.                                                         
+                                                                                
+  Next phase: production hardening                                              
+                                                                                
+  I would now freeze the orchestration architecture and move to observability.  
+                                                                                
+  Priority order:                                                               
+                                                                                
+  1. Production trace / stage telemetry                                         
+  2. Artifact integrity + SHA-256 verification                                  
+  3. Checkpoint/resume validation                                               
+  4. Retry/backoff/quarantine verification                                      
+  5. External-provider failure isolation                                        
+  6. GitHub Actions production dry-run                                          
+  7. Real autonomous publish verification                                       
+  8. Analytics feedback loop                                                    
+                                                                                
+  Most importantly, establish a machine-verifiable production invariant:        
+                                                                                
+  PUBLISHABLE(job)                                                              
+      =                                                                         
+      video.valid                                                               
+      AND thumbnail.valid                                                       
+      AND c2pa.valid                                                            
+      AND uniqueness.valid                                                      
+      AND upload.valid                                                          
+                                                                                
+  That gives the system a deterministic production gate, rather than relying on 
+  individual stages behaving correctly.                                         
+                                                                                
+  The architecture refactor itself should now be considered closed. Further     
+  changes should target operational reliability, observability, and autonomous  
+  recovery rather than restructuring ProductionJob again.Start item 1, but with 
+  one architectural correction: do not put PUBLISHABLE() on ProductionJob if    
+  that makes the job responsible for business policy. Keep ProductionJob as     
+  lifecycle/state management and make the publish gate a deterministic          
+  policy/validator.                                                             
+                                                                                
+  Phase 1 — Production Trace / Stage Telemetry                                  
+                                                                                
+  Implement this without changing the existing orchestration flow.              
+                                                                                
+  Target trace schema:                                                          
+                                                                                
+  {                                                                             
+    jobId,                                                                      
+    stage,                                                                      
+    attempt,                                                                    
+    startedAt,                                                                  
+    completedAt,                                                                
+    status,                                                                     
+    durationMs,                                                                 
+    artifactIds: [],                                                            
+    errorClassification: null,                                                  
+    metadata: {}                                                                
+  }                                                                             
+                                                                                
+  Persist it alongside the checkpoint:                                          
+                                                                                
+  .newsmonster/                                                                 
+  └── checkpoints/                                                              
+      └── job-{articleId}.json                                                  
+                                                                                
+  Prefer:                                                                       
+                                                                                
+  job-{articleId}.json                                                          
+  ├── checkpoint                                                                
+  ├── stageTrace[]                                                              
+  └── artifacts                                                                 
+                                                                                
+  rather than introducing another persistence system.                           
+                                                                                
+  Required stage states                                                         
+  PENDING                                                                       
+  RUNNING                                                                       
+  SUCCEEDED                                                                     
+  FAILED                                                                        
+  SKIPPED                                                                       
+  QUARANTINED                                                                   
+  Failure classification                                                        
+                                                                                
+  Normalize failures into the existing retry model:                             
+                                                                                
+  TRANSIENT                                                                     
+  RATE_LIMITED                                                                  
+  INVALID                                                                       
+  PERMANENT                                                                     
+  DEPENDENCY                                                                    
+  CONFIGURATION                                                                 
+                                                                                
+  Don't persist arbitrary error strings as the primary classification.          
+                                                                                
+  Critical telemetry invariant                                                  
+                                                                                
+  Every executed stage must produce exactly one terminal trace record per       
+  attempt:                                                                      
+                                                                                
+  RUNNING                                                                       
+     ↓                                                                          
+  SUCCEEDED                                                                     
+                                                                                
+  or:                                                                           
+                                                                                
+  RUNNING                                                                       
+     ↓                                                                          
+  FAILED                                                                        
+     ↓                                                                          
+  retry                                                                         
+     ↓                                                                          
+  RUNNING                                                                       
+     ↓                                                                          
+  SUCCEEDED                                                                     
+                                                                                
+  This gives you an auditable production history instead of just a final        
+  checkpoint.                                                                   
+                                                                                
+  Then implement the publish gate                                               
+                                                                                
+  Create a deterministic validator/policy:                                      
+                                                                                
+  const result = publishability.evaluate(job);                                  
+                                                                                
+  if (!result.valid) {                                                          
+      throw new ProductionError(                                                
+          'PUBLISHABILITY_GATE_FAILED',                                         
+          result.missing                                                        
+      );                                                                        
+  }                                                                             
+                                                                                
+  Its result should be machine-readable:                                        
+                                                                                
+  {                                                                             
+    valid: false,                                                               
+    checks: {                                                                   
+      video: true,                                                              
+      thumbnail: true,                                                          
+      c2pa: true,                                                               
+      uniqueness: true,                                                         
+      upload: false,                                                            
+    },                                                                          
+    missing: ['upload'],                                                        
+  }                                                                             
+                                                                                
+  This is superior to:                                                          
+                                                                                
+  if (!video || !thumbnail || !c2pa) ...                                        
+                                                                                
+  scattered throughout the pipeline.                                            
+                                                                                
+  Final production gate                                                         
+                      PUBLISHABILITY                                            
+                           │                                                    
+          ┌────────────────┼────────────────┐                                   
+          ▼                ▼                ▼                                   
+        VIDEO          THUMBNAIL          C2PA                                  
+          │                │                │                                   
+          └────────────────┼────────────────┘                                   
+                           │                                                    
+                      UNIQUENESS                                                
+                           │                                                    
+                         UPLOAD                                                 
+                           │                                                    
+                           ▼                                                    
+                        PUBLISH                                                 
+                                                                                
+  The next implementation should therefore be:                                  
+                                                                                
+  StageTrace schema                                                             
+  Trace recording around existing stage execution                               
+  Checkpoint persistence of trace                                               
+  Retry/error classification integration                                        
+  Architecture tests for trace completeness                                     
+  Deterministic PublishabilityGate                                              
+  Gate test matrix                                                              
+  Production dry-run and trace inspection                                       
+                                                                                
+  Do not modify the stage graph or ProductionJob ownership while doing this.    
+  This phase should be additive hardening on top of commit b46a85a.             
+
+  Searched for 1 pattern, read 2 files (ctrl+o to expand)
+
+⏺ Phase 1 is already committed (cd793ec, on top of b46a85a). Auditing it against
+  your spec rather than re-implementing.
+
+  Searched for 2 patterns, read 1 file, ran 3 shell commands (ctrl+o to expand)
+
+⏺ Six real gaps. Applying fixes.
+
+⏺ Update(src/orchestrator/CheckpointStore.mjs)
+  ⎿  Added 9 lines, removed 1 line
+      76      })
+      77    }
+      78  
+      79 -  appendTrace(record) {                                        
+      79 +  /**                                                          
+      80 +   * Append a trace record, optionally merging artifacts in the
+         + same atomic write.                                            
+      81 +   * One write keeps trace + artifacts consistent: a crash can 
+         +never leave an                                                 
+      82 +   * artifact registered without the trace record that produced
+         + it.                                                           
+      83 +   */                                                          
+      84 +  appendTrace(record, artifacts = null) {                      
+      85      const state = this.load() || { stages: {} }
+      86      if (!state.stageTrace) state.stageTrace = []
+      87      state.stageTrace.push(record)
+      88 +    if (artifacts && Object.keys(artifacts).length > 0) {      
+      89 +      state.artifacts = { ...(state.artifacts || {}), ...artifa
+         +cts }                                                          
+      90 +    }                                                          
+      91      this.save(state)
+      92      return record
+      93    }
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Update(src/orchestrator/ProductionJob.mjs)
+  ⎿  Added 31 lines, removed 7 lines
+      236      return false
+      237    }
+      238  
+      239 -  _trace(stageId, attempt, status, durationMs, artifactIds = [
+          -], errorClassification = null, metadata = {}) {               
+      239 +  /**                                                         
+      240 +   * Append one trace record. `startedAt` must be the real sta
+          +rt of the attempt —                                           
+      241 +   * never "now" for a terminal record, or startedAt/completed
+          +At collapse and the                                           
+      242 +   * trace stops being an auditable timeline.                 
+      243 +   */                                                         
+      244 +  _trace({ stage, attempt, status, startedAt, durationMs = nul
+          +l, artifactIds = [], errorClassification = null, metadata = {}
+          + }, artifacts = null) {                                       
+      245 +    const terminal = status !== 'RUNNING'                     
+      246 +    const started = startedAt || new Date().toISOString()     
+      247      this.store.appendTrace({
+      248        jobId: this.jobId,
+      242 -      stage: stageId,                                         
+      249 +      stage,                                                  
+      250        attempt,
+      244 -      startedAt: new Date().toISOString(),                    
+      245 -      completedAt: status !== 'RUNNING' ? new Date().toISOStri
+          -ng() : undefined,                                             
+      251 +      startedAt: started,                                     
+      252 +      completedAt: terminal                                   
+      253 +        ? new Date(new Date(started).getTime() + (durationMs |
+          +| 0)).toISOString()                                           
+      254 +        : undefined,                                          
+      255        status,
+      256        durationMs,
+      257        artifactIds,
+      258        errorClassification,
+      259        metadata,
+      251 -    })                                                        
+      260 +    }, artifacts)                                             
+      261    }
+      262  
+      263 +  /**                                                         
+      264 +   * Map a stage result onto stable artifact identifiers.     
+      265 +   * RENDER/THUMBNAIL are the canonical artifacts, so their re
+          +al shapes                                                     
+      266 +   * (engine-based video, selected thumbnail) must be covered 
+          +here — an empty                                               
+      267 +   * artifactIds on those stages would make the trace claim pr
+          +ovenance it lacks.                                            
+      268 +   */                                                         
+      269    _extractArtifactIds(stageId, result) {
+      270      if (!result) return []
+      271      const ids = []
+      257 -    if (result.videoPath) ids.push(`video:${result.videoPath}`
+          -)                                                             
+      272 +                                                              
+      273 +    if (stageId === 'RENDER') {                               
+      274 +      const videoPath = result.videoPath || result.engine?.fin
+          +alPath || `${this.outDir}/final.mp4`                          
+      275 +      ids.push(`video:${videoPath}`)                          
+      276 +    }                                                         
+      277 +    if (stageId === 'THUMBNAIL' && result.selected?.path) {   
+      278 +      ids.push(`thumbnail:${result.selected.path}`)           
+      279 +    }                                                         
+      280 +                                                              
+      281 +    if (result.videoPath && stageId !== 'RENDER') ids.push(`vi
+          +deo:${result.videoPath}`)                                     
+      282      if (result.thumbnailPath) ids.push(`thumbnail:${result.thu
+           mbnailPath}`)
+      283      if (result.path) ids.push(`file:${result.path}`)
+      284      if (result.videoId) ids.push(`youtube:${result.videoId}`)
+      285      if (result.remote_id) ids.push(`remote:${result.remote_id}
+           `)
+      286      if (result.manifestId) ids.push(`c2pa:${result.manifestId}
+           `)
+      263 -    return ids                                                
+      287 +    return [...new Set(ids)]                                  
+      288    }
+      289  
+      290    _restoreResults(saved) {
+
+⏺ Now the call sites: real startedAt, missing SKIPPED/WAITING records, and the
+  duplicate terminal record on retry exhaustion.
+
+⏺ Update(src/orchestrator/ProductionJob.mjs)
+  ⎿  Added 8 lines
+      68        if (this.store.isStageCompleted(stage.id)) {
+      69          const existing = this.store.getStageResult(stage.id)
+      70          this.results[stage.id] = existing?.result || {}
+      71 +        this._trace({                                          
+      72 +          stage: stage.id,                                     
+      73 +          attempt: 0,                                          
+      74 +          status: 'SKIPPED',                                   
+      75 +          startedAt: new Date().toISOString(),                 
+      76 +          durationMs: 0,                                       
+      77 +          metadata: { reason: 'completed in previous run' },   
+      78 +        })                                                     
+      79          console.log(`[JOB] ${stage.id}: SKIPPED (completed in p
+          revious run)`)
+      80          continue
+      81        }
+
+⏺ Update(src/orchestrator/ProductionJob.mjs)
+  ⎿  Added 8 lines
+      131    async _executeStage(stage) {
+      132      const handler = this.stageHandlers[stage.id]
+      133      if (!handler) {
+      134 +      this._trace({                                           
+      135 +        stage: stage.id,                                      
+      136 +        attempt: 0,                                           
+      137 +        status: 'SKIPPED',                                    
+      138 +        startedAt: new Date().toISOString(),                  
+      139 +        durationMs: 0,                                        
+      140 +        metadata: { reason: 'no handler registered' },        
+      141 +      })                                                      
+      142        return true
+      143      }
+      144  
+
+⏺ Update(src/orchestrator/ProductionJob.mjs)
+  ⎿  Added 9 lines, removed 1 line
+      150          console.log(`[JOB] ${stage.id}: RECOVERY — operation a
+           lready completed remotely (remote_id=${prior.remote_id})`)
+      151          this.results[stage.id] = { remote_id: prior.remote_id,
+            remote_state: prior.remote_state, recovered: true }
+      152          this.store.markStageCompleted(stage.id, this.results[s
+           tage.id])
+      153 -        this._trace(stage.id, 0, 'SUCCEEDED', 0, [], null, { r
+          -ecovered: true, remoteId: prior.remote_id })                  
+      153 +        this._trace({                                         
+      154 +          stage: stage.id,                                    
+      155 +          attempt: 0,                                         
+      156 +          status: 'SUCCEEDED',                                
+      157 +          startedAt: new Date().toISOString(),                
+      158 +          durationMs: 0,                                      
+      159 +          artifactIds: this._extractArtifactIds(stage.id, this
+          +.results[stage.id]),                                          
+      160 +          metadata: { recovered: true, remoteId: prior.remote_
+          +id },                                                         
+      161 +        }, { [stage.id]: this.results[stage.id] })            
+      162          return true
+      163        }
+      164      }
+
+⏺ Update(src/orchestrator/ProductionJob.mjs)
+  ⎿  Added 1 line, removed 1 line
+      158            durationMs: 0,
+      159            artifactIds: this._extractArtifactIds(stage.id, this
+           .results[stage.id]),
+      160            metadata: { recovered: true, remoteId: prior.remote_
+           id },
+      161 -        }, { [stage.id]: this.results[stage.id] })            
+      161 +        }, this._artifactsFor(stage.id, this._extractArtifactI
+          +ds(stage.id, this.results[stage.id])))                        
+      162          return true
+      163        }
+      164      }
+
+⏺ Now the retry loop — real startedAt, artifact persistence, and one terminal
+  record per attempt.
+
+⏺ Update(src/orchestrator/ProductionJob.mjs)  ⎿  Added 40 lines, removed 6 lines
+      193        if (attempt > 0) retries++
+      194  
+      195        const attemptStart = Date.now()
+      196 -      this._trace(stage.id, attempt, 'RUNNING', null, [], null
+          -, { maxRetries })                                             
+      196 +      const attemptStartedAt = new Date(attemptStart).toISOStr
+          +ing()                                                         
+      197 +      this._trace({ stage: stage.id, attempt, status: 'RUNNING
+          +', startedAt: attemptStartedAt, metadata: { maxRetries } })   
+      198  
+      199        try {
+      200          const ctx = {
+     ...
+      212          this.store.markStageCompleted(stage.id, result)
+      213          const durationMs = Date.now() - attemptStart
+      214          const artifactIds = this._extractArtifactIds(stage.id,
+            result)
+      214 -        this._trace(stage.id, attempt, 'SUCCEEDED', durationMs
+          -, artifactIds, null)                                          
+      215 +        this._trace(                                          
+      216 +          { stage: stage.id, attempt, status: 'SUCCEEDED', sta
+          +rtedAt: attemptStartedAt, durationMs, artifactIds },          
+      217 +          this._artifactsFor(stage.id, artifactIds)           
+      218 +        )                                                     
+      219          console.log(`[JOB] ${stage.id}: COMPLETED (attempt ${a
+           ttempt + 1})`)
+      220          return true
+      221  
+     ...
+      234          if (failureClass === FailureClass.PERMANENT || failure
+           Class === FailureClass.CONFIGURATION) {
+      235            this.quarantineReason = `${stage.id} quarantined: ${
+           failureClass.toLowerCase()} failure (last error: ${error.messa
+           ge})`
+      236            this.store.markStageQuarantined(stage.id, this.quara
+           ntineReason)
+      233 -          this._trace(stage.id, attempt, 'QUARANTINED', durati
+          -onMs, [], failureClass, { error: error.message })             
+      237 +          this._trace({                                       
+      238 +            stage: stage.id, attempt, status: 'QUARANTINED', s
+          +tartedAt: attemptStartedAt, durationMs,                       
+      239 +            errorClassification: failureClass, metadata: { err
+          +or: error.message },                                          
+      240 +          })                                                  
+      241            console.error(`[JOB] ${stage.id}: QUARANTINED — ${th
+           is.quarantineReason}`)
+      242            if (this.governor && stage.provider) this.governor.r
+           elease(stage.provider)
+      243            this._releaseUniquenessReservation()
+      244            return false
+      245          }
+      246  
+      240 -        this._trace(stage.id, attempt, 'FAILED', durationMs, [
+          -], failureClass, { error: error.message })                    
+      247 +        // Retries exhausted: this attempt's terminal state IS
+          + quarantine.                                                  
+      248 +        // Emitting FAILED here as well would give the attempt
+          + two terminal                                                 
+      249 +        // records and break the one-terminal-per-attempt inva
+          +riant.                                                        
+      250 +        if (retries >= maxRetries) {                          
+      251 +          this.quarantineReason = `${stage.id} quarantined: ex
+          +hausted ${maxRetries} retries (last error: ${lastError?.messag
+          +e})`                                                          
+      252 +          this.store.markStageQuarantined(stage.id, this.quara
+          +ntineReason)                                                  
+      253 +          this._trace({                                       
+      254 +            stage: stage.id, attempt, status: 'QUARANTINED', s
+          +tartedAt: attemptStartedAt, durationMs,                       
+      255 +            errorClassification: failureClass,                
+      256 +            metadata: { error: error.message, exhaustedRetries
+          +: true },                                                     
+      257 +          })                                                  
+      258 +          console.error(`[JOB] ${stage.id}: QUARANTINED — ${th
+          +is.quarantineReason}`)                                        
+      259 +          if (this.governor && stage.provider) this.governor.r
+          +elease(stage.provider)                                        
+      260 +          this._releaseUniquenessReservation()                
+      261 +          return false                                        
+      262 +        }                                                     
+      263  
+      242 -        if (retries >= maxRetries) break                      
+      264 +        this._trace({                                         
+      265 +          stage: stage.id, attempt, status: 'FAILED', startedA
+          +t: attemptStartedAt, durationMs,                              
+      266 +          errorClassification: failureClass, metadata: { error
+          +: error.message },                                            
+      267 +        })                                                    
+      268  
+      269          const decision = classifyDecision(failureClass, retrie
+           s, maxRetries)
+      270          if (decision.delayMs > 0) {
+     ...
+      278  
+      279      this.quarantineReason = `${stage.id} quarantined: exhauste
+           d ${maxRetries} retries (last error: ${lastError?.message})`
+      280      this.store.markStageQuarantined(stage.id, this.quarantineR
+           eason)
+      256 -    this._trace(stage.id, maxRetries, 'QUARANTINED', 0, [], Fa
+          -ilureClass.TRANSIENT, { error: lastError?.message, exhaustedRe
+          -tries: true })                                                
+      281      console.error(`[JOB] ${stage.id}: QUARANTINED — ${this.qua
+           rantineReason}`)
+      282      if (this.governor && stage.provider) this.governor.release
+           (stage.provider)
+      283      this._releaseUniquenessReservation()
+     ...
+      285    }
+      286  
+      287    /**
+      288 +   * Artifact index entry for the job file: stage → the ids it
+          + produced.                                                    
+      289 +   * Deliberately stores ids only, never the raw stage result 
+          +— results carry                                               
+      290 +   * whole engine objects and would bloat every checkpoint wri
+          +te.                                                           
+      291 +   */                                                         
+      292 +  _artifactsFor(stageId, artifactIds) {                       
+      293 +    if (!artifactIds || artifactIds.length === 0) return null 
+      294 +    return { [stageId]: { ids: artifactIds, recordedAt: new Da
+          +te().toISOString() } }                                        
+      295 +  }                                                           
+      296 +                                                              
+      297 +  /**                                                         
+      298     * Append one trace record. `startedAt` must be the real sta
+           rt of the attempt —
+      299     * never "now" for a terminal record, or startedAt/completed
+           At collapse and the
+      300     * trace stops being an auditable timeline.
+
+⏺ Now the WAITING_FOR_QUOTA gap and the gate's evaluate(job) signature.
+
+⏺ Update(src/orchestrator/ProductionJob.mjs)
+  ⎿  Added 9 lines
+      175            budget: quota.budget,
+      176          })
+      177          console.log(`[JOB] ${stage.id}: WAITING_FOR_QUOTA — ${
+           quota.reason} (next eligible: ${quota.nextEligibleAt})`)
+      178 +        this._trace({                                         
+      179 +          stage: stage.id,                                    
+      180 +          attempt: 0,                                         
+      181 +          status: 'SKIPPED',                                  
+      182 +          startedAt: new Date().toISOString(),                
+      183 +          durationMs: 0,                                      
+      184 +          errorClassification: FailureClass.RATE_LIMITED,     
+      185 +          metadata: { waiting: true, reason: quota.reason, nex
+          +tEligibleAt: quota.nextEligibleAt, provider: stage.provider },
+      186 +        })                                                    
+      187          return { waiting: true, nextEligibleAt: quota.nextElig
+           ibleAt, reason: quota.reason }
+      188        }
+      189        this.governor.reserve(stage.provider)
+
+⏺ Update(src/orchestrator/PublishabilityGate.mjs)
+  ⎿  Added 8 lines, removed 4 lines
+      16  const REQUIRED_CHECKS = ['video', 'thumbnail', 'c2pa', 'uniquen
+          ess', 'upload']
+      17  
+      18  export class PublishabilityGate {
+      19 -  evaluate(results = {}) {                                     
+      19 +  /**                                                          
+      20 +   * Accepts either a raw stage-results map or a ProductionJob 
+         +(reads .results).                                              
+      21 +   * The gate never touches job lifecycle state — policy stays 
+         +out of the job.                                                
+      22 +   */                                                          
+      23 +  evaluate(input = {}) {                                       
+      24 +    const results = (input && typeof input === 'object' && inpu
+         +t.results) ? input.results : input                             
+      25 +                                                               
+      26      const checks = {
+      27        video: this._checkVideo(results),
+      28        thumbnail: this._checkThumbnail(results),
+     ...
+      31        upload: this._checkUpload(results),
+      32      }
+      33  
+      28 -    const missing = Object.entries(checks)                     
+      29 -      .filter(([, v]) => !v.pass)                              
+      30 -      .map(([k]) => k)                                         
+      34 +    const missing = REQUIRED_CHECKS.filter(k => !checks[k].pass
+         +)                                                              
+      35  
+      36      return {
+      37        valid: missing.length === 0,
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Now the invariant test suite and a trace inspector.
+
+⏺ Write(tests/trace-invariants.test.mjs)
+  ⎿  Wrote 408 lines to tests/trace-invariants.test.mjs
+       1 import { describe, it, beforeEach, afterEach } from 'node:test'
+       2 import assert from 'node:assert/strict'
+       3 import { mkdtempSync, rmSync } from 'node:fs'
+       5 import { tmpdir } from 'node:os'
+       6 
+       7 /**
+       8  * Phase 1 hardening — telemetry invariants the trace must never
+       9  *
+      10  * trace-and-gate.test.mjs proves records exist. This file prove
+         s they are
+     … +549 lines (ctrl+o to expand)
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+⏺ Two findings from my own tests — one gate bug, one wrong assumption in my
+  test.
+
+⏺ Update(src/orchestrator/PublishabilityGate.mjs)
+  ⎿  Added 2 lines, removed 1 line
+      21     * The gate never touches job lifecycle state — policy stays 
+          out of the job.
+      22     */
+      23    evaluate(input = {}) {
+      24 -    const results = (input && typeof input === 'object' && inpu
+         -t.results) ? input.results : input                             
+      24 +    const source = input || {}                                 
+      25 +    const results = (typeof source === 'object' && source.resul
+         +ts) ? source.results : source                                  
+      26  
+      27      const checks = {
+      28        video: this._checkVideo(results),
+
+⏺ Update(tests/trace-invariants.test.mjs)
+  ⎿  Added 38 lines, removed 7 lines
+      202      job.cleanup()
+      203    })
+      204  
+      205 -  it('stages replayed from a checkpoint are traced SKIPPED on 
+          -resume', async () => {                                        
+      205 +  it('stages replayed from a checkpoint are traced SKIPPED', a
+          +sync () => {                                                  
+      206      const { ProductionJob } = await import('../src/orchestrato
+           r/ProductionJob.mjs')
+      207      const { STAGES } = await import('../src/orchestrator/Stage
+           s.mjs')
+      208  
+     ...
+      218      }
+      219      await first.run()
+      220  
+      221 -    // Second run: same jobId, so DISCOVER..UNIQUENESS are alr
+          -eady complete.                                                
+      221 +    // Force a replay from the top: DISCOVER is already comple
+          +te, so the job                                                
+      222 +    // must record the skip rather than silently falling throu
+          +gh.                                                           
+      223      const second = new ProductionJob(article, { outDir: tmpDir
+           , checkpointDir: tmpDir })
+      224 +    let executed = 0                                          
+      225 +    for (const s of STAGES) second.onStage(s.id, async () => {
+          + executed++; return { ok: true } })                           
+      226 +    await second.run(STAGES[0])                               
+      227 +                                                              
+      228 +    const skipped = second.store.getStageTrace('DISCOVER').fil
+          +ter(r => r.status === 'SKIPPED')                              
+      229 +    assert.equal(skipped.length, 1, 'replayed stage must be tr
+          +aced SKIPPED')                                                
+      230 +    assert.equal(skipped[0].metadata.reason, 'completed in pre
+          +vious run')                                                   
+      231 +    assert.ok(executed < STAGES.length, 'completed stages must
+          + not re-execute')                                             
+      232 +                                                              
+      233 +    second.cleanup()                                          
+      234 +  })                                                          
+      235 +                                                              
+      236 +  it('resuming past completed stages preserves their original 
+          +trace records', async () => {                                 
+      237 +    const { ProductionJob } = await import('../src/orchestrato
+          +r/ProductionJob.mjs')                                         
+      238 +    const { STAGES } = await import('../src/orchestrator/Stage
+          +s.mjs')                                                       
+      239 +                                                              
+      240 +    const article = { title: 'cumulative trace', category: 'te
+          +ch' }                                                         
+      241 +                                                              
+      242 +    const first = new ProductionJob(article, { outDir: tmpDir,
+          + checkpointDir: tmpDir })                                     
+      243 +    for (const s of STAGES) {                                 
+      244 +      first.onStage(s.id, async () => {                       
+      245 +        if (s.id === 'UPLOAD') throw new Error('invalid_grant 
+          +auth failure')                                                
+      246 +        return { ok: true }                                   
+      247 +      })                                                      
+      248 +    }                                                         
+      249 +    await first.run()                                         
+      250 +    const beforeResume = first.store.getStageTrace('DISCOVER')
+          +.length                                                       
+      251 +    assert.ok(beforeResume >= 2, 'first run traced DISCOVER') 
+      252 +                                                              
+      253 +    // A natural resume starts after the last completed stage,
+          + so DISCOVER is                                               
+      254 +    // never revisited. The audit history must survive in the 
+          +job file anyway.                                              
+      255 +    const second = new ProductionJob(article, { outDir: tmpDir
+          +, checkpointDir: tmpDir })                                    
+      256      for (const s of STAGES) second.onStage(s.id, async () => (
+           { ok: true }))
+      257      await second.run()
+      258  
+      226 -    const discover = second.store.getStageTrace('DISCOVER')   
+      227 -    const skipped = discover.filter(r => r.status === 'SKIPPED
+          -')                                                            
+      228 -    assert.equal(skipped.length, 1, 'resume must record the sk
+          -ip instead of silently continuing')                           
+      229 -    assert.equal(skipped[0].metadata.reason, 'completed in pre
+          -vious run')                                                   
+      259 +    const after = second.store.getStageTrace('DISCOVER')      
+      260 +    assert.equal(after.length, beforeResume, 'trace is append-
+          +only across runs, never truncated')                           
+      261 +    assert.ok(after.some(r => r.status === 'SUCCEEDED'), 'orig
+          +inal terminal record still present')                          
+      262  
+      231 -    assertOneTerminalPerAttempt(second.store.getTrace().filter
+          -(r => r.status === 'SKIPPED'))                                
+      263      second.cleanup()
+      264    })
+      265  
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ Now the trace inspector (item 8).
+
+⏺ Write(scripts/trace-inspect.mjs)
+  ⎿  Wrote 152 lines to scripts/trace-inspect.mjs
+       1 #!/usr/bin/env node
+       3  * trace-inspect — read-only inspection of persisted production 
+         traces.
+       5  * Renders the stage timeline from .newsmonster/checkpoints/*.js
+         on and verifies
+         uches nothing:
+       7  * safe to run against live checkpoints.
+       9  *   node scripts/trace-inspect.mjs                  # summarise
+          every job
+         full timeline
+     … +179 lines (ctrl+o to expand)
+
+  Ran 4 shell commands (ctrl+o to expand)
+
+⏺ Trace is clean end-to-end. Full suite:
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+⏺ Phase 1 was already implemented in cd793ec (on top of b46a85a). I audited it
+  against your spec instead of rebuilding it, and found six defects — all now
+  fixed. No stage-graph or ownership changes.
+
+  Defects found in the committed Phase 1
+
+  1. ProductionJob.mjs:239 — fabricated timestamps. _trace() stamped startedAt =
+  now on every record, so terminal records had startedAt === completedAt. A
+  60ms stage reported a zero-width window; durationMs was the only truthful
+  field. Now the real attempt start is threaded through and completedAt is
+  derived from it.
+  2. ProductionJob.mjs:216,232 — two terminal records for one attempt. On the
+  last attempt the loop traced FAILED, broke, then traced QUARANTINED with
+  attempt = maxRetries — the same attempt number. This directly violated your
+  stated invariant. Exhaustion is now the attempt's single terminal state.
+  3. _extractArtifactIds recorded nothing for the artifacts that matter. It only
+  read videoPath/thumbnailPath, but RENDER returns {engine, renderTimeMs} and
+  THUMBNAIL returns {selected:{path}} (scripts/composer.mjs:389,409). So
+  artifactIds was empty for video and thumbnail — the trace claimed provenance
+  it didn't have. Now covers the real shapes, deduped.
+  4. artifacts was dead code. setArtifacts/getArtifacts existed; nothing called
+  them. Your job-{articleId}.json layout was checkpoint + stageTrace only.
+  Artifacts are now indexed per stage in the same atomic write as the trace
+  record — ids only, never the raw result, since results carry whole engine
+  objects.
+  5. Trace holes for non-executing stages. Resume-skip, no-handler, and
+  quota-block paths logged to console but wrote no record. A resumed job's trace
+  had gaps. All three now emit SKIPPED (quota-block carries RATE_LIMITED).
+  6. gate.evaluate(null) threw TypeError: Cannot read properties of null — my
+  own test caught it. Also evaluate() now accepts a job or a results map per
+  your evaluate(job) signature, and missing is ordered by REQUIRED_CHECKS so
+  output no longer depends on input key order.
+
+  Note on one thing I did not change: checks returns {pass, reason} objects, not
+  the bare booleans in your spec sketch. That's a superset — pass is the
+  machine-readable flag, reason carries the diagnostic — and existing tests
+  depend on it.
+
+  Verification — tests/trace-invariants.test.mjs (19 tests) asserts
+  one-terminal-per-attempt across happy/retry/exhaustion paths, timestamp
+  honesty, no-hole coverage, artifact attribution, and the gate matrix. Two of
+  my assumptions were wrong, not the code: natural resume starts after the last
+  completed stage, so pre-resume stages are never revisited — their original
+  records persist append-only. I split that into its own test rather than
+  forcing the assertion.
+
+  scripts/trace-inspect.mjs is read-only: --verify exits 1 on any invariant
+  breach (CI-ready for item 6). A two-job dry-run (happy + retry-to-quarantine)
+  rendered clean with 0 violations.
+
+  982 tests, 980 passing, 0 regressions (was 963/961). The 2 failures are the
+  same LinkedIn credential prerequisites, untouched.
+
+  Uncommitted — 3 files modified, 2 added. The unrelated uniqueness/capacity
+  work in your tree is untouched; say the word and I'll commit just the Phase 1
+  scope.
+
+✻ Sautéed for 31m 17s
+
+※ recap: Phase 1 production trace hardening is done: fixed six defects in the already-committed telemetry and gate code, 982 tests with 980 passing and no regressions. Next: commit just the Phase 1 scope if you want it. (disable recaps in /config)
+
+❯ Proceed with Phase 1: Production Trace / Stage Telemetry on top of b46a85a.   
+                                                                                
+  Keep the orchestration architecture frozen. The implementation boundary       
+  should be:                                                                    
+                                                                                
+  ProductionJob                                                                 
+      │                                                                         
+      ├── existing stage lifecycle                                              
+      │                                                                         
+      └── StageTraceRecorder                                                    
+              │                                                                 
+              ├── stage                                                         
+              ├── attempt                                                       
+              ├── startedAt                                                     
+              ├── completedAt                                                   
+              ├── durationMs                                                    
+              ├── status                                                        
+              ├── artifactIds                                                   
+              └── errorClassification                                           
+                                                                                
+  Then persist the trace with the existing checkpoint rather than creating a    
+  second state store.                                                           
+                                                                                
+  After that, implement the deterministic:                                      
+                                                                                
+  PUBLISHABLE(job)                                                              
+                                                                                
+  gate:                                                                         
+                                                                                
+  video.valid                                                                   
+  AND thumbnail.valid                                                           
+  AND c2pa.valid                                                                
+  AND uniqueness.valid                                                          
+  AND upload.valid                                                              
+  Acceptance criteria                                                           
+  ✓ Existing 9-stage graph unchanged                                            
+  ✓ Exactly one ProductionJob                                                   
+  ✓ Existing checkpoint/resume behavior unchanged                               
+  ✓ Every stage attempt produces a trace                                        
+  ✓ Retries produce separate attempts                                           
+  ✓ Failures have normalized classifications                                    
+  ✓ Trace survives process restart                                              
+  ✓ Architecture tests remain green                                             
+  ✓ PUBLISH cannot execute when any publishability predicate is false           
+  ✓ Publishability result is machine-readable                                   
+  ✓ No provider-specific logic inside the gate                                  
+                                                                                
+  The critical production behavior should become:                               
+                                                                                
+  UPLOAD ✓                                                                      
+     │                                                                          
+     ▼                                                                          
+  PublishabilityGate                                                            
+     │                                                                          
+     ├── video       ✓                                                          
+     ├── thumbnail   ✓                                                          
+     ├── c2pa        ✓                                                          
+     ├── uniqueness  ✓                                                          
+     └── upload      ✓                                                          
+              │                                                                 
+              ▼                                                                 
+           PUBLISH                                                              
+                                                                                
+  If any check fails:                                                           
+                                                                                
+  PublishabilityGate                                                            
+         │                                                                      
+         ▼                                                                      
+  PUBLISHABLE = false                                                           
+         │                                                                      
+         ├── PUBLISH is not executed                                            
+         └── trace records the exact failed predicate                           
+                                                                                
+  Do not add markStart()/markDone() compatibility layers, a second job          
+  abstraction, or another orchestration mechanism. This phase is observability  
+  and deterministic gating only.                                                
+
+  Read 1 file, ran 2 shell commands (ctrl+o to expand)
+
+⏺ Phase 1 is functionally in place; the genuinely new asks are the
+  StageTraceRecorder boundary and making PUBLISH not execute on gate failure.
+  Implementing both.
+
+⏺ Write(src/orchestrator/StageTraceRecorder.mjs)
+  ⎿  Wrote 178 lines to src/orchestrator/StageTraceRecorder.mjs
+       1 import { StageStatus } from './Stages.mjs'
+       3 /**
+       4  * StageTraceRecorder — owns the shape and persistence of stage 
+         telemetry.
+       6  * Boundary:
+       7  *   ProductionJob  → stage lifecycle, retries, quarantine decis
+       8  *   StageTraceRecorder → what a trace record contains and where
+          it lands
+       9  *
+         ies `startedAt`
+     … +205 lines (ctrl+o to expand)
+
+⏺ Now rewire ProductionJob to delegate, and add the policy-free precondition
+  guard.
+
+⏺ Update(src/orchestrator/ProductionJob.mjs)
+  ⎿  Added 1 line
+      2  import { STAGES, StageStatus, FailureClass, classifyError, getSt
+         age, stageIndex } from './Stages.mjs'
+      3  import { classifyDecision } from './RetryPolicy.mjs'
+      4  import { CheckpointStore } from './CheckpointStore.mjs'
+      5 +import { StageTraceRecorder } from './StageTraceRecorder.mjs'   
+      6  import { buildJobId } from './ArtifactID.mjs'
+      7  
+      8  /**
+⏺ Update(src/orchestrator/ProductionJob.mjs)
+  ⎿  Added 2 lines
+      26      this.outDir = options.outDir || 'output'
+      27      this.checkpointDir = options.checkpointDir || '.newsmonster
+          /checkpoints'
+      28      this.store = new CheckpointStore(this.jobId, this.checkpoin
+          tDir)
+      29 +    this.trace = new StageTraceRecorder(this.jobId, this.store,
+         + { outDir: this.outDir })                                      
+      30      this.governor = options.governor || null
+      31      this.stageHandlers = {}
+      32 +    this.preconditions = {}                                    
+      33      this.results = {}
+      34      this.startedAt = null
+      35      this.completedAt = null
+
+⏺ Update(src/orchestrator/ProductionJob.mjs)
+  ⎿  Added 14 lines
+      49      return this
+      50    }
+      51  
+      52 +  /**                                                          
+      53 +   * Register a precondition that must hold before a stage's ha
+         +ndler is invoked.                                              
+      54 +   *                                                           
+      55 +   * The job enforces the contract but knows nothing about what
+         + is being                                                      
+      56 +   * checked — the validator supplies the policy. This is how t
+         +he publish gate                                                
+      57 +   * blocks PUBLISH without business policy leaking into the li
+         +fecycle.                                                       
+      58 +   *                                                           
+      59 +   * validator(ctx) → { valid: boolean, missing?: string[], che
+         +cks?: object }                                                 
+      60 +   */                                                          
+      61 +  onPrecondition(stageId, validator) {                         
+      62 +    this.preconditions[stageId] = validator                    
+      63 +    return this                                                
+      64 +  }                                                            
+      65 +                                                               
+      66    async run(startFrom) {
+      67      this.startedAt = this.startedAt || new Date().toISOString()
+      68      const existing = this.store.load() || {}
+
+⏺ Now replace the inline trace calls with recorder delegation and insert the
+  precondition guard.
+
+⏺ Update(src/orchestrator/ProductionJob.mjs)
+  ⎿  Added 1 line, removed 8 lines
+      85        if (this.store.isStageCompleted(stage.id)) {
+      86          const existing = this.store.getStageResult(stage.id)
+      87          this.results[stage.id] = existing?.result || {}
+      88 -        this._trace({                                          
+      89 -          stage: stage.id,                                     
+      90 -          attempt: 0,                                          
+      91 -          status: 'SKIPPED',                                   
+      92 -          startedAt: new Date().toISOString(),                 
+      93 -          durationMs: 0,                                       
+      94 -          metadata: { reason: 'completed in previous run' },   
+      95 -        })                                                     
+      88 +        this.trace.skipped(stage.id, 'completed in previous run
+         +')                                                             
+      89          console.log(`[JOB] ${stage.id}: SKIPPED (completed in p
+          revious run)`)
+      90          continue
+      91        }
+
+⏺ Update(src/orchestrator/ProductionJob.mjs)
+  ⎿  Added 30 lines, removed 8 lines
+      141    async _executeStage(stage) {
+      142      const handler = this.stageHandlers[stage.id]
+      143      if (!handler) {
+      144 -      this._trace({                                           
+      145 -        stage: stage.id,                                      
+      146 -        attempt: 0,                                           
+      147 -        status: 'SKIPPED',                                    
+      148 -        startedAt: new Date().toISOString(),                  
+      149 -        durationMs: 0,                                        
+      150 -        metadata: { reason: 'no handler registered' },        
+      151 -      })                                                      
+      144 +      this.trace.skipped(stage.id, 'no handler registered')   
+      145        return true
+      146      }
+      147  
+      148 +    // ── Precondition gate ──                                
+      149 +    // Runs before the handler exists in the picture at all: a
+          + stage whose                                                  
+      150 +    // precondition is false never executes, and the trace nam
+          +es the exact                                                  
+      151 +    // predicates that failed rather than an opaque error stri
+          +ng.                                                           
+      152 +    const precondition = this.preconditions[stage.id]         
+      153 +    if (precondition) {                                       
+      154 +      const verdict = await precondition({                    
+      155 +        jobId: this.jobId,                                    
+      156 +        article: this.article,                                
+      157 +        outDir: this.outDir,                                  
+      158 +        results: this.results,                                
+      159 +        stage,                                                
+      160 +      })                                                      
+      161 +      if (verdict && verdict.valid === false) {               
+      162 +        const failed = verdict.missing || []                  
+      163 +        this.quarantineReason = `${stage.id} blocked: precondi
+          +tion failed (${failed.join(', ') || 'unspecified'})`          
+      164 +        this.store.markStageQuarantined(stage.id, this.quarant
+          +ineReason)                                                    
+      165 +        this.trace.blocked(stage.id, {                        
+      166 +          errorClassification: FailureClass.DEPENDENCY,       
+      167 +          failedPredicates: failed,                           
+      168 +          checks: verdict.checks || null,                     
+      169 +          reason: this.quarantineReason,                      
+      170 +        })                                                    
+      171 +        console.error(`[JOB] ${stage.id}: BLOCKED — preconditi
+          +on failed: ${failed.join(', ')}`)                             
+      172 +        this._releaseUniquenessReservation()                  
+      173 +        return false                                          
+      174 +      }                                                       
+      175 +    }                                                         
+      176 +                                                              
+      177      // ── Crash recovery ──
+      178      if (this.governor && stage.provider) {
+      179        const operationType = `${stage.provider}.${stage.id.toLo
+           werCase()}`
+
+⏺ Update(src/orchestrator/ProductionJob.mjs)
+  ⎿  Added 4 lines, removed 9 lines
+      182          console.log(`[JOB] ${stage.id}: RECOVERY — operation a
+           lready completed remotely (remote_id=${prior.remote_id})`)
+      183          this.results[stage.id] = { remote_id: prior.remote_id,
+            remote_state: prior.remote_state, recovered: true }
+      184          this.store.markStageCompleted(stage.id, this.results[s
+           tage.id])
+      185 -        this._trace({                                         
+      186 -          stage: stage.id,                                    
+      187 -          attempt: 0,                                         
+      188 -          status: 'SUCCEEDED',                                
+      189 -          startedAt: new Date().toISOString(),                
+      190 -          durationMs: 0,                                      
+      191 -          artifactIds: this._extractArtifactIds(stage.id, this
+          -.results[stage.id]),                                          
+      192 -          metadata: { recovered: true, remoteId: prior.remote_
+          -id },                                                         
+      193 -        }, this._artifactsFor(stage.id, this._extractArtifactI
+          -ds(stage.id, this.results[stage.id])))                        
+      185 +        this.trace.succeeded(stage.id, 0, new Date().toISOStri
+          +ng(), 0, this.results[stage.id], {                            
+      186 +          recovered: true,                                    
+      187 +          remoteId: prior.remote_id,                          
+      188 +        })                                                    
+      189          return true
+      190        }
+      191      }
+
+⏺ Update(src/orchestrator/ProductionJob.mjs)
+  ⎿  Added 2 lines, removed 7 lines
+      202            budget: quota.budget,
+      203          })
+      204          console.log(`[JOB] ${stage.id}: WAITING_FOR_QUOTA — ${
+           quota.reason} (next eligible: ${quota.nextEligibleAt})`)
+      205 -        this._trace({                                         
+      206 -          stage: stage.id,                                    
+      207 -          attempt: 0,                                         
+      208 -          status: 'SKIPPED',                                  
+      209 -          startedAt: new Date().toISOString(),                
+      210 -          durationMs: 0,                                      
+      205 +        this.trace.skipped(stage.id, quota.reason, {          
+      206            errorClassification: FailureClass.RATE_LIMITED,
+      212 -          metadata: { waiting: true, reason: quota.reason, nex
+          -tEligibleAt: quota.nextEligibleAt, provider: stage.provider },
+      207 +          metadata: { waiting: true, nextEligibleAt: quota.nex
+          +tEligibleAt, provider: stage.provider },                      
+      208          })
+      209          return { waiting: true, nextEligibleAt: quota.nextElig
+           ibleAt, reason: quota.reason }
+      210        }
+
+⏺ Update(src/orchestrator/ProductionJob.mjs)
+  ⎿  Added 1 line, removed 1 line
+      225  
+      226        const attemptStart = Date.now()
+      227        const attemptStartedAt = new Date(attemptStart).toISOStr
+           ing()
+      228 -      this._trace({ stage: stage.id, attempt, status: 'RUNNING
+          -', startedAt: attemptStartedAt, metadata: { maxRetries } })   
+      228 +      this.trace.running(stage.id, attempt, attemptStartedAt, 
+          +{ maxRetries })                                               
+      229  
+      230        try {
+      231          const ctx = {
+
+⏺ Update(src/orchestrator/ProductionJob.mjs)
+  ⎿  Added 1 line, removed 6 lines
+      241          const result = await handler(ctx)
+      242          this.results[stage.id] = result || {}
+      243          this.store.markStageCompleted(stage.id, result)
+      244 -        const durationMs = Date.now() - attemptStart          
+      245 -        const artifactIds = this._extractArtifactIds(stage.id,
+          - result)                                                      
+      246 -        this._trace(                                          
+      247 -          { stage: stage.id, attempt, status: 'SUCCEEDED', sta
+          -rtedAt: attemptStartedAt, durationMs, artifactIds },          
+      248 -          this._artifactsFor(stage.id, artifactIds)           
+      249 -        )                                                     
+      244 +        this.trace.succeeded(stage.id, attempt, attemptStarted
+          +At, Date.now() - attemptStart, result)                        
+      245          console.log(`[JOB] ${stage.id}: COMPLETED (attempt ${a
+           ttempt + 1})`)
+      246          return true
+      247  
+
+⏺ Update(src/orchestrator/ProductionJob.mjs)
+  ⎿  Added 5 lines, removed 12 lines
+      260          if (failureClass === FailureClass.PERMANENT || failure
+           Class === FailureClass.CONFIGURATION) {
+      261            this.quarantineReason = `${stage.id} quarantined: ${
+           failureClass.toLowerCase()} failure (last error: ${error.messa
+           ge})`
+      262            this.store.markStageQuarantined(stage.id, this.quara
+           ntineReason)
+      263 -          this._trace({                                       
+      264 -            stage: stage.id, attempt, status: 'QUARANTINED', s
+          -tartedAt: attemptStartedAt, durationMs,                       
+      265 -            errorClassification: failureClass, metadata: { err
+          -or: error.message },                                          
+      266 -          })                                                  
+      263 +          this.trace.quarantined(stage.id, attempt, attemptSta
+          +rtedAt, durationMs, failureClass, { error: error.message })   
+      264            console.error(`[JOB] ${stage.id}: QUARANTINED — ${th
+           is.quarantineReason}`)
+      265            if (this.governor && stage.provider) this.governor.r
+           elease(stage.provider)
+      266            this._releaseUniquenessReservation()
+     ...
+      273          if (retries >= maxRetries) {
+      274            this.quarantineReason = `${stage.id} quarantined: ex
+           hausted ${maxRetries} retries (last error: ${lastError?.messag
+           e})`
+      275            this.store.markStageQuarantined(stage.id, this.quara
+           ntineReason)
+      279 -          this._trace({                                       
+      280 -            stage: stage.id, attempt, status: 'QUARANTINED', s
+          -tartedAt: attemptStartedAt, durationMs,                       
+      281 -            errorClassification: failureClass,                
+      282 -            metadata: { error: error.message, exhaustedRetries
+          -: true },                                                     
+      276 +          this.trace.quarantined(stage.id, attempt, attemptSta
+          +rtedAt, durationMs, failureClass, {                           
+      277 +            error: error.message,                             
+      278 +            exhaustedRetries: true,                           
+      279            })
+      280            console.error(`[JOB] ${stage.id}: QUARANTINED — ${th
+           is.quarantineReason}`)
+      281            if (this.governor && stage.provider) this.governor.r
+           elease(stage.provider)
+     ...
+      283            return false
+      284          }
+      285  
+      290 -        this._trace({                                         
+      291 -          stage: stage.id, attempt, status: 'FAILED', startedA
+          -t: attemptStartedAt, durationMs,                              
+      292 -          errorClassification: failureClass, metadata: { error
+          -: error.message },                                            
+      293 -        })                                                    
+      286 +        this.trace.failed(stage.id, attempt, attemptStartedAt,
+          + durationMs, failureClass, { error: error.message })          
+      287  
+      288          const decision = classifyDecision(failureClass, retrie
+           s, maxRetries)
+      289          if (decision.delayMs > 0) {
+
+⏺ Now drop the superseded inline helpers, keeping _extractArtifactIds as a thin
+  delegate.
+
+⏺ Update(src/orchestrator/ProductionJob.mjs)
+  ⎿  Added 3 lines, removed 32 lines
+      303      return false
+      304    }
+      305  
+      306 -  /**                                                         
+      307 -   * Artifact index entry for the job file: stage → the ids it
+          - produced.                                                    
+      308 -   * Deliberately stores ids only, never the raw stage result 
+          -— results carry                                               
+      309 -   * whole engine objects and would bloat every checkpoint wri
+          -te.                                                           
+      310 -   */                                                         
+      311 -  _artifactsFor(stageId, artifactIds) {                       
+      312 -    if (!artifactIds || artifactIds.length === 0) return null 
+      313 -    return { [stageId]: { ids: artifactIds, recordedAt: new Da
+          -te().toISOString() } }                                        
+      306 +  /** Delegates to the recorder — artifact identity is trace c
+          +oncern, not lifecycle. */                                     
+      307 +  _extractArtifactIds(stageId, result) {                      
+      308 +    return this.trace.artifactIdsFor(stageId, result)         
+      309    }
+      310  
+      311    /**
+      317 -   * Append one trace record. `startedAt` must be the real sta
+          -rt of the attempt —                                           
+      318 -   * never "now" for a terminal record, or startedAt/completed
+          -At collapse and the                                           
+      319 -   * trace stops being an auditable timeline.                 
+      320 -   */                                                         
+      321 -  _trace({ stage, attempt, status, startedAt, durationMs = nul
+          -l, artifactIds = [], errorClassification = null, metadata = {}
+          - }, artifacts = null) {                                       
+      322 -    const terminal = status !== 'RUNNING'                     
+      323 -    const started = startedAt || new Date().toISOString()     
+      324 -    this.store.appendTrace({                                  
+      325 -      jobId: this.jobId,                                      
+      326 -      stage,                                                  
+      327 -      attempt,                                                
+      328 -      startedAt: started,                                     
+      329 -      completedAt: terminal                                   
+      330 -        ? new Date(new Date(started).getTime() + (durationMs |
+          -| 0)).toISOString()                                           
+      331 -        : undefined,                                          
+      332 -      status,                                                 
+      333 -      durationMs,                                             
+      334 -      artifactIds,                                            
+      335 -      errorClassification,                                    
+      336 -      metadata,                                               
+      337 -    }, artifacts)                                             
+      338 -  }                                                           
+      339 -                                                              
+      340 -  /**                                                         
+      312     * Map a stage result onto stable artifact identifiers.
+      313     * RENDER/THUMBNAIL are the canonical artifacts, so their re
+           al shapes
+      314     * (engine-based video, selected thumbnail) must be covered 
+           here — an empty
+
+⏺ Now wire the gate as a precondition in the composer so PUBLISH's handler is
+  never reached.
+
+⏺ Update(scripts/composer.mjs)
+  ⎿  Added 15 lines, removed 9 lines
+      633          return { uploadTitle, hashtags, nicheDecision, ...resu
+           lt }
+      634        })
+      635  
+      636 -      // ── PUBLISH — gate check + cross-platform distribution
+          - ──                                                           
+      637 -      job.onStage('PUBLISH', async (ctx) => {                 
+      638 -        const { PublishabilityGate, ProductionError } = await 
+          -import('../src/orchestrator/PublishabilityGate.mjs')          
+      639 -        const gate = new PublishabilityGate()                 
+      640 -        const gateResult = gate.evaluate(ctx.results)         
+      641 -        if (!gateResult.valid) {                              
+      642 -          throw new ProductionError('PUBLISHABILITY_GATE_FAILE
+          -D', gateResult.missing)                                       
+      643 -        }                                                     
+      644 -        console.log(`[PUBLISH-GATE] PASS — ${gateResult.missin
+          -g.length === 0 ? 'all checks passed' : gateResult.missing.join
+          -(', ')}`)                                                     
+      636 +      // ── PUBLISH — gated by publishability, then cross-plat
+          +form distribution ──                                          
+      637 +      // The gate is a precondition, not the first lines of th
+          +e handler: if any                                             
+      638 +      // predicate is false the handler is never invoked and t
+          +he trace records                                              
+      639 +      // exactly which predicates failed.                     
+      640 +      {                                                       
+      641 +        const { PublishabilityGate } = await import('../src/or
+          +chestrator/PublishabilityGate.mjs')                           
+      642 +        const publishability = new PublishabilityGate()       
+      643 +        job.onPrecondition('PUBLISH', (ctx) => {              
+      644 +          const gateResult = publishability.evaluate(ctx.resul
+          +ts)                                                           
+      645 +          if (gateResult.valid) console.log('[PUBLISH-GATE] PA
+          +SS — all publishability checks passed')                       
+      646 +          else console.error(`[PUBLISH-GATE] BLOCK — failed: $
+          +{gateResult.missing.join(', ')}`)                             
+      647 +          return gateResult                                   
+      648 +        })                                                    
+      649 +      }                                                       
+      650  
+      651 +      job.onStage('PUBLISH', async (ctx) => {                 
+      652          const { engine } = ctx.results.RENDER
+      653          const plan = ctx.results.DISCOVER?.plan
+      654          const { videoId, uploadTitle, hashtags, nicheDecision 
+           } = ctx.results.UPLOAD
+
+⏺ Now update the inspector for the non-executed case, then add tests.
+
+⏺ Update(scripts/trace-inspect.mjs)
+  ⎿  Added 4 lines, removed 1 line
+      55      } else if (terminals.length > 1) {
+      56        violations.push({ key, kind: 'MULTIPLE_TERMINAL', detail:
+           terminals.map(t => t.status).join(' + ') })
+      57      }
+      58 -    if (!records.some(r => r.status === 'RUNNING') && !terminal
+         -s.some(t => t.status === 'SKIPPED')) {                         
+      58 +    // A stage blocked by a precondition never entered executio
+         +n, so it has no                                                
+      59 +    // RUNNING record by design — same for stages that were ski
+         +pped outright.                                                 
+      60 +    const neverExecuted = records.some(r => r.metadata?.handler
+         +Invoked === false)                                             
+      61 +    if (!records.some(r => r.status === 'RUNNING') && !terminal
+         +s.some(t => t.status === 'SKIPPED') && !neverExecuted) {       
+      62        violations.push({ key, kind: 'NO_RUNNING', detail: 'termi
+          nal record with no preceding RUNNING' })
+      63      }
+      64    }
+
+⏺ Update(scripts/trace-inspect.mjs)
+  ⎿  Added 5 lines, removed 3 lines
+      102      const mark = MARK[r.status] || '?'
+      103      const dur = r.durationMs != null ? `${String(r.durationMs)
+           .padStart(6)}ms` : '        '
+      104      const cls = r.errorClassification ? ` [${r.errorClassifica
+           tion}]` : ''
+      105 -    const note = r.metadata?.error ? ` — ${String(r.metadata.e
+          -rror).slice(0, 60)}`                                          
+      106 -      : r.metadata?.reason ? ` — ${r.metadata.reason}`        
+      107 -        : ''                                                  
+      105 +    const note = r.metadata?.failedPredicates?.length ? ` — bl
+          +ocked on: ${r.metadata.failedPredicates.join(', ')}`          
+      106 +      : r.metadata?.error ? ` — ${String(r.metadata.error).sli
+          +ce(0, 60)}`                                                   
+      107 +        : r.metadata?.reason ? ` — ${r.metadata.reason}`      
+      108 +          : ''                                                
+      109      console.log(`  ${mark} ${r.stage.padEnd(11)} a${r.attempt}
+            ${dur} ${r.status.padEnd(11)}${cls}${note}`)
+      110 +    if (r.metadata?.handlerInvoked === false) console.log('   
+          +    └─ handler never invoked')                                
+      111      for (const id of r.artifactIds || []) console.log(`       
+           └─ ${id}`)
+      112    }
+      113  
+
+⏺ Write(tests/phase1-acceptance.test.mjs)
+  ⎿  Wrote 291 lines to tests/phase1-acceptance.test.mjs
+       1 import { describe, it, beforeEach, afterEach } from 'node:test'
+       2 import assert from 'node:assert/strict'
+       3 import { mkdtempSync, rmSync, writeFileSync, readFileSync } from
+       4 import { execFileSync } from 'node:child_process'
+       5 import { join } from 'node:path'
+       6 import { tmpdir } from 'node:os'
+       7 
+       9  * Phase 1 acceptance criteria — the deterministic gating contra
+         ct.
+      10  *
+     … +391 lines (ctrl+o to expand)
+
+  Searched for 2 patterns, read 1 file, ran 3 shell commands (ctrl+o to expand)
+
+⏺ Update(src/orchestrator/PublishabilityGate.mjs)
+  ⎿  Added 9 lines, removed 5 lines
+       4   * PublishabilityGate — deterministic policy validator.
+       5   *
+       6   * NOT a production stage. NOT part of ProductionJob lifecycle.
+       7 - * This is a pure function that evaluates whether a job's accum
+         -ulated                                                         
+       8 - * results satisfy all prerequisites for publish.              
+       7 + * A pure function over accumulated stage results:             
+       8   *
+      10 - * Usage:                                                      
+       9 + *   PUBLISHABLE = video ∧ thumbnail ∧ c2pa ∧ uniqueness ∧ uplo
+         +ad                                                             
+      10 + *                                                             
+      11 + * Depends only on the stage vocabulary — no providers, no env,
+         + no filesystem —                                               
+      12 + * so the same results always yield the same verdict.          
+      13 + *                                                             
+      14 + * Wired as a stage precondition, so a false predicate means PU
+         +BLISH never                                                    
+      15 + * executes (see scripts/composer.mjs):                        
+      16   *   const gate = new PublishabilityGate()
+      12 - *   const result = gate.evaluate(job.results)                 
+      13 - *   if (!result.valid) throw new ProductionError(...)         
+      17 + *   job.onPrecondition('PUBLISH', (ctx) => gate.evaluate(ctx.r
+         +esults))                                                       
+      18   */
+      19  
+      20  const REQUIRED_CHECKS = ['video', 'thumbnail', 'c2pa', 'uniquen
+          ess', 'upload']
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+⏺ Full suite:
+  Ran 2 shell commands (ctrl+o to expand)
+
+⏺ Done. 996 tests, 994 passing, 0 regressions — the 2 failures are the same
+  LinkedIn credential prerequisites.
+
+  What changed
+
+  src/orchestrator/StageTraceRecorder.mjs (new) — owns record shape, artifact
+  identity, and persistence. Deliberately stateless about attempts: the caller
+  passes attempt and startedAt because ProductionJob still owns the lifecycle.
+  It writes through the existing CheckpointStore, so there's still exactly one
+  state file — a test asserts that by counting .json files after a run.
+
+  ProductionJob now delegates every trace write
+  (this.trace.succeeded/failed/quarantined/skipped/blocked). No
+  markStart()/markDone(), no second job abstraction. An architecture test
+  asserts this.store.appendTrace no longer appears in the job, and that the
+  recorder exposes no retry/execute/markStart/markDone.
+
+  PUBLISH now genuinely does not execute. The gate was previously the first four
+  lines inside the PUBLISH handler (composer.mjs:638), so on failure PUBLISH
+  ran, threw, and traced RUNNING → FAILED with metadata error: "ProductionError:
+  PUBLISHABILITY_GATE_FAILED" — the failed predicates were not in the trace at
+  all. I added a generic job.onPrecondition(stageId, validator) guard that runs
+  before the handler is in the picture. The job enforces the contract and knows
+  nothing about what's checked; composer.mjs supplies the policy. Blocked stages
+  now trace:
+
+  ⊘ PUBLISH  a0  0ms QUARANTINED [DEPENDENCY] — blocked on: upload
+       └─ handler never invoked
+
+  failedPredicates: ['upload'] plus per-check reasons, handlerInvoked: false, no
+  RUNNING record, and no retry attempts — a false predicate won't fix itself.
+
+  Verification — tests/phase1-acceptance.test.mjs (14 tests) covers the criteria
+  the invariant suite didn't:
+  - Restart durability across a real OS process boundary (execFileSync, separate
+  runtimes) rather than two instances in one process — records,
+  classifications, and artifact index all survive.
+  - Gate purity: source contains no provider name, no process.env, no filesystem
+  access, and imports only ./Stages.mjs.
+  - The precondition mechanism is generic (proved with a non-publish predicate
+  on VERIFY).
+
+  Architecture tests: 17/17 green, untouched. The 9-stage graph,
+  checkpoint/resume behavior, and single-ProductionJob ownership are unchanged.
+
+  One consequence worth flagging: ProductionError is now referenced only by a
+  test — enforcement moved to the precondition path, which quarantines rather
+  than throwing. I left the class exported and fixed its stale usage docblock,
+  but if you'd rather the gate not ship an unused error type, it's a clean
+  delete.
+
+  Still uncommitted: 4 modified (ProductionJob, CheckpointStore,
+  PublishabilityGate, composer), 3 added (StageTraceRecorder, 2 test files, plus
+  scripts/trace-inspect.mjs). Your unrelated uniqueness/capacity changes are
+  untouched — say the word and I'll commit just the Phase 1 scope.
+
+✻ Baked for 21m 41s
+
+※ recap: Goal was Phase 1 production trace and a deterministic publish gate on the video pipeline; both are implemented and verified, with 994 of 996 tests passing and only the known LinkedIn credential failures left. Next: commit the Phase 1 scope if you want it. (disable recaps in /config)
+
+❯ Phase 1 implementation is structurally correct based on the supplied          
+  execution log.                                                                
+                                                                                
+  Verified result                                                               
+  996 tests                                                                     
+  994 passing                                                                   
+  2 known LinkedIn credential failures                                          
+  0 refactor regressions                                                        
+                                                                                
+  The important architectural changes are correct:                              
+                                                                                
+  ProductionJob                                                                 
+      │                                                                         
+      ├── owns lifecycle / retry / quarantine                                   
+      │                                                                         
+      └── StageTraceRecorder                                                    
+              ├── trace schema                                                  
+              ├── artifact identity                                             
+              └── checkpoint-backed persistence                                 
+                                                                                
+  And the publish path is now correctly:                                        
+                                                                                
+  UPLOAD                                                                        
+     │                                                                          
+     ▼                                                                          
+  PUBLISH precondition                                                          
+     │                                                                          
+     ├── video.valid                                                            
+     ├── thumbnail.valid                                                        
+     ├── c2pa.valid                                                             
+     ├── uniqueness.valid                                                       
+     └── upload.valid                                                           
+            │                                                                   
+            ▼                                                                   
+         PUBLISH                                                                
+                                                                                
+  The critical improvement is that PUBLISH's handler is never invoked when the  
+  gate fails. This is materially better than the previous implementation where  
+  PUBLISH entered RUNNING, threw PUBLISHABILITY_GATE_FAILED, and only then      
+  became FAILED. Your supplied log explicitly confirms this change.             
+                                                                                
+  StageTraceRecorder boundary                                                   
+                                                                                
+  The separation is also correct:                                               
+                                                                                
+  ProductionJob                                                                 
+      = lifecycle authority                                                     
+                                                                                
+  StageTraceRecorder                                                            
+      = telemetry authority                                                     
+                                                                                
+  PublishabilityGate                                                            
+      = policy authority                                                        
+                                                                                
+  That avoids the three common architectural regressions:                       
+                                                                                
+  no second ProductionJob                                                       
+  no executeStage() abstraction                                                 
+  no retry logic inside telemetry                                               
+  no business policy inside ProductionJob                                       
+                                                                                
+  The supplied implementation explicitly keeps StageTraceRecorder stateless     
+  about attempts and leaves lifecycle ownership with ProductionJob.             
+                                                                                
+  One issue to fix before calling Phase 1 completely closed                     
+                                                                                
+  The log shows remnants of the old _trace() path during the transition:        
+                                                                                
+  this._trace(...)                                                              
+  this.trace.succeeded(...)                                                     
+                                                                                
+  and similar patterns.                                                         
+                                                                                
+  If the final source still contains both mechanisms, remove the obsolete       
+  _trace() persistence path. The stated architecture is that StageTraceRecorder 
+  owns trace persistence, so there should be exactly one trace-write path.      
+                                                                                
+  Target:                                                                       
+                                                                                
+  this.trace.running(...)                                                       
+  this.trace.succeeded(...)                                                     
+  this.trace.failed(...)                                                        
+  this.trace.quarantined(...)                                                   
+  this.trace.skipped(...)                                                       
+  this.trace.blocked(...)                                                       
+                                                                                
+  and no direct:                                                                
+                                                                                
+  this.store.appendTrace(...)                                                   
+                                                                                
+  from ProductionJob.                                                           
+                                                                                
+  The supplied log says the architecture test asserts this, so verify the       
+  actual final tree rather than relying only on the agent's summary.            
+                                                                                
+  Also important: the claude doctor failure                                     
+                                                                                
+  The final lines:                                                              
+                                                                                
+  Auto-update failed · Run claude doctor                                        
+                                                                                
+  are not a production-pipeline failure. Treat that as tooling/environment      
+  output unless the actual test command exited non-zero because of it. Do not   
+  modify the application architecture for this.                                 
+                                                                                
+  Phase 1 acceptance status                                                     
+  Requirement    Status                                                         
+  Stage telemetry    ✅                                                         
+  Retry attempts traceable    ✅                                                
+  Error classification    ✅                                                    
+  Artifact IDs    ✅                                                            
+  Existing checkpoint reused    ✅                                              
+  Single state file    ✅                                                       
+  PUBLISH precondition    ✅                                                    
+  Failed predicates recorded    ✅                                              
+  PUBLISH handler not invoked on failure    ✅                                  
+  No second job abstraction    ✅                                               
+  996-test suite    ✅ 994 pass                                                 
+  Known external failures    ⚠️ 2 LinkedIn credential prerequisites             
+                                                                                
+  Phase 1 can be considered complete once the final source confirms the         
+  obsolete direct trace path is gone.                                           
+                                                                                
+  The next phase should be checkpoint/resume + artifact integrity, not another  
+  orchestration refactor:                                                       
+                                                                                
+  Phase 1  → Trace / deterministic publish gate       ✅                        
+  Phase 2  → Checkpoint + artifact integrity                                    
+  Phase 3  → Retry / recovery / quarantine                                      
+  Phase 4  → External-provider isolation                                        
+  Phase 5  → Real GitHub Actions production run                                 
+  Phase 6  → Analytics feedback loop                                            
+                                                                                
+  That keeps b46a85a's orchestration architecture frozen while progressively    
+  making the system production-operational.                                     
+
+⏺ Verifying the actual tree rather than my summary.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Tree is clean — the _trace(...) lines in the log were intermediate edit
+  states, not the final source. Final state:
+
+  - _trace / _artifactsFor: gone
+  - appendTrace: defined in CheckpointStore, called from exactly one production
+  site (StageTraceRecorder.mjs:65)
+  - ProductionJob: six recorder methods only
+
+  The remaining store.appendTrace hits in trace-and-gate.test.mjs are unit tests
+  of CheckpointStore itself, not a second production path. One genuine leftover
+  though — _extractArtifactIds at line 308 is now a pure test-only shim:
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Found a real defect I introduced — _extractArtifactIds is defined twice:
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ The second definition wins in JS, so the delegate was dead and
+  artifact-identity logic lived in both ProductionJob and StageTraceRecorder —
+  violating the "single telemetry authority" boundary. Removing both from the
+  job.
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Update(src/orchestrator/ProductionJob.mjs)
+  ⎿  Removed 27 lines
+      308      return this.trace.artifactIdsFor(stageId, result)
+      309    }
+      310  
+      311 -  /**                                                         
+      312 -   * Map a stage result onto stable artifact identifiers.     
+      313 -   * RENDER/THUMBNAIL are the canonical artifacts, so their re
+          -al shapes                                                     
+      314 -   * (engine-based video, selected thumbnail) must be covered 
+          -here — an empty                                               
+      315 -   * artifactIds on those stages would make the trace claim pr
+          -ovenance it lacks.                                            
+      316 -   */                                                         
+      317 -  _extractArtifactIds(stageId, result) {                      
+      318 -    if (!result) return []                                    
+      319 -    const ids = []                                            
+      320 -                                                              
+      321 -    if (stageId === 'RENDER') {                               
+      322 -      const videoPath = result.videoPath || result.engine?.fin
+          -alPath || `${this.outDir}/final.mp4`                          
+      323 -      ids.push(`video:${videoPath}`)                          
+      324 -    }                                                         
+      325 -    if (stageId === 'THUMBNAIL' && result.selected?.path) {   
+      326 -      ids.push(`thumbnail:${result.selected.path}`)           
+      327 -    }                                                         
+      328 -                                                              
+      329 -    if (result.videoPath && stageId !== 'RENDER') ids.push(`vi
+          -deo:${result.videoPath}`)                                     
+      330 -    if (result.thumbnailPath) ids.push(`thumbnail:${result.thu
+          -mbnailPath}`)                                                 
+      331 -    if (result.path) ids.push(`file:${result.path}`)          
+      332 -    if (result.videoId) ids.push(`youtube:${result.videoId}`) 
+      333 -    if (result.remote_id) ids.push(`remote:${result.remote_id}
+          -`)                                                            
+      334 -    if (result.manifestId) ids.push(`c2pa:${result.manifestId}
+          -`)                                                            
+      335 -    return [...new Set(ids)]                                  
+      336 -  }                                                           
+      337 -                                                              
+      311    _restoreResults(saved) {
+      312      const results = {}
+      313      if (!saved.stages) return results
+
+⏺ Also removing the shim entirely so artifact identity has exactly one home, and
+  pointing the test at the recorder.
+
+⏺ Update(src/orchestrator/ProductionJob.mjs)
+  ⎿  Removed 5 lines
+      303      return false
+      304    }
+      305  
+      306 -  /** Delegates to the recorder — artifact identity is trace c
+          -oncern, not lifecycle. */                                     
+      307 -  _extractArtifactIds(stageId, result) {                      
+      308 -    return this.trace.artifactIdsFor(stageId, result)         
+      309 -  }                                                           
+      310 -                                                              
+      306    _restoreResults(saved) {
+      307      const results = {}
+      308      if (!saved.stages) return results
+
+⏺ Update(tests/trace-invariants.test.mjs)
+  ⎿  Added 5 lines, removed 3 lines
+      329    })
+      330  
+      331    it('artifact ids are deduplicated', async () => {
+      332 -    const { ProductionJob } = await import('../src/orchestrato
+          -r/ProductionJob.mjs')                                         
+      333 -    const job = new ProductionJob({ title: 'dedup', category: 
+          -'tech' }, { outDir: tmpDir, checkpointDir: tmpDir })          
+      334 -    const ids = job._extractArtifactIds('RENDER', { videoPath:
+          - `${tmpDir}/final.mp4`, engine: { finalPath: `${tmpDir}/final.
+          -mp4` } })                                                     
+      332 +    const { StageTraceRecorder } = await import('../src/orches
+          +trator/StageTraceRecorder.mjs')                               
+      333 +    const { CheckpointStore } = await import('../src/orchestra
+          +tor/CheckpointStore.mjs')                                     
+      334 +                                                              
+      335 +    const recorder = new StageTraceRecorder('job-dedup', new C
+          +heckpointStore('job-dedup', tmpDir), { outDir: tmpDir })      
+      336 +    const ids = recorder.artifactIdsFor('RENDER', { videoPath:
+          + `${tmpDir}/final.mp4`, engine: { finalPath: `${tmpDir}/final.
+          +mp4` } })                                                     
+      337      assert.deepEqual(ids, [`video:${tmpDir}/final.mp4`])
+      338    })
+      339  
+
+⏺ Now drop the recorder's unused passthroughs and add a guard for the
+  duplicate-method class of bug.
+
+⏺ Update(src/orchestrator/StageTraceRecorder.mjs)
+  ⎿  Removed 8 lines
+      162      if (!artifactIds || artifactIds.length === 0) return null
+      163      return { [stageId]: { ids: artifactIds, recordedAt: new Da
+           te().toISOString() } }
+      164    }
+      165 -                                                              
+      166 -  getTrace() {                                                
+      167 -    return this.store.getTrace()                              
+      168 -  }                                                           
+      169 -                                                              
+      170 -  getStageTrace(stageId) {                                    
+      171 -    return this.store.getStageTrace(stageId)                  
+      172 -  }                                                           
+      165  }
+      166  
+      167  // StageStatus is the checkpoint's stage vocabulary; TraceStat
+           us is the trace's.
+
+⏺ Update(tests/phase1-acceptance.test.mjs)
+  ⎿  Added 32 lines
+      287      const src = readFileSync(join(REPO, 'src/orchestrator/Prod
+           uctionJob.mjs'), 'utf-8')
+      288      assert.ok(!/this\.store\.appendTrace/.test(src), 'job must
+            not write trace records directly')
+      289      assert.ok(/this\.trace\./.test(src), 'job must delegate to
+            the recorder')
+      290 +                                                              
+      291 +    // No remnants of the pre-recorder trace path.            
+      292 +    assert.ok(!/_trace\s*\(/.test(src), 'obsolete _trace() pat
+          +h must be gone')                                              
+      293 +    assert.ok(!/_artifactsFor/.test(src), 'obsolete _artifacts
+          +For() path must be gone')                                     
+      294    })
+      295 +                                                              
+      296 +  it('artifact identity lives only in the recorder', async () 
+          +=> {                                                          
+      297 +    const job = readFileSync(join(REPO, 'src/orchestrator/Prod
+          +uctionJob.mjs'), 'utf-8')                                     
+      298 +    const recorder = readFileSync(join(REPO, 'src/orchestrator
+          +/StageTraceRecorder.mjs'), 'utf-8')                           
+      299 +                                                              
+      300 +    // The regression this guards: an artifact-extraction copy
+          + left behind in                                               
+      301 +    // the job, so `video:`/`thumbnail:` id construction lived
+          + in two places.                                               
+      302 +    assert.ok(/video:/.test(recorder), 'recorder builds artifa
+          +ct ids')                                                      
+      303 +    assert.ok(!/`video:|`thumbnail:|`c2pa:/.test(job), 'job mu
+          +st not construct artifact ids')                               
+      304 +    assert.ok(!/_extractArtifactIds/.test(job), 'job must not 
+          +carry an artifact-extraction shim')                           
+      305 +  })                                                          
+      306 +                                                              
+      307 +  it('no orchestrator class defines the same method twice', as
+          +ync () => {                                                   
+      308 +    // A duplicate definition silently wins over the earlier o
+          +ne, so a stale                                                
+      309 +    // copy can shadow a delegating method and pass every beha
+          +vioural test.                                                 
+      310 +    const files = execFileSync('find', [join(REPO, 'src/orches
+          +trator'), '-name', '*.mjs'], { encoding: 'utf-8' })           
+      311 +      .trim().split('\n').filter(Boolean)                     
+      312 +                                                              
+      313 +    for (const file of files) {                               
+      314 +      const seen = new Map()                                  
+      315 +      for (const [, name] of readFileSync(file, 'utf-8').match
+          +All(/^ {2}(?:async\s+)?([A-Za-z_][\w]*)\s*\(/gm)) {           
+      316 +        if (['if', 'for', 'while', 'switch', 'catch', 'return'
+          +].includes(name)) continue                                    
+      317 +        seen.set(name, (seen.get(name) || 0) + 1)             
+      318 +      }                                                       
+      319 +      const dupes = [...seen].filter(([, n]) => n > 1).map(([n
+          +ame]) => name)                                                
+      320 +      assert.deepEqual(dupes, [], `${file.split('/').pop()}: d
+          +uplicate method definition(s): ${dupes.join(', ')}`)          
+      321 +    }                                                         
+      322 +  })                                                          
+      323  })
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ Verifying the new detector actually fails on the bug it guards:
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+⏺ Phase 1 closed. 998 tests, 996 passing — same 2 LinkedIn credential failures.
+
+  Your instinct to check the tree was right, and it found more than expected.
+  The _trace(...) lines in the log were intermediate edit states — those are
+  gone. But grepping the final source surfaced a real defect I introduced:
+
+  _extractArtifactIds was defined twice in ProductionJob (lines 307 and 317). My
+  delegate-to-recorder version came first; the old inline copy came second. In
+  JS the later definition wins, so the delegate was dead and the duplicate was 
+  live — meaning video:/thumbnail:/c2pa: id construction existed in both
+  ProductionJob and StageTraceRecorder. The stated "telemetry authority"
+  boundary was violated in the final tree, not just cosmetically.
+
+  Every behavioural test still passed, because both copies were logically
+  identical and production paths (trace.succeeded) went through the recorder
+  regardless. Only the source grep exposed it.
+
+  Fixes
+  - Deleted both copies from ProductionJob. Artifact identity now lives solely
+  in StageTraceRecorder.
+  - Removed the shim entirely rather than keeping a test-only delegate; the
+  dedup test now exercises the recorder directly.
+  - Dropped StageTraceRecorder.getTrace()/getStageTrace() — unused passthroughs
+  duplicating CheckpointStore's API.
+
+  Three new guards, since behavioural tests demonstrably could not catch this:
+  - _trace( / _artifactsFor must not appear in ProductionJob
+  - artifact-id construction must not appear in ProductionJob
+  - no orchestrator class defines the same method twice — I fault-injected a
+  duplicate to confirm it actually fails rather than being a test that can never
+  fail:
+  not ok 5 - no orchestrator class defines the same method twice
+      ProductionJob.mjs: duplicate method definition(s): _extractArtifactIds
+
+  Final trace-write topology — appendTrace has exactly one production caller:
+  ProductionJob ──6 methods──> StageTraceRecorder ──appendTrace──>
+  CheckpointStore
+  Remaining store.appendTrace references are CheckpointStore's own unit tests,
+  not a second path.
+
+  On claude doctor: that didn't appear in any of my runs and I changed nothing
+  for it. Worth noting though — npm test does exit 1, because of the 2 LinkedIn
+  failures, not the updater. If CI gates on exit code, those two need
+  skipping-without-credentials or the gate needs an allowlist. That's Phase 4
+  (external-provider isolation) territory.
+
+  Phase 2 (checkpoint + artifact integrity) is the right next step —
+  CheckpointStore already has the artifacts index to hang SHA-256 verification
+  off, and getArtifacts() currently records ids with no content hash, so
+  integrity checking has a natural seam.
+
+  Still uncommitted, Phase 1 scope: 4 modified (ProductionJob, CheckpointStore,
+  PublishabilityGate, composer), 4 added (StageTraceRecorder, trace-inspect.mjs,
+  2 test files). Your uniqueness/capacity changes untouched.
+
+✻ Sautéed for 11m 40s
+
+❯ This is the correct correction. The important finding was not a behavioral    
+  regression but an architectural boundary violation that the behavioral suite  
+  could not detect.                                                             
+                                                                                
+  Phase 1 final state                                                           
+  ProductionJob                                                                 
+      │                                                                         
+      └── lifecycle only                                                        
+               │                                                                
+               ▼                                                                
+  StageTraceRecorder                                                            
+      │                                                                         
+      ├── trace schema                                                          
+      ├── artifact identity                                                     
+      └── trace persistence                                                     
+               │                                                                
+               ▼                                                                
+  CheckpointStore                                                               
+      └── appendTrace()                                                         
+                                                                                
+  The duplicate _extractArtifactIds() was a real defect because JavaScript's    
+  later method definition silently won. The fault-injected duplicate-method     
+  test is particularly valuable because it demonstrates that the guard is       
+  capable of detecting the exact class of regression it protects against.       
+                                                                                
+  Your final topology:                                                          
+                                                                                
+  ProductionJob                                                                 
+     │                                                                          
+     │  6 trace calls                                                           
+     ▼                                                                          
+  StageTraceRecorder                                                            
+     │                                                                          
+     │  appendTrace()                                                           
+     ▼                                                                          
+  CheckpointStore                                                               
+                                                                                
+  is the boundary I would freeze.                                               
+                                                                                
+  The source-level guards are also worth retaining:                             
+                                                                                
+  _trace / _artifactsFor absent from ProductionJob                              
+  artifact-ID construction absent from ProductionJob                            
+  duplicate methods prohibited                                                  
+                                                                                
+  These protect architectural ownership that normal functional tests cannot     
+  prove.                                                                        
+                                                                                
+  Phase 2 — Checkpoint + Artifact Integrity                                     
+                                                                                
+  Your proposed seam is correct:                                                
+                                                                                
+  CheckpointStore                                                               
+      ↓                                                                         
+  artifacts index                                                               
+      ↓                                                                         
+  artifact ID                                                                   
+      +                                                                         
+  SHA-256                                                                       
+      +                                                                         
+  size                                                                          
+      +                                                                         
+  path                                                                          
+                                                                                
+  I would make the artifact record immutable once a stage succeeds:             
+                                                                                
+  {                                                                             
+      id: "artifact:video:...",                                                 
+      type: "video",                                                            
+      path: "output/final.mp4",                                                 
+      sha256: "...",                                                            
+      sizeBytes: 12345678,                                                      
+      recordedAt: "...",                                                        
+  }                                                                             
+                                                                                
+  Then checkpoint state becomes capable of answering:                           
+                                                                                
+  Does the artifact that the checkpoint claims was produced still exist, and is 
+  it byte-for-byte the same artifact?                                           
+                                                                                
+  Integrity invariant                                                           
+  CHECKPOINT_VALID(job, stage)                                                  
+      =                                                                         
+      stage.completed                                                           
+      AND                                                                       
+      every referenced artifact exists                                          
+      AND                                                                       
+      every artifact hash matches                                               
+                                                                                
+  This is important for crash recovery.                                         
+                                                                                
+  Without hashing:                                                              
+                                                                                
+  checkpoint says RENDER ✓                                                      
+          ↓                                                                     
+  final.mp4 exists                                                              
+          ↓                                                                     
+  resume assumes valid                                                          
+                                                                                
+  With integrity verification:                                                  
+                                                                                
+  checkpoint says RENDER ✓                                                      
+          ↓                                                                     
+  final.mp4 exists                                                              
+          ↓                                                                     
+  SHA-256 matches checkpoint                                                    
+          ↓                                                                     
+  RESUME RENDER safely                                                          
+                                                                                
+  But:                                                                          
+                                                                                
+  checkpoint says RENDER ✓                                                      
+          ↓                                                                     
+  final.mp4 exists                                                              
+          ↓                                                                     
+  SHA-256 mismatch                                                              
+          ↓                                                                     
+  artifact INVALID                                                              
+          ↓                                                                     
+  stage must NOT be trusted                                                     
+          ↓                                                                     
+  regenerate / quarantine according to policy                                   
+  Do not hash everything blindly                                                
+                                                                                
+  For production performance, hash canonical persisted artifacts, not arbitrary 
+  objects or every intermediate file.                                           
+                                                                                
+  At minimum:                                                                   
+                                                                                
+  RENDER     → final video                                                      
+  THUMBNAIL  → canonical thumbnail                                              
+  C2PA       → signed/provenance artifact                                       
+  UPLOAD     → remote identity + local canonical artifact                       
+                                                                                
+  For large video files, calculate the SHA-256 once when the artifact is        
+  finalized, then reuse it everywhere downstream.                               
+                                                                                
+  Phase 2 acceptance tests                                                      
+                                                                                
+  Add tests for:                                                                
+                                                                                
+  artifact gets SHA-256 on registration                                         
+  hash is persisted in checkpoint                                               
+  restart reloads hash                                                          
+  unchanged artifact passes verification                                        
+  modified artifact fails verification                                          
+  deleted artifact fails verification                                           
+  checkpoint without artifact metadata is handled deterministically             
+  multiple artifacts can belong to one stage                                    
+  artifact IDs remain deterministic                                             
+  failed integrity prevents unsafe resume                                       
+  integrity verification does not regenerate unchanged artifacts                
+  no duplicate hashing during downstream stages                                 
+                                                                                
+  And one architecture test:                                                    
+                                                                                
+  Artifact hashing                                                              
+      ↓                                                                         
+  one canonical implementation                                                  
+                                                                                
+  Do not let ProductionJob, CheckpointStore, C2PA, upload, and thumbnail code   
+  each implement their own SHA-256 logic.                                       
+                                                                                
+  LinkedIn failures                                                             
+                                                                                
+  Your classification is also correct:                                          
+                                                                                
+  996 tests                                                                     
+  996? → current final report says 996 total / 996?                             
+                                                                                
+  Based on your latest statement, the authoritative current result is:          
+                                                                                
+  998 total                                                                     
+  996 passing                                                                   
+  2 LinkedIn credential failures                                                
+                                                                                
+  Those should remain outside Phase 2. Don't weaken the production tests to     
+  make npm test exit 0. Instead, Phase 4 should establish an explicit           
+  external-provider test policy:                                                
+                                                                                
+  credential present                                                            
+      → integration test executes                                               
+                                                                                
+  credential absent                                                             
+      → integration test SKIPPED                                                
+                                                                                
+  That is preferable to:                                                        
+                                                                                
+  credential absent                                                             
+      → test FAIL                                                               
+                                                                                
+  because CI should distinguish application failure from missing optional       
+  integration credentials.                                                      
+                                                                                
+  Phase 2 boundary                                                              
+                                                                                
+  Keep this phase strictly:                                                     
+                                                                                
+  Checkpoint                                                                    
+      +                                                                         
+  Artifact identity                                                             
+      +                                                                         
+  SHA-256                                                                       
+      +                                                                         
+  Resume integrity                                                              
+                                                                                
+  Do not modify retry policy, provider isolation, uniqueness, publishing, or    
+  the stage graph yet.                                                          
+                                                                                
+  The next clean milestone is therefore:                                        
+                                                                                
+  b46a85a                                                                       
+     ↓                                                                          
+  Phase 1: Trace + Publishability Gate     ✅                                   
+     ↓                                                                          
+  Phase 2: Artifact Integrity              ← NEXT                               
+     ↓                                                                          
+  Phase 3: Retry / Recovery / Quarantine                                        
+     ↓                                                                          
+  Phase 4: External Provider Isolation                                          
+     ↓                                                                          
+  Phase 5: Production GitHub Actions Run                                        
+                                                                                
+  This keeps the architecture stable while progressively making the existing    
+  pipeline trustworthy under crashes, partial writes, and corrupted/stale       
+  artifacts.                                                                    
+  ⎿  Not logged in · Please run /login
+
+✻ Brewed for 0s

@@ -307,4 +307,59 @@ describe('GlobalAssetUniquenessGate — Script Scopes', () => {
     assert.equal(result.pass, false, 'overall validation should fail')
     assert.ok(result.violations.some(v => v.scope === 'script-across-video'))
   })
+
+  it('empty script does NOT false-positive as a cross-video duplicate', async () => {
+    // A real published video with a legit script in the registry.
+    registry.recordScript(registry.constructor.hash('a real narration'), { text: 'a real narration' })
+    registry.state.publishedVideos.push({
+      videoId: 'vid-real',
+      scriptHash: registry.constructor.hash('a real narration'),
+      scriptText: 'a real narration',
+    })
+    registry._save()
+
+    // Two jobs/videos that both failed to produce a script (empty narration).
+    // sha256("") = e3b0c44298fc1c14 — previously flagged as a "duplicate".
+    const emptyManifest = {
+      scriptHash: registry.constructor.hash(''),
+      scriptText: '',
+      scenes: [],
+      music: null,
+      thumbnail: null,
+    }
+    const result = await gate.validate(emptyManifest, { jobId: 'job-empty' })
+    const scriptAcross = result.scopeResults.find(s => s.scope === 'script-across-video')
+    assert.equal(scriptAcross.pass, true, 'empty script must not be a duplicate')
+    assert.match(scriptAcross.detail, /INVALID_SCRIPT_ARTIFACT/)
+    assert.equal(result.pass, true, 'overall validation must pass for empty script')
+  })
+
+  it('empty script is NOT reserved as a legitimate identity', () => {
+    const emptyHash = registry.constructor.hash('')
+    // Pre-reserve one empty-script job so a second would collide if the bug existed.
+    registry.reserve('job-a', { scriptHash: emptyHash, scriptText: '', imageHashes: [] })
+
+    const result = gate.reserve('job-b', {
+      scriptHash: emptyHash,
+      scriptText: '',
+      imageHashes: [],
+    })
+    assert.equal(result.reserved, true, 'empty script must not cause a reservation conflict')
+    assert.equal(registry.state.reservations['job-b'], undefined, 'empty script should not be reserved (no identity stored)')
+  })
+
+  it('missing scriptText with empty hash is INVALID_SCRIPT_ARTIFACT', async () => {
+    // Composer path: setScript('') stores only scriptHash (no scriptText set on manifest).
+    const manifest = {
+      scriptHash: registry.constructor.hash(''),
+      scriptText: undefined,
+      scenes: [],
+      music: null,
+      thumbnail: null,
+    }
+    const result = await gate.validate(manifest, { jobId: 'job-unset' })
+    const scriptAcross = result.scopeResults.find(s => s.scope === 'script-across-video')
+    assert.equal(scriptAcross.pass, true)
+    assert.match(scriptAcross.detail, /INVALID_SCRIPT_ARTIFACT/)
+  })
 })
