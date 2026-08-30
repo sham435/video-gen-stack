@@ -11,11 +11,18 @@
 // Each axis has its own metrics, thresholds, and learning signal.
 
 export class PerformanceObservation {
-  constructor({ videoId, articleId, niche, publishedAt, analytics }) {
+  constructor({ videoId, articleId, niche, publishedAt, analytics, hookStyle, thumbnailStyle, musicTrack, planConfidence, success }) {
     this.videoId = String(videoId || '')
     this.articleId = String(articleId || '')
     this.niche = String(niche || 'GENERAL')
     this.publishedAt = publishedAt || new Date().toISOString()
+    // Optional production-strategy metadata consumed by PerformanceMemory
+    // hookStats()/thumbnailStats() grouping and stored alongside core fields.
+    this.hookStyle = hookStyle || null
+    this.thumbnailStyle = thumbnailStyle || null
+    this.musicTrack = musicTrack || null
+    this.planConfidence = planConfidence != null ? planConfidence : null
+    this.success = success !== false
     this.analytics = {
       impressions: 0,
       views: 0,
@@ -63,6 +70,11 @@ export class PerformanceObservation {
       articleId: this.articleId,
       niche: this.niche,
       publishedAt: this.publishedAt,
+      hookStyle: this.hookStyle,
+      thumbnailStyle: this.thumbnailStyle,
+      musicTrack: this.musicTrack,
+      planConfidence: this.planConfidence,
+      success: this.success,
       analytics: { ...this.analytics },
       signals: this.signals,
     }

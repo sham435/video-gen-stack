@@ -27,6 +27,7 @@
 import { getProfile } from '../production/CategoryProductionProfiles.mjs'
 import { resolveNicheSync } from '../pipeline/NicheResolver.mjs'
 import { StrategyValidator } from './StrategyValidator.mjs'
+import { PerformanceObservation } from '../production/PerformanceObservation.mjs'
 import { StrategyContextBuilder } from './StrategyContextBuilder.mjs'
 
 const CONFIDENCE_THRESHOLD = 0.60
@@ -222,7 +223,7 @@ export class ProductionStrategyController {
     if (!this.performanceMemory || !outcome?.videoId) return
 
     try {
-      const observation = {
+      const observation = new PerformanceObservation({
         videoId: outcome.videoId,
         articleId: plan.jobId,
         niche: plan.niche.key,
@@ -230,10 +231,10 @@ export class ProductionStrategyController {
         hookStyle: plan.hookStrategy.style,
         thumbnailStyle: plan.thumbnailStrategy.layout,
         musicTrack: outcome.musicTrack || null,
-        analytics: outcome.analytics || {},
         planConfidence: plan.confidence,
         success: outcome.success !== false,
-      }
+        analytics: outcome.analytics || {},
+      })
       this.performanceMemory.record(observation)
     } catch (e) {
       console.log(`[STRATEGY] recordOutcome failed (non-fatal): ${e.message}`)

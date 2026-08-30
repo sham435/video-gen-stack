@@ -50,7 +50,21 @@ export async function composeVideo(articles, outDir = 'output', options = {}) {
     await fetchBestImage(article)
   }
 
-  const engine = new NewsBroadcastEngine()
+  // Pass the render-geometry fields into the ENGINE CONSTRUCTOR so the render
+  // profile resolves correctly at construction time (index.mjs reads
+  // mediaType/aspectRatio/outputWidth/outputHeight there). Previously these were
+  // only forwarded to generateFromArticle, which ignores them for profile
+  // selection — so every run defaulted to SHORT_4K (9:16) regardless of the
+  // requested 16:9, overriding the composer's RENDER_ASPECT/TARGET_* selection.
+  const renderGeom = {
+    mediaType: options.mediaType,
+    aspectRatio: options.aspectRatio,
+    outputWidth: options.outputWidth,
+    outputHeight: options.outputHeight,
+    renderFps: options.renderFps,
+    outputFps: options.outputFps,
+  }
+  const engine = new NewsBroadcastEngine(renderGeom)
   const result = await engine.generateFromArticle(article, outDir, { ...options, quick: !!process.env.QUICK_RENDER })
   const broadcastPath = typeof result === 'string' ? result : result.videoPath
 
@@ -423,7 +437,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           return { candidates: [], selected: null, strategy: 'none' }
         }
         // Inspect the ACTUAL file (never hardcode the geometry — the canonical
-        // Short thumbnail is 9:16 2160x3840). This becomes the artifact's
+        // default is 16:9 3840x2160 standard YouTube). This becomes the artifact's
         // immutable identity (sha256 + dimensions + mime).
         const { inspectThumbnailFile } = await import('../src/thumbnail/ThumbnailMetadata.mjs')
         const { validateThumbnailMediaFile, MediaValidationState } = await import('../src/thumbnail/ThumbnailMediaValidator.mjs')
@@ -455,7 +469,8 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
 
         const meta = await inspectThumbnailFile(candidate)
         const selected = { path: candidate, width: meta.width, height: meta.height, mimeType: meta.mimeType, sha256: meta.sha256, aspectRatio: meta.aspectRatio }
-        // Enforce the Short thumbnail geometry contract (9:16 2160x3840).
+        // Enforce the actual thumbnail geometry contract (validation only —
+        // accepts the produced aspect ratio, e.g. 16:9 3840x2160).
         try {
           enforceThumbnailProfile(
             { width: selected.width, height: selected.height },
