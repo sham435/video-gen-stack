@@ -55,7 +55,7 @@ export class InformationLayer {
     ctx.save()
     ctx.globalAlpha = hp
     const hScale = 0.6 + hp * 0.4
-    const anchorY = scene.headlineLayout?.y || H * 0.62
+    const anchorY = scene.headlineLayout?.y || H * DesignSystem.layout.hero
     ctx.translate(W / 2, anchorY)
     ctx.scale(hScale, hScale)
     const layoutLines = scene.headlineLayout?.lines?.length ? scene.headlineLayout.lines : []
@@ -97,7 +97,7 @@ export class InformationLayer {
     const layout = scene.headlineLayout
     const heroSize = layout?.fontSize || scene.headlineFontSize || 92
     const fontSize = Math.max(40, Math.round(heroSize * 0.7))
-    const anchorY = layout?.y || H * 0.62
+    const anchorY = layout?.y || H * DesignSystem.layout.secondary
     const text = (scene.text || '').replace('BREAKING: ', '').toUpperCase()
     const words = text.split(' ')
     const mid = Math.ceil(words.length / 2)
@@ -168,10 +168,10 @@ export class InformationLayer {
     ctx.shadowBlur = 6
     const hp = Math.min(1, progress * 1.2)
     ctx.globalAlpha = hp
-    ctx.fillText('WHY IT MATTERS', startX, H * 0.15)
+    ctx.fillText('WHY IT MATTERS', startX, H * DesignSystem.layout.explanationHeading)
     ctx.shadowBlur = 0
     ctx.fillStyle = DesignSystem.brand.primary
-    ctx.fillRect(startX, H * 0.15 + 72, 96, 6)
+    ctx.fillRect(startX, H * DesignSystem.layout.explanationHeading + 72, 96, 6)
     ctx.restore()
 
     ctx.save()
@@ -190,7 +190,7 @@ export class InformationLayer {
     const maxChars = DesignSystem.getMaxChars('body')
     const words = body.split(' ')
     let line = ''
-    let lineY = H * 0.18 + 92
+    let lineY = H * DesignSystem.layout.explanationBody + 92
     for (const w of words) {
       if ((line + ' ' + w).trim().length <= maxChars) line += (line ? ' ' : '') + w
       else {
@@ -230,10 +230,10 @@ export class InformationLayer {
     const alertPulse = 0.4 + Math.sin(progress * 12) * 0.3
     ctx.fillStyle = `rgba(225, 6, 0, ${alertPulse})`
     ctx.beginPath()
-    ctx.arc(W / 2 - 180, H * 0.20, 10, 0, Math.PI * 2)
+    ctx.arc(W / 2 - 180, H * DesignSystem.layout.retentionBadge, 10, 0, Math.PI * 2)
     ctx.fill()
     ctx.fillStyle = DesignSystem.brand.primary
-    ctx.fillText('BREAKING ANALYSIS', W / 2, H * 0.20)
+    ctx.fillText('BREAKING ANALYSIS', W / 2, H * DesignSystem.layout.retentionBadge)
     ctx.shadowBlur = 0
     ctx.restore()
 
@@ -241,7 +241,7 @@ export class InformationLayer {
     const bp = Math.min(1, Math.max(0, (progress - 0.15) / 0.3))
     ctx.globalAlpha = bp
     const scale = 0.85 + bp * 0.15
-    ctx.translate(W / 2, H * 0.50)
+    ctx.translate(W / 2, H * DesignSystem.layout.retentionCenter)
     ctx.scale(scale, scale)
 
     const retentionToken = DesignSystem.getTypography('headline', 'small')
@@ -317,7 +317,7 @@ export class InformationLayer {
       ctx.textBaseline = 'middle'
       ctx.shadowColor = 'rgba(255,193,7,0.5)'
       ctx.shadowBlur = 18
-      ctx.fillText('STAY WITH', W / 2, H * 0.37)
+      ctx.fillText('STAY WITH', W / 2, H * DesignSystem.layout.brandStay)
       ctx.shadowBlur = 0
       ctx.restore()
     }
@@ -326,7 +326,7 @@ export class InformationLayer {
       const scale = 0.6 + brandP * 0.4
       ctx.save()
       ctx.globalAlpha = brandP
-      ctx.translate(W / 2, H * 0.50)
+      ctx.translate(W / 2, H * DesignSystem.layout.brandCenter)
       ctx.scale(scale, scale)
       // Fit-to-width so the brand headline always stays inside the layout.
       const brandFont = '900 140px "Montserrat ExtraBold", sans-serif'
@@ -360,7 +360,7 @@ if (tagP > 0) {
       const leading = tagSize * tagLeading
       const blockH = tagLines.length * leading
       // Center the wrapped block on the headline anchor line.
-      const blockTop = H * 0.60 - blockH / 2 + tagSize / 2
+      const blockTop = H * DesignSystem.layout.tagline - blockH / 2 + tagSize / 2
       tagLines.forEach((line, i) => {
         ctx.font = `900 ${tagSize}px "Montserrat ExtraBold", sans-serif`
         ctx.fillText(line, W / 2, blockTop + leading * i + tagSize * 0.5)
@@ -380,7 +380,7 @@ if (tagP > 0) {
         ctx.fillStyle = 'rgba(255,255,255,0.78)'
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
-        ctx.fillText(`Source: ${src}`, W / 2, H * 0.60 + blockH / 2 + tagSize + 42)
+        ctx.fillText(`Source: ${src}`, W / 2, H * DesignSystem.layout.tagline + blockH / 2 + tagSize + 42)
         ctx.restore()
       }
 
@@ -392,7 +392,7 @@ if (tagP > 0) {
       if (q && qP > 0) {
         const footerTop = FooterLayout.barTopInFrame(ctx, W, H)
         // Keep the question clear of the source line and above the anchor/footer.
-        const qY = Math.min(H * 0.60 + blockH / 2 + tagSize + 110, footerTop - 200)
+        const qY = Math.min(H * DesignSystem.layout.tagline + blockH / 2 + tagSize + 110, footerTop - 200)
         ctx.save()
         ctx.globalAlpha = qP
         ctx.font = '800 40px Inter, sans-serif'

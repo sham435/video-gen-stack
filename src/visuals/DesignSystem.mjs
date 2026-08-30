@@ -43,6 +43,66 @@ export class DesignSystem {
     return this._profile.logical.height
   }
 
+  /** Aspect ratio (width / height) of the active logical canvas. */
+  static get aspectRatio() {
+    return this.W / this.H
+  }
+
+  /**
+   * True when the active profile is a landscape/wide frame (16:9 and up),
+   * false for portrait (9:16). Visual layers use this to swap layout
+   * anchors: wide frames get higher headlines / lower badges / flatter
+   * vertical rhythm, while the portrait 9:16 look is preserved unchanged.
+   */
+  static get isWide() {
+    return this.aspectRatio >= 1
+  }
+
+  /**
+   * Returns a keyed set of vertical anchor fractions appropriate to the
+   * active aspect ratio. Wide (16:9) frames are short and horizontal, so
+   * the hero / headline rides HIGH (vertical thirds) and the caption /
+   * badge bands sit lower — there is far less vertical room than a 9:16
+   * frame (720 vs 1920 logical px). The portrait keys preserve the exact
+   * original 9:16 anchors so legacy Shorts output is unchanged.
+   */
+  static get layout() {
+    if (this.isWide) {
+      // 16:9 (1280x720) — wide + short: keep content high, badges low.
+      return {
+        hero: 0.42,
+        secondary: 0.56,
+        explanationHeading: 0.16,
+        explanationBody: 0.20,
+        retentionBadge: 0.22,
+        retentionCenter: 0.50,
+        brandStay: 0.36,
+        brandCenter: 0.50,
+        tagline: 0.60,
+        caption: 0.84,
+        ticker: 0.92,
+        badge: 0.74,
+        safeArea: { top: 0.05, bottom: 0.08, left: 0.04, right: 0.04 },
+      }
+    }
+    // 9:16 (1080x1920) — original portrait anchors, unchanged.
+    return {
+      hero: 0.62,
+      secondary: 0.62,
+      explanationHeading: 0.15,
+      explanationBody: 0.18,
+      retentionBadge: 0.20,
+      retentionCenter: 0.50,
+      brandStay: 0.37,
+      brandCenter: 0.50,
+      tagline: 0.60,
+      caption: 0.78,
+      ticker: 0.92,
+      badge: 0.65,
+      safeArea: { top: 0.03, bottom: 0.05, left: 0.04, right: 0.04 },
+    }
+  }
+
   /** Scale a 1080px-design-width value into the active logical canvas. */
   static get sx() {
     const base = 1080
