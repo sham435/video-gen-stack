@@ -30,7 +30,13 @@ export class SocialPostGenerator {
     const title = cleanTitle(video.title || 'NEWS-MONSTER')
     const videoId = video.videoId || null
     const videoUrl = video.videoUrl || (videoId ? `https://youtu.be/${videoId}` : '')
-    const youtubeShortsUrl = videoId ? `https://www.youtube.com/shorts/${videoId}` : videoUrl
+    // Aspect-aware canonical link: a Standard 16:9 upload uses the watch URL,
+    // only a 9:16 Shorts upload uses /shorts/. Driven by RENDER_ASPECT (same
+    // single source as composer), default 16:9.
+    const isShorts = (process.env.RENDER_ASPECT || '16:9') === '9:16'
+    const youtubeShortsUrl = videoId
+      ? (isShorts ? `https://www.youtube.com/shorts/${videoId}` : `https://www.youtube.com/watch?v=${videoId}`)
+      : videoUrl
     const summary = video.summary || video.hook || ''
     const hook = nicheHook(title)
     const category = video.category || 'news'

@@ -48,7 +48,9 @@ test('post generator — post contains YouTube URL', () => {
   const g = new SocialPostGenerator()
   const post = g.build(VIDEO)
   assert.ok(post.videoUrl === 'https://youtu.be/abc123xyz')
-  assert.ok(post.platforms.linkedin.commentary.includes('https://www.youtube.com/shorts/abc123xyz'))
+  // Default aspect is Standard 16:9, so the canonical link is a watch URL
+  // (not /shorts/), driven by RENDER_ASPECT.
+  assert.ok(post.platforms.linkedin.commentary.includes('https://www.youtube.com/watch?v=abc123xyz'))
   assert.ok(post.platforms.youtubeCommunity.text.includes('https://youtu.be/abc123xyz'))
 })
 

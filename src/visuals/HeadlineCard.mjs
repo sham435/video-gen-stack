@@ -1,6 +1,7 @@
-const W = 1080, H = 1920
+import { DesignSystem } from './DesignSystem.mjs'
 
 export function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF', fontSize = 0, layout = null) {
+  const { W, H, sx, sy } = DesignSystem
   const p = Math.min(1, progress * 1.5)
   const words = text.split(' ')
   const lines = []
@@ -17,12 +18,15 @@ export function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF', fontSiz
     if (line) lines.push(line)
   }
 
-  const size = layout ? layout.fontSize : fontSize > 0 ? fontSize : text.length > 15 ? 96 : text.length > 8 ? 116 : 136
-  const lineH = layout ? layout.lineHeight : size * 1.2
+  // Sizes are authored on the 1080x1920 design space; scale into the active
+  // canvas so a 16:9 headline stays proportionally correct, not oversized.
+  const baseSize = layout ? (layout.fontSize || 0) : (fontSize > 0 ? fontSize : text.length > 15 ? 96 : text.length > 8 ? 116 : 136)
+  const size = layout ? sx(layout.fontSize || baseSize) : sx(baseSize)
+  const lineH = layout ? (layout.lineHeight ? sy(layout.lineHeight) : size * 1.2) : size * 1.2
   const totalH = lines.length * lineH
   // Rule of thirds: headline sits in the upper-middle band, keeping the
   // bottom third clear for caption overlays (caption safe area at 0.78H)
-  const startY = layout ? layout.y : H * 0.30 - totalH / 2
+  const startY = layout ? (layout.y !== undefined ? (layout.y === 0 ? 0 : sy(layout.y)) : H * 0.30 - totalH / 2) : H * 0.30 - totalH / 2
 
   ctx.save()
 
@@ -31,7 +35,7 @@ export function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF', fontSiz
   ctx.scale(scale, scale)
   ctx.translate(-W / 2, -H * 0.30)
 
-  const depthOffset = (1 - p) * 40
+  const depthOffset = (1 - p) * sx(40)
   ctx.shadowColor = 'rgba(0,0,0,0.5)'
   ctx.shadowBlur = 20 * p
   ctx.shadowOffsetX = depthOffset * 0.5

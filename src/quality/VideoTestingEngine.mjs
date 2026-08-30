@@ -23,10 +23,14 @@ export class VideoTestingEngine {
       const fps = fpsMatch ? parseInt(fpsMatch[1]) / parseInt(fpsMatch[2]) : 0
       const codec = info.match(/codec_name=(\w+)/)?.[1]
 
-      // Accept any 9:16 vertical Shorts resolution (logical 1080x1920 or the
-      // physical 2160x3840 master). Validate aspect-ratio, not a single size.
-      const validRes = (width === 1080 && height === 1920) || (width === 2160 && height === 3840)
-      results.resolution = { width, height, valid: validRes, aspectRatio: '9:16' }
+      // Accept profile-appropriate resolutions by ASPECT RATIO, not a single
+      // size: 9:16 vertical Shorts (1080x1920, 2160x3840) or 16:9 landscape
+      // standard YouTube (1280x720, 1920x1080, 3840x2160).
+      const gcd = (a, b) => (b ? gcd(b, a % b) : a)
+      const g = gcd(width, height)
+      const ar = g ? `${width / g}:${height / g}` : ''
+      const validRes = ar === '9:16' || ar === '16:9'
+      results.resolution = { width, height, valid: validRes, aspectRatio: ar || 'unknown' }
       results.fps = { value: fps, valid: Math.abs(fps - 30) < 1 }
       results.codec = { value: codec, valid: codec === 'h264' }
 

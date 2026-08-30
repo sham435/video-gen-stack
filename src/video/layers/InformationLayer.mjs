@@ -7,8 +7,6 @@ import { wrapText } from '../../layout/wrapText.mjs'
 import { FooterLayout } from '../footer/FooterLayout.mjs'
 import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
 
-const { W, H } = DesignSystem
-
 export class InformationLayer {
   async draw(ctx, scene, progress, category, timeline = null, time = 0) {
     const envelope = timeline ? (id) => {
@@ -51,6 +49,7 @@ export class InformationLayer {
   // Hero headline — gold gradient, heavy shadow, slight glow, largest font,
   // center of frame, max 2 lines, scale-in with the timeline envelope.
   renderHero(ctx, scene, progress, category, alpha) {
+    const { W, H } = DesignSystem
     if (alpha <= 0.01 || !scene.text) return
     const hp = alpha
     ctx.save()
@@ -93,6 +92,7 @@ export class InformationLayer {
   // Secondary headline — white, keyword in accent red only, 70% of hero size,
   // word-stagger fade-up. Renders only in its own timeline window.
   renderSecondary(ctx, scene, progress, category, alpha, time, layerStart = 0) {
+    const { W, H } = DesignSystem
     if (alpha <= 0.01 || !scene.text) return
     const layout = scene.headlineLayout
     const heroSize = layout?.fontSize || scene.headlineFontSize || 92
@@ -153,6 +153,7 @@ export class InformationLayer {
   }
 
   renderExplanation(ctx, scene, progress) {
+    const { W, H } = DesignSystem
     const textWidth = W * 0.85
     const startX = W / 2 - textWidth / 2
 
@@ -204,6 +205,7 @@ export class InformationLayer {
   }
 
   renderRetention(ctx, scene, progress) {
+    const { W, H } = DesignSystem
     const p = Math.min(1, progress * 1.2)
 
     ctx.fillStyle = `rgba(5, 5, 5, ${p * 0.5})`
@@ -265,7 +267,7 @@ export class InformationLayer {
   }
 
   renderBrandClose(ctx, scene, progress) {
-    const W = 1080, H = 1920
+    const { W, H, sx, sy } = DesignSystem
     const p = Math.min(1, Math.max(0, progress))
     const DUR = scene.duration || 3
     const t = p * DUR

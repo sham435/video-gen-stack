@@ -1,8 +1,6 @@
 import { loadImage } from '@napi-rs/canvas'
 import { DesignSystem } from '../../visuals/DesignSystem.mjs'
 
-const { W, H } = DesignSystem
-
 export class HeroVisualLayer {
   constructor() {
     this.cache = {}
@@ -20,6 +18,7 @@ export class HeroVisualLayer {
   }
 
   async draw(ctx, scene, progress) {
+    const { W, H } = DesignSystem
     const urls = scene.images || (scene.image ? [scene.image] : null) || (scene.bRoll ? [scene.bRoll] : null) || (scene.backgroundImage ? [scene.backgroundImage] : null)
     if (!urls || urls.length === 0) return
 

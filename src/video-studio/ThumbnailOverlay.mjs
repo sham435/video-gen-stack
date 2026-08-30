@@ -94,14 +94,20 @@ export function drawThumbnailOverlay(ctx, opts = {}) {
   const payoff = payoffOverride || extractPayoff(title, pillar)
 
   // ── Layer 1: TOP TAG BAR ──────────────────────────────────────────────
-  const barH = 100
-  const barY = 180
+  // Ratio-scaled so the overlay reads correctly on any canvas (portrait
+  // 1080x1920 covers and 16:9 landscape thumbnails alike). U is the base
+  // font unit derived from the frame's shorter side.
+  const U = Math.max(24, Math.round(Math.min(w, h) / 18))
+  const barH = Math.max(40, Math.round(h * 0.06))
+  const barY = Math.max(60, Math.round(h * 0.10))
+  const barW = Math.round(w * 0.50)
+  const barRadius = Math.max(6, Math.round(h * 0.008))
   ctx.fillStyle = barColor
   ctx.beginPath()
-  ctx.roundRect(w / 2 - 280, barY, 560, barH, 12)
+  ctx.roundRect(w / 2 - barW / 2, barY, barW, barH, barRadius)
   ctx.fill()
 
-  ctx.font = '900 80px Anton, Impact, sans-serif'
+  ctx.font = `900 ${Math.round(U * 1.3)}px Anton, Impact, sans-serif`
   ctx.fillStyle = '#FFFFFF'
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
@@ -109,13 +115,14 @@ export function drawThumbnailOverlay(ctx, opts = {}) {
 
   // ── Layer 2: MIDDLE BIG HOOK ─────────────────────────────────────────
   const hookY = h * 0.42
-  ctx.font = '900 160px Anton, Impact, sans-serif'
+  const hookFont = Math.round(U * 2.6)
+  ctx.font = `900 ${hookFont}px Anton, Impact, sans-serif`
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
 
-  // Black stroke (8px)
+  // Black stroke
   ctx.strokeStyle = '#000000'
-  ctx.lineWidth = 16
+  ctx.lineWidth = Math.max(4, Math.round(hookFont * 0.1))
   ctx.lineJoin = 'round'
   ctx.strokeText(hook, w / 2, hookY)
 
@@ -125,14 +132,14 @@ export function drawThumbnailOverlay(ctx, opts = {}) {
 
   // ── Layer 3: BOTTOM PAYOFF ───────────────────────────────────────────
   const payoffY = h * 0.62
-  ctx.font = '900 90px Anton, Impact, sans-serif'
+  ctx.font = `900 ${Math.round(U * 1.5)}px Anton, Impact, sans-serif`
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
   ctx.fillStyle = YELLOW_PAYOFF
 
   // Subtle glow behind payoff
   ctx.shadowColor = YELLOW_PAYOFF
-  ctx.shadowBlur = 30
+  ctx.shadowBlur = Math.max(8, Math.round(h * 0.016))
   ctx.fillText(payoff, w / 2, payoffY)
   ctx.shadowBlur = 0
 

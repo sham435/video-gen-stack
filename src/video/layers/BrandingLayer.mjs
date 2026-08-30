@@ -4,8 +4,6 @@ import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
 import { FooterLayout, loadPlatformIcons } from '../footer/FooterLayout.mjs'
 import { measureBrandPill } from '../../layout/HeaderLayout.mjs'
 
-const { W, H } = DesignSystem
-
 export class BrandingLayer {
   draw(ctx, scene, progress) {
     if (scene.type === 'brand_close') {
@@ -60,6 +58,7 @@ export class BrandingLayer {
   // Drawn every scene; it is chrome, not content, so it stays on-brand and
   // readable after compression.
   drawFooter(ctx, scene, progress) {
+    const { W, H } = DesignSystem
     ctx.save()
     ctx.globalAlpha = 1
     // Platform badges load async — fire once, draw with whatever is ready.
@@ -70,6 +69,7 @@ export class BrandingLayer {
   }
 
   drawTicker(ctx, scene, progress) {
+    const { W, H } = DesignSystem
     const p = Math.min(1, progress * 1.5)
     const tickerItems = scene.ticker || ['AI', 'Robotics', 'Cybersecurity', 'Space', 'Programming', 'Quantum', 'Biotech']
 

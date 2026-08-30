@@ -1,7 +1,3 @@
-import { createCanvas } from '@napi-rs/canvas'
-
-const W = 1080, H = 1920
-
 export class Timeline {
   constructor(scenes, fps = 30) {
     this.scenes = scenes

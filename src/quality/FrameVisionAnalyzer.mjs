@@ -1,6 +1,6 @@
 import { execFileSync } from 'child_process'
 import fs from 'fs'
-import { SafeZoneManager, SAFE_ZONES } from '../layout/SafeZoneManager.mjs'
+import { SafeZoneManager } from '../layout/SafeZoneManager.mjs'
 
 // Frame Vision Analyzer — post-render visual composition scoring.
 //
@@ -12,57 +12,52 @@ import { SafeZoneManager, SAFE_ZONES } from '../layout/SafeZoneManager.mjs'
 //   face_visibility → subject-band visual detail (presence proxy; no ML)
 //   blank_frame     → near-zero luminance frame
 //
-// This is the "Frame → Vision Analyzer → Score" step the pre-render
-// deterministic checks cannot provide: it verifies what actually rendered.
-const W = 1080
-const H = 1920
+// Resolution-agnostic: the actual video width/height are probed via ffprobe
+// and all zones are computed as FRACTIONS of W/H that mirror the renderer's
+// anchors (headline H*0.62, captions H*0.78, fact headline H*0.30), so the
+// same checks work for 9:16 Shorts (1920x1080 landscape VIDEO_HD) and behave
+// correctly across profiles.
 const SAMPLE_STEP = 4 // analyze every 4th pixel
 
-// Scene-type text presets — calibrated against the actual renderer layout
-// (InformationLayer + CaptionEngine) on rendered 1080x1920 output:
-//   hook:        headline band y1080-1320 (H*0.62±46) + captions y1405-1630
-//   fact:        headline card centered at H*0.30 (y~450-750) + captions
-//   explanation: "WHY IT MATTERS" header at y288 (+ body when present) + captions
-//   reaction/reveal: captions only — the background image is NOT text
-//   retention/brand_close: center text at H*0.50 (y~960) + captions
-// Every scene carries word captions at y1405-1630, so that band is the
-// universal text signal. The bright brand footer starts at y1820 and must
-// never count as text bleed.
-const LAYOUTS = {
-  hook: {
-    textBands: [SAFE_ZONES.headline, SAFE_ZONES.caption],
-    subject: SAFE_ZONES.subject,
-  },
-  fact: {
-    textBands: [{ x: 0, y: 400, width: 1080, height: 400 }, SAFE_ZONES.caption],
-    subject: { x: 200, y: 800, width: 680, height: 500 },
-  },
-  explanation: {
-    textBands: [{ x: 0, y: 250, width: 1080, height: 560 }, SAFE_ZONES.caption],
-    subject: { x: 200, y: 820, width: 680, height: 480 },
-  },
-  reaction: {
-    textBands: [SAFE_ZONES.caption],
-    subject: SAFE_ZONES.subject,
-  },
-  reveal: {
-    textBands: [SAFE_ZONES.caption],
-    subject: SAFE_ZONES.subject,
-  },
-  centered: {
-    textBands: [{ x: 0, y: 880, width: 1080, height: 280 }, SAFE_ZONES.caption],
-    subject: { x: 200, y: 450, width: 680, height: 400 },
-  },
+// Scene-type text presets — FRACTIONAL bands (of W/H) mirroring the renderer.
+//   hook:        headline band at H*0.62 + captions at H*0.78
+//   fact:        headline card centered at H*0.30 + captions
+//   explanation: "WHY IT MATTERS" header near top + body + captions
+//   reaction/reveal: captions only
+//   retention/brand_close: center text at H*0.50 + captions
+const RATIO = {
+  headline: { x: 0, y: 0.62, w: 1, h: 0.14 },    // hook headline band
+  caption: { x: 0, y: 0.78, w: 1, h: 0.16 },     // word-caption band
+  factHead: { x: 0, y: 0.30, w: 1, h: 0.22 },    // fact headline card
+  explainHead: { x: 0, y: 0.15, w: 1, h: 0.14 }, // "WHY IT MATTERS"
+  centerText: { x: 0, y: 0.50, w: 1, h: 0.20 },  // centered CTA / brand
+  subject: { x: 0.18, y: 0.16, w: 0.63, h: 0.36 }, // face/object band (no text)
+  // Bleed check: the band immediately below captions (above the footer).
+  bleed: { x: 0.18, y: 0.94, w: 0.63, h: 0.03 },
 }
-// Gap between caption band (ends y1640) and the brand footer (starts y1820).
-// Text bleeding past the captions lands here — this is the only bleed zone
-// that stays reliably content-free on rendered frames.
-const BLEED_BOTTOM = { x: 200, y: 1650, width: 680, height: 40 }
+
+function bandFor(buf, W, H, b) {
+  return { x: b.x * W, y: b.y * H, width: b.w * W, height: b.h * H }
+}
 
 export class FrameVisionAnalyzer {
   constructor(options = {}) {
     this.threshold = options.threshold || 85
     this.sampleStep = options.sampleStep || SAMPLE_STEP
+    this.W = options.width || 1080
+    this.H = options.height || 1920
+  }
+
+  _probeDims(videoPath) {
+    try {
+      const info = execFileSync(
+        'ffprobe',
+        ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height', '-of', 'default=noprint_wrappers=1', videoPath]
+      ).toString().trim()
+      const w = parseInt(info.match(/width=(\d+)/)?.[1] || '0')
+      const h = parseInt(info.match(/height=(\d+)/)?.[1] || '0')
+      if (w && h) { this.W = w; this.H = h }
+    } catch {}
   }
 
   _extractFrame(videoPath, seconds) {
@@ -70,7 +65,7 @@ export class FrameVisionAnalyzer {
     const out = execFileSync(
       'ffmpeg',
       ['-v', 'error', '-ss', String(seconds), '-i', videoPath, '-frames:v', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', 'pipe:1'],
-      { timeout: 20000, maxBuffer: 32 * 1024 * 1024 }
+      { timeout: 20000, maxBuffer: 64 * 1024 * 1024 }
     )
     return Buffer.from(out)
   }
@@ -82,6 +77,7 @@ export class FrameVisionAnalyzer {
 
   // Sampled stats (mean, stddev, high-contrast ratio) over a rect region
   _regionStats(buf, rect, step = this.sampleStep) {
+    const W = this.W, H = this.H
     let n = 0, sum = 0, sumSq = 0, hi = 0
     const values = []
     for (let y = rect.y; y < rect.y + rect.height && y < H; y += step) {
@@ -94,16 +90,39 @@ export class FrameVisionAnalyzer {
     if (n === 0) return { mean: 0, stddev: 0, hiRatio: 0 }
     const mean = sum / n
     const stddev = Math.sqrt(Math.max(0, sumSq / n - mean * mean))
-    const threshold = mean + 45
     hi = values.filter(v => Math.abs(v - mean) > 45).length
     return { mean: Math.round(mean), stddev: Math.round(stddev), hiRatio: (hi / n) * 100 }
   }
 
   _frameChecks(buf, scene) {
+    const W = this.W, H = this.H
     const checks = {}
     const penalties = { total: 0, issues: [] }
     const flag = (name, pts) => { checks[name] = false; penalties.total += pts; penalties.issues.push(name) }
-    const layout = LAYOUTS[scene.type] || LAYOUTS.centered
+
+    // Pick the text bands for this scene type (fractional -> pixel rects).
+    const type = scene.type || 'centered'
+    let ratioBands, subjectBand
+    if (type === 'hook') {
+      ratioBands = [RATIO.headline, RATIO.caption]
+      subjectBand = RATIO.subject
+    } else if (type === 'fact') {
+      ratioBands = [RATIO.factHead, RATIO.caption]
+      subjectBand = { x: 0.18, y: 0.42, w: 0.63, h: 0.26 }
+    } else if (type === 'explanation') {
+      ratioBands = [RATIO.explainHead, RATIO.caption]
+      subjectBand = { x: 0.18, y: 0.43, w: 0.63, h: 0.25 }
+    } else if (type === 'retention' || type === 'brand_close' || type === 'close') {
+      ratioBands = [RATIO.centerText, RATIO.caption]
+      subjectBand = { x: 0.18, y: 0.23, w: 0.63, h: 0.21 }
+    } else {
+      // reaction / reveal — captions only
+      ratioBands = [RATIO.caption]
+      subjectBand = RATIO.subject
+    }
+    const textBands = ratioBands.map(b => bandFor(buf, W, H, b))
+    const subject = bandFor(buf, W, H, subjectBand)
+    const bleedRect = bandFor(buf, W, H, RATIO.bleed)
 
     // Overall blank detection
     const overall = this._regionStats(buf, { x: 0, y: 0, width: W, height: H }, 16)
@@ -111,28 +130,25 @@ export class FrameVisionAnalyzer {
     if (!checks.blank) { penalties.total += 40; penalties.issues.push('blank') }
 
     // Contrast — text bands must have enough luminance variance to be legible.
-    // Calibrated to measured renders: captions ~17-22, headlines ~68-77.
-    const textStd = Math.max(...layout.textBands.map(b => this._regionStats(buf, b).stddev))
+    const textStd = Math.max(...textBands.map(b => this._regionStats(buf, b).stddev))
     checks.contrast = textStd >= 15
     if (!checks.contrast) flag('contrast', textStd >= 10 ? 5 : 20)
 
-    // Text presence — any layout text band must show ink (headline band for
-    // hook/fact, centered CTA for close scenes, or the universal caption band)
-    const ink = layout.textBands.map(b => this._regionStats(buf, b))
+    // Text presence — any layout text band must show ink.
+    const ink = textBands.map(b => this._regionStats(buf, b))
     const textRendered = ink.some(s => s.hiRatio > 0.8 || s.stddev >= 10) || scene.captionHidden
     checks.textRendered = textRendered
     if (!textRendered && !scene.captionHidden) flag('textRendered', 10)
 
-    // Safe margin — no text bleeding past the caption band (footer at y1820
-    // is brand chrome, not bleed)
-    const bleed = this._regionStats(buf, BLEED_BOTTOM, 8).hiRatio
+    // Safe margin — no text bleeding past the caption band (footer is chrome).
+    const bleed = this._regionStats(buf, bleedRect, 8).hiRatio
     checks.safeMargin = bleed < 0.15
     if (!checks.safeMargin) flag('safeMargin', 20)
 
     // Face visibility proxy — subject band should carry visual detail
-    const subject = this._regionStats(buf, layout.subject)
-    checks.faceVisibility = subject.stddev >= 12
-    if (!checks.faceVisibility) flag('faceVisibility', subject.stddev >= 8 ? 5 : 10)
+    const subjectStats = this._regionStats(buf, subject)
+    checks.faceVisibility = subjectStats.stddev >= 12
+    if (!checks.faceVisibility) flag('faceVisibility', subjectStats.stddev >= 8 ? 5 : 10)
 
     // Text collision — geometric: mapped layers must stay inside their zones
     const layers = scene.textManifest?.text_layers || []
@@ -150,11 +166,9 @@ export class FrameVisionAnalyzer {
 
   // Analyze the rendered video: one frame per scene, returns per-scene + overall
   async analyze(videoPath, scenes, options = {}) {
+    this._probeDims(videoPath)
     const results = []
     for (const scene of scenes || []) {
-      // Sample at ~65% of the scene duration — after the headline/caption
-      // animations have fully rendered (text animates in at progress 0.45+,
-      // so sampling at +0.2s would catch empty pre-animation frames)
       const at = options.secondsForScene
         ? options.secondsForScene(scene)
         : scene.start + (scene.end - scene.start) * 0.65

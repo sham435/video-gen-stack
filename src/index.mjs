@@ -49,6 +49,7 @@ import { AssetUsageTracker } from './assets/AssetUsageTracker.mjs'
 import { ImagePerformanceMemory } from './analytics/ImagePerformanceMemory.mjs'
 import { SceneVisualPlanner } from './assets/SceneVisualPlanner.mjs'
 import { RenderProfiles, resolveRenderProfile } from './video/RenderProfile.mjs'
+import { DesignSystem } from './visuals/DesignSystem.mjs'
 
 const RENDER_FPS = 10
 const OUTPUT_FPS = 30
@@ -57,15 +58,20 @@ export class NewsBroadcastEngine {
   constructor(options = {}) {
     this.renderFps = options.renderFps || RENDER_FPS
     this.outputFps = options.outputFps || OUTPUT_FPS
-    // Canonical render contract: logical 1080x1920 design → physical
-    // 2160x3840 output for Shorts (9:16). The frames are composited in the
-    // logical space and upscaled to the physical output during concat.
+    // Canonical render contract: logical design space → physical output.
+    // SHORT_4K: logical 1080x1920 → 2160x3840 (9:16). VIDEO_HD: logical
+    // 1280x720 → 1920x1080 (16:9). Frames are composited in the logical space
+    // and upscaled to the physical output during concat. The active profile
+    // pins DesignSystem's logical canvas so the whole visual stack matches.
     this.renderProfile = resolveRenderProfile({
       type: options.mediaType || 'short',
       width: options.outputWidth,
       height: options.outputHeight,
       aspectRatio: options.aspectRatio || '9:16',
     })
+    // Pin the composition canvas to the selected profile (DEFAULT stays
+    // SHORT_4K until composer passes 16:9 options; VIDEO_HD -> 1280x720).
+    DesignSystem.setProfile(this.renderProfile)
     this.sceneEngine = null
     this.timeline = null
     this.voiceSync = new VoiceSync()
@@ -435,6 +441,7 @@ export class NewsBroadcastEngine {
         const layout = TextLayoutEngine.layout({
           text: layer.text,
           role: layer.type,
+          canvas: { width: DesignSystem.W, height: DesignSystem.H },
           fontFamily: layer.type === 'headline' || layer.type === 'emphasis' ? 'Anton' : 'Inter',
           preferredFontSize: rolePolicy.preferredFontSize || LAYER_FONT_SIZE[layer.type] || 58,
           maxLines: rolePolicy.maxLines,
@@ -913,7 +920,7 @@ export class NewsBroadcastEngine {
   }
 
   async verifyQuality(videoPath) {
-    const result = await this.qualityChecker.analyzeRenderedVideo(videoPath)
+    const result = await this.qualityChecker.analyzeRenderedVideo(videoPath, this.renderProfile.output)
     console.log('Quality check:', result.checks)
     if (result.warnings.length > 0) {
       console.log('Warnings:', result.warnings)

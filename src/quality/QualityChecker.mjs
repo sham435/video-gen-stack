@@ -10,8 +10,14 @@ export class QualityChecker {
     const errors = []
 
     if (!template.version) errors.push('Missing version')
-    if (template.resolution?.width !== 1080 || template.resolution?.height !== 1920) {
-      errors.push('Resolution must be 1080x1920')
+    // Accept profile-appropriate logical resolutions: 9:16 portrait (1080x1920)
+    // or 16:9 landscape (1280x720, 1920x1080). Validate aspect, not one size.
+    const { width = 0, height = 0 } = template.resolution || {}
+    const gcd = (a, b) => (b ? gcd(b, a % b) : a)
+    const g = gcd(width, height)
+    const ar = g ? `${width / g}:${height / g}` : ''
+    if (ar !== '9:16' && ar !== '16:9') {
+      errors.push(`Resolution must be 9:16 or 16:9, got ${width}x${height}`)
     }
     if (template.fps !== 30) errors.push('FPS must be 30')
     if (!template.scenes || template.scenes.length === 0) errors.push('No scenes defined')
@@ -35,7 +41,7 @@ export class QualityChecker {
     }
   }
 
-  checkRenderOutput(videoPath, expect = { width: 2160, height: 3840 }) {
+  checkRenderOutput(videoPath, expect = null) {
     const checks = {}
 
     try {
@@ -52,10 +58,17 @@ export class QualityChecker {
     return checks
   }
 
-  parseResolution(info, expect = { width: 2160, height: 3840 }) {
+  parseResolution(info, expect = null) {
     const w = parseInt(info.match(/width=(\d+)/)?.[1] || '0')
     const h = parseInt(info.match(/height=(\d+)/)?.[1] || '0')
-    return { width: w, height: h, valid: w === expect.width && h === expect.height }
+    const gcd = (a, b) => (b ? gcd(b, a % b) : a)
+    const g = gcd(w, h)
+    const ar = g ? `${w / g}:${h / g}` : ''
+    // Valid if it exactly matches the expected size, or if it's a supported
+    // 9:16 / 16:9 aspect ratio (so landscape VIDEO_HD renders validate too).
+    const expectMatch = expect && w === expect.width && h === expect.height
+    const aspectValid = ar === '9:16' || ar === '16:9'
+    return { width: w, height: h, valid: expectMatch || aspectValid, aspectRatio: ar }
   }
 
   parseFPS(info) {
@@ -75,7 +88,7 @@ export class QualityChecker {
     return { valid: true }
   }
 
-  async analyzeRenderedVideo(videoPath, expect = { width: 2160, height: 3840 }) {
+  async analyzeRenderedVideo(videoPath, expect = null) {
     const results = {
       path: videoPath,
       exists: fs.existsSync(videoPath),

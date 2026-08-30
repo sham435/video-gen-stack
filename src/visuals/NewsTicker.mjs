@@ -1,8 +1,9 @@
-const W = 1080, H = 1920
 import { FooterLayout } from '../video/footer/FooterLayout.mjs'
+import { DesignSystem } from './DesignSystem.mjs'
 
 export function drawNewsTicker(ctx, items, progress) {
-  const tickerH = 50
+  const { W, H, sx, sy } = DesignSystem
+  const tickerH = sy(50)
   // The footer owns the bottom safe zone. Dock just above its ACTUAL bar top
   // (computed, not the static token) so the ticker never rides up onto the
   // footer bar / pill / URL group. That contract lives in FooterLayout.
@@ -13,13 +14,13 @@ export function drawNewsTicker(ctx, items, progress) {
 
   ctx.fillStyle = 'rgba(0,0,0,0.8)'
   ctx.beginPath()
-  ctx.roundRect(20, tickerY, W - 40, tickerH, 8)
+  ctx.roundRect(sx(20), tickerY, W - sx(40), tickerH, 8)
   ctx.fill()
 
   ctx.strokeStyle = 'rgba(0, 229, 255, 0.15)'
   ctx.lineWidth = 1
   ctx.beginPath()
-  ctx.roundRect(20, tickerY, W - 40, tickerH, 8)
+  ctx.roundRect(sx(20), tickerY, W - sx(40), tickerH, 8)
   ctx.stroke()
 
   const scrollP = (progress * 60) % items.length
@@ -30,7 +31,7 @@ export function drawNewsTicker(ctx, items, progress) {
 
   for (let i = 0; i < 4; i++) {
     const idx = (startIdx + i) % items.length
-    const x = 40 + i * itemW
+    const x = sx(40) + i * itemW
     const itemP = scrollP % 1
     const alpha = i === 0 ? 1 - itemP : 0.6
     const xOff = i === 0 ? -itemP * 40 : 0
@@ -42,7 +43,7 @@ export function drawNewsTicker(ctx, items, progress) {
 
   ctx.fillStyle = COLORS?.red || '#E10600'
   ctx.beginPath()
-  ctx.arc(32, tickerY + tickerH / 2, 3, 0, Math.PI * 2)
+  ctx.arc(sx(32), tickerY + tickerH / 2, 3, 0, Math.PI * 2)
   ctx.fill()
 }
 

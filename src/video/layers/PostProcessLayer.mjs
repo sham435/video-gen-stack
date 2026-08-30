@@ -3,8 +3,6 @@ import { DesignSystem } from '../../visuals/DesignSystem.mjs'
 import { drawGlitchOverlay } from '../../visuals/BreakingBanner.mjs'
 import { FrameEnhancer } from '../enhancement/FrameEnhancer.mjs'
 
-const { W, H } = DesignSystem
-
 export class PostProcessLayer {
   constructor() {
     this.enhancer = new FrameEnhancer()
@@ -36,6 +34,7 @@ export class PostProcessLayer {
   }
 
   drawVignette(ctx, progress) {
+    const { W, H } = DesignSystem
     const grad = ctx.createRadialGradient(W / 2, H / 2, H * 0.3, W / 2, H / 2, H * 0.8)
     grad.addColorStop(0, 'rgba(0,0,0,0)')
     grad.addColorStop(1, 'rgba(0,0,0,0.4)')

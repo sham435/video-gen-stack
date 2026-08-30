@@ -7,6 +7,20 @@ import { NewsBroadcastEngine } from '../src/index.mjs'
 import { validateRenderOutput } from '../src/video/validateOutput.mjs'
 import { resolveRenderManifest, resolveRenderGates } from '../src/pipeline/RenderManifest.mjs'
 import { ChannelController } from '../src/governor/ChannelController.mjs'
+import { RenderProfiles } from '../src/video/RenderProfile.mjs'
+import { ThumbnailProfile } from '../src/thumbnail/ThumbnailProfile.mjs'
+
+// ── Output profile selection (single source of truth) ───────────────────
+// RENDER_ASPECT selects the target aspect for BOTH the rendered video and the
+// uploaded thumbnail so they never drift apart. Default 16:9 — Standard
+// YouTube (channel-shelf thumbnails via thumbnails.set). Set RENDER_ASPECT=9:16
+// to go back to Shorts. Values come straight from the canonical profile
+// definitions (RenderProfiles / ThumbnailProfile) — no scattered literals.
+const TARGET_ASPECT = process.env.RENDER_ASPECT || '16:9'
+const TARGET_RENDER = TARGET_ASPECT === '9:16' ? RenderProfiles.SHORT_4K : RenderProfiles.VIDEO_HD
+const TARGET_THUMB = TARGET_ASPECT === '9:16' ? ThumbnailProfile.SHORT : ThumbnailProfile.VIDEO
+const TARGET_MEDIA_TYPE = TARGET_RENDER.type === 'SHORT' ? 'short' : 'video'
+
 
 // ── Experiment + Metrics + Manifest (loaded per-run when enabled) ─────
 
@@ -375,7 +389,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
       // ── RENDER — core video production + post-render footer overlay ──
       job.onStage('RENDER', async (ctx) => {
         const plan = ctx.results.DISCOVER?.plan
-        const renderOptions = { quick: !!process.env.QUICK_RENDER }
+        const renderOptions = { quick: !!process.env.QUICK_RENDER, mediaType: TARGET_MEDIA_TYPE, aspectRatio: TARGET_ASPECT }
         if (plan) {
           renderOptions.strategy = {
             sceneStrategy: plan.sceneStrategy,
@@ -757,7 +771,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
               summary: (article.description || '').slice(0, 200),
               category: category || 'technology',
               videoUrl: `https://youtu.be/${videoId}`,
-              youtubeShortsUrl: `https://www.youtube.com/shorts/${videoId}`,
+              youtubeShortsUrl: TARGET_ASPECT === '9:16' ? `https://www.youtube.com/shorts/${videoId}` : `https://www.youtube.com/watch?v=${videoId}`,
               hashtags: (hashtags || '').split(/\s+/).filter(Boolean),
               thumbnailPath: thumbPath,
             })
@@ -902,16 +916,16 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         let thumbnailResult = { state: VerifyState.VIDEO_NOT_VISIBLE_YET, hasCustomThumbnail: false, verifiedUrl: null, remoteSha256: null, thumbnailMatches: false }
         const masterThumb = ctx.results.THUMBNAIL?.selected?.path || null
         const masterThumbSha = masterThumb ? sha256Thumbnail(masterThumb) : null
-        const shortProfile = ThumbnailProfile.SHORT
+        const thumbProfile = TARGET_THUMB
         if (masterThumb) {
           try {
             const { getAccessToken } = await import('../apps/api/publishers/youtube.js')
             const token = await getAccessToken()
             const verifier = new YouTubePropagationVerifier({
               token,
-              expectedWidth: shortProfile.width,
-              expectedHeight: shortProfile.height,
-              expectedAspectRatio: shortProfile.aspectRatio,
+              expectedWidth: thumbProfile.width,
+              expectedHeight: thumbProfile.height,
+              expectedAspectRatio: thumbProfile.aspectRatio,
             })
             thumbnailResult = await verifier.verify({ videoId, sha256: masterThumbSha, thumbnailPath: masterThumb })
 
@@ -949,9 +963,9 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           const token = await getAccessToken()
           const verifier = new PostPublishVerifier({
             token,
-            expectedWidth: shortProfile.width,
-            expectedHeight: shortProfile.height,
-            expectedAspectRatio: shortProfile.aspectRatio,
+            expectedWidth: thumbProfile.width,
+            expectedHeight: thumbProfile.height,
+            expectedAspectRatio: thumbProfile.aspectRatio,
           })
           const thumbPath = masterThumb || null
           verification = await verifier.verify({

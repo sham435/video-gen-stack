@@ -2,6 +2,7 @@ import { readFileSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { UIStyleSelector } from '../ai/UIStyleSelector.mjs'
+import { RenderProfiles, DEFAULT_PROFILE } from '../video/RenderProfile.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -10,9 +11,53 @@ const typography = JSON.parse(readFileSync(join(__dirname, '../../design-system/
 
 const styleSelector = new UIStyleSelector()
 
+// The DesignSystem is the SINGLE source of truth for the LOGICAL composition
+// canvas. Every visual/layout component reads W/H/dimensions from here, so the
+// whole stack is aspect-aware by construction. `setProfile` lets the video
+// engine pin the active RenderProfile (SHORT_4K -> 1080x1920, VIDEO_HD ->
+// 1280x720) BEFORE any frame is composed; nothing should hardcode 1080x1920.
+//
+// W/H/sx/sy are LIVE GETTERS that always reflect the active profile. This is
+// important: components are statically imported (module load) but the profile
+// is only pinned at ENGINE CONSTRUCTION (runtime), so a module-scope `const =
+// DesignSystem.W` would freeze the SHORT default. Always read them INSIDE the
+// draw function: `const { W, H, sx, sy } = DesignSystem`.
 export class DesignSystem {
-  static W = 1080
-  static H = 1920
+  static _profile = DEFAULT_PROFILE
+
+  /** Pin the active render profile; logical canvas dims follow it. */
+  static setProfile(profile = DEFAULT_PROFILE) {
+    this._profile = profile
+    return this
+  }
+
+  static get profile() {
+    return this._profile
+  }
+
+  static get W() {
+    return this._profile.logical.width
+  }
+
+  static get H() {
+    return this._profile.logical.height
+  }
+
+  /** Scale a 1080px-design-width value into the active logical canvas. */
+  static get sx() {
+    const base = 1080
+    return (v) => (v / base) * this.W
+  }
+
+  /** Scale a 1920px-design-height value into the active logical canvas. */
+  static get sy() {
+    const base = 1920
+    return (v) => (v / base) * this.H
+  }
+
+  static get sf() {
+    return (v) => (v / 1080) * Math.min(this.W, this.H * (1080 / 1920))
+  }
 
   static get dimensions() {
     return { W: this.W, H: this.H, centerX: this.W / 2, centerY: this.H / 2 }

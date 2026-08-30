@@ -62,7 +62,10 @@ const HOOK_TAGS = {
   SHOCKING_NUMBER: ['shocking', 'record', 'massive', 'numbers'],
 }
 
-const NICHE_VARIANT = ['viral', 'shorts', 'tiktok', 'reels', 'trending', 'fyp', 'explore', 'feed']
+// Standard YouTube discovery variants (16:9 non-Shorts) — replaces the old
+// Shorts-format signals (#shorts/#tiktok/#reels/#fyp) that no longer describe
+// the production output.
+const NICHE_VARIANT = ['news', 'breaking', 'trending', 'viral', 'explore', 'watch', 'mustwatch', 'daily']
 
 // Build 15 unique tags for an algorithm
 function buildAlgoTags(algo) {

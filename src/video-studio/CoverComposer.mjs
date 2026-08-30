@@ -219,20 +219,23 @@ export class CoverComposer {
   // ------------------------------------------------------------------
 
   /**
-   * 9:16 vertical "Shorts" thumbnail (2160x3840) — same brand system as the
-   * portrait cover. Designed for the thumbnail, not a blind video-frame grab:
-   * brand bar top, top overlay, home headline, subject, bottom brand strip.
-   * Resolves to the canonical SHORT profile (2x of the 1080x1920 base layout).
+   * YouTube thumbnail — 16:9 landscape (3840x2160) by default so it matches
+   * the Standard (non-Shorts) video and populates the channel shelf. The
+   * geometry is parameterized (opts.width/opts.height) and ALL layout is
+   * ratio-based (fractions of W/H) so the same renderer works for 16:9
+   * landscape or 9:16 portrait without hardcoded pixel constants.
    */
-  async composeThumbnail(brief, heroImage, outPath) {
-    const TW = 2160, TH = 3840
-    const S = 2 // scale factor over the original 1080x1920 base layout
+  async composeThumbnail(brief, heroImage, outPath, opts = {}) {
+    const TW = opts.width || 3840
+    const TH = opts.height || 2160
     const canvas = createCanvas(TW, TH)
     const ctx = canvas.getContext('2d')
+    // Base font unit scales with the frame's shorter side (landscape 16:9).
+    const U = Math.round(Math.min(TW, TH) / 18)
+    const Pad = Math.round(TW * 0.028)
     // Niche profile overrides: profile.accent > brief.accent_color > default
     const profile = brief.nicheProfile || null
     const accent = profile?.accent || brief.accent_color || '#E10600'
-    const pillLabel = profile?.label || brief.category || 'NEWS'
     const footerImg = brief.hideBranding ? null : await loadFooterAsset()
 
     // 1. Hero background (cover full frame)
@@ -251,41 +254,42 @@ export class CoverComposer {
         dim.addColorStop(1, 'rgba(0,0,0,0.86)')
         ctx.fillStyle = dim
         ctx.fillRect(0, 0, TW, TH)
-      } catch { this._thumbnailGradient(ctx, accent) }
+      } catch { this._thumbnailGradient(ctx, accent, TW, TH) }
     } else {
-      this._thumbnailGradient(ctx, accent)
+      this._thumbnailGradient(ctx, accent, TW, TH)
     }
 
-    // 2. Brand bar (FIXED top)
+    // 2. Brand bar (FIXED top) — height = 9% of frame height
+    const barH = Math.round(TH * 0.09)
     if (!brief.hideBranding) {
       ctx.fillStyle = 'rgba(0,0,0,0.6)'
-      ctx.fillRect(0, 0, TW, 240 * S)
+      ctx.fillRect(0, 0, TW, barH)
       ctx.fillStyle = accent
-      ctx.fillRect(0, 0, TW, 16 * S)
-      ctx.font = `900 ${80 * S}px Anton, Impact, sans-serif`
+      ctx.fillRect(0, 0, TW, Math.max(6, Math.round(TH * 0.012)))
+      ctx.font = `900 ${Math.round(U * 1.0)}px Anton, Impact, sans-serif`
       ctx.fillStyle = '#FFFFFF'
       ctx.textAlign = 'left'
       ctx.textBaseline = 'middle'
-      ctx.fillText(ANCHOR_CONFIG.label, 80 * S, 120 * S)
+      ctx.fillText(ANCHOR_CONFIG.label, Pad, Math.round(barH * 0.5))
       // LIVE badge
-      const liveW = 220 * S, liveH = 92 * S
-      ctx.font = `900 ${52 * S}px Inter, sans-serif`
+      const liveW = Math.round(TW * 0.075), liveH = Math.round(barH * 0.6)
+      ctx.font = `900 ${Math.round(U * 0.6)}px Inter, sans-serif`
       ctx.fillStyle = '#E10600'
       ctx.beginPath()
-      ctx.roundRect(TW - 80 * S - liveW, 74 * S, liveW, liveH, 16 * S)
+      ctx.roundRect(TW - Pad - liveW, Math.round(barH * 0.2), liveW, liveH, Math.round(TH * 0.012))
       ctx.fill()
       ctx.fillStyle = '#FFFFFF'
       ctx.textAlign = 'center'
-      ctx.fillText('LIVE', TW - 80 * S - liveW / 2, 120 * S)
+      ctx.fillText('LIVE', TW - Pad - liveW / 2, Math.round(barH * 0.5))
     }
 
-    // algorithm badge (9:16 small — visible in Shorts feed)
+    // algorithm badge (small, under the brand bar)
     const algo = brief.algorithm || new BrandStyleResolver().resolve(brief.headline || '', 'technology').algorithm
     if (!brief.hideBranding && algo) {
-      ctx.font = `600 ${44 * S}px Inter, sans-serif`
+      ctx.font = `600 ${Math.round(U * 0.5)}px Inter, sans-serif`
       ctx.fillStyle = 'rgba(255,255,255,0.6)'
       ctx.textAlign = 'left'
-      ctx.fillText(`ALGO #${algo.number}/48 • ${algo.visual?.id || ''}`, 80 * S, 200 * S)
+      ctx.fillText(`ALGO #${algo.number}/48 • ${algo.visual?.id || ''}`, Pad, Math.round(barH * 1.55))
       ctx.textAlign = 'center'
     }
 
@@ -308,18 +312,18 @@ export class CoverComposer {
       ? 'NOBODY EXPECTED THIS MOVE'
       : safeOverlay(brief.text_overlay?.top)
     ctx.textAlign = 'center'
-    ctx.font = `900 ${192 * S}px Anton, Impact, sans-serif`
+    ctx.font = `900 ${Math.round(U * 1.6)}px Anton, Impact, sans-serif`
     ctx.fillStyle = accent
     ctx.shadowColor = accent
-    ctx.shadowBlur = 80 * S
-    ctx.fillText(topText, TW / 2, TH * 0.24)
+    ctx.shadowBlur = Math.round(TW * 0.02)
+    ctx.fillText(topText, TW / 2, TH * 0.20)
     ctx.shadowBlur = 0
 
-    // 4. Headline — wrap to max TW*0.92 width, max 4 lines, auto-scale
+    // 4. Headline — wrap to max TW*0.88 width, max 4 lines, auto-scale
     const headline = (brief.headline || 'TECH NEWS').toUpperCase()
-    ctx.font = `900 ${240 * S}px Anton, Impact, sans-serif`
-    const maxW = TW * 0.92
-    let hFontSize = headline.length > 70 ? 68 * 2 : headline.length > 45 ? 80 * 2 : headline.length > 28 ? 100 * 2 : 120 * 2
+    ctx.font = `900 ${Math.round(U * 1.9)}px Anton, Impact, sans-serif`
+    const maxW = TW * 0.88
+    let hFontSize = headline.length > 90 ? U * 1.2 : headline.length > 60 ? U * 1.4 : headline.length > 40 ? U * 1.7 : U * 2.0
     const lines = []
     const wrap = () => {
       lines.length = 0
@@ -334,47 +338,48 @@ export class CoverComposer {
     }
     wrap()
     let guard = 0
-    while (lines.length > 4 && hFontSize > 80 && guard < 24) {
-      hFontSize -= 8
+    while (lines.length > 4 && hFontSize > U * 0.9 && guard < 24) {
+      hFontSize -= U * 0.07
       wrap()
       guard++
     }
     ctx.font = `900 ${hFontSize}px Anton, Impact, sans-serif`
     ctx.fillStyle = '#FFFFFF'
     ctx.shadowColor = 'rgba(0,0,0,0.95)'
-    ctx.shadowBlur = 36 * S
-    const lineH = hFontSize * 1.12
+    ctx.shadowBlur = Math.round(TH * 0.02)
+    const lineH = hFontSize * 1.1
     const blockH = lines.length * lineH
-    const startY = TH * 0.38 - blockH / 2
+    const startY = TH * 0.36 - blockH / 2
     lines.forEach((l, i) => ctx.fillText(l, TW / 2, startY + i * lineH + hFontSize * 0.8))
     ctx.shadowBlur = 0
 
     // 5. Bottom accent badge — niche pill from profile takes priority
-    const nicheText = profile?.label || null
-    const bottomText = nicheText || safeOverlay(brief.text_overlay?.bottom, 'NEW DETAILS')
-    ctx.font = `900 ${88 * S}px Anton, Impact, sans-serif`
-    const bw = ctx.measureText(bottomText).width + 120 * S
+    const bottomText = profile?.label || safeOverlay(brief.text_overlay?.bottom, 'NEW DETAILS')
+    ctx.font = `900 ${Math.round(U * 1.0)}px Anton, Impact, sans-serif`
+    const bw = ctx.measureText(bottomText).width + Math.round(TW * 0.04)
+    const badgH = Math.round(TH * 0.075)
     ctx.fillStyle = accent
     ctx.beginPath()
-    ctx.roundRect(TW / 2 - bw / 2, TH * 0.70, bw, 136 * S, 20 * S)
+    ctx.roundRect(TW / 2 - bw / 2, TH * 0.72, bw, badgH, Math.round(badgH / 3))
     ctx.fill()
     ctx.fillStyle = '#FFFFFF'
-    ctx.fillText(bottomText, TW / 2, TH * 0.70 + 72 * S)
+    ctx.fillText(bottomText, TW / 2, TH * 0.72 + badgH / 2)
     } // end legacy mode
 
     // 6. Bottom brand strip
     if (!brief.hideBranding) {
+      const stripH = Math.round(TH * 0.08)
       ctx.fillStyle = 'rgba(0,0,0,0.6)'
-      ctx.fillRect(0, TH - 168 * S, TW, 168 * S)
-      ctx.font = `600 ${64 * S}px Inter, sans-serif`
+      ctx.fillRect(0, TH - stripH, TW, stripH)
+      ctx.font = `600 ${Math.round(U * 0.7)}px Inter, sans-serif`
       ctx.fillStyle = 'rgba(255,255,255,0.75)'
       ctx.textAlign = 'left'
       ctx.textBaseline = 'middle'
-      ctx.fillText(`Source: ${brief.source_label || 'NEWS-MONSTER'}`, 72 * S, TH - 84 * S)
+      ctx.fillText(`Source: ${brief.source_label || 'NEWS-MONSTER'}`, Pad, TH - stripH / 2)
       ctx.textAlign = 'right'
       ctx.fillStyle = accent
-      ctx.font = `700 ${64 * S}px Inter, sans-serif`
-      ctx.fillText((brief.mood || 'BREAKING').toUpperCase(), TW - 72 * S, TH - 84 * S)
+      ctx.font = `700 ${Math.round(U * 0.7)}px Inter, sans-serif`
+      ctx.fillText((brief.mood || 'BREAKING').toUpperCase(), TW - Pad, TH - stripH / 2)
     }
 
     fs.mkdirSync(path.dirname(outPath), { recursive: true })
@@ -382,15 +387,14 @@ export class CoverComposer {
     return outPath
   }
 
-  _thumbnailGradient(ctx, accent) {
-    const W = 2160, H = 3840
+  _thumbnailGradient(ctx, accent, W, H) {
     const grad = ctx.createLinearGradient(0, 0, 0, H)
     grad.addColorStop(0, '#0A0A0A')
     grad.addColorStop(0.5, '#101020')
     grad.addColorStop(1, '#050505')
     ctx.fillStyle = grad
     ctx.fillRect(0, 0, W, H)
-    const glow = ctx.createRadialGradient(W / 2, H * 0.5, 0, W / 2, H * 0.5, 1280)
+    const glow = ctx.createRadialGradient(W / 2, H * 0.5, 0, W / 2, H * 0.5, Math.round(Math.min(W, H) * 0.6))
     glow.addColorStop(0, `${accent}30`)
     glow.addColorStop(1, `${accent}00`)
     ctx.fillStyle = glow

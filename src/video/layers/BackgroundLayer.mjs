@@ -1,9 +1,8 @@
 import { DesignSystem } from '../../visuals/DesignSystem.mjs'
 
-const { W, H } = DesignSystem
-
 export class BackgroundLayer {
   draw(ctx, scene, progress, category) {
+    const { W, H } = DesignSystem
     const catStyle = DesignSystem.getCategoryStyle(category)
     const accent = catStyle.colors.primary || DesignSystem.brand.primary
 

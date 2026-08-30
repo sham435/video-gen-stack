@@ -2,10 +2,9 @@ import { DesignSystem } from '../../visuals/DesignSystem.mjs'
 import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
 import { headerLayout } from '../../layout/HeaderLayout.mjs'
 
-const { W, H } = DesignSystem
-
 export class BroadcastUILayer {
   draw(ctx, scene, progress, category) {
+    const { W, H } = DesignSystem
     const catStyle = DesignSystem.getCategoryStyle(category)
     const p = Math.min(1, progress * 1.5)
 

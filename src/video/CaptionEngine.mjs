@@ -1,4 +1,4 @@
-const W = 1080, H = 1920
+import { DesignSystem } from '../visuals/DesignSystem.mjs'
 
 export function buildWordTimings(script, duration) {
   const words = script.split(' ')
@@ -18,6 +18,7 @@ export function getActiveWordIndex(wordTimings, time) {
 }
 
 export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accentColor = '#E10600', fontSize = 58, layout = null) {
+  const { W, H, sx } = DesignSystem
   // Phase 1 — Duplicate Word Filter: the emphasis word is already rendered large
   // by InformationLayer. Remove it from the caption sentence so it's never repeated.
   const focusKey = (focusWord || '').toUpperCase()
@@ -36,6 +37,9 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
     lines = layout.lines.map(l => l.split(' '))
     fontSize = layout.fontSize
   } else {
+    // Non-layout path: scale the design-space caption size (58 default) into
+    // the active canvas so reading text stays proportionally correct on 16:9.
+    fontSize = sx(fontSize || 58)
     const maxWordsPerLine = 3
     lines = []
     for (let i = 0; i < words.length; i += maxWordsPerLine) {

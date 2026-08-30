@@ -1,7 +1,8 @@
-const W = 1080, H = 1920
+import { DesignSystem } from '../visuals/DesignSystem.mjs'
 
 const EFFECTS = {
   glitch_red(ctx, p) {
+    const { W, H } = DesignSystem
     if (Math.random() > 0.08 / (p + 0.1)) return
     const sliceH = 2 + Math.random() * 10
     const sliceY = Math.random() * H
@@ -16,6 +17,7 @@ const EFFECTS = {
   },
 
   rgb_split(ctx, p) {
+    const { W, H } = DesignSystem
     if (Math.random() > 0.06) return
     const offset = (Math.random() - 0.5) * 8 * (1 - p)
     ctx.save()
@@ -29,6 +31,7 @@ const EFFECTS = {
   },
 
   scan_lines(ctx, p) {
+    const { W, H } = DesignSystem
     ctx.save()
     ctx.fillStyle = `rgba(0, 229, 255, ${0.015 + Math.sin(p * 60) * 0.01})`
     for (let i = 0; i < H; i += 4) ctx.fillRect(0, i, W, 1)
@@ -36,6 +39,7 @@ const EFFECTS = {
   },
 
   vignette(ctx, p) {
+    const { W, H } = DesignSystem
     const radius = W * 0.7
     const grad = ctx.createRadialGradient(W / 2, H / 2, radius * 0.4, W / 2, H / 2, radius)
     grad.addColorStop(0, 'rgba(0,0,0,0)')
@@ -53,6 +57,7 @@ const EFFECTS = {
   },
 
   particle_burst(ctx, p) {
+    const { W, H } = DesignSystem
     if (p > 0.3) return
     const count = 30
     for (let i = 0; i < count; i++) {
@@ -69,6 +74,7 @@ const EFFECTS = {
   },
 
   light_sweep(ctx, p) {
+    const { W, H } = DesignSystem
     const sweepX = (p * 1.5 % 1) * W * 1.5 - W * 0.25
     const grad = ctx.createLinearGradient(sweepX - 80, 0, sweepX + 80, 0)
     grad.addColorStop(0, 'rgba(255,255,255,0)')
@@ -79,6 +85,7 @@ const EFFECTS = {
   },
 
   noise_overlay(ctx, p) {
+    const { W, H } = DesignSystem
     const density = 0.01
     ctx.fillStyle = 'rgba(255,255,255,0.03)'
     for (let i = 0; i < W * H * density; i++) {
@@ -89,6 +96,7 @@ const EFFECTS = {
   },
 
   cameraPush(ctx, p, color = '#00E5FF') {
+    const { W, H } = DesignSystem
     const zoom = 1 + Math.sin(p * Math.PI * 0.5) * 0.03
     ctx.translate(W / 2, H / 2)
     ctx.scale(zoom, zoom)
@@ -103,6 +111,7 @@ const EFFECTS = {
   },
 
   depthBlur(ctx, p, intensity = 0.3) {
+    const { W, H } = DesignSystem
     const blurAmount = Math.sin(p * Math.PI) * intensity
     ctx.save()
     ctx.globalAlpha = blurAmount * 0.15
@@ -118,6 +127,7 @@ const EFFECTS = {
   },
 
   particleField(ctx, p, color = '#00E5FF', count = 40) {
+    const { W, H } = DesignSystem
     const phase = p * 60
     for (let i = 0; i < count; i++) {
       const seed = i * 137.508
@@ -133,6 +143,7 @@ const EFFECTS = {
   },
 
   digitalHUD(ctx, p, color = '#00E5FF') {
+    const { W, H } = DesignSystem
     ctx.save()
     ctx.strokeStyle = color
     ctx.lineWidth = 1.5
@@ -167,6 +178,7 @@ const EFFECTS = {
   },
 
   cinematicReveal(ctx, p, color = '#FFFFFF') {
+    const { W, H } = DesignSystem
     const reveal = Math.min(1, p * 2)
     const barH = H * 0.5 * (1 - reveal)
     ctx.save()
@@ -188,6 +200,7 @@ const EFFECTS = {
   },
 
   lensFlare(ctx, p, color = '#00E5FF') {
+    const { W, H } = DesignSystem
     if (Math.random() > 0.03) return
     const x = W * 0.2 + Math.random() * W * 0.6
     const y = H * 0.2 + Math.random() * H * 0.6
@@ -214,6 +227,7 @@ const EFFECTS = {
   },
 
   smartTransition(ctx, p, type = 'crossfade') {
+    const { W, H } = DesignSystem
     if (type === 'crossfade') {
       ctx.save()
       ctx.globalAlpha = 1 - p

@@ -1,9 +1,8 @@
 import { DesignSystem } from '../../visuals/DesignSystem.mjs'
 
-const { W, H } = DesignSystem
-
 export class GlassCardLayer {
   draw(ctx, scene, progress, options = {}) {
+    const { W, H } = DesignSystem
     const p = Math.min(1, (progress - (options.delay || 0)) / (options.duration || 0.3))
     if (p <= 0) return
 

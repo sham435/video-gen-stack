@@ -58,7 +58,7 @@ function buildAlgoDescription(algo) {
     '',
     algo.title,
     '',
-    '#NEWSMONSTER #Shorts',
+    '#NEWSMONSTER #BREAKING',
   ].join('\n')
 }
 
