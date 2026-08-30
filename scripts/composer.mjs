@@ -414,6 +414,8 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         const { inspectThumbnailFile } = await import('../src/thumbnail/ThumbnailMetadata.mjs')
         const { validateThumbnailMediaFile, MediaValidationState } = await import('../src/thumbnail/ThumbnailMediaValidator.mjs')
 
+        const { enforceThumbnailProfile, ThumbnailValidationError, MAX_THUMBNAIL_BYTES } = await import('../src/thumbnail/ThumbnailProfile.mjs')
+
         // MEDIA_VALID gate — pure-buffer PNG structural validation (safe, no
         // native decode). Malformed/unsupported PNGs are caught HERE, before
         // upload, never reaching YouTube's thumbnails.set. Failures are
@@ -440,7 +442,6 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         const meta = await inspectThumbnailFile(candidate)
         const selected = { path: candidate, width: meta.width, height: meta.height, mimeType: meta.mimeType, sha256: meta.sha256, aspectRatio: meta.aspectRatio }
         // Enforce the Short thumbnail geometry contract (9:16 2160x3840).
-        const { enforceThumbnailProfile, ThumbnailValidationError, MAX_THUMBNAIL_BYTES } = await import('../src/thumbnail/ThumbnailProfile.mjs')
         try {
           enforceThumbnailProfile(
             { width: selected.width, height: selected.height },
