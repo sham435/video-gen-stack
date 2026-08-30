@@ -1,166 +1,217 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-30T17:06:05.374Z",
-  "source": "production-ledger",
+  "updatedAt": "2026-08-30T17:35:34.324Z",
+  "source": "youtube-rss",
   "videos": [
     {
       "id": "tx2vlV418yg",
       "title": "Jameson Maker Pernod Ricard Warns of Sales Hit as Americans Ease Off on Drinking | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-08-30T17:01:28.304Z",
+      "publishedAt": "2026-08-30T17:01:42+00:00",
       "publishedLabel": "Aug 30, 05:01 PM",
-      "thumbnail": "/thumbnails/tx2vlV418yg.png",
-      "thumbnailSha256": "1e5c8729b512354c707696541c994247b55c3ee772fcd44577305bd7ef3fc377",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/tx2vlV418yg",
+      "thumbnail": "https://i.ytimg.com/vi/tx2vlV418yg/maxresdefault.jpg",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
       "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "tx2vlV418yg",
-          "url": "https://youtu.be/tx2vlV418yg",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "1e5c8729b512354c707696541c994247b55c3ee772fcd44577305bd7ef3fc377",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "1e5c8729b512354c707696541c994247b55c3ee772fcd44577305bd7ef3fc377",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/tx2vlV418yg.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
       "id": "N-Jax6mKHkQ",
-      "title": "Global Bond Yields Rise Ahead of Fed’s Warsh Speech; 10-Year Bund Yield Hits 15-Year High | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-08-30T16:59:21.020Z",
+      "title": "Global Bond Yields Rise Ahead of Fed’s Warsh Speech; 10-Year Bund Yield Hits 15-Year High | NEWS-MON",
+      "publishedAt": "2026-08-30T16:59:49+00:00",
       "publishedLabel": "Aug 30, 04:59 PM",
-      "thumbnail": "/thumbnails/N-Jax6mKHkQ.png",
-      "thumbnailSha256": "7470f9a129454552d9d12b0ba240350f7e3c677e2c87933768e49ae936df038c",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/N-Jax6mKHkQ",
+      "thumbnail": "https://i.ytimg.com/vi/N-Jax6mKHkQ/maxresdefault.jpg",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
       "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "N-Jax6mKHkQ",
-          "url": "https://youtu.be/N-Jax6mKHkQ",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "7470f9a129454552d9d12b0ba240350f7e3c677e2c87933768e49ae936df038c",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "7470f9a129454552d9d12b0ba240350f7e3c677e2c87933768e49ae936df038c",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/N-Jax6mKHkQ.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
       "id": "Z7gfWEq8p1M",
       "title": "Stocks Lower as Fed’s Warsh Comments Boost Rate-Hike Bets | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-08-30T16:57:03.518Z",
+      "publishedAt": "2026-08-30T16:57:21+00:00",
       "publishedLabel": "Aug 30, 04:57 PM",
-      "thumbnail": "/thumbnails/Z7gfWEq8p1M.png",
-      "thumbnailSha256": "e1382a99bad7afff0af6ac14ab47e0d27854c10319949ed77706dc931ae4a271",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/Z7gfWEq8p1M",
+      "thumbnail": "https://i.ytimg.com/vi/Z7gfWEq8p1M/maxresdefault.jpg",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
       "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "Z7gfWEq8p1M",
-          "url": "https://youtu.be/Z7gfWEq8p1M",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "e1382a99bad7afff0af6ac14ab47e0d27854c10319949ed77706dc931ae4a271",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "e1382a99bad7afff0af6ac14ab47e0d27854c10319949ed77706dc931ae4a271",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/Z7gfWEq8p1M.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "yni0q1EvM-s",
+      "title": "‘Force Restart’—Microsoft Changes Windows Update Next Month - Forbes | NEWS-MONSTER",
+      "publishedAt": "2026-08-30T15:12:08+00:00",
+      "publishedLabel": "Aug 30, 03:12 PM",
+      "thumbnail": "https://i.ytimg.com/vi/yni0q1EvM-s/maxresdefault.jpg",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "bQaEwsb613Q",
+      "title": "Fatal Fury: City of the Wolves is free to play for the weekend though only on one platform | NEWS-MO",
+      "publishedAt": "2026-08-30T14:23:53+00:00",
+      "publishedLabel": "Aug 30, 02:23 PM",
+      "thumbnail": "https://i.ytimg.com/vi/bQaEwsb613Q/maxresdefault.jpg",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "_xtp7R0L_DI",
+      "title": "‘Force Restart’—Microsoft Changes Windows Update Next Month - Forbes | NEWS-MONSTER",
+      "publishedAt": "2026-08-30T14:15:44+00:00",
+      "publishedLabel": "Aug 30, 02:15 PM",
+      "thumbnail": "https://i.ytimg.com/vi/_xtp7R0L_DI/maxresdefault.jpg",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "bp79GxiplR4",
+      "title": "Fatal Fury: City of the Wolves is free to play for the weekend though only on one platform | NEWS-MO",
+      "publishedAt": "2026-08-30T12:16:20+00:00",
+      "publishedLabel": "Aug 30, 12:16 PM",
+      "thumbnail": "https://i.ytimg.com/vi/bp79GxiplR4/maxresdefault.jpg",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "g9PdQky9ZrM",
+      "title": "Fatal Fury: City of the Wolves is free to play for the weekend though only on one platform | NEWS-MO",
+      "publishedAt": "2026-08-30T09:29:42+00:00",
+      "publishedLabel": "Aug 30, 09:29 AM",
+      "thumbnail": "https://i.ytimg.com/vi/g9PdQky9ZrM/maxresdefault.jpg",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "EFmjtXA_MzE",
+      "title": "Fatal Fury: City of the Wolves is free to play for the weekend though only on one platform | NEWS-MO",
+      "publishedAt": "2026-08-30T07:28:28+00:00",
+      "publishedLabel": "Aug 30, 07:28 AM",
+      "thumbnail": "https://i.ytimg.com/vi/EFmjtXA_MzE/maxresdefault.jpg",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "GicGqDHflO4",
+      "title": "Apple implements price hikes for its TV streaming service and 'One' subscription bundle -  | NEWS-MO",
+      "publishedAt": "2026-08-30T07:20:06+00:00",
+      "publishedLabel": "Aug 30, 07:20 AM",
+      "thumbnail": "https://i.ytimg.com/vi/GicGqDHflO4/maxresdefault.jpg",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "LSC8uAG7CrQ",
+      "title": "Cuatro días entre Nvidia, OpenAI, Google y Tesla: la gira chilena por Silicon Valley | NEWS-MONSTER",
+      "publishedAt": "2026-08-30T00:54:30+00:00",
+      "publishedLabel": "Aug 30, 12:54 AM",
+      "thumbnail": "https://i.ytimg.com/vi/LSC8uAG7CrQ/maxresdefault.jpg",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "2CinTjlXdy8",
+      "title": "tesla-protocol 1.2.0 | NEWS-MONSTER",
+      "publishedAt": "2026-08-30T00:45:55+00:00",
+      "publishedLabel": "Aug 30, 12:45 AM",
+      "thumbnail": "https://i.ytimg.com/vi/2CinTjlXdy8/maxresdefault.jpg",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "vtF7shH3j_Y",
+      "title": "Experts Disagree On U.S | NEWS-MONSTER",
+      "publishedAt": "2026-08-29T22:54:36+00:00",
+      "publishedLabel": "Aug 29, 10:54 PM",
+      "thumbnail": "https://i.ytimg.com/vi/vtF7shH3j_Y/maxresdefault.jpg",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "x3M_rYQ2akg",
+      "title": "Jameson Maker Pernod Ricard Warns of Sales Hit as Americans Ease Off on Drinking | NEWS-MONSTER",
+      "publishedAt": "2026-08-29T22:47:53+00:00",
+      "publishedLabel": "Aug 29, 10:47 PM",
+      "thumbnail": "https://i.ytimg.com/vi/x3M_rYQ2akg/maxresdefault.jpg",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "Nb7Ft0GUdGk",
+      "title": "Global Bond Yields Rise Ahead of Fed’s Warsh Speech; 10-Year Bund Yield Hits 15-Year High | NEWS-MON",
+      "publishedAt": "2026-08-29T22:38:56+00:00",
+      "publishedLabel": "Aug 29, 10:38 PM",
+      "thumbnail": "https://i.ytimg.com/vi/Nb7Ft0GUdGk/maxresdefault.jpg",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     }
   ]
 }
