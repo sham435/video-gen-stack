@@ -1,31 +1,31 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-30T15:11:57.857Z",
+  "updatedAt": "2026-08-30T17:06:05.374Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "yni0q1EvM-s",
-      "title": "‘Force Restart’—Microsoft Changes Windows Update Next Month - Forbes | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-08-30T15:11:57.365Z",
-      "publishedLabel": "Aug 30, 03:11 PM",
-      "thumbnail": "/thumbnails/yni0q1EvM-s.png",
-      "thumbnailSha256": "8ccbb1bff9ef76faf61ac5a8e9abcdce023b1576a17710ca245ebff200f990d2",
+      "id": "tx2vlV418yg",
+      "title": "Jameson Maker Pernod Ricard Warns of Sales Hit as Americans Ease Off on Drinking | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-08-30T17:01:28.304Z",
+      "publishedLabel": "Aug 30, 05:01 PM",
+      "thumbnail": "/thumbnails/tx2vlV418yg.png",
+      "thumbnailSha256": "1e5c8729b512354c707696541c994247b55c3ee772fcd44577305bd7ef3fc377",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/yni0q1EvM-s",
+      "youtubeUrl": "https://youtu.be/tx2vlV418yg",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "yni0q1EvM-s",
-          "url": "https://youtu.be/yni0q1EvM-s",
+          "videoId": "tx2vlV418yg",
+          "url": "https://youtu.be/tx2vlV418yg",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "8ccbb1bff9ef76faf61ac5a8e9abcdce023b1576a17710ca245ebff200f990d2",
+            "sha256": "1e5c8729b512354c707696541c994247b55c3ee772fcd44577305bd7ef3fc377",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -40,14 +40,120 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 4,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "8ccbb1bff9ef76faf61ac5a8e9abcdce023b1576a17710ca245ebff200f990d2",
+            "sha256": "1e5c8729b512354c707696541c994247b55c3ee772fcd44577305bd7ef3fc377",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/yni0q1EvM-s.png"
+            "path": "public/thumbnails/tx2vlV418yg.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "N-Jax6mKHkQ",
+      "title": "Global Bond Yields Rise Ahead of Fed’s Warsh Speech; 10-Year Bund Yield Hits 15-Year High | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-08-30T16:59:21.020Z",
+      "publishedLabel": "Aug 30, 04:59 PM",
+      "thumbnail": "/thumbnails/N-Jax6mKHkQ.png",
+      "thumbnailSha256": "7470f9a129454552d9d12b0ba240350f7e3c677e2c87933768e49ae936df038c",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/N-Jax6mKHkQ",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "N-Jax6mKHkQ",
+          "url": "https://youtu.be/N-Jax6mKHkQ",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "7470f9a129454552d9d12b0ba240350f7e3c677e2c87933768e49ae936df038c",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "7470f9a129454552d9d12b0ba240350f7e3c677e2c87933768e49ae936df038c",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/N-Jax6mKHkQ.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "Z7gfWEq8p1M",
+      "title": "Stocks Lower as Fed’s Warsh Comments Boost Rate-Hike Bets | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-08-30T16:57:03.518Z",
+      "publishedLabel": "Aug 30, 04:57 PM",
+      "thumbnail": "/thumbnails/Z7gfWEq8p1M.png",
+      "thumbnailSha256": "e1382a99bad7afff0af6ac14ab47e0d27854c10319949ed77706dc931ae4a271",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/Z7gfWEq8p1M",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "Z7gfWEq8p1M",
+          "url": "https://youtu.be/Z7gfWEq8p1M",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "e1382a99bad7afff0af6ac14ab47e0d27854c10319949ed77706dc931ae4a271",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "e1382a99bad7afff0af6ac14ab47e0d27854c10319949ed77706dc931ae4a271",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/Z7gfWEq8p1M.png"
           }
         },
         "linkedin": {
