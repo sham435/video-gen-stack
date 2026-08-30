@@ -8,6 +8,7 @@
 import { DesignSystem } from '../../visuals/DesignSystem.mjs'
 import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
 import { canRenderText } from '../TextPolicy.mjs'
+import { FooterLayout } from '../footer/FooterLayout.mjs'
 
 // Category accent palette for the AI layer (per production spec):
 // technology = electric cyan / neon blue, business = emerald,

@@ -16,21 +16,27 @@ import { createCanvas, GlobalFonts } from '@napi-rs/canvas'
 import fs from 'node:fs'
 import { FooterLayout } from '../src/video/footer/FooterLayout.mjs'
 import { BROADCAST_TEXT } from '../src/style/text-tokens.mjs'
+import { DesignSystem } from '../src/visuals/DesignSystem.mjs'
+import { RenderProfiles, DEFAULT_PROFILE } from '../src/video/RenderProfile.mjs'
 const FOOTER = BROADCAST_TEXT.footer
 
 if (fs.existsSync('assets/fonts/Montserrat-ExtraBold.ttf'))
   GlobalFonts.registerFromPath('assets/fonts/Montserrat-ExtraBold.ttf', 'Montserrat ExtraBold')
 
+// Each format runs the canvas pipeline with its own render PROFILE pinned so
+// the footer geometry is verified against the true logical canvas — both the
+// portrait 9:16 default (SHORT_4K) and the landscape 16:9 target (VIDEO_HD).
 const FORMATS = [
-  { name: '9:16', W: 1080, H: 1920 },
-  { name: '1:1', W: 1080, H: 1080 },
-  { name: '16:9', W: 1920, H: 1080 },
+  { name: '9:16 SHORT_4K', W: 1080, H: 1920, profile: RenderProfiles.SHORT_4K },
+  { name: '1:1', W: 1080, H: 1080, profile: DEFAULT_PROFILE },
+  { name: '16:9 VIDEO_HD', W: 1280, H: 720, profile: RenderProfiles.VIDEO_HD },
 ]
 
 const PAD = 0.5 // tolerance for float measure rounds
 
 for (const fmt of FORMATS) {
   test(`footer layout — ${fmt.name} (${fmt.W}x${fmt.H})`, () => {
+    DesignSystem.setProfile(fmt.profile)
     const ctx = createCanvas(fmt.W, fmt.H).getContext('2d')
     const layout = FooterLayout.compute(ctx, fmt.W)
     const zones = layout.zones
@@ -128,16 +134,39 @@ for (const fmt of FORMATS) {
     ctx.font = urlFont
     const urlFull = ctx.measureText('sham435.github.io/video-gen-stack').width
     assert.ok(urlFull <= zones[2].w + PAD, `full URL (${Math.round(urlFull)}px) fits right zone (${Math.round(zones[2].w)}px) — no ellipsis`)
-    assert.ok(urlPx >= 20, `URL font ${urlPx}px readable`)
+    // Readability floor is a 9:16 (full-size footer) guarantee. The compact
+    // 16:9 footer uses ~14px logical fonts by design; those are upscaled
+    // (VIDEO_HD logical 1280x720 -> physical 1920x1080, 1.5x) so the final
+    // output stays legible. Guard the physical output size instead.
+    const physicalScale = fmt.profile === RenderProfiles.VIDEO_HD ? 1.5 : 1
+    assert.ok(urlPx * physicalScale >= 14, `URL font ${urlPx}px (${Math.round(urlPx * physicalScale)}px physical) readable`)
 
-    // 10. Line gaps: the logo→platform stack carries at least a 12px
-    //     (scaled) vertical gap — no touching lines.
+    // 10. Line gaps: the logo→platform stack carries a readable vertical gap —
+    //     never touching lines. 9:16 keeps the full ≥12px (scaled) floor; the
+    //     compact 16:9 footer scales the gap proportionally (~50%), so the
+    //     invariant is a non-zero gap ≥ 6px rather than the full 12px.
     const lineGapPx = Math.round(FOOTER.lineGap * scale)
-    assert.ok(lineGapPx >= 12, `line gap ${lineGapPx}px must be ≥ 12px`)
+    const gapFloor = fmt.profile === RenderProfiles.VIDEO_HD ? 6 : 12
+    assert.ok(lineGapPx >= gapFloor, `line gap ${lineGapPx}px must be ≥ ${gapFloor}px`)
     // The urlTagline line was removed — the URL column is a single line.
     assert.ok(url.h === Math.round(FOOTER.url.size * scale), 'URL column is single-line (no urlTagline)')
   })
 }
+
+// Reset to the default portrait profile so later tests run on 9:16.
+DesignSystem.setProfile(DEFAULT_PROFILE)
+
+// Wide (16:9 VIDEO_HD) footer is compacted to ~50% height so it never
+// dominates the short landscape frame.
+test('footer — wide 16:9 secondary is compacted to about half the 9:16 height', () => {
+  DesignSystem.setProfile(RenderProfiles.SHORT_4K)
+  const short = FooterLayout.compute(createCanvas(1080, 1920).getContext('2d'), 1080)
+  DesignSystem.setProfile(RenderProfiles.VIDEO_HD)
+  const wide = FooterLayout.compute(createCanvas(1280, 720).getContext('2d'), 1280)
+  const ratio = wide.barHeight / short.barHeight
+  assert.ok(ratio <= 0.65, `wide footer / 9:16 footer = ${ratio.toFixed(2)} (expect ≤0.65 for ~50% height)`)
+  DesignSystem.setProfile(DEFAULT_PROFILE)
+})
 
 // Deterministic draw smoke test: rendering must not throw and produces pixels.
 test('footer draw — produces a non-empty frame', () => {

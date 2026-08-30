@@ -19,6 +19,8 @@ import { FooterLayout } from '../src/video/footer/FooterLayout.mjs'
 import { BROADCAST_TEXT } from '../src/style/text-tokens.mjs'
 import { headerLayout } from '../src/layout/HeaderLayout.mjs'
 import { resolveRenderManifest } from '../src/pipeline/RenderManifest.mjs'
+import { DesignSystem } from '../src/visuals/DesignSystem.mjs'
+import { RenderProfiles, DEFAULT_PROFILE } from '../src/video/RenderProfile.mjs'
 
 if (fs.existsSync('assets/fonts/Montserrat-ExtraBold.ttf'))
   GlobalFonts.registerFromPath('assets/fonts/Montserrat-ExtraBold.ttf', 'Montserrat ExtraBold')
@@ -167,6 +169,69 @@ test('chrome — footer drawn ABOVE post-process (never behind vignette)', async
   // The footer bar region must contain bright text; vignette alone yields ~124.
   const s = regionStats(ctx, 0, footerTop, W, H)
   assert.ok(s.maxB >= 200, `footer bar max brightness ${s.maxB} ≥200 (pre-fix was 124)`)
+})
+
+// ── 16:9 VIDEO_HD contract ───────────────────────────────────────────────
+// The header reflows to a single compact right-aligned row (brand rightmost,
+// LIVE to its left) and the footer compacts to ~50% so both fit the short
+// landscape frame. These are the deliberate 16:9 deviations from 9:16.
+
+const WIDE = { W: 1280, H: 720, profile: RenderProfiles.VIDEO_HD }
+const SHORT = { W: 1080, H: 1920, profile: RenderProfiles.SHORT_4K }
+
+async function renderWideBrandCloseFrame(progress = 1.0) {
+  const { SceneEngine } = await import('../src/video/SceneEngine.mjs')
+  const engine = new SceneEngine({ quality: 'default', category: 'technology' })
+  const scene = { type: 'brand_close', duration: 6, category: 'technology', image: 'output/batch-01/cover.png', ticker: ['AI', 'Robotics', 'Cybersecurity'] }
+  return engine.renderSceneFrame(scene, progress, [], 0, null)
+}
+
+test('16:9 — header is a single compact right-aligned row (y=40, 40px right margin)', () => {
+  DesignSystem.setProfile(WIDE.profile)
+  const ctx = createCanvas(WIDE.W, WIDE.H).getContext('2d')
+  const layout = headerLayout(ctx)
+  const rightGap = WIDE.W - (layout.brand.x + layout.brand.w)
+  assert.ok(Math.abs(rightGap - 40) <= 0.6, `brand rightGap ${rightGap} == 40px from right edge`)
+  assert.ok(layout.brand.y <= 44, `brand top ${layout.brand.y} at compact header y`)
+  // Brand is rightmost, LIVE sits to its LEFT (order reversed from portrait).
+  assert.ok(layout.live.x + layout.live.w <= layout.brand.x, 'LIVE left of brand')
+  // Compact brand font (28px) vs the full portrait brand (38px).
+  assert.ok(layout.brand.h <= 44, `compact brand pill height ${layout.brand.h} <= 44px`)
+  DesignSystem.setProfile(DEFAULT_PROFILE)
+})
+
+test('16:9 — wide footer fits inside the 720-tall frame', () => {
+  DesignSystem.setProfile(WIDE.profile)
+  const ctx = createCanvas(WIDE.W, WIDE.H).getContext('2d')
+  const layout = FooterLayout.compute(ctx, WIDE.W)
+  const footerTop = FooterLayout.barTopInFrame(ctx, WIDE.W, WIDE.H)
+  assert.ok(footerTop >= 0, `footerTop ${footerTop} >= 0`)
+  assert.ok(footerTop + layout.barHeight <= WIDE.H, `footer inside frame (${footerTop + layout.barHeight} <= ${WIDE.H})`)
+  // Compact footer is materially shorter than the 9:16 footer.
+  DesignSystem.setProfile(SHORT.profile)
+  const shortLayout = FooterLayout.compute(createCanvas(SHORT.W, SHORT.H).getContext('2d'), SHORT.W)
+  assert.ok(layout.barHeight <= shortLayout.barHeight * 0.65, `wide bar ${layout.barHeight} <= ${Math.round(shortLayout.barHeight * 0.65)} (compact ~50%)`)
+  DesignSystem.setProfile(DEFAULT_PROFILE)
+})
+
+test('16:9 — header and footer both render visibly in composed wide frame', async () => {
+  DesignSystem.setProfile(WIDE.profile)
+  const ctx = createCanvas(WIDE.W, WIDE.H).getContext('2d')
+  const { loadImage } = await import('@napi-rs/canvas')
+  const img = await loadImage(await renderWideBrandCloseFrame(1.0))
+  ctx.drawImage(img, 0, 0)
+  // Header: red LIVE pill present near top-right.
+  const header = headerLayout(ctx)
+  const redBox = ctx.getImageData(header.live.x, header.live.y, Math.max(1, header.live.w), Math.max(1, header.live.h)).data
+  let red = 0
+  for (let i = 0; i < redBox.length; i += 4) if (redBox[i] > 120 && redBox[i + 1] < 100 && redBox[i + 2] < 100) red++
+  assert.ok(red > 500, `16:9 LIVE red pill pixels ${red}`)
+  // Footer: bright text in the compact bar region.
+  const layout = FooterLayout.compute(ctx, WIDE.W)
+  const footerTop = FooterLayout.barTopInFrame(ctx, WIDE.W, WIDE.H)
+  const s = regionStats(ctx, 0, footerTop, WIDE.W, footerTop + layout.barHeight)
+  assert.ok(s.maxB >= 200, `16:9 footer max brightness ${s.maxB} >= 200`)
+  DesignSystem.setProfile(DEFAULT_PROFILE)
 })
 
 void fs

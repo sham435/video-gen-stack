@@ -49,7 +49,9 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
 
   const lineH = layout ? layout.lineHeight : fontSize * 1.45
   const totalH = lines.length * lineH
-  const startY = layout ? layout.y : H * 0.78 - totalH / 2
+  // Aspect-aware caption band: uses DesignSystem.layout.caption (0.78 portrait,
+  // 0.84 wide) so captions sit in the correct vertical zone on 16:9 too.
+  const startY = layout ? layout.y : H * DesignSystem.layout.caption - totalH / 2
   const centerX = layout ? layout.x + layout.width / 2 : W / 2
   let wordCounter = 0
 

@@ -2,7 +2,7 @@ import { DesignSystem } from '../../visuals/DesignSystem.mjs'
 
 export class GlassCardLayer {
   draw(ctx, scene, progress, options = {}) {
-    const { W, H } = DesignSystem
+    const { W, H, sy } = DesignSystem
     const p = Math.min(1, (progress - (options.delay || 0)) / (options.duration || 0.3))
     if (p <= 0) return
 
@@ -10,7 +10,8 @@ export class GlassCardLayer {
     const x = options.x ?? W * 0.05
     const y = options.y ?? H * 0.65
     const w = options.width ?? W * 0.9
-    const h = options.height ?? 200
+    // Default height is the 9:16 design 200px scaled to the active frame.
+    const h = options.height ?? sy(200)
     const r = options.radius ?? glass.radius
 
     ctx.save()

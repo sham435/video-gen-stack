@@ -1,4 +1,5 @@
 import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
+import { DesignSystem } from '../../visuals/DesignSystem.mjs'
 import {
   LogoBlock,
   BrandBlock,
@@ -58,7 +59,12 @@ export async function loadPlatformIcons() {
  * top via barTopInFrame() — never H - barHeight directly.
  */
 export class FooterLayout {
-  static SAFE_BOTTOM = 64
+  // LinkedIn safe-area: px of clear canvas reserved below the bar so platform
+  // UI never clips its content. Profile-aware: the 9:16 design uses 64px, the
+  // compact 16:9 footer uses 32px (roughly half).
+  static get SAFE_BOTTOM() {
+    return DesignSystem.isWide ? 32 : 64
+  }
   static DEFAULT_DATA = {
     brand: 'NEWS-MONSTER',
     // Primary brand message — deliberately shorter and more visible.
@@ -90,8 +96,15 @@ export class FooterLayout {
   static compute(ctx, W, data = {}) {
     const D = { ...this.DEFAULT_DATA, ...data }
 
-    // Responsive scale: proportional to the 1080px design surface.
-    const scale = Math.min(F.maxScale, Math.max(F.minScale, W / F.baseWidth))
+    // Wide (16:9) frames are short (720 logical tall vs 1920). The 16:9 footer
+    // is compacted to ~50% height: the responsive scale and the min-height are
+    // both halved so the bar never dominates the frame. Portrait (9:16) keeps
+    // the original full-size footer — compact = 1.0 there.
+    const compact = DesignSystem.isWide ? 0.5 : 1
+    // Responsive scale: proportional to the 1080px design surface, compacted
+    // on 16:9.
+    const scale = compact * Math.min(F.maxScale, Math.max(F.minScale, W / F.baseWidth))
+    const minHeight = DesignSystem.isWide ? Math.round(F.minHeight * 0.5) : F.minHeight
 
     const padX = Math.max(16, Math.round(F.padding.x * scale))
     const innerW = W - padX * 2
@@ -125,7 +138,7 @@ export class FooterLayout {
     const stackH = topRowH + vGap + tagline.h + vGap + url.h + vGap + platformRowH
 
     const verticalPadding = Math.round(F.padding.y * scale)
-    const barHeight = Math.round(Math.max(F.minHeight, stackH) + verticalPadding * 2)
+    const barHeight = Math.round(Math.max(minHeight, stackH) + verticalPadding * 2)
 
     const leftX = padX
     const centerX = padX + zoneW.left

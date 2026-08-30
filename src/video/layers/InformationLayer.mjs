@@ -153,7 +153,7 @@ export class InformationLayer {
   }
 
   renderExplanation(ctx, scene, progress) {
-    const { W, H } = DesignSystem
+    const { W, H, sy } = DesignSystem
     const textWidth = W * 0.85
     const startX = W / 2 - textWidth / 2
 
@@ -171,7 +171,7 @@ export class InformationLayer {
     ctx.fillText('WHY IT MATTERS', startX, H * DesignSystem.layout.explanationHeading)
     ctx.shadowBlur = 0
     ctx.fillStyle = DesignSystem.brand.primary
-    ctx.fillRect(startX, H * DesignSystem.layout.explanationHeading + 72, 96, 6)
+    ctx.fillRect(startX, H * DesignSystem.layout.explanationHeading + sy(72), 96, 6)
     ctx.restore()
 
     ctx.save()
@@ -190,13 +190,13 @@ export class InformationLayer {
     const maxChars = DesignSystem.getMaxChars('body')
     const words = body.split(' ')
     let line = ''
-    let lineY = H * DesignSystem.layout.explanationBody + 92
+    let lineY = H * DesignSystem.layout.explanationBody + sy(92)
     for (const w of words) {
       if ((line + ' ' + w).trim().length <= maxChars) line += (line ? ' ' : '') + w
       else {
         ctx.fillText(line, startX, lineY)
         line = w
-        lineY += 56
+        lineY += sy(56)
       }
     }
     if (line) ctx.fillText(line, startX, lineY)
@@ -205,7 +205,7 @@ export class InformationLayer {
   }
 
   renderRetention(ctx, scene, progress) {
-    const { W, H } = DesignSystem
+    const { W, H, sx } = DesignSystem
     const p = Math.min(1, progress * 1.2)
 
     ctx.fillStyle = `rgba(5, 5, 5, ${p * 0.5})`
@@ -230,7 +230,7 @@ export class InformationLayer {
     const alertPulse = 0.4 + Math.sin(progress * 12) * 0.3
     ctx.fillStyle = `rgba(225, 6, 0, ${alertPulse})`
     ctx.beginPath()
-    ctx.arc(W / 2 - 180, H * DesignSystem.layout.retentionBadge, 10, 0, Math.PI * 2)
+    ctx.arc(W / 2 - sx(180), H * DesignSystem.layout.retentionBadge, 10, 0, Math.PI * 2)
     ctx.fill()
     ctx.fillStyle = DesignSystem.brand.primary
     ctx.fillText('BREAKING ANALYSIS', W / 2, H * DesignSystem.layout.retentionBadge)
@@ -294,12 +294,12 @@ export class InformationLayer {
     if (bgP > 0.2 && !scene.hideBranding) {
       ctx.save()
       ctx.globalAlpha = 0.12 * bgP
-      const wmSize = 420
+      const wmSize = sy(420)
       ctx.fillStyle = '#E10600'
       ctx.beginPath()
-      ctx.roundRect(W / 2 - wmSize / 2, H / 2 - wmSize / 2, wmSize, wmSize, 64)
+      ctx.roundRect(W / 2 - wmSize / 2, H / 2 - wmSize / 2, wmSize, wmSize, sy(64))
       ctx.fill()
-      ctx.font = '900 240px Anton, Impact, sans-serif'
+      ctx.font = `900 ${sy(240)}px Anton, Impact, sans-serif`
       ctx.fillStyle = '#FFFFFF'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
@@ -310,8 +310,8 @@ export class InformationLayer {
     if (stayP > 0) {
       ctx.save()
       ctx.globalAlpha = stayP
-      ctx.translate(0, (1 - stayP) * 40)
-      ctx.font = '900 98px "Montserrat ExtraBold", sans-serif'
+      ctx.translate(0, (1 - stayP) * sy(40))
+      ctx.font = `900 ${sy(98)}px "Montserrat ExtraBold", sans-serif`
       ctx.fillStyle = '#FFC107'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
@@ -329,10 +329,10 @@ export class InformationLayer {
       ctx.translate(W / 2, H * DesignSystem.layout.brandCenter)
       ctx.scale(scale, scale)
       // Fit-to-width so the brand headline always stays inside the layout.
-      const brandFont = '900 140px "Montserrat ExtraBold", sans-serif'
+      const brandFont = `900 ${sy(140)}px "Montserrat ExtraBold", sans-serif`
       ctx.font = brandFont
-      const fit = Math.min(1, (W - 160) / Math.max(ctx.measureText('NEWS-MONSTER').width, 1))
-      ctx.font = `900 ${Math.floor(140 * fit)}px "Montserrat ExtraBold", sans-serif`
+      const fit = Math.min(1, (W - sx(160)) / Math.max(ctx.measureText('NEWS-MONSTER').width, 1))
+      ctx.font = `900 ${Math.floor(sy(140) * fit)}px "Montserrat ExtraBold", sans-serif`
       ctx.fillStyle = '#FFFFFF'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
@@ -375,12 +375,12 @@ if (tagP > 0) {
       if (srcP > 0 && src !== 'News') {
         ctx.save()
         ctx.globalAlpha = srcP
-        const srcFont = '700 34px Inter, sans-serif'
+        const srcFont = `700 ${sy(34)}px Inter, sans-serif`
         ctx.font = srcFont
         ctx.fillStyle = 'rgba(255,255,255,0.78)'
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
-        ctx.fillText(`Source: ${src}`, W / 2, H * DesignSystem.layout.tagline + blockH / 2 + tagSize + 42)
+        ctx.fillText(`Source: ${src}`, W / 2, H * DesignSystem.layout.tagline + blockH / 2 + tagSize + sy(42))
         ctx.restore()
       }
 
@@ -392,17 +392,17 @@ if (tagP > 0) {
       if (q && qP > 0) {
         const footerTop = FooterLayout.barTopInFrame(ctx, W, H)
         // Keep the question clear of the source line and above the anchor/footer.
-        const qY = Math.min(H * DesignSystem.layout.tagline + blockH / 2 + tagSize + 110, footerTop - 200)
+        const qY = Math.min(H * DesignSystem.layout.tagline + blockH / 2 + tagSize + sy(110), footerTop - sy(200))
         ctx.save()
         ctx.globalAlpha = qP
-        ctx.font = '800 40px Inter, sans-serif'
+        ctx.font = `800 ${sy(40)}px Inter, sans-serif`
         ctx.fillStyle = '#FFFFFF'
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
         ctx.shadowColor = 'rgba(0,0,0,0.9)'
         ctx.shadowBlur = 10
-        const qLines = wrapText(ctx, q, W - 160, 2)
-        qLines.forEach((line, i) => ctx.fillText(line, W / 2, qY + i * 48))
+        const qLines = wrapText(ctx, q, W - sx(160), 2)
+        qLines.forEach((line, i) => ctx.fillText(line, W / 2, qY + i * sy(48)))
         ctx.shadowBlur = 0
         ctx.restore()
       }

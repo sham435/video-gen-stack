@@ -180,7 +180,7 @@ export class CoverGenerator {
       const result = this.sdcpp.generate({
         prompt: `${prompt}, cinematic editorial photography, dramatic lighting, high detail, 8k`,
         negative: 'blurry, low quality, watermark, text, logo, deformed, extra fingers, duplicate',
-        width: 576, height: 1024, steps: 20, cfg: 7.0, seed,
+        width: 1024, height: 576, steps: 20, cfg: 7.0, seed,
         outPath: path.join(this.cacheDir, `sd-hero-${seed}.png`),
       })
       return result?.path || null
@@ -192,7 +192,7 @@ export class CoverGenerator {
       const resp = await fetch('https://fal.run/fal-ai/fast-sdxl', {
         method: 'POST',
         headers: { Authorization: `Key ${process.env.FAL_KEY}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, image_size: 'portrait_4_3', num_inference_steps: 25, guidance_scale: 7.5 }),
+        body: JSON.stringify({ prompt, image_size: 'landscape_16_9', num_inference_steps: 25, guidance_scale: 7.5 }),
         signal: AbortSignal.timeout(15000),
       })
       if (!resp.ok) return null
@@ -223,7 +223,7 @@ export class CoverGenerator {
       // + 48-algorithm engine: page + index derived from the algo seed so two
       // different stories never pull the same candidate photo.
       const page = (seed % 10) + 1
-      const res = await fetch(`${PEXELS}?query=${encodeURIComponent(query)}&per_page=20&page=${page}&orientation=portrait`, {
+      const res = await fetch(`${PEXELS}?query=${encodeURIComponent(query)}&per_page=20&page=${page}&orientation=landscape`, {
         headers: { Authorization: key },
         signal: AbortSignal.timeout(5000),
       })

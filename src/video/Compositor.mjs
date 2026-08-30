@@ -7,6 +7,7 @@ import { CaptionLayer } from './layers/CaptionLayer.mjs'
 import { BroadcastUILayer } from './layers/BroadcastUILayer.mjs'
 import { BrandingLayer } from './layers/BrandingLayer.mjs'
 import { PostProcessLayer } from './layers/PostProcessLayer.mjs'
+import { DesignSystem } from '../visuals/DesignSystem.mjs'
 import { TextTimelineScheduler } from './TextTimelineScheduler.mjs'
 import { canRenderText } from './TextPolicy.mjs'
 import { getDirector } from '../ai/CategoryDirector.mjs'
@@ -49,7 +50,8 @@ export class Compositor {
       this.glass.draw(ctx, scene, progress, {
         category,
         y: layout.textPosition === 'bottom' ? 0.62 : 0.55,
-        height: layout.textPosition === 'bottom' ? 300 : 250,
+        // 9:16 design-space card heights scaled to the active frame.
+        height: DesignSystem.sy(layout.textPosition === 'bottom' ? 300 : 250),
         accentLine: layout.accentLine,
         delay: 0.05,
         borderColor: layout.borderPulse ? undefined : 'rgba(255,255,255,0.08)',

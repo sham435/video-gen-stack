@@ -239,3 +239,41 @@ test('outro caption — CaptionLayer does not render in the lower third for clos
   }
   assert.equal(bright, 0, `outro scene must not render caption glyphs at caption anchor (bright=${bright})`)
 })
+
+test('outro caption — single-owner rule enforced at the gate (production BrandOutro, 16:9-independent)', async () => {
+  // The 16:9 frame is only 720px tall and the outro's own end-card stack
+  // legitimately covers the wide caption anchor band, so a pixel probe there
+  // is not a clean signal. The real single-owner guarantee is a logic gate:
+  // the production brand_outro scene (BrandOutro.mjs) sets textPolicy that
+  // disables story captions — this holds for BOTH profiles. This is the
+  // authoritative, profile-independent assertion of FOOTER-001/outro.
+  const { canRenderText } = await import('../src/video/TextPolicy.mjs')
+  const { brandOutroScene } = await import('../src/publishing/BrandOutro.mjs')
+  const outro = brandOutroScene({})
+  assert.equal(outro.type, 'close')
+  assert.equal(canRenderText(outro, 'caption'), false, 'caption must be off for brand_outro')
+  assert.equal(canRenderText(outro, 'generic'), false, 'generic scheduling must be off for brand_outro')
+  assert.equal(canRenderText(outro, 'emphasis'), false, 'emphasis must be off for brand_outro')
+
+  // And the full 16:9 composed frame still renders the end card visibly.
+  const { SceneEngine } = await import('../src/video/SceneEngine.mjs')
+  const { RenderProfiles, DEFAULT_PROFILE } = await import('../src/video/RenderProfile.mjs')
+  const { DesignSystem } = await import('../src/visuals/DesignSystem.mjs')
+  const engine = new SceneEngine({ quality: 'default', category: 'technology' })
+  const { loadImage, createCanvas } = await import('@napi-rs/canvas')
+  const WW = 1280, HH = 720
+  DesignSystem.setProfile(RenderProfiles.VIDEO_HD)
+  const buf = await engine.renderSceneFrame(
+    { ...outro, image: null, ticker: [] },
+    0.9, [], 0, null
+  )
+  const ctx = createCanvas(WW, HH).getContext('2d')
+  ctx.drawImage(await loadImage(buf), 0, 0)
+  // End card tagline region (mid-frame) contains bright white text — proves the
+  // outro content itself renders on 16:9 (not suppressed with the captions).
+  const d = ctx.getImageData(0, 300, WW, 200).data
+  let lit = 0
+  for (let i = 0; i < d.length; i += 4) if ((d[i] + d[i + 1] + d[i + 2]) / 3 > 160) lit++
+  DesignSystem.setProfile(DEFAULT_PROFILE)
+  assert.ok(lit > 500, `16:9 outro end card paints (lit=${lit})`)
+})
