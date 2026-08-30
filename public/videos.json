@@ -1,31 +1,31 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-30T17:50:39.852Z",
+  "updatedAt": "2026-08-30T19:46:45.295Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "kr_eErRNVyU",
-      "title": "We're in the midst of an 'Imax awakening,' CEO says. How the company makes millions - CNBC | NEWS-MONSTER",
-      "category": "business",
-      "publishedAt": "2026-08-30T17:50:39.370Z",
-      "publishedLabel": "Aug 30, 05:50 PM",
-      "thumbnail": "/thumbnails/kr_eErRNVyU.png",
-      "thumbnailSha256": "25163c4887f16ac1d59d24fb3bc9cc6ad7d80220025f0944abac3754dca7fe79",
+      "id": "tLrjkhEoDTQ",
+      "title": "Jameson Maker Pernod Ricard Warns of Sales Hit as Americans Ease Off on Drinking | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-08-30T19:46:44.481Z",
+      "publishedLabel": "Aug 30, 07:46 PM",
+      "thumbnail": "/thumbnails/tLrjkhEoDTQ.png",
+      "thumbnailSha256": "416046b0f3d1dd2e09079dceac882a2f77224533e2377acad15bca8e1cdd2c37",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/kr_eErRNVyU",
+      "youtubeUrl": "https://youtu.be/tLrjkhEoDTQ",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "kr_eErRNVyU",
-          "url": "https://youtu.be/kr_eErRNVyU",
+          "videoId": "tLrjkhEoDTQ",
+          "url": "https://youtu.be/tLrjkhEoDTQ",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "25163c4887f16ac1d59d24fb3bc9cc6ad7d80220025f0944abac3754dca7fe79",
+            "sha256": "416046b0f3d1dd2e09079dceac882a2f77224533e2377acad15bca8e1cdd2c37",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -42,12 +42,12 @@
           "errors": [],
           "durationMs": 1,
           "thumbnail": {
-            "sha256": "25163c4887f16ac1d59d24fb3bc9cc6ad7d80220025f0944abac3754dca7fe79",
+            "sha256": "416046b0f3d1dd2e09079dceac882a2f77224533e2377acad15bca8e1cdd2c37",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/kr_eErRNVyU.png"
+            "path": "public/thumbnails/tLrjkhEoDTQ.png"
           }
         },
         "linkedin": {
@@ -57,28 +57,28 @@
       }
     },
     {
-      "id": "AzncMCtUKGU",
-      "title": "Tech investor mocks Vance’s call to hire Americans as 'DEI', gets blasted by Trump officia | NEWS-MONSTER",
-      "category": "business",
-      "publishedAt": "2026-08-30T17:48:10.444Z",
-      "publishedLabel": "Aug 30, 05:48 PM",
-      "thumbnail": "/thumbnails/AzncMCtUKGU.png",
-      "thumbnailSha256": "1195542d21f5756219ab103e961082035e9193987ede95c4ee92caa97404eaa2",
+      "id": "Ur7JLR1_tWE",
+      "title": "Global Bond Yields Rise Ahead of Fed’s Warsh Speech; 10-Year Bund Yield Hits 15-Year High | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-08-30T19:44:22.575Z",
+      "publishedLabel": "Aug 30, 07:44 PM",
+      "thumbnail": "/thumbnails/Ur7JLR1_tWE.png",
+      "thumbnailSha256": "11de636551debd10beec53d3f27510cca1db65a05fa2d2783e3f1419a191f5ad",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/AzncMCtUKGU",
+      "youtubeUrl": "https://youtu.be/Ur7JLR1_tWE",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "AzncMCtUKGU",
-          "url": "https://youtu.be/AzncMCtUKGU",
+          "videoId": "Ur7JLR1_tWE",
+          "url": "https://youtu.be/Ur7JLR1_tWE",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "1195542d21f5756219ab103e961082035e9193987ede95c4ee92caa97404eaa2",
+            "sha256": "11de636551debd10beec53d3f27510cca1db65a05fa2d2783e3f1419a191f5ad",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -93,14 +93,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "1195542d21f5756219ab103e961082035e9193987ede95c4ee92caa97404eaa2",
+            "sha256": "11de636551debd10beec53d3f27510cca1db65a05fa2d2783e3f1419a191f5ad",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/AzncMCtUKGU.png"
+            "path": "public/thumbnails/Ur7JLR1_tWE.png"
           }
         },
         "linkedin": {
@@ -110,28 +110,28 @@
       }
     },
     {
-      "id": "i0tMzepEQmM",
-      "title": "Trump lauded low prices at Freedom Fuel. A supplier says some gas wasn’t paid for. - The W | NEWS-MONSTER",
-      "category": "business",
-      "publishedAt": "2026-08-30T17:45:22.088Z",
-      "publishedLabel": "Aug 30, 05:45 PM",
-      "thumbnail": "/thumbnails/i0tMzepEQmM.png",
-      "thumbnailSha256": "f493fa9562c5838e9ff305a57e367f7ae21e7d3a299d43d9e09c2a1d08f1e759",
+      "id": "ydI58LStMqQ",
+      "title": "Stocks Lower as Fed’s Warsh Comments Boost Rate-Hike Bets | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-08-30T19:41:54.393Z",
+      "publishedLabel": "Aug 30, 07:41 PM",
+      "thumbnail": "/thumbnails/ydI58LStMqQ.png",
+      "thumbnailSha256": "3a8feb9e95d4410053d3ef6d338691a10d53ff67bd2d952cf7c3a32835a9aaec",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/i0tMzepEQmM",
+      "youtubeUrl": "https://youtu.be/ydI58LStMqQ",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "i0tMzepEQmM",
-          "url": "https://youtu.be/i0tMzepEQmM",
+          "videoId": "ydI58LStMqQ",
+          "url": "https://youtu.be/ydI58LStMqQ",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "f493fa9562c5838e9ff305a57e367f7ae21e7d3a299d43d9e09c2a1d08f1e759",
+            "sha256": "3a8feb9e95d4410053d3ef6d338691a10d53ff67bd2d952cf7c3a32835a9aaec",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -146,14 +146,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "f493fa9562c5838e9ff305a57e367f7ae21e7d3a299d43d9e09c2a1d08f1e759",
+            "sha256": "3a8feb9e95d4410053d3ef6d338691a10d53ff67bd2d952cf7c3a32835a9aaec",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/i0tMzepEQmM.png"
+            "path": "public/thumbnails/ydI58LStMqQ.png"
           }
         },
         "linkedin": {
