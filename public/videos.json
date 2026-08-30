@@ -1,31 +1,31 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-30T21:05:01.137Z",
+  "updatedAt": "2026-08-30T22:32:45.234Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "16SRUsKxFIQ",
-      "title": "Apple's iOS 27 and Siri AI are coming soon: Everything we know so far - Mashable | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-08-30T21:05:00.647Z",
-      "publishedLabel": "Aug 30, 09:05 PM",
-      "thumbnail": "/thumbnails/16SRUsKxFIQ.png",
-      "thumbnailSha256": "93283249662d6a40f8a609f573aa7cdecdb5103b643a9c1c6c15198ac23eee9a",
+      "id": "Oelemrwm3PY",
+      "title": "Peterson Institute's Posen: It's fine for the Fed not to give forward guidance, but a fore | NEWS-MONSTER",
+      "category": "apple",
+      "publishedAt": "2026-08-30T22:32:44.718Z",
+      "publishedLabel": "Aug 30, 10:32 PM",
+      "thumbnail": "/thumbnails/Oelemrwm3PY.png",
+      "thumbnailSha256": "e832ca632f09a916d771c6dd5732ed86d1d5748d06c8f686d37274a22b820be5",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/16SRUsKxFIQ",
+      "youtubeUrl": "https://youtu.be/Oelemrwm3PY",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "16SRUsKxFIQ",
-          "url": "https://youtu.be/16SRUsKxFIQ",
+          "videoId": "Oelemrwm3PY",
+          "url": "https://youtu.be/Oelemrwm3PY",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "93283249662d6a40f8a609f573aa7cdecdb5103b643a9c1c6c15198ac23eee9a",
+            "sha256": "e832ca632f09a916d771c6dd5732ed86d1d5748d06c8f686d37274a22b820be5",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -40,14 +40,120 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 6,
           "thumbnail": {
-            "sha256": "93283249662d6a40f8a609f573aa7cdecdb5103b643a9c1c6c15198ac23eee9a",
+            "sha256": "e832ca632f09a916d771c6dd5732ed86d1d5748d06c8f686d37274a22b820be5",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/16SRUsKxFIQ.png"
+            "path": "public/thumbnails/Oelemrwm3PY.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "ASk2dw4R2-k",
+      "title": "Sony Music, Warner sue Anthropic, alleging a \"brazen campaign\" of intellectual property th | NEWS-MONSTER",
+      "category": "apple",
+      "publishedAt": "2026-08-30T22:29:16.111Z",
+      "publishedLabel": "Aug 30, 10:29 PM",
+      "thumbnail": "/thumbnails/ASk2dw4R2-k.png",
+      "thumbnailSha256": "63a19f2def972784f5141a6e2f763b088383d3de9afd6786ec94a9cc3dde89a8",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/ASk2dw4R2-k",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "ASk2dw4R2-k",
+          "url": "https://youtu.be/ASk2dw4R2-k",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "63a19f2def972784f5141a6e2f763b088383d3de9afd6786ec94a9cc3dde89a8",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 3,
+          "thumbnail": {
+            "sha256": "63a19f2def972784f5141a6e2f763b088383d3de9afd6786ec94a9cc3dde89a8",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/ASk2dw4R2-k.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "5rj00cm1F_o",
+      "title": "OpenAI to end model access to Cursor after acquisition by Elon Musk's SpaceX - CNBC | NEWS-MONSTER",
+      "category": "apple",
+      "publishedAt": "2026-08-30T22:26:05.436Z",
+      "publishedLabel": "Aug 30, 10:26 PM",
+      "thumbnail": "/thumbnails/5rj00cm1F_o.png",
+      "thumbnailSha256": "5b3eb2a8eed040b1d3a385cda9d86822d3654981d75d02a30732040ac75059e6",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/5rj00cm1F_o",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "5rj00cm1F_o",
+          "url": "https://youtu.be/5rj00cm1F_o",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "5b3eb2a8eed040b1d3a385cda9d86822d3654981d75d02a30732040ac75059e6",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 1,
+          "thumbnail": {
+            "sha256": "5b3eb2a8eed040b1d3a385cda9d86822d3654981d75d02a30732040ac75059e6",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/5rj00cm1F_o.png"
           }
         },
         "linkedin": {
