@@ -1,31 +1,31 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-30T09:29:18.017Z",
+  "updatedAt": "2026-08-30T12:16:01.509Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "g9PdQky9ZrM",
+      "id": "bp79GxiplR4",
       "title": "Fatal Fury: City of the Wolves is free to play for the weekend though only on one platform | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-08-30T09:29:16.836Z",
-      "publishedLabel": "Aug 30, 09:29 AM",
-      "thumbnail": "/thumbnails/g9PdQky9ZrM.png",
-      "thumbnailSha256": "0d2fd6f19038b1d0bccc64cb68102f4be70ba9606a424d8055b3048491273b95",
+      "publishedAt": "2026-08-30T12:16:00.761Z",
+      "publishedLabel": "Aug 30, 12:16 PM",
+      "thumbnail": "/thumbnails/bp79GxiplR4.png",
+      "thumbnailSha256": "f4eef7eb24248e17253e8b2529420504dfa8fcc2ebf2f6fe5e88d01470783145",
       "thumbnailWidth": 2160,
       "thumbnailHeight": 3840,
       "thumbnailAspectRatio": "9:16",
-      "youtubeUrl": "https://youtu.be/g9PdQky9ZrM",
+      "youtubeUrl": "https://youtu.be/bp79GxiplR4",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "g9PdQky9ZrM",
-          "url": "https://youtu.be/g9PdQky9ZrM",
+          "videoId": "bp79GxiplR4",
+          "url": "https://youtu.be/bp79GxiplR4",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "0d2fd6f19038b1d0bccc64cb68102f4be70ba9606a424d8055b3048491273b95",
+            "sha256": "f4eef7eb24248e17253e8b2529420504dfa8fcc2ebf2f6fe5e88d01470783145",
             "width": 2160,
             "height": 3840,
             "mimeType": "image/png",
@@ -40,14 +40,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "0d2fd6f19038b1d0bccc64cb68102f4be70ba9606a424d8055b3048491273b95",
+            "sha256": "f4eef7eb24248e17253e8b2529420504dfa8fcc2ebf2f6fe5e88d01470783145",
             "width": 2160,
             "height": 3840,
             "mimeType": "image/png",
             "aspectRatio": "9:16",
-            "path": "public/thumbnails/g9PdQky9ZrM.png"
+            "path": "public/thumbnails/bp79GxiplR4.png"
           }
         },
         "linkedin": {
