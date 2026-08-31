@@ -166,7 +166,8 @@ export class InformationLayer {
     const heading = scene.text.split('.')[0]
     ctx.save()
     ctx.globalAlpha = Math.min(1, progress * 1.2)
-    ctx.font = `${DesignSystem.getTypography('body', 'default').weight} ${DesignSystem.getTypography('body', 'default').size}px ${DesignSystem.getTypography('body', 'default').font}, sans-serif`
+    const headingSize = DesignSystem.getTypography('body', 'default').size
+    ctx.font = `${DesignSystem.getTypography('body', 'default').weight} ${headingSize}px ${DesignSystem.getTypography('body', 'default').font}, sans-serif`
     ctx.fillStyle = DesignSystem.getSemantic('info')
     ctx.textAlign = 'left'
     ctx.textBaseline = 'top'
@@ -174,10 +175,14 @@ export class InformationLayer {
     ctx.shadowBlur = 6
     const hp = Math.min(1, progress * 1.2)
     ctx.globalAlpha = hp
-    ctx.fillText('WHY IT MATTERS', startX, H * DesignSystem.layout.explanationHeading)
+    const headingY = H * DesignSystem.layout.explanationHeading
+    ctx.fillText('WHY IT MATTERS', startX, headingY)
     ctx.shadowBlur = 0
     ctx.fillStyle = DesignSystem.brand.primary
-    ctx.fillRect(startX, H * DesignSystem.layout.explanationHeading + sy(72), 96, 6)
+    // Underline must render BENEATH the "WHY IT MATTERS" text, below the cap
+    // height (~0.8 * fontSize), never over the glyphs. The old sy(72)/27px
+    // offset sat inside the 52px-tall heading, drawing the red bar across the text.
+    ctx.fillRect(startX, headingY + headingSize * 0.8 + sy(12), 96, 6)
     ctx.restore()
 
     ctx.save()

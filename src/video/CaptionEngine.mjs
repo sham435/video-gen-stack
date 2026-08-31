@@ -36,12 +36,14 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
   // independent y coordinates — that is the anti-pattern that caused lines to
   // overlap the headline and each other.
   let rendered = []
-  let lineH = fontSize * 1.25
+  // 1.6 = caption line-height token (typography.spacing.lineHeight.caption);
+  // the too-tight 1.25 caused multi-line captions to overlap.
+  let lineH = fontSize * 1.6
   if (layout && layout.lines && layout.lines.length) {
     // Single authoritative block: lines already wrapped once by TextLayoutEngine.
     rendered = layout.lines.map(l => l.split(' '))
     fontSize = layout.fontSize
-    lineH = layout.lineHeight || fontSize * 1.25
+    lineH = layout.lineHeight || fontSize * 1.6
   } else {
     // Fallback (headless / no injected layout): still build ONE wrapped block
     // with consistent geometry — never independent line coordinates. Reduced to

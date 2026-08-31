@@ -49,7 +49,7 @@ export class TextLayoutEngine {
     }
 
     const lines = fitted.wrap.lines
-    const lineHeight = FontMetrics.lineHeight(fitted.fontSize)
+    const lineHeight = FontMetrics.lineHeight(fitted.fontSize, lineHeightFactorFor(role))
     const width = Math.max(...fitted.wrap.widths, 0)
     const height = lines.length * lineHeight
 
@@ -78,4 +78,12 @@ export class TextLayoutEngine {
   static measure(text, fontSize, fontFamily = 'Inter') {
     return FontMetrics.measure(text, fontSize, fontFamily)
   }
+}
+
+// Per-role line-height multiplier. Captions use the design token
+// (typography.spacing.lineHeight.caption = 1.6) so multi-line spoken sentences
+// get proper line spacing instead of the cramped 1.25 default that made lines
+// overlap visually. Other roles keep the FontMetrics default of 1.25.
+function lineHeightFactorFor(role) {
+  return role === 'caption' ? 1.6 : 1.25
 }
