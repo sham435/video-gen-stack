@@ -1,32 +1,86 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-31T14:53:50.342Z",
+  "updatedAt": "2026-08-31T14:59:37.976Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "tq0wfGOMq0U",
-      "title": "What Happened After 40-year-old corner store | NEWS-MONSTER",
-      "description": "What Happened After 40-year-old corner store | NEWS-MONSTER",
-      "category": "business",
-      "publishedAt": "2026-08-31T14:53:00.387Z",
-      "publishedLabel": "Aug 31, 02:53 PM",
-      "thumbnail": "/thumbnails/tq0wfGOMq0U.png",
-      "thumbnailSha256": "f6ec65dc69b56cb9cc4686bbddb3f40b43303935f373ca4735cf7b258dab2360",
+      "id": "dMHJxuMESLY",
+      "title": "Bandai Namco Is Bringing My Hero Academia: All's Justice To Switch 2 - Nintendo Life | NEWS-MONSTER",
+      "description": "Bandai Namco Is Bringing My Hero Academia: All's Justice To Switch 2 - Nintendo Life | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-08-31T14:59:37.081Z",
+      "publishedLabel": "Aug 31, 02:59 PM",
+      "thumbnail": "/thumbnails/dMHJxuMESLY.png",
+      "thumbnailSha256": "e965770a0e367d97a7b9b8d9ba7f65ca136eed5fa6fedd1188e62356181fda0a",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/tq0wfGOMq0U",
+      "youtubeUrl": "https://youtu.be/dMHJxuMESLY",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "tq0wfGOMq0U",
-          "url": "https://youtu.be/tq0wfGOMq0U",
+          "videoId": "dMHJxuMESLY",
+          "url": "https://youtu.be/dMHJxuMESLY",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "f6ec65dc69b56cb9cc4686bbddb3f40b43303935f373ca4735cf7b258dab2360",
+            "sha256": "e965770a0e367d97a7b9b8d9ba7f65ca136eed5fa6fedd1188e62356181fda0a",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 3,
+          "thumbnail": {
+            "sha256": "e965770a0e367d97a7b9b8d9ba7f65ca136eed5fa6fedd1188e62356181fda0a",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/dMHJxuMESLY.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "ou5YOQooBbU",
+      "title": "iPhone Ultra could turn out to be an unwise long-term decision - PhoneArena | NEWS-MONSTER",
+      "description": "iPhone Ultra could turn out to be an unwise long-term decision - PhoneArena | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-08-31T14:57:18.616Z",
+      "publishedLabel": "Aug 31, 02:57 PM",
+      "thumbnail": "/thumbnails/ou5YOQooBbU.png",
+      "thumbnailSha256": "5458ce64feeb64d47fa313d5b707f0f072c7a662b1cd467ecfd5bb8b834b340d",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/ou5YOQooBbU",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "ou5YOQooBbU",
+          "url": "https://youtu.be/ou5YOQooBbU",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "5458ce64feeb64d47fa313d5b707f0f072c7a662b1cd467ecfd5bb8b834b340d",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +97,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "f6ec65dc69b56cb9cc4686bbddb3f40b43303935f373ca4735cf7b258dab2360",
+            "sha256": "5458ce64feeb64d47fa313d5b707f0f072c7a662b1cd467ecfd5bb8b834b340d",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/tq0wfGOMq0U.png"
+            "path": "public/thumbnails/ou5YOQooBbU.png"
           }
         },
         "linkedin": {
