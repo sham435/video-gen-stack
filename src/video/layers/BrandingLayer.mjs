@@ -35,26 +35,34 @@ export class BrandingLayer {
     const padY = 1
 
     ctx.save()
-    ctx.font = `${bug.weight} ${size}px Anton, ${font}, sans-serif`
+    // Label font: 900 weight + a crisp 1px dark stroke. Smaller than the pill
+    // height so the READY text no longer fills edge-to-edge and mush into the
+    // red accent lines (28px in a 30px pill). No soft shadow on the text —
+    // shadowBlur is what made it look blurry/washed-out.
+    const labelSize = 18
+    ctx.font = `900 ${labelSize}px Anton, ${font}, sans-serif`
     const textW = ctx.measureText(label).width
     const textX = x + padX + 8
-    const textY = y + pillH / 2
+    // Raised baseline (above the pill vertical center) so the label reads
+    // clearly separated from the red top/bottom accent lines.
+    const textY = y + pillH / 2 - 1
 
-    ctx.shadowColor = 'rgba(0,0,0,0.7)'
-    ctx.shadowBlur = 10
     ctx.fillStyle = bug.bg
     ctx.beginPath()
     ctx.roundRect(x, y, pillW, pillH, bug.borderRadius)
     ctx.fill()
-    ctx.shadowBlur = 0
 
     ctx.fillStyle = DesignSystem.brand.primary
-    ctx.fillRect(x, y, 8, pillH)
-    ctx.fillRect(x + 8, y + pillH - 4, pillW - 8, 4)
+    ctx.fillRect(x, y, 6, pillH)
+    ctx.fillRect(x + 6, y + pillH - 4, pillW - 6, 4)
 
     ctx.fillStyle = '#FFFFFF'
+    ctx.lineJoin = 'round'
+    ctx.lineWidth = 1
+    ctx.strokeStyle = 'rgba(0,0,0,0.6)'
     ctx.textAlign = 'left'
     ctx.textBaseline = 'middle'
+    ctx.strokeText(label, textX, textY)
     ctx.fillText(label, textX, textY)
     ctx.restore()
   }
