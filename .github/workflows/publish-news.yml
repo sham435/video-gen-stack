@@ -122,17 +122,43 @@ jobs:
         if: always()
         run: node scripts/update-videos.mjs
 
+      - name: Generate video detail pages (hub + OG/SEO)
+        if: always()
+        run: |
+          node scripts/update-video-detail.mjs || true
+          ls -1 public/video-detail.json public/videos/*.json 2>/dev/null || true
+
+      - name: Stage downloadable mp4 for the landing page
+        # Copy the freshly rendered broadcast into public/videos/{videoId}.mp4 so
+        # the site's Download buttons (hero + cards) work on static Pages and
+        # on the self-hosted /videos endpoint. The existing commit step below
+        # stages public/videos, so the mp4 is committed with the feed refresh.
+        if: always()
+        run: |
+          mkdir -p public/videos
+          if [ -f output/final.mp4 ] && [ -f public/video-detail.json ]; then
+            VIDEO_ID=$(node -e "process.stdout.write(require('./public/video-detail.json').videoId || '')")
+            if [ -n "$VIDEO_ID" ]; then
+              cp output/final.mp4 "public/videos/${VIDEO_ID}.mp4"
+              echo "Staged public/videos/${VIDEO_ID}.mp4 ($(du -h "public/videos/${VIDEO_ID}.mp4" | cut -f1))"
+            else
+              echo "No videoId in video-detail.json — skipping mp4 stage"
+            fi
+          else
+            echo "No output/final.mp4 or video-detail.json — skipping mp4 stage"
+          fi
+
       - name: Commit updated videos.json (triggers GitHub Pages deploy)
         if: always()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if git diff --quiet public/videos.json && ! git diff --quiet -- production/runs 2>/dev/null && ! git ls-files --others --exclude-standard production/runs | rg -q .; then
+          if git diff --quiet public/videos.json && git diff --quiet public/video-detail.json && ! git diff --quiet -- production/runs 2>/dev/null && ! git ls-files --others --exclude-standard production/runs public/videos public/thumbnails | rg -q .; then
             echo "No feed change"
           else
             git config user.name "news-monster-bot"
             git config user.email "actions@users.noreply.github.com"
-            git add public/videos.json production/runs
+            git add public/videos.json public/video-detail.json public/videos public/thumbnails production/runs
             git commit -m "chore: refresh landing page video feed + production acceptance records"
             # Scheduled runs overlap (12min run vs 30min cadence) and other
             # commits can land on main mid-run, so a plain push races. The

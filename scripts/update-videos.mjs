@@ -57,6 +57,7 @@ function readLedger() {
         .map(e => ({
           id: e.videoId,
           title: e.title || `Video ${e.videoId}`,
+          description: e.description || e.title || '',
           category: e.category || 'general',
           publishedAt: e.publishedAt || e.verifiedAt,
           publishedLabel: e.publishedAt
