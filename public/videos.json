@@ -1,31 +1,31 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-31T00:51:49.614Z",
+  "updatedAt": "2026-08-31T05:37:21.711Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "3jHex1hFMIY",
-      "title": "2025 Said One Thing, Then Did This | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-08-31T00:51:48.477Z",
-      "publishedLabel": "Aug 31, 12:51 AM",
-      "thumbnail": "/thumbnails/3jHex1hFMIY.png",
-      "thumbnailSha256": "469c78efe024502303ec6255c8db79edc563e64ef4c46537450f486e78e180d5",
+      "id": "RvcYkNlup5o",
+      "title": "Gamescom 2026: Classic remakes and new worlds at gaming's biggest showcase - BBC | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-08-31T05:37:20.539Z",
+      "publishedLabel": "Aug 31, 05:37 AM",
+      "thumbnail": "/thumbnails/RvcYkNlup5o.png",
+      "thumbnailSha256": "34102070243ccc20f0ac84616d0c622e2925734651b40f0e2313bb5e954a6031",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/3jHex1hFMIY",
+      "youtubeUrl": "https://youtu.be/RvcYkNlup5o",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "3jHex1hFMIY",
-          "url": "https://youtu.be/3jHex1hFMIY",
+          "videoId": "RvcYkNlup5o",
+          "url": "https://youtu.be/RvcYkNlup5o",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "469c78efe024502303ec6255c8db79edc563e64ef4c46537450f486e78e180d5",
+            "sha256": "34102070243ccc20f0ac84616d0c622e2925734651b40f0e2313bb5e954a6031",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -42,12 +42,12 @@
           "errors": [],
           "durationMs": 4,
           "thumbnail": {
-            "sha256": "469c78efe024502303ec6255c8db79edc563e64ef4c46537450f486e78e180d5",
+            "sha256": "34102070243ccc20f0ac84616d0c622e2925734651b40f0e2313bb5e954a6031",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/3jHex1hFMIY.png"
+            "path": "public/thumbnails/RvcYkNlup5o.png"
           }
         },
         "linkedin": {
@@ -57,28 +57,28 @@
       }
     },
     {
-      "id": "lc2sbLmQ6Mc",
-      "title": "Grok Bot successfully orders a Tesla Model Y for a user, marking a new era for AI commerce | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-08-31T00:49:24.853Z",
-      "publishedLabel": "Aug 31, 12:49 AM",
-      "thumbnail": "/thumbnails/lc2sbLmQ6Mc.png",
-      "thumbnailSha256": "13e07b56d1363c20de95458114c83acd997171e6341b68a316d727bca7a11f4e",
+      "id": "8GE0yqMYkNE",
+      "title": "Sony Reconsidering Digital-Only Plans as Xbox Pushes Physical - MP1st | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-08-31T05:33:54.870Z",
+      "publishedLabel": "Aug 31, 05:33 AM",
+      "thumbnail": "/thumbnails/8GE0yqMYkNE.png",
+      "thumbnailSha256": "e256b6ce3224977e9f0ef4196bc916ffbf0dc54729f9084279808cef65630a15",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/lc2sbLmQ6Mc",
+      "youtubeUrl": "https://youtu.be/8GE0yqMYkNE",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "lc2sbLmQ6Mc",
-          "url": "https://youtu.be/lc2sbLmQ6Mc",
+          "videoId": "8GE0yqMYkNE",
+          "url": "https://youtu.be/8GE0yqMYkNE",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "13e07b56d1363c20de95458114c83acd997171e6341b68a316d727bca7a11f4e",
+            "sha256": "e256b6ce3224977e9f0ef4196bc916ffbf0dc54729f9084279808cef65630a15",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,12 +95,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "13e07b56d1363c20de95458114c83acd997171e6341b68a316d727bca7a11f4e",
+            "sha256": "e256b6ce3224977e9f0ef4196bc916ffbf0dc54729f9084279808cef65630a15",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/lc2sbLmQ6Mc.png"
+            "path": "public/thumbnails/8GE0yqMYkNE.png"
           }
         },
         "linkedin": {
