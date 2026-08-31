@@ -10,10 +10,10 @@ export class PublicationArtifact {
   constructor(options = {}) {
     this.artifactId = options.artifactId || null
     this.media = {
-      type: options.mediaType || 'short',
-      width: options.mediaWidth || 2160,
-      height: options.mediaHeight || 3840,
-      aspectRatio: options.mediaAspectRatio || '9:16',
+      type: options.mediaType || 'video',
+      width: options.mediaWidth || 1920,
+      height: options.mediaHeight || 1080,
+      aspectRatio: options.mediaAspectRatio || '16:9',
     }
     this.video = {
       path: options.videoPath || null,
@@ -72,17 +72,16 @@ export class PublicationArtifact {
 
     // The artifact's media contract must reflect what was ACTUALLY rendered,
     // proven by the render engine's RenderProfile — not assumed from the
-    // thumbnail or a hardcoded default. If the render profile (and therefore
-    // the physical output it produced) is unavailable, fail rather than guess.
-    const { resolveRenderProfile } = await import('../video/RenderProfile.mjs')
+    // thumbnail or a hardcoded default. The pipeline is 16:9 only, so the
+    // canonical fallback is VIDEO_HD (1920x1080).
+    const { VIDEO_HD } = await import('../video/RenderProfile.mjs')
     const engine = results.RENDER?.engine
-    const renderedOutput = engine?.renderProfile?.output
-      || resolveRenderProfile(engine?.renderProfile || {}).output
+    const renderedOutput = engine?.renderProfile?.output || VIDEO_HD.output
     if (!renderedOutput || !renderedOutput.width || !renderedOutput.height) {
       throw new Error('RENDER_MEDIA_METADATA_MISSING: could not resolve the rendered video geometry')
     }
     const profile = {
-      mediaType: engine?.renderProfile?.type === 'video' ? 'video' : 'short',
+      mediaType: engine?.renderProfile?.type || 'video',
       width: renderedOutput.width,
       height: renderedOutput.height,
       aspectRatio: engine?.renderProfile?.aspectRatio || `${renderedOutput.width}:${renderedOutput.height}`,

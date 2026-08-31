@@ -105,14 +105,14 @@ async function main() {
       || entry.distribution?.youtube?.thumbnail?.sha256
       || (thumbPath ? (await import('../src/thumbnail/ThumbnailMetadata.mjs')).sha256Thumbnail(thumbPath) : null)
     const { ThumbnailProfile } = await import('../src/thumbnail/ThumbnailProfile.mjs')
-    const shortProfile = ThumbnailProfile.SHORT
+    const videoProfile = ThumbnailProfile.VIDEO
     let thumbnailResult
     try {
       const verifier = new YouTubePropagationVerifier({
         token,
-        expectedWidth: shortProfile.width,
-        expectedHeight: shortProfile.height,
-        expectedAspectRatio: shortProfile.aspectRatio,
+        expectedWidth: videoProfile.width,
+        expectedHeight: videoProfile.height,
+        expectedAspectRatio: videoProfile.aspectRatio,
       })
       thumbnailResult = await verifier.verify({ videoId: entry.videoId, sha256: expectedSha, thumbnailPath: thumbPath })
       console.log(`  thumbnail: ${thumbnailResult.state}${expectedSha ? ` (identity=${thumbnailResult.identity || 'UNKNOWN'}, remote ${thumbnailResult.remote?.width || '?'}x${thumbnailResult.remote?.height || '?'})` : ''} (${thumbnailResult.durationMs}ms)`)

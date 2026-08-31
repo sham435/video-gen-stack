@@ -7,19 +7,18 @@ import { NewsBroadcastEngine } from '../src/index.mjs'
 import { validateRenderOutput } from '../src/video/validateOutput.mjs'
 import { resolveRenderManifest, resolveRenderGates } from '../src/pipeline/RenderManifest.mjs'
 import { ChannelController } from '../src/governor/ChannelController.mjs'
-import { RenderProfiles } from '../src/video/RenderProfile.mjs'
+import { VIDEO_HD } from '../src/video/RenderProfile.mjs'
 import { ThumbnailProfile } from '../src/thumbnail/ThumbnailProfile.mjs'
 
 // ── Output profile selection (single source of truth) ───────────────────
-// RENDER_ASPECT selects the target aspect for BOTH the rendered video and the
-// uploaded thumbnail so they never drift apart. Default 16:9 — Standard
-// YouTube (channel-shelf thumbnails via thumbnails.set). Set RENDER_ASPECT=9:16
-// to go back to Shorts. Values come straight from the canonical profile
-// definitions (RenderProfiles / ThumbnailProfile) — no scattered literals.
-const TARGET_ASPECT = process.env.RENDER_ASPECT || '16:9'
-const TARGET_RENDER = TARGET_ASPECT === '9:16' ? RenderProfiles.SHORT_4K : RenderProfiles.VIDEO_HD
-const TARGET_THUMB = TARGET_ASPECT === '9:16' ? ThumbnailProfile.SHORT : ThumbnailProfile.VIDEO
-const TARGET_MEDIA_TYPE = TARGET_RENDER.type === 'SHORT' ? 'short' : 'video'
+// The pipeline is 16:9 (standard YouTube) ONLY. The video render and the
+// uploaded thumbnail both target the canonical 16:9 profiles so they never
+// drift apart (channel-shelf thumbnails via thumbnails.set). No RENDER_ASPECT
+// switch exists — there is no alternate aspect.
+const TARGET_RENDER = VIDEO_HD
+const TARGET_THUMB = ThumbnailProfile.VIDEO
+const TARGET_MEDIA_TYPE = 'video'
+const TARGET_ASPECT = '16:9'
 
 
 // ── Experiment + Metrics + Manifest (loaded per-run when enabled) ─────
@@ -50,17 +49,10 @@ export async function composeVideo(articles, outDir = 'output', options = {}) {
     await fetchBestImage(article)
   }
 
-  // Pass the render-geometry fields into the ENGINE CONSTRUCTOR so the render
-  // profile resolves correctly at construction time (index.mjs reads
-  // mediaType/aspectRatio/outputWidth/outputHeight there). Previously these were
-  // only forwarded to generateFromArticle, which ignores them for profile
-  // selection — so every run defaulted to SHORT_4K (9:16) regardless of the
-  // requested 16:9, overriding the composer's RENDER_ASPECT/TARGET_* selection.
+  // Forward render-geometry fields into the ENGINE CONSTRUCTOR. The profile is
+  // hardcoded to VIDEO_HD (16:9) inside the engine, so mediaType/aspectRatio/
+  // outputWidth/outputHeight no longer affect profile resolution.
   const renderGeom = {
-    mediaType: options.mediaType,
-    aspectRatio: options.aspectRatio,
-    outputWidth: options.outputWidth,
-    outputHeight: options.outputHeight,
     renderFps: options.renderFps,
     outputFps: options.outputFps,
   }
@@ -786,7 +778,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
               summary: (article.description || '').slice(0, 200),
               category: category || 'technology',
               videoUrl: `https://youtu.be/${videoId}`,
-              youtubeShortsUrl: TARGET_ASPECT === '9:16' ? `https://www.youtube.com/shorts/${videoId}` : `https://www.youtube.com/watch?v=${videoId}`,
+              youtubeShortsUrl: `https://www.youtube.com/watch?v=${videoId}`,
               hashtags: (hashtags || '').split(/\s+/).filter(Boolean),
               thumbnailPath: thumbPath,
             })

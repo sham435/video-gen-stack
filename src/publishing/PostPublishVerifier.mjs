@@ -151,12 +151,13 @@ export class PostPublishVerifier {
    * ARTIFACT INTEGRITY is SHA-256 (what WE generated). YOUTUBE ACCEPTANCE is
    * hasCustomThumbnail=true (checked via YouTubePropagationVerifier) + a remote
    * representation that is fetchable/hashable. Remote geometry is decoupled from
-   * the local 9:16 artifact — YouTube serves vertical Shorts thumbnails inside
-   * a 16:9 `maxresdefault.jpg` (1280x720) container, so the remote aspect will
-   * never equal the source. YouTube may also re-encode the image, so a differing
-   * remote SHA is expected and does NOT fail the check — identity records
-   * 'REENCODED'. It only fails when the local artifact disagrees with the
-   * expected hash, or the remote cannot be retrieved/hashed.
+   * the local 16:9 artifact — YouTube may re-encode / re-serve the thumbnail at
+   * a different dimension, so the remote aspect is not relied upon for identity
+   * (the local canonical is 16:9 3840x2160; YouTube serves a smaller processed
+   * derivative). YouTube may also re-encode the image, so a differing remote SHA
+   * is expected and does NOT fail the check — identity records 'REENCODED'. It
+   * only fails when the local artifact disagrees with the expected hash, or the
+   * remote cannot be retrieved/hashed.
    */
   async _checkThumbnailIdentity(videoId, localPath, expectedSha256) {
     try {
@@ -198,11 +199,11 @@ export class PostPublishVerifier {
       const remoteSha = await this._sha256Buffer(remoteBuf)
 
       const matches = remoteSha.toLowerCase() === expectedSha256.toLowerCase()
-      // Acceptance is driven by remote presence, NOT geometry. YouTube serves
-      // vertical Shorts thumbnails inside a 16:9 `maxresdefault.jpg` container
-      // (1280x720), so remote aspect will never equal the source 9:16. A remote
-      // asset that fetchable + hashes IS the YouTube acceptance (hasCustomThumbnail
-      // is checked separately). We accept a YouTube-processed copy even when the
+      // Acceptance is driven by remote presence, NOT geometry. YouTube may
+      // re-encode/re-serve the thumbnail at a different dimension, so remote
+      // aspect/geometry is not relied upon for identity. A remote asset that is
+      // fetchable + hashes IS the YouTube acceptance (hasCustomThumbnail is
+      // checked separately). We accept a YouTube-processed copy even when the
       // SHA differs (platform re-encode) — identity records REENCODED.
       const identity = matches ? 'EXACT' : 'REENCODED'
       return {

@@ -48,7 +48,7 @@ import { ImageRanker } from './assets/ImageRanker.mjs'
 import { AssetUsageTracker } from './assets/AssetUsageTracker.mjs'
 import { ImagePerformanceMemory } from './analytics/ImagePerformanceMemory.mjs'
 import { SceneVisualPlanner } from './assets/SceneVisualPlanner.mjs'
-import { RenderProfiles, resolveRenderProfile } from './video/RenderProfile.mjs'
+import { VIDEO_HD } from './video/RenderProfile.mjs'
 import { DesignSystem } from './visuals/DesignSystem.mjs'
 
 const RENDER_FPS = 10
@@ -59,18 +59,11 @@ export class NewsBroadcastEngine {
     this.renderFps = options.renderFps || RENDER_FPS
     this.outputFps = options.outputFps || OUTPUT_FPS
     // Canonical render contract: logical design space → physical output.
-    // SHORT_4K: logical 1080x1920 → 2160x3840 (9:16). VIDEO_HD: logical
-    // 1280x720 → 1920x1080 (16:9). Frames are composited in the logical space
-    // and upscaled to the physical output during concat. The active profile
-    // pins DesignSystem's logical canvas so the whole visual stack matches.
-    this.renderProfile = resolveRenderProfile({
-      type: options.mediaType || 'short',
-      width: options.outputWidth,
-      height: options.outputHeight,
-      aspectRatio: options.aspectRatio || '9:16',
-    })
-    // Pin the composition canvas to the selected profile (DEFAULT stays
-    // SHORT_4K until composer passes 16:9 options; VIDEO_HD -> 1280x720).
+    // The pipeline is 16:9 ONLY — VIDEO_HD (logical 1280x720 → output
+    // 1920x1080). Frames are composited in the logical space and upscaled to
+    // the physical output during concat. The profile pins DesignSystem's
+    // logical canvas so the whole visual stack matches.
+    this.renderProfile = VIDEO_HD
     DesignSystem.setProfile(this.renderProfile)
     this.sceneEngine = null
     this.timeline = null
@@ -759,10 +752,10 @@ export class NewsBroadcastEngine {
     fs.writeFileSync(listPath, listContent)
 
     const silentVideo = `${outDir}/silent_broadcast.mp4`
-    // Render contract: frames are composited in the LOGICAL space (e.g.
-    // 1080x1920) and upscaled to the PHYSICAL output (e.g. 2160x3840) here.
-    // This yields a valid 4K vertical master with more headroom for YouTube
-    // transcoding. Bitrate scales with output resolution.
+    // Render contract: frames are composited in the LOGICAL space (1280x720)
+    // and upscaled to the PHYSICAL output (1920x1080) here. This yields a valid
+    // 1080p landscape master with headroom for YouTube transcoding. Bitrate
+    // scales with output resolution.
     const outW = this.renderProfile.output.width
     const outH = this.renderProfile.output.height
     const is4k = outH >= 3840
@@ -774,13 +767,11 @@ export class NewsBroadcastEngine {
       execFileSync(
         'ffmpeg',
         ['-y', '-f', 'concat', '-safe', '0', '-i', listPath, '-vf', `scale=${outW}:${outH}:force_original_aspect_ratio=decrease,pad=${outW}:${outH}:(ow-iw)/2:(oh-ih)/2,format=yuv420p,fps=${this.outputFps}`, '-c:v', 'libx264', '-preset', 'faster', '-profile:v', 'high', '-pix_fmt', 'yuv420p', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-b:v', videoBitrate, '-maxrate', maxrate, '-bufsize', maxrate, '-r', this.outputFps, silentVideo],
-        // 4K (2160x3840) x264 is slow (~5fps at medium preset); a 180s timeout
-        // killed the concat mid-encode and RENDER never completed. This is an
-        // ENCODING-POLICY change: preset medium -> faster (lower compression
-        // efficiency / higher size at the same 40Mbps bitrate) with a 20min
-        // timeout ceiling. The media CONTRACT (2160x3840, high profile,
-        // yuv420p, bt709, 40M) is unchanged and QC (assertValidRender) gate
-        // vets the resulting master before any downstream stage consumes it.
+        // Encoding policy: preset medium -> faster (lower compression efficiency
+        // / higher size at the same bitrate) with a 20min timeout ceiling. The
+        // media CONTRACT (1920x1080, high profile, yuv420p, bt709, 8M) is
+        // unchanged and QC (assertValidRender) gate vets the resulting master
+        // before any downstream stage consumes it.
         { stdio: 'inherit', timeout: 1200000 }
       )
       const renderElapsedMs = Date.now() - renderStartMs

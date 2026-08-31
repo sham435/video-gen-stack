@@ -175,14 +175,14 @@ test('validateThumbnail — rejects non-existent file', () => {
   assert.ok(r.errors[0].includes('not found'))
 })
 
-test('validateThumbnail — accepts a valid canonical 2160x3840 (9:16 short) PNG', () => {
+test('validateThumbnail — accepts a valid canonical 3840x2160 (16:9) PNG', () => {
   const tmpFile = path.join(os.tmpdir(), `nm-test-${Date.now()}.png`)
-  fs.writeFileSync(tmpFile, makeValidPng(2160, 3840))
+  fs.writeFileSync(tmpFile, makeValidPng(3840, 2160))
   try {
     const r = validateThumbnail(tmpFile)
     assert.equal(r.ok, true, `errors: ${r.errors.join('; ')}`)
-    assert.equal(r.width, 2160)
-    assert.equal(r.height, 3840)
+    assert.equal(r.width, 3840)
+    assert.equal(r.height, 2160)
     assert.equal(r.isPng, true)
   } finally { fs.unlinkSync(tmpFile) }
 })
@@ -213,10 +213,10 @@ test('assertValidThumbnail — throws on invalid file', () => {
 
 test('assertValidThumbnail — returns result on valid canonical file', () => {
   const tmpFile = path.join(os.tmpdir(), `nm-test-${Date.now()}.png`)
-  fs.writeFileSync(tmpFile, makeValidPng(2160, 3840))
+  fs.writeFileSync(tmpFile, makeValidPng(3840, 2160))
   try {
     const r = assertValidThumbnail(tmpFile)
     assert.equal(r.ok, true)
-    assert.equal(r.width, 2160)
+    assert.equal(r.width, 3840)
   } finally { fs.unlinkSync(tmpFile) }
 })

@@ -2,15 +2,14 @@
 // a valid, upload-ready production asset before touching the YouTube API.
 //
 // SINGLE SOURCE OF TRUTH: the canonical geometry comes from ThumbnailProfile
-// (SHORT = 2160x3840 9:16 — the production default; VIDEO = 3840x2160 16:9).
-// This validator mirrors enforceThumbnailProfile, NOT the legacy 16:9-only
-// desktop contract. A Short thumbnail MUST match 2160x3840 exactly.
+// (VIDEO = 3840x2160 16:9 — the production default). This validator mirrors
+// enforceThumbnailProfile. A canonical thumbnail MUST match 3840x2160 exactly.
 //
 // Checks:
 //   1. File exists
 //   2. Readable
 //   3. Valid PNG signature
-//   4. Exact canonical dimensions (2160x3840 for short / 3840x2160 for video)
+//   4. Exact canonical dimensions (3840x2160)
 //   5. File size within bounds
 //
 // Returns { ok, errors[], width, height, sizeBytes, aspectRatio }
@@ -32,13 +31,15 @@ function readPngDimensions(buffer) {
   return { width, height }
 }
 
+export const CANONICAL_THUMBNAIL_PROFILE = ThumbnailProfile.VIDEO
+
 /**
- * Validate a thumbnail against the canonical profile.
+ * Validate a thumbnail against the canonical 16:9 profile.
  * @param {string} filePath
- * @param {object} [opts] - { mediaType: 'short'|'video' } selects the profile.
+ * @param {object} [opts] - retained for API compatibility; always 16:9 VIDEO.
  */
 export function validateThumbnail(filePath, opts = {}) {
-  const profile = opts.mediaType === 'video' ? ThumbnailProfile.VIDEO : ThumbnailProfile.SHORT
+  const profile = CANONICAL_THUMBNAIL_PROFILE
   const errors = []
   let width = 0, height = 0, sizeBytes = 0
 

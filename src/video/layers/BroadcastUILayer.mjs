@@ -10,7 +10,7 @@ export class BroadcastUILayer {
     const p = Math.min(1, progress * 1.5)
 
     // LIVE indicator — sits on the same header row as the NEWS-MONSTER brand
-    // pill, placed by the shared header layout (per-profile). Never a
+    // pill + category chip, placed by the shared header layout. Never a
     // hard-coded corner position.
     const live = BROADCAST_TEXT.live
     const liveAlpha = (0.9 + Math.sin(progress * 6) * 0.1) * p
@@ -24,7 +24,7 @@ export class BroadcastUILayer {
     const liveW = header.live.w
     const liveH = header.live.h
     const centerY = liveY + liveH / 2
-    const livePillH = DesignSystem.isWide ? liveH : liveH
+    const livePillH = liveH
 
     ctx.fillStyle = live.bg
     ctx.beginPath()
@@ -36,8 +36,8 @@ export class BroadcastUILayer {
     ctx.textBaseline = 'middle'
     ctx.shadowColor = 'rgba(0,0,0,0.8)'
     ctx.shadowBlur = 4
-    // Wide header uses an 18px LIVE label; portrait keeps the token size.
-    const liveSize = DesignSystem.isWide ? 18 : live.size
+    // Compact header uses an 18px LIVE label on a ~30px pill.
+    const liveSize = 18
     ctx.font = `${live.weight} ${liveSize}px ${liveFont.font}, sans-serif`
     ctx.fillText('LIVE', liveX + liveW / 2, centerY + 1)
     ctx.shadowBlur = 0
@@ -46,9 +46,9 @@ export class BroadcastUILayer {
     const catTagP = Math.min(1, progress * 2)
     const catLabel = category ? category.toUpperCase() : 'TECHNOLOGY'
 
-    if (DesignSystem.isWide && header.category) {
-      // 16:9 — category chip sits IN the right-aligned header row, left of
-      // the brand, next to LIVE, all on one line at y=40.
+    // 16:9 — category chip sits IN the right-aligned header row, left of the
+    // brand, next to LIVE, all on one line at y=40.
+    if (header.category) {
       const c = header.category
       ctx.save()
       ctx.globalAlpha = catTagP
@@ -62,28 +62,10 @@ export class BroadcastUILayer {
       ctx.font = `700 ${18}px Inter, sans-serif`
       ctx.fillText(catLabel, c.x + c.w / 2, c.y + c.h / 2)
       ctx.restore()
-    } else {
-      // 9:16 — category chip sits BELOW the brand+LIVE header row (never over
-      // the NEWS-MONSTER pill); top-aligned to the header left edge.
-      ctx.save()
-      ctx.globalAlpha = catTagP
-      ctx.font = `${DesignSystem.getTypography('badge', 'label').weight} ${DesignSystem.getTypography('badge', 'label').size}px ${DesignSystem.getTypography('badge', 'label').font}, sans-serif`
-      const chipH = 26
-      const catX = header.brand.x
-      const catY = header.brand.y + header.brand.h + 12 + chipH / 2
-      ctx.fillStyle = catStyle.colors.primary
-      ctx.beginPath()
-      ctx.roundRect(catX, catY - 9, ctx.measureText(catLabel).width + 24, chipH, 4)
-      ctx.fill()
-      ctx.fillStyle = '#FFFFFF'
-      ctx.textAlign = 'left'
-      ctx.textBaseline = 'middle'
-      ctx.fillText(catLabel, catX + 12, catY + 2)
-      ctx.restore()
     }
 
     // Bottom chrome (source line + timestamp) docks above the footer's ACTUAL
-    // top edge — computed, never hard-coded to the 9:16 180px token.
+    // top edge — computed via FooterLayout.barTopInFrame, never hard-coded.
     const footerTop = FooterLayout.barTopInFrame(ctx, W, H)
 
     if (scene.source) {

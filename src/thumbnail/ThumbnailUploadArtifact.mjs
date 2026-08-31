@@ -5,13 +5,13 @@
 //     - Maximum file size: 2MB
 //     - badRequest (400) / invalidImage → "The provided image content is invalid."
 //
-// The canonical Local thumbnail (output/thumbnail.png) is 2160x3840 (9:16) and
+// The canonical Local thumbnail (output/thumbnail.png) is 3840x2160 (16:9) and
 // is NEVER mutated. When it fits under the 2 MiB budget it is uploaded as-is
 // (transformation NONE). When it exceeds the budget we produce a bounded UPLOAD
 // COPY (never touching the canonical) by, in order:
 //   1. RECOMPRESSED — re-encode the same canvas at PNG compressionLevel 9.
 //   2. DOWNSCALED   — re-encode preserving aspect ratio, longest edge 1280
-//                     (9:16 → 720x1280), comfortably under 2 MiB.
+//                     (16:9 → 1280x720), comfortably under 2 MiB.
 // If neither produces a copy ≤ 2 MiB we fail deterministically.
 //
 // Conversion only runs when the fallback path actually requires it. It uses
@@ -37,7 +37,7 @@ export const UploadTransformation = {
   DOWNSCALED: 'DOWNSCALED',
 }
 
-// Longest-edge bound for the DOWNSCALED fallback copy. 9:16 → 720x1280.
+// Longest-edge bound for the DOWNSCALED fallback copy. 16:9 → 1280x720.
 export const UPLOAD_COPY_MAX_EDGE = 1280
 
 export class ThumbnailUploadError extends Error {

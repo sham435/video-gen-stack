@@ -18,10 +18,10 @@
  *
  * Acceptance is based on hasCustomThumbnail === true + remote retrievable.
  * REMOTE geometry is deliberately decoupled from the LOCAL canonical artifact:
- * YouTube serves vertical Shorts thumbnails inside a 16:9 `maxresdefault.jpg`
- * container (1280x720), so remote aspect will never equal the source 9:16.
- * The local 2160x3840 geometry validates the artifact; hasCustomThumbnail +
- * remote presence validates propagation; remote geometry validates NEITHER.
+ * YouTube may re-encode/re-serve the thumbnail at a different dimension, so
+ * remote geometry is not relied upon for identity. The local 3840x2160 geometry
+ * validates the artifact; hasCustomThumbnail + remote presence validates
+ * propagation; remote geometry validates NEITHER.
  *
  * States:
  *   CUSTOM_THUMBNAIL_PENDING  — custom thumbnail set but remote asset not yet fetchable
@@ -219,9 +219,9 @@ export class YouTubePropagationVerifier {
 
         // D. Identity — accept on hasCustomThumbnail + remote representation
         // exists. The REMOTE geometry is decoupled from the LOCAL canonical
-        // 9:16 artifact: YouTube serves vertical Shorts thumbnails inside a
-        // 16:9 `maxresdefault.jpg` (1280x720) container, so remote aspect will
-        // NEVER be 9:16. hasCustomThumbnail=true + a fetchable remote IS the
+        // 16:9 artifact — YouTube may re-encode/re-serve the thumbnail at a
+        // different dimension, so remote geometry is not relied upon for
+        // identity. hasCustomThumbnail=true + a fetchable remote IS the
         // authoritative YouTube-acceptance signal. Remote geometry is reported
         // for trace only and is NOT a rejection criterion.
         const matches = expectedSha256
