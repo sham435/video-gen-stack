@@ -146,12 +146,22 @@ test('resume — interrupted session restores exact position', () => {
 
   // New session boots a fresh manager against the same root (restart).
   const w2 = new WorkLogManager({ root: w.root })
-  const resume = new ResumeManager({ worklog: w2 }).resume()
+  const rm = new ResumeManager({ worklog: w2 })
+  // Git branch is read from the ambient checkout via `git branch --show-current`.
+  // On CI, actions/checkout runs PR validation on a DETACHED HEAD (merge commit)
+  // where that command returns an empty string — so the value is environment-
+  // dependent, not a property of resume. Stub it to assert the resume plumbing
+  // propagates git state deterministically on any runner. (WorkLogManager I/O is
+  // synchronous-and-durable already, so no async flush is required here.)
+  rm.gitStatus = () => ({ branch: 'main', clean: true, lastCommit: 'abc1234' })
+  const resume = rm.resume()
   assert.equal(resume.currentTask.id, 'R1')
   assert.equal(resume.currentTask.status, 'in_progress')
   assert.equal(resume.nextAction, 'validate mp4')
   assert.equal(resume.session.interrupted, true)
   assert.equal(resume.git.branch, 'main')
+  assert.equal(resume.git.clean, true)
+  assert.equal(resume.git.lastCommit, 'abc1234')
   assert.equal(resume.tests.passed, 184)
 })
 

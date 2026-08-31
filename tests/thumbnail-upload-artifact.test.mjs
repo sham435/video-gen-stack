@@ -126,7 +126,13 @@ describe('prepareUploadThumbnail', () => {
     const path = join(tmpDir, 'unbounded.png')
     writeFileSync(path, Buffer.alloc(MAX_YOUTUBE_THUMBNAIL_BYTES + 100))
 
-    const seam = makeSeam({ srcW: 3840, srcH: 2160, byteFactor: 1e9 })
+    // Force EVERY rung of the ladder (RECOMPRESSED 3840x2160 and DOWNSCALED
+    // 1280x720) to exceed the budget so no copy fits. The byte factor is chosen
+    // to keep the fabricated buffers SMALL but strictly over the 2 MiB budget
+    // (DOWNSCALED 46.08×50k ≈ 2.3 MiB, RECOMPRESSED 414.72×50k ≈ 20 MiB) — an
+    // enormous factor like 1e9 produced multi-hundred-GB allocations that threw
+    // RangeError on constrained CI runners instead of ThumbnailUploadError.
+    const seam = makeSeam({ srcW: 3840, srcH: 2160, byteFactor: 50_000 })
     await assert.rejects(
       () => prepareUploadThumbnail({ path, outDir: tmpDir, canvas: seam }),
       (err) => {
