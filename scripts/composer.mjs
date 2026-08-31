@@ -1039,6 +1039,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             videoId,
             jobId: ctx.jobId,
             title: uploadTitle || title,
+            description: (article?.description || uploadTitle || title || '').slice(0, 400),
             category: category || 'technology',
             thumbnail: verifiedThumbnailUrl || `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`,
             thumbnailSha256: masterThumbSha || null,

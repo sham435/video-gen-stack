@@ -15,6 +15,8 @@ import directRoutes from './routes/direct.js'
 import cronManagerRoutes from './routes/cron-manager.js'
 import aiManagerRoutes from './routes/ai-manager.js'
 import youtubeThumbnailRoutes from '../../src/youtube/youtubeThumbnailRoute.js'
+import adminRoutes from './routes/admin.mjs'
+import downloadRoutes from './routes/download.mjs'
 import { requireAuth } from '../../packages/auth/requireAuth.js'
 import { logger } from '../../packages/logger.mjs'
 import { startMetricsServer, httpRequestsTotal, httpRequestDurationMs, updateJobGauges } from '../../packages/metrics.mjs'
@@ -71,6 +73,14 @@ app.use('/api', directRoutes)
 app.use('/api', cronManagerRoutes)
 app.use('/api/youtube', youtubeThumbnailRoutes)
 app.use('/api/ai', aiManagerRoutes)
+
+// Admin RBAC console (JWT + httpOnly cookie) — /admin/login, /admin/dashboard, ...
+app.use('/admin', adminRoutes)
+// Public video download endpoint — /download/:videoId
+app.use(downloadRoutes)
+// Self-hosted /local deployments: serve committed downloadable mp4s directly at
+// /videos/*.mp4 (matches the static GitHub Pages layout).
+app.use('/videos', express.static(path.resolve(process.cwd(), 'public', 'videos')))
 
 app.get('/api/health', (req, res) => {
   let version = 'v3.0'
