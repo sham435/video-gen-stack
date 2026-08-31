@@ -39,14 +39,14 @@ export const THRESHOLD_PRIORITY = 0.82    // above => PRIORITY
 // total is normalized by the sum of applied weights so partial signal sets
 // remain comparable.
 export const DEFAULT_WEIGHTS = Object.freeze({
-  topicInterest: 0.20,
-  urgency: 0.15,
-  novelty: 0.12,
+  topicInterest: 0.25,
+  urgency: 0.20,
+  novelty: 0.15,
   audienceFit: 0.12,
-  visualPotential: 0.12,
-  headlineStrength: 0.10,
-  searchDemand: 0.10,
-  competition: 0.09, // inverted: lower competition => higher contribution
+  visualPotential: 0.10,
+  headlineStrength: 0.08,
+  searchDemand: 0.05,
+  competition: 0.05, // inverted: lower competition => higher contribution
 })
 
 // Higher-interest niches (proxy for search demand + audience fit).
