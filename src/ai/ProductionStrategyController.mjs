@@ -29,6 +29,7 @@ import { resolveNicheSync } from '../pipeline/NicheResolver.mjs'
 import { StrategyValidator } from './StrategyValidator.mjs'
 import { PerformanceObservation } from '../production/PerformanceObservation.mjs'
 import { StrategyContextBuilder } from './StrategyContextBuilder.mjs'
+import { scoreViralPotential } from './TopicOpportunityEngine.mjs'
 
 const CONFIDENCE_THRESHOLD = 0.60
 const MIN_SAMPLES_FOR_LEARNING = 3
@@ -52,6 +53,12 @@ export class ProductionStrategyController {
     this.resourceGovernor = options.resourceGovernor || null
     this.assetRegistry = options.assetRegistry || null
     this.aiLayer = options.aiLayer || null
+    // Accept either a callable `scoreViralPotential` or an object exposing
+    // `.score`; normalize to an object with `.score` so the plan call is uniform.
+    const eng = options.topicOpportunityEngine
+    this.topicOpportunityEngine = typeof eng === 'function'
+      ? { score: eng }
+      : eng || null
     this.now = options.now || (() => Date.now())
     this._decisionTrace = null
   }
@@ -199,6 +206,22 @@ export class ProductionStrategyController {
       thumbnailStrategy: plan.thumbnailStrategy,
     }, decision)
     plan.confidence = this._computeConfidence(niche, memorySignals, decision)
+
+    // ── 7b. Viral Potential (pre-render gate signal) ──
+    // Deterministic ViralPotentialScore attached to the plan so the scheduler
+    // can prioritize/regenerate/reject BEFORE rendering. Non-gating by default:
+    // it is a decision signal, not a hard block (existing production behavior
+    // is preserved). Callers may enable a hard gate by checking `verdict`.
+    if (this.topicOpportunityEngine) {
+      plan.viralPotential = this.topicOpportunityEngine.score({
+        title: article.title || '',
+        description: article.description || '',
+        category: article.category || niche.key,
+      }, { profileKey: niche.key })
+    } else {
+      plan.viralPotential = null
+    }
+
     plan.planDurationMs = this.now() - startTime
 
     // Store decision trace for ProductionTrace

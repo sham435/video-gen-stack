@@ -145,6 +145,8 @@ export class Compositor {
 
     // Watermark sits ABOVE post (vignette + grade) so it stays crisp/visible.
     // Always on — every scene, every frame. Skipped when hideBranding is set.
-    this.branding.drawBug(ctx, scene)
+    // During OUTRO the end-card brand stack owns the frame, so the top-left
+    // brand bug is suppressed (the footer chrome still draws above post).
+    this.branding.drawBug(ctx, scene, narrative.activeState)
   }
 }

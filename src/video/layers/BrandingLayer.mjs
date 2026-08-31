@@ -16,8 +16,14 @@ export class BrandingLayer {
   // the vignette and category grade can never dim it. Solid near-black pill,
   // 900-weight brand wordmark, red accent — readable on any hero plate.
   // Skipped when scene.hideBranding is set.
-  drawBug(ctx, scene) {
+  //
+  // The brand bug is narrative-state-aware: during OUTRO the end-card renders
+  // its own centered NEWS-MONSTER brand stack (InformationLayer brand close),
+  // so this top-left duplicate is suppressed to avoid a second "NEWS-MONSTER"
+  // mark piling on the same frame. Footer chrome is unaffected.
+  drawBug(ctx, scene, narrativeState = null) {
     if (scene?.hideBranding) return
+    if (narrativeState === 'OUTRO') return
     const bug = BROADCAST_TEXT.bug
     const font = DesignSystem.getTypography('watermark', 'default').font
     const label = 'NEWS-MONSTER'
