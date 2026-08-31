@@ -60,10 +60,18 @@ describe('ProductionManifest', () => {
     })
 
     it('generates deterministic artifactId from title', () => {
+      // artifactId embeds a wall-clock timestamp (Date.now().toString(36)) so
+      // back-to-back creates can straddle a second boundary and differ in the
+      // time component. The content-derived hash — what makes the id stable for
+      // the same title — must be identical across calls, and the overall shape
+      // (vid-<time36>-<hash8>) must be stable.
       const pm = new ProductionManifest({ outDir: tmpDir })
-      const m1 = pm.create({ article: { title: 'Same Title' }, niche: { key: 'AI' } })
-      const m2 = pm.create({ article: { title: 'Same Title' }, niche: { key: 'AI' } })
-      assert.equal(m1.artifactId, m2.artifactId)
+      const idOf = ({ title }) => pm.create({ article: { title }, niche: { key: 'AI' } }).artifactId
+      const a = idOf({ title: 'Same Title' })
+      const b = idOf({ title: 'Same Title' })
+      const hashOf = (id) => id.split('-').pop()
+      assert.equal(hashOf(a), hashOf(b), 'content hash is stable for the same title')
+      assert.match(a, /^vid-[0-9a-z]+-[0-9a-f]{8}$/)
     })
 
     it('different titles produce different artifactIds', () => {

@@ -8,7 +8,13 @@ import { FooterLayout } from '../footer/FooterLayout.mjs'
 import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
 
 export class InformationLayer {
-  async draw(ctx, scene, progress, category, timeline = null, time = 0) {
+  async draw(ctx, scene, progress, category, timeline = null, time = 0, narrative = null) {
+    // The headline stack renders from ONE authoritative measured block. Prefer
+    // the production injected layout, then the narrative composition's — never
+    // an ad-hoc re-wrap/position in the renderer.
+    if (!scene.headlineLayout && narrative?.headlineLayout) {
+      scene = { ...scene, headlineLayout: narrative.headlineLayout, headlineFontSize: narrative.headlineLayout.fontSize }
+    }
     const envelope = timeline ? (id) => {
       const layer = timeline.layers.find(l => l.id === id)
       return layer && TextTimelineScheduler.envelope(layer, time)
