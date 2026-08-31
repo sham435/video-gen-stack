@@ -5,7 +5,7 @@
   "resolution": {"width": 1080, "height": 1920},
   "fps": 30,
   "duration": 30,
-  "visual_style": "technology, cyberpunk, neon blue cyan accents, dark cinematic lighting, holographic UI elements, 8k, photorealistic, vertical 9:16",
+  "visual_style": "technology, cyberpunk, neon blue cyan accents, dark cinematic lighting, holographic UI elements, 8k, photorealistic, 16:9 landscape",
   "colors": {
     "primary": "#E10600",
     "secondary": "#00E5FF",

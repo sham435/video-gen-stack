@@ -2,7 +2,7 @@ import { readFileSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { UIStyleSelector } from '../ai/UIStyleSelector.mjs'
-import { RenderProfiles, DEFAULT_PROFILE } from '../video/RenderProfile.mjs'
+import { DEFAULT_PROFILE } from '../video/RenderProfile.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -12,15 +12,16 @@ const typography = JSON.parse(readFileSync(join(__dirname, '../../design-system/
 const styleSelector = new UIStyleSelector()
 
 // The DesignSystem is the SINGLE source of truth for the LOGICAL composition
-// canvas. Every visual/layout component reads W/H/dimensions from here, so the
-// whole stack is aspect-aware by construction. `setProfile` lets the video
-// engine pin the active RenderProfile (SHORT_4K -> 1080x1920, VIDEO_HD ->
-// 1280x720) BEFORE any frame is composed; nothing should hardcode 1080x1920.
+// canvas. Every visual/layout component reads W/H/dimensions from here. The
+// pipeline is 16:9 ONLY: the logical canvas is always 1280x720. `setProfile`
+// is retained as a no-op-safe hook so the video engine can still pin the
+// active RenderProfile before any frame is composed, but there is exactly one
+// profile (VIDEO_HD). Nothing should hardcode 1280x720.
 //
 // W/H/sx/sy are LIVE GETTERS that always reflect the active profile. This is
 // important: components are statically imported (module load) but the profile
 // is only pinned at ENGINE CONSTRUCTION (runtime), so a module-scope `const =
-// DesignSystem.W` would freeze the SHORT default. Always read them INSIDE the
+// DesignSystem.W` would freeze the 16:9 default. Always read them INSIDE the
 // draw function: `const { W, H, sx, sy } = DesignSystem`.
 export class DesignSystem {
   static _profile = DEFAULT_PROFILE
@@ -49,61 +50,28 @@ export class DesignSystem {
   }
 
   /**
-   * True when the active profile is a landscape/wide frame (16:9 and up),
-   * false for portrait (9:16). Visual layers use this to swap layout
-   * anchors: wide frames get higher headlines / lower badges / flatter
-   * vertical rhythm, while the portrait 9:16 look is preserved unchanged.
-   */
-  static get isWide() {
-    return this.aspectRatio >= 1
-  }
-
-  /**
-   * Returns a keyed set of vertical anchor fractions appropriate to the
-   * active aspect ratio. Wide (16:9) frames are short and horizontal, so
-   * the hero / headline rides HIGH (vertical thirds) and the caption /
-   * badge bands sit lower — there is far less vertical room than a 9:16
-   * frame (720 vs 1920 logical px). The portrait keys preserve the exact
-   * original 9:16 anchors so legacy Shorts output is unchanged.
+   * Returns a keyed set of vertical anchor fractions for the 16:9 (1280x720)
+   * frame. Narrative text (hero / secondary / caption / outro) anchors to the
+   * VERTICAL CENTER (0.5) so every story text state — MAIN HEADLINE → SPOKEN
+   * SENTENCE → STAY WITH NEWS-MONSTER — occupies the same center-stage position
+   * (temporal replacement, not stacked). Badge/explanation sub-elements stay in
+   * their bands. The pipeline is 16:9 only, so these anchors are fixed.
    */
   static get layout() {
-    if (this.isWide) {
-      // 16:9 (1280x720) — wide + short. Narrative text (hero / secondary /
-      // caption / outro) anchors to the VERTICAL CENTER (0.5) so every story
-      // text state — MAIN HEADLINE → SPOKEN SENTENCE → STAY WITH NEWS-MONSTER —
-      // occupies the same center-stage position (temporal replacement, not
-      // stacked). Badge/explanation sub-elements stay in their bands.
-      return {
-        hero: 0.5,
-        secondary: 0.5,
-        explanationHeading: 0.16,
-        explanationBody: 0.20,
-        retentionBadge: 0.22,
-        retentionCenter: 0.50,
-        brandStay: 0.43,
-        brandCenter: 0.57,
-        tagline: 0.60,
-        caption: 0.5,
-        ticker: 0.92,
-        badge: 0.74,
-        safeArea: { top: 0.05, bottom: 0.08, left: 0.04, right: 0.04 },
-      }
-    }
-    // 9:16 (1080x1920) — original portrait anchors, unchanged.
     return {
-      hero: 0.62,
-      secondary: 0.62,
-      explanationHeading: 0.15,
-      explanationBody: 0.18,
-      retentionBadge: 0.20,
+      hero: 0.5,
+      secondary: 0.5,
+      explanationHeading: 0.16,
+      explanationBody: 0.20,
+      retentionBadge: 0.22,
       retentionCenter: 0.50,
-      brandStay: 0.37,
-      brandCenter: 0.50,
+      brandStay: 0.43,
+      brandCenter: 0.57,
       tagline: 0.60,
-      caption: 0.78,
+      caption: 0.5,
       ticker: 0.92,
-      badge: 0.65,
-      safeArea: { top: 0.03, bottom: 0.05, left: 0.04, right: 0.04 },
+      badge: 0.74,
+      safeArea: { top: 0.05, bottom: 0.08, left: 0.04, right: 0.04 },
     }
   }
 

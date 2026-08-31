@@ -15,18 +15,18 @@ export class BrandingLayer {
   // Top-left broadcast bug — rendered AFTER post-processing (Compositor) so
   // the vignette and category grade can never dim it. Solid near-black pill,
   // 900-weight brand wordmark, red accent — readable on any hero plate.
-  // Skipped when scene.hideBranding is set (Shorts mode).
+  // Skipped when scene.hideBranding is set.
   drawBug(ctx, scene) {
     if (scene?.hideBranding) return
     const bug = BROADCAST_TEXT.bug
     const font = DesignSystem.getTypography('watermark', 'default').font
     const label = 'NEWS-MONSTER'
     const { x, y, w: pillW, h: pillH } = measureBrandPill(ctx)
-    // Wide (16:9) uses a compact right-aligned pill — the internal font must
-    // match the compact box (28px), not the 9:16 54px design size.
-    const size = DesignSystem.isWide ? HEADER_WIDE_BRAND_SIZE : bug.size
-    const padX = DesignSystem.isWide ? 14 : bug.padding[1]
-    const padY = DesignSystem.isWide ? 1 : bug.padding[0]
+    // 16:9 uses a compact right-aligned pill — the internal font must match
+    // the compact box (28px), not the token design size.
+    const size = HEADER_WIDE_BRAND_SIZE
+    const padX = 14
+    const padY = 1
 
     ctx.save()
     ctx.font = `${bug.weight} ${size}px Anton, ${font}, sans-serif`
@@ -55,9 +55,8 @@ export class BrandingLayer {
 
   // Footer — rendered by the shared FooterLayout engine so the in-canvas bar
   // and the standalone footer.png composite are always identical. Layout:
-  //   Left(25%): [NM] NEWS-MONSTER (top row) + tagline + AVAILABLE ON badges |
-  //   Center(50%): whitespace |
-  //   Right(25%): [SUBSCRIBE] (aligned with the wordmark) + URL below
+  //   16:9 single centered row: [NEWS-MONSTER NM] pair + domain (left) +
+  //   Subscribe pill (right), bottom-anchored with a red accent at the edge.
   // Drawn every scene; it is chrome, not content, so it stays on-brand and
   // readable after compression.
   drawFooter(ctx, scene, progress) {
@@ -77,11 +76,11 @@ export class BrandingLayer {
     const tickerItems = scene.ticker || ['AI', 'Robotics', 'Cybersecurity', 'Space', 'Programming', 'Quantum', 'Biotech']
 
     ctx.save()
-    // Preview ticker anchor: 9:16 uses the original 0.72/0.75 band; wide
-    // (16:9) docks the preview above the footer so it never collides with the
-    // real footer-docked ticker (`drawNewsTicker` -> barTopInFrame).
-    const previewY = DesignSystem.isWide ? H * 0.78 : H * 0.75
-    const lineY = DesignSystem.isWide ? H * 0.75 : H * 0.72
+    // Preview ticker anchor: the preview docks above the footer so it never
+    // collides with the real footer-docked ticker (`drawNewsTicker` ->
+    // barTopInFrame).
+    const previewY = H * 0.78
+    const lineY = H * 0.75
     ctx.fillStyle = 'rgba(0, 229, 255, 0.12)'
     ctx.fillRect(W * 0.1, lineY, W * 0.8, 1)
 

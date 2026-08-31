@@ -5,7 +5,7 @@
   "resolution": {"width": 1080, "height": 1920},
   "fps": 30,
   "duration": 30,
-  "visual_style": "retro future, gaming, pixel art, neon purple and cyan, CRT glow, arcade lighting, 8k, vertical 9:16",
+  "visual_style": "retro future, gaming, pixel art, neon purple and cyan, CRT glow, arcade lighting, 8k, 16:9 landscape",
   "colors": {"primary": "#E100FF", "secondary": "#00FFE5", "background": "#0A0015", "text": "#FFFFFF"},
   "scenes": [
     {"id":"hook","type":"hook","start":0,"end":2.5,"text":"GAMING BREAKING NEWS","headline":"BREAKING","subheadline":"{{title}}","visual":"gaming","effect":"glitch","audio":"impact"},

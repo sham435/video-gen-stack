@@ -7,7 +7,6 @@
 const TARGETS = Object.freeze({
   youtube: Object.freeze({ width: 1280, height: 720, aspectRatio: 16 / 9, format: 'png' }),
   web: Object.freeze({ width: 1280, height: 720, aspectRatio: 16 / 9, format: 'png' }),
-  shorts_cover: Object.freeze({ width: 2160, height: 3840, aspectRatio: 9 / 16, format: 'png' }),
 })
 
 const MIN_WIDTH = 640

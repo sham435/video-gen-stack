@@ -1,4 +1,4 @@
-// Broadcast-safe text tokens for 1080x1920 9:16 renders.
+// Broadcast-safe text tokens for 16:9 renders (1920x1080 logical design-space).
 // Anything under 24px is invisible after YouTube/TikTok compression, so every
 // chrome layer (bug, LIVE, footer) and every reading layer (caption, emphasis)
 // must consume these minimums. Renderers import these — no hard-coded sizes.

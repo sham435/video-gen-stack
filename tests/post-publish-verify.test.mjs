@@ -87,7 +87,7 @@ describe('PostPublishVerifier', () => {
       // the thumbnail asset itself → HTTP 404
       return { ok: false, status: 404 }
     }
-    const verifier = new PostPublishVerifier({ token: 'tok', expectedWidth: 2160, expectedHeight: 3840, expectedAspectRatio: '9:16' })
+    const verifier = new PostPublishVerifier({ token: 'tok', expectedWidth: 3840, expectedHeight: 2160, expectedAspectRatio: '16:9' })
     const result = await verifier.verify({
       videoId: 'vid1',
       expectedTitle: 'T',

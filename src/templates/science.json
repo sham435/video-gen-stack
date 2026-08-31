@@ -5,7 +5,7 @@
   "resolution": {"width": 1080, "height": 1920},
   "fps": 30,
   "duration": 35,
-  "visual_style": "science, space exploration, biology research, laboratory environment, clean lighting, blue tones, microscopic detail, 8k, photorealistic, vertical 9:16",
+  "visual_style": "science, space exploration, biology research, laboratory environment, clean lighting, blue tones, microscopic detail, 8k, photorealistic, 16:9 landscape",
   "colors": {
     "primary": "#00E5FF",
     "secondary": "#E10600",

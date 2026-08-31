@@ -29,7 +29,7 @@ import { BROADCAST_TEXT } from '../src/style/text-tokens.mjs'
 if (fs.existsSync('assets/fonts/Montserrat-ExtraBold.ttf'))
   GlobalFonts.registerFromPath('assets/fonts/Montserrat-ExtraBold.ttf', 'Montserrat ExtraBold')
 
-const W = 1080, H = 1920
+const W = 1280, H = 720
 
 function makeCanvas() {
   return createCanvas(W, H).getContext('2d')
@@ -177,70 +177,34 @@ test('composer source — footer.png composite is conditional on the manifest ga
 
 // ── 5. Readability contract (kept intact by the single-owner footer) ──────
 
-test('readability — footer text sizes readable (brand/URL ≥ legibility floor)', () => {
-  // The footer is the single owner of the bottom chrome; these metrics are
-  // enforced with the shared design tokens so the in-frame canvas footer and
-  // any footer.png composite stay identical and readable.
+test('readability — compact footer text stays readable (URL/brand ≥ legibility floor)', () => {
+  // The footer is the single owner of the bottom chrome; the compact 16:9
+  // strip still enforces a smaller-but-readable floor via the shared tokens,
+  // so the in-frame canvas footer and any footer.png composite stay identical.
   const F = BROADCAST_TEXT.footer
   const ctx = makeCanvas()
   const layout = FooterLayout.compute(ctx, W)
   const urlPx = Math.round(F.url.size * layout.scale)
   const brandPx = Math.round(F.brand.size * layout.scale)
-  const availablePx = Math.round(F.available.size * layout.scale)
-  assert.ok(urlPx >= 20, `URL ${urlPx}px readable`)
-  assert.ok(brandPx >= 34, `brand ${brandPx}px readable`)
-  assert.ok(availablePx >= 22, `AVAILABLE ON ${availablePx}px readable`)
+  assert.ok(urlPx >= 12, `URL ${urlPx}px readable on the compact strip`)
+  assert.ok(brandPx >= 24, `brand ${brandPx}px readable on the compact strip`)
 })
 
-test('readability — URL sits below the pill on its own line; line gaps keep text apart', () => {
+test('readability — URL and subscribe pill share one centered row, no horizontal overlap', () => {
   const ctx = makeCanvas()
   const layout = FooterLayout.compute(ctx, W)
-  const F = BROADCAST_TEXT.footer
-  const { scale } = layout
   const pill = layout.right.find(c => c.key === 'subscribe')
   const url = layout.right.find(c => c.key === 'url')
-  // The URL lives on its own line; the subscribe pill sits on the AVAILABLE
-  // ON row BELOW the URL — the hard invariant is that nothing leaves the bar.
+  // Both on the SAME centered row — the hard invariant is that nothing leaves
+  // the bar and the URL stays left of the pill.
   assert.ok(url.y + url.h <= layout.barHeight + 1, `URL inside bar (bottom ${Math.round(url.y + url.h)} ≤ bar ${layout.barHeight})`)
-  assert.ok(pill.y + 0.5 >= url.y + url.h, 'pill below the URL (last row)')
-  // Vertical gap between stacked footer lines has a floor so glyphs never touch.
-  const lineGapPx = Math.round(F.lineGap * scale)
-  assert.ok(lineGapPx >= 12, `line gap ${lineGapPx}px`)
+  assert.ok(url.x + url.w <= pill.x, 'URL does not overlap the subscribe pill')
+  const urlCenter = url.y + url.h / 2
+  const pillCenter = pill.y + pill.h / 2
+  assert.ok(Math.abs(pillCenter - urlCenter) <= 1.5, `pill shares the URL centerline (delta ${Math.abs(pillCenter - urlCenter).toFixed(2)})`)
 })
 
-test('outro caption — CaptionLayer does not render in the lower third for close scenes', async () => {
-  // The outro scene carries caption.fullText='STAY WITH NEWS-MONSTER'. The
-  // centered InformationLayer stack already renders it; the CaptionLayer must
-  // NOT duplicate it in the lower third (y≈H*0.78), where it collides with the
-  // footer zone and re-prints the outro text. Single-owner rule, like FOOTER-001.
-  const { SceneEngine } = await import('../src/video/SceneEngine.mjs')
-  const engine = new SceneEngine({ quality: 'default', category: 'technology' })
-  const { loadImage } = await import('@napi-rs/canvas')
-
-  const buf = await engine.renderSceneFrame(
-    { type: 'brand_close', outro: true, duration: 6, category: 'technology', image: null, ticker: [], caption: { focus: 'STAY WITH', fullText: 'STAY WITH NEWS-MONSTER' } },
-    0.9, [], 0, null
-  )
-  const canvas = createCanvas(W, H)
-  const ctx = canvas.getContext('2d')
-  ctx.drawImage(await loadImage(buf), 0, 0)
-  // CaptionEngine default anchor is y=H*0.78 (≈1497 on a 1920 frame). The
-  // outro scene must never render a caption there. Probe a tight window at the
-  // caption anchor that sits ABOVE the anchor badge and footer bar — the GAP
-  // between the outro tagline/source and the badge is the only row where a
-  // stray caption would be visible.
-  const captionAnchor = Math.floor(H * 0.78)
-  const y0 = captionAnchor - 12, y1 = captionAnchor + 12
-  let bright = 0
-  const dd = ctx.getImageData(0, y0, W, y1 - y0).data
-  for (let i = 0; i < dd.length; i += 4) {
-    const l = (dd[i] + dd[i + 1] + dd[i + 2]) / 3
-    if (l > 140) bright++
-  }
-  assert.equal(bright, 0, `outro scene must not render caption glyphs at caption anchor (bright=${bright})`)
-})
-
-test('outro caption — single-owner rule enforced at the gate (production BrandOutro, 16:9-independent)', async () => {
+test('outro caption — single-owner rule enforced at the gate (production BrandOutro)', async () => {
   // The 16:9 frame is only 720px tall and the outro's own end-card stack
   // legitimately covers the wide caption anchor band, so a pixel probe there
   // is not a clean signal. The real single-owner guarantee is a logic gate:
@@ -257,12 +221,12 @@ test('outro caption — single-owner rule enforced at the gate (production Brand
 
   // And the full 16:9 composed frame still renders the end card visibly.
   const { SceneEngine } = await import('../src/video/SceneEngine.mjs')
-  const { RenderProfiles, DEFAULT_PROFILE } = await import('../src/video/RenderProfile.mjs')
+  const { VIDEO_HD, DEFAULT_PROFILE } = await import('../src/video/RenderProfile.mjs')
   const { DesignSystem } = await import('../src/visuals/DesignSystem.mjs')
   const engine = new SceneEngine({ quality: 'default', category: 'technology' })
   const { loadImage, createCanvas } = await import('@napi-rs/canvas')
   const WW = 1280, HH = 720
-  DesignSystem.setProfile(RenderProfiles.VIDEO_HD)
+  DesignSystem.setProfile(VIDEO_HD)
   const buf = await engine.renderSceneFrame(
     { ...outro, image: null, ticker: [] },
     0.9, [], 0, null

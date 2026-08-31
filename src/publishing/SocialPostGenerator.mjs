@@ -30,12 +30,10 @@ export class SocialPostGenerator {
     const title = cleanTitle(video.title || 'NEWS-MONSTER')
     const videoId = video.videoId || null
     const videoUrl = video.videoUrl || (videoId ? `https://youtu.be/${videoId}` : '')
-    // Aspect-aware canonical link: a Standard 16:9 upload uses the watch URL,
-    // only a 9:16 Shorts upload uses /shorts/. Driven by RENDER_ASPECT (same
-    // single source as composer), default 16:9.
-    const isShorts = (process.env.RENDER_ASPECT || '16:9') === '9:16'
+    // The pipeline is 16:9 (standard YouTube) only, so the canonical link is
+    // always the standard /watch?v= URL (never /shorts/).
     const youtubeShortsUrl = videoId
-      ? (isShorts ? `https://www.youtube.com/shorts/${videoId}` : `https://www.youtube.com/watch?v=${videoId}`)
+      ? `https://www.youtube.com/watch?v=${videoId}`
       : videoUrl
     const summary = video.summary || video.hook || ''
     const hook = nicheHook(title)

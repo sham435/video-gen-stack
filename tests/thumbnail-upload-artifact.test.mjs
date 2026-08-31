@@ -18,9 +18,9 @@ import {
   ThumbnailUploadError,
 } from '../src/thumbnail/ThumbnailUploadArtifact.mjs'
 
-// A PNG that decodes to a 2160x3840 image (portrait, 9:16) — the canonical local
-// shape. `width`/`height`/`toBuffer` let tests fully control output sizes/bytes
-// without real encoding.
+// A PNG that decodes to a 3840x2160 image (landscape, 16:9) — the canonical
+// local shape. `width`/`height`/`toBuffer` let tests fully control output
+// sizes/bytes without real encoding.
 function fakeImage(width, height) {
   return { width, height, srcWidth: width, srcHeight: height }
 }
@@ -90,14 +90,14 @@ describe('prepareUploadThumbnail', () => {
     writeFileSync(path, sourceBytes)
 
     // Re-encoding at same dims yields a much smaller PNG (fits budget).
-    const seam = makeSeam({ srcW: 2160, srcH: 3840, byteFactor: 1 })
+    const seam = makeSeam({ srcW: 3840, srcH: 2160, byteFactor: 1 })
     const result = await prepareUploadThumbnail({ path, outDir: tmpDir, canvas: seam })
 
     assert.equal(result.transformation, UploadTransformation.RECOMPRESSED)
     assert.notEqual(result.path, path, 'must produce a copy, not mutate canonical')
     assert.ok(result.path.startsWith(tmpDir))
-    assert.equal(result.width, 2160)
-    assert.equal(result.height, 3840)
+    assert.equal(result.width, 3840)
+    assert.equal(result.height, 2160)
     assert.ok(result.bytes <= MAX_YOUTUBE_THUMBNAIL_BYTES, 'copy must be ≤ 2 MiB')
     // Canonical file is byte-for-byte untouched.
     assert.equal((await import('node:fs')).readFileSync(path).length, sourceBytes.length)
@@ -110,23 +110,23 @@ describe('prepareUploadThumbnail', () => {
     writeFileSync(path, sourceBytes)
 
     // Huge byte factor so even recompressed stays > budget → falls to DOWNSCALED.
-    const seam = makeSeam({ srcW: 2160, srcH: 3840, byteFactor: 6000 })
+    const seam = makeSeam({ srcW: 3840, srcH: 2160, byteFactor: 6000 })
     const result = await prepareUploadThumbnail({ path, outDir: tmpDir, canvas: seam })
 
     assert.equal(result.transformation, UploadTransformation.DOWNSCALED)
     assert.ok(result.bytes <= MAX_YOUTUBE_THUMBNAIL_BYTES, 'downscaled copy must be ≤ 2 MiB')
-    // 9:16 preserved, longest edge bounded by UPLOAD_COPY_MAX_EDGE (720x1280).
-    assert.equal(result.height, UPLOAD_COPY_MAX_EDGE)
-    assert.ok(result.width <= UPLOAD_COPY_MAX_EDGE)
+    // 16:9 preserved, longest edge bounded by UPLOAD_COPY_MAX_EDGE (1280x720).
+    assert.equal(result.width, UPLOAD_COPY_MAX_EDGE)
+    assert.ok(result.height <= UPLOAD_COPY_MAX_EDGE)
     const ratio = result.width / result.height
-    assert.ok(Math.abs(ratio - 2160 / 3840) < 0.01, `aspect preserved, got ${ratio}`)
+    assert.ok(Math.abs(ratio - 3840 / 2160) < 0.01, `aspect preserved, got ${ratio}`)
   })
 
   it('throws THUMBNAIL_UPLOAD_COPY_TOO_LARGE when no copy fits the budget', async () => {
     const path = join(tmpDir, 'unbounded.png')
     writeFileSync(path, Buffer.alloc(MAX_YOUTUBE_THUMBNAIL_BYTES + 100))
 
-    const seam = makeSeam({ srcW: 2160, srcH: 3840, byteFactor: 1e9 })
+    const seam = makeSeam({ srcW: 3840, srcH: 2160, byteFactor: 1e9 })
     await assert.rejects(
       () => prepareUploadThumbnail({ path, outDir: tmpDir, canvas: seam }),
       (err) => {

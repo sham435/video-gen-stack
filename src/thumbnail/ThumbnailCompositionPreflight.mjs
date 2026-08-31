@@ -5,7 +5,8 @@
 // before the judge can score them.
 //
 // Detects:
-//   - Embedded vertical/9:16 video inside 16:9 canvas
+//   - Embedded portrait/9:16 video content inside the 16:9 canvas
+//     (a 16:9 thumbnail should not show letterboxed/pillarboxed source media)
 //   - Pillarboxing (dark side bands)
 //   - Excessive empty/uniform area
 //   - Text overload (too many competing layers)
@@ -18,12 +19,12 @@ import { loadImage } from '@napi-rs/canvas'
 
 // Thresholds — calibrated against existing CompositionJudge data
 const MAX_EMPTY_AREA_RATIO = 0.35     // >35% uniform pixels = too much dead space
-const MAX_PILLARBOX_RATIO = 0.18      // >18% dark side bands = embedded vertical
-const MAX_VERTICAL_CENTER_RATIO = 0.85 // center column brighter than sides by this ratio = vertical video
+const MAX_PILLARBOX_RATIO = 0.18      // >18% dark side bands = embedded portrait source
+const MAX_VERTICAL_CENTER_RATIO = 0.85 // center brighter than sides by this ratio = portrait source
 const MIN_TEXT_DENSITY = 0.02          // <2% text-area pixels = no visible text
 const MAX_TEXT_DENSITY = 0.45          // >45% text-area pixels = text overload
 const SAFE_ZONE_MARGIN = 0.04         // text within 4% of edge = unsafe placement
-const MIN_EDGE_CONTRAST = 0.15        // contrast between center and edges for vertical detection
+const MIN_EDGE_CONTRAST = 0.15        // contrast between center and edges for portrait-content detection
 
 export class ThumbnailCompositionPreflight {
   /**
@@ -81,7 +82,8 @@ export class ThumbnailCompositionPreflight {
       errors.push(`PILLARBOXING: ${(pillarResult.ratio * 100).toFixed(1)}% dark sides (max ${MAX_PILLARBOX_RATIO * 100}%)`)
     }
 
-    // 3. Embedded vertical video detection — center column significantly brighter than sides
+    // 3. Embedded portrait-source detection — center column significantly
+    //    brighter than sides (foreign portrait media letterboxed into 16:9).
     const verticalResult = ThumbnailCompositionPreflight._detectEmbeddedVertical(pixels, canvas.width, canvas.height)
     composition.verticalEmbedRatio = verticalResult.ratio
     checks.push({
@@ -90,7 +92,7 @@ export class ThumbnailCompositionPreflight {
       detail: `center/sides brightness ratio=${verticalResult.ratio.toFixed(3)}`,
     })
     if (verticalResult.ratio >= MAX_VERTICAL_CENTER_RATIO) {
-      errors.push(`EMBEDDED_VERTICAL: center is ${verticalResult.ratio.toFixed(2)}x brighter than sides (vertical video in 16:9)`)
+      errors.push(`EMBEDDED_VERTICAL: center is ${verticalResult.ratio.toFixed(2)}x brighter than sides (portrait source in 16:9)`)
     }
 
     // 4. Empty area detection — count near-uniform pixel regions
@@ -179,7 +181,10 @@ export class ThumbnailCompositionPreflight {
   }
 
   /**
-   * Detect embedded vertical video: center column much brighter than sides.
+   * Detect embedded portrait-source content: center column much brighter than
+   * the sides (foreign 9:16 media letterboxed/pillarboxed inside the 16:9
+   * thumbnail). This is a composition-quality check, not an output-resolution
+   * check — the rendered thumbnail is always 16:9.
    * This is the specific pattern from the dp8SzamyN4k case.
    */
   static _detectEmbeddedVertical(pixels, w, h) {

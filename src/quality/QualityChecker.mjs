@@ -10,14 +10,14 @@ export class QualityChecker {
     const errors = []
 
     if (!template.version) errors.push('Missing version')
-    // Accept profile-appropriate logical resolutions: 9:16 portrait (1080x1920)
-    // or 16:9 landscape (1280x720, 1920x1080). Validate aspect, not one size.
+    // Rendered output is always 16:9 landscape (1280x720, 1920x1080,
+    // 3840x2160). Validate aspect, not one size.
     const { width = 0, height = 0 } = template.resolution || {}
     const gcd = (a, b) => (b ? gcd(b, a % b) : a)
     const g = gcd(width, height)
     const ar = g ? `${width / g}:${height / g}` : ''
-    if (ar !== '9:16' && ar !== '16:9') {
-      errors.push(`Resolution must be 9:16 or 16:9, got ${width}x${height}`)
+    if (ar !== '16:9') {
+      errors.push(`Resolution must be 16:9, got ${width}x${height}`)
     }
     if (template.fps !== 30) errors.push('FPS must be 30')
     if (!template.scenes || template.scenes.length === 0) errors.push('No scenes defined')
@@ -64,10 +64,10 @@ export class QualityChecker {
     const gcd = (a, b) => (b ? gcd(b, a % b) : a)
     const g = gcd(w, h)
     const ar = g ? `${w / g}:${h / g}` : ''
-    // Valid if it exactly matches the expected size, or if it's a supported
-    // 9:16 / 16:9 aspect ratio (so landscape VIDEO_HD renders validate too).
+    // Valid if it exactly matches the expected size, or if it's the 16:9
+    // landscape aspect ratio (so any 16:9 production render validates).
     const expectMatch = expect && w === expect.width && h === expect.height
-    const aspectValid = ar === '9:16' || ar === '16:9'
+    const aspectValid = ar === '16:9'
     return { width: w, height: h, valid: expectMatch || aspectValid, aspectRatio: ar }
   }
 

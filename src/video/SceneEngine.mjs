@@ -130,10 +130,8 @@ export class SceneEngine {
 
     try {
       const page = ((sceneSeed + sceneIndex * 7) % 10) + 1
-      // Source imagery matches the active canvas aspect: portrait for 9:16
-      // Shorts, landscape for 16:9 video.
-      const isWide = DesignSystem.W >= DesignSystem.H
-      const orientation = isWide ? 'landscape' : 'portrait'
+      // Source imagery matches the 16:9 landscape canvas.
+      const orientation = 'landscape'
       const res = await fetch(
         `https://api.pexels.com/v1/search?query=${encodeURIComponent(pexelsQuery)}&per_page=15&page=${page}&orientation=${orientation}`,
         { headers: { Authorization: key2 }, signal: AbortSignal.timeout(5000) }

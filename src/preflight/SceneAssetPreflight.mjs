@@ -4,8 +4,16 @@
 // rendered video has:
 //   - an actual image file on disk
 //   - valid resolution (meets minimum dimensions)
-//   - correct aspect ratio (16:9 or 9:16)
+//   - an acceptable source aspect ratio (the image is cover-fitted onto the
+//     16:9 frame, so source photos of any common ratio are valid inputs)
 //   - exactly one primary image per scene
+//
+// SOURCE-ASSET validator (Option A): it validates the INCOMING scene images,
+// not the rendered output. Source photos are fitted/cropped onto the 16:9
+// canvas (object-fit cover), so a 9:16 or 1:1 source is a legitimate input
+// and must not be rejected. The rendered output itself is 16:9 — that aspect
+// contract is enforced separately by the QC render-output validators
+// (VideoTestingEngine / QualityChecker), not here.
 //
 // Called after RENDER stage. Does NOT check uniqueness (that's UniquenessPreflight).
 // Does NOT check semantic relevance (that's the LLM scoring in VisualSearchEngine).
@@ -15,6 +23,9 @@ import { execFileSync } from 'node:child_process'
 
 const MIN_WIDTH = 640
 const MIN_HEIGHT = 360
+// Source-asset aspect tolerance (Option A): these are INCOMING scene images
+// that get cover-fitted onto the 16:9 frame, so common source ratios (16:9,
+// 9:16, 1:1) are all accepted. The rendered output is always 16:9.
 const VALID_ASPECT_RATIOS = ['16:9', '9:16', '1:1']
 
 export class SceneAssetPreflight {
@@ -137,7 +148,9 @@ export class SceneAssetPreflight {
   }
 
   /**
-   * Classify aspect ratio from dimensions.
+   * Classify an incoming SOURCE image's aspect ratio from its dimensions.
+   * Any of these ratios is a valid source — the image is cover-fitted onto
+   * the 16:9 frame during rendering, so we classify (not reject) it here.
    */
   static _classifyAspect(width, height) {
     if (!width || !height) return 'unknown'

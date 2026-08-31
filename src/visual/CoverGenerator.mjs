@@ -61,7 +61,7 @@ export class CoverGenerator {
       // different stories never pull the same candidate photo.
       const page = (seed % 10) + 1
       const per = 30
-      const res = await fetch(`${PEXELS}?query=${encodeURIComponent(query)}&per_page=${per}&page=${page}&orientation=portrait`, {
+      const res = await fetch(`${PEXELS}?query=${encodeURIComponent(query)}&per_page=${per}&page=${page}&orientation=landscape`, {
         headers: { Authorization: key },
         signal: AbortSignal.timeout(8000),
       })

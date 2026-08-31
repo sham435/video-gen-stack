@@ -38,43 +38,33 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
     fontSize = layout.fontSize
   } else {
     // Non-layout path: scale the design-space caption size (58 default) into
-    // the active canvas so reading text stays proportionally correct on 16:9.
+    // the active canvas. The 16:9 LIVE caption is a center-stage sentence (not
+    // a dense lower third) — keep it SMALLER than the hero headline and
+    // constrained to a wide 78% canvas at max 3 lines, word-wrapped so it reads
+    // like a comfortably wrapped spoken sentence.
     fontSize = sx(fontSize || 58)
-    const maxWordsPerLine = 3
-
-    if (DesignSystem.isWide) {
-      // 16:9 wide — the LIVE caption is a center-stage sentence (not a dense
-      // lower third). Keep it SMALLER than the hero headline and constrained to
-      // a wide 78% canvas at max 3 lines, word-wrapped so it reads like a
-      // comfortably wrapped spoken sentence rather than a 3-token grid.
-      fontSize = Math.max(30, Math.round(fontSize * 0.78))
-      ctx.font = `900 ${fontSize}px 'Montserrat ExtraBold', Inter, sans-serif`
-      const maxW = W * 0.78
-      const wrapped = []
-      let cur = []
-      for (const w of words) {
-        const probe = cur.length ? [...cur, w].join(' ') : w
-        if (ctx.measureText(probe.toUpperCase()).width <= maxW || cur.length === 0) {
-          cur.push(w)
-          continue
-        }
-        wrapped.push(cur)
-        cur = [w]
+    fontSize = Math.max(30, Math.round(fontSize * 0.78))
+    ctx.font = `900 ${fontSize}px 'Montserrat ExtraBold', Inter, sans-serif`
+    const maxW = W * 0.78
+    const wrapped = []
+    let cur = []
+    for (const w of words) {
+      const probe = cur.length ? [...cur, w].join(' ') : w
+      if (ctx.measureText(probe.toUpperCase()).width <= maxW || cur.length === 0) {
+        cur.push(w)
+        continue
       }
-      if (cur.length) wrapped.push(cur)
-      lines = wrapped.slice(0, 3) // hard cap: max 3 lines
-    } else {
-      lines = []
-      for (let i = 0; i < words.length; i += maxWordsPerLine) {
-        lines.push(words.slice(i, i + maxWordsPerLine))
-      }
+      wrapped.push(cur)
+      cur = [w]
     }
+    if (cur.length) wrapped.push(cur)
+    lines = wrapped.slice(0, 3) // hard cap: max 3 lines
   }
 
   const lineH = layout ? layout.lineHeight : fontSize * 1.45
   const totalH = lines.length * lineH
-  // Aspect-aware caption band: uses DesignSystem.layout.caption (0.78 portrait,
-  // 0.84 wide) so captions sit in the correct vertical zone on 16:9 too.
+  // Caption band: uses DesignSystem.layout.caption (0.5) so captions sit in the
+  // vertical center on 16:9.
   const startY = layout ? layout.y : H * DesignSystem.layout.caption - totalH / 2
   const centerX = layout ? layout.x + layout.width / 2 : W / 2
   let wordCounter = 0

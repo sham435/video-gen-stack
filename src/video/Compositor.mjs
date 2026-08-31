@@ -50,7 +50,7 @@ export class Compositor {
       this.glass.draw(ctx, scene, progress, {
         category,
         y: layout.textPosition === 'bottom' ? 0.62 : 0.55,
-        // 9:16 design-space card heights scaled to the active frame.
+        // Design-space card heights scaled to the active (16:9) frame.
         height: DesignSystem.sy(layout.textPosition === 'bottom' ? 300 : 250),
         accentLine: layout.accentLine,
         delay: 0.05,

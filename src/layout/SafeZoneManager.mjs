@@ -84,9 +84,9 @@ export class SafeZoneManager {
 
   // { left, right, top, bottom, width, height } for a role on a canvas.
   // `canvas` SHOULD reflect the real render resolution (the layout engine stamps
-  // canvasWidth/canvasHeight onto layouts). It falls back to a 9:16 portrait
+  // canvasWidth/canvasHeight onto layouts). It falls back to a 16:9 landscape
   // default only when no canvas is supplied (e.g. legacy/standalone callers).
-  static roleZone(role, canvas = { width: 1080, height: 1920 }) {
+  static roleZone(role, canvas = { width: 1920, height: 1080 }) {
     const cfg = SafeZoneManager.roleConfig(role)
     const zoneWidth = canvas.width * cfg.widthRatio
     const zoneHeight = canvas.height * cfg.heightRatio
@@ -112,7 +112,7 @@ export class SafeZoneManager {
   // Hard gate: throws TEXT_OVERFLOW_BLOCKED_RENDER when a layout escapes
   // its safe zone or reports overflow. Uses the canvas the layout was
   // computed against (stamped by TextLayoutEngine) so 16:9 landscape text is
-  // measured against the correct 16:9 zone — not a 9:16 portrait default.
+  // always measured against the correct 16:9 zone.
   static assertSafe(layout, label = 'text') {
     if (!layout) return true
     const canvas = layout.canvasWidth && layout.canvasHeight

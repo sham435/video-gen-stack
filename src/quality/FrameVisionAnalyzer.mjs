@@ -12,11 +12,11 @@ import { SafeZoneManager } from '../layout/SafeZoneManager.mjs'
 //   face_visibility → subject-band visual detail (presence proxy; no ML)
 //   blank_frame     → near-zero luminance frame
 //
-// Resolution-agnostic: the actual video width/height are probed via ffprobe
-// and all zones are computed as FRACTIONS of W/H that mirror the renderer's
-// anchors (headline H*0.62, captions H*0.78, fact headline H*0.30), so the
-// same checks work for 9:16 Shorts (1920x1080 landscape VIDEO_HD) and behave
-// correctly across profiles.
+// Resolution-agnostic for 16:9 renders: the actual video width/height are
+// probed via ffprobe and all zones are computed as FRACTIONS of W/H that
+// mirror the renderer's anchors (headline H*0.62, captions H*0.78, fact
+// headline H*0.30), so the same checks work for any 16:9 landscape VIDEO_HD
+// resolution and behave correctly across profiles.
 const SAMPLE_STEP = 4 // analyze every 4th pixel
 
 // Scene-type text presets — FRACTIONAL bands (of W/H) mirroring the renderer.
@@ -44,8 +44,10 @@ export class FrameVisionAnalyzer {
   constructor(options = {}) {
     this.threshold = options.threshold || 85
     this.sampleStep = options.sampleStep || SAMPLE_STEP
-    this.W = options.width || 1080
-    this.H = options.height || 1920
+    // 16:9 landscape default (1920x1080); overridden by _probeDims from the
+    // actual rendered video.
+    this.W = options.width || 1920
+    this.H = options.height || 1080
   }
 
   _probeDims(videoPath) {

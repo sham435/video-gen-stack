@@ -62,7 +62,7 @@ export class BRollSelector {
   }
 
   buildAIPrompt(scene, article) {
-    const style = 'ultra realistic cinematic news broadcast, dramatic lighting, volumetric fog, 8K, highly detailed, photorealistic, vertical 9:16'
+    const style = 'ultra realistic cinematic news broadcast, dramatic lighting, volumetric fog, 8K, highly detailed, photorealistic, 16:9 landscape'
     const topic = article.title?.slice(0, 80) || 'technology'
     const sceneContext = scene.text || scene.caption || topic
     return `${sceneContext}, ${style}`
@@ -74,7 +74,7 @@ export class BRollSelector {
       const resp = await fetch('https://fal.run/fal-ai/fast-sdxl', {
         method: 'POST',
         headers: { 'Authorization': `Key ${falKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, image_size: 'portrait_16_9', num_inference_steps: 25, guidance_scale: 7.5 }),
+        body: JSON.stringify({ prompt, image_size: 'landscape_16_9', num_inference_steps: 25, guidance_scale: 7.5 }),
       })
       if (!resp.ok) return null
       const data = await resp.json()
@@ -115,7 +115,7 @@ export class BRollSelector {
     if (!this.pexelsKey) return null
     try {
       const resp = await fetch(
-        `${PEXELS_BASE}/search?query=${encodeURIComponent(query)}&per_page=1&orientation=portrait`,
+        `${PEXELS_BASE}/search?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape`,
         {
           headers: { Authorization: this.pexelsKey },
           signal: AbortSignal.timeout(5000),

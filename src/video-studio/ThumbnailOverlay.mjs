@@ -1,16 +1,16 @@
 import { pillarColor, pillarLabel, pillarEmoji } from '../publishing/TitleTemplates.mjs'
 
-// ThumbnailOverlay — 3-layer text overlay for YouTube Shorts covers.
+// ThumbnailOverlay — 3-layer text overlay for 16:9 YouTube thumbnail covers.
 //
 // Layer 1: TOP TAG [Company/Pillar] - 80px, colored bar, white text
 // Layer 2: MIDDLE BIG [The Hook] - 160px Bold, White + 8px Black Stroke
 // Layer 3: BOTTOM PAYOFF [The Why] - 90px, Yellow #FFD60A
 //
-// Canvas: 1080x1920 (portrait Shorts cover)
+// Canvas: 1920x1080 (16:9 landscape cover)
 // Fonts: Anton or Bebas Neue Bold, All caps, Center align
 
-const CANVAS_W = 1080
-const CANVAS_H = 1920
+const CANVAS_W = 1920
+const CANVAS_H = 1080
 const YELLOW_PAYOFF = '#FFD60A'
 
 // ─── Hook extraction (2 words max) ────────────────────────────────────────
@@ -71,8 +71,8 @@ function extractPayoff(title = '', pillar = 'tech') {
  * @param {string} [opts.hook] - override for middle hook text (2 words max)
  * @param {string} [opts.payoff] - override for bottom payoff text
  * @param {string} [opts.barLabel] - override for top bar label
- * @param {number} [opts.w] - canvas width (default 1080)
- * @param {number} [opts.h] - canvas height (default 1920)
+ * @param {number} [opts.w] - canvas width (default 1920)
+ * @param {number} [opts.h] - canvas height (default 1080)
  * @param {Image} [opts.footerImage] - loaded footer_asset_1920x300.png; when
  *   present the footer band is drawn across the bottom of the canvas
  */
@@ -94,9 +94,9 @@ export function drawThumbnailOverlay(ctx, opts = {}) {
   const payoff = payoffOverride || extractPayoff(title, pillar)
 
   // ── Layer 1: TOP TAG BAR ──────────────────────────────────────────────
-  // Ratio-scaled so the overlay reads correctly on any canvas (portrait
-  // 1080x1920 covers and 16:9 landscape thumbnails alike). U is the base
-  // font unit derived from the frame's shorter side.
+  // Ratio-scaled so the overlay reads correctly on any 16:9 canvas (the
+  // pipeline renders landscape thumbnails only). U is the base font unit
+  // derived from the frame's shorter side.
   const U = Math.max(24, Math.round(Math.min(w, h) / 18))
   const barH = Math.max(40, Math.round(h * 0.06))
   const barY = Math.max(60, Math.round(h * 0.10))

@@ -39,7 +39,7 @@ Rules:
 - Every scene has:
   - type: hook | fact | reveal | explanation | reaction | close
   - narration: 1-2 sentences what the voice says
-  - visual_prompt: detailed AI image prompt (ultra realistic cinematic, 8k, vertical 9:16)
+  - visual_prompt: detailed AI image prompt (ultra realistic cinematic, 8k, 16:9 landscape)
   - camera: push_in | slow_zoom | orbit | pan | shake | parallax | pull_back
   - transition: cut | flash | glitch | zoom_blur | light_leak
   - emotion: shock | awe | curiosity | tension | excitement
@@ -57,7 +57,7 @@ Output ONLY valid JSON:
       "type": "hook",
       "purpose": "stop scroll with breaking news",
       "narration": "8-12 words max",
-      "visual_prompt": "detailed cinematic prompt, vertical 9:16",
+      "visual_prompt": "detailed cinematic prompt, 16:9 landscape",
       "camera": "push_in",
       "transition": "flash",
       "emotion": "shock",

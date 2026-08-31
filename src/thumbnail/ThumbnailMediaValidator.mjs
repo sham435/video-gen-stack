@@ -11,9 +11,9 @@
 // and reported with a machine-readable reason so the caller can decide whether
 // to REGENERATE (invalid media) or QUARANTINE.
 //
-// The canonical Short thumbnail is 2160x3840 (9:16) PNG. Geometry/profile
-// enforcement for the destination is a SEPARATE concern (ThumbnailProfile) —
-// this validator only cares whether the bytes are a structurally valid PNG.
+// This validator is aspect-agnostic — it only cares whether the bytes are a
+// structurally valid PNG. Geometry/profile enforcement for the destination is
+// a SEPARATE concern (ThumbnailProfile), which is 16:9 VIDEO (3840x2160).
 
 const CRC_TABLE = (() => {
   const table = new Int32Array(256)

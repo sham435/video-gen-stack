@@ -23,8 +23,8 @@ export class VisualDirector {
       let score = 50
       // resolution: prefer larger (implied by size in URL, best-effort)
       if (/w=1200|w=1920|large2x/.test(url)) score += 15
-      // portrait suitability
-      if (/portrait|orientation/.test(url)) score += 5
+      // 16:9 landscape suitability
+      if (/landscape/.test(url)) score += 5
       // relevance: title keyword match in URL slug
       const slug = decodeURIComponent(url).toLowerCase()
       let match = 0

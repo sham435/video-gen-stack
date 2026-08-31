@@ -30,10 +30,10 @@ function safeOverlay(text, fallback = 'BREAKING') {
 export class CoverComposer {
   /**
    * Studio cover — 16:9 LANDSCAPE by default (3840x2160), matching the
-   * Standard YouTube format the pipeline now renders. `compose()` is
-   * fully ratio-based (fractions of W/H) so it never hard-codes a 9:16
-   * pixel constant. Pass opts.width/opts.height to render at another 16:9
-   * size.
+   * Standard YouTube format the pipeline now renders. `compose()` is fully
+   * ratio-based (fractions of W/H) so it works at any 16:9 size without
+   * hard-coded pixel constants. Pass opts.width/opts.height to render at
+   * another 16:9 size.
    */
   async compose(brief, heroImage, outPath, opts = {}) {
     const W = opts.width || 3840
@@ -223,8 +223,8 @@ export class CoverComposer {
 
   // ------------------------------------------------------------------
   // 16:9 YouTube thumbnail (1280x720) — the image actually shown in
-  // feed/suggestions. Same brand system as the portrait Shorts cover but
-  // laid out landscape. Deterministic for identical input.
+  // feed/suggestions. Same brand system as the studio cover but laid out
+  // landscape. Deterministic for identical input.
   //
   // brief.nicheProfile — when provided, the profile's accent color and
   //   label override the brief's accent_color / category. This is the
@@ -235,8 +235,8 @@ export class CoverComposer {
    * YouTube thumbnail — 16:9 landscape (3840x2160) by default so it matches
    * the Standard (non-Shorts) video and populates the channel shelf. The
    * geometry is parameterized (opts.width/opts.height) and ALL layout is
-   * ratio-based (fractions of W/H) so the same renderer works for 16:9
-   * landscape or 9:16 portrait without hardcoded pixel constants.
+   * ratio-based (fractions of W/H) so the same renderer works at any 16:9
+   * size without hardcoded pixel constants.
    */
   async composeThumbnail(brief, heroImage, outPath, opts = {}) {
     const TW = opts.width || 3840

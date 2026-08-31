@@ -1,8 +1,8 @@
-// STEP14 smoke test — render a single hook frame at both profiles to confirm
-// the aspect-aware InformationLayer composition works for 9:16 and 16:9.
+// Smoke test — render a single hook frame at the 16:9 profile to confirm the
+// production composition pipeline runs end-to-end (1280x720 logical -> 1920x1080).
 import { SceneEngine } from '../src/video/SceneEngine.mjs'
 import { DesignSystem } from '../src/visuals/DesignSystem.mjs'
-import { RenderProfiles } from '../src/video/RenderProfile.mjs'
+import { VIDEO_HD } from '../src/video/RenderProfile.mjs'
 import { createCanvas } from '@napi-rs/canvas'
 import fs from 'fs'
 
@@ -24,12 +24,10 @@ async function renderOne(profile, label) {
   const png = await engine.renderSceneFrame(scene, 0.9, [], 0, null)
   const file = `output/smoke-${label}.png`
   fs.writeFileSync(file, png)
-  const canvas = createCanvas(0, 0)
   const dims = [DesignSystem.W, DesignSystem.H]
   console.log(`[SMOKE] ${label} profile=${profile.type} w=${dims[0]} h=${dims[1]} bytes=${png.length} -> ${file}`)
   return file
 }
 
-await renderOne(RenderProfiles.SHORT_4K, 'short')
-await renderOne(RenderProfiles.VIDEO_HD, 'video')
-console.log('[SMOKE] OK both profiles rendered without crashing')
+await renderOne(VIDEO_HD, 'video')
+console.log('[SMOKE] OK 16:9 profile rendered without crashing')
