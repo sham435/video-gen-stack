@@ -1,84 +1,31 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-31T05:37:21.711Z",
+  "updatedAt": "2026-08-31T06:48:40.439Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "RvcYkNlup5o",
-      "title": "Gamescom 2026: Classic remakes and new worlds at gaming's biggest showcase - BBC | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-08-31T05:37:20.539Z",
-      "publishedLabel": "Aug 31, 05:37 AM",
-      "thumbnail": "/thumbnails/RvcYkNlup5o.png",
-      "thumbnailSha256": "34102070243ccc20f0ac84616d0c622e2925734651b40f0e2313bb5e954a6031",
+      "id": "lZ4zp1nu5gE",
+      "title": "Не хватает турбин — SpaceX будет выпускать свои. Маск обещает ускорить их производство на  | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-08-31T06:48:39.757Z",
+      "publishedLabel": "Aug 31, 06:48 AM",
+      "thumbnail": "/thumbnails/lZ4zp1nu5gE.png",
+      "thumbnailSha256": "f8e0b7e4296627395df91416c057218abafe47dfc7eb1247e386b50c19c70766",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/RvcYkNlup5o",
+      "youtubeUrl": "https://youtu.be/lZ4zp1nu5gE",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "RvcYkNlup5o",
-          "url": "https://youtu.be/RvcYkNlup5o",
+          "videoId": "lZ4zp1nu5gE",
+          "url": "https://youtu.be/lZ4zp1nu5gE",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "34102070243ccc20f0ac84616d0c622e2925734651b40f0e2313bb5e954a6031",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 4,
-          "thumbnail": {
-            "sha256": "34102070243ccc20f0ac84616d0c622e2925734651b40f0e2313bb5e954a6031",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/RvcYkNlup5o.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "8GE0yqMYkNE",
-      "title": "Sony Reconsidering Digital-Only Plans as Xbox Pushes Physical - MP1st | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-08-31T05:33:54.870Z",
-      "publishedLabel": "Aug 31, 05:33 AM",
-      "thumbnail": "/thumbnails/8GE0yqMYkNE.png",
-      "thumbnailSha256": "e256b6ce3224977e9f0ef4196bc916ffbf0dc54729f9084279808cef65630a15",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/8GE0yqMYkNE",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "8GE0yqMYkNE",
-          "url": "https://youtu.be/8GE0yqMYkNE",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "e256b6ce3224977e9f0ef4196bc916ffbf0dc54729f9084279808cef65630a15",
+            "sha256": "f8e0b7e4296627395df91416c057218abafe47dfc7eb1247e386b50c19c70766",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,12 +42,118 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "e256b6ce3224977e9f0ef4196bc916ffbf0dc54729f9084279808cef65630a15",
+            "sha256": "f8e0b7e4296627395df91416c057218abafe47dfc7eb1247e386b50c19c70766",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/8GE0yqMYkNE.png"
+            "path": "public/thumbnails/lZ4zp1nu5gE.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "BGoUhtGRUnw",
+      "title": "‘That Was Word Salad,’ ‘Makes The Team Look Better’ — NFL Fans Divided as Report Reveals W | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-08-31T06:45:43.078Z",
+      "publishedLabel": "Aug 31, 06:45 AM",
+      "thumbnail": "/thumbnails/BGoUhtGRUnw.png",
+      "thumbnailSha256": "0efbb44c161931305d8e3107b52162e25d801488a240bb08170e288f62adecff",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/BGoUhtGRUnw",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "BGoUhtGRUnw",
+          "url": "https://youtu.be/BGoUhtGRUnw",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "0efbb44c161931305d8e3107b52162e25d801488a240bb08170e288f62adecff",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 1,
+          "thumbnail": {
+            "sha256": "0efbb44c161931305d8e3107b52162e25d801488a240bb08170e288f62adecff",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/BGoUhtGRUnw.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "GI8YeqqoxYM",
+      "title": "La deuda pública se convierte en el nuevo foco de tensión de los mercados: por qué escala  | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-08-31T06:42:25.214Z",
+      "publishedLabel": "Aug 31, 06:42 AM",
+      "thumbnail": "/thumbnails/GI8YeqqoxYM.png",
+      "thumbnailSha256": "186414512006c1bd5e734d62e7164efc20bd588170408189db4bedb91eb08d3e",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/GI8YeqqoxYM",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "GI8YeqqoxYM",
+          "url": "https://youtu.be/GI8YeqqoxYM",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "186414512006c1bd5e734d62e7164efc20bd588170408189db4bedb91eb08d3e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 3,
+          "thumbnail": {
+            "sha256": "186414512006c1bd5e734d62e7164efc20bd588170408189db4bedb91eb08d3e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/GI8YeqqoxYM.png"
           }
         },
         "linkedin": {
