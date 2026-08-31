@@ -74,5 +74,5 @@ jobs:
 
       - name: Check assets exist
         run: |
-          [ -f assets/fonts/Anton-Regular.ttf ] && echo '  Font: Anton OK'
-          [ -f assets/fonts/Inter-Black.ttf ] || [ -f assets/fonts/Inter-Bold.ttf ] && echo '  Font: Inter OK'
+          test -f assets/fonts/Anton-Regular.ttf && echo '  Font: Anton OK' || { echo '  MISSING assets/fonts/Anton-Regular.ttf'; exit 1; }
+          test -f assets/fonts/Montserrat-ExtraBold.ttf && echo '  Font: Montserrat OK' || { echo '  MISSING assets/fonts/Montserrat-ExtraBold.ttf'; exit 1; }
