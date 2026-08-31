@@ -1,31 +1,84 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-31T06:48:40.439Z",
+  "updatedAt": "2026-08-31T10:06:34.449Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "lZ4zp1nu5gE",
-      "title": "Не хватает турбин — SpaceX будет выпускать свои. Маск обещает ускорить их производство на  | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-08-31T06:48:39.757Z",
-      "publishedLabel": "Aug 31, 06:48 AM",
-      "thumbnail": "/thumbnails/lZ4zp1nu5gE.png",
-      "thumbnailSha256": "f8e0b7e4296627395df91416c057218abafe47dfc7eb1247e386b50c19c70766",
+      "id": "yzUOUwymZuE",
+      "title": "Sony Reconsidering Digital-Only Plans as Xbox Pushes Physical - MP1st | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-08-31T10:06:33.302Z",
+      "publishedLabel": "Aug 31, 10:06 AM",
+      "thumbnail": "/thumbnails/yzUOUwymZuE.png",
+      "thumbnailSha256": "12b0a1b68525b19c376fd3e1e37ae813409c5ba8be2d8463859cf8a15f5a4330",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/lZ4zp1nu5gE",
+      "youtubeUrl": "https://youtu.be/yzUOUwymZuE",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "lZ4zp1nu5gE",
-          "url": "https://youtu.be/lZ4zp1nu5gE",
+          "videoId": "yzUOUwymZuE",
+          "url": "https://youtu.be/yzUOUwymZuE",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "f8e0b7e4296627395df91416c057218abafe47dfc7eb1247e386b50c19c70766",
+            "sha256": "12b0a1b68525b19c376fd3e1e37ae813409c5ba8be2d8463859cf8a15f5a4330",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "12b0a1b68525b19c376fd3e1e37ae813409c5ba8be2d8463859cf8a15f5a4330",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/yzUOUwymZuE.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "ua4GtvMN9nw",
+      "title": "Amazon is selling a pair of ‘practical’ $20 cordless table lamps that have 3 color modes - | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-08-31T10:03:06.466Z",
+      "publishedLabel": "Aug 31, 10:03 AM",
+      "thumbnail": "/thumbnails/ua4GtvMN9nw.png",
+      "thumbnailSha256": "dd3d3a9e7838b1a083eccd4b3990f6a45f78c97d6f52511bdb765afb4ca6aeba",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/ua4GtvMN9nw",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "ua4GtvMN9nw",
+          "url": "https://youtu.be/ua4GtvMN9nw",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "dd3d3a9e7838b1a083eccd4b3990f6a45f78c97d6f52511bdb765afb4ca6aeba",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -42,12 +95,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "f8e0b7e4296627395df91416c057218abafe47dfc7eb1247e386b50c19c70766",
+            "sha256": "dd3d3a9e7838b1a083eccd4b3990f6a45f78c97d6f52511bdb765afb4ca6aeba",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/lZ4zp1nu5gE.png"
+            "path": "public/thumbnails/ua4GtvMN9nw.png"
           }
         },
         "linkedin": {
@@ -57,81 +110,28 @@
       }
     },
     {
-      "id": "BGoUhtGRUnw",
-      "title": "‘That Was Word Salad,’ ‘Makes The Team Look Better’ — NFL Fans Divided as Report Reveals W | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-08-31T06:45:43.078Z",
-      "publishedLabel": "Aug 31, 06:45 AM",
-      "thumbnail": "/thumbnails/BGoUhtGRUnw.png",
-      "thumbnailSha256": "0efbb44c161931305d8e3107b52162e25d801488a240bb08170e288f62adecff",
+      "id": "fy5Xr2kw8wY",
+      "title": "Upcoming Iron Man Game Footage Leaks, EA Remains Cool: \"That Didn't Go As Planned\" - TechP | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-08-31T09:59:51.379Z",
+      "publishedLabel": "Aug 31, 09:59 AM",
+      "thumbnail": "/thumbnails/fy5Xr2kw8wY.png",
+      "thumbnailSha256": "9dfe5d1f1e21663960baac8daaa85e378260880dc086f9a0deda3b4c98d52124",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/BGoUhtGRUnw",
+      "youtubeUrl": "https://youtu.be/fy5Xr2kw8wY",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "BGoUhtGRUnw",
-          "url": "https://youtu.be/BGoUhtGRUnw",
+          "videoId": "fy5Xr2kw8wY",
+          "url": "https://youtu.be/fy5Xr2kw8wY",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "0efbb44c161931305d8e3107b52162e25d801488a240bb08170e288f62adecff",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 1,
-          "thumbnail": {
-            "sha256": "0efbb44c161931305d8e3107b52162e25d801488a240bb08170e288f62adecff",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/BGoUhtGRUnw.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "GI8YeqqoxYM",
-      "title": "La deuda pública se convierte en el nuevo foco de tensión de los mercados: por qué escala  | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-08-31T06:42:25.214Z",
-      "publishedLabel": "Aug 31, 06:42 AM",
-      "thumbnail": "/thumbnails/GI8YeqqoxYM.png",
-      "thumbnailSha256": "186414512006c1bd5e734d62e7164efc20bd588170408189db4bedb91eb08d3e",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/GI8YeqqoxYM",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "GI8YeqqoxYM",
-          "url": "https://youtu.be/GI8YeqqoxYM",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "186414512006c1bd5e734d62e7164efc20bd588170408189db4bedb91eb08d3e",
+            "sha256": "9dfe5d1f1e21663960baac8daaa85e378260880dc086f9a0deda3b4c98d52124",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -148,12 +148,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "186414512006c1bd5e734d62e7164efc20bd588170408189db4bedb91eb08d3e",
+            "sha256": "9dfe5d1f1e21663960baac8daaa85e378260880dc086f9a0deda3b4c98d52124",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/GI8YeqqoxYM.png"
+            "path": "public/thumbnails/fy5Xr2kw8wY.png"
           }
         },
         "linkedin": {
