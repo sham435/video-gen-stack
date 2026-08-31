@@ -445,8 +445,13 @@ export class NewsBroadcastEngine {
         sc[`${layer.type}FontSize`] = layout.fontSize
       }
     }
-    // Hard failure gate: abort before FFmpeg if any layout still overflows
-    for (const sc of scenes) TextLayoutPreflight.validateScene(sc)
+    // Hard failure gate: abort before FFmpeg if any layout still overflows,
+    // and reject narrative-text collisions (self-overlap / footer spill /
+    // canvas escape) before any frame is rendered.
+    for (const sc of scenes) {
+      TextLayoutPreflight.validateScene(sc)
+      TextLayoutPreflight.validateNarrativeCollisions(sc, null, sc.id)
+    }
     // Layout snapshots for regression testing (LAYOUT_SNAPSHOTS=1 to record)
     if (process.env.LAYOUT_SNAPSHOTS === '1') LayoutSnapshotStore.capture(scenes)
 

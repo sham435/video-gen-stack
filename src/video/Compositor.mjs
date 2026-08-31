@@ -11,6 +11,13 @@ import { DesignSystem } from '../visuals/DesignSystem.mjs'
 import { TextTimelineScheduler } from './TextTimelineScheduler.mjs'
 import { canRenderText } from './TextPolicy.mjs'
 import { getDirector } from '../ai/CategoryDirector.mjs'
+import {
+  resolveNarrativeState,
+  buildNarrativeLayouts,
+  validateTextComposition,
+  textLayoutDiagnostics,
+  NARRATIVE_STATES,
+} from './NarrativeTextComposition.mjs'
 
 export class Compositor {
   constructor() {
@@ -41,6 +48,44 @@ export class Compositor {
     TextTimelineScheduler.assertFrame(timeline, time, scene.id)
     const env = (id) => TextTimelineScheduler.envelope(timeline.layers.find(l => l.id === id), time)
 
+    // NARRATIVE STATE MACHINE (16:9). At most ONE narrative text state is
+    // active at any instant (HEADLINE -> CAPTION -> OUTRO, temporal
+    // replacement). The authoritative layout for each narrative state is
+    // measured by TextLayoutEngine and validated for collisions before any
+    // renderer draws.
+    const timeFrac = duration > 0 ? time / duration : 0
+    const activeNarrative = resolveNarrativeState(scene, timeFrac)
+    const comp = buildNarrativeLayouts(scene, { width: DesignSystem.W, height: DesignSystem.H }, ctx)
+
+    // Prefer the production-injected layouts (src/index.mjs already runs every
+    // layer through TextLayoutEngine) but fall back to the narrative comp's
+    // authoritative measurement when a scene bypassed the engine.
+    const headlineLayout = scene.headlineLayout || comp.headline
+    const captionLayout = (scene.caption && scene.captionHidden !== true) ? (scene.captionLayout || comp.caption) : null
+    const outroLayout = comp.outro
+    try {
+      validateTextComposition(
+        { headline: headlineLayout, caption: captionLayout, outro: outroLayout, footer: comp.footer },
+        {
+          label: scene.id || scene.type,
+          canvas: { width: DesignSystem.W, height: DesignSystem.H },
+          // Only enforce narrative-vs-narrative exclusion when BOTH states are
+          // active this frame (shared center-stage across time is intended).
+          activeStates: activeNarrative.state ? [activeNarrative.state] : [],
+        }
+      )
+    } catch (e) {
+      // Deterministic collision gate: unexpected narrative overlap fails the
+      // render (production-quality, per spec).
+      throw e
+    }
+    if (process.env.TEXT_LAYOUT_DIAGNOSTICS === '1') {
+      console.log(textLayoutDiagnostics(
+        { ...comp, headline: headlineLayout, caption: captionLayout, outro: outroLayout },
+        activeNarrative
+      ))
+    }
+
     this.background.draw(ctx, scene, progress, category)
     if (scene.image || scene.backgroundImage || scene.bRoll) {
       await this.hero.draw(ctx, scene, progress)
@@ -58,9 +103,33 @@ export class Compositor {
       })
     }
 
-    if (owned('headline')) await this.info.draw(ctx, scene, progress, category, timeline, time)
+    // Narrative text is drawn from the resolved state machine + authoritative
+    // layouts only — never from independent hard-coded positions.
+    const narrative = {
+      activeState: activeNarrative.state,
+      opacity: activeNarrative.opacity,
+      headlineLayout,
+      captionLayout,
+      outroLayout,
+      states: NARRATIVE_STATES,
+      timeFrac,
+    }
+
+    // The narrative state machine guarantees HEADLINE / CAPTION / OUTRO are
+    // never both >40% opacity at a frame: headline and spoken caption replace
+    // each other in time instead of stacking in the same center-stage region.
+    if (owned('headline') && activeNarrative.state === 'HEADLINE') {
+      await this.info.draw(ctx, scene, progress, category, timeline, time, narrative)
+    } else if (owned('headline') && (scene.outro || scene.type === 'close' || scene.type === 'brand_close')) {
+      // Outro scenes draw their brand-close stack through InformationLayer.
+      await this.info.draw(ctx, scene, progress, category, timeline, time, narrative)
+    }
+    // Emphasis (AI accent) yields to a visible caption internally (non-hook);
+    // hooks schedule it as their own AI phase. Governed by its own timeline.
     if (owned('emphasis') && canRenderText(scene, 'emphasis')) this.emphasis.draw(ctx, scene, progress, category, env('ai'))
-    if (owned('caption') && canRenderText(scene, 'caption')) this.captions.draw(ctx, scene, progress, wordIndex, env('caption'))
+    if (owned('caption') && canRenderText(scene, 'caption') && activeNarrative.state === 'CAPTION') {
+      this.captions.draw(ctx, scene, progress, wordIndex, env('caption'), narrative)
+    }
 
     // Cinematic grade (vignette, color grade, scan lines, noise) runs over the
     // CONTENT stack only. Chrome (LIVE, footer, ticker, bug) must be drawn

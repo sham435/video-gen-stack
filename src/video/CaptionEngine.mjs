@@ -30,22 +30,26 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
     return true
   })
 
-  // Phase 2 — Layout Manifest: when the pipeline provides a pre-computed
-  // layout, honor its wrapping, size, and position instead of guessing.
-  let lines
+  // Phase 2 — Layout Manifest: the caption is ONE measured text block. When the
+  // authoritative layout (TextLayoutEngine) is provided, honor its wrapping,
+  // size, line-height, and position verbatim. Renderers never re-wrap or guess
+  // independent y coordinates — that is the anti-pattern that caused lines to
+  // overlap the headline and each other.
+  let rendered = []
+  let lineH = fontSize * 1.25
   if (layout && layout.lines && layout.lines.length) {
-    lines = layout.lines.map(l => l.split(' '))
+    // Single authoritative block: lines already wrapped once by TextLayoutEngine.
+    rendered = layout.lines.map(l => l.split(' '))
     fontSize = layout.fontSize
+    lineH = layout.lineHeight || fontSize * 1.25
   } else {
-    // Non-layout path: scale the design-space caption size (58 default) into
-    // the active canvas. The 16:9 LIVE caption is a center-stage sentence (not
-    // a dense lower third) — keep it SMALLER than the hero headline and
-    // constrained to a wide 78% canvas at max 3 lines, word-wrapped so it reads
-    // like a comfortably wrapped spoken sentence.
+    // Fallback (headless / no injected layout): still build ONE wrapped block
+    // with consistent geometry — never independent line coordinates. Reduced to
+    // 78% of the design caption size and capped at 3 lines.
     fontSize = sx(fontSize || 58)
     fontSize = Math.max(30, Math.round(fontSize * 0.78))
     ctx.font = `900 ${fontSize}px 'Montserrat ExtraBold', Inter, sans-serif`
-    const maxW = W * 0.78
+    const maxW = W * 0.72
     const wrapped = []
     let cur = []
     for (const w of words) {
@@ -58,29 +62,31 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
       cur = [w]
     }
     if (cur.length) wrapped.push(cur)
-    lines = wrapped.slice(0, 3) // hard cap: max 3 lines
+    rendered = wrapped.slice(0, 3) // hard cap: max 3 lines
   }
 
-  const lineH = layout ? layout.lineHeight : fontSize * 1.45
-  const totalH = lines.length * lineH
-  // Caption band: uses DesignSystem.layout.caption (0.5) so captions sit in the
-  // vertical center on 16:9.
-  const startY = layout ? layout.y : H * DesignSystem.layout.caption - totalH / 2
+  const totalH = rendered.length * lineH
+  // The caption block's vertical center is its layout y (center-stage for the
+  // caption state); the block is horizontally centered on the layout center x.
+  const startY = layout ? layout.y - totalH / 2 : H * 0.5 - totalH / 2
   const centerX = layout ? layout.x + layout.width / 2 : W / 2
   let wordCounter = 0
 
   ctx.save()
 
-  for (const line of lines) {
+  for (const line of rendered) {
     const lineText = line.join(' ')
     ctx.font = `900 ${fontSize}px 'Montserrat ExtraBold', Inter, sans-serif`
     const lineW = ctx.measureText(lineText.toUpperCase()).width
-    const startX = layout ? centerX - lineW / 2 : W / 2 - lineW / 2 - 30
+    const startX = centerX - lineW / 2
+    const lineY = startY + linesIndexOf(rendered, line) * lineH
 
+    // Background box sized to the line height (not wider glyph estimate) so
+    // consecutive line boxes NEVER overlap each other.
     const bgAlpha = (wordCounter <= wordIndex && wordIndex >= 0) ? 0.45 : 0.4
     ctx.fillStyle = `rgba(0, 0, 0, ${bgAlpha})`
     ctx.beginPath()
-    ctx.roundRect(startX - 12, startY + lines.indexOf(line) * lineH - fontSize * 0.35, lineW + 48, fontSize * 1.35, 12)
+    ctx.roundRect(startX - 12, lineY - fontSize * 0.35, lineW + 48, lineH + fontSize * 0.2, 12)
     ctx.fill()
 
     ctx.shadowColor = 'rgba(0,0,0,0.85)'
@@ -96,7 +102,7 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
 
       if (isActive) {
         const scale = 0.8 + lp * 0.2
-        ctx.translate(startX + 15 + line.indexOf(w) * (lineW / line.length) + fontSize * 0.25, startY + lines.indexOf(line) * lineH + fontSize * 0.18)
+        ctx.translate(startX + 15 + line.indexOf(w) * (lineW / line.length) + fontSize * 0.25, lineY + fontSize * 0.18)
         ctx.scale(scale, scale)
         ctx.shadowColor = isFocus ? accentColor : '#00E5FF'
         ctx.shadowBlur = 20 * lp
@@ -128,4 +134,10 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
 
   ctx.shadowBlur = 0
   ctx.restore()
+}
+
+// index of a specific line reference inside the rendered block (identity-safe).
+function linesIndexOf(lines, target) {
+  for (let i = 0; i < lines.length; i++) if (lines[i] === target) return i
+  return 0
 }
