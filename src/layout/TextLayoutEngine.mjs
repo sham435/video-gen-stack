@@ -31,6 +31,10 @@ export class TextLayoutEngine {
       minFontSize: cfg.floor,
       fontFamily: font,
       maxLines: ml,
+      // Fit against the SAME line-height the layout will store (captions use
+      // 1.6). Without this the fitter validates height at the 1.25 default and
+      // flags a caption as fitting that assertSafe later quarantines.
+      lineHeightFactor: lineHeightFactorFor(role),
     })
 
     let finalText = String(text ?? '')
