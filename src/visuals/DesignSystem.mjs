@@ -68,18 +68,22 @@ export class DesignSystem {
    */
   static get layout() {
     if (this.isWide) {
-      // 16:9 (1280x720) — wide + short: keep content high, badges low.
+      // 16:9 (1280x720) — wide + short. Narrative text (hero / secondary /
+      // caption / outro) anchors to the VERTICAL CENTER (0.5) so every story
+      // text state — MAIN HEADLINE → SPOKEN SENTENCE → STAY WITH NEWS-MONSTER —
+      // occupies the same center-stage position (temporal replacement, not
+      // stacked). Badge/explanation sub-elements stay in their bands.
       return {
-        hero: 0.42,
-        secondary: 0.56,
+        hero: 0.5,
+        secondary: 0.5,
         explanationHeading: 0.16,
         explanationBody: 0.20,
         retentionBadge: 0.22,
         retentionCenter: 0.50,
-        brandStay: 0.36,
-        brandCenter: 0.50,
+        brandStay: 0.43,
+        brandCenter: 0.57,
         tagline: 0.60,
-        caption: 0.84,
+        caption: 0.5,
         ticker: 0.92,
         badge: 0.74,
         safeArea: { top: 0.05, bottom: 0.08, left: 0.04, right: 0.04 },

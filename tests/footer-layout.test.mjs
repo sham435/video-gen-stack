@@ -74,82 +74,94 @@ for (const fmt of FORMATS) {
     //    SUBSCRIBE pill on one line (pill rightmost, vertically centered),
     //    then tagline, then URL, then AVAILABLE ON badges — every row
     //    right-aligned to the frame's right edge. No left-zone content.
+    //    (16:9 is the compact single-row strip instead — see the branch.)
     assert.deepEqual(layout.left, [], 'left zone is empty (all content right-aligned)')
     const right = layout.right
     const keys = right.map(c => c.key)
-    assert.ok(keys.includes('logo') && keys.includes('brand'), `top row has logo+brand (${keys})`)
-    assert.ok(keys.includes('subscribe') && keys.includes('tagline') && keys.includes('url') && keys.includes('platform'), `stack has subscribe+tagline+url+platform (${keys})`)
-    const logo = right.find(c => c.key === 'logo')
-    const brand = right.find(c => c.key === 'brand')
-    const tagline = right.find(c => c.key === 'tagline')
-    const platform = right.find(c => c.key === 'platform')
-    assert.ok(logo.h > 0 && brand.h > 0 && tagline.h > 0 && platform.h > 0)
-    // Monogram + wordmark share the top row (vertically centered together).
-    const logoCenter = logo.y + logo.h / 2
-    const brandCenter = brand.y + brand.h / 2
-    assert.ok(Math.abs(brandCenter - logoCenter) <= 1, `logo + brand share top row (delta ${Math.abs(brandCenter - logoCenter).toFixed(2)})`)
-    assert.ok(brand.x + brand.w + 0.5 <= logo.x, 'wordmark left of the [NM] badge')
-    // Tagline on its own line below the top row; badges below the tagline.
-    const topRowBottom = Math.max(logo.y + logo.h, brand.y + brand.h)
-    assert.ok(tagline.y + 0.5 >= topRowBottom, 'top row -> tagline overlap')
-    assert.ok(platform.y + 0.5 >= tagline.y + tagline.h, 'tagline -> platform overlap')
+    if (!layout.wide) {
+      // ── Portrait multi-row footer ───────────────────────────────────────
+      // 5. Right-aligned stack: logo + brand + tagline + url + subscribe +
+      //    platform, rows right-aligned to the frame's right edge.
+      assert.ok(keys.includes('logo') && keys.includes('brand'), `top row has logo+brand (${keys})`)
+      assert.ok(keys.includes('subscribe') && keys.includes('tagline') && keys.includes('url') && keys.includes('platform'), `stack has subscribe+tagline+url+platform (${keys})`)
+      const logo = right.find(c => c.key === 'logo')
+      const brand = right.find(c => c.key === 'brand')
+      const tagline = right.find(c => c.key === 'tagline')
+      const platform = right.find(c => c.key === 'platform')
+      const pill = right.find(c => c.key === 'subscribe')
+      const url = right.find(c => c.key === 'url')
+      assert.ok(logo.h > 0 && brand.h > 0 && tagline.h > 0 && platform.h > 0)
+      const logoCenter = logo.y + logo.h / 2
+      const brandCenter = brand.y + brand.h / 2
+      assert.ok(Math.abs(brandCenter - logoCenter) <= 1, `logo + brand share top row (delta ${Math.abs(brandCenter - logoCenter).toFixed(2)})`)
+      assert.ok(brand.x + brand.w + 0.5 <= logo.x, 'wordmark left of the [NM] badge')
+      const topRowBottom = Math.max(logo.y + logo.h, brand.y + brand.h)
+      assert.ok(tagline.y + 0.5 >= topRowBottom, 'top row -> tagline overlap')
+      assert.ok(platform.y + 0.5 >= tagline.y + tagline.h, 'tagline -> platform overlap')
 
-    // 6. Subscribe pill sits on the LAST line, LEFT of AVAILABLE ON; the [NM]
-    //    badge is rightmost on the top row. URL is on line 3 between them.
-    const pill = right.find(c => c.key === 'subscribe')
-    const url = right.find(c => c.key === 'url')
-    assert.ok(pill.h > 0 && url.h > 0)
-    assert.ok(pill.y + 0.5 >= url.y + url.h, 'url -> pill overlap (pill below URL)')
-    assert.ok(url.w >= 60, `url column width ${url.w.toFixed(0)}`)
-    // Pill shares the AVAILABLE ON row (same centerline).
-    const pillCenter = pill.y + pill.h / 2
-    const platformCenter = platform.y + platform.h / 2
-    assert.ok(Math.abs(pillCenter - platformCenter) <= 1, `pill shares platform row center (delta ${Math.abs(pillCenter - platformCenter).toFixed(2)})`)
-    // [NM] badge rightmost on the top row; every row right-aligns to the
-    // frame's right edge; pill sits LEFT of the AVAILABLE ON group.
-    const rightEdge = fmt.W - Math.max(16, Math.round(FOOTER.padding.x * layout.scale))
-    assert.ok(Math.abs(logo.x + logo.w - rightEdge) <= 1.5, '[NM] badge right-aligns to the frame edge')
-    assert.ok(pill.x + pill.w + 0.5 <= platform.x, 'pill left of AVAILABLE ON group')
-    assert.ok(Math.abs(url.x + url.w - rightEdge) <= 1.5, 'url right-aligns to the frame edge')
-    assert.ok(Math.abs(tagline.x + tagline.w - rightEdge) <= 1.5, 'tagline right-aligns to the frame edge')
-    assert.ok(Math.abs(platform.x + platform.w - rightEdge) <= 1.5, 'platform row right-aligns to the frame edge')
+      // 6. Subscribe pill on the LAST line left of AVAILABLE ON; [NM] badge
+      //    rightmost on the top row; URL on line 3.
+      assert.ok(pill.h > 0 && url.h > 0)
+      assert.ok(pill.y + 0.5 >= url.y + url.h, 'url -> pill overlap (pill below URL)')
+      assert.ok(url.w >= 60, `url column width ${url.w.toFixed(0)}`)
+      const pillCenter = pill.y + pill.h / 2
+      const platformCenter = platform.y + platform.h / 2
+      assert.ok(Math.abs(pillCenter - platformCenter) <= 1, `pill shares platform row center (delta ${Math.abs(pillCenter - platformCenter).toFixed(2)})`)
+      const rightEdge = fmt.W - Math.max(16, Math.round(FOOTER.padding.x * layout.scale))
+      assert.ok(Math.abs(logo.x + logo.w - rightEdge) <= 1.5, '[NM] badge right-aligns to the frame edge')
+      assert.ok(pill.x + pill.w + 0.5 <= platform.x, 'pill left of AVAILABLE ON group')
+      assert.ok(Math.abs(url.x + url.w - rightEdge) <= 1.5, 'url right-aligns to the frame edge')
+      assert.ok(Math.abs(tagline.x + tagline.w - rightEdge) <= 1.5, 'tagline right-aligns to the frame edge')
+      assert.ok(Math.abs(platform.x + platform.w - rightEdge) <= 1.5, 'platform row right-aligns to the frame edge')
 
-    // 7. Tagline font at its token size (32 — slightly smaller than the
-    //    38px wordmark); AVAILABLE ON matches the subscribe pill label size.
-    assert.equal(Math.round(FOOTER.tagline.size * layout.scale), Math.round(32 * layout.scale), 'tagline size == 32 token')
-    assert.equal(Math.round(FOOTER.available.size * layout.scale), Math.round(FOOTER.pill.labelSize * layout.scale), 'AVAILABLE ON size == pill label size')
+      // 7. Tagline at token size; AVAILABLE ON matches pill label size.
+      assert.equal(Math.round(FOOTER.tagline.size * layout.scale), Math.round(32 * layout.scale), 'tagline size == 32 token')
+      assert.equal(Math.round(FOOTER.available.size * layout.scale), Math.round(FOOTER.pill.labelSize * layout.scale), 'AVAILABLE ON size == pill label size')
 
-    // 8. The URL always stays fully inside the bar (never overflows) and sits
-    //    below the tagline on its own line.
-    const { scale } = layout
-    const urlBaseline = url.y + Math.round(FOOTER.url.size * scale)
-    assert.ok(url.y + url.h <= layout.barHeight + 1, `URL column inside bar (bottom ${Math.round(url.y + url.h)} ≤ bar ${layout.barHeight})`)
-    assert.ok(urlBaseline >= url.y + FOOTER.url.size * 0.5, 'URL baseline sits within the URL column')
+      // 8. URL stays fully inside the bar.
+      const { scale } = layout
+      const urlBaseline = url.y + Math.round(FOOTER.url.size * scale)
+      assert.ok(url.y + url.h <= layout.barHeight + 1, `URL column inside bar (bottom ${Math.round(url.y + url.h)} ≤ bar ${layout.barHeight})`)
+      assert.ok(urlBaseline >= url.y + FOOTER.url.size * 0.5, 'URL baseline sits within the URL column')
 
-    // 9. URL font size fits the FULL hostname in the right column at design
-    //    width — the regression this suite guards: the URL used to ellipsize
-    //    to "video-gen-stac-…" because the column was too narrow.
-    const urlPx = Math.round(FOOTER.url.size * scale)
-    const urlFont = `${FOOTER.url.weight} ${urlPx}px 'Montserrat ExtraBold', Inter, sans-serif`
-    ctx.font = urlFont
-    const urlFull = ctx.measureText('sham435.github.io/video-gen-stack').width
-    assert.ok(urlFull <= zones[2].w + PAD, `full URL (${Math.round(urlFull)}px) fits right zone (${Math.round(zones[2].w)}px) — no ellipsis`)
-    // Readability floor is a 9:16 (full-size footer) guarantee. The compact
-    // 16:9 footer uses ~14px logical fonts by design; those are upscaled
-    // (VIDEO_HD logical 1280x720 -> physical 1920x1080, 1.5x) so the final
-    // output stays legible. Guard the physical output size instead.
-    const physicalScale = fmt.profile === RenderProfiles.VIDEO_HD ? 1.5 : 1
-    assert.ok(urlPx * physicalScale >= 14, `URL font ${urlPx}px (${Math.round(urlPx * physicalScale)}px physical) readable`)
+      // 9. URL font fits the FULL hostname in the right column (no ellipsis).
+      const urlPx = Math.round(FOOTER.url.size * scale)
+      const urlFont = `${FOOTER.url.weight} ${urlPx}px 'Montserrat ExtraBold', Inter, sans-serif`
+      ctx.font = urlFont
+      const urlFull = ctx.measureText('sham435.github.io/video-gen-stack').width
+      assert.ok(urlFull <= zones[2].w + PAD, `full URL (${Math.round(urlFull)}px) fits right zone (${Math.round(zones[2].w)}px) — no ellipsis`)
+      assert.ok(urlPx >= 14, `URL font ${urlPx}px readable`)
 
-    // 10. Line gaps: the logo→platform stack carries a readable vertical gap —
-    //     never touching lines. 9:16 keeps the full ≥12px (scaled) floor; the
-    //     compact 16:9 footer scales the gap proportionally (~50%), so the
-    //     invariant is a non-zero gap ≥ 6px rather than the full 12px.
-    const lineGapPx = Math.round(FOOTER.lineGap * scale)
-    const gapFloor = fmt.profile === RenderProfiles.VIDEO_HD ? 6 : 12
-    assert.ok(lineGapPx >= gapFloor, `line gap ${lineGapPx}px must be ≥ ${gapFloor}px`)
-    // The urlTagline line was removed — the URL column is a single line.
-    assert.ok(url.h === Math.round(FOOTER.url.size * scale), 'URL column is single-line (no urlTagline)')
+      // 10. Line gaps never touch.
+      const lineGapPx = Math.round(FOOTER.lineGap * scale)
+      assert.ok(lineGapPx >= 12, `line gap ${lineGapPx}px must be ≥ 12px`)
+      assert.ok(url.h === Math.round(FOOTER.url.size * scale), 'URL column is single-line (no urlTagline)')
+    } else {
+      // ── 16:9 compact strip ──────────────────────────────────────────────
+      // logo+brand+url+subscribe on ONE centered row; bottom-anchored; compact.
+      assert.ok(keys.includes('logo') && keys.includes('brand'), `wide strip has logo+brand (${keys})`)
+      assert.ok(keys.includes('url') && keys.includes('subscribe'), `wide strip has url+subscribe (${keys})`)
+      assert.equal(right.filter(c => ['logo', 'brand', 'url', 'subscribe'].includes(c.key)).length, 4, 'wide strip has exactly the 4 compact columns')
+      const logo = right.find(c => c.key === 'logo')
+      const brand = right.find(c => c.key === 'brand')
+      const url = right.find(c => c.key === 'url')
+      const pill = right.find(c => c.key === 'subscribe')
+      const centers = [logo, brand, url, pill].map(c => c.y + c.h / 2)
+      for (const c of centers) assert.ok(Math.abs(c - centers[0]) <= 1.5, `compact row shares centerline (delta ${Math.abs(c - centers[0]).toFixed(2)})`)
+      const brandCX = brand.x + brand.w / 2
+      // Group center = bounding-box center of brand+logo (they differ in width,
+      // so the arithmetic mean of the two CX values is NOT the box center).
+      const groupL = Math.min(brand.x, logo.x)
+      const groupR = Math.max(brand.x + brand.w, logo.x + logo.w)
+      const groupCX = (groupL + groupR) / 2
+      assert.ok(Math.abs(groupCX - fmt.W / 2) <= 4, `brand+logo group centered near frame middle (dx ${Math.abs(groupCX - fmt.W / 2).toFixed(2)})`)
+      assert.ok(layout.barHeight <= fmt.H * 0.12, `wide strip ${layout.barHeight} <= 12% of frame (${Math.round(fmt.H * 0.12)})`)
+      assert.ok(url.y + url.h <= layout.barHeight + 1, 'URL column inside compact strip')
+      // Bottom-anchored: with the profile's SAFE_BOTTOM of 0 on wide, the strip
+      // reaches the frame's bottom edge.
+      const footerBottom = FooterLayout.barTopInFrame(ctx, fmt.W, fmt.H) + layout.barHeight
+      assert.ok(Math.abs(footerBottom - fmt.H) <= 2, `wide footer bottom-anchored at frame bottom (${footerBottom} == ${fmt.H})`)
+    }
   })
 }
 

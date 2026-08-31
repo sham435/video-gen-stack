@@ -60,10 +60,12 @@ export async function loadPlatformIcons() {
  */
 export class FooterLayout {
   // LinkedIn safe-area: px of clear canvas reserved below the bar so platform
-  // UI never clips its content. Profile-aware: the 9:16 design uses 64px, the
-  // compact 16:9 footer uses 32px (roughly half).
+  // UI never clips its content. The 9:16 portrait design keeps 64px of clear
+  // canvas below the bar. The compact 16:9 footer is BOTTOM-ANCHORED directly
+  // against the frame's bottom edge (production 16:9 spec) — it must not
+  // float above the edge, so it reserves no clear canvas on wide frames.
   static get SAFE_BOTTOM() {
-    return DesignSystem.isWide ? 32 : 64
+    return DesignSystem.isWide ? 0 : 64
   }
   static DEFAULT_DATA = {
     brand: 'NEWS-MONSTER',
@@ -96,15 +98,12 @@ export class FooterLayout {
   static compute(ctx, W, data = {}) {
     const D = { ...this.DEFAULT_DATA, ...data }
 
-    // Wide (16:9) frames are short (720 logical tall vs 1920). The 16:9 footer
-    // is compacted to ~50% height: the responsive scale and the min-height are
-    // both halved so the bar never dominates the frame. Portrait (9:16) keeps
-    // the original full-size footer — compact = 1.0 there.
-    const compact = DesignSystem.isWide ? 0.5 : 1
-    // Responsive scale: proportional to the 1080px design surface, compacted
-    // on 16:9.
-    const scale = compact * Math.min(F.maxScale, Math.max(F.minScale, W / F.baseWidth))
-    const minHeight = DesignSystem.isWide ? Math.round(F.minHeight * 0.5) : F.minHeight
+    // 16:9 production spec — the footer is a single compact, bottom-anchored,
+    // horizontally centered branding strip (not a multi-row information panel).
+    if (DesignSystem.isWide) return this._computeWide(ctx, W, D)
+
+    const scale = Math.min(F.maxScale, Math.max(F.minScale, W / F.baseWidth))
+    const minHeight = F.minHeight
 
     const padX = Math.max(16, Math.round(F.padding.x * scale))
     const innerW = W - padX * 2
@@ -195,6 +194,78 @@ export class FooterLayout {
   }
 
   /**
+   * 16:9 compact footer (production spec). A SINGLE bottom-anchored, centered
+   * branding strip rather than the tall multi-row portrait panel:
+   *
+   *   ┌────────────────────────────────────────────────────────────┐
+   *   │  sham435…            NEWS-MONSTER                 SUBSCRIBE │
+   *   │◄────────────────────── red accent line ───────────────────►│
+   *   └────────────────────────────────────────────────────────────┘
+   *
+   * barHeight is ~30% of the portrait bar. Content sits on ONE centered row
+   * (brand wordmark + monogram in the middle, muted domain on the left, a
+   * compact Subscribe pill on the right). The red accent is drawn at the
+   * frame's actual bottom boundary (draw()/renderStandalone).
+   *
+   * Items are stored on `right` so existing consumers that iterate the stack
+   * keep working; the compact strip exposes `wide: true`.
+   */
+  static _computeWide(ctx, W, data) {
+    // Compact single-row scale: proportional to the frame HEIGHT (the 16:9
+    // footer is a short strip, not the tall 1080-wide portrait panel). Falls
+    // back to the portrait min-scale so glyphs stay legible on small frames.
+    const H = DesignSystem.H
+    const scale = Math.max(F.minScale, Math.min(1, H / 960))
+
+    const padX = Math.max(16, Math.round(W * 0.02))
+    const innerW = W - padX * 2
+    const zoneW = {
+      left: innerW * F.grid.left,
+      center: innerW * F.grid.center,
+      right: innerW * F.grid.right,
+    }
+    const zones = [
+      { key: 'left', x: padX, w: Math.round(zoneW.left) },
+      { key: 'center', x: padX + Math.round(zoneW.left), w: Math.round(zoneW.center) },
+      { key: 'right', x: padX + Math.round(zoneW.left + zoneW.center), w: Math.round(zoneW.right) },
+    ]
+
+    // Single centered row: [NM] NEWS-MONSTER in the middle.
+    const logo = data.showLogo ? LogoBlock.measure(ctx, scale) : null
+    const brand = BrandBlock.measure(ctx, scale, data)
+    const logoBrandGap = Math.round(14 * scale)
+    const rowH = Math.max(logo ? logo.h : 0, brand.h)
+
+    // Right: compact Subscribe pill. Left: muted domain.
+    const subscribe = SubscribeBlock.measure(ctx, scale)
+    const url = UrlBlock.measure(ctx, scale, data, innerW * 0.32)
+
+    // barHeight hugs the single row (compact strip) within the 92–100% zone.
+    const verticalPadding = Math.round(F.padding.y * scale)
+    const barHeight = Math.max(rowH + verticalPadding * 2 + Math.round(5 * scale), Math.round(H * 0.06))
+    const midY = Math.round(barHeight / 2)
+
+    const columns = []
+    // Center: brand + monogram as a pair, horizontally centered on the frame.
+    // Center around the PAIR's bounding box (not the gap) so the whole central
+    // group sits on the frame's horizontal middle.
+    const centerCX = W / 2
+    if (logo) {
+      const pairW = brand.w + logoBrandGap + logo.w
+      const pairLeft = Math.round(centerCX - pairW / 2)
+      columns.push({ key: 'brand', block: BrandBlock, x: pairLeft, y: midY - Math.round(brand.h / 2), w: brand.w, h: brand.h })
+      columns.push({ key: 'logo', block: LogoBlock, x: pairLeft + brand.w + logoBrandGap, y: midY - Math.round(logo.h / 2), w: logo.w, h: logo.h })
+    } else {
+      columns.push({ key: 'brand', block: BrandBlock, x: Math.round(centerCX - brand.w / 2), y: midY - Math.round(brand.h / 2), w: brand.w, h: brand.h })
+    }
+    // Left: domain; Right: Subscribe pill.
+    columns.push({ key: 'url', block: UrlBlock, x: Math.round(padX), y: midY - Math.round(url.h / 2), w: url.w, h: url.h })
+    columns.push({ key: 'subscribe', block: SubscribeBlock, x: Math.round(W - padX - subscribe.w), y: midY - Math.round(subscribe.h / 2), w: subscribe.w, h: subscribe.h })
+
+    return { scale, barHeight, zones, left: [], right: columns, data, wide: true }
+  }
+
+  /**
    * Render the footer bar onto ctx. The bar occupies the bottom of the canvas
    * (W x H); H is only used to anchor the bar vertically.
    * Returns the same geometry as compute().
@@ -210,10 +281,17 @@ export class FooterLayout {
     // Bar background + hairline border + accent strip
     ctx.fillStyle = F.bg
     ctx.fillRect(0, top, W, barHeight)
-    ctx.fillStyle = F.border
-    ctx.fillRect(0, top, W, 1)
-    ctx.fillStyle = F.accent
-    ctx.fillRect(0, top + barHeight - 3, W * 0.3, 3)
+    if (layout.wide) {
+      // 16:9: the red accent becomes the actual bottom boundary of the frame
+      // (full width, at the very bottom edge) — not a separated lower panel.
+      ctx.fillStyle = F.accent
+      ctx.fillRect(0, H - 3, W, 3)
+    } else {
+      ctx.fillStyle = F.border
+      ctx.fillRect(0, top, W, 1)
+      ctx.fillStyle = F.accent
+      ctx.fillRect(0, top + barHeight - 3, W * 0.3, 3)
+    }
 
     for (const col of [...layout.left, ...layout.right]) {
       col.y = top + col.y
@@ -232,10 +310,16 @@ export class FooterLayout {
     ctx.save()
     ctx.fillStyle = F.bg
     ctx.fillRect(0, 0, W, barHeight)
-    ctx.fillStyle = F.border
-    ctx.fillRect(0, 0, W, 1)
-    ctx.fillStyle = F.accent
-    ctx.fillRect(0, barHeight - 3, W * 0.3, 3)
+    if (layout.wide) {
+      // 16:9 standalone — red accent spans the strip's bottom edge.
+      ctx.fillStyle = F.accent
+      ctx.fillRect(0, barHeight - 3, W, 3)
+    } else {
+      ctx.fillStyle = F.border
+      ctx.fillRect(0, 0, W, 1)
+      ctx.fillStyle = F.accent
+      ctx.fillRect(0, barHeight - 3, W * 0.3, 3)
+    }
 
     for (const col of [...layout.left, ...layout.right]) {
       col.block.draw(ctx, { ...col, y: col.y }, layout.scale, layout.data, icons)
