@@ -1,31 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-31T10:06:34.449Z",
+  "updatedAt": "2026-08-31T14:53:50.342Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "yzUOUwymZuE",
-      "title": "Sony Reconsidering Digital-Only Plans as Xbox Pushes Physical - MP1st | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-08-31T10:06:33.302Z",
-      "publishedLabel": "Aug 31, 10:06 AM",
-      "thumbnail": "/thumbnails/yzUOUwymZuE.png",
-      "thumbnailSha256": "12b0a1b68525b19c376fd3e1e37ae813409c5ba8be2d8463859cf8a15f5a4330",
+      "id": "tq0wfGOMq0U",
+      "title": "What Happened After 40-year-old corner store | NEWS-MONSTER",
+      "description": "What Happened After 40-year-old corner store | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-08-31T14:53:00.387Z",
+      "publishedLabel": "Aug 31, 02:53 PM",
+      "thumbnail": "/thumbnails/tq0wfGOMq0U.png",
+      "thumbnailSha256": "f6ec65dc69b56cb9cc4686bbddb3f40b43303935f373ca4735cf7b258dab2360",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/yzUOUwymZuE",
+      "youtubeUrl": "https://youtu.be/tq0wfGOMq0U",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "yzUOUwymZuE",
-          "url": "https://youtu.be/yzUOUwymZuE",
+          "videoId": "tq0wfGOMq0U",
+          "url": "https://youtu.be/tq0wfGOMq0U",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "12b0a1b68525b19c376fd3e1e37ae813409c5ba8be2d8463859cf8a15f5a4330",
+            "sha256": "f6ec65dc69b56cb9cc4686bbddb3f40b43303935f373ca4735cf7b258dab2360",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -42,118 +43,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "12b0a1b68525b19c376fd3e1e37ae813409c5ba8be2d8463859cf8a15f5a4330",
+            "sha256": "f6ec65dc69b56cb9cc4686bbddb3f40b43303935f373ca4735cf7b258dab2360",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/yzUOUwymZuE.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "ua4GtvMN9nw",
-      "title": "Amazon is selling a pair of ‘practical’ $20 cordless table lamps that have 3 color modes - | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-08-31T10:03:06.466Z",
-      "publishedLabel": "Aug 31, 10:03 AM",
-      "thumbnail": "/thumbnails/ua4GtvMN9nw.png",
-      "thumbnailSha256": "dd3d3a9e7838b1a083eccd4b3990f6a45f78c97d6f52511bdb765afb4ca6aeba",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/ua4GtvMN9nw",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "ua4GtvMN9nw",
-          "url": "https://youtu.be/ua4GtvMN9nw",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "dd3d3a9e7838b1a083eccd4b3990f6a45f78c97d6f52511bdb765afb4ca6aeba",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "dd3d3a9e7838b1a083eccd4b3990f6a45f78c97d6f52511bdb765afb4ca6aeba",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/ua4GtvMN9nw.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "fy5Xr2kw8wY",
-      "title": "Upcoming Iron Man Game Footage Leaks, EA Remains Cool: \"That Didn't Go As Planned\" - TechP | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-08-31T09:59:51.379Z",
-      "publishedLabel": "Aug 31, 09:59 AM",
-      "thumbnail": "/thumbnails/fy5Xr2kw8wY.png",
-      "thumbnailSha256": "9dfe5d1f1e21663960baac8daaa85e378260880dc086f9a0deda3b4c98d52124",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/fy5Xr2kw8wY",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "fy5Xr2kw8wY",
-          "url": "https://youtu.be/fy5Xr2kw8wY",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "9dfe5d1f1e21663960baac8daaa85e378260880dc086f9a0deda3b4c98d52124",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "9dfe5d1f1e21663960baac8daaa85e378260880dc086f9a0deda3b4c98d52124",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/fy5Xr2kw8wY.png"
+            "path": "public/thumbnails/tq0wfGOMq0U.png"
           }
         },
         "linkedin": {
