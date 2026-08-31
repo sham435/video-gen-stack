@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-31T18:46:00.469Z",
+  "updatedAt": "2026-08-31T19:12:12.829Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "00ehuaGBoAo",
+      "id": "dSxny_CYO1w",
       "title": "Experts Disagree On RTX | NEWS-MONSTER",
       "description": "Experts Disagree On RTX | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-08-31T18:45:59.755Z",
-      "publishedLabel": "Aug 31, 06:45 PM",
-      "thumbnail": "/thumbnails/00ehuaGBoAo.png",
-      "thumbnailSha256": "09a5bf641f0654a4eb889603d2aada1ed542b6e348bcfff6ac701a07ce1eca0d",
+      "publishedAt": "2026-08-31T19:12:11.893Z",
+      "publishedLabel": "Aug 31, 07:12 PM",
+      "thumbnail": "/thumbnails/dSxny_CYO1w.png",
+      "thumbnailSha256": "e6ac072c078c84cef4349b38839bacc4b28cd9e66a4d8fd33af0e51b29636ad5",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/00ehuaGBoAo",
+      "youtubeUrl": "https://youtu.be/dSxny_CYO1w",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "00ehuaGBoAo",
-          "url": "https://youtu.be/00ehuaGBoAo",
+          "videoId": "dSxny_CYO1w",
+          "url": "https://youtu.be/dSxny_CYO1w",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "09a5bf641f0654a4eb889603d2aada1ed542b6e348bcfff6ac701a07ce1eca0d",
+            "sha256": "e6ac072c078c84cef4349b38839bacc4b28cd9e66a4d8fd33af0e51b29636ad5",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "09a5bf641f0654a4eb889603d2aada1ed542b6e348bcfff6ac701a07ce1eca0d",
+            "sha256": "e6ac072c078c84cef4349b38839bacc4b28cd9e66a4d8fd33af0e51b29636ad5",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/00ehuaGBoAo.png"
+            "path": "public/thumbnails/dSxny_CYO1w.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "2Z8sxx1UFrA",
+      "id": "R20TTxR_xyc",
       "title": "Fable Gets Forgiving PC Minimum Hardware Requirements and Potential 60 FPS Cap - TechPower | NEWS-MONSTER",
       "description": "Fable Gets Forgiving PC Minimum Hardware Requirements and Potential 60 FPS Cap - TechPower | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-08-31T18:42:22.857Z",
-      "publishedLabel": "Aug 31, 06:42 PM",
-      "thumbnail": "/thumbnails/2Z8sxx1UFrA.png",
-      "thumbnailSha256": "7efb5fcc3d4063fdd78c563a9386602c7b5b683b1d136acb1210aa73d54eb6bf",
+      "publishedAt": "2026-08-31T19:09:49.400Z",
+      "publishedLabel": "Aug 31, 07:09 PM",
+      "thumbnail": "/thumbnails/R20TTxR_xyc.png",
+      "thumbnailSha256": "cc6e570f3f01db44257caabc6d4fa1cc6e4d719d302890aa3bd5bc609b8a525b",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/2Z8sxx1UFrA",
+      "youtubeUrl": "https://youtu.be/R20TTxR_xyc",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "2Z8sxx1UFrA",
-          "url": "https://youtu.be/2Z8sxx1UFrA",
+          "videoId": "R20TTxR_xyc",
+          "url": "https://youtu.be/R20TTxR_xyc",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "7efb5fcc3d4063fdd78c563a9386602c7b5b683b1d136acb1210aa73d54eb6bf",
+            "sha256": "cc6e570f3f01db44257caabc6d4fa1cc6e4d719d302890aa3bd5bc609b8a525b",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,14 +95,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 4,
           "thumbnail": {
-            "sha256": "7efb5fcc3d4063fdd78c563a9386602c7b5b683b1d136acb1210aa73d54eb6bf",
+            "sha256": "cc6e570f3f01db44257caabc6d4fa1cc6e4d719d302890aa3bd5bc609b8a525b",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/2Z8sxx1UFrA.png"
+            "path": "public/thumbnails/R20TTxR_xyc.png"
           }
         },
         "linkedin": {
@@ -112,29 +112,29 @@
       }
     },
     {
-      "id": "AEDmR1bnQEI",
+      "id": "92qBM2cQC9g",
       "title": "Fans Are Marvelling At How Much Better GTA 6 Looks Compared To GTA 5 - Kotaku | NEWS-MONSTER",
       "description": "Fans Are Marvelling At How Much Better GTA 6 Looks Compared To GTA 5 - Kotaku | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-08-31T18:38:26.523Z",
-      "publishedLabel": "Aug 31, 06:38 PM",
-      "thumbnail": "/thumbnails/AEDmR1bnQEI.png",
-      "thumbnailSha256": "551f51852be7dac01cbf3a6e1db7c2c0017cf274c0d47ceb89a7b08415dd1a2f",
+      "publishedAt": "2026-08-31T19:07:05.383Z",
+      "publishedLabel": "Aug 31, 07:07 PM",
+      "thumbnail": "/thumbnails/92qBM2cQC9g.png",
+      "thumbnailSha256": "64cb5c8a2c567395c8d40a402fe68f88b235b56f0b3f7f7e9aee92954f48760b",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/AEDmR1bnQEI",
+      "youtubeUrl": "https://youtu.be/92qBM2cQC9g",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "AEDmR1bnQEI",
-          "url": "https://youtu.be/AEDmR1bnQEI",
+          "videoId": "92qBM2cQC9g",
+          "url": "https://youtu.be/92qBM2cQC9g",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "551f51852be7dac01cbf3a6e1db7c2c0017cf274c0d47ceb89a7b08415dd1a2f",
+            "sha256": "64cb5c8a2c567395c8d40a402fe68f88b235b56f0b3f7f7e9aee92954f48760b",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -149,14 +149,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 5,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "551f51852be7dac01cbf3a6e1db7c2c0017cf274c0d47ceb89a7b08415dd1a2f",
+            "sha256": "64cb5c8a2c567395c8d40a402fe68f88b235b56f0b3f7f7e9aee92954f48760b",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/AEDmR1bnQEI.png"
+            "path": "public/thumbnails/92qBM2cQC9g.png"
           }
         },
         "linkedin": {
