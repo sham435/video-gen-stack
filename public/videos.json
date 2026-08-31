@@ -1,31 +1,31 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-30T22:32:45.234Z",
+  "updatedAt": "2026-08-31T00:51:49.614Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "Oelemrwm3PY",
-      "title": "Peterson Institute's Posen: It's fine for the Fed not to give forward guidance, but a fore | NEWS-MONSTER",
-      "category": "apple",
-      "publishedAt": "2026-08-30T22:32:44.718Z",
-      "publishedLabel": "Aug 30, 10:32 PM",
-      "thumbnail": "/thumbnails/Oelemrwm3PY.png",
-      "thumbnailSha256": "e832ca632f09a916d771c6dd5732ed86d1d5748d06c8f686d37274a22b820be5",
+      "id": "3jHex1hFMIY",
+      "title": "2025 Said One Thing, Then Did This | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-08-31T00:51:48.477Z",
+      "publishedLabel": "Aug 31, 12:51 AM",
+      "thumbnail": "/thumbnails/3jHex1hFMIY.png",
+      "thumbnailSha256": "469c78efe024502303ec6255c8db79edc563e64ef4c46537450f486e78e180d5",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/Oelemrwm3PY",
+      "youtubeUrl": "https://youtu.be/3jHex1hFMIY",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "Oelemrwm3PY",
-          "url": "https://youtu.be/Oelemrwm3PY",
+          "videoId": "3jHex1hFMIY",
+          "url": "https://youtu.be/3jHex1hFMIY",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "e832ca632f09a916d771c6dd5732ed86d1d5748d06c8f686d37274a22b820be5",
+            "sha256": "469c78efe024502303ec6255c8db79edc563e64ef4c46537450f486e78e180d5",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -40,14 +40,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 6,
+          "durationMs": 4,
           "thumbnail": {
-            "sha256": "e832ca632f09a916d771c6dd5732ed86d1d5748d06c8f686d37274a22b820be5",
+            "sha256": "469c78efe024502303ec6255c8db79edc563e64ef4c46537450f486e78e180d5",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/Oelemrwm3PY.png"
+            "path": "public/thumbnails/3jHex1hFMIY.png"
           }
         },
         "linkedin": {
@@ -57,28 +57,28 @@
       }
     },
     {
-      "id": "ASk2dw4R2-k",
-      "title": "Sony Music, Warner sue Anthropic, alleging a \"brazen campaign\" of intellectual property th | NEWS-MONSTER",
-      "category": "apple",
-      "publishedAt": "2026-08-30T22:29:16.111Z",
-      "publishedLabel": "Aug 30, 10:29 PM",
-      "thumbnail": "/thumbnails/ASk2dw4R2-k.png",
-      "thumbnailSha256": "63a19f2def972784f5141a6e2f763b088383d3de9afd6786ec94a9cc3dde89a8",
+      "id": "lc2sbLmQ6Mc",
+      "title": "Grok Bot successfully orders a Tesla Model Y for a user, marking a new era for AI commerce | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-08-31T00:49:24.853Z",
+      "publishedLabel": "Aug 31, 12:49 AM",
+      "thumbnail": "/thumbnails/lc2sbLmQ6Mc.png",
+      "thumbnailSha256": "13e07b56d1363c20de95458114c83acd997171e6341b68a316d727bca7a11f4e",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/ASk2dw4R2-k",
+      "youtubeUrl": "https://youtu.be/lc2sbLmQ6Mc",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "ASk2dw4R2-k",
-          "url": "https://youtu.be/ASk2dw4R2-k",
+          "videoId": "lc2sbLmQ6Mc",
+          "url": "https://youtu.be/lc2sbLmQ6Mc",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "63a19f2def972784f5141a6e2f763b088383d3de9afd6786ec94a9cc3dde89a8",
+            "sha256": "13e07b56d1363c20de95458114c83acd997171e6341b68a316d727bca7a11f4e",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,65 +95,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "63a19f2def972784f5141a6e2f763b088383d3de9afd6786ec94a9cc3dde89a8",
+            "sha256": "13e07b56d1363c20de95458114c83acd997171e6341b68a316d727bca7a11f4e",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/ASk2dw4R2-k.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "5rj00cm1F_o",
-      "title": "OpenAI to end model access to Cursor after acquisition by Elon Musk's SpaceX - CNBC | NEWS-MONSTER",
-      "category": "apple",
-      "publishedAt": "2026-08-30T22:26:05.436Z",
-      "publishedLabel": "Aug 30, 10:26 PM",
-      "thumbnail": "/thumbnails/5rj00cm1F_o.png",
-      "thumbnailSha256": "5b3eb2a8eed040b1d3a385cda9d86822d3654981d75d02a30732040ac75059e6",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/5rj00cm1F_o",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "5rj00cm1F_o",
-          "url": "https://youtu.be/5rj00cm1F_o",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "5b3eb2a8eed040b1d3a385cda9d86822d3654981d75d02a30732040ac75059e6",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 1,
-          "thumbnail": {
-            "sha256": "5b3eb2a8eed040b1d3a385cda9d86822d3654981d75d02a30732040ac75059e6",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/5rj00cm1F_o.png"
+            "path": "public/thumbnails/lc2sbLmQ6Mc.png"
           }
         },
         "linkedin": {
