@@ -7,6 +7,10 @@ import { wrapText } from '../../layout/wrapText.mjs'
 import { FooterLayout } from '../footer/FooterLayout.mjs'
 import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
 
+// Bright yellow for the explanation heading + body (high contrast on the dark
+// scrim, matches the "WHY IT MATTERS" yellow design).
+const BRIGHT_YELLOW = '#FFE600'
+
 export class InformationLayer {
   async draw(ctx, scene, progress, category, timeline = null, time = 0, narrative = null) {
     // The headline stack renders from ONE authoritative measured block. Prefer
@@ -168,7 +172,8 @@ export class InformationLayer {
     ctx.globalAlpha = Math.min(1, progress * 1.2)
     const headingSize = DesignSystem.getTypography('body', 'default').size
     ctx.font = `${DesignSystem.getTypography('body', 'default').weight} ${headingSize}px ${DesignSystem.getTypography('body', 'default').font}, sans-serif`
-    ctx.fillStyle = DesignSystem.getSemantic('info')
+    // Bright yellow heading (matches the body) — high contrast on the scrim.
+    ctx.fillStyle = BRIGHT_YELLOW
     ctx.textAlign = 'left'
     ctx.textBaseline = 'top'
     ctx.shadowColor = 'rgba(0,0,0,0.8)'
@@ -177,12 +182,13 @@ export class InformationLayer {
     ctx.globalAlpha = hp
     const headingY = H * DesignSystem.layout.explanationHeading
     ctx.fillText('WHY IT MATTERS', startX, headingY)
+    // Red underline spans the full width of the "WHY IT MATTERS" heading text
+    // (measure it — never a fixed 96px stub). It must render BENEATH the text,
+    // below the cap height (~0.8 * fontSize), never over the glyphs.
+    const headingW = ctx.measureText('WHY IT MATTERS').width
     ctx.shadowBlur = 0
     ctx.fillStyle = DesignSystem.brand.primary
-    // Underline must render BENEATH the "WHY IT MATTERS" text, below the cap
-    // height (~0.8 * fontSize), never over the glyphs. The old sy(72)/27px
-    // offset sat inside the 52px-tall heading, drawing the red bar across the text.
-    ctx.fillRect(startX, headingY + headingSize * 0.8 + sy(12), 96, 6)
+    ctx.fillRect(startX, headingY + headingSize * 0.8 + sy(12), headingW, 6)
     ctx.restore()
 
     ctx.save()
@@ -191,23 +197,30 @@ export class InformationLayer {
 
     const body = scene.text.replace(heading + '. ', '')
     const bodyToken = DesignSystem.getTypography('body', 'small')
-    ctx.font = `${bodyToken.weight} ${bodyToken.size}px ${bodyToken.font}, sans-serif`
+    const bodySize = bodyToken.size
+    ctx.font = `${bodyToken.weight} ${bodySize}px ${bodyToken.font}, sans-serif`
     ctx.fillStyle = '#FFFFFF'
     ctx.textAlign = 'left'
     ctx.textBaseline = 'top'
     ctx.shadowColor = 'rgba(0,0,0,0.9)'
     ctx.shadowBlur = 10
 
-    const maxChars = DesignSystem.getMaxChars('body')
+    // Wrap the body to a max width of ~60% of the canvas so it stays a compact
+    // left column under the heading (not stretched across the wide 16:9 frame).
+    const maxBodyWidth = W * 0.60
+    // Comfortable line spacing: 1.4x the body font size per line. The old
+    // sy(56)~(21px for a 42px font, ~0.5x) packed lines onto each other.
+    const bodyLineStep = Math.round(bodySize * 1.4)
     const words = body.split(' ')
     let line = ''
     let lineY = H * DesignSystem.layout.explanationBody + sy(92)
     for (const w of words) {
-      if ((line + ' ' + w).trim().length <= maxChars) line += (line ? ' ' : '') + w
+      const probe = line ? line + ' ' + w : w
+      if (ctx.measureText(probe).width <= maxBodyWidth || !line) line += (line ? ' ' : '') + w
       else {
         ctx.fillText(line, startX, lineY)
         line = w
-        lineY += sy(56)
+        lineY += bodyLineStep
       }
     }
     if (line) ctx.fillText(line, startX, lineY)
