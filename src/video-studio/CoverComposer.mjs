@@ -3,6 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import { ANCHOR_CONFIG, BrandStyleResolver } from '../visual/BrandStyleResolver.mjs'
 import { drawThumbnailOverlay, drawFooterBand } from './ThumbnailOverlay.mjs'
+import { composeLandscape } from '../thumbnail/LandscapeComposition.mjs'
 
 // Footer band asset — generated from the shared FooterLayout engine
 // (scripts/footer.mjs --asset 1920x300). Lazy-loaded once and cached; a
@@ -398,6 +399,27 @@ export class CoverComposer {
     fs.mkdirSync(path.dirname(outPath), { recursive: true })
     fs.writeFileSync(outPath, canvas.toBuffer('image/png'))
     return outPath
+  }
+
+  /**
+   * First-class 16:9 landscape composition mode.
+   *
+   * Delegates to LandscapeComposition, which RECONSTRUCTS the composition
+   * natively for the wide 16:9 canvas (subject in negative space, Level-3
+   * keyword + Level-4 headline, compact footer) instead of cropping/stretching
+   * a portrait layout. Used when the candidate carries a 16:9 strategy
+   * (brief._layout in A–E). The portrait/legacy path above is untouched.
+   *
+   * @param {object} brief { keyword, headline, status, brand, accent, layout, hideBranding, category }
+   * @param {string|null} heroImage
+   * @param {string} outPath
+   * @param {object} opts { width, height } default 1920x1080
+   */
+  async composeLandscape(brief, heroImage, outPath, opts = {}) {
+    const width = opts.width || 1920
+    const height = opts.height || 1080
+    const result = await composeLandscape(brief, heroImage, outPath, { width, height })
+    return result.path
   }
 
   _thumbnailGradient(ctx, accent, W, H) {

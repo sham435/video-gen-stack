@@ -30,8 +30,18 @@ export class ThumbnailRenderer {
           hideBranding: candidate.hideBranding,
           _pillar: candidate._pillar || null,
           source_label: candidate.source_label || 'NEWS-MONSTER',
+          // 16:9 landscape mode — first-class LandscapeComposition
+          _layout: candidate._layout || null,
+          keyword: candidate.keyword,
+          status: candidate.status,
+          brand: candidate.brand,
+          accent: candidate.accent,
         }
-        await this.composer.composeThumbnail(brief, candidate.heroImage, outPath)
+        if (candidate.landscape) {
+          await this.composer.composeLandscape(brief, candidate.heroImage, outPath)
+        } else {
+          await this.composer.composeThumbnail(brief, candidate.heroImage, outPath)
+        }
         results.push({ ...candidate, path: outPath, rendered: true })
       } catch (e) {
         results.push({ ...candidate, path: null, rendered: false, error: e.message })
@@ -54,8 +64,17 @@ export class ThumbnailRenderer {
       hideBranding: candidate.hideBranding,
       _pillar: candidate._pillar || null,
       source_label: candidate.source_label || 'NEWS-MONSTER',
+      _layout: candidate._layout || null,
+      keyword: candidate.keyword,
+      status: candidate.status,
+      brand: candidate.brand,
+      accent: candidate.accent,
     }
-    await this.composer.composeThumbnail(brief, candidate.heroImage, outPath)
+    if (candidate.landscape) {
+      await this.composer.composeLandscape(brief, candidate.heroImage, outPath)
+    } else {
+      await this.composer.composeThumbnail(brief, candidate.heroImage, outPath)
+    }
     return { ...candidate, path: outPath, rendered: true }
   }
 }
