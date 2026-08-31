@@ -80,7 +80,7 @@ describe('YouTubePropagationVerifier', () => {
       // thumbnail asset download
       return { ok: true, status: 200, arrayBuffer: async () => thumbBytes.buffer.slice(thumbBytes.byteOffset, thumbBytes.byteOffset + thumbBytes.byteLength) }
     }
-    const verifier = new YouTubePropagationVerifier({ token: 'tok', maxAttempts: 5, delays: [0,0,0,0,0], expectedAspectRatio: '9:16' })
+    const verifier = new YouTubePropagationVerifier({ token: 'tok', maxAttempts: 5, delays: [0,0,0,0,0], expectedAspectRatio: '16:9' })
     const result = await verifier.verify({ videoId: 'abc123', sha256: null })
     global.fetch = realFetch
     YouTubePropagationVerifier.prototype._delay = realDelay
@@ -104,7 +104,7 @@ describe('YouTubePropagationVerifier', () => {
         }),
       }
     }
-    const verifier = new YouTubePropagationVerifier({ token: 'tok', maxAttempts: 3, delays: [0,0,0], expectedAspectRatio: '9:16' })
+    const verifier = new YouTubePropagationVerifier({ token: 'tok', maxAttempts: 3, delays: [0,0,0], expectedAspectRatio: '16:9' })
     const result = await verifier.verify({ videoId: 'abc123', sha256: null })
     global.fetch = realFetch
     YouTubePropagationVerifier.prototype._delay = realDelay

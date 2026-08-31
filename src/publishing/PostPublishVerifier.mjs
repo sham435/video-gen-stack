@@ -12,9 +12,10 @@ export class PostPublishVerifier {
   constructor(options = {}) {
     this.token = options.token || process.env.YOUTUBE_OAUTH_TOKEN || ''
     this.timeout = options.timeout || 10000
-    // SOURCE contract (LOCAL canonical SHORT profile 2160x3840 9:16). Used for
-    // aspect-compatibility comparison only — the YouTube REMOTE representation
-    // is NOT required to equal these exact dimensions (YouTube re-sizes uploads).
+    // SOURCE contract (LOCAL canonical 16:9 thumbnail profile 3840x2160).
+    // Used for aspect-compatibility comparison only — the YouTube REMOTE
+    // representation is NOT required to equal these exact dimensions
+    // (YouTube re-sizes uploads).
     this.expectedWidth = options.expectedWidth || null
     this.expectedHeight = options.expectedHeight || null
     this.expectedAspectRatio = options.expectedAspectRatio || null

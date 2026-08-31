@@ -10,7 +10,7 @@ export class GlassCardLayer {
     const x = options.x ?? W * 0.05
     const y = options.y ?? H * 0.65
     const w = options.width ?? W * 0.9
-    // Default height is the 9:16 design 200px scaled to the active frame.
+    // Default height is the design-space 200px scaled to the active (16:9) frame.
     const h = options.height ?? sy(200)
     const r = options.radius ?? glass.radius
 

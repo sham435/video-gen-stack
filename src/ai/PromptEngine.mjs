@@ -59,7 +59,7 @@ export class PromptEngine {
     const comp = SCENE_COMPOSITION[sceneType] || 'cinematic composition'
     const hook = hookStrategy ? HOOK_FORMATS[hookStrategy] : ''
     const kw = (keywords || []).slice(0, 3).join(', ')
-    const parts = [kw, comp, hook, base, 'vertical 9:16, ultra realistic, photorealistic'].filter(Boolean)
+    const parts = [kw, comp, hook, base, '16:9 landscape, ultra realistic, photorealistic'].filter(Boolean)
     return parts.join(', ')
   }
 

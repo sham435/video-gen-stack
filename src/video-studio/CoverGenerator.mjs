@@ -58,7 +58,7 @@ export class CoverGenerator {
   }
 
   /**
-   * 16:9 YouTube thumbnail (1280x720) — same brand system as the portrait
+   * 16:9 YouTube thumbnail (1280x720) — same brand system as the studio
    * cover but laid out landscape. Deterministic for identical input.
    */
   async generateThumbnail(article, outPath, options = {}) {

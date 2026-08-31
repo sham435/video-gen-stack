@@ -42,7 +42,7 @@ export class VisualReasoner {
 
   async resolveAssets(keywords, article, cat, scene) {
     const assets = []
-    // 1. Pexels — pull up to 3 portrait photos for b-roll variety
+    // 1. Pexels — pull up to 3 landscape photos (16:9 frame) for b-roll variety
     if (this.pexelsKey) {
       for (const term of keywords.slice(0, 3)) {
         const url = await this._pexelsOne(term)
@@ -68,7 +68,7 @@ export class VisualReasoner {
   async _pexelsOne(term) {
     try {
       const res = await fetch(
-        `${PEXELS_BASE}/search?query=${encodeURIComponent(term)}&per_page=3&orientation=portrait`,
+        `${PEXELS_BASE}/search?query=${encodeURIComponent(term)}&per_page=3&orientation=landscape`,
         { headers: { Authorization: this.pexelsKey }, signal: AbortSignal.timeout(5000) }
       )
       if (!res.ok) return null
@@ -92,7 +92,7 @@ export class VisualReasoner {
     for (const term of keywords) {
       try {
         const res = await fetch(
-          `${PEXELS_BASE}/search?query=${encodeURIComponent(term)}&per_page=1&orientation=portrait`,
+          `${PEXELS_BASE}/search?query=${encodeURIComponent(term)}&per_page=1&orientation=landscape`,
           { headers: { Authorization: this.pexelsKey }, signal: AbortSignal.timeout(5000) }
         )
         if (!res.ok) continue
@@ -109,7 +109,7 @@ export class VisualReasoner {
       const resp = await fetch(FAL_BASE, {
         method: 'POST',
         headers: { Authorization: `Key ${this.falKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, image_size: 'portrait_16_9', num_inference_steps: 25, guidance_scale: 7.5 }),
+        body: JSON.stringify({ prompt, image_size: 'landscape_16_9', num_inference_steps: 25, guidance_scale: 7.5 }),
         signal: AbortSignal.timeout(15000),
       })
       if (!resp.ok) return null

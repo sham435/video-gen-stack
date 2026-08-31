@@ -125,7 +125,7 @@ export class ScenePlanner {
   buildVisualPrompt(originalPrompt, article, analysis) {
     if (originalPrompt) return originalPrompt
     const brand = analysis.brand || article.title?.split(' ')[0] || 'technology'
-    return `cinematic news broadcast about ${brand}, professional lighting, dramatic composition, 8k, vertical 9:16, photorealistic`
+    return `cinematic news broadcast about ${brand}, professional lighting, dramatic composition, 8k, 16:9 landscape, photorealistic`
   }
 
   emotionColors(emotion) {

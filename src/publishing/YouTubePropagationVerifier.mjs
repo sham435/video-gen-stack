@@ -5,7 +5,7 @@
  * Classifies API errors: authorization, quota, transient, propagation.
  *
  * Three distinct contracts are kept separate:
- *   A. SOURCE COMPLIANCE — the LOCAL canonical artifact is 2160x3840 (9:16),
+ *   A. SOURCE COMPLIANCE — the LOCAL canonical artifact is 3840x2160 (16:9),
  *      < 45MB, PNG/JPEG, SHA-256. This proves what WE generated.
  *   B. YOUTUBE ACCEPTANCE — hasCustomThumbnail === true (from videos.list).
  *   C. REMOTE REPRESENTATION — the authoritative URL + dimensions returned by

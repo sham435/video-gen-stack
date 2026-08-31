@@ -121,17 +121,17 @@ Text timing is managed by `TextTimelineScheduler`: exactly one focal layer per f
 3. TEXT         SceneTextManifest → TextConflictResolver (60% de-dupe guard)
                 → TextLayoutEngine (safe zones) → LayoutPreflight (hard gate)
 4. TIMELINE     TextTimelineScheduler assigns non-overlapping windows
-5. RENDER       Canvas 1080×1920 @ 10fps → PNG frames (Compositor + 9 layers)
+5. RENDER       Canvas 1920×1080 @ 10fps → PNG frames (Compositor + 9 layers)
 6. ASSEMBLE     FFmpeg concat → 30fps yuv420p → voice + music mix (-16 LUFS)
 7. QUALITY      QualityChecker scores the rendered video
-8. PUBLISH      YouTube Short (public, with source attribution)
+8. PUBLISH      YouTube Standard (public, with source attribution)
 ```
 
 ## Video Output
 
 | Feature | Detail |
 |---|---|
-| Resolution | 1080×1920 (9:16), 30fps output |
+| Resolution | 1920×1080 (16:9), 30fps output |
 | Typography | Anton/Impact headlines (84px, max 2 lines @ 0.62H), Inter body |
 | Footer | 34px bold brand + 44px URL, fixed bottom bar |
 | Banner | Breaking bar full-width at top (48-64px), contained glow |

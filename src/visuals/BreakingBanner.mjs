@@ -14,8 +14,9 @@ const COLORS = {
 // stays chrome, and the red wash never spills past the banner band.
 //
 // W/H/sx/sy are read INSIDE the function from DesignSystem (live getters) so
-// the composition follows the active render profile (1080x1920 for 9:16,
-// 1280x720 for 16:9). sx/sy scale 1080x1920-design values into that canvas.
+// the composition follows the active render profile (always 16:9 landscape,
+// e.g. 1280x720 or 1920x1080). sx/sy scale the design-space values into that
+// canvas.
 export function drawBreakingBanner(ctx, text, progress, fontSize = 64) {
   const { W, H, sx, sy } = DesignSystem
   const p = Math.min(1, progress * 2)

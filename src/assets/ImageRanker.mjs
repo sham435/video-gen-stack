@@ -5,7 +5,7 @@
 //         - w_reuse    * reusePenalty
 //
 // relevance : lexical/embedding match vs the scene's visual intent
-// quality   : resolution, portrait aspect (Shorts), aspect fit
+// quality   : resolution, landscape aspect (16:9), aspect fit
 // entity    : exact entity hit (Apple Park > generic "tech")
 // recency   : same asset used within cooldownDays → hard discount
 // reuse     : usage_count-based long-tail penalty (cross-video diversity)
@@ -21,7 +21,7 @@ export const RANK_WEIGHTS = {
   learned: 0.10,     // applied as bonus (0 when no performance data)
 }
 
-export const TARGET_ASPECT = 9 / 16 // portrait Shorts frame
+export const TARGET_ASPECT = 16 / 9 // 16:9 landscape frame
 
 export class ImageRanker {
   constructor({ weights = RANK_WEIGHTS, usageTracker = null, performanceMemory = null } = {}) {
@@ -118,8 +118,8 @@ export class ImageRanker {
   _quality(c) {
     let q = 0
     const area = (c.width || 0) * (c.height || 0)
-    if (area >= 1080 * 1920) q += 0.5
-    else if (area >= 640 * 1136) q += 0.3
+    if (area >= 1920 * 1080) q += 0.5
+    else if (area >= 1280 * 720) q += 0.3
     else q += 0.1
     const aspect = c.aspect || ((c.width && c.height) ? c.width / c.height : 0)
     if (aspect > 0) {

@@ -10,7 +10,7 @@
 //   - never re-downloads an already-indexed asset
 //   - returns BOTH raw candidates and indexed metadata (sha256/dHash) so the
 //     ranker and duplicate detector can do their jobs
-//   - prefers the highest-quality portrait URL from Pexels response set
+//   - prefers the highest-quality landscape URL from Pexels response set
 
 import { extractImageMetadata } from './ImageMetadata.mjs'
 import { rejectDuplicates } from './DuplicateDetector.mjs'
@@ -151,7 +151,7 @@ export class VisualSearchEngine {
   async _pexelsSearch(term) {
     try {
       const res = await fetch(
-        `${PEXELS_BASE}/search?query=${encodeURIComponent(term)}&per_page=${this.perQuery}&orientation=portrait`,
+        `${PEXELS_BASE}/search?query=${encodeURIComponent(term)}&per_page=${this.perQuery}&orientation=landscape`,
         { headers: { Authorization: this.pexelsKey }, signal: AbortSignal.timeout(8000) }
       )
       if (!res.ok) return []

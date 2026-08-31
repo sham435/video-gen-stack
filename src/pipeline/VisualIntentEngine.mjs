@@ -76,8 +76,9 @@ export class VisualIntentEngine {
     const emotionTerms = EMOTION_TERMS[intent.emotion] || []
     emotion = emotionTerms.some(t => slug.includes(t)) ? 85 : 55
 
-    // Viewer relevance (15%) — portrait stock photos are more relevant
-    viewer = /portrait|orientation|w=1200|w=1920/.test(slug) ? 80 : 60
+    // Viewer relevance (15%) — landscape / high-resolution photos fill the
+    // 16:9 canvas better, so prefer them.
+    viewer = /w=1920|large2x|hd|landscape/.test(slug) ? 80 : 60
 
     // Quality (10%) — resolution signal
     const quality = /w=1920|large2x|hd/.test(slug) ? 85 : 70

@@ -67,10 +67,9 @@ export class TextLayoutEngine {
       scalePercent: fitted.scalePercent,
       overflow: fitted.overflow,
       // Stamp the canvas this layout was computed against so preflight/assertSafe
-      // re-derive the SAME safe zone. Previously assertSafe defaulted to a
-      // 9:16 portrait canvas (1080x1920), so 16:9 landscape text coordinates
-      // were measured against a too-narrow portrait zone and falsely flagged as
-      // overflowing (TEXT_OVERFLOW_BLOCKED_RENDER) → whole render quarantined.
+      // re-derive the SAME safe zone. The pipeline renders 16:9 landscape, so the
+      // layout is always measured against the true 16:9 zone — never a portrait
+      // default that would falsely flag overflow (TEXT_OVERFLOW_BLOCKED_RENDER).
       canvasWidth: canvas.width,
       canvasHeight: canvas.height,
     }

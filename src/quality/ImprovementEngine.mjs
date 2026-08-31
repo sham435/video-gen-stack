@@ -60,7 +60,7 @@ export class ImprovementEngine {
         suggestions.push({
           area: 'technical',
           priority: 'critical',
-          message: `Wrong resolution: ${technical.resolution.width}x${technical.resolution.height} — must be 9:16 Shorts (1080x1920/2160x3840) or 16:9 (1280x720/1920x1080/3840x2160).`,
+          message: `Wrong resolution: ${technical.resolution.width}x${technical.resolution.height} — must be 16:9 landscape (1280x720, 1920x1080, or 3840x2160).`,
           action: 'Check render settings',
         })
       }

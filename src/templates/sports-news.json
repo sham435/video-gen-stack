@@ -5,7 +5,7 @@
   "resolution": {"width": 1080, "height": 1920},
   "fps": 30,
   "duration": 30,
-  "visual_style": "high energy stadium, dramatic sports lighting, motion blur, crowd atmosphere, vibrant colors, professional camera, 8k, vertical 9:16",
+  "visual_style": "high energy stadium, dramatic sports lighting, motion blur, crowd atmosphere, vibrant colors, professional camera, 8k, 16:9 landscape",
   "colors": {"primary": "#FFD700", "secondary": "#E10600", "background": "#050510", "text": "#FFFFFF"},
   "scenes": [
     {"id":"hook","type":"hook","start":0,"end":2.5,"text":"SPORTS BREAKING NEWS","headline":"BREAKING","subheadline":"{{title}}","visual":"stadium","effect":"flash","audio":"impact"},
