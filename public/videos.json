@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-01T20:52:32.780Z",
+  "updatedAt": "2026-09-01T21:26:26.505Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "N6dUdG0HO5o",
+      "id": "lzanalndUsQ",
       "title": "Apple Seemingly Made a Mistake When Announcing the New Mac Studio - MacRumors | NEWS-MONSTER",
       "description": "Apple Seemingly Made a Mistake When Announcing the New Mac Studio - MacRumors | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-01T20:52:32.300Z",
-      "publishedLabel": "Sep 1, 08:52 PM",
-      "thumbnail": "/thumbnails/N6dUdG0HO5o.png",
-      "thumbnailSha256": "6c14e118a377eefbb121e8deb043a118aecc2ebdd6d21f4daffd37ddb7a05d77",
+      "publishedAt": "2026-09-01T21:26:25.918Z",
+      "publishedLabel": "Sep 1, 09:26 PM",
+      "thumbnail": "/thumbnails/lzanalndUsQ.png",
+      "thumbnailSha256": "a9642067a1c17a80d2297f6eb477b6bbc4f1e03cf993d306a4a696350d281456",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/N6dUdG0HO5o",
+      "youtubeUrl": "https://youtu.be/lzanalndUsQ",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "N6dUdG0HO5o",
-          "url": "https://youtu.be/N6dUdG0HO5o",
+          "videoId": "lzanalndUsQ",
+          "url": "https://youtu.be/lzanalndUsQ",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "6c14e118a377eefbb121e8deb043a118aecc2ebdd6d21f4daffd37ddb7a05d77",
+            "sha256": "a9642067a1c17a80d2297f6eb477b6bbc4f1e03cf993d306a4a696350d281456",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +43,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "6c14e118a377eefbb121e8deb043a118aecc2ebdd6d21f4daffd37ddb7a05d77",
+            "sha256": "a9642067a1c17a80d2297f6eb477b6bbc4f1e03cf993d306a4a696350d281456",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/N6dUdG0HO5o.png"
+            "path": "public/thumbnails/lzanalndUsQ.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "skzX5k4vMHo",
+      "id": "zREmwkAYyiM",
       "title": "iPhone Ultra release timing: Here’s what the latest reporting says - 9to5Mac | NEWS-MONSTER",
       "description": "iPhone Ultra release timing: Here’s what the latest reporting says - 9to5Mac | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-01T20:49:13.048Z",
-      "publishedLabel": "Sep 1, 08:49 PM",
-      "thumbnail": "/thumbnails/skzX5k4vMHo.png",
-      "thumbnailSha256": "fb5287d526db6764ff06b1e5fa0d8d592e31780c73b99b6f726eb79db5b47234",
+      "publishedAt": "2026-09-01T21:21:54.569Z",
+      "publishedLabel": "Sep 1, 09:21 PM",
+      "thumbnail": "/thumbnails/zREmwkAYyiM.png",
+      "thumbnailSha256": "eb95a8a936e16364bfd9a77ad6a69b86811e707e9bec1285a9d02c7331c93f72",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/skzX5k4vMHo",
+      "youtubeUrl": "https://youtu.be/zREmwkAYyiM",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "skzX5k4vMHo",
-          "url": "https://youtu.be/skzX5k4vMHo",
+          "videoId": "zREmwkAYyiM",
+          "url": "https://youtu.be/zREmwkAYyiM",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "fb5287d526db6764ff06b1e5fa0d8d592e31780c73b99b6f726eb79db5b47234",
+            "sha256": "eb95a8a936e16364bfd9a77ad6a69b86811e707e9bec1285a9d02c7331c93f72",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,14 +95,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 4,
           "thumbnail": {
-            "sha256": "fb5287d526db6764ff06b1e5fa0d8d592e31780c73b99b6f726eb79db5b47234",
+            "sha256": "eb95a8a936e16364bfd9a77ad6a69b86811e707e9bec1285a9d02c7331c93f72",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/skzX5k4vMHo.png"
+            "path": "public/thumbnails/zREmwkAYyiM.png"
           }
         },
         "linkedin": {
@@ -112,29 +112,29 @@
       }
     },
     {
-      "id": "8WUgb2pTmRQ",
+      "id": "NtEM2eAlh-E",
       "title": "Microsoft Outlook and OpenAI's ChatGPT Work are experiencing user outages - CNBC | NEWS-MONSTER",
       "description": "Microsoft Outlook and OpenAI's ChatGPT Work are experiencing user outages - CNBC | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-01T20:45:52.688Z",
-      "publishedLabel": "Sep 1, 08:45 PM",
-      "thumbnail": "/thumbnails/8WUgb2pTmRQ.png",
-      "thumbnailSha256": "2d166482c27a79405ae2e382e804c854f63e7045ef2ccb1d7c436b18a1b4d0cc",
+      "publishedAt": "2026-09-01T21:18:23.096Z",
+      "publishedLabel": "Sep 1, 09:18 PM",
+      "thumbnail": "/thumbnails/NtEM2eAlh-E.png",
+      "thumbnailSha256": "d93eaec809179549eb305c8f1e04e405e4785a80985949049203303c180a8d3c",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/8WUgb2pTmRQ",
+      "youtubeUrl": "https://youtu.be/NtEM2eAlh-E",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "8WUgb2pTmRQ",
-          "url": "https://youtu.be/8WUgb2pTmRQ",
+          "videoId": "NtEM2eAlh-E",
+          "url": "https://youtu.be/NtEM2eAlh-E",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "2d166482c27a79405ae2e382e804c854f63e7045ef2ccb1d7c436b18a1b4d0cc",
+            "sha256": "d93eaec809179549eb305c8f1e04e405e4785a80985949049203303c180a8d3c",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -149,14 +149,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "2d166482c27a79405ae2e382e804c854f63e7045ef2ccb1d7c436b18a1b4d0cc",
+            "sha256": "d93eaec809179549eb305c8f1e04e405e4785a80985949049203303c180a8d3c",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/8WUgb2pTmRQ.png"
+            "path": "public/thumbnails/NtEM2eAlh-E.png"
           }
         },
         "linkedin": {
