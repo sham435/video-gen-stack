@@ -5,7 +5,7 @@
 // before the judge can score them.
 //
 // Detects:
-//   - Embedded portrait/9:16 video content inside the 16:9 canvas
+//   - Embedded portrait (vertical) source video content inside the 16:9 canvas
 //     (a 16:9 thumbnail should not show letterboxed/pillarboxed source media)
 //   - Pillarboxing (dark side bands)
 //   - Excessive empty/uniform area
@@ -182,9 +182,9 @@ export class ThumbnailCompositionPreflight {
 
   /**
    * Detect embedded portrait-source content: center column much brighter than
-   * the sides (foreign 9:16 media letterboxed/pillarboxed inside the 16:9
-   * thumbnail). This is a composition-quality check, not an output-resolution
-   * check — the rendered thumbnail is always 16:9.
+   * the sides (foreign portrait/vertical media letterboxed/pillarboxed inside
+   * the 16:9 thumbnail). This is a composition-quality check, not an
+   * output-resolution check — the rendered thumbnail is always 16:9.
    * This is the specific pattern from the dp8SzamyN4k case.
    */
   static _detectEmbeddedVertical(pixels, w, h) {

@@ -7,7 +7,7 @@ export const VIDEO_MODELS = [
     speed: 'fast',
     quality: 'good',
     duration: { min: 3, max: 10 },
-    supportsAspectRatios: ['16:9', '9:16'],
+    supportsAspectRatios: ['16:9'],
     openSource: false,
     freeTier: true,
     endpoints: {
@@ -22,7 +22,7 @@ export const VIDEO_MODELS = [
     speed: 'medium',
     quality: 'good',
     duration: { min: 3, max: 10 },
-    supportsAspectRatios: ['16:9', '9:16'],
+    supportsAspectRatios: ['16:9'],
     openSource: true,
     freeTier: false,
     endpoints: {
@@ -39,7 +39,7 @@ export const VIDEO_MODELS = [
     speed: 'fast',
     quality: 'excellent',
     duration: { min: 3, max: 10 },
-    supportsAspectRatios: ['16:9', '9:16'],
+    supportsAspectRatios: ['16:9'],
     openSource: false,
     freeTier: false,
     endpoints: {
@@ -55,7 +55,7 @@ export const VIDEO_MODELS = [
     speed: 'medium',
     quality: 'excellent',
     duration: { min: 3, max: 10 },
-    supportsAspectRatios: ['16:9', '9:16'],
+    supportsAspectRatios: ['16:9'],
     openSource: false,
     freeTier: false,
     endpoints: {
@@ -70,7 +70,7 @@ export const VIDEO_MODELS = [
     speed: 'medium',
     quality: 'excellent',
     duration: { min: 3, max: 10 },
-    supportsAspectRatios: ['16:9', '9:16'],
+    supportsAspectRatios: ['16:9'],
     openSource: false,
     freeTier: false,
     endpoints: {
@@ -85,7 +85,7 @@ export const VIDEO_MODELS = [
     speed: 'medium',
     quality: 'excellent',
     duration: { min: 3, max: 10 },
-    supportsAspectRatios: ['16:9', '9:16'],
+    supportsAspectRatios: ['16:9'],
     openSource: false,
     freeTier: false,
     endpoints: {
@@ -100,7 +100,7 @@ export const VIDEO_MODELS = [
     speed: 'fast',
     quality: 'good',
     duration: { min: 3, max: 8 },
-    supportsAspectRatios: ['16:9', '9:16'],
+    supportsAspectRatios: ['16:9'],
     openSource: false,
     freeTier: false,
     endpoints: {
@@ -116,7 +116,7 @@ export const VIDEO_MODELS = [
     speed: 'medium',
     quality: 'good',
     duration: { min: 3, max: 10 },
-    supportsAspectRatios: ['16:9', '9:16'],
+    supportsAspectRatios: ['16:9'],
     openSource: false,
     freeTier: false,
     endpoints: {
@@ -131,7 +131,7 @@ export const VIDEO_MODELS = [
     speed: 'instant',
     quality: 'good',
     duration: { min: 3, max: 10 },
-    supportsAspectRatios: ['16:9', '9:16'],
+    supportsAspectRatios: ['16:9'],
     openSource: true,
     freeTier: true,
     endpoints: {

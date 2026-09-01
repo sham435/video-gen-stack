@@ -21,7 +21,7 @@ try {
     GlobalFonts.registerFromPath('assets/fonts/Montserrat-ExtraBold.ttf', 'Montserrat ExtraBold')
 } catch {}
 
-const W = 1080   // matches Shorts 9:16 width
+const W = 1920   // matches 16:9 landscape output width (1920x1080)
 
 /**
  * Generate the footer bar PNG overlay via the shared layout engine.

@@ -15,21 +15,28 @@
 // captions shrink.
 
 // --- A) Legacy collision zones (match the actual renderer layout) ---
+// 16:9 LOGICAL canvas (1280x720) — the pipeline is 16:9-only, so portrait
+// 1080x1920 values are gone. Headline/caption wrap to the center 60% column
+// and must stay clear of the subject band.
 export const SAFE_ZONES = {
-  headline: { x: 0, y: 1080, width: 1080, height: 240 },        // hook headline band
-  subject: { x: 200, y: 320, width: 680, height: 700 },         // face/object band — no text
-  caption: { x: 0, y: 1340, width: 1080, height: 300 },         // word-caption band
-  logo: { x: 850, y: 850, width: 180, height: 100 },            // lower-right logo
+  headline: { x: 0, y: 40, width: 1280, height: 200 },            // top headline band
+  subject: { x: 230, y: 300, width: 820, height: 260 },           // face/object band — no text
+  caption: { x: 0, y: 520, width: 1280, height: 140 },            // word-caption band
+  logo: { x: 1100, y: 640, width: 160, height: 70 },              // lower-right logo
 }
 
 // --- B) Layout roles ---
 // Anchors mirror the renderers: banner top 100px, headline center (0.62),
 // AI accent 200px from the bottom (0.90), caption lower third (0.78),
 // source above the footer.
+//
+// WIDTH: headline and caption wrap to 60% of the frame (not 85%) so narrative
+// body text reads as a readable centered column — the observed 16:9 bug
+// shipped 2-line VO sentences stacked edge-to-edge, visually colliding.
 export const ROLE_CONFIG = {
   emphasis: { priority: 3, widthRatio: 0.90, heightRatio: 0.30, anchor: 0.90, floor: 36, maxLines: 2 },
-  headline: { priority: 2, widthRatio: 0.85, heightRatio: 0.25, anchor: 0.62, floor: 34, maxLines: 2 },
-  caption:  { priority: 1, widthRatio: 0.85, heightRatio: 0.25, anchor: 0.78, floor: 32, maxLines: 2 },
+  headline: { priority: 2, widthRatio: 0.60, heightRatio: 0.25, anchor: 0.62, floor: 34, maxLines: 2 },
+  caption:  { priority: 1, widthRatio: 0.60, heightRatio: 0.25, anchor: 0.78, floor: 32, maxLines: 2 },
   source:   { priority: 0, widthRatio: 0.85, heightRatio: 0.20, anchor: 0.90, floor: 28, maxLines: 1 },
 }
 

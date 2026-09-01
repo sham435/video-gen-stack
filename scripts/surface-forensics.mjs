@@ -240,7 +240,7 @@ async function main() {
       const shelf = await probeShelfInjection(channelHandle, v)
       const maxres = thumbnails?.maxres
       const localDims = rec.render ? `${rec.render.width}x${rec.render.height}` : 'n/a'
-      const isShort = rec.render?.profile === 'SHORT' || rec.render?.aspectRatio === '9:16'
+      const isShort = rec.render?.profile === 'VIDEO_HD' || rec.render?.aspectRatio === '16:9'
       // If the artwork is fingerprint-stable (served on watch surfaces) AND the
       // channel shelf injects frame/oar variants, the shelf is using VIDEO_FRAME_FALLBACK.
       const shelfCls = (stable && shelf.shortsShelfSeen && shelf.hasFrameVariant)

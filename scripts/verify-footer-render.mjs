@@ -1,4 +1,4 @@
-// Real-render footer verification. Renders one representative 9:16 video
+// Real-render footer verification. Renders one representative 16:9 video
 // through the actual NewsBroadcastEngine (canvas pipeline, offline TTS stub),
 // then inspects the bottom 25% of the final MP4 for footer artifacts:
 //   exactly one NEWS-MONSTER footer bar (one red accent band)
@@ -18,7 +18,7 @@ import { NewsBroadcastEngine } from '../src/index.mjs'
 import { FooterLayout } from '../src/video/footer/FooterLayout.mjs'
 import { resolveRenderManifest } from '../src/pipeline/RenderManifest.mjs'
 
-const W = 1080, H = 1920
+const W = 1920, H = 1080
 const outDir = mkdtempSync(join(tmpdir(), 'footerverify-'))
 const engine = new NewsBroadcastEngine()
 engine.storyDirector.plan = async () => ({

@@ -385,7 +385,16 @@ if (tagP > 0) {
       ctx.font = `900 ${tagSize}px "Montserrat ExtraBold", sans-serif`
       const tagLines = wrapText(ctx, 'UNFILTERED BREAKING NEWS FROM THE FUTURE', close.tagline.maxWidth, 2)
       const blockH = tagLines.length * leading
-      let blockTop = H * DesignSystem.layout.tagline - blockH / 2 + tagSize / 2
+      // The tagline block must sit CLEAR of the NEWS-MONSTER brand mark above
+      // it (brand ink spans brandCenter ± half the sy(140) em — the observed
+      // 16:9 bug anchored the block at 0.60H and it collided with the brand at
+      // 0:40). Anchor the block's TOP just below the brand ink bottom, then
+      // clamp so the whole block ends above footerTop - safeGap.
+      const brandInkBottom = H * DesignSystem.layout.brandCenter + sy(140) * 0.5
+      let blockTop = Math.max(
+        brandInkBottom + sy(24),
+        H * DesignSystem.layout.tagline - blockH / 2 + tagSize / 2
+      )
       // Clamp: the whole block must end above footerTop - safeGap.
       const maxBottom = footerTop - safeGap
       if (blockTop + blockH > maxBottom) blockTop = maxBottom - blockH

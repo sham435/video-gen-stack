@@ -139,8 +139,8 @@ export async function renderPromptVideo(prompt, options = {}) {
   const bg1 = ff(theme.bg1)
   const accent = ff(theme.accent)
 
-  // NEWS-MONSTER vertical format: 1080x1920 (9:16) — never letterbox/pillarbox.
-  const OW = 1080, OH = 1920
+  // NEWS-MONSTER landscape format: 1920x1080 (16:9) — never letterbox/pillarbox.
+  const OW = 1920, OH = 1080
 
   const bgPath = join(tmp, `pb_${Date.now()}_${segmentIndex}.mp4`)
   const renderedPath = join(tmp, `pr_${Date.now()}_${segmentIndex}.mp4`)

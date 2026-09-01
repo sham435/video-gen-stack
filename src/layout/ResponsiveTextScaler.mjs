@@ -40,8 +40,8 @@ export class ResponsiveTextScaler {
     return { fontSize: size, scalePercent, overflow, wrap }
   }
 
-  // Shorts-safe preset: ratio-based safe zone of the canvas.
-  static fitForCanvas({ text, canvasWidth = 1080, canvasHeight = 1920, fontSize, minFontSize, fontFamily, maxLines, ratios = ResponsiveTextScaler.SHORTS } = {}) {
+  // 16:9-safe preset: ratio-based safe zone of the landscape canvas.
+  static fitForCanvas({ text, canvasWidth = 1920, canvasHeight = 1080, fontSize, minFontSize, fontFamily, maxLines, ratios = { widthRatio: 0.85, heightRatio: 0.25 } } = {}) {
     return ResponsiveTextScaler.fit({
       text,
       maxWidth: canvasWidth * ratios.widthRatio,

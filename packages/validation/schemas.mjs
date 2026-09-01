@@ -8,7 +8,7 @@ export const generateSchema = z.object({
   prompt: z.string().min(3).max(4000),
   provider: z.enum(['local', 'gemini', 'fal.ai', 'huggingface', 'colab', 'replicate']).optional(),
   duration: z.number().int().min(1).max(120).optional(),
-  aspectRatio: z.enum(['9:16', '16:9', '1:1', '4:5']).optional(),
+  aspectRatio: z.enum(['16:9', '1:1', '4:5']).optional(),
   imageUrl: z.string().url().optional().or(z.literal('')),
   segments: z.array(z.object({ prompt: z.string().max(1000), duration: z.number().min(0.5).max(30).optional() })).max(10).optional(),
   segmentDuration: z.number().int().min(1).max(60).optional(),
