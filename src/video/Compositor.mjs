@@ -79,7 +79,7 @@ export class Compositor {
       // render (production-quality, per spec).
       throw e
     }
-    if (process.env.TEXT_LAYOUT_DIAGNOSTICS === '1') {
+    if (process.env.TEXT_LAYOUT_DIAGNOSTICS === '1' || process.env.TEXT_LAYOUT_DEBUG === '1') {
       console.log(textLayoutDiagnostics(
         { ...comp, headline: headlineLayout, caption: captionLayout, outro: outroLayout },
         activeNarrative

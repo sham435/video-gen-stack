@@ -57,7 +57,7 @@ export class TextLayoutEngine {
     const width = Math.max(...fitted.wrap.widths, 0)
     const height = lines.length * lineHeight
 
-    return {
+    const manifest = {
       text: finalText,
       role,
       priority: cfg.priority,
@@ -77,6 +77,20 @@ export class TextLayoutEngine {
       canvasWidth: canvas.width,
       canvasHeight: canvas.height,
     }
+    // TextBlock-compatible fields (spec model): every manifest is also a valid
+    // TextBlock descriptor so renderers can hand it straight to renderTextBlock
+    // — one measured block, positioned once, drawn with ONE line-height step.
+    manifest.fontFamily = fontFamily === 'Inter' && role !== 'source' ? 'Inter' : fontFamily
+    manifest.fontWeight = cfg.weight || 900
+    manifest.maxWidth = zone.width
+    manifest.maxLines = lineCap
+    manifest.lineHeightFactor = lineHeightFactorFor(role)
+    manifest.letterSpacing = 0
+    manifest.textAlign = 'center'
+    manifest.anchorX = 'center'
+    manifest.anchorY = 'middle'
+    manifest.opacity = 1
+    return manifest
   }
 
   static measure(text, fontSize, fontFamily = 'Inter') {

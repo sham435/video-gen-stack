@@ -16,6 +16,18 @@ export class ScenePlanner {
     const narration = this.cleanNarration(sceneDef.narration)
     const safeNarration = this.sanitizeText(narration)
     const safeEmphasis = this.sanitizeText(emphasis)
+    // 16:9 center-stage contract: narration is VO ONLY. The on-screen
+    // HEADLINE is a short visual block (first sentence, hard-capped at 10
+    // words) — never the full VO sentence, whose wrap was the source of the
+    // headline text stacking onto itself in published videos.
+    const isHook = sceneDef.type === 'hook'
+    const isClose = sceneDef.type === 'close' || sceneDef.type === 'brand_close'
+    const visualHeadline = isHook || isClose
+      ? safeNarration
+      : this.shortVisualText(safeNarration, 10)
+    // Caption is short center-stage visual text from the LLM, verbatim —
+    // never a narration dump (the contract keeps narration audio-only).
+    const visualCaption = sceneDef.caption ? this.shortVisualText(this.cleanNarration(sceneDef.caption), 12) : ''
     const scene = {
       id: sceneDef.id || index + 1,
       type: sceneDef.type || 'fact',
@@ -24,12 +36,13 @@ export class ScenePlanner {
       end: 0,
       duration: this._clampDuration(sceneDef.duration),
       narration: safeNarration,
-      text: safeNarration || (article.title || '').slice(0, 60),
-      subheadline: safeNarration || (article.title || '').slice(0, 60),
-      // Never fall back caption to caption_focus or narration words — the
-      // manifest emits narration as its own caption layer; duplicating the
-      // keyword here is what produced the "SECRET twice" render bug.
-      caption: '',
+      text: visualHeadline || safeNarration || (article.title || '').slice(0, 60),
+      subheadline: visualHeadline || safeNarration || (article.title || '').slice(0, 60),
+      // Caption from the LLM's short center-stage fullText only. Never fall
+      // back caption to caption_focus or narration words — the manifest emits
+      // narration as its own caption layer; duplicating the keyword here is
+      // what produced the "SECRET twice" render bug.
+      caption: visualCaption,
       caption_focus: safeEmphasis,
       captionFocus: safeEmphasis.toUpperCase(),
       camera: {
@@ -60,6 +73,19 @@ export class ScenePlanner {
       .replace(/\*\*/g, '')
       .replace(/[«»""]/g, '"')
       .trim()
+  }
+
+  // Reduce a narration sentence to a SHORT center-stage visual block: the
+  // first sentence only, hard-capped at maxWords words. This is the tool that
+  // keeps on-screen text from wrapping into the multi-line stack that overlapped
+  // in published 16:9 videos — narration stays VO-only, the visual headline is
+  // punchy. Never returns an empty string for a non-empty input.
+  shortVisualText(text, maxWords = 10) {
+    if (!text) return ''
+    const firstSentence = String(text).split(/[.!?]+/)[0].trim()
+    const words = firstSentence.split(/\s+/).filter(Boolean)
+    if (words.length <= maxWords) return firstSentence
+    return words.slice(0, maxWords).join(' ') + '…'
   }
 
   // Dead phrasing the channel never wants on screen or in VO — matches the
