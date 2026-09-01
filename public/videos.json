@@ -1,140 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-01T20:22:52.408Z",
+  "updatedAt": "2026-09-01T20:52:32.780Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "A30gCu2v_J8",
+      "id": "N6dUdG0HO5o",
       "title": "Apple Seemingly Made a Mistake When Announcing the New Mac Studio - MacRumors | NEWS-MONSTER",
       "description": "Apple Seemingly Made a Mistake When Announcing the New Mac Studio - MacRumors | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-01T20:22:51.226Z",
-      "publishedLabel": "Sep 1, 08:22 PM",
-      "thumbnail": "/thumbnails/A30gCu2v_J8.png",
-      "thumbnailSha256": "f5cca5d86edab37f91baecd1a6d676903c7b8383da9841a1e3bf8a4ff582c949",
+      "publishedAt": "2026-09-01T20:52:32.300Z",
+      "publishedLabel": "Sep 1, 08:52 PM",
+      "thumbnail": "/thumbnails/N6dUdG0HO5o.png",
+      "thumbnailSha256": "6c14e118a377eefbb121e8deb043a118aecc2ebdd6d21f4daffd37ddb7a05d77",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/A30gCu2v_J8",
+      "youtubeUrl": "https://youtu.be/N6dUdG0HO5o",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "A30gCu2v_J8",
-          "url": "https://youtu.be/A30gCu2v_J8",
+          "videoId": "N6dUdG0HO5o",
+          "url": "https://youtu.be/N6dUdG0HO5o",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "f5cca5d86edab37f91baecd1a6d676903c7b8383da9841a1e3bf8a4ff582c949",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 4,
-          "thumbnail": {
-            "sha256": "f5cca5d86edab37f91baecd1a6d676903c7b8383da9841a1e3bf8a4ff582c949",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/A30gCu2v_J8.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "-NrWHcLuRbM",
-      "title": "iPhone Ultra release timing: Here’s what the latest reporting says - 9to5Mac | NEWS-MONSTER",
-      "description": "iPhone Ultra release timing: Here’s what the latest reporting says - 9to5Mac | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-01T20:19:27.348Z",
-      "publishedLabel": "Sep 1, 08:19 PM",
-      "thumbnail": "/thumbnails/-NrWHcLuRbM.png",
-      "thumbnailSha256": "e85310d107a18d47335e03ca3458e4f92a4983a07bb9ef11c51c8cda4a592da2",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/-NrWHcLuRbM",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "-NrWHcLuRbM",
-          "url": "https://youtu.be/-NrWHcLuRbM",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "e85310d107a18d47335e03ca3458e4f92a4983a07bb9ef11c51c8cda4a592da2",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 4,
-          "thumbnail": {
-            "sha256": "e85310d107a18d47335e03ca3458e4f92a4983a07bb9ef11c51c8cda4a592da2",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/-NrWHcLuRbM.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "xIg4RvIH9OY",
-      "title": "Microsoft Outlook and OpenAI's ChatGPT Work are experiencing user outages - CNBC | NEWS-MONSTER",
-      "description": "Microsoft Outlook and OpenAI's ChatGPT Work are experiencing user outages - CNBC | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-01T20:16:01.341Z",
-      "publishedLabel": "Sep 1, 08:16 PM",
-      "thumbnail": "/thumbnails/xIg4RvIH9OY.png",
-      "thumbnailSha256": "4f69979967f92b25c1da4a7c5273033997facd1c962df42fef5ecbf24553ce75",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/xIg4RvIH9OY",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "xIg4RvIH9OY",
-          "url": "https://youtu.be/xIg4RvIH9OY",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "4f69979967f92b25c1da4a7c5273033997facd1c962df42fef5ecbf24553ce75",
+            "sha256": "6c14e118a377eefbb121e8deb043a118aecc2ebdd6d21f4daffd37ddb7a05d77",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -151,12 +43,120 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "4f69979967f92b25c1da4a7c5273033997facd1c962df42fef5ecbf24553ce75",
+            "sha256": "6c14e118a377eefbb121e8deb043a118aecc2ebdd6d21f4daffd37ddb7a05d77",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/xIg4RvIH9OY.png"
+            "path": "public/thumbnails/N6dUdG0HO5o.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "skzX5k4vMHo",
+      "title": "iPhone Ultra release timing: Here’s what the latest reporting says - 9to5Mac | NEWS-MONSTER",
+      "description": "iPhone Ultra release timing: Here’s what the latest reporting says - 9to5Mac | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-01T20:49:13.048Z",
+      "publishedLabel": "Sep 1, 08:49 PM",
+      "thumbnail": "/thumbnails/skzX5k4vMHo.png",
+      "thumbnailSha256": "fb5287d526db6764ff06b1e5fa0d8d592e31780c73b99b6f726eb79db5b47234",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/skzX5k4vMHo",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "skzX5k4vMHo",
+          "url": "https://youtu.be/skzX5k4vMHo",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "fb5287d526db6764ff06b1e5fa0d8d592e31780c73b99b6f726eb79db5b47234",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "fb5287d526db6764ff06b1e5fa0d8d592e31780c73b99b6f726eb79db5b47234",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/skzX5k4vMHo.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "8WUgb2pTmRQ",
+      "title": "Microsoft Outlook and OpenAI's ChatGPT Work are experiencing user outages - CNBC | NEWS-MONSTER",
+      "description": "Microsoft Outlook and OpenAI's ChatGPT Work are experiencing user outages - CNBC | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-01T20:45:52.688Z",
+      "publishedLabel": "Sep 1, 08:45 PM",
+      "thumbnail": "/thumbnails/8WUgb2pTmRQ.png",
+      "thumbnailSha256": "2d166482c27a79405ae2e382e804c854f63e7045ef2ccb1d7c436b18a1b4d0cc",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/8WUgb2pTmRQ",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "8WUgb2pTmRQ",
+          "url": "https://youtu.be/8WUgb2pTmRQ",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "2d166482c27a79405ae2e382e804c854f63e7045ef2ccb1d7c436b18a1b4d0cc",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "2d166482c27a79405ae2e382e804c854f63e7045ef2ccb1d7c436b18a1b4d0cc",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/8WUgb2pTmRQ.png"
           }
         },
         "linkedin": {
