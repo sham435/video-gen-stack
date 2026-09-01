@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-01T19:52:33.178Z",
+  "updatedAt": "2026-09-01T20:22:52.408Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "RybqmvMj-z4",
+      "id": "A30gCu2v_J8",
       "title": "Apple Seemingly Made a Mistake When Announcing the New Mac Studio - MacRumors | NEWS-MONSTER",
       "description": "Apple Seemingly Made a Mistake When Announcing the New Mac Studio - MacRumors | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-01T19:52:32.503Z",
-      "publishedLabel": "Sep 1, 07:52 PM",
-      "thumbnail": "/thumbnails/RybqmvMj-z4.png",
-      "thumbnailSha256": "68f2ca2e5eb28a62024cbfb19cd0e6599ba81dc7a6e8e8d174178b6836a0908f",
+      "publishedAt": "2026-09-01T20:22:51.226Z",
+      "publishedLabel": "Sep 1, 08:22 PM",
+      "thumbnail": "/thumbnails/A30gCu2v_J8.png",
+      "thumbnailSha256": "f5cca5d86edab37f91baecd1a6d676903c7b8383da9841a1e3bf8a4ff582c949",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/RybqmvMj-z4",
+      "youtubeUrl": "https://youtu.be/A30gCu2v_J8",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "RybqmvMj-z4",
-          "url": "https://youtu.be/RybqmvMj-z4",
+          "videoId": "A30gCu2v_J8",
+          "url": "https://youtu.be/A30gCu2v_J8",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "68f2ca2e5eb28a62024cbfb19cd0e6599ba81dc7a6e8e8d174178b6836a0908f",
+            "sha256": "f5cca5d86edab37f91baecd1a6d676903c7b8383da9841a1e3bf8a4ff582c949",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 4,
           "thumbnail": {
-            "sha256": "68f2ca2e5eb28a62024cbfb19cd0e6599ba81dc7a6e8e8d174178b6836a0908f",
+            "sha256": "f5cca5d86edab37f91baecd1a6d676903c7b8383da9841a1e3bf8a4ff582c949",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/RybqmvMj-z4.png"
+            "path": "public/thumbnails/A30gCu2v_J8.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "k0Te1lcyO3c",
+      "id": "-NrWHcLuRbM",
       "title": "iPhone Ultra release timing: Here’s what the latest reporting says - 9to5Mac | NEWS-MONSTER",
       "description": "iPhone Ultra release timing: Here’s what the latest reporting says - 9to5Mac | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-01T19:49:15.160Z",
-      "publishedLabel": "Sep 1, 07:49 PM",
-      "thumbnail": "/thumbnails/k0Te1lcyO3c.png",
-      "thumbnailSha256": "9325877d9d30d32ccbba7a8be95b8cc1e57327e4679fe5779c37b7fab854be10",
+      "publishedAt": "2026-09-01T20:19:27.348Z",
+      "publishedLabel": "Sep 1, 08:19 PM",
+      "thumbnail": "/thumbnails/-NrWHcLuRbM.png",
+      "thumbnailSha256": "e85310d107a18d47335e03ca3458e4f92a4983a07bb9ef11c51c8cda4a592da2",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/k0Te1lcyO3c",
+      "youtubeUrl": "https://youtu.be/-NrWHcLuRbM",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "k0Te1lcyO3c",
-          "url": "https://youtu.be/k0Te1lcyO3c",
+          "videoId": "-NrWHcLuRbM",
+          "url": "https://youtu.be/-NrWHcLuRbM",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "9325877d9d30d32ccbba7a8be95b8cc1e57327e4679fe5779c37b7fab854be10",
+            "sha256": "e85310d107a18d47335e03ca3458e4f92a4983a07bb9ef11c51c8cda4a592da2",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,14 +95,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 4,
           "thumbnail": {
-            "sha256": "9325877d9d30d32ccbba7a8be95b8cc1e57327e4679fe5779c37b7fab854be10",
+            "sha256": "e85310d107a18d47335e03ca3458e4f92a4983a07bb9ef11c51c8cda4a592da2",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/k0Te1lcyO3c.png"
+            "path": "public/thumbnails/-NrWHcLuRbM.png"
           }
         },
         "linkedin": {
@@ -112,29 +112,29 @@
       }
     },
     {
-      "id": "YtpVypaF5Nw",
+      "id": "xIg4RvIH9OY",
       "title": "Microsoft Outlook and OpenAI's ChatGPT Work are experiencing user outages - CNBC | NEWS-MONSTER",
       "description": "Microsoft Outlook and OpenAI's ChatGPT Work are experiencing user outages - CNBC | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-01T19:46:01.904Z",
-      "publishedLabel": "Sep 1, 07:46 PM",
-      "thumbnail": "/thumbnails/YtpVypaF5Nw.png",
-      "thumbnailSha256": "21a57d12ee69869b2ba848703ec6f8ba56da0d34dd2a14a4d0d794fd0b7f6f3b",
+      "publishedAt": "2026-09-01T20:16:01.341Z",
+      "publishedLabel": "Sep 1, 08:16 PM",
+      "thumbnail": "/thumbnails/xIg4RvIH9OY.png",
+      "thumbnailSha256": "4f69979967f92b25c1da4a7c5273033997facd1c962df42fef5ecbf24553ce75",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/YtpVypaF5Nw",
+      "youtubeUrl": "https://youtu.be/xIg4RvIH9OY",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "YtpVypaF5Nw",
-          "url": "https://youtu.be/YtpVypaF5Nw",
+          "videoId": "xIg4RvIH9OY",
+          "url": "https://youtu.be/xIg4RvIH9OY",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "21a57d12ee69869b2ba848703ec6f8ba56da0d34dd2a14a4d0d794fd0b7f6f3b",
+            "sha256": "4f69979967f92b25c1da4a7c5273033997facd1c962df42fef5ecbf24553ce75",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -151,12 +151,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "21a57d12ee69869b2ba848703ec6f8ba56da0d34dd2a14a4d0d794fd0b7f6f3b",
+            "sha256": "4f69979967f92b25c1da4a7c5273033997facd1c962df42fef5ecbf24553ce75",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/YtpVypaF5Nw.png"
+            "path": "public/thumbnails/xIg4RvIH9OY.png"
           }
         },
         "linkedin": {
