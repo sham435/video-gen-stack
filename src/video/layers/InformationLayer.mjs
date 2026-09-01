@@ -199,7 +199,7 @@ export class InformationLayer {
     const bodyToken = DesignSystem.getTypography('body', 'small')
     const bodySize = bodyToken.size
     ctx.font = `${bodyToken.weight} ${bodySize}px ${bodyToken.font}, sans-serif`
-    ctx.fillStyle = '#FFFFFF'
+    ctx.fillStyle = BRIGHT_YELLOW
     ctx.textAlign = 'left'
     ctx.textBaseline = 'top'
     ctx.shadowColor = 'rgba(0,0,0,0.9)'
@@ -208,9 +208,9 @@ export class InformationLayer {
     // Wrap the body to a max width of ~60% of the canvas so it stays a compact
     // left column under the heading (not stretched across the wide 16:9 frame).
     const maxBodyWidth = W * 0.60
-    // Comfortable line spacing: 1.4x the body font size per line. The old
+    // Comfortable line spacing: 1.6x the body font size per line. The old
     // sy(56)~(21px for a 42px font, ~0.5x) packed lines onto each other.
-    const bodyLineStep = Math.round(bodySize * 1.4)
+    const bodyLineStep = Math.round(bodySize * 1.6)
     const words = body.split(' ')
     let line = ''
     let lineY = H * DesignSystem.layout.explanationBody + sy(92)
