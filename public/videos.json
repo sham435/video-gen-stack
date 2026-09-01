@@ -1,32 +1,86 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-01T09:53:13.455Z",
+  "updatedAt": "2026-09-01T10:32:49.999Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "TRNCKYLRVAo",
-      "title": "10 Practical Camping Gadgets Worth Buying From Tractor Supply - SlashGear | NEWS-MONSTER",
-      "description": "10 Practical Camping Gadgets Worth Buying From Tractor Supply - SlashGear | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-01T09:53:12.470Z",
-      "publishedLabel": "Sep 1, 09:53 AM",
-      "thumbnail": "/thumbnails/TRNCKYLRVAo.png",
-      "thumbnailSha256": "c87542dd3bb5c682f880057e971901dfa76414b4f40fa607aa57cb7f86dc72cd",
+      "id": "4w0cakOsWag",
+      "title": "Stock futures fall after U.S. strikes Iran; Wall Street heads for winning month: Live upda | NEWS-MONSTER",
+      "description": "Stock futures fall after U.S. strikes Iran; Wall Street heads for winning month: Live upda | NEWS-MONSTER",
+      "category": "apple",
+      "publishedAt": "2026-09-01T10:32:49.486Z",
+      "publishedLabel": "Sep 1, 10:32 AM",
+      "thumbnail": "/thumbnails/4w0cakOsWag.png",
+      "thumbnailSha256": "b304ad59149392d9f7ad53eadd94924df57a8bc5d108dd7cdc63f8956c406730",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/TRNCKYLRVAo",
+      "youtubeUrl": "https://youtu.be/4w0cakOsWag",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "TRNCKYLRVAo",
-          "url": "https://youtu.be/TRNCKYLRVAo",
+          "videoId": "4w0cakOsWag",
+          "url": "https://youtu.be/4w0cakOsWag",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "c87542dd3bb5c682f880057e971901dfa76414b4f40fa607aa57cb7f86dc72cd",
+            "sha256": "b304ad59149392d9f7ad53eadd94924df57a8bc5d108dd7cdc63f8956c406730",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 3,
+          "thumbnail": {
+            "sha256": "b304ad59149392d9f7ad53eadd94924df57a8bc5d108dd7cdc63f8956c406730",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/4w0cakOsWag.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "-GeH-yW3vVw",
+      "title": "American NS27 Intercontinental Network Expansion - AeroRoutes | NEWS-MONSTER",
+      "description": "American NS27 Intercontinental Network Expansion - AeroRoutes | NEWS-MONSTER",
+      "category": "apple",
+      "publishedAt": "2026-09-01T10:29:37.544Z",
+      "publishedLabel": "Sep 1, 10:29 AM",
+      "thumbnail": "/thumbnails/-GeH-yW3vVw.png",
+      "thumbnailSha256": "70efc84e14ded6228f0fb55513d9267cf4c16aada551b0dbd479ac7f1a018e7e",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/-GeH-yW3vVw",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "-GeH-yW3vVw",
+          "url": "https://youtu.be/-GeH-yW3vVw",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "70efc84e14ded6228f0fb55513d9267cf4c16aada551b0dbd479ac7f1a018e7e",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +97,66 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "c87542dd3bb5c682f880057e971901dfa76414b4f40fa607aa57cb7f86dc72cd",
+            "sha256": "70efc84e14ded6228f0fb55513d9267cf4c16aada551b0dbd479ac7f1a018e7e",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/TRNCKYLRVAo.png"
+            "path": "public/thumbnails/-GeH-yW3vVw.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "A9aTP1nVjmU",
+      "title": "Gold Steadies After Tumbling as Warsh Spurs Fed Rate-Hike Bets - Bloomberg.com | NEWS-MONSTER",
+      "description": "Gold Steadies After Tumbling as Warsh Spurs Fed Rate-Hike Bets - Bloomberg.com | NEWS-MONSTER",
+      "category": "apple",
+      "publishedAt": "2026-09-01T10:25:49.209Z",
+      "publishedLabel": "Sep 1, 10:25 AM",
+      "thumbnail": "/thumbnails/A9aTP1nVjmU.png",
+      "thumbnailSha256": "1a45ca45ada6115f8bd577dafb7b4275204dd494fffc48a21ab373c80bf15300",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/A9aTP1nVjmU",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "A9aTP1nVjmU",
+          "url": "https://youtu.be/A9aTP1nVjmU",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "1a45ca45ada6115f8bd577dafb7b4275204dd494fffc48a21ab373c80bf15300",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "1a45ca45ada6115f8bd577dafb7b4275204dd494fffc48a21ab373c80bf15300",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/A9aTP1nVjmU.png"
           }
         },
         "linkedin": {
