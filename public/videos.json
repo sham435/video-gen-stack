@@ -1,140 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-01T21:26:26.505Z",
+  "updatedAt": "2026-09-01T21:49:23.241Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "lzanalndUsQ",
-      "title": "Apple Seemingly Made a Mistake When Announcing the New Mac Studio - MacRumors | NEWS-MONSTER",
-      "description": "Apple Seemingly Made a Mistake When Announcing the New Mac Studio - MacRumors | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-01T21:26:25.918Z",
-      "publishedLabel": "Sep 1, 09:26 PM",
-      "thumbnail": "/thumbnails/lzanalndUsQ.png",
-      "thumbnailSha256": "a9642067a1c17a80d2297f6eb477b6bbc4f1e03cf993d306a4a696350d281456",
+      "id": "YyomuKb7q9I",
+      "title": "Experts Disagree On CEO | NEWS-MONSTER",
+      "description": "Experts Disagree On CEO | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-01T21:49:22.081Z",
+      "publishedLabel": "Sep 1, 09:49 PM",
+      "thumbnail": "/thumbnails/YyomuKb7q9I.png",
+      "thumbnailSha256": "47e6b5fe8e9c15f63da9fd40243e61ebdc6d4f17a4e4bfbf4467a341b36b6c4f",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/lzanalndUsQ",
+      "youtubeUrl": "https://youtu.be/YyomuKb7q9I",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "lzanalndUsQ",
-          "url": "https://youtu.be/lzanalndUsQ",
+          "videoId": "YyomuKb7q9I",
+          "url": "https://youtu.be/YyomuKb7q9I",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "a9642067a1c17a80d2297f6eb477b6bbc4f1e03cf993d306a4a696350d281456",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "a9642067a1c17a80d2297f6eb477b6bbc4f1e03cf993d306a4a696350d281456",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/lzanalndUsQ.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "zREmwkAYyiM",
-      "title": "iPhone Ultra release timing: Here’s what the latest reporting says - 9to5Mac | NEWS-MONSTER",
-      "description": "iPhone Ultra release timing: Here’s what the latest reporting says - 9to5Mac | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-01T21:21:54.569Z",
-      "publishedLabel": "Sep 1, 09:21 PM",
-      "thumbnail": "/thumbnails/zREmwkAYyiM.png",
-      "thumbnailSha256": "eb95a8a936e16364bfd9a77ad6a69b86811e707e9bec1285a9d02c7331c93f72",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/zREmwkAYyiM",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "zREmwkAYyiM",
-          "url": "https://youtu.be/zREmwkAYyiM",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "eb95a8a936e16364bfd9a77ad6a69b86811e707e9bec1285a9d02c7331c93f72",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 4,
-          "thumbnail": {
-            "sha256": "eb95a8a936e16364bfd9a77ad6a69b86811e707e9bec1285a9d02c7331c93f72",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/zREmwkAYyiM.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "NtEM2eAlh-E",
-      "title": "Microsoft Outlook and OpenAI's ChatGPT Work are experiencing user outages - CNBC | NEWS-MONSTER",
-      "description": "Microsoft Outlook and OpenAI's ChatGPT Work are experiencing user outages - CNBC | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-01T21:18:23.096Z",
-      "publishedLabel": "Sep 1, 09:18 PM",
-      "thumbnail": "/thumbnails/NtEM2eAlh-E.png",
-      "thumbnailSha256": "d93eaec809179549eb305c8f1e04e405e4785a80985949049203303c180a8d3c",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/NtEM2eAlh-E",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "NtEM2eAlh-E",
-          "url": "https://youtu.be/NtEM2eAlh-E",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "d93eaec809179549eb305c8f1e04e405e4785a80985949049203303c180a8d3c",
+            "sha256": "47e6b5fe8e9c15f63da9fd40243e61ebdc6d4f17a4e4bfbf4467a341b36b6c4f",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -151,12 +43,120 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "d93eaec809179549eb305c8f1e04e405e4785a80985949049203303c180a8d3c",
+            "sha256": "47e6b5fe8e9c15f63da9fd40243e61ebdc6d4f17a4e4bfbf4467a341b36b6c4f",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/NtEM2eAlh-E.png"
+            "path": "public/thumbnails/YyomuKb7q9I.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "x_HNwnZHW1c",
+      "title": "CHICAGO Said One Thing, Then Did This | NEWS-MONSTER",
+      "description": "CHICAGO Said One Thing, Then Did This | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-01T21:45:55.384Z",
+      "publishedLabel": "Sep 1, 09:45 PM",
+      "thumbnail": "/thumbnails/x_HNwnZHW1c.png",
+      "thumbnailSha256": "451dda18d2a1238101ea3ff3b452762badd10ce71986106bb4fe22104768044e",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/x_HNwnZHW1c",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "x_HNwnZHW1c",
+          "url": "https://youtu.be/x_HNwnZHW1c",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "451dda18d2a1238101ea3ff3b452762badd10ce71986106bb4fe22104768044e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "451dda18d2a1238101ea3ff3b452762badd10ce71986106bb4fe22104768044e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/x_HNwnZHW1c.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "qDy3Pi3vTEk",
+      "title": "Tesla leads S&P 500 gainers as investors await Cybercab launch | NEWS-MONSTER",
+      "description": "Tesla leads S&P 500 gainers as investors await Cybercab launch | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-01T21:42:13.414Z",
+      "publishedLabel": "Sep 1, 09:42 PM",
+      "thumbnail": "/thumbnails/qDy3Pi3vTEk.png",
+      "thumbnailSha256": "3c28f162f943165746db5a3d4121076b0e35a7360357573fe837b4ff9db236b1",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/qDy3Pi3vTEk",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "qDy3Pi3vTEk",
+          "url": "https://youtu.be/qDy3Pi3vTEk",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "3c28f162f943165746db5a3d4121076b0e35a7360357573fe837b4ff9db236b1",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "3c28f162f943165746db5a3d4121076b0e35a7360357573fe837b4ff9db236b1",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/qDy3Pi3vTEk.png"
           }
         },
         "linkedin": {
