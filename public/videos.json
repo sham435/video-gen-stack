@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-01T21:49:23.241Z",
+  "updatedAt": "2026-09-01T23:55:52.980Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "YyomuKb7q9I",
-      "title": "Experts Disagree On CEO | NEWS-MONSTER",
-      "description": "Experts Disagree On CEO | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-09-01T21:49:22.081Z",
-      "publishedLabel": "Sep 1, 09:49 PM",
-      "thumbnail": "/thumbnails/YyomuKb7q9I.png",
-      "thumbnailSha256": "47e6b5fe8e9c15f63da9fd40243e61ebdc6d4f17a4e4bfbf4467a341b36b6c4f",
+      "id": "duYoQ_ifUbU",
+      "title": "Can cut-price Shein shine in its long-awaited stock market debut? - BBC | NEWS-MONSTER",
+      "description": "Can cut-price Shein shine in its long-awaited stock market debut? - BBC | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-09-01T23:55:52.456Z",
+      "publishedLabel": "Sep 1, 11:55 PM",
+      "thumbnail": "/thumbnails/duYoQ_ifUbU.png",
+      "thumbnailSha256": "f6a35d79ca31dfa3f5b715eb94ad33093954267bbd31e02b22eceaad445e4666",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/YyomuKb7q9I",
+      "youtubeUrl": "https://youtu.be/duYoQ_ifUbU",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "YyomuKb7q9I",
-          "url": "https://youtu.be/YyomuKb7q9I",
+          "videoId": "duYoQ_ifUbU",
+          "url": "https://youtu.be/duYoQ_ifUbU",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "47e6b5fe8e9c15f63da9fd40243e61ebdc6d4f17a4e4bfbf4467a341b36b6c4f",
+            "sha256": "f6a35d79ca31dfa3f5b715eb94ad33093954267bbd31e02b22eceaad445e4666",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 1,
           "thumbnail": {
-            "sha256": "47e6b5fe8e9c15f63da9fd40243e61ebdc6d4f17a4e4bfbf4467a341b36b6c4f",
+            "sha256": "f6a35d79ca31dfa3f5b715eb94ad33093954267bbd31e02b22eceaad445e4666",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/YyomuKb7q9I.png"
+            "path": "public/thumbnails/duYoQ_ifUbU.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "x_HNwnZHW1c",
-      "title": "CHICAGO Said One Thing, Then Did This | NEWS-MONSTER",
-      "description": "CHICAGO Said One Thing, Then Did This | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-09-01T21:45:55.384Z",
-      "publishedLabel": "Sep 1, 09:45 PM",
-      "thumbnail": "/thumbnails/x_HNwnZHW1c.png",
-      "thumbnailSha256": "451dda18d2a1238101ea3ff3b452762badd10ce71986106bb4fe22104768044e",
+      "id": "TmLYd1l5foI",
+      "title": "Exclusive | Anthropic Signs $35 Billion Cloud Deal Backed by Nvidia - WSJ | NEWS-MONSTER",
+      "description": "Exclusive | Anthropic Signs $35 Billion Cloud Deal Backed by Nvidia - WSJ | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-09-01T23:52:28.131Z",
+      "publishedLabel": "Sep 1, 11:52 PM",
+      "thumbnail": "/thumbnails/TmLYd1l5foI.png",
+      "thumbnailSha256": "b0d3a0a856df63396b60df2f1c8dcd7566db7df76986026b36c691ba2a2016c0",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/x_HNwnZHW1c",
+      "youtubeUrl": "https://youtu.be/TmLYd1l5foI",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "x_HNwnZHW1c",
-          "url": "https://youtu.be/x_HNwnZHW1c",
+          "videoId": "TmLYd1l5foI",
+          "url": "https://youtu.be/TmLYd1l5foI",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "451dda18d2a1238101ea3ff3b452762badd10ce71986106bb4fe22104768044e",
+            "sha256": "b0d3a0a856df63396b60df2f1c8dcd7566db7df76986026b36c691ba2a2016c0",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,68 +95,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 4,
+          "durationMs": 1,
           "thumbnail": {
-            "sha256": "451dda18d2a1238101ea3ff3b452762badd10ce71986106bb4fe22104768044e",
+            "sha256": "b0d3a0a856df63396b60df2f1c8dcd7566db7df76986026b36c691ba2a2016c0",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/x_HNwnZHW1c.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "qDy3Pi3vTEk",
-      "title": "Tesla leads S&P 500 gainers as investors await Cybercab launch | NEWS-MONSTER",
-      "description": "Tesla leads S&P 500 gainers as investors await Cybercab launch | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-09-01T21:42:13.414Z",
-      "publishedLabel": "Sep 1, 09:42 PM",
-      "thumbnail": "/thumbnails/qDy3Pi3vTEk.png",
-      "thumbnailSha256": "3c28f162f943165746db5a3d4121076b0e35a7360357573fe837b4ff9db236b1",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/qDy3Pi3vTEk",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "qDy3Pi3vTEk",
-          "url": "https://youtu.be/qDy3Pi3vTEk",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "3c28f162f943165746db5a3d4121076b0e35a7360357573fe837b4ff9db236b1",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "3c28f162f943165746db5a3d4121076b0e35a7360357573fe837b4ff9db236b1",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/qDy3Pi3vTEk.png"
+            "path": "public/thumbnails/TmLYd1l5foI.png"
           }
         },
         "linkedin": {
