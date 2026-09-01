@@ -4,6 +4,7 @@ import { drawHeadlineCard } from '../../visuals/HeadlineCard.mjs'
 import { drawAnchorBadge } from '../../visuals/AnchorBadge.mjs'
 import { TextTimelineScheduler } from '../TextTimelineScheduler.mjs'
 import { wrapText } from '../../layout/wrapText.mjs'
+import { renderTextBlock } from '../../layout/TextBlock.mjs'
 import { FooterLayout } from '../footer/FooterLayout.mjs'
 import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
 
@@ -368,27 +369,43 @@ export class InformationLayer {
     }
 
 if (tagP > 0) {
-      // Tagline wraps to the close-scene maxWidth (never truncates) and every
-      // wrapped line gets the shared leading token — loose enough to read as
-      // separate lines. The block is centered just inside the safe top zone.
+      // Tagline: ONE measured TextBlock (never per-line guesses). Wrapped to
+      // the close-scene maxWidth, positioned as a complete block just inside
+      // the safe top zone, and CLAMPED strictly above the footer reserve —
+      // narrative.bottom < footer.top - safeGap (persistent branding owns the
+      // bottom safe zone; a long tagline can never collide with it).
       const close = BROADCAST_TEXT.close
       const tagSize = close.tagline.size
       const tagLeading = close.tagline.leading
+      const safeGap = close.anchor.margin
+      const footerTop = FooterLayout.barTopInFrame(ctx, W, H)
+      const leading = tagSize * tagLeading
       ctx.save()
       ctx.globalAlpha = tagP
       ctx.font = `900 ${tagSize}px "Montserrat ExtraBold", sans-serif`
-      ctx.fillStyle = 'rgba(255,255,255,0.92)'
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'middle'
       const tagLines = wrapText(ctx, 'UNFILTERED BREAKING NEWS FROM THE FUTURE', close.tagline.maxWidth, 2)
-      const leading = tagSize * tagLeading
       const blockH = tagLines.length * leading
-      // Center the wrapped block on the headline anchor line.
-      const blockTop = H * DesignSystem.layout.tagline - blockH / 2 + tagSize / 2
-      tagLines.forEach((line, i) => {
-        ctx.font = `900 ${tagSize}px "Montserrat ExtraBold", sans-serif`
-        ctx.fillText(line, W / 2, blockTop + leading * i + tagSize * 0.5)
-      })
+      let blockTop = H * DesignSystem.layout.tagline - blockH / 2 + tagSize / 2
+      // Clamp: the whole block must end above footerTop - safeGap.
+      const maxBottom = footerTop - safeGap
+      if (blockTop + blockH > maxBottom) blockTop = maxBottom - blockH
+      renderTextBlock(ctx, {
+        text: 'UNFILTERED BREAKING NEWS FROM THE FUTURE',
+        fontFamily: '"Montserrat ExtraBold"',
+        fontSize: tagSize,
+        fontWeight: 900,
+        maxWidth: close.tagline.maxWidth,
+        maxLines: 2,
+        lineHeight: leading,
+        textAlign: 'center',
+        anchorX: 'center',
+        anchorY: 'top',
+        x: W / 2,
+        y: blockTop,
+        lines: tagLines,
+        width: close.tagline.maxWidth,
+        height: blockH,
+      }, { fillStyle: 'rgba(255,255,255,0.92)' })
       ctx.restore()
 
       // News source credit — revealed after the tagline so the end card always
@@ -404,7 +421,7 @@ if (tagP > 0) {
         ctx.fillStyle = 'rgba(255,255,255,0.78)'
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
-        ctx.fillText(`Source: ${src}`, W / 2, H * DesignSystem.layout.tagline + blockH / 2 + tagSize + sy(42))
+        ctx.fillText(`Source: ${src}`, W / 2, blockTop + blockH + tagSize + sy(42))
         ctx.restore()
       }
 
@@ -414,9 +431,8 @@ if (tagP > 0) {
       const q = scene.cta?.engagement || scene.cta?.text
       const qP = Math.min(1, Math.max(0, (t - 2.2) / 0.4))
       if (q && qP > 0) {
-        const footerTop = FooterLayout.barTopInFrame(ctx, W, H)
         // Keep the question clear of the source line and above the anchor/footer.
-        const qY = Math.min(H * DesignSystem.layout.tagline + blockH / 2 + tagSize + sy(110), footerTop - sy(200))
+        const qY = Math.min(blockTop + blockH + tagSize + sy(110), footerTop - sy(200))
         ctx.save()
         ctx.globalAlpha = qP
         ctx.font = `800 ${sy(40)}px Inter, sans-serif`
@@ -435,7 +451,6 @@ if (tagP > 0) {
       // clears the footer bar top — the tagline can never collide with it.
       // Skipped when scene.hideBranding is set (Shorts mode).
       if (!scene.hideBranding) {
-        const footerTop = FooterLayout.barTopInFrame(ctx, W, H)
         const anchor = close.anchor
         const taglineBottom = blockTop + blockH
         const badgeY = Math.min(

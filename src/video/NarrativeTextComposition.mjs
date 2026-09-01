@@ -211,6 +211,25 @@ export function resolveNarrativeState(scene = {}, timeFrac = 0) {
 }
 
 /**
+ * Spec-compatible authoritative narrative resolver: given the scene and its
+ * duration, return the ONE narrative state active at absolute `time` (seconds)
+ * — or null when no state is active.
+ *
+ * This is the single resolver all producers/layers must consult; renderers
+ * never independently decide which narrative text to draw.
+ *
+ *   const narrative = resolveNarrativeAt(time, scene, duration);
+ *   if (narrative.state) renderNarrative(narrative);
+ *
+ * Returns { state, opacity, at, time, timeFrac }.
+ */
+export function resolveNarrativeAt(time = 0, scene = {}, duration = 4) {
+  const timeFrac = duration > 0 ? Math.max(0, Math.min(1, time / duration)) : 0
+  const resolved = resolveNarrativeState(scene, timeFrac)
+  return { ...resolved, time, timeFrac }
+}
+
+/**
  * Deterministic collision gate (Acceptance: preflight rejects text collision).
  *
  * Semantics — narrative states share the SAME center-stage anchor by design
@@ -316,31 +335,48 @@ export function assertNarrativeComposition(scene = {}, ctx = null, options = {})
  * render diagnostics expose text bounding boxes).
  */
 export function textLayoutDiagnostics(comp = {}, active = {}) {
+  const canvasW = comp.canvas?.width || DesignSystem.W
+  const canvasH = comp.canvas?.height || DesignSystem.H
   const box = (l) => (l ? blockFor(l) : null)
+  const center = (b) => (b ? { cx: Math.round(b.left + b.width / 2), cy: Math.round(b.top + b.height / 2) } : null)
   const lines = []
   lines.push('[TEXT-LAYOUT]')
-  lines.push(`format: 16:9 canvas: ${comp.canvas?.width || DesignSystem.W}x${comp.canvas?.height || DesignSystem.H}`)
-  lines.push(`activeState: ${active.state || 'NONE'}`)
+  const aspect = canvasW / canvasH
+  const isLandscape = Math.abs(aspect - 16 / 9) < 0.02 || Math.abs(aspect - 1.78) < 0.02
+  lines.push(`format: ${isLandscape ? '16:9' : '9:16'} canvas: ${canvasW}x${canvasH}`)
+  lines.push(`ACTIVE NARRATIVE: ${active.state || 'NONE'}`)
   if (comp.caption) {
     const b = box(comp.caption)
-    lines.push(`caption: lines=${comp.caption.lines?.length} fontSize=${comp.caption.fontSize} box=${JSON.stringify(b)}`)
+    const c = center(b)
+    lines.push('CAPTION')
+    lines.push('-------')
+    lines.push(`lines: ${comp.caption.lines?.length || 0}`)
+    lines.push(`fontSize: ${comp.caption.fontSize}`)
+    lines.push(`lineHeight: ${comp.caption.lineHeight}`)
+    lines.push(`width: ${Math.round(b.width)}`)
+    lines.push(`height: ${Math.round(b.height)}`)
+    lines.push(`centerX: ${c.cx}`)
+    lines.push(`centerY: ${c.cy}`)
   } else {
-    lines.push('caption: active: false')
+    lines.push('CAPTION: (none)')
   }
   if (comp.headline) {
     const b = box(comp.headline)
-    lines.push(`headline: lines=${comp.headline.lines?.length} fontSize=${comp.headline.fontSize} box=${JSON.stringify(b)} active: ${active.state === 'HEADLINE'}`)
+    lines.push(`HEADLINE lines=${comp.headline.lines?.length || 0} fontSize=${comp.headline.fontSize} lineHeight=${comp.headline.lineHeight} box=[${Math.round(b.left)},${Math.round(b.top)}..${Math.round(b.right)},${Math.round(b.bottom)}] active: ${active.state === 'HEADLINE'}`)
   } else {
-    lines.push('headline: active: false')
+    lines.push('HEADLINE: (none)')
   }
   if (comp.outro) {
     const b = box(comp.outro)
-    lines.push(`outro: box=${JSON.stringify(b)} active: ${active.state === 'OUTRO'}`)
+    lines.push(`OUTRO box=[${Math.round(b.left)},${Math.round(b.top)}..${Math.round(b.right)},${Math.round(b.bottom)}] active: ${active.state === 'OUTRO'}`)
   } else {
-    lines.push('outro: active: false')
+    lines.push('OUTRO: (none)')
   }
   if (comp.footer) {
-    lines.push(`footer: top=${comp.footer.top} bottom=${comp.footer.bottom}`)
+    lines.push('FOOTER')
+    lines.push('------')
+    lines.push(`top: ${comp.footer.top}`)
+    lines.push(`bottom: ${comp.footer.bottom}`)
   }
   const hBox = box(comp.headline)
   const cBox = box(comp.caption)
@@ -352,12 +388,13 @@ export function textLayoutDiagnostics(comp = {}, active = {}) {
     const set = activeState ? [activeState] : []
     return set.includes(a) && set.includes(b)
   }
-  lines.push('collision:')
-  lines.push(`  headline/caption: ${hBox && cBox && pairActive('HEADLINE', 'CAPTION') ? (overlaps(hBox, cBox) ? 'FAIL' : 'PASS') : 'PASS (not simultaneous)'}`)
-  lines.push(`  caption/footer: ${cBox && comp.footer ? (cBox.bottom > comp.footer.top ? 'FAIL' : 'PASS') : 'N/A'}`)
-  lines.push(`  outro/footer: ${oBox && comp.footer ? (oBox.bottom > comp.footer.top ? 'FAIL' : 'PASS') : 'N/A'}`)
-  const selfFail = cBox && comp.caption ? overlapsSelf(comp.caption) : false
-  lines.push(`  caption/self: ${selfFail ? 'FAIL' : 'PASS'}`)
+  lines.push('COLLISION')
+  lines.push('---------')
+  lines.push(`caption/self: ${cBox && comp.caption ? (overlapsSelf(comp.caption) ? 'FAIL' : 'PASS') : 'N/A'}`)
+  lines.push(`headline/caption: ${hBox && cBox && pairActive('HEADLINE', 'CAPTION') ? (overlaps(hBox, cBox) ? 'FAIL' : 'PASS') : 'PASS (not simultaneous)'}`)
+  lines.push(`caption/footer: ${cBox && comp.footer ? (cBox.bottom > comp.footer.top ? 'FAIL' : 'PASS') : 'N/A'}`)
+  lines.push(`outro/footer: ${oBox && comp.footer ? (oBox.bottom > comp.footer.top ? 'FAIL' : 'PASS') : 'N/A'}`)
+  lines.push(`outro/branding: ${oBox && comp.footer ? (oBox.bottom > comp.footer.top ? 'FAIL' : 'PASS') : 'N/A'}`)
   return lines.join('\n')
 }
 

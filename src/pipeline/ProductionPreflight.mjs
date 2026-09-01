@@ -117,8 +117,10 @@ export const ProductionPreflight = Object.freeze({
 
     if (aiStrategyEnabled) {
       try {
+        const { buildProviders } = await import('../src/ai/providers/resolveProviders.mjs')
         const { ProviderChain } = await import('../src/ai/providers/ProviderChain.mjs')
-        const chain = new ProviderChain()
+        const providers = buildProviders()
+        const chain = new ProviderChain(providers)
         if (chain.providers.length > 0) {
           diagnostics.aiStrategy.provider = chain.name
           diagnostics.aiStrategy.fallback = 'enabled'

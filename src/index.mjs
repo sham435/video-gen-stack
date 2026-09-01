@@ -50,6 +50,8 @@ import { ImagePerformanceMemory } from './analytics/ImagePerformanceMemory.mjs'
 import { SceneVisualPlanner } from './assets/SceneVisualPlanner.mjs'
 import { VIDEO_HD } from './video/RenderProfile.mjs'
 import { DesignSystem } from './visuals/DesignSystem.mjs'
+import { buildProviders } from './ai/providers/resolveProviders.mjs'
+import { ProviderChain } from './ai/providers/ProviderChain.mjs'
 
 const RENDER_FPS = 10
 const OUTPUT_FPS = 30
@@ -72,7 +74,17 @@ export class NewsBroadcastEngine {
     this.qualityChecker = new QualityChecker()
     this.audioMixer = new AudioMixer()
     this.scenePlanner = new ScenePlanner()
-    this.storyDirector = new StoryDirector()
+    // AI provider chain: OpenRouter primary → OpenCode Zen fallback → OpenAI /
+    // Gemini / Ollama. StoryDirector falls back to a deterministic plan only
+    // when every provider fails. (Repo-aware render contract is injected into
+    // the prompt by the StoryDirector itself.)
+    let storyProvider = null
+    try {
+      const providers = buildProviders()
+      if (providers.length) storyProvider = new ProviderChain(providers)
+    } catch { /* no provider → deterministic fallback */ }
+    this.storyProvider = storyProvider
+    this.storyDirector = new StoryDirector(storyProvider)
     this.visualReasoner = new VisualReasoner()
     this.coverGenerator = new CoverGenerator(null)
     this.scriptContract = new ScriptContract()
@@ -294,6 +306,10 @@ export class NewsBroadcastEngine {
       music_cue: s.emotion === 'shock' || s.emotion === 'excitement' ? 'build' : 'ambient',
       sfx: s.type === 'hook' ? 'impact' : s.type === 'reveal' ? 'reveal' : 'whoosh',
       caption_focus: s.caption?.focus || '',
+      // 16:9 center-stage caption is the LLM's short fullText, passed through
+      // verbatim. It must NOT be reconstructed from narration later — narration
+      // is VO-only and duplicating it on screen caused text stacking.
+      caption: s.caption?.fullText || '',
     }))
 
     const rawScenes = this.scenePlanner.planScenes(article, { headline: directorStory.headline, scenes: sceneDefs })

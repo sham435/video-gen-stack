@@ -28,6 +28,7 @@ import {
   textLayoutDiagnostics,
 } from '../src/video/NarrativeTextComposition.mjs'
 import { TextLayoutPreflight } from '../src/layout/TextLayoutPreflight.mjs'
+import { ScenePlanner } from '../src/ai/ScenePlanner.mjs'
 
 if (fs.existsSync('assets/fonts/Montserrat-ExtraBold.ttf'))
   GlobalFonts.registerFromPath('assets/fonts/Montserrat-ExtraBold.ttf', 'Montserrat ExtraBold')
@@ -150,8 +151,10 @@ test('criteria 11 — [TEXT-LAYOUT] diagnostics expose measured blocks + collisi
   const st = resolveNarrativeState(factScene, 0.5)
   const diag = textLayoutDiagnostics(comp, st)
   assert.match(diag, /\[TEXT-LAYOUT\]/)
-  assert.match(diag, /activeState: CAPTION|HEADLINE|OUTRO/)
-  assert.match(diag, /collision:/)
+  assert.match(diag, /ACTIVE NARRATIVE: CAPTION|HEADLINE|OUTRO/)
+  assert.match(diag, /COLLISION/)
+  assert.match(diag, /centerX: 640/)
+  assert.match(diag, /centerY: 360/)
 })
 
 test('criteria 12 — overlap helper is AABB-correct (touching counts as overlap)', () => {
@@ -184,4 +187,30 @@ test('criteria 5 — fade opacity overlap is allowed (opacity, not blank frame t
 test('assert helper does not throw for valid composition', () => {
   const comp = assertNarrativeComposition(factScene, ctx, {})
   assert.ok(comp.caption.lines.length >= 1)
+})
+
+test('published-video regression — long VO narration produces a SHORT visual headline, never a stacked multi-sentence block', () => {
+  // https://www.youtube.com/watch?v=4w0cakOsWag — the 3-sentence VO was dumped
+  // into scene.text and wrapped into a multi-line on-screen stack (headline
+  // "It started like any day... Stock futures fall... The world was against
+  // them" overlapped itself at 0:06). ScenePlanner now derives the short
+  // center-stage headline (first sentence, max 10 words) and keeps the full VO
+  // as narration only.
+  const planner = new ScenePlanner()
+  const scene = planner.buildScene(
+    { id: 2, type: 'fact', duration: 5.5, narration: 'It started like any day for the bully study success. Stock futures fall after U.S. strikes. The world was against them.', caption: 'THE WORLD WAS AGAINST THEM', caption_focus: 'TRAGEDY', camera: 'slow_zoom', transition: 'flash', emotion: 'tension', visual_subject: 'rain', visual_style: 'doc', visual_composition: 'wide', visual_prompt: 'x' },
+    1,
+    { title: 'Stock futures fall after U.S. strikes', category: 'finance' }
+  )
+  // Headline is the FIRST SENTENCE only — the second/third sentences never stack.
+  assert.ok(scene.text.length <= 60, `visual headline is short: ${scene.text.length} chars`)
+  assert.ok(!scene.text.toLowerCase().includes('stock futures'), 'second sentence not in visual headline')
+  assert.ok(!scene.text.toLowerCase().includes('world was against'), 'third sentence not in visual headline')
+  // Full VO stays in narration (audio channel only).
+  assert.ok(scene.narration.includes('Stock futures fall'), 'VO keeps the full story')
+  // Caption is the LLM short text, never a narration dump.
+  assert.equal(scene.caption, 'THE WORLD WAS AGAINST THEM')
+  // The short headline wraps into at most 2 lines inside a 16:9 frame.
+  const comp = buildNarrativeLayouts(scene, { width: W, height: H }, ctx)
+  assert.ok(comp.headline.lines.length <= 2, `headline lines ${comp.headline.lines.length} <= 2`)
 })
