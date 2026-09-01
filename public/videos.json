@@ -1,29 +1,29 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-01T15:12:37.168Z",
+  "updatedAt": "2026-09-01T15:25:40.098Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "0A95WVw4ePk",
+      "id": "TzNtcFhV6K0",
       "title": "Stellar Blade dev confirms Nintendo Switch 2 frame rate and resolution, explains how DLSS  | NEWS-MONSTER",
       "description": "Stellar Blade dev confirms Nintendo Switch 2 frame rate and resolution, explains how DLSS  | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-01T15:12:36.401Z",
-      "publishedLabel": "Sep 1, 03:12 PM",
-      "thumbnail": "/thumbnails/0A95WVw4ePk.png",
+      "publishedAt": "2026-09-01T15:25:39.562Z",
+      "publishedLabel": "Sep 1, 03:25 PM",
+      "thumbnail": "/thumbnails/TzNtcFhV6K0.png",
       "thumbnailSha256": "7d44a3e0f00652a3e921cb6eb3fd214a7a435e5807396d6244fb9081c95dda3c",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/0A95WVw4ePk",
+      "youtubeUrl": "https://youtu.be/TzNtcFhV6K0",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "0A95WVw4ePk",
-          "url": "https://youtu.be/0A95WVw4ePk",
+          "videoId": "TzNtcFhV6K0",
+          "url": "https://youtu.be/TzNtcFhV6K0",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "7d44a3e0f00652a3e921cb6eb3fd214a7a435e5807396d6244fb9081c95dda3c",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 3,
           "thumbnail": {
             "sha256": "7d44a3e0f00652a3e921cb6eb3fd214a7a435e5807396d6244fb9081c95dda3c",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/0A95WVw4ePk.png"
+            "path": "public/thumbnails/TzNtcFhV6K0.png"
           }
         },
         "linkedin": {
@@ -58,26 +58,26 @@
       }
     },
     {
-      "id": "nADtKTts8ak",
+      "id": "G08DsrDYLB8",
       "title": "Fake Chrome update scam could infect your computer - Fox News | NEWS-MONSTER",
       "description": "Fake Chrome update scam could infect your computer - Fox News | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-01T15:09:39.401Z",
-      "publishedLabel": "Sep 1, 03:09 PM",
-      "thumbnail": "/thumbnails/nADtKTts8ak.png",
+      "publishedAt": "2026-09-01T15:21:59.437Z",
+      "publishedLabel": "Sep 1, 03:21 PM",
+      "thumbnail": "/thumbnails/G08DsrDYLB8.png",
       "thumbnailSha256": "d88f61eb44e6d8cb39073f296d9d8b5e2e8f9d589b384fe581976f52addee38e",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/nADtKTts8ak",
+      "youtubeUrl": "https://youtu.be/G08DsrDYLB8",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "nADtKTts8ak",
-          "url": "https://youtu.be/nADtKTts8ak",
+          "videoId": "G08DsrDYLB8",
+          "url": "https://youtu.be/G08DsrDYLB8",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "d88f61eb44e6d8cb39073f296d9d8b5e2e8f9d589b384fe581976f52addee38e",
@@ -102,7 +102,7 @@
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/nADtKTts8ak.png"
+            "path": "public/thumbnails/G08DsrDYLB8.png"
           }
         },
         "linkedin": {
