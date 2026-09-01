@@ -958,7 +958,7 @@ app.post('/api/ai/execute-action', async (req, res) => {
 
           // Pipeline dry-run validation — branding, metadata, captions, scenes
           if (!tpl.brand) issues.push('missing brand')
-          if (!tpl.resolution || tpl.resolution.width !== 1080 || tpl.resolution.height !== 1920) issues.push('non-9:16 resolution')
+          if (!tpl.resolution || tpl.resolution.width !== 1920 || tpl.resolution.height !== 1080) issues.push('non-16:9 resolution')
           if (!tpl.duration || tpl.duration < 15) issues.push(`short duration (${tpl.duration || 0}s)`)
           if (!tpl.colors || !tpl.colors.primary || !tpl.colors.text) issues.push('missing brand colors')
           if (!Array.isArray(tpl.scenes) || tpl.scenes.length === 0) issues.push('no scenes')

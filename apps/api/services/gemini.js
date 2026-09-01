@@ -12,7 +12,7 @@ export async function generateVideo({ endpoint, modelId, prompt, duration = 5, a
     generationConfig: {
       responseModalities: ['TEXT', 'IMAGE'],
       imageConfig: {
-        aspectRatio: aspectRatio === '9:16' ? '9:16' : '16:9',
+        aspectRatio: '16:9',
         quality: 'MEDIUM',
       },
     },

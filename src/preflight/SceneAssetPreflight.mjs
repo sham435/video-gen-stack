@@ -10,7 +10,7 @@
 //
 // SOURCE-ASSET validator (Option A): it validates the INCOMING scene images,
 // not the rendered output. Source photos are fitted/cropped onto the 16:9
-// canvas (object-fit cover), so a 9:16 or 1:1 source is a legitimate input
+// canvas (object-fit cover), so a 16:9 or 1:1 source is a legitimate input
 // and must not be rejected. The rendered output itself is 16:9 — that aspect
 // contract is enforced separately by the QC render-output validators
 // (VideoTestingEngine / QualityChecker), not here.
@@ -25,8 +25,8 @@ const MIN_WIDTH = 640
 const MIN_HEIGHT = 360
 // Source-asset aspect tolerance (Option A): these are INCOMING scene images
 // that get cover-fitted onto the 16:9 frame, so common source ratios (16:9,
-// 9:16, 1:1) are all accepted. The rendered output is always 16:9.
-const VALID_ASPECT_RATIOS = ['16:9', '9:16', '1:1']
+// 1:1) are all accepted. The rendered output is always 16:9.
+const VALID_ASPECT_RATIOS = ['16:9', '1:1']
 
 export class SceneAssetPreflight {
   /**
@@ -156,7 +156,6 @@ export class SceneAssetPreflight {
     if (!width || !height) return 'unknown'
     const ratio = width / height
     if (Math.abs(ratio - 16 / 9) < 0.05) return '16:9'
-    if (Math.abs(ratio - 9 / 16) < 0.05) return '9:16'
     if (Math.abs(ratio - 1) < 0.05) return '1:1'
     return `${width}:${height}`
   }

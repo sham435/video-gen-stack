@@ -336,7 +336,7 @@ export async function uploadShort(videoUrl, title, description, privacy = 'publi
  * validation + SHA-256 preflight.
  *
  * A 2xx response is NOT authoritative acceptance. Propagation is confirmed by
- * YouTubePropagationVerifier (hasCustomThumbnail + remote 9:16 geometry).
+ * YouTubePropagationVerifier (hasCustomThumbnail + remote 16:9 geometry).
  */
 export async function setThumbnail(token, videoId, thumbnailPath, options = {}) {
   if (!token) throw new Error('YOUTUBE_ACCESS_TOKEN_REQUIRED')

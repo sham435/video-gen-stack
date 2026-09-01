@@ -86,7 +86,7 @@ async function runNewsVideo(job) {
   if (!load) throw new Error(`Provider not available: ${p.provider}`)
   const prov = await load()
   const prompt = `Create a ${p.duration || 7}-second news highlights video from these headlines. Style: modern news broadcast, clean, professional.\n\n${newsText}`
-  const result = await prov.generateVideo({ endpoint, modelId: model, prompt, duration: p.duration || 7, aspectRatio: p.aspectRatio || '9:16' })
+  const result = await prov.generateVideo({ endpoint, modelId: model, prompt, duration: p.duration || 7, aspectRatio: p.aspectRatio || '16:9' })
   const video = result.videos?.[0]
   return { resultPath: video?.path || null, result }
 }

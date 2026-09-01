@@ -3,7 +3,7 @@
 // The supplied portrait thumbnail is a VISUAL STYLE REFERENCE, not a geometry
 // template. This module reconstructs the composition natively for the wide
 // 16:9 canvas (1920x1080 or 1280x720) instead of cropping/stretching/resizing
-// the 9:16 artwork. It is ratio-based (fractions of W/H), deterministic, and
+// the 16:9 artwork. It is ratio-based (fractions of W/H), deterministic, and
 // leaves the portrait system untouched.
 //
 // Architecture:
