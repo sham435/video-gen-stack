@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-01T09:24:21.363Z",
+  "updatedAt": "2026-09-01T09:53:13.455Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "7hjA2yuxMgc",
+      "id": "TRNCKYLRVAo",
       "title": "10 Practical Camping Gadgets Worth Buying From Tractor Supply - SlashGear | NEWS-MONSTER",
       "description": "10 Practical Camping Gadgets Worth Buying From Tractor Supply - SlashGear | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-01T09:24:20.180Z",
-      "publishedLabel": "Sep 1, 09:24 AM",
-      "thumbnail": "/thumbnails/7hjA2yuxMgc.png",
-      "thumbnailSha256": "92c76ebe51ff6b91c15a13d17ab4f77ee361d3aa96c0cbb0aaae2f1c39f2dc69",
+      "publishedAt": "2026-09-01T09:53:12.470Z",
+      "publishedLabel": "Sep 1, 09:53 AM",
+      "thumbnail": "/thumbnails/TRNCKYLRVAo.png",
+      "thumbnailSha256": "c87542dd3bb5c682f880057e971901dfa76414b4f40fa607aa57cb7f86dc72cd",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/7hjA2yuxMgc",
+      "youtubeUrl": "https://youtu.be/TRNCKYLRVAo",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "7hjA2yuxMgc",
-          "url": "https://youtu.be/7hjA2yuxMgc",
+          "videoId": "TRNCKYLRVAo",
+          "url": "https://youtu.be/TRNCKYLRVAo",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "92c76ebe51ff6b91c15a13d17ab4f77ee361d3aa96c0cbb0aaae2f1c39f2dc69",
+            "sha256": "c87542dd3bb5c682f880057e971901dfa76414b4f40fa607aa57cb7f86dc72cd",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "92c76ebe51ff6b91c15a13d17ab4f77ee361d3aa96c0cbb0aaae2f1c39f2dc69",
+            "sha256": "c87542dd3bb5c682f880057e971901dfa76414b4f40fa607aa57cb7f86dc72cd",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/7hjA2yuxMgc.png"
+            "path": "public/thumbnails/TRNCKYLRVAo.png"
           }
         },
         "linkedin": {
