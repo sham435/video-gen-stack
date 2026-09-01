@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-01T17:19:03.934Z",
+  "updatedAt": "2026-09-01T17:48:53.789Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "Mhv_ep3VpDU",
+      "id": "bPXmmuIpLL4",
       "title": "Stellar Blade dev confirms Nintendo Switch 2 frame rate and resolution, explains how DLSS  | NEWS-MONSTER",
       "description": "Stellar Blade dev confirms Nintendo Switch 2 frame rate and resolution, explains how DLSS  | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-01T17:19:03.412Z",
-      "publishedLabel": "Sep 1, 05:19 PM",
-      "thumbnail": "/thumbnails/Mhv_ep3VpDU.png",
-      "thumbnailSha256": "f4d2a7c6e00dd8effcdea3c42d9ecedd54210e42518c9d1a01a184c9b951b77c",
+      "publishedAt": "2026-09-01T17:48:53.284Z",
+      "publishedLabel": "Sep 1, 05:48 PM",
+      "thumbnail": "/thumbnails/bPXmmuIpLL4.png",
+      "thumbnailSha256": "1bba413e25730cd7415f71ebe3d9d0cbbe0c7f0a2dd197a5d218c78fcb1f119d",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/Mhv_ep3VpDU",
+      "youtubeUrl": "https://youtu.be/bPXmmuIpLL4",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "Mhv_ep3VpDU",
-          "url": "https://youtu.be/Mhv_ep3VpDU",
+          "videoId": "bPXmmuIpLL4",
+          "url": "https://youtu.be/bPXmmuIpLL4",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "f4d2a7c6e00dd8effcdea3c42d9ecedd54210e42518c9d1a01a184c9b951b77c",
+            "sha256": "1bba413e25730cd7415f71ebe3d9d0cbbe0c7f0a2dd197a5d218c78fcb1f119d",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "f4d2a7c6e00dd8effcdea3c42d9ecedd54210e42518c9d1a01a184c9b951b77c",
+            "sha256": "1bba413e25730cd7415f71ebe3d9d0cbbe0c7f0a2dd197a5d218c78fcb1f119d",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/Mhv_ep3VpDU.png"
+            "path": "public/thumbnails/bPXmmuIpLL4.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "DAYMCbecoL4",
+      "id": "WERDvq_lD10",
       "title": "Fake Chrome update scam could infect your computer - Fox News | NEWS-MONSTER",
       "description": "Fake Chrome update scam could infect your computer - Fox News | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-01T17:15:17.828Z",
-      "publishedLabel": "Sep 1, 05:15 PM",
-      "thumbnail": "/thumbnails/DAYMCbecoL4.png",
-      "thumbnailSha256": "cb5aaef0ce4df2c73147f781ca9ddabd4bb71491e3dc51c21187f5850a905461",
+      "publishedAt": "2026-09-01T17:45:10.215Z",
+      "publishedLabel": "Sep 1, 05:45 PM",
+      "thumbnail": "/thumbnails/WERDvq_lD10.png",
+      "thumbnailSha256": "0090dc95d99cb7f6540dad1a74c8e35bebfb868d5e84929a20b9bfe2d170d226",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/DAYMCbecoL4",
+      "youtubeUrl": "https://youtu.be/WERDvq_lD10",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "DAYMCbecoL4",
-          "url": "https://youtu.be/DAYMCbecoL4",
+          "videoId": "WERDvq_lD10",
+          "url": "https://youtu.be/WERDvq_lD10",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "cb5aaef0ce4df2c73147f781ca9ddabd4bb71491e3dc51c21187f5850a905461",
+            "sha256": "0090dc95d99cb7f6540dad1a74c8e35bebfb868d5e84929a20b9bfe2d170d226",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,14 +95,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 7,
+          "durationMs": 4,
           "thumbnail": {
-            "sha256": "cb5aaef0ce4df2c73147f781ca9ddabd4bb71491e3dc51c21187f5850a905461",
+            "sha256": "0090dc95d99cb7f6540dad1a74c8e35bebfb868d5e84929a20b9bfe2d170d226",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/DAYMCbecoL4.png"
+            "path": "public/thumbnails/WERDvq_lD10.png"
           }
         },
         "linkedin": {
