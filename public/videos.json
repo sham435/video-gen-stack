@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-01T06:01:00.226Z",
+  "updatedAt": "2026-09-01T07:22:27.789Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "w-CCFsjvUnE",
+      "id": "43I7yn-uBBw",
       "title": "10 Practical Camping Gadgets Worth Buying From Tractor Supply - SlashGear | NEWS-MONSTER",
       "description": "10 Practical Camping Gadgets Worth Buying From Tractor Supply - SlashGear | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-01T06:00:59.030Z",
-      "publishedLabel": "Sep 1, 06:00 AM",
-      "thumbnail": "/thumbnails/w-CCFsjvUnE.png",
-      "thumbnailSha256": "c5262215f76bc2918ba69b74fea1c2bd8451f23fd83974b24953310393885961",
+      "publishedAt": "2026-09-01T07:22:26.700Z",
+      "publishedLabel": "Sep 1, 07:22 AM",
+      "thumbnail": "/thumbnails/43I7yn-uBBw.png",
+      "thumbnailSha256": "b9c1055e0205244f24532494ccef4d8778bcf760c9c42e7ae6e65af12d4ab633",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/w-CCFsjvUnE",
+      "youtubeUrl": "https://youtu.be/43I7yn-uBBw",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "w-CCFsjvUnE",
-          "url": "https://youtu.be/w-CCFsjvUnE",
+          "videoId": "43I7yn-uBBw",
+          "url": "https://youtu.be/43I7yn-uBBw",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "c5262215f76bc2918ba69b74fea1c2bd8451f23fd83974b24953310393885961",
+            "sha256": "b9c1055e0205244f24532494ccef4d8778bcf760c9c42e7ae6e65af12d4ab633",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,68 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 1,
           "thumbnail": {
-            "sha256": "c5262215f76bc2918ba69b74fea1c2bd8451f23fd83974b24953310393885961",
+            "sha256": "b9c1055e0205244f24532494ccef4d8778bcf760c9c42e7ae6e65af12d4ab633",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/w-CCFsjvUnE.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "kHyQI-qd_3E",
-      "title": "Nobody Expected This About Mega | NEWS-MONSTER",
-      "description": "Nobody Expected This About Mega | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-01T05:57:27.919Z",
-      "publishedLabel": "Sep 1, 05:57 AM",
-      "thumbnail": "/thumbnails/kHyQI-qd_3E.png",
-      "thumbnailSha256": "daf440562c6fa0a2bb0ee119559aac0ed0c18d19984d1aec5f75d8720511f1b3",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/kHyQI-qd_3E",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "kHyQI-qd_3E",
-          "url": "https://youtu.be/kHyQI-qd_3E",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "daf440562c6fa0a2bb0ee119559aac0ed0c18d19984d1aec5f75d8720511f1b3",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "daf440562c6fa0a2bb0ee119559aac0ed0c18d19984d1aec5f75d8720511f1b3",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/kHyQI-qd_3E.png"
+            "path": "public/thumbnails/43I7yn-uBBw.png"
           }
         },
         "linkedin": {
