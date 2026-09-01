@@ -29,7 +29,7 @@ export async function generateVideo({ modelId, prompt, duration = 5, aspectRatio
   const body = {
     prompt,
     num_frames: duration * 8,
-    aspect_ratio: aspectRatio === '9:16' ? '9:16' : '16:9',
+    aspect_ratio: '16:9',
     num_images: numVideos,
   }
 

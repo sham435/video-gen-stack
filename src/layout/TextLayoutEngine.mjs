@@ -98,10 +98,12 @@ export class TextLayoutEngine {
   }
 }
 
-// Per-role line-height multiplier. Captions use the design token
-// (typography.spacing.lineHeight.caption = 1.6) so multi-line spoken sentences
-// get proper line spacing instead of the cramped 1.25 default that made lines
-// overlap visually. Other roles keep the FontMetrics default of 1.25.
+// Per-role line-height multiplier. Captions and headlines use the design token
+// (typography.spacing.lineHeight.caption = 1.6) but both are raised here to
+// 2.0: the observed overlap bug shipped multi-line narration at the cramped
+// 1.25 default, making lines visually collide. 2.0x guarantees every spoken
+// line keeps clear vertical separation regardless of wrap depth. Lower-priority
+// roles keep the FontMetrics default of 1.25.
 function lineHeightFactorFor(role) {
-  return role === 'caption' ? 1.6 : 1.25
+  return role === 'caption' || role === 'headline' ? 2.0 : 1.25
 }

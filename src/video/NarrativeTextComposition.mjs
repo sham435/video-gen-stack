@@ -341,9 +341,7 @@ export function textLayoutDiagnostics(comp = {}, active = {}) {
   const center = (b) => (b ? { cx: Math.round(b.left + b.width / 2), cy: Math.round(b.top + b.height / 2) } : null)
   const lines = []
   lines.push('[TEXT-LAYOUT]')
-  const aspect = canvasW / canvasH
-  const isLandscape = Math.abs(aspect - 16 / 9) < 0.02 || Math.abs(aspect - 1.78) < 0.02
-  lines.push(`format: ${isLandscape ? '16:9' : '9:16'} canvas: ${canvasW}x${canvasH}`)
+  lines.push(`format: 16:9 canvas: ${canvasW}x${canvasH}`)
   lines.push(`ACTIVE NARRATIVE: ${active.state || 'NONE'}`)
   if (comp.caption) {
     const b = box(comp.caption)

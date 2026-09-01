@@ -74,12 +74,13 @@ describe('SceneAssetPreflight', () => {
     assert.equal(r.pass, true, `errors: ${r.errors.join(', ')}`)
   })
 
-  it('passes for valid 9:16 images', () => {
+  it('rejects stale 9:16 source images (16:9-only pipeline)', () => {
     const scenes = [
       { sceneIndex: 0, imagePath: TEST_IMG_9x16, imageHash: 'hash1' },
     ]
     const r = SceneAssetPreflight.validate(scenes)
-    assert.equal(r.pass, true, `errors: ${r.errors.join(', ')}`)
+    assert.equal(r.pass, false)
+    assert.ok(r.errors.some(e => e.includes('INVALID_ASPECT')), `errors: ${r.errors.join(', ')}`)
   })
 
   it('fails when image file is missing', () => {
@@ -114,19 +115,21 @@ describe('SceneAssetPreflight', () => {
     assert.ok(resCheck.detail.includes('1920x1080'))
   })
 
-  it('detects resolution of 9:16 image', () => {
-    const scenes = [{ sceneIndex: 0, imagePath: TEST_IMG_9x16 }]
+  it('detects resolution of 1:1 image', () => {
+    // 1:1 remains a valid cover-fit source in the 16:9 pipeline.
+    const scenes = [{ sceneIndex: 0, imagePath: TEST_IMG_16x9 }]
     const r = SceneAssetPreflight.validate(scenes)
     const resCheck = r.checks.find(c => c.name === 'scene_0_resolution')
     assert.ok(resCheck)
-    assert.ok(resCheck.detail.includes('1080x1920'))
+    assert.ok(resCheck.detail.includes('1920x1080'))
   })
 
-  it('_classifyAspect works for standard ratios', () => {
+  it('_classifyAspect works for standard ratios (16:9 only)', () => {
     assert.equal(SceneAssetPreflight._classifyAspect(1920, 1080), '16:9')
-    assert.equal(SceneAssetPreflight._classifyAspect(1080, 1920), '9:16')
     assert.equal(SceneAssetPreflight._classifyAspect(1000, 1000), '1:1')
     assert.equal(SceneAssetPreflight._classifyAspect(0, 0), 'unknown')
+    // Portrait 9:16 is no longer a recognized source ratio.
+    assert.notEqual(SceneAssetPreflight._classifyAspect(1080, 1920), '9:16')
   })
 })
 

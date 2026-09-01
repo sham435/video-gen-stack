@@ -98,7 +98,10 @@ export const BROADCAST_TEXT = {
     // Brand outro stack (brand_close scene): STAY WITH / NEWS-MONSTER /
     // tagline / anchor badge. Everything must sit ABOVE the footer bar top
     // (FooterLayout.barTopInFrame) — the footer owns the bottom safe zone.
-    tagline: { size: 40, weight: 900, leading: 1.42, maxWidth: 920 },
+    // leading 1.6 (>= 1.5x floor): the observed 16:9 outro overlap shipped the
+    // tagline at 1.42 — too tight, so "UNFILTERED BREAKING NEWS FROM THE
+    // FUTURE" collided with the NEWS-MONSTER brand mark at 0:40.
+    tagline: { size: 40, weight: 900, leading: 1.6, maxWidth: 920 },
     anchor: {
       badgeH: 60,
       fontSize: 40,
