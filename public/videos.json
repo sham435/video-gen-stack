@@ -1,140 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-01T05:40:02.720Z",
+  "updatedAt": "2026-09-01T06:01:00.226Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "43DHbPuEVuU",
-      "title": "Watch: When did iPads get as expensive as MacBooks? | NEWS-MONSTER",
-      "description": "Watch: When did iPads get as expensive as MacBooks? | NEWS-MONSTER",
-      "category": "techcrunch",
-      "publishedAt": "2026-09-01T05:40:02.178Z",
-      "publishedLabel": "Sep 1, 05:40 AM",
-      "thumbnail": "/thumbnails/43DHbPuEVuU.png",
-      "thumbnailSha256": "780e33d8397ae72da3b6a9a65a87de7600a69eb3c5ddcc5f53d2e9e1300fa513",
+      "id": "w-CCFsjvUnE",
+      "title": "10 Practical Camping Gadgets Worth Buying From Tractor Supply - SlashGear | NEWS-MONSTER",
+      "description": "10 Practical Camping Gadgets Worth Buying From Tractor Supply - SlashGear | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-01T06:00:59.030Z",
+      "publishedLabel": "Sep 1, 06:00 AM",
+      "thumbnail": "/thumbnails/w-CCFsjvUnE.png",
+      "thumbnailSha256": "c5262215f76bc2918ba69b74fea1c2bd8451f23fd83974b24953310393885961",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/43DHbPuEVuU",
+      "youtubeUrl": "https://youtu.be/w-CCFsjvUnE",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "43DHbPuEVuU",
-          "url": "https://youtu.be/43DHbPuEVuU",
+          "videoId": "w-CCFsjvUnE",
+          "url": "https://youtu.be/w-CCFsjvUnE",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "780e33d8397ae72da3b6a9a65a87de7600a69eb3c5ddcc5f53d2e9e1300fa513",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "780e33d8397ae72da3b6a9a65a87de7600a69eb3c5ddcc5f53d2e9e1300fa513",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/43DHbPuEVuU.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "HyDoSFinyjg",
-      "title": "$450M for Noname, two billion-dollar rounds, and good news for crypto startups | TechCrunc | NEWS-MONSTER",
-      "description": "$450M for Noname, two billion-dollar rounds, and good news for crypto startups | TechCrunc | NEWS-MONSTER",
-      "category": "techcrunch",
-      "publishedAt": "2026-09-01T05:36:20.036Z",
-      "publishedLabel": "Sep 1, 05:36 AM",
-      "thumbnail": "/thumbnails/HyDoSFinyjg.png",
-      "thumbnailSha256": "a60604e4481c3708f40a4ad18f7ea4f543839fc85e0d3756028d5b029ffbb9ce",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/HyDoSFinyjg",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "HyDoSFinyjg",
-          "url": "https://youtu.be/HyDoSFinyjg",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "a60604e4481c3708f40a4ad18f7ea4f543839fc85e0d3756028d5b029ffbb9ce",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "a60604e4481c3708f40a4ad18f7ea4f543839fc85e0d3756028d5b029ffbb9ce",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/HyDoSFinyjg.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "tp1FJRd2Eb8",
-      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONSTER",
-      "description": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONSTER",
-      "category": "techcrunch",
-      "publishedAt": "2026-09-01T05:32:35.383Z",
-      "publishedLabel": "Sep 1, 05:32 AM",
-      "thumbnail": "/thumbnails/tp1FJRd2Eb8.png",
-      "thumbnailSha256": "494989e999a6ec72d8f929678403b7eff8e09e8463b472a2201d0127d75e8ef2",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/tp1FJRd2Eb8",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "tp1FJRd2Eb8",
-          "url": "https://youtu.be/tp1FJRd2Eb8",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "494989e999a6ec72d8f929678403b7eff8e09e8463b472a2201d0127d75e8ef2",
+            "sha256": "c5262215f76bc2918ba69b74fea1c2bd8451f23fd83974b24953310393885961",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -151,12 +43,66 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "494989e999a6ec72d8f929678403b7eff8e09e8463b472a2201d0127d75e8ef2",
+            "sha256": "c5262215f76bc2918ba69b74fea1c2bd8451f23fd83974b24953310393885961",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/tp1FJRd2Eb8.png"
+            "path": "public/thumbnails/w-CCFsjvUnE.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "kHyQI-qd_3E",
+      "title": "Nobody Expected This About Mega | NEWS-MONSTER",
+      "description": "Nobody Expected This About Mega | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-01T05:57:27.919Z",
+      "publishedLabel": "Sep 1, 05:57 AM",
+      "thumbnail": "/thumbnails/kHyQI-qd_3E.png",
+      "thumbnailSha256": "daf440562c6fa0a2bb0ee119559aac0ed0c18d19984d1aec5f75d8720511f1b3",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/kHyQI-qd_3E",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "kHyQI-qd_3E",
+          "url": "https://youtu.be/kHyQI-qd_3E",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "daf440562c6fa0a2bb0ee119559aac0ed0c18d19984d1aec5f75d8720511f1b3",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 3,
+          "thumbnail": {
+            "sha256": "daf440562c6fa0a2bb0ee119559aac0ed0c18d19984d1aec5f75d8720511f1b3",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/kHyQI-qd_3E.png"
           }
         },
         "linkedin": {
