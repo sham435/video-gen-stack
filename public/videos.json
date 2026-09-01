@@ -1,29 +1,83 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-01T17:08:45.480Z",
+  "updatedAt": "2026-09-01T17:19:03.934Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "289nLfhGOE4",
-      "title": "Fake Chrome update scam could infect your computer - Fox News | NEWS-MONSTER",
-      "description": "Fake Chrome update scam could infect your computer - Fox News | NEWS-MONSTER",
+      "id": "Mhv_ep3VpDU",
+      "title": "Stellar Blade dev confirms Nintendo Switch 2 frame rate and resolution, explains how DLSS  | NEWS-MONSTER",
+      "description": "Stellar Blade dev confirms Nintendo Switch 2 frame rate and resolution, explains how DLSS  | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-01T17:06:17.621Z",
-      "publishedLabel": "Sep 1, 05:06 PM",
-      "thumbnail": "/thumbnails/289nLfhGOE4.png",
-      "thumbnailSha256": "cb5aaef0ce4df2c73147f781ca9ddabd4bb71491e3dc51c21187f5850a905461",
+      "publishedAt": "2026-09-01T17:19:03.412Z",
+      "publishedLabel": "Sep 1, 05:19 PM",
+      "thumbnail": "/thumbnails/Mhv_ep3VpDU.png",
+      "thumbnailSha256": "f4d2a7c6e00dd8effcdea3c42d9ecedd54210e42518c9d1a01a184c9b951b77c",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/289nLfhGOE4",
+      "youtubeUrl": "https://youtu.be/Mhv_ep3VpDU",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "289nLfhGOE4",
-          "url": "https://youtu.be/289nLfhGOE4",
+          "videoId": "Mhv_ep3VpDU",
+          "url": "https://youtu.be/Mhv_ep3VpDU",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "f4d2a7c6e00dd8effcdea3c42d9ecedd54210e42518c9d1a01a184c9b951b77c",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "f4d2a7c6e00dd8effcdea3c42d9ecedd54210e42518c9d1a01a184c9b951b77c",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/Mhv_ep3VpDU.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "DAYMCbecoL4",
+      "title": "Fake Chrome update scam could infect your computer - Fox News | NEWS-MONSTER",
+      "description": "Fake Chrome update scam could infect your computer - Fox News | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-01T17:15:17.828Z",
+      "publishedLabel": "Sep 1, 05:15 PM",
+      "thumbnail": "/thumbnails/DAYMCbecoL4.png",
+      "thumbnailSha256": "cb5aaef0ce4df2c73147f781ca9ddabd4bb71491e3dc51c21187f5850a905461",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/DAYMCbecoL4",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "DAYMCbecoL4",
+          "url": "https://youtu.be/DAYMCbecoL4",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "cb5aaef0ce4df2c73147f781ca9ddabd4bb71491e3dc51c21187f5850a905461",
@@ -41,14 +95,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 7,
           "thumbnail": {
             "sha256": "cb5aaef0ce4df2c73147f781ca9ddabd4bb71491e3dc51c21187f5850a905461",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/289nLfhGOE4.png"
+            "path": "public/thumbnails/DAYMCbecoL4.png"
           }
         },
         "linkedin": {
