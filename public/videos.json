@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-01T00:26:43.255Z",
+  "updatedAt": "2026-09-01T05:26:53.481Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "9i3IvkkR_Lk",
-      "title": "Experts Disagree On RTX | NEWS-MONSTER",
-      "description": "Experts Disagree On RTX | NEWS-MONSTER",
+      "id": "eoCq1CclKE4",
+      "title": "Nobody Expected This About Mega | NEWS-MONSTER",
+      "description": "Nobody Expected This About Mega | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-01T00:26:42.216Z",
-      "publishedLabel": "Sep 1, 12:26 AM",
-      "thumbnail": "/thumbnails/9i3IvkkR_Lk.png",
-      "thumbnailSha256": "6b0b3f53fbdf38ba369eeff6cc57662c713b89b73903f3191fc3e9b0d0f00cf9",
+      "publishedAt": "2026-09-01T05:26:51.590Z",
+      "publishedLabel": "Sep 1, 05:26 AM",
+      "thumbnail": "/thumbnails/eoCq1CclKE4.png",
+      "thumbnailSha256": "fac0e34019688a5a5d1559680ca6f03d7764fd08e7345a3da028c01af3e28d21",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/9i3IvkkR_Lk",
+      "youtubeUrl": "https://youtu.be/eoCq1CclKE4",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "9i3IvkkR_Lk",
-          "url": "https://youtu.be/9i3IvkkR_Lk",
+          "videoId": "eoCq1CclKE4",
+          "url": "https://youtu.be/eoCq1CclKE4",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "6b0b3f53fbdf38ba369eeff6cc57662c713b89b73903f3191fc3e9b0d0f00cf9",
+            "sha256": "fac0e34019688a5a5d1559680ca6f03d7764fd08e7345a3da028c01af3e28d21",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 1,
           "thumbnail": {
-            "sha256": "6b0b3f53fbdf38ba369eeff6cc57662c713b89b73903f3191fc3e9b0d0f00cf9",
+            "sha256": "fac0e34019688a5a5d1559680ca6f03d7764fd08e7345a3da028c01af3e28d21",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/9i3IvkkR_Lk.png"
+            "path": "public/thumbnails/eoCq1CclKE4.png"
           }
         },
         "linkedin": {
