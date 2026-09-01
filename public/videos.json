@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-01T07:52:39.337Z",
+  "updatedAt": "2026-09-01T08:23:01.499Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "AWISA63v8us",
+      "id": "IUC433-SJtQ",
       "title": "10 Practical Camping Gadgets Worth Buying From Tractor Supply - SlashGear | NEWS-MONSTER",
       "description": "10 Practical Camping Gadgets Worth Buying From Tractor Supply - SlashGear | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-01T07:52:38.377Z",
-      "publishedLabel": "Sep 1, 07:52 AM",
-      "thumbnail": "/thumbnails/AWISA63v8us.png",
-      "thumbnailSha256": "0370fb0f6b4d506a6bc802ed1155c9fb8a59869a1cd7c187a9ccba0df99a293e",
+      "publishedAt": "2026-09-01T08:23:00.551Z",
+      "publishedLabel": "Sep 1, 08:23 AM",
+      "thumbnail": "/thumbnails/IUC433-SJtQ.png",
+      "thumbnailSha256": "09362653c249d0cf93df705d3715cea3137c0f129de81f27450189621b6ac8d7",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/AWISA63v8us",
+      "youtubeUrl": "https://youtu.be/IUC433-SJtQ",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "AWISA63v8us",
-          "url": "https://youtu.be/AWISA63v8us",
+          "videoId": "IUC433-SJtQ",
+          "url": "https://youtu.be/IUC433-SJtQ",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "0370fb0f6b4d506a6bc802ed1155c9fb8a59869a1cd7c187a9ccba0df99a293e",
+            "sha256": "09362653c249d0cf93df705d3715cea3137c0f129de81f27450189621b6ac8d7",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "0370fb0f6b4d506a6bc802ed1155c9fb8a59869a1cd7c187a9ccba0df99a293e",
+            "sha256": "09362653c249d0cf93df705d3715cea3137c0f129de81f27450189621b6ac8d7",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/AWISA63v8us.png"
+            "path": "public/thumbnails/IUC433-SJtQ.png"
           }
         },
         "linkedin": {
