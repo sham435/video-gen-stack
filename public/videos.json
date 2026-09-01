@@ -1,140 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-08-31T20:49:10.324Z",
+  "updatedAt": "2026-09-01T00:26:43.255Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "4C636s3TKm0",
-      "title": "The World's Best-Selling Bourbon Brand Has Stayed On Top For Years - Mashed | NEWS-MONSTER",
-      "description": "The World's Best-Selling Bourbon Brand Has Stayed On Top For Years - Mashed | NEWS-MONSTER",
-      "category": "business",
-      "publishedAt": "2026-08-31T20:49:09.857Z",
-      "publishedLabel": "Aug 31, 08:49 PM",
-      "thumbnail": "/thumbnails/4C636s3TKm0.png",
-      "thumbnailSha256": "e649d96341e2736395c84b76615be4a8f7acac4dcb08792165dedbdfea287951",
+      "id": "9i3IvkkR_Lk",
+      "title": "Experts Disagree On RTX | NEWS-MONSTER",
+      "description": "Experts Disagree On RTX | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-01T00:26:42.216Z",
+      "publishedLabel": "Sep 1, 12:26 AM",
+      "thumbnail": "/thumbnails/9i3IvkkR_Lk.png",
+      "thumbnailSha256": "6b0b3f53fbdf38ba369eeff6cc57662c713b89b73903f3191fc3e9b0d0f00cf9",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/4C636s3TKm0",
+      "youtubeUrl": "https://youtu.be/9i3IvkkR_Lk",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "4C636s3TKm0",
-          "url": "https://youtu.be/4C636s3TKm0",
+          "videoId": "9i3IvkkR_Lk",
+          "url": "https://youtu.be/9i3IvkkR_Lk",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "e649d96341e2736395c84b76615be4a8f7acac4dcb08792165dedbdfea287951",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 5,
-          "thumbnail": {
-            "sha256": "e649d96341e2736395c84b76615be4a8f7acac4dcb08792165dedbdfea287951",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/4C636s3TKm0.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "htTVz8N6t3E",
-      "title": "Cathie Wood buys $53 million of popular semiconductor stock - thestreet.com | NEWS-MONSTER",
-      "description": "Cathie Wood buys $53 million of popular semiconductor stock - thestreet.com | NEWS-MONSTER",
-      "category": "business",
-      "publishedAt": "2026-08-31T20:45:44.298Z",
-      "publishedLabel": "Aug 31, 08:45 PM",
-      "thumbnail": "/thumbnails/htTVz8N6t3E.png",
-      "thumbnailSha256": "3355c2bc7e0d8880a2f23b0401d6197c0f7c2f35b5fe69c136642f6bacfe7f71",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/htTVz8N6t3E",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "htTVz8N6t3E",
-          "url": "https://youtu.be/htTVz8N6t3E",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "3355c2bc7e0d8880a2f23b0401d6197c0f7c2f35b5fe69c136642f6bacfe7f71",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "3355c2bc7e0d8880a2f23b0401d6197c0f7c2f35b5fe69c136642f6bacfe7f71",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/htTVz8N6t3E.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "FXAZpyxt3uM",
-      "title": "Trump-promoted Freedom Fuel stations sold gas a distributor says went unpaid for - CNBC | NEWS-MONSTER",
-      "description": "Trump-promoted Freedom Fuel stations sold gas a distributor says went unpaid for - CNBC | NEWS-MONSTER",
-      "category": "business",
-      "publishedAt": "2026-08-31T20:42:28.700Z",
-      "publishedLabel": "Aug 31, 08:42 PM",
-      "thumbnail": "/thumbnails/FXAZpyxt3uM.png",
-      "thumbnailSha256": "199c5d3eb29d0278f79381eef7dbdb1f486c59549d2e7b296acfca7c9e8e580b",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/FXAZpyxt3uM",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "FXAZpyxt3uM",
-          "url": "https://youtu.be/FXAZpyxt3uM",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "199c5d3eb29d0278f79381eef7dbdb1f486c59549d2e7b296acfca7c9e8e580b",
+            "sha256": "6b0b3f53fbdf38ba369eeff6cc57662c713b89b73903f3191fc3e9b0d0f00cf9",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -151,12 +43,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "199c5d3eb29d0278f79381eef7dbdb1f486c59549d2e7b296acfca7c9e8e580b",
+            "sha256": "6b0b3f53fbdf38ba369eeff6cc57662c713b89b73903f3191fc3e9b0d0f00cf9",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/FXAZpyxt3uM.png"
+            "path": "public/thumbnails/9i3IvkkR_Lk.png"
           }
         },
         "linkedin": {
