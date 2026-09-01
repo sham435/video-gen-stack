@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-01T13:54:38.347Z",
+  "updatedAt": "2026-09-01T14:24:27.542Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "Bj74b2RkeXA",
+      "id": "_9xrDVDa3vg",
       "title": "What Happened After September | NEWS-MONSTER",
       "description": "What Happened After September | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-01T13:54:37.797Z",
-      "publishedLabel": "Sep 1, 01:54 PM",
-      "thumbnail": "/thumbnails/Bj74b2RkeXA.png",
-      "thumbnailSha256": "9df417f6f3aa35d3ef88f904403f9e795a4de633e7c9ea0fc94ce1d8d4abf104",
+      "publishedAt": "2026-09-01T14:24:27.091Z",
+      "publishedLabel": "Sep 1, 02:24 PM",
+      "thumbnail": "/thumbnails/_9xrDVDa3vg.png",
+      "thumbnailSha256": "fa6dbbf39c41abf80fba5af6e5df190177a7a9742a3d7517837d8dbf251b748c",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/Bj74b2RkeXA",
+      "youtubeUrl": "https://youtu.be/_9xrDVDa3vg",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "Bj74b2RkeXA",
-          "url": "https://youtu.be/Bj74b2RkeXA",
+          "videoId": "_9xrDVDa3vg",
+          "url": "https://youtu.be/_9xrDVDa3vg",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "9df417f6f3aa35d3ef88f904403f9e795a4de633e7c9ea0fc94ce1d8d4abf104",
+            "sha256": "fa6dbbf39c41abf80fba5af6e5df190177a7a9742a3d7517837d8dbf251b748c",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "9df417f6f3aa35d3ef88f904403f9e795a4de633e7c9ea0fc94ce1d8d4abf104",
+            "sha256": "fa6dbbf39c41abf80fba5af6e5df190177a7a9742a3d7517837d8dbf251b748c",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/Bj74b2RkeXA.png"
+            "path": "public/thumbnails/_9xrDVDa3vg.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "ySf6cfFCSCw",
+      "id": "2ukkDa9_ZJc",
       "title": "State of Play Confirmed for 3rd September, State of Play Japan Show Straight After - Push  | NEWS-MONSTER",
       "description": "State of Play Confirmed for 3rd September, State of Play Japan Show Straight After - Push  | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-01T13:51:18.515Z",
-      "publishedLabel": "Sep 1, 01:51 PM",
-      "thumbnail": "/thumbnails/ySf6cfFCSCw.png",
-      "thumbnailSha256": "8f8b814de54fbff515ca403f39f2b2e89814b70d69a10e226e057b9d9700b332",
+      "publishedAt": "2026-09-01T14:21:06.821Z",
+      "publishedLabel": "Sep 1, 02:21 PM",
+      "thumbnail": "/thumbnails/2ukkDa9_ZJc.png",
+      "thumbnailSha256": "fb4832832e4f8443f7a91d89734dee99ccc4d17e43cad520056f3f25bce6d5cb",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/ySf6cfFCSCw",
+      "youtubeUrl": "https://youtu.be/2ukkDa9_ZJc",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "ySf6cfFCSCw",
-          "url": "https://youtu.be/ySf6cfFCSCw",
+          "videoId": "2ukkDa9_ZJc",
+          "url": "https://youtu.be/2ukkDa9_ZJc",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "8f8b814de54fbff515ca403f39f2b2e89814b70d69a10e226e057b9d9700b332",
+            "sha256": "fb4832832e4f8443f7a91d89734dee99ccc4d17e43cad520056f3f25bce6d5cb",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +97,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "8f8b814de54fbff515ca403f39f2b2e89814b70d69a10e226e057b9d9700b332",
+            "sha256": "fb4832832e4f8443f7a91d89734dee99ccc4d17e43cad520056f3f25bce6d5cb",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/ySf6cfFCSCw.png"
+            "path": "public/thumbnails/2ukkDa9_ZJc.png"
           }
         },
         "linkedin": {
