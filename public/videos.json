@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-01T23:55:52.980Z",
+  "updatedAt": "2026-09-02T02:58:39.947Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "duYoQ_ifUbU",
-      "title": "Can cut-price Shein shine in its long-awaited stock market debut? - BBC | NEWS-MONSTER",
-      "description": "Can cut-price Shein shine in its long-awaited stock market debut? - BBC | NEWS-MONSTER",
+      "id": "Og-ZgQJbFTU",
+      "title": "Polymarket reportedly raises $300 million from Donald Trump Jr.’s investment fund - TechCr | NEWS-MONSTER",
+      "description": "Polymarket reportedly raises $300 million from Donald Trump Jr.’s investment fund - TechCr | NEWS-MONSTER",
       "category": "business",
-      "publishedAt": "2026-09-01T23:55:52.456Z",
-      "publishedLabel": "Sep 1, 11:55 PM",
-      "thumbnail": "/thumbnails/duYoQ_ifUbU.png",
-      "thumbnailSha256": "f6a35d79ca31dfa3f5b715eb94ad33093954267bbd31e02b22eceaad445e4666",
+      "publishedAt": "2026-09-02T02:58:39.363Z",
+      "publishedLabel": "Sep 2, 02:58 AM",
+      "thumbnail": "/thumbnails/Og-ZgQJbFTU.png",
+      "thumbnailSha256": "4506f136690cd0791618cac14a23cbc9f1fc5be1259ca05e61332ddf3fb8e4d5",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/duYoQ_ifUbU",
+      "youtubeUrl": "https://youtu.be/Og-ZgQJbFTU",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "duYoQ_ifUbU",
-          "url": "https://youtu.be/duYoQ_ifUbU",
+          "videoId": "Og-ZgQJbFTU",
+          "url": "https://youtu.be/Og-ZgQJbFTU",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "f6a35d79ca31dfa3f5b715eb94ad33093954267bbd31e02b22eceaad445e4666",
+            "sha256": "4506f136690cd0791618cac14a23cbc9f1fc5be1259ca05e61332ddf3fb8e4d5",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 1,
+          "durationMs": 4,
           "thumbnail": {
-            "sha256": "f6a35d79ca31dfa3f5b715eb94ad33093954267bbd31e02b22eceaad445e4666",
+            "sha256": "4506f136690cd0791618cac14a23cbc9f1fc5be1259ca05e61332ddf3fb8e4d5",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/duYoQ_ifUbU.png"
+            "path": "public/thumbnails/Og-ZgQJbFTU.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "TmLYd1l5foI",
-      "title": "Exclusive | Anthropic Signs $35 Billion Cloud Deal Backed by Nvidia - WSJ | NEWS-MONSTER",
-      "description": "Exclusive | Anthropic Signs $35 Billion Cloud Deal Backed by Nvidia - WSJ | NEWS-MONSTER",
+      "id": "20sSF-e9gF0",
+      "title": "Three deaths in CAR-T trials prompt halt by Novartis; Bristol Myers programs also paused - | NEWS-MONSTER",
+      "description": "Three deaths in CAR-T trials prompt halt by Novartis; Bristol Myers programs also paused - | NEWS-MONSTER",
       "category": "business",
-      "publishedAt": "2026-09-01T23:52:28.131Z",
-      "publishedLabel": "Sep 1, 11:52 PM",
-      "thumbnail": "/thumbnails/TmLYd1l5foI.png",
-      "thumbnailSha256": "b0d3a0a856df63396b60df2f1c8dcd7566db7df76986026b36c691ba2a2016c0",
+      "publishedAt": "2026-09-02T02:55:01.128Z",
+      "publishedLabel": "Sep 2, 02:55 AM",
+      "thumbnail": "/thumbnails/20sSF-e9gF0.png",
+      "thumbnailSha256": "1f23f97b8db6506dcae75b2096c8707415087708367e9f82ad3be8b6348eb0cd",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/TmLYd1l5foI",
+      "youtubeUrl": "https://youtu.be/20sSF-e9gF0",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "TmLYd1l5foI",
-          "url": "https://youtu.be/TmLYd1l5foI",
+          "videoId": "20sSF-e9gF0",
+          "url": "https://youtu.be/20sSF-e9gF0",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "b0d3a0a856df63396b60df2f1c8dcd7566db7df76986026b36c691ba2a2016c0",
+            "sha256": "1f23f97b8db6506dcae75b2096c8707415087708367e9f82ad3be8b6348eb0cd",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,14 +95,68 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 1,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "b0d3a0a856df63396b60df2f1c8dcd7566db7df76986026b36c691ba2a2016c0",
+            "sha256": "1f23f97b8db6506dcae75b2096c8707415087708367e9f82ad3be8b6348eb0cd",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/TmLYd1l5foI.png"
+            "path": "public/thumbnails/20sSF-e9gF0.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "njg49TbzXeI",
+      "title": "The Detail Everyone Missed About Apple | NEWS-MONSTER",
+      "description": "The Detail Everyone Missed About Apple | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-09-02T02:51:25.325Z",
+      "publishedLabel": "Sep 2, 02:51 AM",
+      "thumbnail": "/thumbnails/njg49TbzXeI.png",
+      "thumbnailSha256": "7eed4c1417ffda5daaffac24c64b202f05d46a497edba5105c79c4f30b1b89a2",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/njg49TbzXeI",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "njg49TbzXeI",
+          "url": "https://youtu.be/njg49TbzXeI",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "7eed4c1417ffda5daaffac24c64b202f05d46a497edba5105c79c4f30b1b89a2",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "7eed4c1417ffda5daaffac24c64b202f05d46a497edba5105c79c4f30b1b89a2",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/njg49TbzXeI.png"
           }
         },
         "linkedin": {
