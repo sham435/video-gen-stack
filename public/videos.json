@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-02T03:55:52.671Z",
+  "updatedAt": "2026-09-02T04:13:22.300Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "cifaiF1U_B0",
+      "id": "kteKYws-Xag",
       "title": "Pikmin 3 Deluxe 1.2.0 update out now, patch notes - new benefits for Nintendo Switch 2 pla | NEWS-MONSTER",
       "description": "Pikmin 3 Deluxe 1.2.0 update out now, patch notes - new benefits for Nintendo Switch 2 pla | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-02T03:55:51.625Z",
-      "publishedLabel": "Sep 2, 03:55 AM",
-      "thumbnail": "/thumbnails/cifaiF1U_B0.png",
-      "thumbnailSha256": "125714ebc56fe8c6cb335fac48110e723b248e2c8c2f867452020c0976587c19",
+      "publishedAt": "2026-09-02T04:13:21.714Z",
+      "publishedLabel": "Sep 2, 04:13 AM",
+      "thumbnail": "/thumbnails/kteKYws-Xag.png",
+      "thumbnailSha256": "ff317cd9c062f39ff1400729a57e4ccfdd027992d529a3396a436fedf709cfca",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/cifaiF1U_B0",
+      "youtubeUrl": "https://youtu.be/kteKYws-Xag",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "cifaiF1U_B0",
-          "url": "https://youtu.be/cifaiF1U_B0",
+          "videoId": "kteKYws-Xag",
+          "url": "https://youtu.be/kteKYws-Xag",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "125714ebc56fe8c6cb335fac48110e723b248e2c8c2f867452020c0976587c19",
+            "sha256": "ff317cd9c062f39ff1400729a57e4ccfdd027992d529a3396a436fedf709cfca",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +43,12 @@
           "errors": [],
           "durationMs": 1,
           "thumbnail": {
-            "sha256": "125714ebc56fe8c6cb335fac48110e723b248e2c8c2f867452020c0976587c19",
+            "sha256": "ff317cd9c062f39ff1400729a57e4ccfdd027992d529a3396a436fedf709cfca",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/cifaiF1U_B0.png"
+            "path": "public/thumbnails/kteKYws-Xag.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "6bSJiQRLW4I",
+      "id": "cYQj3GhBsPo",
       "title": "‘Most’ of Star Wars Zero Company studio Bit Reactor was furloughed ahead of launch - Game  | NEWS-MONSTER",
       "description": "‘Most’ of Star Wars Zero Company studio Bit Reactor was furloughed ahead of launch - Game  | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-02T03:52:36.505Z",
-      "publishedLabel": "Sep 2, 03:52 AM",
-      "thumbnail": "/thumbnails/6bSJiQRLW4I.png",
-      "thumbnailSha256": "dd40650df159c3f57f7fd0b7e5cbc09b4a245f24f43d8ad3e8284eb17805733b",
+      "publishedAt": "2026-09-02T04:10:01.307Z",
+      "publishedLabel": "Sep 2, 04:10 AM",
+      "thumbnail": "/thumbnails/cYQj3GhBsPo.png",
+      "thumbnailSha256": "c2e085b93e9cb658a32c3583f2f467daec0ea7860cc82ecb8b079031035dc0df",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/6bSJiQRLW4I",
+      "youtubeUrl": "https://youtu.be/cYQj3GhBsPo",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "6bSJiQRLW4I",
-          "url": "https://youtu.be/6bSJiQRLW4I",
+          "videoId": "cYQj3GhBsPo",
+          "url": "https://youtu.be/cYQj3GhBsPo",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "dd40650df159c3f57f7fd0b7e5cbc09b4a245f24f43d8ad3e8284eb17805733b",
+            "sha256": "c2e085b93e9cb658a32c3583f2f467daec0ea7860cc82ecb8b079031035dc0df",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,14 +95,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "dd40650df159c3f57f7fd0b7e5cbc09b4a245f24f43d8ad3e8284eb17805733b",
+            "sha256": "c2e085b93e9cb658a32c3583f2f467daec0ea7860cc82ecb8b079031035dc0df",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/6bSJiQRLW4I.png"
+            "path": "public/thumbnails/cYQj3GhBsPo.png"
           }
         },
         "linkedin": {
