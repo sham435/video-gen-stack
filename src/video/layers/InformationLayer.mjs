@@ -138,11 +138,13 @@ export class InformationLayer {
         const py = -offset + i * lineH - pieceOffset + pi * lineH
         for (const w of piece.split(' ')) {
           const isKeyword = keyword && w.includes(keyword)
-          // word stagger: each word enters 0.06s after the previous, fade-up
-          const wordT = Math.min(1, Math.max(0, (time - layerStart - wordCounter * 0.06) / 0.12))
+          // word stagger: each word enters 0.14s after the previous, fade-up,
+          // slower + shorter travel so the phrase is readable (“quickly fly”
+          // feedback on hook text: 0.06s/0.12s + 28px was too fast to see)
+          const wordT = Math.min(1, Math.max(0, (time - layerStart - wordCounter * 0.14) / 0.24))
           ctx.save()
           ctx.globalAlpha = Math.min(alpha, wordT) * (isKeyword ? 1 : 0.95)
-          ctx.translate(0, (1 - wordT) * 28)
+          ctx.translate(0, (1 - wordT) * 12)
           ctx.shadowColor = 'rgba(0,0,0,0.9)'
           ctx.shadowBlur = 12
           ctx.lineWidth = 3
