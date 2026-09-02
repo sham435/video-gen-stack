@@ -1,32 +1,86 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-02T05:10:26.865Z",
+  "updatedAt": "2026-09-02T05:23:57.179Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "RdFoJDyeF-8",
-      "title": "Pikmin 3 Deluxe 1.2.0 update out now, patch notes - new benefits for Nintendo Switch 2 pla | NEWS-MONSTER",
-      "description": "Pikmin 3 Deluxe 1.2.0 update out now, patch notes - new benefits for Nintendo Switch 2 pla | NEWS-MONSTER",
+      "id": "Y6Kby1yedUo",
+      "title": "Microsoft acknowledges widespread Exchange Online problems - Mashable | NEWS-MONSTER",
+      "description": "Microsoft acknowledges widespread Exchange Online problems - Mashable | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-02T05:10:26.078Z",
-      "publishedLabel": "Sep 2, 05:10 AM",
-      "thumbnail": "/thumbnails/RdFoJDyeF-8.png",
-      "thumbnailSha256": "a2c1e4aaf67c66c152f71450b11d7600e46313fd4f2d7604e455cc078d1e87fe",
+      "publishedAt": "2026-09-02T05:23:56.239Z",
+      "publishedLabel": "Sep 2, 05:23 AM",
+      "thumbnail": "/thumbnails/Y6Kby1yedUo.png",
+      "thumbnailSha256": "483a8be274780637101e8be31764d50dbdd9c7e40be17ce9a251e7a44bd92fa4",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/RdFoJDyeF-8",
+      "youtubeUrl": "https://youtu.be/Y6Kby1yedUo",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "RdFoJDyeF-8",
-          "url": "https://youtu.be/RdFoJDyeF-8",
+          "videoId": "Y6Kby1yedUo",
+          "url": "https://youtu.be/Y6Kby1yedUo",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "a2c1e4aaf67c66c152f71450b11d7600e46313fd4f2d7604e455cc078d1e87fe",
+            "sha256": "483a8be274780637101e8be31764d50dbdd9c7e40be17ce9a251e7a44bd92fa4",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "483a8be274780637101e8be31764d50dbdd9c7e40be17ce9a251e7a44bd92fa4",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/Y6Kby1yedUo.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "K8H468gxFPY",
+      "title": "OpenClaw 2.0 is here, ushering in the era of 'multiplayer' AI coding: What it means for en | NEWS-MONSTER",
+      "description": "OpenClaw 2.0 is here, ushering in the era of 'multiplayer' AI coding: What it means for en | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-02T05:20:55.665Z",
+      "publishedLabel": "Sep 2, 05:20 AM",
+      "thumbnail": "/thumbnails/K8H468gxFPY.png",
+      "thumbnailSha256": "83328910ff1faa170537f80bac8e8a6df824fe0f92e729a8fabe912b9bd1c4dd",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/K8H468gxFPY",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "K8H468gxFPY",
+          "url": "https://youtu.be/K8H468gxFPY",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "83328910ff1faa170537f80bac8e8a6df824fe0f92e729a8fabe912b9bd1c4dd",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,66 +97,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "a2c1e4aaf67c66c152f71450b11d7600e46313fd4f2d7604e455cc078d1e87fe",
+            "sha256": "83328910ff1faa170537f80bac8e8a6df824fe0f92e729a8fabe912b9bd1c4dd",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/RdFoJDyeF-8.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "u6eOQ3TcCCQ",
-      "title": "‘Most’ of Star Wars Zero Company studio Bit Reactor was furloughed ahead of launch - Game  | NEWS-MONSTER",
-      "description": "‘Most’ of Star Wars Zero Company studio Bit Reactor was furloughed ahead of launch - Game  | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-02T05:06:58.077Z",
-      "publishedLabel": "Sep 2, 05:06 AM",
-      "thumbnail": "/thumbnails/u6eOQ3TcCCQ.png",
-      "thumbnailSha256": "5a05e0214381027aebe480d393ace94a3e799e50c3c7fe1a1bba3484162948ad",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/u6eOQ3TcCCQ",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "u6eOQ3TcCCQ",
-          "url": "https://youtu.be/u6eOQ3TcCCQ",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "5a05e0214381027aebe480d393ace94a3e799e50c3c7fe1a1bba3484162948ad",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 1,
-          "thumbnail": {
-            "sha256": "5a05e0214381027aebe480d393ace94a3e799e50c3c7fe1a1bba3484162948ad",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/u6eOQ3TcCCQ.png"
+            "path": "public/thumbnails/K8H468gxFPY.png"
           }
         },
         "linkedin": {
