@@ -1,86 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-02T18:41:02.586Z",
+  "updatedAt": "2026-09-02T19:55:41.889Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "NXEOfK0bslE",
-      "title": "Android Auto tests Quick Settings and hilarious ‘Jimothy’ weather Easter egg [Gallery] - 9 | NEWS-MONSTER",
-      "description": "Android Auto tests Quick Settings and hilarious ‘Jimothy’ weather Easter egg [Gallery] - 9 | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-02T18:41:01.206Z",
-      "publishedLabel": "Sep 2, 06:41 PM",
-      "thumbnail": "/thumbnails/NXEOfK0bslE.png",
-      "thumbnailSha256": "886c20e7648322bfbe9c3fd8e764507432e9ce31f008936363a34d5acba095bd",
+      "id": "VHpawUy4i5o",
+      "title": "U.S. Stock Futures Little Changed as Markets Weigh Warsh’s Hawkish Remarks | NEWS-MONSTER",
+      "description": "U.S. Stock Futures Little Changed as Markets Weigh Warsh’s Hawkish Remarks | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-02T19:55:41.436Z",
+      "publishedLabel": "Sep 2, 07:55 PM",
+      "thumbnail": "/thumbnails/VHpawUy4i5o.png",
+      "thumbnailSha256": "20ca097236655ed27c632d54b53034359976d868c1dc1059cedbc0c0a2fe5ec8",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/NXEOfK0bslE",
+      "youtubeUrl": "https://youtu.be/VHpawUy4i5o",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "NXEOfK0bslE",
-          "url": "https://youtu.be/NXEOfK0bslE",
+          "videoId": "VHpawUy4i5o",
+          "url": "https://youtu.be/VHpawUy4i5o",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "886c20e7648322bfbe9c3fd8e764507432e9ce31f008936363a34d5acba095bd",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 7,
-          "thumbnail": {
-            "sha256": "886c20e7648322bfbe9c3fd8e764507432e9ce31f008936363a34d5acba095bd",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/NXEOfK0bslE.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "le01aiKdByw",
-      "title": "Google’s answer to Canva is an AI tool where you prompt instead of design - TechCrunch | NEWS-MONSTER",
-      "description": "Google’s answer to Canva is an AI tool where you prompt instead of design - TechCrunch | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-02T18:36:50.658Z",
-      "publishedLabel": "Sep 2, 06:36 PM",
-      "thumbnail": "/thumbnails/le01aiKdByw.png",
-      "thumbnailSha256": "6d0d16f22af50ce39d31ff83973096ae38db5df3c25f827e67ae2937efaee9a6",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/le01aiKdByw",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "le01aiKdByw",
-          "url": "https://youtu.be/le01aiKdByw",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "6d0d16f22af50ce39d31ff83973096ae38db5df3c25f827e67ae2937efaee9a6",
+            "sha256": "20ca097236655ed27c632d54b53034359976d868c1dc1059cedbc0c0a2fe5ec8",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +43,12 @@
           "errors": [],
           "durationMs": 4,
           "thumbnail": {
-            "sha256": "6d0d16f22af50ce39d31ff83973096ae38db5df3c25f827e67ae2937efaee9a6",
+            "sha256": "20ca097236655ed27c632d54b53034359976d868c1dc1059cedbc0c0a2fe5ec8",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/le01aiKdByw.png"
+            "path": "public/thumbnails/VHpawUy4i5o.png"
           }
         },
         "linkedin": {
@@ -112,29 +58,29 @@
       }
     },
     {
-      "id": "n9dzMq1UxYk",
-      "title": "Sept. 2026 Android Drop: Find Hub ‘Remembered’ list, Motion Assist, & Keep in Google Messa | NEWS-MONSTER",
-      "description": "Sept. 2026 Android Drop: Find Hub ‘Remembered’ list, Motion Assist, & Keep in Google Messa | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-02T18:32:31.915Z",
-      "publishedLabel": "Sep 2, 06:32 PM",
-      "thumbnail": "/thumbnails/n9dzMq1UxYk.png",
-      "thumbnailSha256": "bd6d29c296ce3b8dc26cbc7a607f313596f7ba0feabecde6b51922cbc5ee229f",
+      "id": "8Qgl0RijAbA",
+      "title": "U.K Said One Thing, Then Did This | NEWS-MONSTER",
+      "description": "U.K Said One Thing, Then Did This | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-02T19:51:28.857Z",
+      "publishedLabel": "Sep 2, 07:51 PM",
+      "thumbnail": "/thumbnails/8Qgl0RijAbA.png",
+      "thumbnailSha256": "793d7e7958443fdc9e0b508dacba0310438e7656d114e006bdb5d9034c47da74",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/n9dzMq1UxYk",
+      "youtubeUrl": "https://youtu.be/8Qgl0RijAbA",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "n9dzMq1UxYk",
-          "url": "https://youtu.be/n9dzMq1UxYk",
+          "videoId": "8Qgl0RijAbA",
+          "url": "https://youtu.be/8Qgl0RijAbA",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "bd6d29c296ce3b8dc26cbc7a607f313596f7ba0feabecde6b51922cbc5ee229f",
+            "sha256": "793d7e7958443fdc9e0b508dacba0310438e7656d114e006bdb5d9034c47da74",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -151,12 +97,66 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "bd6d29c296ce3b8dc26cbc7a607f313596f7ba0feabecde6b51922cbc5ee229f",
+            "sha256": "793d7e7958443fdc9e0b508dacba0310438e7656d114e006bdb5d9034c47da74",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/n9dzMq1UxYk.png"
+            "path": "public/thumbnails/8Qgl0RijAbA.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "rTc88blekj0",
+      "title": "How Hits Changed Overnight | NEWS-MONSTER",
+      "description": "How Hits Changed Overnight | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-02T19:47:26.808Z",
+      "publishedLabel": "Sep 2, 07:47 PM",
+      "thumbnail": "/thumbnails/rTc88blekj0.png",
+      "thumbnailSha256": "eeb3fadc3c12b51adc6f3c9bc8743559bf9ee78b1bf7b6fb5ae9ee44f13c02eb",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/rTc88blekj0",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "rTc88blekj0",
+          "url": "https://youtu.be/rTc88blekj0",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "eeb3fadc3c12b51adc6f3c9bc8743559bf9ee78b1bf7b6fb5ae9ee44f13c02eb",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "eeb3fadc3c12b51adc6f3c9bc8743559bf9ee78b1bf7b6fb5ae9ee44f13c02eb",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/rTc88blekj0.png"
           }
         },
         "linkedin": {
