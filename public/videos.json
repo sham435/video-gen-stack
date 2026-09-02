@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-02T13:53:46.186Z",
+  "updatedAt": "2026-09-02T14:13:56.506Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "qFkynRkwX3M",
+      "id": "n-MH9bYYiyI",
       "title": "Nvidia’s DLSS 5, explained - The Verge | NEWS-MONSTER",
       "description": "Nvidia’s DLSS 5, explained - The Verge | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-02T13:53:45.625Z",
-      "publishedLabel": "Sep 2, 01:53 PM",
-      "thumbnail": "/thumbnails/qFkynRkwX3M.png",
-      "thumbnailSha256": "fc7d63b61247ee9e2ea377286891e6b1dcf7c81cd086c29f1d254a267b04e29d",
+      "publishedAt": "2026-09-02T14:13:55.359Z",
+      "publishedLabel": "Sep 2, 02:13 PM",
+      "thumbnail": "/thumbnails/n-MH9bYYiyI.png",
+      "thumbnailSha256": "139b47408932fd51ba507fe1634e539cfc9b2bda7f91e88ac687c6d823e806e9",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/qFkynRkwX3M",
+      "youtubeUrl": "https://youtu.be/n-MH9bYYiyI",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "qFkynRkwX3M",
-          "url": "https://youtu.be/qFkynRkwX3M",
+          "videoId": "n-MH9bYYiyI",
+          "url": "https://youtu.be/n-MH9bYYiyI",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "fc7d63b61247ee9e2ea377286891e6b1dcf7c81cd086c29f1d254a267b04e29d",
+            "sha256": "139b47408932fd51ba507fe1634e539cfc9b2bda7f91e88ac687c6d823e806e9",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +43,12 @@
           "errors": [],
           "durationMs": 5,
           "thumbnail": {
-            "sha256": "fc7d63b61247ee9e2ea377286891e6b1dcf7c81cd086c29f1d254a267b04e29d",
+            "sha256": "139b47408932fd51ba507fe1634e539cfc9b2bda7f91e88ac687c6d823e806e9",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/qFkynRkwX3M.png"
+            "path": "public/thumbnails/n-MH9bYYiyI.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "L_Vr5E17Lqk",
-      "title": "Sony Institutes Harassment Policy Following PS5 Disc Controversy - Kotaku | NEWS-MONSTER",
-      "description": "Sony Institutes Harassment Policy Following PS5 Disc Controversy - Kotaku | NEWS-MONSTER",
+      "id": "57Jr3HXK5jU",
+      "title": "Here are iPhone 18 Pro’s new colors, says leaker - 9to5Mac | NEWS-MONSTER",
+      "description": "Here are iPhone 18 Pro’s new colors, says leaker - 9to5Mac | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-02T13:45:28.162Z",
-      "publishedLabel": "Sep 2, 01:45 PM",
-      "thumbnail": "/thumbnails/L_Vr5E17Lqk.png",
-      "thumbnailSha256": "dd8b4691ea6c0cb59f6947a743227c8b2040d9cb27120a602e8b39fdee678877",
+      "publishedAt": "2026-09-02T14:10:25.259Z",
+      "publishedLabel": "Sep 2, 02:10 PM",
+      "thumbnail": "/thumbnails/57Jr3HXK5jU.png",
+      "thumbnailSha256": "6026bb648c4b00ed581c73ad285a868569efd3500e009d8fdf076f658c377db8",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/L_Vr5E17Lqk",
+      "youtubeUrl": "https://youtu.be/57Jr3HXK5jU",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "L_Vr5E17Lqk",
-          "url": "https://youtu.be/L_Vr5E17Lqk",
+          "videoId": "57Jr3HXK5jU",
+          "url": "https://youtu.be/57Jr3HXK5jU",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "dd8b4691ea6c0cb59f6947a743227c8b2040d9cb27120a602e8b39fdee678877",
+            "sha256": "6026bb648c4b00ed581c73ad285a868569efd3500e009d8fdf076f658c377db8",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +97,66 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "dd8b4691ea6c0cb59f6947a743227c8b2040d9cb27120a602e8b39fdee678877",
+            "sha256": "6026bb648c4b00ed581c73ad285a868569efd3500e009d8fdf076f658c377db8",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/L_Vr5E17Lqk.png"
+            "path": "public/thumbnails/57Jr3HXK5jU.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "TbAA_RcBLzM",
+      "title": "Sony Institutes Harassment Policy Following PS5 Disc Controversy - Kotaku | NEWS-MONSTER",
+      "description": "Sony Institutes Harassment Policy Following PS5 Disc Controversy - Kotaku | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-02T14:07:03.562Z",
+      "publishedLabel": "Sep 2, 02:07 PM",
+      "thumbnail": "/thumbnails/TbAA_RcBLzM.png",
+      "thumbnailSha256": "fa28c000a95af7fbbf36f8fc0b640579cadadc220bd70b979a63bb65628ba4c5",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/TbAA_RcBLzM",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "TbAA_RcBLzM",
+          "url": "https://youtu.be/TbAA_RcBLzM",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "fa28c000a95af7fbbf36f8fc0b640579cadadc220bd70b979a63bb65628ba4c5",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "fa28c000a95af7fbbf36f8fc0b640579cadadc220bd70b979a63bb65628ba4c5",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/TbAA_RcBLzM.png"
           }
         },
         "linkedin": {
