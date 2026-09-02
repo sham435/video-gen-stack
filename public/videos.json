@@ -1,86 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-02T06:26:00.188Z",
+  "updatedAt": "2026-09-02T06:55:44.069Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "brz73KcR4lY",
+      "id": "VRNAU_br9SQ",
       "title": "Microsoft acknowledges widespread Exchange Online problems - Mashable | NEWS-MONSTER",
       "description": "Microsoft acknowledges widespread Exchange Online problems - Mashable | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-02T06:25:59.731Z",
-      "publishedLabel": "Sep 2, 06:25 AM",
-      "thumbnail": "/thumbnails/brz73KcR4lY.png",
-      "thumbnailSha256": "f32a5a74f47d7a53de2b551d688ebc726653dbcff8f1b9ad7fa5fe1e47aad879",
+      "publishedAt": "2026-09-02T06:55:43.391Z",
+      "publishedLabel": "Sep 2, 06:55 AM",
+      "thumbnail": "/thumbnails/VRNAU_br9SQ.png",
+      "thumbnailSha256": "941cbc619186e3cc603022885a1c1b023155288c9031678820b5fd99a0e31db7",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/brz73KcR4lY",
+      "youtubeUrl": "https://youtu.be/VRNAU_br9SQ",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "brz73KcR4lY",
-          "url": "https://youtu.be/brz73KcR4lY",
+          "videoId": "VRNAU_br9SQ",
+          "url": "https://youtu.be/VRNAU_br9SQ",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "f32a5a74f47d7a53de2b551d688ebc726653dbcff8f1b9ad7fa5fe1e47aad879",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "f32a5a74f47d7a53de2b551d688ebc726653dbcff8f1b9ad7fa5fe1e47aad879",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/brz73KcR4lY.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "gwV-t5atqT0",
-      "title": "OpenClaw 2.0 is here, ushering in the era of 'multiplayer' AI coding: What it means for en | NEWS-MONSTER",
-      "description": "OpenClaw 2.0 is here, ushering in the era of 'multiplayer' AI coding: What it means for en | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-02T06:22:25.983Z",
-      "publishedLabel": "Sep 2, 06:22 AM",
-      "thumbnail": "/thumbnails/gwV-t5atqT0.png",
-      "thumbnailSha256": "befb24f7ab57e33d5ba8491d077ce374d22d31d5410bef69ac969eb3220afa65",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/gwV-t5atqT0",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "gwV-t5atqT0",
-          "url": "https://youtu.be/gwV-t5atqT0",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "befb24f7ab57e33d5ba8491d077ce374d22d31d5410bef69ac969eb3220afa65",
+            "sha256": "941cbc619186e3cc603022885a1c1b023155288c9031678820b5fd99a0e31db7",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +43,66 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "befb24f7ab57e33d5ba8491d077ce374d22d31d5410bef69ac969eb3220afa65",
+            "sha256": "941cbc619186e3cc603022885a1c1b023155288c9031678820b5fd99a0e31db7",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/gwV-t5atqT0.png"
+            "path": "public/thumbnails/VRNAU_br9SQ.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "19PzN1hUTRo",
+      "title": "OpenClaw 2.0 is here, ushering in the era of 'multiplayer' AI coding: What it means for en | NEWS-MONSTER",
+      "description": "OpenClaw 2.0 is here, ushering in the era of 'multiplayer' AI coding: What it means for en | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-02T06:52:11.869Z",
+      "publishedLabel": "Sep 2, 06:52 AM",
+      "thumbnail": "/thumbnails/19PzN1hUTRo.png",
+      "thumbnailSha256": "d6ea26f835ca47fe9e75fe0584496dc1aecb00bd8dfefa2c6e0b2a9fe9ecd9bd",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/19PzN1hUTRo",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "19PzN1hUTRo",
+          "url": "https://youtu.be/19PzN1hUTRo",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "d6ea26f835ca47fe9e75fe0584496dc1aecb00bd8dfefa2c6e0b2a9fe9ecd9bd",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "d6ea26f835ca47fe9e75fe0584496dc1aecb00bd8dfefa2c6e0b2a9fe9ecd9bd",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/19PzN1hUTRo.png"
           }
         },
         "linkedin": {
