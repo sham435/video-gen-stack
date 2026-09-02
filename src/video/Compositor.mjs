@@ -99,7 +99,11 @@ export class Compositor {
 
     this.background.draw(ctx, scene, progress, category)
     if (scene.image || scene.backgroundImage || scene.bRoll) {
-      await this.hero.draw(ctx, scene, progress)
+      // Pass absolute scene time + layer start so the entity image highlight
+      // (scale-pulse + accent ring) fires exactly when the brand word lands in
+      // the on-screen text — a recognition cue, not a transition effect.
+      const secondaryLayer = timeline?.layers?.find(l => l.id === 'secondary')
+      await this.hero.draw(ctx, scene, progress, time, secondaryLayer?.start || 0, scene.colors?.primary)
     }
 
     if (layout.glassCard) {

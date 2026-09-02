@@ -138,6 +138,34 @@ export class NewsBroadcastEngine {
     }
   }
 
+    // Stage the presentation-style outro's 3-beat backdrops from the story's
+    // already-selected hero images (reuses the asset-selection/diversity
+    // output — never hand-picked). The final beat always keeps the fixed brand
+    // moment; the brand card renders over the backdrop.
+    _stageOutroBackdrops(timedScenes) {
+      const outro = timedScenes.find(s => s.outro || s.type === 'close' || s.type === 'brand_close')
+      // Always lower the BGM bed for the outro, independent of imagery.
+      if (outro) outro.musicLevel = outro.presentation?.musicLevel ?? 1
+      const beats = outro?.presentation?.beats
+      if (!outro || !Array.isArray(beats) || !beats.length) return
+      // Distinct backdrops: collect the first image of each non-outro scene,
+      // preserving scene order (diversity planner already spread them out).
+      const backdrops = timedScenes
+        .filter(s => s !== outro && !s.outro && s.type !== 'close' && s.type !== 'brand_close')
+        .map(s => s.images?.[0] || s.image)
+        .filter(Boolean)
+      if (!backdrops.length) return
+      const assigned = [...backdrops]
+      // Wrap round-robin so every beat gets a distinct backdrop even when the
+      // story has fewer imagery scenes than beats.
+      beats.forEach((b, i) => {
+        const url = assigned[i % assigned.length] || assigned[0]
+        b.backdrop = url
+      })
+      // Expose the ordered beat set on the scene for the renderer.
+      outro.presentBackdrops = beats.map(b => b.backdrop).filter(Boolean)
+    }
+
   getCategoryConfig(category) {
     const configs = {
       technology: { template: 'tech-news.json', duration: 30, visual_style: 'technology, cyberpunk, neon blue cyan, dark cinematic, holographic, 8k' },
@@ -310,6 +338,13 @@ export class NewsBroadcastEngine {
       // verbatim. It must NOT be reconstructed from narration later — narration
       // is VO-only and duplicating it on screen caused text stacking.
       caption: s.caption?.fullText || '',
+      // Carry the brand-outro markers through the reconstruction so the fixed
+      // end card keeps its single-owner text policy + multi-beat presentation
+      // plan all the way to the renderer (these gates/fields are dropped by the
+      // default sceneDef map).
+      outro: s.outro === true ? true : undefined,
+      textPolicy: s.textPolicy || undefined,
+      presentation: s.presentation || undefined,
     }))
 
     const rawScenes = this.scenePlanner.planScenes(article, { headline: directorStory.headline, scenes: sceneDefs })
@@ -582,6 +617,14 @@ export class NewsBroadcastEngine {
       this.coverPath = null
     }
 
+    // Presentation-style outro: populate the fixed close scene's 3-beat plan
+    // with DISTINCT background imagery. Rather than hand-picking, we reuse the
+    // asset-selection/diversity system's output — the strongest earlier scenes'
+    // already-chosen hero images become the beat backdrops, so each beat shows
+    // a different scenery while the final beat keeps the fixed brand moment
+    // (brand card renders over the backdrop). Skips scenes that carry no image.
+    this._stageOutroBackdrops(timedScenes)
+
     this.sceneEngine = new SceneEngine(timedScenes)
     this.timeline = new Timeline(timedScenes, this.renderFps)
 
@@ -837,7 +880,15 @@ export class NewsBroadcastEngine {
     }
 
     const musicPath = this.audioMixer.getRandomMusic()
-    this.audioMixer.mixAudio(silentVideo, voicePath, musicPath, totalDuration, videoPath)
+    // Presentation-style outro: lower the BGM bed during the outro window so
+    // the brand narration/callout sits clearly above a quieter underscore. If
+    // the video has no outro or no level set, the mix keeps its uniform bed.
+    let musicEnvelope = null
+    const outroSc = scenes.find(s => s.outro || s.type === 'close' || s.type === 'brand_close')
+    if (outroSc && Number.isFinite(outroSc.start) && Number.isFinite(outroSc.musicLevel)) {
+      musicEnvelope = { outroStart: outroSc.start, level: outroSc.musicLevel }
+    }
+    this.audioMixer.mixAudio(silentVideo, voicePath, musicPath, totalDuration, videoPath, musicEnvelope)
 
     // Music reuse + learning hook: persist the chosen track against this video
     // so the last-50-videos policy keeps underscores fresh and analytics can
