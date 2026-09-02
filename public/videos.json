@@ -1,29 +1,29 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-02T11:03:50.976Z",
+  "updatedAt": "2026-09-02T11:12:23.166Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "IPFPVv-JLhI",
+      "id": "b9tW4cWda5o",
       "title": "What Dyson’s First Toothbrush Says About Oral Care’s Beauty Era - Vogue | NEWS-MONSTER",
       "description": "What Dyson’s First Toothbrush Says About Oral Care’s Beauty Era - Vogue | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-02T11:03:49.990Z",
-      "publishedLabel": "Sep 2, 11:03 AM",
-      "thumbnail": "/thumbnails/IPFPVv-JLhI.png",
+      "publishedAt": "2026-09-02T11:12:21.977Z",
+      "publishedLabel": "Sep 2, 11:12 AM",
+      "thumbnail": "/thumbnails/b9tW4cWda5o.png",
       "thumbnailSha256": "9ead2dfbcb544995d12e9373d4e909d84d4d2d3a286e2c8137b156624124d9da",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/IPFPVv-JLhI",
+      "youtubeUrl": "https://youtu.be/b9tW4cWda5o",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "IPFPVv-JLhI",
-          "url": "https://youtu.be/IPFPVv-JLhI",
+          "videoId": "b9tW4cWda5o",
+          "url": "https://youtu.be/b9tW4cWda5o",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "9ead2dfbcb544995d12e9373d4e909d84d4d2d3a286e2c8137b156624124d9da",
@@ -48,7 +48,7 @@
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/IPFPVv-JLhI.png"
+            "path": "public/thumbnails/b9tW4cWda5o.png"
           }
         },
         "linkedin": {

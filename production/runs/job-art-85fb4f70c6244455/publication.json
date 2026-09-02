@@ -1,7 +1,7 @@
 {
   "runId": "job-art-85fb4f70c6244455",
-  "videoId": "IPFPVv-JLhI",
-  "publishedAt": "2026-09-02T11:03:49.991Z",
+  "videoId": "b9tW4cWda5o",
+  "publishedAt": "2026-09-02T11:12:21.978Z",
   "render": {
     "width": 1920,
     "height": 1080,
@@ -16,7 +16,7 @@
       "sha256": "9ead2dfbcb544995d12e9373d4e909d84d4d2d3a286e2c8137b156624124d9da"
     },
     "remote": {
-      "url": "https://i.ytimg.com/vi/IPFPVv-JLhI/maxresdefault.jpg",
+      "url": "https://i.ytimg.com/vi/b9tW4cWda5o/maxresdefault.jpg",
       "width": 1280,
       "height": 720,
       "sha256": "56dfe1192a369e1b660dcfbe7f6328f75ef23114283ef187d9de7189efd07717"
@@ -27,18 +27,18 @@
   "verification": {
     "state": "VERIFIED (REENCODED)",
     "passed": true,
-    "durationMs": 554,
+    "durationMs": 476,
     "failures": []
   },
   "upload": {
     "state": "SUCCESS",
-    "url": "https://youtu.be/IPFPVv-JLhI"
+    "url": "https://youtu.be/b9tW4cWda5o"
   },
   "distribution": {
     "youtube": {
       "state": "SUCCESS",
-      "videoId": "IPFPVv-JLhI",
-      "url": "https://youtu.be/IPFPVv-JLhI",
+      "videoId": "b9tW4cWda5o",
+      "url": "https://youtu.be/b9tW4cWda5o",
       "thumbnail": {
         "state": "SUCCESS",
         "sha256": "9ead2dfbcb544995d12e9373d4e909d84d4d2d3a286e2c8137b156624124d9da",
@@ -63,7 +63,7 @@
         "height": 2160,
         "mimeType": "image/png",
         "aspectRatio": "16:9",
-        "path": "public/thumbnails/IPFPVv-JLhI.png"
+        "path": "public/thumbnails/b9tW4cWda5o.png"
       }
     },
     "linkedin": {
