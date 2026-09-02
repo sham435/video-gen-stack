@@ -34,11 +34,7 @@ export class ScenePlanner {
       purpose: sceneDef.purpose || '',
       start: 0,
       end: 0,
-      duration: this._clampDuration(sceneDef.duration, sceneDef.type),
-      transition: sceneDef.transition || 'cut',
-      emotion: sceneDef.emotion || 'neutral',
-      music_cue: sceneDef.music_cue || 'none',
-      sfx: sceneDef.sfx || 'none',
+      duration: this._clampDuration(sceneDef.duration),
       narration: safeNarration,
       text: visualHeadline || safeNarration || (article.title || '').slice(0, 60),
       subheadline: visualHeadline || safeNarration || (article.title || '').slice(0, 60),
@@ -117,27 +113,14 @@ export class ScenePlanner {
     return out.replace(/\s{2,}/g, ' ').replace(/^\s*(,|and|but|so)\s*/i, '').trim()
   }
 
-  // Single duration clamp, type-aware. A positive finite numeric value is
-  // clamped; a missing, zero, or non-numeric value falls back to the 3s
-  // default (which is already inside the clamp, so it passes through
-  // unchanged). Zero must NOT be treated as a valid duration — it means "not
-  // specified".
-  //
-  // Cinematic refinement: explanation/reveal scenes carry the narration
-  // callout sequence (caption -> "WHY IT MATTERS" -> 2-line yellow), so they
-  // get a higher ceiling ([2, 9.5]) to absorb the label (~0.7s) + 2-line hold
-  // (~1.5-2s) without compressing the per-word reading pace. Other scenes keep
-  // the [2, 8] wall. Narration scenes also get a raised FLOOR so the spoken
-  // caption is never crushed under the moving headline: 4s minimum (caption
-  // window must survive long enough to be read).
-  _clampDuration(value, type) {
+  // Single duration clamp. A positive finite numeric value is clamped into
+  // [2, 8]; a missing, zero, or non-numeric value falls back to the 3s default
+  // (which is already inside the clamp, so it passes through unchanged). Zero
+  // must NOT be treated as a valid 2s duration — it means "not specified".
+  _clampDuration(value) {
     const n = Number(value)
     const base = n > 0 && Number.isFinite(n) ? n : 3
-    const longForm = type === 'explanation' || type === 'reveal'
-    const ceil = longForm ? 9.5 : 8
-    const floor = 2
-    const clamped = Math.max(floor, Math.min(ceil, base))
-    return clamped
+    return Math.max(2, Math.min(8, base))
   }
 
   cameraSpeed(cameraType) {

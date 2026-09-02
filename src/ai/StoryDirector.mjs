@@ -84,7 +84,7 @@ Do NOT invent:
 - outcomes
 - facts not supported by the article
 
-Target duration: 30–40 seconds.
+Target duration: 25–35 seconds.
 
 The final scene is ALWAYS the fixed NEWS-MONSTER brand outro.
 
@@ -220,7 +220,7 @@ ${this.repoContext.build()}
 }
 
 Rules:
-- Total duration: 30-40 seconds for the 16:9 YouTube video
+- Total duration: 25-35 seconds for the 16:9 YouTube video
 - emotionalArc: 3-5 emotions that define the story's emotional journey
 - Each scene must have a distinct purpose
 - Hook scene must use hookStrategy for its narration

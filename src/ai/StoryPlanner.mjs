@@ -33,7 +33,7 @@ Style: mysterious, exclusive, documentary-style. Write hooks like:
 - "[Number] Years Later, We Found The Truth"
 
 Rules:
-- Duration: 30-40 seconds total
+- Duration: 25-35 seconds total
 - Hook (0-3s): create urgency/curiosity, max 10 words, use "declassified/exclusive" tone
 - Each scene: 3-7 seconds, with specific purpose
 - Every scene has:

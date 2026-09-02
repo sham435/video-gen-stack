@@ -43,7 +43,7 @@ export function drawLogoAnimation(ctx, progress, brand = 'NEWS-MONSTER') {
 
     ctx.font = '400 28px Inter, sans-serif'
     ctx.fillStyle = 'rgba(0, 229, 255, 0.7)'
-    ctx.fillText('UNFILTERED NEWS FROM THE FUTURE', W / 2, logoY + logoSize + 54)
+    ctx.fillText('UNFILTERED BREAKING NEWS FROM THE FUTURE', W / 2, logoY + logoSize + 54)
     ctx.restore()
   }
 }

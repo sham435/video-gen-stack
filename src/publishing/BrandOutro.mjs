@@ -10,7 +10,7 @@
 export const BRAND_OUTRO = {
   headline: 'STAY WITH', // golden yellow
   brand: 'NEWS-MONSTER',
-  tagline: 'UNFILTERED NEWS FROM THE FUTURE',
+  tagline: 'UNFILTERED BREAKING NEWS FROM THE FUTURE',
   narration: 'Stay with NEWS-MONSTER. Unfiltered breaking news from the future.',
   duration: 3,
   colors: {

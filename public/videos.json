@@ -1,86 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-02T13:08:28.904Z",
+  "updatedAt": "2026-09-02T13:38:24.805Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "rEOgU41Ar4I",
-      "title": "Samsung Confirms Free Feature Upgrade For Millions Of Galaxy Phones - forbes.com | NEWS-MONSTER",
-      "description": "Samsung Confirms Free Feature Upgrade For Millions Of Galaxy Phones - forbes.com | NEWS-MONSTER",
+      "id": "_1mbHqnIwQs",
+      "title": "Sony Institutes Harassment Policy Following PS5 Disc Controversy - Kotaku | NEWS-MONSTER",
+      "description": "Sony Institutes Harassment Policy Following PS5 Disc Controversy - Kotaku | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-02T13:08:28.420Z",
-      "publishedLabel": "Sep 2, 01:08 PM",
-      "thumbnail": "/thumbnails/rEOgU41Ar4I.png",
-      "thumbnailSha256": "b5bf8be4efc165f500bebdf7050af53dbf7c9a08c2e70c6fe7982e2d58201ef2",
+      "publishedAt": "2026-09-02T13:36:07.174Z",
+      "publishedLabel": "Sep 2, 01:36 PM",
+      "thumbnail": "/thumbnails/_1mbHqnIwQs.png",
+      "thumbnailSha256": "dd8b4691ea6c0cb59f6947a743227c8b2040d9cb27120a602e8b39fdee678877",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/rEOgU41Ar4I",
+      "youtubeUrl": "https://youtu.be/_1mbHqnIwQs",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "rEOgU41Ar4I",
-          "url": "https://youtu.be/rEOgU41Ar4I",
+          "videoId": "_1mbHqnIwQs",
+          "url": "https://youtu.be/_1mbHqnIwQs",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "b5bf8be4efc165f500bebdf7050af53dbf7c9a08c2e70c6fe7982e2d58201ef2",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "b5bf8be4efc165f500bebdf7050af53dbf7c9a08c2e70c6fe7982e2d58201ef2",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/rEOgU41Ar4I.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "zg5OJjJ6HRM",
-      "title": "Round Up: The Reviews For Orbitals On Switch 2 Are In - Nintendo Life | NEWS-MONSTER",
-      "description": "Round Up: The Reviews For Orbitals On Switch 2 Are In - Nintendo Life | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-02T13:05:03.362Z",
-      "publishedLabel": "Sep 2, 01:05 PM",
-      "thumbnail": "/thumbnails/zg5OJjJ6HRM.png",
-      "thumbnailSha256": "50efafbd6b4d2cac32981891e8b91e88c84ec153fba46b7f9b2345640f5bc248",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/zg5OJjJ6HRM",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "zg5OJjJ6HRM",
-          "url": "https://youtu.be/zg5OJjJ6HRM",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "50efafbd6b4d2cac32981891e8b91e88c84ec153fba46b7f9b2345640f5bc248",
+            "sha256": "dd8b4691ea6c0cb59f6947a743227c8b2040d9cb27120a602e8b39fdee678877",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +43,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "50efafbd6b4d2cac32981891e8b91e88c84ec153fba46b7f9b2345640f5bc248",
+            "sha256": "dd8b4691ea6c0cb59f6947a743227c8b2040d9cb27120a602e8b39fdee678877",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/zg5OJjJ6HRM.png"
+            "path": "public/thumbnails/_1mbHqnIwQs.png"
           }
         },
         "linkedin": {
