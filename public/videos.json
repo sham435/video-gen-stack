@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-02T19:55:41.889Z",
+  "updatedAt": "2026-09-02T22:32:44.312Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "VHpawUy4i5o",
-      "title": "U.S. Stock Futures Little Changed as Markets Weigh Warsh’s Hawkish Remarks | NEWS-MONSTER",
-      "description": "U.S. Stock Futures Little Changed as Markets Weigh Warsh’s Hawkish Remarks | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-09-02T19:55:41.436Z",
-      "publishedLabel": "Sep 2, 07:55 PM",
-      "thumbnail": "/thumbnails/VHpawUy4i5o.png",
-      "thumbnailSha256": "20ca097236655ed27c632d54b53034359976d868c1dc1059cedbc0c0a2fe5ec8",
+      "id": "GcdvA3rqXFc",
+      "title": "Nearly 150,000 Ford vehicles recalled after defect raises risk of sudden power loss while  | NEWS-MONSTER",
+      "description": "Nearly 150,000 Ford vehicles recalled after defect raises risk of sudden power loss while  | NEWS-MONSTER",
+      "category": "apple",
+      "publishedAt": "2026-09-02T22:32:43.804Z",
+      "publishedLabel": "Sep 2, 10:32 PM",
+      "thumbnail": "/thumbnails/GcdvA3rqXFc.png",
+      "thumbnailSha256": "c91d95ae8c9df729ff81c44e39cb7a860fa5a1af165baa155962244d339b850c",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/VHpawUy4i5o",
+      "youtubeUrl": "https://youtu.be/GcdvA3rqXFc",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "VHpawUy4i5o",
-          "url": "https://youtu.be/VHpawUy4i5o",
+          "videoId": "GcdvA3rqXFc",
+          "url": "https://youtu.be/GcdvA3rqXFc",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "20ca097236655ed27c632d54b53034359976d868c1dc1059cedbc0c0a2fe5ec8",
+            "sha256": "c91d95ae8c9df729ff81c44e39cb7a860fa5a1af165baa155962244d339b850c",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 4,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "20ca097236655ed27c632d54b53034359976d868c1dc1059cedbc0c0a2fe5ec8",
+            "sha256": "c91d95ae8c9df729ff81c44e39cb7a860fa5a1af165baa155962244d339b850c",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/VHpawUy4i5o.png"
+            "path": "public/thumbnails/GcdvA3rqXFc.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "8Qgl0RijAbA",
-      "title": "U.K Said One Thing, Then Did This | NEWS-MONSTER",
-      "description": "U.K Said One Thing, Then Did This | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-09-02T19:51:28.857Z",
-      "publishedLabel": "Sep 2, 07:51 PM",
-      "thumbnail": "/thumbnails/8Qgl0RijAbA.png",
-      "thumbnailSha256": "793d7e7958443fdc9e0b508dacba0310438e7656d114e006bdb5d9034c47da74",
+      "id": "dCmk2uBQzkI",
+      "title": "Dow falls more than 400 points, oil rises after new U.S. strikes against Iran - CNBC | NEWS-MONSTER",
+      "description": "Dow falls more than 400 points, oil rises after new U.S. strikes against Iran - CNBC | NEWS-MONSTER",
+      "category": "apple",
+      "publishedAt": "2026-09-02T22:28:10.723Z",
+      "publishedLabel": "Sep 2, 10:28 PM",
+      "thumbnail": "/thumbnails/dCmk2uBQzkI.png",
+      "thumbnailSha256": "5038890b893c8a72006f2e476afdae9451caa35d962c3955427ded36e1dd1267",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/8Qgl0RijAbA",
+      "youtubeUrl": "https://youtu.be/dCmk2uBQzkI",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "8Qgl0RijAbA",
-          "url": "https://youtu.be/8Qgl0RijAbA",
+          "videoId": "dCmk2uBQzkI",
+          "url": "https://youtu.be/dCmk2uBQzkI",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "793d7e7958443fdc9e0b508dacba0310438e7656d114e006bdb5d9034c47da74",
+            "sha256": "5038890b893c8a72006f2e476afdae9451caa35d962c3955427ded36e1dd1267",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,66 +97,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "793d7e7958443fdc9e0b508dacba0310438e7656d114e006bdb5d9034c47da74",
+            "sha256": "5038890b893c8a72006f2e476afdae9451caa35d962c3955427ded36e1dd1267",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/8Qgl0RijAbA.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "rTc88blekj0",
-      "title": "How Hits Changed Overnight | NEWS-MONSTER",
-      "description": "How Hits Changed Overnight | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-09-02T19:47:26.808Z",
-      "publishedLabel": "Sep 2, 07:47 PM",
-      "thumbnail": "/thumbnails/rTc88blekj0.png",
-      "thumbnailSha256": "eeb3fadc3c12b51adc6f3c9bc8743559bf9ee78b1bf7b6fb5ae9ee44f13c02eb",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/rTc88blekj0",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "rTc88blekj0",
-          "url": "https://youtu.be/rTc88blekj0",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "eeb3fadc3c12b51adc6f3c9bc8743559bf9ee78b1bf7b6fb5ae9ee44f13c02eb",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 4,
-          "thumbnail": {
-            "sha256": "eeb3fadc3c12b51adc6f3c9bc8743559bf9ee78b1bf7b6fb5ae9ee44f13c02eb",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/rTc88blekj0.png"
+            "path": "public/thumbnails/dCmk2uBQzkI.png"
           }
         },
         "linkedin": {
