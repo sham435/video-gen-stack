@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-02T12:09:18.989Z",
+  "updatedAt": "2026-09-02T12:44:05.499Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "_NcU0JjOEuM",
-      "title": "Samsung Confirms Free Feature Upgrade For Millions Of Galaxy Phones - forbes.com | NEWS-MONSTER",
-      "description": "Samsung Confirms Free Feature Upgrade For Millions Of Galaxy Phones - forbes.com | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-02T12:09:17.881Z",
-      "publishedLabel": "Sep 2, 12:09 PM",
-      "thumbnail": "/thumbnails/_NcU0JjOEuM.png",
-      "thumbnailSha256": "7e20bf188e4aea0dc1c5636c18cfc19348b5371a724641040b93ab3cc993cc10",
+      "id": "TspvvqgI7m4",
+      "title": "Brandenburg: Sprengvorrichtung an Umspannwerk gefunden | NEWS-MONSTER",
+      "description": "Brandenburg: Sprengvorrichtung an Umspannwerk gefunden | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-02T12:44:05.015Z",
+      "publishedLabel": "Sep 2, 12:44 PM",
+      "thumbnail": "/thumbnails/TspvvqgI7m4.png",
+      "thumbnailSha256": "da054fcd3489afd0707f030bf0ef57fa3bf5310ef1d117fafdf49fb9d16e93e2",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/_NcU0JjOEuM",
+      "youtubeUrl": "https://youtu.be/TspvvqgI7m4",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "_NcU0JjOEuM",
-          "url": "https://youtu.be/_NcU0JjOEuM",
+          "videoId": "TspvvqgI7m4",
+          "url": "https://youtu.be/TspvvqgI7m4",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "7e20bf188e4aea0dc1c5636c18cfc19348b5371a724641040b93ab3cc993cc10",
+            "sha256": "da054fcd3489afd0707f030bf0ef57fa3bf5310ef1d117fafdf49fb9d16e93e2",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "7e20bf188e4aea0dc1c5636c18cfc19348b5371a724641040b93ab3cc993cc10",
+            "sha256": "da054fcd3489afd0707f030bf0ef57fa3bf5310ef1d117fafdf49fb9d16e93e2",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/_NcU0JjOEuM.png"
+            "path": "public/thumbnails/TspvvqgI7m4.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,83 @@
       }
     },
     {
-      "id": "HgzpHoWZiCg",
-      "title": "Round Up: The Reviews For Orbitals On Switch 2 Are In - Nintendo Life | NEWS-MONSTER",
-      "description": "Round Up: The Reviews For Orbitals On Switch 2 Are In - Nintendo Life | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-02T12:05:54.202Z",
-      "publishedLabel": "Sep 2, 12:05 PM",
-      "thumbnail": "/thumbnails/HgzpHoWZiCg.png",
-      "thumbnailSha256": "941a917c8cabef74d62968047e9cd169453c2aaf3236ef948501dfa2df0752b0",
+      "id": "09f3wXEDLKA",
+      "title": "Tesla Stock Soars. Robotaxi Event Could Be the Next Big Catalyst | NEWS-MONSTER",
+      "description": "Tesla Stock Soars. Robotaxi Event Could Be the Next Big Catalyst | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-02T12:40:30.346Z",
+      "publishedLabel": "Sep 2, 12:40 PM",
+      "thumbnail": "/thumbnails/09f3wXEDLKA.png",
+      "thumbnailSha256": "b41bb4c98d998402431b8a6917d0282df709d6149c3d54fda039909c507f7f50",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/HgzpHoWZiCg",
+      "youtubeUrl": "https://youtu.be/09f3wXEDLKA",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "HgzpHoWZiCg",
-          "url": "https://youtu.be/HgzpHoWZiCg",
+          "videoId": "09f3wXEDLKA",
+          "url": "https://youtu.be/09f3wXEDLKA",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "941a917c8cabef74d62968047e9cd169453c2aaf3236ef948501dfa2df0752b0",
+            "sha256": "b41bb4c98d998402431b8a6917d0282df709d6149c3d54fda039909c507f7f50",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "b41bb4c98d998402431b8a6917d0282df709d6149c3d54fda039909c507f7f50",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/09f3wXEDLKA.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "3UPTwHRBbIM",
+      "title": "ID.4 Just Set Up What Comes Next | NEWS-MONSTER",
+      "description": "ID.4 Just Set Up What Comes Next | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-02T12:37:12.748Z",
+      "publishedLabel": "Sep 2, 12:37 PM",
+      "thumbnail": "/thumbnails/3UPTwHRBbIM.png",
+      "thumbnailSha256": "4f846851cc8b0c42cc32cb4babe87bb29e3b94552c44561f6d20a5aafbb06faa",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/3UPTwHRBbIM",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "3UPTwHRBbIM",
+          "url": "https://youtu.be/3UPTwHRBbIM",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "4f846851cc8b0c42cc32cb4babe87bb29e3b94552c44561f6d20a5aafbb06faa",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +151,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "941a917c8cabef74d62968047e9cd169453c2aaf3236ef948501dfa2df0752b0",
+            "sha256": "4f846851cc8b0c42cc32cb4babe87bb29e3b94552c44561f6d20a5aafbb06faa",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/HgzpHoWZiCg.png"
+            "path": "public/thumbnails/3UPTwHRBbIM.png"
           }
         },
         "linkedin": {
