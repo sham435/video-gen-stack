@@ -33,10 +33,13 @@ export const SAFE_ZONES = {
 // WIDTH: headline and caption wrap to 60% of the frame (not 85%) so narrative
 // body text reads as a readable centered column — the observed 16:9 bug
 // shipped 2-line VO sentences stacked edge-to-edge, visually colliding.
+// HEIGHT: narration roles get a 45%-of-frame band (was 25%) so a full 2-3 line
+// VO sentence at the 3.0x line-height factor fits without the fitter trimming
+// words to a truncated one-liner + ellipsis.
 export const ROLE_CONFIG = {
   emphasis: { priority: 3, widthRatio: 0.90, heightRatio: 0.30, anchor: 0.90, floor: 36, maxLines: 2 },
-  headline: { priority: 2, widthRatio: 0.60, heightRatio: 0.25, anchor: 0.62, floor: 34, maxLines: 2 },
-  caption:  { priority: 1, widthRatio: 0.60, heightRatio: 0.25, anchor: 0.78, floor: 32, maxLines: 2 },
+  headline: { priority: 2, widthRatio: 0.60, heightRatio: 0.45, anchor: 0.62, floor: 34, maxLines: 3 },
+  caption:  { priority: 1, widthRatio: 0.60, heightRatio: 0.45, anchor: 0.78, floor: 32, maxLines: 3 },
   source:   { priority: 0, widthRatio: 0.85, heightRatio: 0.20, anchor: 0.90, floor: 28, maxLines: 1 },
 }
 

@@ -31,9 +31,12 @@ export class TextLayoutEngine {
       minFontSize: cfg.floor,
       fontFamily: font,
       maxLines: ml,
-      // Fit against the SAME line-height the layout will store (captions use
-      // 1.6). Without this the fitter validates height at the 1.25 default and
-      // flags a caption as fitting that assertSafe later quarantines.
+      // Fit against the SAME line-height the layout will store. Without this
+      // the fitter validates height at the 1.25 default and flags a caption as
+      // fitting that assertSafe later quarantines. Caption/headline narration
+      // is spaced at 3.0x so multi-line VO sentences keep clear air between
+      // lines (observed overlap shipped 2.0x but the drawn factor was further
+      // crushed by HeadlineCard's design-space rescale — fixed there).
       lineHeightFactor: lineHeightFactorFor(role),
     })
 
@@ -98,12 +101,12 @@ export class TextLayoutEngine {
   }
 }
 
-// Per-role line-height multiplier. Captions and headlines use the design token
-// (typography.spacing.lineHeight.caption = 1.6) but both are raised here to
-// 2.0: the observed overlap bug shipped multi-line narration at the cramped
-// 1.25 default, making lines visually collide. 2.0x guarantees every spoken
-// line keeps clear vertical separation regardless of wrap depth. Lower-priority
-// roles keep the FontMetrics default of 1.25.
+// Per-role line-height multiplier. Caption/headline narration is spaced at
+// 3.0x: the observed overlap bug shipped multi-line VO sentences at the
+// cramped 1.25 default (2.0x still visually collided because drawHeadlineCard
+// re-scaled the layout's already-logical lineHeight through the 1920-design
+// sy() divider — that double-scaling is fixed there, so 3.0x is the real
+// drawn gap). Lower-priority roles keep the FontMetrics default of 1.25.
 function lineHeightFactorFor(role) {
-  return role === 'caption' || role === 'headline' ? 2.0 : 1.25
+  return role === 'caption' || role === 'headline' ? 3.0 : 1.25
 }
