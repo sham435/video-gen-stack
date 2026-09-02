@@ -1,29 +1,29 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-02T04:13:22.300Z",
+  "updatedAt": "2026-09-02T04:25:52.426Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "kteKYws-Xag",
+      "id": "-QyWmOxP47Y",
       "title": "Pikmin 3 Deluxe 1.2.0 update out now, patch notes - new benefits for Nintendo Switch 2 pla | NEWS-MONSTER",
       "description": "Pikmin 3 Deluxe 1.2.0 update out now, patch notes - new benefits for Nintendo Switch 2 pla | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-02T04:13:21.714Z",
-      "publishedLabel": "Sep 2, 04:13 AM",
-      "thumbnail": "/thumbnails/kteKYws-Xag.png",
+      "publishedAt": "2026-09-02T04:25:51.272Z",
+      "publishedLabel": "Sep 2, 04:25 AM",
+      "thumbnail": "/thumbnails/-QyWmOxP47Y.png",
       "thumbnailSha256": "ff317cd9c062f39ff1400729a57e4ccfdd027992d529a3396a436fedf709cfca",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/kteKYws-Xag",
+      "youtubeUrl": "https://youtu.be/-QyWmOxP47Y",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "kteKYws-Xag",
-          "url": "https://youtu.be/kteKYws-Xag",
+          "videoId": "-QyWmOxP47Y",
+          "url": "https://youtu.be/-QyWmOxP47Y",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "ff317cd9c062f39ff1400729a57e4ccfdd027992d529a3396a436fedf709cfca",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 1,
+          "durationMs": 2,
           "thumbnail": {
             "sha256": "ff317cd9c062f39ff1400729a57e4ccfdd027992d529a3396a436fedf709cfca",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/kteKYws-Xag.png"
+            "path": "public/thumbnails/-QyWmOxP47Y.png"
           }
         },
         "linkedin": {
@@ -58,26 +58,26 @@
       }
     },
     {
-      "id": "cYQj3GhBsPo",
+      "id": "n2a_Gj31R0Y",
       "title": "‘Most’ of Star Wars Zero Company studio Bit Reactor was furloughed ahead of launch - Game  | NEWS-MONSTER",
       "description": "‘Most’ of Star Wars Zero Company studio Bit Reactor was furloughed ahead of launch - Game  | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-02T04:10:01.307Z",
-      "publishedLabel": "Sep 2, 04:10 AM",
-      "thumbnail": "/thumbnails/cYQj3GhBsPo.png",
+      "publishedAt": "2026-09-02T04:22:39.659Z",
+      "publishedLabel": "Sep 2, 04:22 AM",
+      "thumbnail": "/thumbnails/n2a_Gj31R0Y.png",
       "thumbnailSha256": "c2e085b93e9cb658a32c3583f2f467daec0ea7860cc82ecb8b079031035dc0df",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/cYQj3GhBsPo",
+      "youtubeUrl": "https://youtu.be/n2a_Gj31R0Y",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "cYQj3GhBsPo",
-          "url": "https://youtu.be/cYQj3GhBsPo",
+          "videoId": "n2a_Gj31R0Y",
+          "url": "https://youtu.be/n2a_Gj31R0Y",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "c2e085b93e9cb658a32c3583f2f467daec0ea7860cc82ecb8b079031035dc0df",
@@ -95,14 +95,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 4,
           "thumbnail": {
             "sha256": "c2e085b93e9cb658a32c3583f2f467daec0ea7860cc82ecb8b079031035dc0df",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/cYQj3GhBsPo.png"
+            "path": "public/thumbnails/n2a_Gj31R0Y.png"
           }
         },
         "linkedin": {

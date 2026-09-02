@@ -1,7 +1,7 @@
 {
   "runId": "job-art-3b48bc622b753b42",
-  "videoId": "kteKYws-Xag",
-  "publishedAt": "2026-09-02T04:13:21.715Z",
+  "videoId": "-QyWmOxP47Y",
+  "publishedAt": "2026-09-02T04:25:51.272Z",
   "render": {
     "width": 1920,
     "height": 1080,
@@ -16,7 +16,7 @@
       "sha256": "ff317cd9c062f39ff1400729a57e4ccfdd027992d529a3396a436fedf709cfca"
     },
     "remote": {
-      "url": "https://i.ytimg.com/vi/kteKYws-Xag/maxresdefault.jpg",
+      "url": "https://i.ytimg.com/vi/-QyWmOxP47Y/maxresdefault.jpg",
       "width": 1280,
       "height": 720,
       "sha256": "a2866edf571c18fd3950bc0d14a12d194828df2745c7be1dd99559b186814e91"
@@ -27,18 +27,18 @@
   "verification": {
     "state": "VERIFIED (REENCODED)",
     "passed": true,
-    "durationMs": 379,
+    "durationMs": 368,
     "failures": []
   },
   "upload": {
     "state": "SUCCESS",
-    "url": "https://youtu.be/kteKYws-Xag"
+    "url": "https://youtu.be/-QyWmOxP47Y"
   },
   "distribution": {
     "youtube": {
       "state": "SUCCESS",
-      "videoId": "kteKYws-Xag",
-      "url": "https://youtu.be/kteKYws-Xag",
+      "videoId": "-QyWmOxP47Y",
+      "url": "https://youtu.be/-QyWmOxP47Y",
       "thumbnail": {
         "state": "SUCCESS",
         "sha256": "ff317cd9c062f39ff1400729a57e4ccfdd027992d529a3396a436fedf709cfca",
@@ -56,14 +56,14 @@
       "manifestUpdated": true,
       "attempts": 1,
       "errors": [],
-      "durationMs": 1,
+      "durationMs": 2,
       "thumbnail": {
         "sha256": "ff317cd9c062f39ff1400729a57e4ccfdd027992d529a3396a436fedf709cfca",
         "width": 3840,
         "height": 2160,
         "mimeType": "image/png",
         "aspectRatio": "16:9",
-        "path": "public/thumbnails/kteKYws-Xag.png"
+        "path": "public/thumbnails/-QyWmOxP47Y.png"
       }
     },
     "linkedin": {
