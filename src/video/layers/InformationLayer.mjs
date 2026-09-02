@@ -123,7 +123,32 @@ export class InformationLayer {
     ctx.textBaseline = 'middle'
     ctx.font = `900 ${fontSize}px Montserrat ExtraBold, sans-serif`
 
+    // Word-stagger readability (cinematic refinement):
+    //   TRANSITION_MS  = 140 — each word's fly-in (position + opacity) completes
+    //     in a SHORT fixed window. After it, the word is fully static — no
+    //     residual motion/fade for its remaining on-screen time.
+    //   STAGGER_MS     = 200 — words land 200ms apart (reading-pace knob).
+    //     The transition is SHORTER than the stagger, so a word is already
+    //     static before the next one starts moving — this is what makes the
+    //     assembled headline decipherable (the old 140ms-stagger/240ms-ease
+    //     meant the next word was still animating while the previous never
+    //     settled, reading as "flying past").
+    //   TAIL_HOLD_MS   = 420 — after the LAST word lands, the fully-assembled
+    //     line must hold static ≥400ms before the layer window closes, so the
+    //     viewer gets a frozen, readable frame (not a rolling fade mid-sentence).
+    const TRANSITION_MS = 0.140
+    const STAGGER_MS = 0.200
+    const TAIL_HOLD_MS = 0.420
+    // We coarse-grain the primary fade-up so motion stops once assembly is done.
     let wordCounter = 0
+    const totalWords = lines.flatMap(l => l.split(' ')).length
+    const firstWordT = (time - layerStart - 0 * STAGGER_MS) / TRANSITION_MS
+    // The last word lands at `layerStart + (totalWords-1)*STAGGER_MS + TRANSITION_MS`.
+    // Enforce a static tail hold by damping the layer alpha to 0 only AFTER
+    // that assembly completes; the remaining per-word alpha is derived from the
+    // same single curve so NO word keeps easing its whole window.
+    const assembledAt = layerStart + (totalWords - 1) * STAGGER_MS + TRANSITION_MS
+    const holdUntil = assembledAt + TAIL_HOLD_MS
     lines.forEach((line, i) => {
       // hard wrap long lines
       const pieces = []
@@ -138,13 +163,19 @@ export class InformationLayer {
         const py = -offset + i * lineH - pieceOffset + pi * lineH
         for (const w of piece.split(' ')) {
           const isKeyword = keyword && w.includes(keyword)
-          // word stagger: each word enters 0.14s after the previous, fade-up,
-          // slower + shorter travel so the phrase is readable (“quickly fly”
-          // feedback on hook text: 0.06s/0.12s + 28px was too fast to see)
-          const wordT = Math.min(1, Math.max(0, (time - layerStart - wordCounter * 0.14) / 0.24))
+          // One easing curve for ALL words: each word's opacity/position derive
+          // from the SAME static-first curve. Once firstWordT hits 1, every
+          // word is frozen (opacity = TAIL envelope, offset = 0). No word keeps
+          // moving for its whole window.
+          const wordStart = layerStart + wordCounter * STAGGER_MS
+          const wordLocal = Math.min(1, Math.max(0, (time - wordStart) / TRANSITION_MS))
+          // Global hold gate: after the last word lands, hold the ENTIRE line
+          // static until `holdUntil`, then fade the assembly out together.
+          const holdAlpha = time < holdUntil ? 1 : Math.min(1, Math.max(0, (1 - (time - holdUntil) / TRANSITION_MS)))
+          const wordT = Math.min(firstWordT, wordLocal, holdAlpha)
           ctx.save()
           ctx.globalAlpha = Math.min(alpha, wordT) * (isKeyword ? 1 : 0.95)
-          ctx.translate(0, (1 - wordT) * 12)
+          ctx.translate(0, (1 - wordLocal) * 12)
           ctx.shadowColor = 'rgba(0,0,0,0.9)'
           ctx.shadowBlur = 12
           ctx.lineWidth = Math.max(2, fontSize * 0.10)
@@ -385,7 +416,7 @@ if (tagP > 0) {
       ctx.save()
       ctx.globalAlpha = tagP
       ctx.font = `900 ${tagSize}px "Montserrat ExtraBold", sans-serif`
-      const tagLines = wrapText(ctx, 'UNFILTERED BREAKING NEWS FROM THE FUTURE', close.tagline.maxWidth, 2)
+      const tagLines = wrapText(ctx, 'UNFILTERED NEWS FROM THE FUTURE', close.tagline.maxWidth, 2)
       const blockH = tagLines.length * leading
       // The tagline block must sit CLEAR of the NEWS-MONSTER brand mark above
       // it (brand ink spans brandCenter ± half the sy(140) em — the observed
@@ -401,7 +432,7 @@ if (tagP > 0) {
       const maxBottom = footerTop - safeGap
       if (blockTop + blockH > maxBottom) blockTop = maxBottom - blockH
       renderTextBlock(ctx, {
-        text: 'UNFILTERED BREAKING NEWS FROM THE FUTURE',
+        text: 'UNFILTERED NEWS FROM THE FUTURE',
         fontFamily: '"Montserrat ExtraBold"',
         fontSize: tagSize,
         fontWeight: 900,
