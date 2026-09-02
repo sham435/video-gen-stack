@@ -21,8 +21,6 @@ const BRIGHT_WHITE_STOPS = [
 
 const EXTRUSION_DEPTHS = [12, 9, 6, 3] // px, drawn bottom-up (darkest last)
 const EXTRUSION_COLORS = ['#4A4F5A', '#5B606B', '#6C717C', '#7D828D'] // slate depth
-const YELLOW_OUTLINE = '#FFE600'
-const OUTLINE_WIDTH_SCALE = 0.16 // relative to font size
 
 function brightWhiteGradient(ctx, y, fontSize) {
   const half = fontSize * 0.62
@@ -111,23 +109,17 @@ export function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF', fontSiz
       ctx.fillText(line, x, y + depth)
     }
 
-    // 2) Black narrow outline — thin dark halo OUTSIDE the yellow ring so
-    //    white text stays visible over ANY background (the fix for "not visible"
-    //    feedback: white-on-white/bright scrim disappears without a dark edge).
+    // 2) BLACK OUTLINE — the visible broadcast stroke (spec: pure black
+    //    #000000, thickness 8-12% of font size, here 10%). Drawn wide enough
+    //    that its solid core shows as a crisp dark edge around the white face.
     ctx.globalAlpha = charP
-    ctx.strokeStyle = 'rgba(0,0,0,0.95)'
-    ctx.lineWidth = Math.max(3, size * 0.20)
+    ctx.strokeStyle = 'rgb(0,0,0)'
+    ctx.lineWidth = Math.max(2, size * 0.10)
     ctx.lineJoin = 'round'
     ctx.strokeText(line, x, y)
 
-    // 3) Yellow broadcast outline — sits inside the black halo.
-    ctx.globalAlpha = charP
-    ctx.strokeStyle = YELLOW_OUTLINE
-    ctx.lineWidth = Math.max(4, size * OUTLINE_WIDTH_SCALE)
-    ctx.lineJoin = 'round'
-    ctx.strokeText(line, x, y)
-
-    // 4) Bright white fill — clean broadcast white face on top of the outlines.
+    // 3) Bright white fill — clean broadcast white face (spec: pure white
+    //    #FFFFFF) on top of the black outline.
     ctx.fillStyle = brightWhiteGradient(ctx, y, size)
     ctx.fillText(line, x, y)
 
