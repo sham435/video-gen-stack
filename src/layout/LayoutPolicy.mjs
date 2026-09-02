@@ -8,7 +8,7 @@
 
 const DEFAULTS = {
   emphasis: { preferredFontSize: 120, maxLines: 1 },
-  headline: { preferredFontSize: 92, maxLines: 3 },
+  headline: { preferredFontSize: 92, maxLines: 2 },
   caption: { preferredFontSize: 58, maxLines: 2 },
   source: { preferredFontSize: 48, maxLines: 1 },
 }

@@ -10,15 +10,15 @@ export class ResponsiveTextScaler {
   static SHORTS = { widthRatio: 0.85, heightRatio: 0.25 }
   static SHORTS_CANVAS = { width: 1080, height: 1920 }
 
-  // { text, maxWidth, maxHeight, fontSize, minFontSize = 18, fontFamily, maxLines, lineHeightFactor } ->
+  // { text, maxWidth, maxHeight, fontSize, minFontSize = 18, fontFamily, maxLines, lineHeightFactor, preferSentences } ->
   // { fontSize, scalePercent, overflow, wrap: { lines, widths } }
-  static fit({ text, maxWidth, maxHeight, fontSize, minFontSize = 18, fontFamily = 'Inter', maxLines = Infinity, lineHeightFactor = 1.25 } = {}) {
+  static fit({ text, maxWidth, maxHeight, fontSize, minFontSize = 18, fontFamily = 'Inter', maxLines = Infinity, lineHeightFactor = 1.25, preferSentences = false } = {}) {
     const textStr = String(text || '')
     const startSize = Math.max(1, Math.floor(fontSize || 18))
     const floor = Math.max(1, Math.floor(minFontSize || 18))
     let size = startSize
 
-    const wrapAt = (s) => LineWrapper.wrap({ text: textStr, maxWidth, fontSize: s, fontFamily, maxLines })
+    const wrapAt = (s) => LineWrapper.wrap({ text: textStr, maxWidth, fontSize: s, fontFamily, maxLines, preferSentences })
     const fits = (wrap) => {
       if (wrap.overflow) return false
       const width = Math.max(...wrap.widths, 0)
