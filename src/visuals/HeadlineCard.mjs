@@ -1,40 +1,39 @@
 // HeadlineCard — broadcast narration headline.
 //
-// NEW STYLE (2026-09): metallic 3D red text with yellow outline:
+// NEW STYLE (2026-09): bright white bold 3D text with yellow outline:
 //   - 3D extrusion: the line is filled several times below itself in
-//     progressively darker red, giving a beveled depth without needing shadows
-//   - metallic gradient fill: brushed-metal red sheen (light top edge -> deep
-//     red body -> darker bottom), so highlights follow the glyph surface
-//   - yellow outline: broadcast-style contrast stroke (readable over any
-//     scrim/background, matches the 16:9 news chrome).
+//     progressively darker slate gray, giving a beveled depth without shadows
+//   - white bright gradient fill: clean broadcast white face (crisp top edge
+//     -> light body -> soft slate bottom), readable over any scrim
+//   - yellow outline: broadcast-style contrast stroke around each glyph.
 // Layout values (fontSize/lineHeight/y) come in logical canvas units from
 // TextLayoutEngine — never re-scale them (the old sx()/sy() rescale crushed
 // the line gap and caused the shipped overlap).
 import { DesignSystem } from './DesignSystem.mjs'
 
-const METALLIC_RED_STOPS = [
-  [0.00, '#FFF3DE'], // top specular highlight
-  [0.22, '#FFD24A'], // warm metal edge
-  [0.38, '#FF2A1F'], // hot red
-  [0.55, '#D40000'], // broadcast red
-  [0.78, '#8F0A00'], // deep shadow red
-  [1.00, '#4A0500'], // bottom dark bevel
+const BRIGHT_WHITE_STOPS = [
+  [0.00, '#FFFFFF'], // top crisp white
+  [0.35, '#FFFFFF'], // bright face
+  [0.62, '#F2F4F8'], // light body
+  [0.85, '#D7DBE3'], // soft gray lower face
+  [1.00, '#B9BEC9'], // bottom bevel
 ]
 
 const EXTRUSION_DEPTHS = [12, 9, 6, 3] // px, drawn bottom-up (darkest last)
+const EXTRUSION_COLORS = ['#4A4F5A', '#5B606B', '#6C717C', '#7D828D'] // slate depth
 const YELLOW_OUTLINE = '#FFE600'
 const OUTLINE_WIDTH_SCALE = 0.16 // relative to font size
 
-function metallicGradient(ctx, y, fontSize) {
+function brightWhiteGradient(ctx, y, fontSize) {
   const half = fontSize * 0.62
   const grad = ctx.createLinearGradient(0, y - half, 0, y + half)
-  for (const [stop, color] of METALLIC_RED_STOPS) grad.addColorStop(stop, color)
+  for (const [stop, color] of BRIGHT_WHITE_STOPS) grad.addColorStop(stop, color)
   return grad
 }
 
 export function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF', fontSize = 0, layout = null) {
   const { W, H, sx, sy } = DesignSystem
-  const p = Math.min(1, progress * 1.5)
+  const p = Math.min(1, progress * 1.2)
   const words = text.split(' ')
   const lines = []
   const maxChars = 10
@@ -88,11 +87,13 @@ export function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF', fontSiz
   ctx.shadowOffsetY = depthOffset
 
   lines.forEach((line, i) => {
-    const charP = Math.max(0, Math.min(1, (p * 1.5) - i * 0.1))
+    const charP = Math.max(0, Math.min(1, (p * 1.2) - i * 0.08))
     // Middle-baseline step within the block box: line i occupies
     // [blockTop + i*lh, blockTop + (i+1)*lh), glyph centered on the box middle.
-    const y = blockTop + lineH * (i + 0.5) + (1 - charP) * 30
-    const x = W / 2 + (1 - charP) * 60 * (i % 2 === 0 ? 1 : -1)
+    // Both sentences are always centered on W/2 — a small vertical drop for the
+    // reveal, NO alternating horizontal sway.
+    const y = blockTop + lineH * (i + 0.5) + (1 - charP) * 24
+    const x = W / 2
 
     ctx.save()
     ctx.globalAlpha = charP
@@ -101,12 +102,13 @@ export function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF', fontSiz
     ctx.textBaseline = 'middle'
     ctx.lineJoin = 'round'
 
-    // 1) 3D extrusion — repeated fills pulled down (darkest = furthest depth,
-    //    slightly transparent so the bevel reads as metal shading).
-    ctx.fillStyle = '#5A0500'
-    for (const d of EXTRUSION_DEPTHS) {
-      ctx.globalAlpha = charP * (0.85 - d / 32)
-      ctx.fillText(line, x, y + d)
+    // 1) 3D extrusion — repeated fills pulled down, darkest slate = furthest
+    //    depth, slightly transparent so the bevel reads as depth.
+    for (let d = 0; d < EXTRUSION_DEPTHS.length; d++) {
+      const depth = EXTRUSION_DEPTHS[d]
+      ctx.globalAlpha = charP * (0.9 - d / 24)
+      ctx.fillStyle = EXTRUSION_COLORS[d]
+      ctx.fillText(line, x, y + depth)
     }
 
     // 2) Yellow broadcast outline — high-contrast rim on top of the depth.
@@ -115,8 +117,8 @@ export function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF', fontSiz
     ctx.lineWidth = Math.max(4, size * OUTLINE_WIDTH_SCALE)
     ctx.strokeText(line, x, y)
 
-    // 3) Metallic red fill — brushed-metal gradient over the same path.
-    ctx.fillStyle = metallicGradient(ctx, y, size)
+    // 3) Bright white fill — clean broadcast white face over the same path.
+    ctx.fillStyle = brightWhiteGradient(ctx, y, size)
     ctx.fillText(line, x, y)
 
     ctx.restore()

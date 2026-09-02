@@ -104,13 +104,15 @@ export class TextLayoutEngine {
   }
 }
 
-// Per-role line-height multiplier. Narration (caption/headline) is spaced at
-// 2.5x: clear air between lines, and being tighter than 3.0x lets the fitter
-// reach a ~50% larger font for the same 2-line zone (the observed overlap bug
-// shipped multi-line VO sentences at the cramped 1.25 default — 2.0x still
-// collided because drawHeadlineCard re-scaled the layout's already-logical
-// lineHeight through the 1920-design sy() divider; that double-scaling is
-// fixed there). Lower-priority roles keep the FontMetrics default of 1.25.
+// Per-role line-height multiplier. The white body caption is spaced at 2.5x
+// (clear air between lines, still readable). The headline narration is 2.0x:
+// the double-scaling overlap bug is fixed in drawHeadlineCard (it keeps the
+// engine's already-logical lineHeight instead of re-scaling through the
+// 1920-design sy() divider), so 2.0x gives clean separation while letting the
+// fitter reach a ~50% LARGER font in the same 2-line zone. Lower-priority
+// roles keep the FontMetrics default of 1.25.
 function lineHeightFactorFor(role) {
-  return role === 'caption' || role === 'headline' ? 2.5 : 1.25
+  if (role === 'headline') return 2.0
+  if (role === 'caption') return 2.5
+  return 1.25
 }
