@@ -1,0 +1,74 @@
+{
+  "runId": "job-art-3b48bc622b753b42",
+  "videoId": "cifaiF1U_B0",
+  "publishedAt": "2026-09-02T03:55:51.626Z",
+  "render": {
+    "width": 1920,
+    "height": 1080,
+    "profile": "VIDEO",
+    "aspectRatio": "16:9"
+  },
+  "thumbnail": {
+    "source": {
+      "width": 3840,
+      "height": 2160,
+      "aspectRatio": "1.7778",
+      "sha256": "125714ebc56fe8c6cb335fac48110e723b248e2c8c2f867452020c0976587c19"
+    },
+    "remote": {
+      "url": "https://i.ytimg.com/vi/cifaiF1U_B0/maxresdefault.jpg",
+      "width": 1280,
+      "height": 720,
+      "sha256": "0fb19296174d8191efaba559fe47aa2ac732ba34fc99a00cc9291a57110481db"
+    },
+    "identity": "REENCODED",
+    "state": "CUSTOM_THUMBNAIL_ACCEPTED"
+  },
+  "verification": {
+    "state": "VERIFIED (REENCODED)",
+    "passed": true,
+    "durationMs": 392,
+    "failures": []
+  },
+  "upload": {
+    "state": "SUCCESS",
+    "url": "https://youtu.be/cifaiF1U_B0"
+  },
+  "distribution": {
+    "youtube": {
+      "state": "SUCCESS",
+      "videoId": "cifaiF1U_B0",
+      "url": "https://youtu.be/cifaiF1U_B0",
+      "thumbnail": {
+        "state": "SUCCESS",
+        "sha256": "125714ebc56fe8c6cb335fac48110e723b248e2c8c2f867452020c0976587c19",
+        "width": 3840,
+        "height": 2160,
+        "mimeType": "image/png",
+        "aspectRatio": "16:9"
+      }
+    },
+    "githubPages": {
+      "destination": "githubPages",
+      "state": "SUCCESS",
+      "deployment": "committed",
+      "thumbnailCopied": true,
+      "manifestUpdated": true,
+      "attempts": 1,
+      "errors": [],
+      "durationMs": 1,
+      "thumbnail": {
+        "sha256": "125714ebc56fe8c6cb335fac48110e723b248e2c8c2f867452020c0976587c19",
+        "width": 3840,
+        "height": 2160,
+        "mimeType": "image/png",
+        "aspectRatio": "16:9",
+        "path": "public/thumbnails/cifaiF1U_B0.png"
+      }
+    },
+    "linkedin": {
+      "state": "PENDING",
+      "postId": null
+    }
+  }
+}

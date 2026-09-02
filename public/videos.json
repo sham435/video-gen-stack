@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-02T02:58:39.947Z",
+  "updatedAt": "2026-09-02T03:55:52.671Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "Og-ZgQJbFTU",
-      "title": "Polymarket reportedly raises $300 million from Donald Trump Jr.’s investment fund - TechCr | NEWS-MONSTER",
-      "description": "Polymarket reportedly raises $300 million from Donald Trump Jr.’s investment fund - TechCr | NEWS-MONSTER",
-      "category": "business",
-      "publishedAt": "2026-09-02T02:58:39.363Z",
-      "publishedLabel": "Sep 2, 02:58 AM",
-      "thumbnail": "/thumbnails/Og-ZgQJbFTU.png",
-      "thumbnailSha256": "4506f136690cd0791618cac14a23cbc9f1fc5be1259ca05e61332ddf3fb8e4d5",
+      "id": "cifaiF1U_B0",
+      "title": "Pikmin 3 Deluxe 1.2.0 update out now, patch notes - new benefits for Nintendo Switch 2 pla | NEWS-MONSTER",
+      "description": "Pikmin 3 Deluxe 1.2.0 update out now, patch notes - new benefits for Nintendo Switch 2 pla | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-02T03:55:51.625Z",
+      "publishedLabel": "Sep 2, 03:55 AM",
+      "thumbnail": "/thumbnails/cifaiF1U_B0.png",
+      "thumbnailSha256": "125714ebc56fe8c6cb335fac48110e723b248e2c8c2f867452020c0976587c19",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/Og-ZgQJbFTU",
+      "youtubeUrl": "https://youtu.be/cifaiF1U_B0",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "Og-ZgQJbFTU",
-          "url": "https://youtu.be/Og-ZgQJbFTU",
+          "videoId": "cifaiF1U_B0",
+          "url": "https://youtu.be/cifaiF1U_B0",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "4506f136690cd0791618cac14a23cbc9f1fc5be1259ca05e61332ddf3fb8e4d5",
+            "sha256": "125714ebc56fe8c6cb335fac48110e723b248e2c8c2f867452020c0976587c19",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 4,
+          "durationMs": 1,
           "thumbnail": {
-            "sha256": "4506f136690cd0791618cac14a23cbc9f1fc5be1259ca05e61332ddf3fb8e4d5",
+            "sha256": "125714ebc56fe8c6cb335fac48110e723b248e2c8c2f867452020c0976587c19",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/Og-ZgQJbFTU.png"
+            "path": "public/thumbnails/cifaiF1U_B0.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "20sSF-e9gF0",
-      "title": "Three deaths in CAR-T trials prompt halt by Novartis; Bristol Myers programs also paused - | NEWS-MONSTER",
-      "description": "Three deaths in CAR-T trials prompt halt by Novartis; Bristol Myers programs also paused - | NEWS-MONSTER",
-      "category": "business",
-      "publishedAt": "2026-09-02T02:55:01.128Z",
-      "publishedLabel": "Sep 2, 02:55 AM",
-      "thumbnail": "/thumbnails/20sSF-e9gF0.png",
-      "thumbnailSha256": "1f23f97b8db6506dcae75b2096c8707415087708367e9f82ad3be8b6348eb0cd",
+      "id": "6bSJiQRLW4I",
+      "title": "‘Most’ of Star Wars Zero Company studio Bit Reactor was furloughed ahead of launch - Game  | NEWS-MONSTER",
+      "description": "‘Most’ of Star Wars Zero Company studio Bit Reactor was furloughed ahead of launch - Game  | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-02T03:52:36.505Z",
+      "publishedLabel": "Sep 2, 03:52 AM",
+      "thumbnail": "/thumbnails/6bSJiQRLW4I.png",
+      "thumbnailSha256": "dd40650df159c3f57f7fd0b7e5cbc09b4a245f24f43d8ad3e8284eb17805733b",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/20sSF-e9gF0",
+      "youtubeUrl": "https://youtu.be/6bSJiQRLW4I",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "20sSF-e9gF0",
-          "url": "https://youtu.be/20sSF-e9gF0",
+          "videoId": "6bSJiQRLW4I",
+          "url": "https://youtu.be/6bSJiQRLW4I",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "1f23f97b8db6506dcae75b2096c8707415087708367e9f82ad3be8b6348eb0cd",
+            "sha256": "dd40650df159c3f57f7fd0b7e5cbc09b4a245f24f43d8ad3e8284eb17805733b",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,66 +97,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "1f23f97b8db6506dcae75b2096c8707415087708367e9f82ad3be8b6348eb0cd",
+            "sha256": "dd40650df159c3f57f7fd0b7e5cbc09b4a245f24f43d8ad3e8284eb17805733b",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/20sSF-e9gF0.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "njg49TbzXeI",
-      "title": "The Detail Everyone Missed About Apple | NEWS-MONSTER",
-      "description": "The Detail Everyone Missed About Apple | NEWS-MONSTER",
-      "category": "business",
-      "publishedAt": "2026-09-02T02:51:25.325Z",
-      "publishedLabel": "Sep 2, 02:51 AM",
-      "thumbnail": "/thumbnails/njg49TbzXeI.png",
-      "thumbnailSha256": "7eed4c1417ffda5daaffac24c64b202f05d46a497edba5105c79c4f30b1b89a2",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/njg49TbzXeI",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "njg49TbzXeI",
-          "url": "https://youtu.be/njg49TbzXeI",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "7eed4c1417ffda5daaffac24c64b202f05d46a497edba5105c79c4f30b1b89a2",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "7eed4c1417ffda5daaffac24c64b202f05d46a497edba5105c79c4f30b1b89a2",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/njg49TbzXeI.png"
+            "path": "public/thumbnails/6bSJiQRLW4I.png"
           }
         },
         "linkedin": {
