@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-02T15:14:53.102Z",
+  "updatedAt": "2026-09-02T17:12:41.461Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "1Ce3wTQVRMQ",
-      "title": "Nvidia’s DLSS 5, explained - The Verge | NEWS-MONSTER",
-      "description": "Nvidia’s DLSS 5, explained - The Verge | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-02T15:14:51.719Z",
-      "publishedLabel": "Sep 2, 03:14 PM",
-      "thumbnail": "/thumbnails/1Ce3wTQVRMQ.png",
-      "thumbnailSha256": "2ee6df86acd8875cfe7382ec874c4ef6acfe372c0c784d810db38e3f7cbb1a86",
+      "id": "OqsDHT5EYhc",
+      "title": "Watch: When did iPads get as expensive as MacBooks? | NEWS-MONSTER",
+      "description": "Watch: When did iPads get as expensive as MacBooks? | NEWS-MONSTER",
+      "category": "techcrunch",
+      "publishedAt": "2026-09-02T17:12:40.970Z",
+      "publishedLabel": "Sep 2, 05:12 PM",
+      "thumbnail": "/thumbnails/OqsDHT5EYhc.png",
+      "thumbnailSha256": "f66a1601e8c344c6b021c85fa05ed3d846ba5a5729339bf5be4f5e7a4dcf51ed",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/1Ce3wTQVRMQ",
+      "youtubeUrl": "https://youtu.be/OqsDHT5EYhc",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "1Ce3wTQVRMQ",
-          "url": "https://youtu.be/1Ce3wTQVRMQ",
+          "videoId": "OqsDHT5EYhc",
+          "url": "https://youtu.be/OqsDHT5EYhc",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "2ee6df86acd8875cfe7382ec874c4ef6acfe372c0c784d810db38e3f7cbb1a86",
+            "sha256": "f66a1601e8c344c6b021c85fa05ed3d846ba5a5729339bf5be4f5e7a4dcf51ed",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +43,12 @@
           "errors": [],
           "durationMs": 4,
           "thumbnail": {
-            "sha256": "2ee6df86acd8875cfe7382ec874c4ef6acfe372c0c784d810db38e3f7cbb1a86",
+            "sha256": "f66a1601e8c344c6b021c85fa05ed3d846ba5a5729339bf5be4f5e7a4dcf51ed",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/1Ce3wTQVRMQ.png"
+            "path": "public/thumbnails/OqsDHT5EYhc.png"
           }
         },
         "linkedin": {
@@ -58,83 +58,29 @@
       }
     },
     {
-      "id": "ExWhP6KJMbI",
-      "title": "Here are iPhone 18 Pro’s new colors, says leaker - 9to5Mac | NEWS-MONSTER",
-      "description": "Here are iPhone 18 Pro’s new colors, says leaker - 9to5Mac | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-02T15:11:24.415Z",
-      "publishedLabel": "Sep 2, 03:11 PM",
-      "thumbnail": "/thumbnails/ExWhP6KJMbI.png",
-      "thumbnailSha256": "77487925f17bbf03d07ea01c79bb1da72e41d3c7093ef004f1bcab65ca00558b",
+      "id": "YnHOKWpDHVg",
+      "title": "$450M for Noname, two billion-dollar rounds, and good news for crypto startups | TechCrunc | NEWS-MONSTER",
+      "description": "$450M for Noname, two billion-dollar rounds, and good news for crypto startups | TechCrunc | NEWS-MONSTER",
+      "category": "techcrunch",
+      "publishedAt": "2026-09-02T17:09:15.142Z",
+      "publishedLabel": "Sep 2, 05:09 PM",
+      "thumbnail": "/thumbnails/YnHOKWpDHVg.png",
+      "thumbnailSha256": "b307f92ad46c40d7d546e14a3f74e17f057f0862b215b29e7c69f41da979f458",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/ExWhP6KJMbI",
+      "youtubeUrl": "https://youtu.be/YnHOKWpDHVg",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "ExWhP6KJMbI",
-          "url": "https://youtu.be/ExWhP6KJMbI",
+          "videoId": "YnHOKWpDHVg",
+          "url": "https://youtu.be/YnHOKWpDHVg",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "77487925f17bbf03d07ea01c79bb1da72e41d3c7093ef004f1bcab65ca00558b",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 4,
-          "thumbnail": {
-            "sha256": "77487925f17bbf03d07ea01c79bb1da72e41d3c7093ef004f1bcab65ca00558b",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/ExWhP6KJMbI.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "gmxzJt02j18",
-      "title": "Sony Institutes Harassment Policy Following PS5 Disc Controversy - Kotaku | NEWS-MONSTER",
-      "description": "Sony Institutes Harassment Policy Following PS5 Disc Controversy - Kotaku | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-02T15:08:00.926Z",
-      "publishedLabel": "Sep 2, 03:08 PM",
-      "thumbnail": "/thumbnails/gmxzJt02j18.png",
-      "thumbnailSha256": "122e4084a75ff5bc9c850494236cd13a77eba1019c71f2ff44bb9e5549006e11",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/gmxzJt02j18",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "gmxzJt02j18",
-          "url": "https://youtu.be/gmxzJt02j18",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "122e4084a75ff5bc9c850494236cd13a77eba1019c71f2ff44bb9e5549006e11",
+            "sha256": "b307f92ad46c40d7d546e14a3f74e17f057f0862b215b29e7c69f41da979f458",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -151,12 +97,66 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "122e4084a75ff5bc9c850494236cd13a77eba1019c71f2ff44bb9e5549006e11",
+            "sha256": "b307f92ad46c40d7d546e14a3f74e17f057f0862b215b29e7c69f41da979f458",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/gmxzJt02j18.png"
+            "path": "public/thumbnails/YnHOKWpDHVg.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "6BSi0lPRF3o",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONSTER",
+      "description": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONSTER",
+      "category": "techcrunch",
+      "publishedAt": "2026-09-02T17:05:41.220Z",
+      "publishedLabel": "Sep 2, 05:05 PM",
+      "thumbnail": "/thumbnails/6BSi0lPRF3o.png",
+      "thumbnailSha256": "a8c34ff89b7c0dca3fec737580eae35e0295dde9eb61b0cb97152701587ce5b2",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/6BSi0lPRF3o",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "6BSi0lPRF3o",
+          "url": "https://youtu.be/6BSi0lPRF3o",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "a8c34ff89b7c0dca3fec737580eae35e0295dde9eb61b0cb97152701587ce5b2",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 3,
+          "thumbnail": {
+            "sha256": "a8c34ff89b7c0dca3fec737580eae35e0295dde9eb61b0cb97152701587ce5b2",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/6BSi0lPRF3o.png"
           }
         },
         "linkedin": {
