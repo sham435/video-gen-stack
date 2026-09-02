@@ -1,32 +1,86 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-02T04:25:52.426Z",
+  "updatedAt": "2026-09-02T04:56:10.677Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "-QyWmOxP47Y",
+      "id": "KHUmjrLqxc0",
       "title": "Pikmin 3 Deluxe 1.2.0 update out now, patch notes - new benefits for Nintendo Switch 2 pla | NEWS-MONSTER",
       "description": "Pikmin 3 Deluxe 1.2.0 update out now, patch notes - new benefits for Nintendo Switch 2 pla | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-02T04:25:51.272Z",
-      "publishedLabel": "Sep 2, 04:25 AM",
-      "thumbnail": "/thumbnails/-QyWmOxP47Y.png",
-      "thumbnailSha256": "ff317cd9c062f39ff1400729a57e4ccfdd027992d529a3396a436fedf709cfca",
+      "publishedAt": "2026-09-02T04:56:10.117Z",
+      "publishedLabel": "Sep 2, 04:56 AM",
+      "thumbnail": "/thumbnails/KHUmjrLqxc0.png",
+      "thumbnailSha256": "b1b84809030cfd1957c104d9dc21bb08f11a453fe9d4da4ff8d0937be0a348c3",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/-QyWmOxP47Y",
+      "youtubeUrl": "https://youtu.be/KHUmjrLqxc0",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "-QyWmOxP47Y",
-          "url": "https://youtu.be/-QyWmOxP47Y",
+          "videoId": "KHUmjrLqxc0",
+          "url": "https://youtu.be/KHUmjrLqxc0",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "ff317cd9c062f39ff1400729a57e4ccfdd027992d529a3396a436fedf709cfca",
+            "sha256": "b1b84809030cfd1957c104d9dc21bb08f11a453fe9d4da4ff8d0937be0a348c3",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 1,
+          "thumbnail": {
+            "sha256": "b1b84809030cfd1957c104d9dc21bb08f11a453fe9d4da4ff8d0937be0a348c3",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/KHUmjrLqxc0.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "yhNsUnI5VMs",
+      "title": "‘Most’ of Star Wars Zero Company studio Bit Reactor was furloughed ahead of launch - Game  | NEWS-MONSTER",
+      "description": "‘Most’ of Star Wars Zero Company studio Bit Reactor was furloughed ahead of launch - Game  | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-02T04:52:49.639Z",
+      "publishedLabel": "Sep 2, 04:52 AM",
+      "thumbnail": "/thumbnails/yhNsUnI5VMs.png",
+      "thumbnailSha256": "2e4e15fa1308efc0072cf78d388f083b63d6f6407dd928e50852d48097b7e5d9",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/yhNsUnI5VMs",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "yhNsUnI5VMs",
+          "url": "https://youtu.be/yhNsUnI5VMs",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "2e4e15fa1308efc0072cf78d388f083b63d6f6407dd928e50852d48097b7e5d9",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,66 +97,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "ff317cd9c062f39ff1400729a57e4ccfdd027992d529a3396a436fedf709cfca",
+            "sha256": "2e4e15fa1308efc0072cf78d388f083b63d6f6407dd928e50852d48097b7e5d9",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/-QyWmOxP47Y.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "n2a_Gj31R0Y",
-      "title": "‘Most’ of Star Wars Zero Company studio Bit Reactor was furloughed ahead of launch - Game  | NEWS-MONSTER",
-      "description": "‘Most’ of Star Wars Zero Company studio Bit Reactor was furloughed ahead of launch - Game  | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-02T04:22:39.659Z",
-      "publishedLabel": "Sep 2, 04:22 AM",
-      "thumbnail": "/thumbnails/n2a_Gj31R0Y.png",
-      "thumbnailSha256": "c2e085b93e9cb658a32c3583f2f467daec0ea7860cc82ecb8b079031035dc0df",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/n2a_Gj31R0Y",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "n2a_Gj31R0Y",
-          "url": "https://youtu.be/n2a_Gj31R0Y",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "c2e085b93e9cb658a32c3583f2f467daec0ea7860cc82ecb8b079031035dc0df",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 4,
-          "thumbnail": {
-            "sha256": "c2e085b93e9cb658a32c3583f2f467daec0ea7860cc82ecb8b079031035dc0df",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/n2a_Gj31R0Y.png"
+            "path": "public/thumbnails/yhNsUnI5VMs.png"
           }
         },
         "linkedin": {
