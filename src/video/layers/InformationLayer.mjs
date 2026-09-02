@@ -78,8 +78,8 @@ export class InformationLayer {
     ctx.font = `900 ${fontSize}px Montserrat ExtraBold, sans-serif`
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
-    ctx.lineWidth = 4
-    ctx.strokeStyle = 'rgba(0,0,0,0.85)'
+    ctx.lineWidth = Math.max(2, fontSize * 0.10)
+    ctx.strokeStyle = 'rgb(0,0,0)'
     ctx.lineJoin = 'round'
     ctx.shadowColor = 'rgba(0,0,0,0.9)'
     ctx.shadowBlur = 24
@@ -147,8 +147,8 @@ export class InformationLayer {
           ctx.translate(0, (1 - wordT) * 12)
           ctx.shadowColor = 'rgba(0,0,0,0.9)'
           ctx.shadowBlur = 12
-          ctx.lineWidth = 3
-          ctx.strokeStyle = 'rgba(0,0,0,0.8)'
+          ctx.lineWidth = Math.max(2, fontSize * 0.10)
+          ctx.strokeStyle = 'rgb(0,0,0)'
           ctx.strokeText(w, 0, py)
           ctx.fillStyle = isKeyword ? '#E10600' : '#FFFFFF'
           ctx.fillText(w, 0, py)

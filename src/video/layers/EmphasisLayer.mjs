@@ -6,7 +6,6 @@
 // absent from the headline, and this layer only draws in its own timeline
 // window.
 import { DesignSystem } from '../../visuals/DesignSystem.mjs'
-import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
 import { canRenderText } from '../TextPolicy.mjs'
 import { FooterLayout } from '../footer/FooterLayout.mjs'
 
@@ -68,9 +67,9 @@ export class EmphasisLayer {
     lines.forEach((line, i) => {
       ctx.globalAlpha = Math.max(0.05, Math.min(1, (p - i * 0.15) * alpha))
       ctx.font = `900 ${fontSize}px Montserrat ExtraBold, sans-serif`
-      ctx.lineWidth = BROADCAST_TEXT.emphasis.strokeWidth
+      ctx.lineWidth = Math.max(2, fontSize * 0.10)
       ctx.lineJoin = 'round'
-      ctx.strokeStyle = 'rgba(0,0,0,0.85)'
+      ctx.strokeStyle = 'rgb(0,0,0)'
       ctx.strokeText(line, 0, i * lineH)
       ctx.fillStyle = accent
       ctx.fillText(line, 0, i * lineH)
