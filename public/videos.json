@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-02T11:12:23.166Z",
+  "updatedAt": "2026-09-02T11:37:13.796Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "b9tW4cWda5o",
-      "title": "What Dyson’s First Toothbrush Says About Oral Care’s Beauty Era - Vogue | NEWS-MONSTER",
-      "description": "What Dyson’s First Toothbrush Says About Oral Care’s Beauty Era - Vogue | NEWS-MONSTER",
+      "id": "NaIvrtrnp14",
+      "title": "Samsung Confirms Free Feature Upgrade For Millions Of Galaxy Phones - forbes.com | NEWS-MONSTER",
+      "description": "Samsung Confirms Free Feature Upgrade For Millions Of Galaxy Phones - forbes.com | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-02T11:12:21.977Z",
-      "publishedLabel": "Sep 2, 11:12 AM",
-      "thumbnail": "/thumbnails/b9tW4cWda5o.png",
-      "thumbnailSha256": "9ead2dfbcb544995d12e9373d4e909d84d4d2d3a286e2c8137b156624124d9da",
+      "publishedAt": "2026-09-02T11:37:12.874Z",
+      "publishedLabel": "Sep 2, 11:37 AM",
+      "thumbnail": "/thumbnails/NaIvrtrnp14.png",
+      "thumbnailSha256": "70778bc6b0bfffed89136a8692d570fb9b7c0c71ef853d73ad5ffa1c661ea384",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/b9tW4cWda5o",
+      "youtubeUrl": "https://youtu.be/NaIvrtrnp14",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "b9tW4cWda5o",
-          "url": "https://youtu.be/b9tW4cWda5o",
+          "videoId": "NaIvrtrnp14",
+          "url": "https://youtu.be/NaIvrtrnp14",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "9ead2dfbcb544995d12e9373d4e909d84d4d2d3a286e2c8137b156624124d9da",
+            "sha256": "70778bc6b0bfffed89136a8692d570fb9b7c0c71ef853d73ad5ffa1c661ea384",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,68 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 4,
+          "durationMs": 1,
           "thumbnail": {
-            "sha256": "9ead2dfbcb544995d12e9373d4e909d84d4d2d3a286e2c8137b156624124d9da",
+            "sha256": "70778bc6b0bfffed89136a8692d570fb9b7c0c71ef853d73ad5ffa1c661ea384",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/b9tW4cWda5o.png"
+            "path": "public/thumbnails/NaIvrtrnp14.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "RfJ4ImYOKbk",
+      "title": "Round Up: The Reviews For Orbitals On Switch 2 Are In - Nintendo Life | NEWS-MONSTER",
+      "description": "Round Up: The Reviews For Orbitals On Switch 2 Are In - Nintendo Life | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-02T11:34:09.480Z",
+      "publishedLabel": "Sep 2, 11:34 AM",
+      "thumbnail": "/thumbnails/RfJ4ImYOKbk.png",
+      "thumbnailSha256": "803270bc2daf0f8de66599750899f46373650214c8d4aabf648ff05d728fd9c7",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/RfJ4ImYOKbk",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "RfJ4ImYOKbk",
+          "url": "https://youtu.be/RfJ4ImYOKbk",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "803270bc2daf0f8de66599750899f46373650214c8d4aabf648ff05d728fd9c7",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 1,
+          "thumbnail": {
+            "sha256": "803270bc2daf0f8de66599750899f46373650214c8d4aabf648ff05d728fd9c7",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/RfJ4ImYOKbk.png"
           }
         },
         "linkedin": {
