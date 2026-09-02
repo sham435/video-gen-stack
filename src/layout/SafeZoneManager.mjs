@@ -38,7 +38,7 @@ export const SAFE_ZONES = {
 // words to a truncated one-liner + ellipsis.
 export const ROLE_CONFIG = {
   emphasis: { priority: 3, widthRatio: 0.90, heightRatio: 0.30, anchor: 0.90, floor: 36, maxLines: 2 },
-  headline: { priority: 2, widthRatio: 0.75, heightRatio: 0.45, anchor: 0.62, floor: 34, maxLines: 2 },
+  headline: { priority: 2, widthRatio: 0.85, heightRatio: 0.45, anchor: 0.62, floor: 34, maxLines: 2 },
   caption:  { priority: 1, widthRatio: 0.60, heightRatio: 0.45, anchor: 0.78, floor: 32, maxLines: 3 },
   source:   { priority: 0, widthRatio: 0.85, heightRatio: 0.20, anchor: 0.90, floor: 28, maxLines: 1 },
 }

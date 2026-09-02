@@ -67,7 +67,7 @@ export class EmphasisLayer {
 
     lines.forEach((line, i) => {
       ctx.globalAlpha = Math.max(0.05, Math.min(1, (p - i * 0.15) * alpha))
-      ctx.font = `900 ${fontSize}px Anton, Impact, sans-serif`
+      ctx.font = `900 ${fontSize}px Montserrat ExtraBold, sans-serif`
       ctx.lineWidth = BROADCAST_TEXT.emphasis.strokeWidth
       ctx.lineJoin = 'round'
       ctx.strokeStyle = 'rgba(0,0,0,0.85)'

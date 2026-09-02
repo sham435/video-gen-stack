@@ -12,6 +12,7 @@
 
 const FAMILY_FACTOR = {
   Anton: 1.08,
+  'Montserrat ExtraBold': 1.0,
   Inter: 1.0,
   Impact: 1.06,
   sans: 1.0,
