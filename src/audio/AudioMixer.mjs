@@ -133,10 +133,26 @@ export class AudioMixer {
     }
   }
 
-  mixAudio(videoPath, voicePath, musicPath, totalDuration, outPath) {
+  // musicEnvelope (optional): { outroStart, level } lowers the BGM bed to
+  // `level` (0-1 multiplier) for the outro window — a mix-level change (the
+  // existing sidechain already ducks music under voice; this drops the resting
+  // bed underneath the brand narration). When omitted the whole video keeps the
+  // current uniform bed.
+  mixAudio(videoPath, voicePath, musicPath, totalDuration, outPath, musicEnvelope = null) {
     const effectiveMusic = musicPath || this.getRandomMusic()
 
     if (effectiveMusic && fs.existsSync(effectiveMusic)) {
+      // Time-based music bed envelope: drop the bed to `level` from
+      // `outroStart` onward (frame-evaluated volume expression). When no
+      // envelope is supplied the standard uniform bed is used.
+      let bedFilter = '[v1][bg]sidechaincompress=threshold=0.05:ratio=8:attack=80:release=500:makeup=1[duck];'
+      let mixInputs = '[v2][duck]amix=inputs=2:duration=longest:dropout_transition=0:normalize=0[a]'
+      if (musicEnvelope && Number.isFinite(musicEnvelope.outroStart) && Number.isFinite(musicEnvelope.level)) {
+        const start = musicEnvelope.outroStart.toFixed(3)
+        const level = musicEnvelope.level.toFixed(3)
+        bedFilter += `[duck]volume='if(lt(t,${start}),1,${level})':eval=frame[duck2];`
+        mixInputs = '[v2][duck2]amix=inputs=2:duration=longest:dropout_transition=0:normalize=0[a]'
+      }
       const cmd = [
         'ffmpeg', '-y',
         '-i', videoPath,
@@ -149,8 +165,8 @@ export class AudioMixer {
         // stays intelligible" rule without burying the underscore.
         '[2:a]aformat=channel_layouts=stereo,afade=t=in:st=0:d=1,apad[bg];' +
         '[1:a]aformat=channel_layouts=stereo,volume=1.3,apad,asplit=2[v1][v2];' +
-        '[v1][bg]sidechaincompress=threshold=0.05:ratio=8:attack=80:release=500:makeup=1[duck];' +
-        '[v2][duck]amix=inputs=2:duration=longest:dropout_transition=0:normalize=0[a]',
+        bedFilter +
+        mixInputs,
         '-map', '0:v', '-map', '[a]',
         '-c:v', 'libx264', '-preset', 'medium', '-crf', '20',
         '-c:a', 'aac', '-b:a', '192k',

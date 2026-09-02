@@ -41,7 +41,7 @@ export class InformationLayer {
         break
       case 'brand_close':
       case 'close':
-        this.renderBrandClose(ctx, scene, progress)
+        await this.renderBrandClose(ctx, scene, progress)
         break
     }
   }
@@ -123,22 +123,29 @@ export class InformationLayer {
     ctx.textBaseline = 'middle'
     ctx.font = `900 ${fontSize}px Montserrat ExtraBold, sans-serif`
 
-    // Word-stagger readability (cinematic refinement):
-    //   TRANSITION_MS  = 140 — each word's fly-in (position + opacity) completes
-    //     in a SHORT fixed window. After it, the word is fully static — no
-    //     residual motion/fade for its remaining on-screen time.
-    //   STAGGER_MS     = 200 — words land 200ms apart (reading-pace knob).
-    //     The transition is SHORTER than the stagger, so a word is already
-    //     static before the next one starts moving — this is what makes the
-    //     assembled headline decipherable (the old 140ms-stagger/240ms-ease
-    //     meant the next word was still animating while the previous never
-    //     settled, reading as "flying past").
-    //   TAIL_HOLD_MS   = 420 — after the LAST word lands, the fully-assembled
-    //     line must hold static ≥400ms before the layer window closes, so the
-    //     viewer gets a frozen, readable frame (not a rolling fade mid-sentence).
-    const TRANSITION_MS = 0.140
-    const STAGGER_MS = 0.200
-    const TAIL_HOLD_MS = 0.420
+    // Word-stagger readability (cinematic refinement + addendum v2).
+    // Standard broadcast subtitle pace (~3 words/sec), applied UNIFORMLY to
+    // every hook-style sentence — the fix lives in this one shared rendering
+    // function, NOT in per-sentence tuning (the same "flying past" bug recurred
+    // on every new sentence because the old timing was hand-tuned per scene).
+    //   TRANSITION_MS  = 0.15 — each word's fly-in (position + opacity) completes
+    //     in a SHORT fixed window. After it the word is fully static.
+    //   STAGGER_MS     = 0.30 — words land 300ms apart (reading-pace knob).
+    //     IMPORTANT: transition (0.15s) completes WELL INSIDE the stagger
+    //     (0.30s), so every word is fully static for ~0.15s BEFORE the next
+    //     word starts moving — a genuine static frame between words, not just
+    //     slower numbers. This is the actual fix.
+    //   TAIL_HOLD_MS   = 0.45 — after the LAST word lands, the fully-assembled
+    //     line holds static ≥400ms before the layer window closes.
+    //   MIN_DISPLAY_S  = 0.6  — every sentence (even a SINGLE word like "FREE")
+    //     must hold fully-visible for at least this long before the scene
+    //     advances. Where animation timing is already fast, a 1-word phrase
+    //     "flying past" is a DISPLAY-DURATION problem, not a timing one — so we
+    //     guarantee a minimum on-screen static window beyond the stagger.
+    const TRANSITION_MS = 0.150
+    const STAGGER_MS = 0.300
+    const TAIL_HOLD_MS = 0.450
+    const MIN_DISPLAY_S = 0.6
     // We coarse-grain the primary fade-up so motion stops once assembly is done.
     let wordCounter = 0
     const totalWords = lines.flatMap(l => l.split(' ')).length
@@ -148,7 +155,11 @@ export class InformationLayer {
     // that assembly completes; the remaining per-word alpha is derived from the
     // same single curve so NO word keeps easing its whole window.
     const assembledAt = layerStart + (totalWords - 1) * STAGGER_MS + TRANSITION_MS
-    const holdUntil = assembledAt + TAIL_HOLD_MS
+    // Minimum on-screen display: even a 1-word phrase must hold static for
+    // MIN_DISPLAY_S after it lands, so the scene can't advance past it while it
+    // is mid-fly. This addresses the single-word "FREE" case where the old timing
+    // made the whole line read as a fast blur regardless of stagger.
+    const holdUntil = Math.max(assembledAt + TAIL_HOLD_MS, assembledAt + MIN_DISPLAY_S)
     lines.forEach((line, i) => {
       // hard wrap long lines
       const pieces = []
@@ -324,21 +335,76 @@ export class InformationLayer {
     ctx.restore()
   }
 
-  renderBrandClose(ctx, scene, progress) {
+  async _loadImg(url) {
+    if (!url) return null
+    if (!this._imgCache) this._imgCache = {}
+    if (this._imgCache[url]) return this._imgCache[url]
+    try {
+      const { loadImage } = await import('@napi-rs/canvas')
+      const img = await loadImage(url)
+      this._imgCache[url] = img
+      return img
+    } catch {
+      return null
+    }
+  }
+
+  // Presentation-style outro (addendum v2): a short 3-beat mini-sequence.
+  // Each beat shows a DIFFERENT background image/scenery (chosen by the asset
+  // system, staged onto the scene as `presentBackdrops`), the brand narration
+  // runs over them, and only the FINAL beat paints the fixed brand mark +
+  // tagline — the brand moment itself never changes, only the rhythm into it.
+  // When no backdrops are staged (older/failed paths) it falls back to the
+  // original single gradient brand card.
+  async renderBrandClose(ctx, scene, progress) {
     const { W, H, sx, sy } = DesignSystem
     const p = Math.min(1, Math.max(0, progress))
     const DUR = scene.duration || 3
     const t = p * DUR
 
+    // Three beats: imagery beat 1, imagery beat 2, then the brand card beat.
+    const backdrops = (Array.isArray(scene.presentBackdrops) && scene.presentBackdrops.length) ? scene.presentBackdrops : null
+    const nBeats = backdrops ? Math.min(3, backdrops.length) : 1
+    const beatLen = DUR / nBeats
+    const beatIndex = Math.min(nBeats - 1, Math.floor(t / beatLen))
+    const beatLocal = (t - beatIndex * beatLen) / beatLen // 0..1 within beat
+    const isFinalBeat = nBeats === 1 || beatIndex === nBeats - 1
+    const beatP = Math.min(1, beatLocal * 2) // fade in per beat
+
     const bgP = Math.min(1, t / 0.4)
-    const stayP = Math.min(1, Math.max(0, (t - 0.4) / 0.4))
-    const brandP = Math.min(1, Math.max(0, (t - 0.8) / 0.6))
-    const tagP = Math.min(1, Math.max(0, (t - 1.4) / 0.6))
-    const anchorP = Math.min(1, Math.max(0, (t - 2.0) / 0.4))
 
     ctx.save()
 
-    if (bgP > 0) {
+    // Background: the current beat's distinct imagery (cover-cropped) with a
+    // heavy dark scrim so the brand text stays legible. Falls back to the
+    // original navy gradient when no beat imagery is available.
+    const beatUrl = backdrops ? backdrops[beatIndex] : null
+    let haveImg = false
+    if (beatUrl) {
+      const img = await this._loadImg(beatUrl)
+      if (img) {
+        haveImg = true
+        ctx.save()
+        ctx.globalAlpha = beatP * bgP
+        const imgA = img.width / img.height
+        const targetA = W / H
+        let sx2, sy2, sw2, sh2
+        if (imgA > targetA) { sh2 = img.height; sw2 = img.height * targetA; sx2 = (img.width - sw2) / 2; sy2 = 0 }
+        else { sw2 = img.width; sh2 = img.width / targetA; sx2 = 0; sy2 = (img.height - sh2) / 2 }
+        ctx.drawImage(img, sx2, sy2, sw2, sh2, 0, 0, W, H)
+        ctx.restore()
+        // Dark scrim so narration + brand text stay readable over any imagery.
+        ctx.save()
+        ctx.globalAlpha = 0.5 * bgP
+        const scrim = ctx.createLinearGradient(0, H * 0.4, 0, H)
+        scrim.addColorStop(0, 'rgba(4,6,12,0.35)')
+        scrim.addColorStop(1, 'rgba(4,6,12,0.9)')
+        ctx.fillStyle = scrim
+        ctx.fillRect(0, 0, W, H)
+        ctx.restore()
+      }
+    }
+    if (!haveImg) {
       ctx.save()
       ctx.globalAlpha = bgP
       const grad = ctx.createLinearGradient(0, 0, 0, H)
@@ -348,6 +414,37 @@ export class InformationLayer {
       ctx.fillRect(0, 0, W, H)
       ctx.restore()
     }
+
+    // Early beats (1 and 2) are pure presentation rhythm: a subtle beat label
+    // over distinct imagery, no brand card yet. The brand moment waits for the
+    // final beat.
+    if (!isFinalBeat) {
+      const label = scene.presentation?.beats?.[beatIndex]?.label
+      if (label) {
+        ctx.save()
+        ctx.globalAlpha = beatP
+        ctx.font = `900 ${sy(72)}px "Montserrat ExtraBold", sans-serif`
+        ctx.fillStyle = 'rgba(255,255,255,0.92)'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.shadowColor = 'rgba(0,0,0,0.9)'
+        ctx.shadowBlur = 14
+        ctx.fillText(label, W / 2, H * 0.48)
+        ctx.restore()
+      }
+      ctx.restore()
+      return
+    }
+
+    // ── Final beat: the fixed brand moment ──
+    // Rebase timing so the brand card plays across the final beat's window
+    // (brandBase = the moment the final beat begins).
+    const brandBase = (nBeats - 1) * beatLen
+    const tF = t
+    const stayP = Math.min(1, Math.max(0, (tF - brandBase) / 0.4))
+    const brandP = Math.min(1, Math.max(0, (tF - (brandBase + 0.4)) / 0.6))
+    const tagP = Math.min(1, Math.max(0, (tF - (brandBase + 1.0)) / 0.6))
+    const anchorP = Math.min(1, Math.max(0, (tF - (brandBase + 1.6)) / 0.4))
 
     if (bgP > 0.2 && !scene.hideBranding) {
       ctx.save()
@@ -454,7 +551,7 @@ if (tagP > 0) {
       // attributes the story ("Source: The Washington Post"), matching the
       // publish description. Never replaces the brand outro.
       const src = scene.source || 'News'
-      const srcP = Math.min(1, Math.max(0, (t - 1.6) / 0.4))
+      const srcP = Math.min(1, Math.max(0, (tF - (brandBase + 1.6)) / 0.4))
       if (srcP > 0 && src !== 'News') {
         ctx.save()
         ctx.globalAlpha = srcP
@@ -471,7 +568,7 @@ if (tagP > 0) {
       // comment is needed (YouTube's API blocks top-level comments; the render
       // carries the CTA instead). Question fades in above the footer bar.
       const q = scene.cta?.engagement || scene.cta?.text
-      const qP = Math.min(1, Math.max(0, (t - 2.2) / 0.4))
+      const qP = Math.min(1, Math.max(0, (tF - (brandBase + 2.2)) / 0.4))
       if (q && qP > 0) {
         // Keep the question clear of the source line and above the anchor/footer.
         const qY = Math.min(blockTop + blockH + tagSize + sy(110), footerTop - sy(200))
