@@ -1,29 +1,29 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-02T08:10:33.013Z",
+  "updatedAt": "2026-09-02T08:26:17.525Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "5Y4K1WpeeWk",
+      "id": "eE6dr55epFs",
       "title": "Microsoft acknowledges widespread Exchange Online problems - Mashable | NEWS-MONSTER",
       "description": "Microsoft acknowledges widespread Exchange Online problems - Mashable | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-02T08:10:31.999Z",
-      "publishedLabel": "Sep 2, 08:10 AM",
-      "thumbnail": "/thumbnails/5Y4K1WpeeWk.png",
+      "publishedAt": "2026-09-02T08:26:16.275Z",
+      "publishedLabel": "Sep 2, 08:26 AM",
+      "thumbnail": "/thumbnails/eE6dr55epFs.png",
       "thumbnailSha256": "d8dbd1cc4febd9703bf208b97f4d819da9b4641e8f93e0f146def1186364d73e",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/5Y4K1WpeeWk",
+      "youtubeUrl": "https://youtu.be/eE6dr55epFs",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "5Y4K1WpeeWk",
-          "url": "https://youtu.be/5Y4K1WpeeWk",
+          "videoId": "eE6dr55epFs",
+          "url": "https://youtu.be/eE6dr55epFs",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "d8dbd1cc4febd9703bf208b97f4d819da9b4641e8f93e0f146def1186364d73e",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 5,
+          "durationMs": 3,
           "thumbnail": {
             "sha256": "d8dbd1cc4febd9703bf208b97f4d819da9b4641e8f93e0f146def1186364d73e",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/5Y4K1WpeeWk.png"
+            "path": "public/thumbnails/eE6dr55epFs.png"
           }
         },
         "linkedin": {
@@ -58,26 +58,26 @@
       }
     },
     {
-      "id": "sNNP8HStcBk",
+      "id": "e1ZNemWDo1Y",
       "title": "OpenClaw 2.0 is here, ushering in the era of 'multiplayer' AI coding: What it means for en | NEWS-MONSTER",
       "description": "OpenClaw 2.0 is here, ushering in the era of 'multiplayer' AI coding: What it means for en | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-02T08:07:03.168Z",
-      "publishedLabel": "Sep 2, 08:07 AM",
-      "thumbnail": "/thumbnails/sNNP8HStcBk.png",
+      "publishedAt": "2026-09-02T08:23:15.320Z",
+      "publishedLabel": "Sep 2, 08:23 AM",
+      "thumbnail": "/thumbnails/e1ZNemWDo1Y.png",
       "thumbnailSha256": "28e38d0b13c581a84792dc4086dbb2d501f671cc21c03f1e51179591917f4aac",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/sNNP8HStcBk",
+      "youtubeUrl": "https://youtu.be/e1ZNemWDo1Y",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "sNNP8HStcBk",
-          "url": "https://youtu.be/sNNP8HStcBk",
+          "videoId": "e1ZNemWDo1Y",
+          "url": "https://youtu.be/e1ZNemWDo1Y",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "28e38d0b13c581a84792dc4086dbb2d501f671cc21c03f1e51179591917f4aac",
@@ -102,7 +102,7 @@
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/sNNP8HStcBk.png"
+            "path": "public/thumbnails/e1ZNemWDo1Y.png"
           }
         },
         "linkedin": {
