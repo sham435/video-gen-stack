@@ -86,7 +86,7 @@ export function buildNarrativeLayouts(scene = {}, canvas = { width: DesignSystem
         text: String(scene.text).replace(/^BREAKING:\s*/i, ''),
         role: 'headline',
         canvas: { width: W, height: H },
-        fontFamily: 'Anton',
+        fontFamily: 'Montserrat ExtraBold',
         preferredFontSize: scene.headlineFontSize || 84,
         maxLines: 2,
       })

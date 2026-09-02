@@ -97,7 +97,7 @@ export function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF', fontSiz
 
     ctx.save()
     ctx.globalAlpha = charP
-    ctx.font = `900 ${size}px Anton, Impact, sans-serif`
+    ctx.font = `900 ${size}px Montserrat ExtraBold, sans-serif`
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.lineJoin = 'round'
@@ -111,13 +111,23 @@ export function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF', fontSiz
       ctx.fillText(line, x, y + depth)
     }
 
-    // 2) Yellow broadcast outline — high-contrast rim on top of the depth.
+    // 2) Black narrow outline — thin dark halo OUTSIDE the yellow ring so
+    //    white text stays visible over ANY background (the fix for "not visible"
+    //    feedback: white-on-white/bright scrim disappears without a dark edge).
+    ctx.globalAlpha = charP
+    ctx.strokeStyle = 'rgba(0,0,0,0.95)'
+    ctx.lineWidth = Math.max(3, size * 0.20)
+    ctx.lineJoin = 'round'
+    ctx.strokeText(line, x, y)
+
+    // 3) Yellow broadcast outline — sits inside the black halo.
     ctx.globalAlpha = charP
     ctx.strokeStyle = YELLOW_OUTLINE
     ctx.lineWidth = Math.max(4, size * OUTLINE_WIDTH_SCALE)
+    ctx.lineJoin = 'round'
     ctx.strokeText(line, x, y)
 
-    // 3) Bright white fill — clean broadcast white face over the same path.
+    // 4) Bright white fill — clean broadcast white face on top of the outlines.
     ctx.fillStyle = brightWhiteGradient(ctx, y, size)
     ctx.fillText(line, x, y)
 

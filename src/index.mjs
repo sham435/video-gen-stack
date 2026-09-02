@@ -451,7 +451,7 @@ export class NewsBroadcastEngine {
           text: layer.text,
           role: layer.type,
           canvas: { width: DesignSystem.W, height: DesignSystem.H },
-          fontFamily: layer.type === 'headline' || layer.type === 'emphasis' ? 'Anton' : 'Inter',
+          fontFamily: layer.type === 'headline' || layer.type === 'emphasis' ? 'Montserrat ExtraBold' : 'Inter',
           preferredFontSize: rolePolicy.preferredFontSize || LAYER_FONT_SIZE[layer.type] || 58,
           maxLines: rolePolicy.maxLines,
         })

@@ -75,7 +75,7 @@ export class InformationLayer {
     const mid = Math.ceil(words.length / 2)
     const lines = layoutLines.length ? layoutLines : [words.slice(0, mid).join(' '), words.slice(mid).join(' ')]
     const fontSize = scene.headlineLayout?.fontSize || scene.headlineFontSize || 92
-    ctx.font = `900 ${fontSize}px Anton, Impact, sans-serif`
+    ctx.font = `900 ${fontSize}px Montserrat ExtraBold, sans-serif`
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.lineWidth = 4
@@ -121,7 +121,7 @@ export class InformationLayer {
     ctx.save()
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
-    ctx.font = `900 ${fontSize}px Anton, Impact, sans-serif`
+    ctx.font = `900 ${fontSize}px Montserrat ExtraBold, sans-serif`
 
     let wordCounter = 0
     lines.forEach((line, i) => {
