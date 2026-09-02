@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-02T07:25:54.816Z",
+  "updatedAt": "2026-09-02T07:46:35.982Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "mZFo48XFGRE",
-      "title": "Microsoft acknowledges widespread Exchange Online problems - Mashable | NEWS-MONSTER",
-      "description": "Microsoft acknowledges widespread Exchange Online problems - Mashable | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-02T07:25:54.144Z",
-      "publishedLabel": "Sep 2, 07:25 AM",
-      "thumbnail": "/thumbnails/mZFo48XFGRE.png",
-      "thumbnailSha256": "1f4b2ba06811ce8c1376c77d712ec627e472dd98cfc0e5862ae3b321180701dc",
+      "id": "2nA3-C4WUuU",
+      "title": "GameStop Expects Higher Profit Despite Lower Sales | NEWS-MONSTER",
+      "description": "GameStop Expects Higher Profit Despite Lower Sales | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-02T07:46:13.407Z",
+      "publishedLabel": "Sep 2, 07:46 AM",
+      "thumbnail": "/thumbnails/2nA3-C4WUuU.png",
+      "thumbnailSha256": "a8bfd475c7180bd00fbedf563a5931258ffbed5c9c12df0005d3e81204b87aa7",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/mZFo48XFGRE",
+      "youtubeUrl": "https://youtu.be/2nA3-C4WUuU",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "mZFo48XFGRE",
-          "url": "https://youtu.be/mZFo48XFGRE",
+          "videoId": "2nA3-C4WUuU",
+          "url": "https://youtu.be/2nA3-C4WUuU",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "1f4b2ba06811ce8c1376c77d712ec627e472dd98cfc0e5862ae3b321180701dc",
+            "sha256": "a8bfd475c7180bd00fbedf563a5931258ffbed5c9c12df0005d3e81204b87aa7",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 4,
+          "durationMs": 1,
           "thumbnail": {
-            "sha256": "1f4b2ba06811ce8c1376c77d712ec627e472dd98cfc0e5862ae3b321180701dc",
+            "sha256": "a8bfd475c7180bd00fbedf563a5931258ffbed5c9c12df0005d3e81204b87aa7",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/mZFo48XFGRE.png"
+            "path": "public/thumbnails/2nA3-C4WUuU.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "mDm8ZS7LVLE",
-      "title": "OpenClaw 2.0 is here, ushering in the era of 'multiplayer' AI coding: What it means for en | NEWS-MONSTER",
-      "description": "OpenClaw 2.0 is here, ushering in the era of 'multiplayer' AI coding: What it means for en | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-02T07:22:19.526Z",
-      "publishedLabel": "Sep 2, 07:22 AM",
-      "thumbnail": "/thumbnails/mDm8ZS7LVLE.png",
-      "thumbnailSha256": "befb24f7ab57e33d5ba8491d077ce374d22d31d5410bef69ac969eb3220afa65",
+      "id": "7m1NawE93N0",
+      "title": "U.S. Stock Futures Little Changed as Markets Weigh Warsh’s Hawkish Remarks | NEWS-MONSTER",
+      "description": "U.S. Stock Futures Little Changed as Markets Weigh Warsh’s Hawkish Remarks | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-02T07:42:49.433Z",
+      "publishedLabel": "Sep 2, 07:42 AM",
+      "thumbnail": "/thumbnails/7m1NawE93N0.png",
+      "thumbnailSha256": "3ddbaa9b9dd0de7501157e9d14ca3b118a5a6e004e6a3dd172cb04e806e1dea3",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/mDm8ZS7LVLE",
+      "youtubeUrl": "https://youtu.be/7m1NawE93N0",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "mDm8ZS7LVLE",
-          "url": "https://youtu.be/mDm8ZS7LVLE",
+          "videoId": "7m1NawE93N0",
+          "url": "https://youtu.be/7m1NawE93N0",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "befb24f7ab57e33d5ba8491d077ce374d22d31d5410bef69ac969eb3220afa65",
+            "sha256": "3ddbaa9b9dd0de7501157e9d14ca3b118a5a6e004e6a3dd172cb04e806e1dea3",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +97,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "befb24f7ab57e33d5ba8491d077ce374d22d31d5410bef69ac969eb3220afa65",
+            "sha256": "3ddbaa9b9dd0de7501157e9d14ca3b118a5a6e004e6a3dd172cb04e806e1dea3",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/mDm8ZS7LVLE.png"
+            "path": "public/thumbnails/7m1NawE93N0.png"
           }
         },
         "linkedin": {
