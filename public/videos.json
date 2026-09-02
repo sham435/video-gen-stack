@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-02T11:37:13.796Z",
+  "updatedAt": "2026-09-02T12:09:18.989Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "NaIvrtrnp14",
+      "id": "_NcU0JjOEuM",
       "title": "Samsung Confirms Free Feature Upgrade For Millions Of Galaxy Phones - forbes.com | NEWS-MONSTER",
       "description": "Samsung Confirms Free Feature Upgrade For Millions Of Galaxy Phones - forbes.com | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-02T11:37:12.874Z",
-      "publishedLabel": "Sep 2, 11:37 AM",
-      "thumbnail": "/thumbnails/NaIvrtrnp14.png",
-      "thumbnailSha256": "70778bc6b0bfffed89136a8692d570fb9b7c0c71ef853d73ad5ffa1c661ea384",
+      "publishedAt": "2026-09-02T12:09:17.881Z",
+      "publishedLabel": "Sep 2, 12:09 PM",
+      "thumbnail": "/thumbnails/_NcU0JjOEuM.png",
+      "thumbnailSha256": "7e20bf188e4aea0dc1c5636c18cfc19348b5371a724641040b93ab3cc993cc10",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/NaIvrtrnp14",
+      "youtubeUrl": "https://youtu.be/_NcU0JjOEuM",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "NaIvrtrnp14",
-          "url": "https://youtu.be/NaIvrtrnp14",
+          "videoId": "_NcU0JjOEuM",
+          "url": "https://youtu.be/_NcU0JjOEuM",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "70778bc6b0bfffed89136a8692d570fb9b7c0c71ef853d73ad5ffa1c661ea384",
+            "sha256": "7e20bf188e4aea0dc1c5636c18cfc19348b5371a724641040b93ab3cc993cc10",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 1,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "70778bc6b0bfffed89136a8692d570fb9b7c0c71ef853d73ad5ffa1c661ea384",
+            "sha256": "7e20bf188e4aea0dc1c5636c18cfc19348b5371a724641040b93ab3cc993cc10",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/NaIvrtrnp14.png"
+            "path": "public/thumbnails/_NcU0JjOEuM.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "RfJ4ImYOKbk",
+      "id": "HgzpHoWZiCg",
       "title": "Round Up: The Reviews For Orbitals On Switch 2 Are In - Nintendo Life | NEWS-MONSTER",
       "description": "Round Up: The Reviews For Orbitals On Switch 2 Are In - Nintendo Life | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-02T11:34:09.480Z",
-      "publishedLabel": "Sep 2, 11:34 AM",
-      "thumbnail": "/thumbnails/RfJ4ImYOKbk.png",
-      "thumbnailSha256": "803270bc2daf0f8de66599750899f46373650214c8d4aabf648ff05d728fd9c7",
+      "publishedAt": "2026-09-02T12:05:54.202Z",
+      "publishedLabel": "Sep 2, 12:05 PM",
+      "thumbnail": "/thumbnails/HgzpHoWZiCg.png",
+      "thumbnailSha256": "941a917c8cabef74d62968047e9cd169453c2aaf3236ef948501dfa2df0752b0",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/RfJ4ImYOKbk",
+      "youtubeUrl": "https://youtu.be/HgzpHoWZiCg",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "RfJ4ImYOKbk",
-          "url": "https://youtu.be/RfJ4ImYOKbk",
+          "videoId": "HgzpHoWZiCg",
+          "url": "https://youtu.be/HgzpHoWZiCg",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "803270bc2daf0f8de66599750899f46373650214c8d4aabf648ff05d728fd9c7",
+            "sha256": "941a917c8cabef74d62968047e9cd169453c2aaf3236ef948501dfa2df0752b0",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,14 +95,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 1,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "803270bc2daf0f8de66599750899f46373650214c8d4aabf648ff05d728fd9c7",
+            "sha256": "941a917c8cabef74d62968047e9cd169453c2aaf3236ef948501dfa2df0752b0",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/RfJ4ImYOKbk.png"
+            "path": "public/thumbnails/HgzpHoWZiCg.png"
           }
         },
         "linkedin": {
