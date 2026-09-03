@@ -1,169 +1,217 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-03T09:03:37.754Z",
-  "source": "production-ledger",
+  "updatedAt": "2026-09-03T09:25:54.437Z",
+  "source": "youtube-rss",
   "videos": [
     {
       "id": "_VnuMfc5u6U",
       "title": "Nintendo Expands Switch Online's NES Library With Three More Titles - Nintendo Life | NEWS-MONSTER",
-      "description": "Nintendo Expands Switch Online's NES Library With Three More Titles - Nintendo Life | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-03T09:03:36.708Z",
+      "publishedAt": "2026-09-03T09:03:46+00:00",
       "publishedLabel": "Sep 3, 09:03 AM",
       "thumbnail": "/thumbnails/_VnuMfc5u6U.png",
-      "thumbnailSha256": "a6f19edee5e06155169c3cab829f8ce95ae233d51716243b158bc7c0a0936adc",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/_VnuMfc5u6U",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
       "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "_VnuMfc5u6U",
-          "url": "https://youtu.be/_VnuMfc5u6U",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "a6f19edee5e06155169c3cab829f8ce95ae233d51716243b158bc7c0a0936adc",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "a6f19edee5e06155169c3cab829f8ce95ae233d51716243b158bc7c0a0936adc",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/_VnuMfc5u6U.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
       "id": "RgUfdp2zKVk",
-      "title": "9 Years Later, Mario Kart 8 Just Got a Game-Changing Update for Nintendo Switch 2 - Polygo | NEWS-MONSTER",
-      "description": "9 Years Later, Mario Kart 8 Just Got a Game-Changing Update for Nintendo Switch 2 - Polygo | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-03T08:59:40.955Z",
+      "title": "9 Years Later, Mario Kart 8 Just Got a Game-Changing Update for Nintendo Switch 2 - Polygo | NEWS-MO",
+      "publishedAt": "2026-09-03T08:59:50+00:00",
       "publishedLabel": "Sep 3, 08:59 AM",
       "thumbnail": "/thumbnails/RgUfdp2zKVk.png",
-      "thumbnailSha256": "b14f172aa6d388fe73ab6c84c92ee2968f1e324db317191636a00b823752ec57",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/RgUfdp2zKVk",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
       "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "RgUfdp2zKVk",
-          "url": "https://youtu.be/RgUfdp2zKVk",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "b14f172aa6d388fe73ab6c84c92ee2968f1e324db317191636a00b823752ec57",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 5,
-          "thumbnail": {
-            "sha256": "b14f172aa6d388fe73ab6c84c92ee2968f1e324db317191636a00b823752ec57",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/RgUfdp2zKVk.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
       "id": "BkjyL_yNPLg",
-      "title": "Super Smash Bros. Ultimate Version 13.0.5 Is Now Live, Here Are The Full Patch Notes - Nin | NEWS-MONSTER",
-      "description": "Super Smash Bros. Ultimate Version 13.0.5 Is Now Live, Here Are The Full Patch Notes - Nin | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-03T08:55:56.475Z",
-      "publishedLabel": "Sep 3, 08:55 AM",
+      "title": "Super Smash Bros. Ultimate Version 13.0.5 Is Now Live, Here Are The Full Patch Notes - Nin | NEWS-MO",
+      "publishedAt": "2026-09-03T08:56:09+00:00",
+      "publishedLabel": "Sep 3, 08:56 AM",
       "thumbnail": "/thumbnails/BkjyL_yNPLg.png",
-      "thumbnailSha256": "0c1cbd7e99333b39722dd58e1045e78edc3a35b1368173ca12ecf9c6e8f18829",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/BkjyL_yNPLg",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
       "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "BkjyL_yNPLg",
-          "url": "https://youtu.be/BkjyL_yNPLg",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "0c1cbd7e99333b39722dd58e1045e78edc3a35b1368173ca12ecf9c6e8f18829",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "0c1cbd7e99333b39722dd58e1045e78edc3a35b1368173ca12ecf9c6e8f18829",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/BkjyL_yNPLg.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "khwEJjCy_lI",
+      "title": "Nintendo Expands Switch Online's NES Library With Three More Titles - Nintendo Life | NEWS-MONSTER",
+      "publishedAt": "2026-09-03T08:27:56+00:00",
+      "publishedLabel": "Sep 3, 08:27 AM",
+      "thumbnail": "/thumbnails/khwEJjCy_lI.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "HsV0qq6eH2w",
+      "title": "9 Years Later, Mario Kart 8 Just Got a Game-Changing Update for Nintendo Switch 2 - Polygo | NEWS-MO",
+      "publishedAt": "2026-09-03T08:23:53+00:00",
+      "publishedLabel": "Sep 3, 08:23 AM",
+      "thumbnail": "/thumbnails/HsV0qq6eH2w.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "l0TiBhEY7P4",
+      "title": "Super Smash Bros. Ultimate Version 13.0.5 Is Now Live, Here Are The Full Patch Notes - Nin | NEWS-MO",
+      "publishedAt": "2026-09-03T08:19:24+00:00",
+      "publishedLabel": "Sep 3, 08:19 AM",
+      "thumbnail": "/thumbnails/l0TiBhEY7P4.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "rjYUf05EsQo",
+      "title": "U.S. Stock Futures Little Changed as Markets Weigh Warsh’s Hawkish Remarks | NEWS-MONSTER",
+      "publishedAt": "2026-09-03T05:12:50+00:00",
+      "publishedLabel": "Sep 3, 05:12 AM",
+      "thumbnail": "/thumbnails/rjYUf05EsQo.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "oU9GmuitLEI",
+      "title": "U.K Said One Thing, Then Did This | NEWS-MONSTER",
+      "publishedAt": "2026-09-03T05:08:17+00:00",
+      "publishedLabel": "Sep 3, 05:08 AM",
+      "thumbnail": "/thumbnails/oU9GmuitLEI.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "7IAIZWPlZ-I",
+      "title": "How Hits Changed Overnight | NEWS-MONSTER",
+      "publishedAt": "2026-09-03T05:04:41+00:00",
+      "publishedLabel": "Sep 3, 05:04 AM",
+      "thumbnail": "/thumbnails/7IAIZWPlZ-I.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "O0Qpeb9X7ao",
+      "title": "美股全面收黑，費半回測半年線，台指期夜盤下跌，期待走出自己的路 | NEWS-MONSTER",
+      "publishedAt": "2026-09-03T00:46:50+00:00",
+      "publishedLabel": "Sep 3, 12:46 AM",
+      "thumbnail": "/thumbnails/O0Qpeb9X7ao.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "FbIruFefyxY",
+      "title": "Honda e Nissan firmam acordo para unificar sistemas eletrônicos a partir de 2029 | NEWS-MONSTER",
+      "publishedAt": "2026-09-03T00:43:04+00:00",
+      "publishedLabel": "Sep 3, 12:43 AM",
+      "thumbnail": "/thumbnails/FbIruFefyxY.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "WsHAhA0VvsU",
+      "title": "ประกอบไทย ในราคาจับต้องได้ ทดสอบ HYUNDAI IONIQ 5 N LINE | NEWS-MONSTER",
+      "publishedAt": "2026-09-03T00:38:37+00:00",
+      "publishedLabel": "Sep 3, 12:38 AM",
+      "thumbnail": "/thumbnails/WsHAhA0VvsU.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "GcdvA3rqXFc",
+      "title": "Nearly 150,000 Ford vehicles recalled after defect raises risk of sudden power loss while  | NEWS-MO",
+      "publishedAt": "2026-09-02T22:32:53+00:00",
+      "publishedLabel": "Sep 2, 10:32 PM",
+      "thumbnail": "/thumbnails/GcdvA3rqXFc.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "dCmk2uBQzkI",
+      "title": "Dow falls more than 400 points, oil rises after new U.S. strikes against Iran - CNBC | NEWS-MONSTER",
+      "publishedAt": "2026-09-02T22:28:35+00:00",
+      "publishedLabel": "Sep 2, 10:28 PM",
+      "thumbnail": "/thumbnails/dCmk2uBQzkI.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "VHpawUy4i5o",
+      "title": "U.S. Stock Futures Little Changed as Markets Weigh Warsh’s Hawkish Remarks | NEWS-MONSTER",
+      "publishedAt": "2026-09-02T19:56:03+00:00",
+      "publishedLabel": "Sep 2, 07:56 PM",
+      "thumbnail": "/thumbnails/VHpawUy4i5o.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     }
   ]
 }
