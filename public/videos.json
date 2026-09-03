@@ -1,86 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-02T22:32:44.312Z",
+  "updatedAt": "2026-09-03T00:46:35.221Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "GcdvA3rqXFc",
-      "title": "Nearly 150,000 Ford vehicles recalled after defect raises risk of sudden power loss while  | NEWS-MONSTER",
-      "description": "Nearly 150,000 Ford vehicles recalled after defect raises risk of sudden power loss while  | NEWS-MONSTER",
-      "category": "apple",
-      "publishedAt": "2026-09-02T22:32:43.804Z",
-      "publishedLabel": "Sep 2, 10:32 PM",
-      "thumbnail": "/thumbnails/GcdvA3rqXFc.png",
-      "thumbnailSha256": "c91d95ae8c9df729ff81c44e39cb7a860fa5a1af165baa155962244d339b850c",
+      "id": "O0Qpeb9X7ao",
+      "title": "美股全面收黑，費半回測半年線，台指期夜盤下跌，期待走出自己的路 | NEWS-MONSTER",
+      "description": "美股全面收黑，費半回測半年線，台指期夜盤下跌，期待走出自己的路 | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-03T00:46:34.542Z",
+      "publishedLabel": "Sep 3, 12:46 AM",
+      "thumbnail": "/thumbnails/O0Qpeb9X7ao.png",
+      "thumbnailSha256": "7fe160ab95532eb937bfd3bab2267e44792219614fd93e113c2c349de7e24b50",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/GcdvA3rqXFc",
+      "youtubeUrl": "https://youtu.be/O0Qpeb9X7ao",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "GcdvA3rqXFc",
-          "url": "https://youtu.be/GcdvA3rqXFc",
+          "videoId": "O0Qpeb9X7ao",
+          "url": "https://youtu.be/O0Qpeb9X7ao",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "c91d95ae8c9df729ff81c44e39cb7a860fa5a1af165baa155962244d339b850c",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "c91d95ae8c9df729ff81c44e39cb7a860fa5a1af165baa155962244d339b850c",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/GcdvA3rqXFc.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "dCmk2uBQzkI",
-      "title": "Dow falls more than 400 points, oil rises after new U.S. strikes against Iran - CNBC | NEWS-MONSTER",
-      "description": "Dow falls more than 400 points, oil rises after new U.S. strikes against Iran - CNBC | NEWS-MONSTER",
-      "category": "apple",
-      "publishedAt": "2026-09-02T22:28:10.723Z",
-      "publishedLabel": "Sep 2, 10:28 PM",
-      "thumbnail": "/thumbnails/dCmk2uBQzkI.png",
-      "thumbnailSha256": "5038890b893c8a72006f2e476afdae9451caa35d962c3955427ded36e1dd1267",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/dCmk2uBQzkI",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "dCmk2uBQzkI",
-          "url": "https://youtu.be/dCmk2uBQzkI",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "5038890b893c8a72006f2e476afdae9451caa35d962c3955427ded36e1dd1267",
+            "sha256": "7fe160ab95532eb937bfd3bab2267e44792219614fd93e113c2c349de7e24b50",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +43,120 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "5038890b893c8a72006f2e476afdae9451caa35d962c3955427ded36e1dd1267",
+            "sha256": "7fe160ab95532eb937bfd3bab2267e44792219614fd93e113c2c349de7e24b50",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/dCmk2uBQzkI.png"
+            "path": "public/thumbnails/O0Qpeb9X7ao.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "FbIruFefyxY",
+      "title": "Honda e Nissan firmam acordo para unificar sistemas eletrônicos a partir de 2029 | NEWS-MONSTER",
+      "description": "Honda e Nissan firmam acordo para unificar sistemas eletrônicos a partir de 2029 | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-03T00:42:59.326Z",
+      "publishedLabel": "Sep 3, 12:42 AM",
+      "thumbnail": "/thumbnails/FbIruFefyxY.png",
+      "thumbnailSha256": "2b493301298f4cd8a318c74188f35203017190405f501f9a4e6308da20511aab",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/FbIruFefyxY",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "FbIruFefyxY",
+          "url": "https://youtu.be/FbIruFefyxY",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "2b493301298f4cd8a318c74188f35203017190405f501f9a4e6308da20511aab",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "2b493301298f4cd8a318c74188f35203017190405f501f9a4e6308da20511aab",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/FbIruFefyxY.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "WsHAhA0VvsU",
+      "title": "ประกอบไทย ในราคาจับต้องได้ ทดสอบ HYUNDAI IONIQ 5 N LINE | NEWS-MONSTER",
+      "description": "ประกอบไทย ในราคาจับต้องได้ ทดสอบ HYUNDAI IONIQ 5 N LINE | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-03T00:38:25.074Z",
+      "publishedLabel": "Sep 3, 12:38 AM",
+      "thumbnail": "/thumbnails/WsHAhA0VvsU.png",
+      "thumbnailSha256": "e2563ab1a8843e6cd53472783cd51b03fb37ccc2eeb180f48bf99724c24a3c0e",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/WsHAhA0VvsU",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "WsHAhA0VvsU",
+          "url": "https://youtu.be/WsHAhA0VvsU",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "e2563ab1a8843e6cd53472783cd51b03fb37ccc2eeb180f48bf99724c24a3c0e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 5,
+          "thumbnail": {
+            "sha256": "e2563ab1a8843e6cd53472783cd51b03fb37ccc2eeb180f48bf99724c24a3c0e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/WsHAhA0VvsU.png"
           }
         },
         "linkedin": {
