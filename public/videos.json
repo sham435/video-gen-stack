@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-03T00:46:35.221Z",
+  "updatedAt": "2026-09-03T05:12:36.643Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "O0Qpeb9X7ao",
-      "title": "美股全面收黑，費半回測半年線，台指期夜盤下跌，期待走出自己的路 | NEWS-MONSTER",
-      "description": "美股全面收黑，費半回測半年線，台指期夜盤下跌，期待走出自己的路 | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-09-03T00:46:34.542Z",
-      "publishedLabel": "Sep 3, 12:46 AM",
-      "thumbnail": "/thumbnails/O0Qpeb9X7ao.png",
-      "thumbnailSha256": "7fe160ab95532eb937bfd3bab2267e44792219614fd93e113c2c349de7e24b50",
+      "id": "rjYUf05EsQo",
+      "title": "U.S. Stock Futures Little Changed as Markets Weigh Warsh’s Hawkish Remarks | NEWS-MONSTER",
+      "description": "U.S. Stock Futures Little Changed as Markets Weigh Warsh’s Hawkish Remarks | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-03T05:12:35.998Z",
+      "publishedLabel": "Sep 3, 05:12 AM",
+      "thumbnail": "/thumbnails/rjYUf05EsQo.png",
+      "thumbnailSha256": "e3e6b2b732cc3cb04d2f373d37f7186f402df7eecf22bc1b8a47994e76057caa",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/O0Qpeb9X7ao",
+      "youtubeUrl": "https://youtu.be/rjYUf05EsQo",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "O0Qpeb9X7ao",
-          "url": "https://youtu.be/O0Qpeb9X7ao",
+          "videoId": "rjYUf05EsQo",
+          "url": "https://youtu.be/rjYUf05EsQo",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "7fe160ab95532eb937bfd3bab2267e44792219614fd93e113c2c349de7e24b50",
+            "sha256": "e3e6b2b732cc3cb04d2f373d37f7186f402df7eecf22bc1b8a47994e76057caa",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 4,
           "thumbnail": {
-            "sha256": "7fe160ab95532eb937bfd3bab2267e44792219614fd93e113c2c349de7e24b50",
+            "sha256": "e3e6b2b732cc3cb04d2f373d37f7186f402df7eecf22bc1b8a47994e76057caa",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/O0Qpeb9X7ao.png"
+            "path": "public/thumbnails/rjYUf05EsQo.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "FbIruFefyxY",
-      "title": "Honda e Nissan firmam acordo para unificar sistemas eletrônicos a partir de 2029 | NEWS-MONSTER",
-      "description": "Honda e Nissan firmam acordo para unificar sistemas eletrônicos a partir de 2029 | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-09-03T00:42:59.326Z",
-      "publishedLabel": "Sep 3, 12:42 AM",
-      "thumbnail": "/thumbnails/FbIruFefyxY.png",
-      "thumbnailSha256": "2b493301298f4cd8a318c74188f35203017190405f501f9a4e6308da20511aab",
+      "id": "oU9GmuitLEI",
+      "title": "U.K Said One Thing, Then Did This | NEWS-MONSTER",
+      "description": "U.K Said One Thing, Then Did This | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-03T05:08:06.223Z",
+      "publishedLabel": "Sep 3, 05:08 AM",
+      "thumbnail": "/thumbnails/oU9GmuitLEI.png",
+      "thumbnailSha256": "b39f852c39939d63cffa200513d3c829545ef6f15ec2cdb4d5d601a82ee0a183",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/FbIruFefyxY",
+      "youtubeUrl": "https://youtu.be/oU9GmuitLEI",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "FbIruFefyxY",
-          "url": "https://youtu.be/FbIruFefyxY",
+          "videoId": "oU9GmuitLEI",
+          "url": "https://youtu.be/oU9GmuitLEI",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "2b493301298f4cd8a318c74188f35203017190405f501f9a4e6308da20511aab",
+            "sha256": "b39f852c39939d63cffa200513d3c829545ef6f15ec2cdb4d5d601a82ee0a183",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,14 +95,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "2b493301298f4cd8a318c74188f35203017190405f501f9a4e6308da20511aab",
+            "sha256": "b39f852c39939d63cffa200513d3c829545ef6f15ec2cdb4d5d601a82ee0a183",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/FbIruFefyxY.png"
+            "path": "public/thumbnails/oU9GmuitLEI.png"
           }
         },
         "linkedin": {
@@ -112,29 +112,29 @@
       }
     },
     {
-      "id": "WsHAhA0VvsU",
-      "title": "ประกอบไทย ในราคาจับต้องได้ ทดสอบ HYUNDAI IONIQ 5 N LINE | NEWS-MONSTER",
-      "description": "ประกอบไทย ในราคาจับต้องได้ ทดสอบ HYUNDAI IONIQ 5 N LINE | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-09-03T00:38:25.074Z",
-      "publishedLabel": "Sep 3, 12:38 AM",
-      "thumbnail": "/thumbnails/WsHAhA0VvsU.png",
-      "thumbnailSha256": "e2563ab1a8843e6cd53472783cd51b03fb37ccc2eeb180f48bf99724c24a3c0e",
+      "id": "7IAIZWPlZ-I",
+      "title": "How Hits Changed Overnight | NEWS-MONSTER",
+      "description": "How Hits Changed Overnight | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-03T05:03:39.374Z",
+      "publishedLabel": "Sep 3, 05:03 AM",
+      "thumbnail": "/thumbnails/7IAIZWPlZ-I.png",
+      "thumbnailSha256": "447e8f2d48771f470727936c731375b134815ebd8304a747c7aea97dbd9733a9",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/WsHAhA0VvsU",
+      "youtubeUrl": "https://youtu.be/7IAIZWPlZ-I",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "WsHAhA0VvsU",
-          "url": "https://youtu.be/WsHAhA0VvsU",
+          "videoId": "7IAIZWPlZ-I",
+          "url": "https://youtu.be/7IAIZWPlZ-I",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "e2563ab1a8843e6cd53472783cd51b03fb37ccc2eeb180f48bf99724c24a3c0e",
+            "sha256": "447e8f2d48771f470727936c731375b134815ebd8304a747c7aea97dbd9733a9",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -149,14 +149,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 5,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "e2563ab1a8843e6cd53472783cd51b03fb37ccc2eeb180f48bf99724c24a3c0e",
+            "sha256": "447e8f2d48771f470727936c731375b134815ebd8304a747c7aea97dbd9733a9",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/WsHAhA0VvsU.png"
+            "path": "public/thumbnails/7IAIZWPlZ-I.png"
           }
         },
         "linkedin": {
