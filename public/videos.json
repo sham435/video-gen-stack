@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-03T10:29:23.321Z",
+  "updatedAt": "2026-09-03T14:04:24.377Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "N22eVO9Cwe0",
-      "title": "Super Smash Bros. Ultimate 13.0.5 update out now, patch notes - Nintendo Everything | NEWS-MONSTER",
-      "description": "Super Smash Bros. Ultimate 13.0.5 update out now, patch notes - Nintendo Everything | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-03T10:29:22.523Z",
-      "publishedLabel": "Sep 3, 10:29 AM",
-      "thumbnail": "/thumbnails/N22eVO9Cwe0.png",
-      "thumbnailSha256": "77c157d82a57810a4707645f4040cdaa382033b74157b52251315db52d8d67de",
+      "id": "XakbOCf1c0c",
+      "title": "U.S. Stock Futures Little Changed as Markets Weigh Warsh’s Hawkish Remarks | NEWS-MONSTER",
+      "description": "U.S. Stock Futures Little Changed as Markets Weigh Warsh’s Hawkish Remarks | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-03T14:04:23.903Z",
+      "publishedLabel": "Sep 3, 02:04 PM",
+      "thumbnail": "/thumbnails/XakbOCf1c0c.png",
+      "thumbnailSha256": "244330a87a9494dd86ebc0659c8fabab913e53e61b2bc95271547a3167db37d3",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/N22eVO9Cwe0",
+      "youtubeUrl": "https://youtu.be/XakbOCf1c0c",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "N22eVO9Cwe0",
-          "url": "https://youtu.be/N22eVO9Cwe0",
+          "videoId": "XakbOCf1c0c",
+          "url": "https://youtu.be/XakbOCf1c0c",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "77c157d82a57810a4707645f4040cdaa382033b74157b52251315db52d8d67de",
+            "sha256": "244330a87a9494dd86ebc0659c8fabab913e53e61b2bc95271547a3167db37d3",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 1,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "77c157d82a57810a4707645f4040cdaa382033b74157b52251315db52d8d67de",
+            "sha256": "244330a87a9494dd86ebc0659c8fabab913e53e61b2bc95271547a3167db37d3",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/N22eVO9Cwe0.png"
+            "path": "public/thumbnails/XakbOCf1c0c.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "oLZQtP2_hcA",
-      "title": "Apple Launching Eight New Products This Month - MacRumors | NEWS-MONSTER",
-      "description": "Apple Launching Eight New Products This Month - MacRumors | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-03T10:25:23.746Z",
-      "publishedLabel": "Sep 3, 10:25 AM",
-      "thumbnail": "/thumbnails/oLZQtP2_hcA.png",
-      "thumbnailSha256": "fddc86b1a9aee39ce19f20d74c810cdc0822f30d88740c626dedcb6073147757",
+      "id": "i1k--53IoUI",
+      "title": "U.K Said One Thing, Then Did This | NEWS-MONSTER",
+      "description": "U.K Said One Thing, Then Did This | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-03T14:00:08.287Z",
+      "publishedLabel": "Sep 3, 02:00 PM",
+      "thumbnail": "/thumbnails/i1k--53IoUI.png",
+      "thumbnailSha256": "d33df3b5caeb22faf443d44afcf3d5ae1e9ed06abf56772e1ec457c47dd1b226",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/oLZQtP2_hcA",
+      "youtubeUrl": "https://youtu.be/i1k--53IoUI",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "oLZQtP2_hcA",
-          "url": "https://youtu.be/oLZQtP2_hcA",
+          "videoId": "i1k--53IoUI",
+          "url": "https://youtu.be/i1k--53IoUI",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "fddc86b1a9aee39ce19f20d74c810cdc0822f30d88740c626dedcb6073147757",
+            "sha256": "d33df3b5caeb22faf443d44afcf3d5ae1e9ed06abf56772e1ec457c47dd1b226",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,14 +95,68 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "fddc86b1a9aee39ce19f20d74c810cdc0822f30d88740c626dedcb6073147757",
+            "sha256": "d33df3b5caeb22faf443d44afcf3d5ae1e9ed06abf56772e1ec457c47dd1b226",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/oLZQtP2_hcA.png"
+            "path": "public/thumbnails/i1k--53IoUI.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "1Pf7_ltmy2Q",
+      "title": "How Hits Changed Overnight | NEWS-MONSTER",
+      "description": "How Hits Changed Overnight | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-03T13:55:59.705Z",
+      "publishedLabel": "Sep 3, 01:55 PM",
+      "thumbnail": "/thumbnails/1Pf7_ltmy2Q.png",
+      "thumbnailSha256": "f2b9f92129be42b9aa79ae578dd1ae5fb6ea6a7cee511f0017e1ae0a87089f58",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/1Pf7_ltmy2Q",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "1Pf7_ltmy2Q",
+          "url": "https://youtu.be/1Pf7_ltmy2Q",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "f2b9f92129be42b9aa79ae578dd1ae5fb6ea6a7cee511f0017e1ae0a87089f58",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 3,
+          "thumbnail": {
+            "sha256": "f2b9f92129be42b9aa79ae578dd1ae5fb6ea6a7cee511f0017e1ae0a87089f58",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/1Pf7_ltmy2Q.png"
           }
         },
         "linkedin": {
