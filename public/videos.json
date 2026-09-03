@@ -1,29 +1,29 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-03T09:40:07.561Z",
+  "updatedAt": "2026-09-03T09:58:28.577Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "TTZvu1ETZp4",
+      "id": "36aXBZroIV0",
       "title": "Super Smash Bros. Ultimate 13.0.5 update out now, patch notes - Nintendo Everything | NEWS-MONSTER",
       "description": "Super Smash Bros. Ultimate 13.0.5 update out now, patch notes - Nintendo Everything | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-03T09:40:07.059Z",
-      "publishedLabel": "Sep 3, 09:40 AM",
-      "thumbnail": "/thumbnails/TTZvu1ETZp4.png",
+      "publishedAt": "2026-09-03T09:58:28.099Z",
+      "publishedLabel": "Sep 3, 09:58 AM",
+      "thumbnail": "/thumbnails/36aXBZroIV0.png",
       "thumbnailSha256": "d52586fc7b2acb985ae7c839322329b3c8d7125de1df7666782a80dd0de0fc76",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/TTZvu1ETZp4",
+      "youtubeUrl": "https://youtu.be/36aXBZroIV0",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "TTZvu1ETZp4",
-          "url": "https://youtu.be/TTZvu1ETZp4",
+          "videoId": "36aXBZroIV0",
+          "url": "https://youtu.be/36aXBZroIV0",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "d52586fc7b2acb985ae7c839322329b3c8d7125de1df7666782a80dd0de0fc76",
@@ -48,7 +48,7 @@
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/TTZvu1ETZp4.png"
+            "path": "public/thumbnails/36aXBZroIV0.png"
           }
         },
         "linkedin": {
@@ -58,26 +58,26 @@
       }
     },
     {
-      "id": "MfvNff3B1Hs",
+      "id": "SruqTePxS-Q",
       "title": "Apple Launching Eight New Products This Month - MacRumors | NEWS-MONSTER",
       "description": "Apple Launching Eight New Products This Month - MacRumors | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-03T09:36:16.251Z",
-      "publishedLabel": "Sep 3, 09:36 AM",
-      "thumbnail": "/thumbnails/MfvNff3B1Hs.png",
+      "publishedAt": "2026-09-03T09:54:50.878Z",
+      "publishedLabel": "Sep 3, 09:54 AM",
+      "thumbnail": "/thumbnails/SruqTePxS-Q.png",
       "thumbnailSha256": "e0413054c1ab94b387b733cd418b82e05f826668c40d4ca5e1fdada772a41d1b",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/MfvNff3B1Hs",
+      "youtubeUrl": "https://youtu.be/SruqTePxS-Q",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "MfvNff3B1Hs",
-          "url": "https://youtu.be/MfvNff3B1Hs",
+          "videoId": "SruqTePxS-Q",
+          "url": "https://youtu.be/SruqTePxS-Q",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "e0413054c1ab94b387b733cd418b82e05f826668c40d4ca5e1fdada772a41d1b",
@@ -102,7 +102,7 @@
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/MfvNff3B1Hs.png"
+            "path": "public/thumbnails/SruqTePxS-Q.png"
           }
         },
         "linkedin": {
