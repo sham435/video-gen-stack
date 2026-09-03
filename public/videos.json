@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-03T21:19:00.984Z",
+  "updatedAt": "2026-09-03T21:45:53.908Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "FhFt5z02ewc",
-      "title": "Dishonored's Co-Creator Explains What So Many Games Are Missing - Kotaku | NEWS-MONSTER",
-      "description": "Dishonored's Co-Creator Explains What So Many Games Are Missing - Kotaku | NEWS-MONSTER",
+      "id": "gXNjcqCPwQw",
+      "title": "iOS 27 Introduces New 'iPhone Handoff' Feature - MacRumors | NEWS-MONSTER",
+      "description": "iOS 27 Introduces New 'iPhone Handoff' Feature - MacRumors | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-03T21:19:00.591Z",
-      "publishedLabel": "Sep 3, 09:19 PM",
-      "thumbnail": "/thumbnails/FhFt5z02ewc.png",
-      "thumbnailSha256": "37d024a400ee6220c4a887dbd359df8f1d5c36b0b2f18bab23b56222cf4c3ad6",
+      "publishedAt": "2026-09-03T21:45:53.440Z",
+      "publishedLabel": "Sep 3, 09:45 PM",
+      "thumbnail": "/thumbnails/gXNjcqCPwQw.png",
+      "thumbnailSha256": "f35ba77a734357bd84b9174465727d89175b58cbe3dd0141e4f349f99050103d",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/FhFt5z02ewc",
+      "youtubeUrl": "https://youtu.be/gXNjcqCPwQw",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "FhFt5z02ewc",
-          "url": "https://youtu.be/FhFt5z02ewc",
+          "videoId": "gXNjcqCPwQw",
+          "url": "https://youtu.be/gXNjcqCPwQw",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "37d024a400ee6220c4a887dbd359df8f1d5c36b0b2f18bab23b56222cf4c3ad6",
+            "sha256": "f35ba77a734357bd84b9174465727d89175b58cbe3dd0141e4f349f99050103d",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,66 +43,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "37d024a400ee6220c4a887dbd359df8f1d5c36b0b2f18bab23b56222cf4c3ad6",
+            "sha256": "f35ba77a734357bd84b9174465727d89175b58cbe3dd0141e4f349f99050103d",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/FhFt5z02ewc.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "i6j96vxwiEk",
-      "title": "Report: Early Splinter Cell Remake Screenshots Unearthed, Revealing Environments and Easte | NEWS-MONSTER",
-      "description": "Report: Early Splinter Cell Remake Screenshots Unearthed, Revealing Environments and Easte | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-03T21:15:31.114Z",
-      "publishedLabel": "Sep 3, 09:15 PM",
-      "thumbnail": "/thumbnails/i6j96vxwiEk.png",
-      "thumbnailSha256": "167a0a4dfd9f225f23dfa4f1b497f2a10546d6abe202aa0b998736ab821a2aa5",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/i6j96vxwiEk",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "i6j96vxwiEk",
-          "url": "https://youtu.be/i6j96vxwiEk",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "167a0a4dfd9f225f23dfa4f1b497f2a10546d6abe202aa0b998736ab821a2aa5",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "167a0a4dfd9f225f23dfa4f1b497f2a10546d6abe202aa0b998736ab821a2aa5",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/i6j96vxwiEk.png"
+            "path": "public/thumbnails/gXNjcqCPwQw.png"
           }
         },
         "linkedin": {
