@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-03T18:15:27.761Z",
+  "updatedAt": "2026-09-03T18:46:52.557Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "nOYEtYI9o40",
+      "id": "cBi220DdKB8",
       "title": "Dishonored's Co-Creator Explains What So Many Games Are Missing - Kotaku | NEWS-MONSTER",
       "description": "Dishonored's Co-Creator Explains What So Many Games Are Missing - Kotaku | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-03T18:15:27.102Z",
-      "publishedLabel": "Sep 3, 06:15 PM",
-      "thumbnail": "/thumbnails/nOYEtYI9o40.png",
-      "thumbnailSha256": "80b4d9e72f2f2c8a78bdc7270d7ce88f895a954e9ff2e6fef4a3d4ca262cd7ad",
+      "publishedAt": "2026-09-03T18:46:51.371Z",
+      "publishedLabel": "Sep 3, 06:46 PM",
+      "thumbnail": "/thumbnails/cBi220DdKB8.png",
+      "thumbnailSha256": "bd7eaae095fdd0da63aa82e217cbfdabff396391e84a7bf0ed321fd95b362750",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/nOYEtYI9o40",
+      "youtubeUrl": "https://youtu.be/cBi220DdKB8",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "nOYEtYI9o40",
-          "url": "https://youtu.be/nOYEtYI9o40",
+          "videoId": "cBi220DdKB8",
+          "url": "https://youtu.be/cBi220DdKB8",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "80b4d9e72f2f2c8a78bdc7270d7ce88f895a954e9ff2e6fef4a3d4ca262cd7ad",
+            "sha256": "bd7eaae095fdd0da63aa82e217cbfdabff396391e84a7bf0ed321fd95b362750",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +43,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "80b4d9e72f2f2c8a78bdc7270d7ce88f895a954e9ff2e6fef4a3d4ca262cd7ad",
+            "sha256": "bd7eaae095fdd0da63aa82e217cbfdabff396391e84a7bf0ed321fd95b362750",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/nOYEtYI9o40.png"
+            "path": "public/thumbnails/cBi220DdKB8.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "GaR4nI8OKBM",
+      "id": "8ls18GNbNLw",
       "title": "Report: Early Splinter Cell Remake Screenshots Unearthed, Revealing Environments and Easte | NEWS-MONSTER",
       "description": "Report: Early Splinter Cell Remake Screenshots Unearthed, Revealing Environments and Easte | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-03T18:11:43.460Z",
-      "publishedLabel": "Sep 3, 06:11 PM",
-      "thumbnail": "/thumbnails/GaR4nI8OKBM.png",
-      "thumbnailSha256": "66f25920c478562321752946359edd28d5559def98f37ebed6dd4a650ffff189",
+      "publishedAt": "2026-09-03T18:42:45.906Z",
+      "publishedLabel": "Sep 3, 06:42 PM",
+      "thumbnail": "/thumbnails/8ls18GNbNLw.png",
+      "thumbnailSha256": "1aff9d6bd9bcd04e244399ddf4ffc52848e29e913a50f16d7895ea197e1f71a2",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/GaR4nI8OKBM",
+      "youtubeUrl": "https://youtu.be/8ls18GNbNLw",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "GaR4nI8OKBM",
-          "url": "https://youtu.be/GaR4nI8OKBM",
+          "videoId": "8ls18GNbNLw",
+          "url": "https://youtu.be/8ls18GNbNLw",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "66f25920c478562321752946359edd28d5559def98f37ebed6dd4a650ffff189",
+            "sha256": "1aff9d6bd9bcd04e244399ddf4ffc52848e29e913a50f16d7895ea197e1f71a2",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +97,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "66f25920c478562321752946359edd28d5559def98f37ebed6dd4a650ffff189",
+            "sha256": "1aff9d6bd9bcd04e244399ddf4ffc52848e29e913a50f16d7895ea197e1f71a2",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/GaR4nI8OKBM.png"
+            "path": "public/thumbnails/8ls18GNbNLw.png"
           }
         },
         "linkedin": {
