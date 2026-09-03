@@ -525,6 +525,159 @@ test('deleteVideo — throws on failure', async () => {
   )
 })
 
+// ── publishVideo — SEO (tags + categoryId) ───────────────────────────────
+test('publishVideo — injects tags[] + categoryId into the snippet', async () => {
+  let capturedMeta = null
+  const videoData = new Uint8Array([1, 2, 3])
+
+  mockTransport((url, opts) => {
+    if (String(url).includes('/example.com/video.mp4')) {
+      return { buffer: videoData.buffer }
+    }
+    if (String(url).includes('/upload/youtube/v3/videos')) {
+      capturedMeta = extractMetadataFromMultipart(opts.body)
+      return { body: { id: 'vid-seo' } }
+    }
+    return { body: {} }
+  })
+
+  const result = await youtube.publishVideo({
+    videoUrl: 'https://example.com/video.mp4',
+    title: 'Seo Test | NEWS-MONSTER',
+    description: 'desc',
+    tags: ['Sports', '#news', 'sports', 'match'],
+    categoryId: '17',
+  })
+
+  assert.ok(capturedMeta, 'must capture upload snippet')
+  assert.deepEqual(capturedMeta.snippet.tags, ['sports', 'news', 'match'], 'tags deduped + no leading # + lowercased')
+  assert.equal(capturedMeta.snippet.categoryId, '17', 'categoryId present')
+  assert.ok(result.metadata.tags.length > 0, 'result reports resolved tags')
+  assert.equal(result.metadata.categoryId, '17')
+})
+
+test('publishVideo — omits snippet.tags when no tags supplied (backward compatible)', async () => {
+  let capturedMeta = null
+  const videoData = new Uint8Array([1, 2, 3])
+
+  mockTransport((url, opts) => {
+    if (String(url).includes('/example.com/video.mp4')) {
+      return { buffer: videoData.buffer }
+    }
+    if (String(url).includes('/upload/youtube/v3/videos')) {
+      capturedMeta = extractMetadataFromMultipart(opts.body)
+      return { body: { id: 'vid-noseo' } }
+    }
+    return { body: {} }
+  })
+
+  await youtube.publishVideo({
+    videoUrl: 'https://example.com/video.mp4',
+    title: 'Plain | NEWS-MONSTER',
+    description: 'no seo',
+  })
+
+  assert.ok(capturedMeta)
+  assert.equal(capturedMeta.snippet.tags, undefined, 'no tags key when empty')
+  assert.equal(capturedMeta.snippet.categoryId, undefined, 'no categoryId when none supplied')
+})
+
+// ── updateVideoSnippet (SEO backfill) ────────────────────────────────────
+test('updateVideoSnippet — merges tags into an existing video, GETs then PUTs', async () => {
+  const requests = []
+  let putBody = null
+
+  mockTransport((url, opts) => {
+    requests.push({ method: opts?.method || 'GET', url: String(url) })
+    if (String(url).includes('/videos?part=snippet&id=vid-1')) {
+      return {
+        body: {
+          items: [{
+            id: 'vid-1',
+            snippet: { title: 'Old Title', description: 'Old desc', categoryId: '25' },
+          }],
+        },
+      }
+    }
+    if (String(url).includes('/videos?part=snippet') && opts?.method === 'PUT') {
+      putBody = JSON.parse(opts.body)
+      return {
+        body: {
+          id: 'vid-1',
+          snippet: { title: 'New Title | NEWS-MONSTER', tags: ['sports', 'news'], categoryId: '17' },
+        },
+      }
+    }
+    return { body: {} }
+  })
+
+  const result = await youtube.updateVideoSnippet({
+    videoId: 'vid-1',
+    title: 'New Title | NEWS-MONSTER',
+    tags: ['Sports', '#news', 'sports'],
+    categoryId: '17',
+  })
+
+  assert.ok(requests.some((r) => r.method === 'GET' && r.url.includes('snippet&id=vid-1')), 'must GET current first')
+  assert.ok(requests.some((r) => r.method === 'PUT' && r.url.includes('part=snippet')), 'must PUT merged snippet')
+  assert.ok(putBody, 'captured PUT body')
+  assert.deepEqual(putBody.snippet.tags, ['sports', 'news'], 'tags deduped/no-#/lowercase')
+  assert.equal(putBody.snippet.categoryId, '17')
+  assert.equal(putBody.snippet.title, 'New Title | NEWS-MONSTER')
+  assert.equal(result.videoId, 'vid-1')
+  assert.equal(result.categoryId, '17')
+})
+
+test('updateVideoSnippet — carries forward existing fields when new ones omitted', async () => {
+  let putBody = null
+  mockTransport((url, opts) => {
+    if (String(url).includes('/videos?part=snippet&id=vid-2')) {
+      return { body: { items: [{ id: 'vid-2', snippet: { title: 'Keep Me', description: 'keep desc', tags: ['old', 'tag'] } }] } }
+    }
+    if (String(url).includes('/videos?part=snippet') && opts?.method === 'PUT') {
+      putBody = JSON.parse(opts.body)
+      return { body: { id: 'vid-2', snippet: putBody.snippet } }
+    }
+    return { body: {} }
+  })
+
+  const result = await youtube.updateVideoSnippet({ videoId: 'vid-2' })
+  assert.equal(putBody.snippet.title, 'Keep Me', 'title carried forward')
+  assert.equal(putBody.snippet.description, 'keep desc', 'description carried forward')
+  assert.deepEqual(putBody.snippet.tags, ['old', 'tag'], 'tags carried forward when none provided')
+  assert.equal(result.videoId, 'vid-2')
+})
+
+test('updateVideoSnippet — throws when video not found', async () => {
+  mockTransport((url) => ({ body: { items: [] } }))
+  await assert.rejects(
+    () => youtube.updateVideoSnippet({ videoId: 'missing' }),
+    /YOUTUBE_VIDEO_NOT_VISIBLE/
+  )
+})
+
+test('updateVideoSEO — derives SEO bundle from category and applies it (Sports)', async () => {
+  let putBody = null
+  mockTransport((url, opts) => {
+    if (String(url).includes('/videos?part=snippet&id=vid-sports')) {
+      return { body: { items: [{ id: 'vid-sports', snippet: { title: 'Old', description: 'd', categoryId: '25' } }] } }
+    }
+    if (String(url).includes('/videos?part=snippet') && opts?.method === 'PUT') {
+      putBody = JSON.parse(opts.body)
+      return { body: { id: 'vid-sports', snippet: putBody.snippet } }
+    }
+    return { body: {} }
+  })
+
+  const result = await youtube.updateVideoSEO({ videoId: 'vid-sports', category: 'SPORTS' })
+
+  assert.ok(putBody, 'PUT issued')
+  assert.equal(putBody.snippet.categoryId, '17', 'Sports → 17')
+  assert.ok(putBody.snippet.tags.includes('sports'), 'sports tag present')
+  assert.ok(putBody.snippet.tags.includes('news-monster'), 'brand tag present')
+  assert.equal(result.categoryId, '17')
+})
+
 // ── authUrl ──────────────────────────────────────────────────────────────
 test('authUrl — contains required OAuth params', () => {
   const url = youtube.authUrl

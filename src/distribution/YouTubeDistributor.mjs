@@ -5,6 +5,7 @@
 
 import { readFileSync, existsSync } from 'node:fs'
 import { DistributionState, DistributionFailure } from './DistributionState.mjs'
+import { resolveYouTubeCategoryId } from '../publishing/YouTubeSEO.mjs'
 
 export class YouTubeDistributor {
   constructor(options = {}) {
@@ -48,6 +49,11 @@ export class YouTubeDistributor {
         description: artifact.metadata.description || '',
         thumbnailPath: artifact.thumbnail.path,
         privacy: 'public',
+        // YouTube SEO: snippet tags + categoryId (search discovery)
+        tags: artifact.metadata.tags,
+        categoryId: artifact.metadata.category
+          ? resolveYouTubeCategoryId(artifact.metadata.category)
+          : (artifact.metadata.categoryKey ? resolveYouTubeCategoryId(artifact.metadata.categoryKey) : null),
       })
 
       result.videoId = uploadResult.videoId
