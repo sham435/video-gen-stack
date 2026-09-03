@@ -33,7 +33,7 @@ export class OpenRouterProvider extends AIProvider {
       payload.response_format = { type: 'json_object' }
     }
 
-    try {
+      try {
       const res = await withRetry(async () => {
         const r = await fetch(OPENROUTER_URL, {
           method: 'POST',
@@ -48,6 +48,14 @@ export class OpenRouterProvider extends AIProvider {
         if (!r.ok) {
           const err = new Error(`OpenRouter API error (${r.status}): ${r.statusText}`)
           err.status = r.status
+          // Honor Retry-After header from rate-limited responses (429).
+          // The withRetry wrapper will use this as the backoff delay when
+          // available, replacing the fixed [0, 500, 2000] schedule.
+          const retryAfter = r.headers?.get('retry-after')
+          if (retryAfter) {
+            const secs = parseInt(retryAfter, 10)
+            if (Number.isFinite(secs) && secs > 0) err.retryAfterMs = secs * 1000
+          }
           throw err
         }
         return r

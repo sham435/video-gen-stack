@@ -12,7 +12,13 @@ const NON_RETRYABLE_CODES = new Set(['AUTH', 'INVALID_REQUEST', 'MODEL_NOT_FOUND
 
 export const RETRY_BACKOFF = [0, 500, 2000]
 
-export function backoffDelay(attempt) {
+export function backoffDelay(attempt, error) {
+  // Honor Retry-After header from 429 responses when available (set by
+  // providers that capture the header, e.g. OpenRouterProvider). Falls
+  // back to the fixed schedule [0, 500, 2000].
+  if (error?.retryAfterMs && Number.isFinite(error.retryAfterMs)) {
+    return Math.min(error.retryAfterMs, 10000) // cap at 10s
+  }
   return RETRY_BACKOFF[Math.min(attempt, RETRY_BACKOFF.length - 1)] ?? 3000
 }
 
@@ -42,7 +48,7 @@ export async function withRetry(fn, options = {}) {
   let lastError = null
 
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
-    if (attempt > 0) await sleep(backoffDelay(attempt - 1))
+    if (attempt > 0) await sleep(backoffDelay(attempt - 1, lastError))
     try {
       return await fn(attempt)
     } catch (e) {

@@ -5,7 +5,7 @@ export class GeminiProvider extends AIProvider {
   constructor(apiKey, options = {}) {
     super()
     this.apiKey = apiKey || process.env.GEMINI_API_KEY
-    this.model = options.model || 'gemini-2.0-flash'
+    this.model = options.model || 'gemini-2.5-flash'
     this.timeout = options.timeout || 30000
   }
 

@@ -1,7 +1,7 @@
 export const VIDEO_MODELS = [
   {
-    id: 'gemini-2.0-flash',
-    name: 'Gemini 2.0 Flash',
+    id: 'gemini-2.5-flash',
+    name: 'Gemini 2.5 Flash',
     provider: 'Google (Free tier)',
     capabilities: ['text-to-video', 'image-to-video'],
     speed: 'fast',
@@ -11,7 +11,7 @@ export const VIDEO_MODELS = [
     openSource: false,
     freeTier: true,
     endpoints: {
-      'gemini': 'gemini-2.0-flash',
+      'gemini': 'gemini-2.5-flash',
     },
   },
   {

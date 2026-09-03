@@ -114,6 +114,11 @@ export class InformationLayer {
     const mid = Math.ceil(words.length / 2)
     const lines = layout?.lines?.length ? layout.lines : [words.slice(0, mid).join(' '), words.slice(mid).join(' ')]
     const keyword = (scene.caption_focus || '').toUpperCase()
+    // Creative Director brief emphasis words: multi-word emphasis treatment
+    // (e.g. ["SECRETLY", "DROPPED"]) applied alongside the single caption_focus.
+    // The brief provides 1-3 words the agent judged as curiosity/punch hooks;
+    // when present they share the accent-red emphasis with caption_focus.
+    const briefEmphasis = (scene.creativeBrief?.textHook?.emphasisWords || []).map(w => w.toUpperCase()).filter(Boolean)
     const lineH = fontSize * 1.3
     const offset = ((lines.length - 1) * lineH) / 2
     const maxChars = 24
@@ -173,7 +178,7 @@ export class InformationLayer {
       pieces.forEach((piece, pi) => {
         const py = -offset + i * lineH - pieceOffset + pi * lineH
         for (const w of piece.split(' ')) {
-          const isKeyword = keyword && w.includes(keyword)
+          const isKeyword = (keyword && w.includes(keyword)) || (briefEmphasis.length > 0 && briefEmphasis.some(ew => w.includes(ew)))
           // One easing curve for ALL words: each word's opacity/position derive
           // from the SAME static-first curve. Once firstWordT hits 1, every
           // word is frozen (opacity = TAIL envelope, offset = 0). No word keeps
