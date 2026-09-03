@@ -1,32 +1,86 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-03T05:12:36.643Z",
+  "updatedAt": "2026-09-03T08:27:45.481Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "rjYUf05EsQo",
-      "title": "U.S. Stock Futures Little Changed as Markets Weigh Warsh’s Hawkish Remarks | NEWS-MONSTER",
-      "description": "U.S. Stock Futures Little Changed as Markets Weigh Warsh’s Hawkish Remarks | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-09-03T05:12:35.998Z",
-      "publishedLabel": "Sep 3, 05:12 AM",
-      "thumbnail": "/thumbnails/rjYUf05EsQo.png",
-      "thumbnailSha256": "e3e6b2b732cc3cb04d2f373d37f7186f402df7eecf22bc1b8a47994e76057caa",
+      "id": "khwEJjCy_lI",
+      "title": "Nintendo Expands Switch Online's NES Library With Three More Titles - Nintendo Life | NEWS-MONSTER",
+      "description": "Nintendo Expands Switch Online's NES Library With Three More Titles - Nintendo Life | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-03T08:27:44.915Z",
+      "publishedLabel": "Sep 3, 08:27 AM",
+      "thumbnail": "/thumbnails/khwEJjCy_lI.png",
+      "thumbnailSha256": "2cd337421dffbed4699d7a1bfecb12689deb1b479f08a17b521d3dc86691afa5",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/rjYUf05EsQo",
+      "youtubeUrl": "https://youtu.be/khwEJjCy_lI",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "rjYUf05EsQo",
-          "url": "https://youtu.be/rjYUf05EsQo",
+          "videoId": "khwEJjCy_lI",
+          "url": "https://youtu.be/khwEJjCy_lI",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "e3e6b2b732cc3cb04d2f373d37f7186f402df7eecf22bc1b8a47994e76057caa",
+            "sha256": "2cd337421dffbed4699d7a1bfecb12689deb1b479f08a17b521d3dc86691afa5",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 3,
+          "thumbnail": {
+            "sha256": "2cd337421dffbed4699d7a1bfecb12689deb1b479f08a17b521d3dc86691afa5",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/khwEJjCy_lI.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "HsV0qq6eH2w",
+      "title": "9 Years Later, Mario Kart 8 Just Got a Game-Changing Update for Nintendo Switch 2 - Polygo | NEWS-MONSTER",
+      "description": "9 Years Later, Mario Kart 8 Just Got a Game-Changing Update for Nintendo Switch 2 - Polygo | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-03T08:23:44.758Z",
+      "publishedLabel": "Sep 3, 08:23 AM",
+      "thumbnail": "/thumbnails/HsV0qq6eH2w.png",
+      "thumbnailSha256": "920cf32dc3716c26e13935f7f529088f84067201b271273cbf1815f7d5e1eba8",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/HsV0qq6eH2w",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "HsV0qq6eH2w",
+          "url": "https://youtu.be/HsV0qq6eH2w",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "920cf32dc3716c26e13935f7f529088f84067201b271273cbf1815f7d5e1eba8",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +97,12 @@
           "errors": [],
           "durationMs": 4,
           "thumbnail": {
-            "sha256": "e3e6b2b732cc3cb04d2f373d37f7186f402df7eecf22bc1b8a47994e76057caa",
+            "sha256": "920cf32dc3716c26e13935f7f529088f84067201b271273cbf1815f7d5e1eba8",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/rjYUf05EsQo.png"
+            "path": "public/thumbnails/HsV0qq6eH2w.png"
           }
         },
         "linkedin": {
@@ -58,29 +112,29 @@
       }
     },
     {
-      "id": "oU9GmuitLEI",
-      "title": "U.K Said One Thing, Then Did This | NEWS-MONSTER",
-      "description": "U.K Said One Thing, Then Did This | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-09-03T05:08:06.223Z",
-      "publishedLabel": "Sep 3, 05:08 AM",
-      "thumbnail": "/thumbnails/oU9GmuitLEI.png",
-      "thumbnailSha256": "b39f852c39939d63cffa200513d3c829545ef6f15ec2cdb4d5d601a82ee0a183",
+      "id": "l0TiBhEY7P4",
+      "title": "Super Smash Bros. Ultimate Version 13.0.5 Is Now Live, Here Are The Full Patch Notes - Nin | NEWS-MONSTER",
+      "description": "Super Smash Bros. Ultimate Version 13.0.5 Is Now Live, Here Are The Full Patch Notes - Nin | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-03T08:19:08.253Z",
+      "publishedLabel": "Sep 3, 08:19 AM",
+      "thumbnail": "/thumbnails/l0TiBhEY7P4.png",
+      "thumbnailSha256": "c74fab68191cec41f1a46b781ca101add64281882ed2a310263a053ad4d3e64a",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/oU9GmuitLEI",
+      "youtubeUrl": "https://youtu.be/l0TiBhEY7P4",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "oU9GmuitLEI",
-          "url": "https://youtu.be/oU9GmuitLEI",
+          "videoId": "l0TiBhEY7P4",
+          "url": "https://youtu.be/l0TiBhEY7P4",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "b39f852c39939d63cffa200513d3c829545ef6f15ec2cdb4d5d601a82ee0a183",
+            "sha256": "c74fab68191cec41f1a46b781ca101add64281882ed2a310263a053ad4d3e64a",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,66 +151,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "b39f852c39939d63cffa200513d3c829545ef6f15ec2cdb4d5d601a82ee0a183",
+            "sha256": "c74fab68191cec41f1a46b781ca101add64281882ed2a310263a053ad4d3e64a",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/oU9GmuitLEI.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "7IAIZWPlZ-I",
-      "title": "How Hits Changed Overnight | NEWS-MONSTER",
-      "description": "How Hits Changed Overnight | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-09-03T05:03:39.374Z",
-      "publishedLabel": "Sep 3, 05:03 AM",
-      "thumbnail": "/thumbnails/7IAIZWPlZ-I.png",
-      "thumbnailSha256": "447e8f2d48771f470727936c731375b134815ebd8304a747c7aea97dbd9733a9",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/7IAIZWPlZ-I",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "7IAIZWPlZ-I",
-          "url": "https://youtu.be/7IAIZWPlZ-I",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "447e8f2d48771f470727936c731375b134815ebd8304a747c7aea97dbd9733a9",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "447e8f2d48771f470727936c731375b134815ebd8304a747c7aea97dbd9733a9",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/7IAIZWPlZ-I.png"
+            "path": "public/thumbnails/l0TiBhEY7P4.png"
           }
         },
         "linkedin": {
