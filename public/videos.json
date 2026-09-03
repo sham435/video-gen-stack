@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-03T21:45:53.908Z",
+  "updatedAt": "2026-09-03T23:09:13.623Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "gXNjcqCPwQw",
-      "title": "iOS 27 Introduces New 'iPhone Handoff' Feature - MacRumors | NEWS-MONSTER",
-      "description": "iOS 27 Introduces New 'iPhone Handoff' Feature - MacRumors | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-03T21:45:53.440Z",
-      "publishedLabel": "Sep 3, 09:45 PM",
-      "thumbnail": "/thumbnails/gXNjcqCPwQw.png",
-      "thumbnailSha256": "f35ba77a734357bd84b9174465727d89175b58cbe3dd0141e4f349f99050103d",
+      "id": "QuC787sBTNg",
+      "title": "U.S. Stock Futures Little Changed as Markets Weigh Warsh’s Hawkish Remarks | NEWS-MONSTER",
+      "description": "U.S. Stock Futures Little Changed as Markets Weigh Warsh’s Hawkish Remarks | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-03T23:09:13.001Z",
+      "publishedLabel": "Sep 3, 11:09 PM",
+      "thumbnail": "/thumbnails/QuC787sBTNg.png",
+      "thumbnailSha256": "5a84d1da17a0ebe0d585d9b5d7b9d87de7fcad4c01c4a766fe8ba44b62ab5154",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/gXNjcqCPwQw",
+      "youtubeUrl": "https://youtu.be/QuC787sBTNg",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "gXNjcqCPwQw",
-          "url": "https://youtu.be/gXNjcqCPwQw",
+          "videoId": "QuC787sBTNg",
+          "url": "https://youtu.be/QuC787sBTNg",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "f35ba77a734357bd84b9174465727d89175b58cbe3dd0141e4f349f99050103d",
+            "sha256": "5a84d1da17a0ebe0d585d9b5d7b9d87de7fcad4c01c4a766fe8ba44b62ab5154",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +43,120 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "f35ba77a734357bd84b9174465727d89175b58cbe3dd0141e4f349f99050103d",
+            "sha256": "5a84d1da17a0ebe0d585d9b5d7b9d87de7fcad4c01c4a766fe8ba44b62ab5154",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/gXNjcqCPwQw.png"
+            "path": "public/thumbnails/QuC787sBTNg.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "penlWq4F4XM",
+      "title": "U.K Said One Thing, Then Did This | NEWS-MONSTER",
+      "description": "U.K Said One Thing, Then Did This | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-03T23:05:02.193Z",
+      "publishedLabel": "Sep 3, 11:05 PM",
+      "thumbnail": "/thumbnails/penlWq4F4XM.png",
+      "thumbnailSha256": "ea7ce2dde82f6d8cd6b5ed7b4dba1c890f739d97c7fc40a05c16c6a6a2fd5306",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/penlWq4F4XM",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "penlWq4F4XM",
+          "url": "https://youtu.be/penlWq4F4XM",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "ea7ce2dde82f6d8cd6b5ed7b4dba1c890f739d97c7fc40a05c16c6a6a2fd5306",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "ea7ce2dde82f6d8cd6b5ed7b4dba1c890f739d97c7fc40a05c16c6a6a2fd5306",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/penlWq4F4XM.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "xyDU6yyQDqQ",
+      "title": "How Hits Changed Overnight | NEWS-MONSTER",
+      "description": "How Hits Changed Overnight | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-03T23:00:59.964Z",
+      "publishedLabel": "Sep 3, 11:00 PM",
+      "thumbnail": "/thumbnails/xyDU6yyQDqQ.png",
+      "thumbnailSha256": "30adf33f1c9cec003603c24e728eb7fc25dca6a5b2dc1bc8a1daec1619a3b88f",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/xyDU6yyQDqQ",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "xyDU6yyQDqQ",
+          "url": "https://youtu.be/xyDU6yyQDqQ",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "30adf33f1c9cec003603c24e728eb7fc25dca6a5b2dc1bc8a1daec1619a3b88f",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 3,
+          "thumbnail": {
+            "sha256": "30adf33f1c9cec003603c24e728eb7fc25dca6a5b2dc1bc8a1daec1619a3b88f",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/xyDU6yyQDqQ.png"
           }
         },
         "linkedin": {
