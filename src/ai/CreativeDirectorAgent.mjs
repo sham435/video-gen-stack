@@ -29,7 +29,19 @@ const SCENE_BRIEF_SCHEMA = {
 const BRIEF_SCHEMA = {
   scenes: 'array',
   overallMood: 'string',
+  // NOTE: structureRecommendation is deliberately NOT in the strict schema.
+  // It is a forward-looking signal for a future structural agent, read
+  // LENIENTLY in _validate (defaulting to 'standard' when absent/invalid).
+  // Requiring it here would discard the whole per-scene brief whenever the
+  // LLM omits it — too aggressive for a field the renderer doesn't consume.
 }
+
+// Top-level recommendation for the video's back-half structure (45%–100% of
+// runtime). The pipeline currently plays scenes in order with no special
+// back-half treatment. This field is a forward-looking signal for a future
+// structural agent to act on — it is validated and passed through but NOT
+// consumed by any renderer today.
+const STRUCTURE_RECOMMENDATIONS = ['standard', 'recap-beat', 'second-story', 'interstitial']
 
 const MOODS = ['urgent', 'triumphant', 'ominous', 'playful', 'reflective', 'curious', 'neutral']
 
@@ -71,7 +83,7 @@ export class CreativeDirectorAgent {
    *
    * @param {{title:string, description:string, category:string, source:string}} article
    * @param {{headline:string, emotionalArc:string[], scenePlan:Array}} directorStory
-   * @returns {{scenes:Array<{sceneId:number, mood:string, imageDirection:string, bgmCue:{genre:string,energy:number,family:string}, textHook:{style:string,emphasisWords:string[]}}>, overallMood:string}|null}
+   * @returns {{scenes:Array<{sceneId:number, mood:string, imageDirection:string, bgmCue:{genre:string,energy:number,family:string}, textHook:{style:string,emphasisWords:string[]}}>, overallMood:string, structureRecommendation:string}|null}
    *   Null on total failure — caller must run pipeline unchanged.
    */
   async plan(article, directorStory) {
@@ -128,11 +140,18 @@ RULES:
 - textHook.emphasisWords: 1-3 words from the scene's narration that should get the STAGGER emphasis (large accent-colored word animation). Pick words that create curiosity or emotional punch. Never pick the first word or a proper noun. If no word fits, return an empty array.
 - textHook.style: one of "shock-stat", "rhetorical-question", "direct-address", "highlight-keyword", "contrast-frame".
 - overallMood: the dominant mood across all scenes.
+- structureRecommendation: one of "standard", "recap-beat", "second-story", "interstitial".
+  - "standard": the existing scene order already fills the full runtime well — no structural change needed.
+  - "recap-beat": the story's climax lands early; add a highlight/recap beat before the outro to let the ending breathe.
+  - "second-story": the script is short enough that a brief related story segment would improve watch time.
+  - "interstitial": a news-desk / anchor-style transition would bridge scenes better than a hard cut.
+  Choose based on the script's pacing: if the narration packs a lot into the first half and the back half would feel thin, recommend something other than "standard".
 - The emotional arc should progress naturally (e.g. curious → tension → reveal → excitement → reflect).
 
 Return ONLY valid JSON matching this structure:
 {
   "overallMood": "curious",
+  "structureRecommendation": "standard",
   "scenes": [
     {
       "sceneId": 1,
@@ -200,6 +219,9 @@ Generate the creative brief for every scene. Keep the mood arc natural — start
     return {
       scenes: validated,
       overallMood: typeof brief.overallMood === 'string' ? brief.overallMood : 'neutral',
+      structureRecommendation: STRUCTURE_RECOMMENDATIONS.includes(brief.structureRecommendation)
+        ? brief.structureRecommendation
+        : 'standard',
     }
   }
 
@@ -218,10 +240,11 @@ Generate the creative brief for every scene. Keep the mood arc natural — start
     return {
       scenes: Array.from({ length: sceneCount }, (_, i) => this._neutralBrief(i + 1)),
       overallMood: 'neutral',
+      structureRecommendation: 'standard',
     }
   }
 }
 
 // ── Helpers exported for tests ─────────────────────────────────────────────────
 
-export { MOOD_TO_EMOTION, MOOD_TO_FAMILY, MOODS }
+export { MOOD_TO_EMOTION, MOOD_TO_FAMILY, MOODS, STRUCTURE_RECOMMENDATIONS }

@@ -9,6 +9,7 @@
 // 6. InformationLayer emphasisWords from brief
 // 7. Retry backoff honors Retry-After header
 // 8. AudioMixer family override via creative brief
+// 9. structureRecommendation field in brief schema
 
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
@@ -229,4 +230,50 @@ test('creative-director: gemini model string updated to 2.5-flash', async () => 
   const src = readFileSync(new URL('../src/ai/providers/GeminiProvider.mjs', import.meta.url), 'utf8')
   assert.ok(src.includes('gemini-2.5-flash'), 'GeminiProvider uses 2.5-flash')
   assert.ok(!src.includes('gemini-2.0-flash'), 'no deprecated 2.0-flash')
+})
+
+// ─── 11. structureRecommendation field ─────────────────────────────────────
+
+test('creative-director: structureRecommendation enum covers all options', async () => {
+  const { STRUCTURE_RECOMMENDATIONS } = await import('../src/ai/CreativeDirectorAgent.mjs')
+  assert.deepEqual(
+    [...STRUCTURE_RECOMMENDATIONS].sort(),
+    ['interstitial', 'recap-beat', 'second-story', 'standard'],
+    'all 4 structure recommendation values present'
+  )
+})
+
+test('creative-director: structureRecommendation passes through when valid', async () => {
+  const { CreativeDirectorAgent } = await import('../src/ai/CreativeDirectorAgent.mjs')
+  const mockProvider = {
+    generate: async () => JSON.stringify({
+      overallMood: 'urgent',
+      structureRecommendation: 'recap-beat',
+      scenes: [{ sceneId: 1, mood: 'urgent', imageDirection: '', bgmCue: { family: 'action-energy', energy: 0.8, genre: '' }, textHook: { style: 'highlight-keyword', emphasisWords: [] } }],
+    }),
+  }
+  const agent = new CreativeDirectorAgent(mockProvider)
+  const brief = await agent.plan({ title: 'X', category: 'tech' }, { headline: 'X', emotionalArc: [], scenePlan: [{ type: 'hook', narration: 'a', duration: 2 }] })
+  assert.equal(brief.structureRecommendation, 'recap-beat')
+})
+
+test('creative-director: structureRecommendation clamps invalid to standard', async () => {
+  const { CreativeDirectorAgent } = await import('../src/ai/CreativeDirectorAgent.mjs')
+  const mockProvider = {
+    generate: async () => JSON.stringify({
+      overallMood: 'urgent',
+      structureRecommendation: 'totally-made-up',
+      scenes: [{ sceneId: 1, mood: 'urgent', imageDirection: '', bgmCue: { family: 'action-energy', energy: 0.8, genre: '' }, textHook: { style: 'highlight-keyword', emphasisWords: [] } }],
+    }),
+  }
+  const agent = new CreativeDirectorAgent(mockProvider)
+  const brief = await agent.plan({ title: 'X', category: 'tech' }, { headline: 'X', emotionalArc: [], scenePlan: [{ type: 'hook', narration: 'a', duration: 2 }] })
+  assert.equal(brief.structureRecommendation, 'standard', 'invalid value clamped to standard')
+})
+
+test('creative-director: fallback brief always recommends standard structure', async () => {
+  const { CreativeDirectorAgent } = await import('../src/ai/CreativeDirectorAgent.mjs')
+  const agent = new CreativeDirectorAgent(null) // null provider → fallback
+  const brief = await agent.plan({ title: 'X', category: 'tech' }, { headline: 'X', scenePlan: [{ type: 'hook', narration: 'a', duration: 2 }] })
+  assert.equal(brief.structureRecommendation, 'standard', 'fallback defaults to standard')
 })
