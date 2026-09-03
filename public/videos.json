@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-03T08:27:45.481Z",
+  "updatedAt": "2026-09-03T09:03:37.754Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "khwEJjCy_lI",
+      "id": "_VnuMfc5u6U",
       "title": "Nintendo Expands Switch Online's NES Library With Three More Titles - Nintendo Life | NEWS-MONSTER",
       "description": "Nintendo Expands Switch Online's NES Library With Three More Titles - Nintendo Life | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-03T08:27:44.915Z",
-      "publishedLabel": "Sep 3, 08:27 AM",
-      "thumbnail": "/thumbnails/khwEJjCy_lI.png",
-      "thumbnailSha256": "2cd337421dffbed4699d7a1bfecb12689deb1b479f08a17b521d3dc86691afa5",
+      "publishedAt": "2026-09-03T09:03:36.708Z",
+      "publishedLabel": "Sep 3, 09:03 AM",
+      "thumbnail": "/thumbnails/_VnuMfc5u6U.png",
+      "thumbnailSha256": "a6f19edee5e06155169c3cab829f8ce95ae233d51716243b158bc7c0a0936adc",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/khwEJjCy_lI",
+      "youtubeUrl": "https://youtu.be/_VnuMfc5u6U",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "khwEJjCy_lI",
-          "url": "https://youtu.be/khwEJjCy_lI",
+          "videoId": "_VnuMfc5u6U",
+          "url": "https://youtu.be/_VnuMfc5u6U",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "2cd337421dffbed4699d7a1bfecb12689deb1b479f08a17b521d3dc86691afa5",
+            "sha256": "a6f19edee5e06155169c3cab829f8ce95ae233d51716243b158bc7c0a0936adc",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "2cd337421dffbed4699d7a1bfecb12689deb1b479f08a17b521d3dc86691afa5",
+            "sha256": "a6f19edee5e06155169c3cab829f8ce95ae233d51716243b158bc7c0a0936adc",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/khwEJjCy_lI.png"
+            "path": "public/thumbnails/_VnuMfc5u6U.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "HsV0qq6eH2w",
+      "id": "RgUfdp2zKVk",
       "title": "9 Years Later, Mario Kart 8 Just Got a Game-Changing Update for Nintendo Switch 2 - Polygo | NEWS-MONSTER",
       "description": "9 Years Later, Mario Kart 8 Just Got a Game-Changing Update for Nintendo Switch 2 - Polygo | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-03T08:23:44.758Z",
-      "publishedLabel": "Sep 3, 08:23 AM",
-      "thumbnail": "/thumbnails/HsV0qq6eH2w.png",
-      "thumbnailSha256": "920cf32dc3716c26e13935f7f529088f84067201b271273cbf1815f7d5e1eba8",
+      "publishedAt": "2026-09-03T08:59:40.955Z",
+      "publishedLabel": "Sep 3, 08:59 AM",
+      "thumbnail": "/thumbnails/RgUfdp2zKVk.png",
+      "thumbnailSha256": "b14f172aa6d388fe73ab6c84c92ee2968f1e324db317191636a00b823752ec57",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/HsV0qq6eH2w",
+      "youtubeUrl": "https://youtu.be/RgUfdp2zKVk",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "HsV0qq6eH2w",
-          "url": "https://youtu.be/HsV0qq6eH2w",
+          "videoId": "RgUfdp2zKVk",
+          "url": "https://youtu.be/RgUfdp2zKVk",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "920cf32dc3716c26e13935f7f529088f84067201b271273cbf1815f7d5e1eba8",
+            "sha256": "b14f172aa6d388fe73ab6c84c92ee2968f1e324db317191636a00b823752ec57",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,14 +95,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 4,
+          "durationMs": 5,
           "thumbnail": {
-            "sha256": "920cf32dc3716c26e13935f7f529088f84067201b271273cbf1815f7d5e1eba8",
+            "sha256": "b14f172aa6d388fe73ab6c84c92ee2968f1e324db317191636a00b823752ec57",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/HsV0qq6eH2w.png"
+            "path": "public/thumbnails/RgUfdp2zKVk.png"
           }
         },
         "linkedin": {
@@ -112,29 +112,29 @@
       }
     },
     {
-      "id": "l0TiBhEY7P4",
+      "id": "BkjyL_yNPLg",
       "title": "Super Smash Bros. Ultimate Version 13.0.5 Is Now Live, Here Are The Full Patch Notes - Nin | NEWS-MONSTER",
       "description": "Super Smash Bros. Ultimate Version 13.0.5 Is Now Live, Here Are The Full Patch Notes - Nin | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-03T08:19:08.253Z",
-      "publishedLabel": "Sep 3, 08:19 AM",
-      "thumbnail": "/thumbnails/l0TiBhEY7P4.png",
-      "thumbnailSha256": "c74fab68191cec41f1a46b781ca101add64281882ed2a310263a053ad4d3e64a",
+      "publishedAt": "2026-09-03T08:55:56.475Z",
+      "publishedLabel": "Sep 3, 08:55 AM",
+      "thumbnail": "/thumbnails/BkjyL_yNPLg.png",
+      "thumbnailSha256": "0c1cbd7e99333b39722dd58e1045e78edc3a35b1368173ca12ecf9c6e8f18829",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/l0TiBhEY7P4",
+      "youtubeUrl": "https://youtu.be/BkjyL_yNPLg",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "l0TiBhEY7P4",
-          "url": "https://youtu.be/l0TiBhEY7P4",
+          "videoId": "BkjyL_yNPLg",
+          "url": "https://youtu.be/BkjyL_yNPLg",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "c74fab68191cec41f1a46b781ca101add64281882ed2a310263a053ad4d3e64a",
+            "sha256": "0c1cbd7e99333b39722dd58e1045e78edc3a35b1368173ca12ecf9c6e8f18829",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -149,14 +149,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "c74fab68191cec41f1a46b781ca101add64281882ed2a310263a053ad4d3e64a",
+            "sha256": "0c1cbd7e99333b39722dd58e1045e78edc3a35b1368173ca12ecf9c6e8f18829",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/l0TiBhEY7P4.png"
+            "path": "public/thumbnails/BkjyL_yNPLg.png"
           }
         },
         "linkedin": {
