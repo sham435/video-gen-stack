@@ -1,86 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-03T17:52:41.846Z",
+  "updatedAt": "2026-09-03T18:15:27.761Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "bSPwETzlaWM",
+      "id": "nOYEtYI9o40",
       "title": "Dishonored's Co-Creator Explains What So Many Games Are Missing - Kotaku | NEWS-MONSTER",
       "description": "Dishonored's Co-Creator Explains What So Many Games Are Missing - Kotaku | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-03T17:52:41.142Z",
-      "publishedLabel": "Sep 3, 05:52 PM",
-      "thumbnail": "/thumbnails/bSPwETzlaWM.png",
-      "thumbnailSha256": "9d242451347cb77810eaeb56dfb5bff8b0db11c1d42553bfc8c59f8b2ac8f473",
+      "publishedAt": "2026-09-03T18:15:27.102Z",
+      "publishedLabel": "Sep 3, 06:15 PM",
+      "thumbnail": "/thumbnails/nOYEtYI9o40.png",
+      "thumbnailSha256": "80b4d9e72f2f2c8a78bdc7270d7ce88f895a954e9ff2e6fef4a3d4ca262cd7ad",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/bSPwETzlaWM",
+      "youtubeUrl": "https://youtu.be/nOYEtYI9o40",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "bSPwETzlaWM",
-          "url": "https://youtu.be/bSPwETzlaWM",
+          "videoId": "nOYEtYI9o40",
+          "url": "https://youtu.be/nOYEtYI9o40",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "9d242451347cb77810eaeb56dfb5bff8b0db11c1d42553bfc8c59f8b2ac8f473",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 1,
-          "thumbnail": {
-            "sha256": "9d242451347cb77810eaeb56dfb5bff8b0db11c1d42553bfc8c59f8b2ac8f473",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/bSPwETzlaWM.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "S3MQ7nA0Cjk",
-      "title": "Report: Early Splinter Cell Remake Screenshots Unearthed, Revealing Environments and Easte | NEWS-MONSTER",
-      "description": "Report: Early Splinter Cell Remake Screenshots Unearthed, Revealing Environments and Easte | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-03T17:48:46.188Z",
-      "publishedLabel": "Sep 3, 05:48 PM",
-      "thumbnail": "/thumbnails/S3MQ7nA0Cjk.png",
-      "thumbnailSha256": "4e96058b1461ad0ba9a6b2463dcb2c8d3b855dd374bebcc3d1779a31f294fba6",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/S3MQ7nA0Cjk",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "S3MQ7nA0Cjk",
-          "url": "https://youtu.be/S3MQ7nA0Cjk",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "4e96058b1461ad0ba9a6b2463dcb2c8d3b855dd374bebcc3d1779a31f294fba6",
+            "sha256": "80b4d9e72f2f2c8a78bdc7270d7ce88f895a954e9ff2e6fef4a3d4ca262cd7ad",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +43,66 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "4e96058b1461ad0ba9a6b2463dcb2c8d3b855dd374bebcc3d1779a31f294fba6",
+            "sha256": "80b4d9e72f2f2c8a78bdc7270d7ce88f895a954e9ff2e6fef4a3d4ca262cd7ad",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/S3MQ7nA0Cjk.png"
+            "path": "public/thumbnails/nOYEtYI9o40.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "GaR4nI8OKBM",
+      "title": "Report: Early Splinter Cell Remake Screenshots Unearthed, Revealing Environments and Easte | NEWS-MONSTER",
+      "description": "Report: Early Splinter Cell Remake Screenshots Unearthed, Revealing Environments and Easte | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-03T18:11:43.460Z",
+      "publishedLabel": "Sep 3, 06:11 PM",
+      "thumbnail": "/thumbnails/GaR4nI8OKBM.png",
+      "thumbnailSha256": "66f25920c478562321752946359edd28d5559def98f37ebed6dd4a650ffff189",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/GaR4nI8OKBM",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "GaR4nI8OKBM",
+          "url": "https://youtu.be/GaR4nI8OKBM",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "66f25920c478562321752946359edd28d5559def98f37ebed6dd4a650ffff189",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "66f25920c478562321752946359edd28d5559def98f37ebed6dd4a650ffff189",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/GaR4nI8OKBM.png"
           }
         },
         "linkedin": {
