@@ -18,7 +18,7 @@ export async function generateVideo({ endpoint, modelId, prompt, duration = 5, a
     },
   }
 
-  const model = endpoint || 'gemini-2.0-flash'
+  const model = endpoint || 'gemini-2.5-flash'
   const url = `${GEMINI_BASE}/models/${model}:generateContent`
   const response = await fetch(url, {
     method: 'POST',

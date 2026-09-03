@@ -2,7 +2,7 @@ const state = {
   models: [],
   messages: [],
   generating: false,
-  selectedModel: 'gemini-2.0-flash',
+  selectedModel: 'gemini-2.5-flash',
   selectedProvider: 'gemini',
   duration: 5,
   aspectRatio: '16:9',

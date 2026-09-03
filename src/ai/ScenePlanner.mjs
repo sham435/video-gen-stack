@@ -67,12 +67,13 @@ export class ScenePlanner {
         motion: sceneDef.camera || 'push_in',
       },
       colors: this.emotionColors(sceneDef.emotion),
-      // Preserve brand-outro marker + single-owner text policy + multi-beat
-      // presentation plan across the scene reconstruction (these are set by
-      // brandOutroScene and must reach the renderer unchanged).
+      // Carry brand-outro markers + single-owner text policy + multi-beat
+      // presentation plan + Creative Director brief across the scene
+      // reconstruction (these fields are dropped by the default sceneDef map).
       outro: sceneDef.outro === true ? true : undefined,
       textPolicy: sceneDef.textPolicy || undefined,
       presentation: sceneDef.presentation || undefined,
+      creativeBrief: sceneDef.creativeBrief || undefined,
     }
     return scene
   }

@@ -79,7 +79,7 @@ async function runNewsVideo(job) {
   }
 
   const newsText = articlesToSummary(articles)
-  const model = p.modelId || 'gemini-2.0-flash'
+  const model = p.modelId || 'gemini-2.5-flash'
   const endpoint = getEndpoint(model, p.provider)
   if (!endpoint) throw new Error('No video provider configured')
   const load = PROVIDERS[p.provider]

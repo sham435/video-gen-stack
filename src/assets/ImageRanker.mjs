@@ -3,19 +3,24 @@
 // Score = w_relevance * relevance  +  w_quality * quality
 //         + w_entity   * entityMatch - w_freshness * recencyPenalty
 //         - w_reuse    * reusePenalty
+//         + w_learned  * learnedBonus
+//         + w_direction * directionMatch   ← Creative Director brief weight
 //
 // relevance : lexical/embedding match vs the scene's visual intent
 // quality   : resolution, landscape aspect (16:9), aspect fit
 // entity    : exact entity hit (Apple Park > generic "tech")
 // recency   : same asset used within cooldownDays → hard discount
 // reuse     : usage_count-based long-tail penalty (cross-video diversity)
+// learned   : performance-memory bonus (0 on cold start)
+// direction : match vs the Creative Director brief's imageDirection phrase
 //
 // All weights are constants; output is deterministic for identical inputs.
 
 export const RANK_WEIGHTS = {
-  relevance: 0.45,
-  quality: 0.25,
+  relevance: 0.41,
+  quality: 0.21,
   entity: 0.15,
+  direction: 0.08,   // Creative Director brief image direction match
   freshness: 0.08,   // applied as penalty
   reuse: 0.07,       // applied as penalty
   learned: 0.10,     // applied as bonus (0 when no performance data)
@@ -33,17 +38,19 @@ export class ImageRanker {
   /**
    * @param {Array<object>} candidates [{url, width, height, entity, tags, score, sha256, dHash, ...}]
    * @param {object} intent {subject, entities[], keywords[], mustShow[]}
-   * @param {object} [opts] {cooldownDays, videoWindow}
+   * @param {object} [opts] {cooldownDays, videoWindow, brief:{imageDirection:string}}
    * @returns {Array<object>} candidates with .rankScore, best first
    */
   rank(candidates, intent = {}, opts = {}) {
     const keywords = this._keywords(intent)
     const entitySet = new Set((intent.entities || []).map(e => String(e).toLowerCase()))
+    const imageDirection = opts.brief?.imageDirection || opts.imageDirection || ''
 
     const scored = candidates.map(c => {
       const relevance = this._relevance(c, keywords)
       const entity = this._entity(c, entitySet)
       const quality = this._quality(c)
+      const direction = this._direction(c, imageDirection)
       const usage = this.usageTracker ? this.usageTracker.status(c, opts) : { hot: false, useCount: 0, usedInDays: null, usedInRecentVideos: false }
       const freshnessPenalty = usage.hot ? 1 : 0
       const reusePenalty = Math.min(1, usage.useCount / 6)
@@ -58,11 +65,12 @@ export class ImageRanker {
       const score =
         (this.w.relevance * relevance +
         this.w.quality * quality +
-        this.w.entity * entity -
+        this.w.entity * entity +
+        this.w.direction * direction -
         this.w.freshness * freshnessPenalty -
         this.w.reuse * reusePenalty +
         this.w.learned * learned) * (1 - usedInRecentVideos)
-      return { ...c, rankScore: +score.toFixed(4), _usage: usage, _learned: learned, _excluded: usedInRecentVideos === 1 }
+      return { ...c, rankScore: +score.toFixed(4), _usage: usage, _learned: learned, _direction: direction, _excluded: usedInRecentVideos === 1 }
     })
 
     return scored.sort((a, b) => b.rankScore - a.rankScore)
@@ -129,5 +137,24 @@ export class ImageRanker {
       q += 0.2
     }
     return q
+  }
+
+  /**
+   * Directional match: score how well the candidate's tags/title/entity
+   * match the Creative Director brief's imageDirection phrase (e.g.
+   * "close-up product shot", "wide aerial", "reaction face").
+   *
+   * Splits the direction phrase into tokens, counts how many appear in the
+   * candidate metadata. Returns 0 when no brief is provided (neutral —
+   * doesn't penalize candidates when the brief is absent).
+   */
+  _direction(c, imageDirection) {
+    if (!imageDirection || typeof imageDirection !== 'string') return 0
+    const tokens = imageDirection.toLowerCase().split(/\s+/).filter(t => t.length > 2)
+    if (!tokens.length) return 0
+    const hay = [c.url || '', Array.isArray(c.tags) ? c.tags.join(' ') : c.tags || '', c.title || '', c.entity || ''].join(' ').toLowerCase()
+    let hits = 0
+    for (const t of tokens) if (hay.includes(t)) hits++
+    return Math.min(1, hits / Math.min(tokens.length, 3))
   }
 }

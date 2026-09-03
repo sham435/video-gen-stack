@@ -39,6 +39,7 @@ import { AudioMixer } from './audio/AudioMixer.mjs'
 import { ScenePlanner } from './ai/ScenePlanner.mjs'
 import { validateRenderOutput } from './video/validateOutput.mjs'
 import { StoryDirector } from './ai/StoryDirector.mjs'
+import { CreativeDirectorAgent } from './ai/CreativeDirectorAgent.mjs'
 import { VisualReasoner } from './ai/VisualReasoner.mjs'
 import { MotionPlanner, TransitionPlanner } from './ai/StoryAnalyzer.mjs'
 import { VisualSearchEngine, ENTITY_EXPANSIONS } from './assets/VisualSearchEngine.mjs'
@@ -85,6 +86,11 @@ export class NewsBroadcastEngine {
     } catch { /* no provider → deterministic fallback */ }
     this.storyProvider = storyProvider
     this.storyDirector = new StoryDirector(storyProvider)
+    // Creative Director: runs ONCE per script after StoryDirector, before
+    // ScenePlanner. Produces per-scene creative briefs (mood, image direction,
+    // BGM cue, emphasis words) that feed into ImageRanker, MusicFamily, and
+    // InformationLayer as ranking weights / sources — not replacements.
+    this.creativeDirector = new CreativeDirectorAgent(storyProvider)
     this.visualReasoner = new VisualReasoner()
     this.coverGenerator = new CoverGenerator(null)
     this.scriptContract = new ScriptContract()
@@ -318,6 +324,23 @@ export class NewsBroadcastEngine {
       console.log(`Council: story ${scores.story_score} / ctr ${scores.ctr_score} / retention ${scores.retention_score} → final ${scores.final_score} (${scores.passed ? 'PASS' : 'BELOW THRESHOLD'})`)
     }
 
+    // Creative Director: per-scene creative briefs (mood, image direction, BGM
+    // cue, emphasis words) — runs ONCE after StoryDirector, before ScenePlanner.
+    // Returns null on LLM failure; pipeline runs unchanged.
+    const creativeBrief = await this.creativeDirector.plan(article, directorStory)
+    if (creativeBrief) {
+      console.log(`CreativeDirector: mood=${creativeBrief.overallMood}, ${creativeBrief.scenes.length} scene briefs`)
+      // Override the article-based music family if the brief's overall mood
+      // strongly suggests a different one. The mood-to-family mapping is
+      // defined in CreativeDirectorAgent.MOOD_TO_FAMILY.
+      const { MOOD_TO_FAMILY } = await import('./ai/CreativeDirectorAgent.mjs')
+      const moodFamily = MOOD_TO_FAMILY[creativeBrief.overallMood]
+      if (moodFamily) {
+        this.audioMixer.musicFamily = moodFamily
+        console.log(`CreativeDirector: BGM family → ${moodFamily} (mood=${creativeBrief.overallMood})`)
+      }
+    }
+
     const sceneDefs = directorStory.scenePlan.map((s, i) => ({
       id: i + 1,
       type: s.type,
@@ -345,6 +368,11 @@ export class NewsBroadcastEngine {
       outro: s.outro === true ? true : undefined,
       textPolicy: s.textPolicy || undefined,
       presentation: s.presentation || undefined,
+      // Creative Director brief: per-scene mood, image direction, BGM cue,
+      // and emphasis words. Flows into ImageRanker (direction weight),
+      // InformationLayer (emphasisWords), and the scene's emotion field
+      // (augmented by MOOD_TO_EMOTION mapping in ScenePlanner.buildScene).
+      creativeBrief: (creativeBrief?.scenes || [])[i] || undefined,
     }))
 
     const rawScenes = this.scenePlanner.planScenes(article, { headline: directorStory.headline, scenes: sceneDefs })
@@ -389,7 +417,7 @@ export class NewsBroadcastEngine {
           }
           const candidates = await this.visualSearchEngine.search(intent)
           if (candidates?.length) {
-            const ranked = this.imageRanker.rank(candidates, { subject: scene.visual.subject, entities: intent.entities, keywords: intent.keywords }, { cooldownDays: 7, videoWindow: 50 })
+            const ranked = this.imageRanker.rank(candidates, { subject: scene.visual.subject, entities: intent.entities, keywords: intent.keywords }, { cooldownDays: 7, videoWindow: 50, brief: sceneDef.creativeBrief })
             const diversity = this.sceneVisualPlanner.pick(
               { index: scene.id, entity: visualIntent.brand, images: ranked },
               { usedScenes: usedAssets, entityCounts }
