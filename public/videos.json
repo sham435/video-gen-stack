@@ -1,32 +1,86 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-04T04:33:03.672Z",
+  "updatedAt": "2026-09-04T05:47:27.955Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "BWqZqx5cMT8",
-      "title": "Experts Disagree On TGS | NEWS-MONSTER",
-      "description": "Experts Disagree On TGS | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-04T04:33:02.599Z",
-      "publishedLabel": "Sep 4, 04:33 AM",
-      "thumbnail": "/thumbnails/BWqZqx5cMT8.png",
-      "thumbnailSha256": "32ec1a462677380bbca3d5059e3664211a8aac5f6820d86b8ae72c9ea3fa0070",
+      "id": "4pKkDZ4xozc",
+      "title": "Canada Opens The Door To 33,397 More Chinese Vehicles - Carscoops | NEWS-MONSTER",
+      "description": "Canada Opens The Door To 33,397 More Chinese Vehicles - Carscoops | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-09-04T05:47:27.456Z",
+      "publishedLabel": "Sep 4, 05:47 AM",
+      "thumbnail": "/thumbnails/4pKkDZ4xozc.png",
+      "thumbnailSha256": "a48fc3bd047c20cf057332e4cd376bdcbd8b04298a6ed41cb80e9caee1adee08",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/BWqZqx5cMT8",
+      "youtubeUrl": "https://youtu.be/4pKkDZ4xozc",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "BWqZqx5cMT8",
-          "url": "https://youtu.be/BWqZqx5cMT8",
+          "videoId": "4pKkDZ4xozc",
+          "url": "https://youtu.be/4pKkDZ4xozc",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "32ec1a462677380bbca3d5059e3664211a8aac5f6820d86b8ae72c9ea3fa0070",
+            "sha256": "a48fc3bd047c20cf057332e4cd376bdcbd8b04298a6ed41cb80e9caee1adee08",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 1,
+          "thumbnail": {
+            "sha256": "a48fc3bd047c20cf057332e4cd376bdcbd8b04298a6ed41cb80e9caee1adee08",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/4pKkDZ4xozc.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "ZlOuDCoxB7o",
+      "title": "Broadcom stock wavers as chipmaker's strong results 'not enough to keep investors happy' - | NEWS-MONSTER",
+      "description": "Broadcom stock wavers as chipmaker's strong results 'not enough to keep investors happy' - | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-09-04T05:43:13.904Z",
+      "publishedLabel": "Sep 4, 05:43 AM",
+      "thumbnail": "/thumbnails/ZlOuDCoxB7o.png",
+      "thumbnailSha256": "830d06dffb45bd6c6b33be24ca26fd4c1de2268678f51cbb0aea9e2f0283dd8d",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/ZlOuDCoxB7o",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "ZlOuDCoxB7o",
+          "url": "https://youtu.be/ZlOuDCoxB7o",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "830d06dffb45bd6c6b33be24ca26fd4c1de2268678f51cbb0aea9e2f0283dd8d",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +97,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "32ec1a462677380bbca3d5059e3664211a8aac5f6820d86b8ae72c9ea3fa0070",
+            "sha256": "830d06dffb45bd6c6b33be24ca26fd4c1de2268678f51cbb0aea9e2f0283dd8d",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/BWqZqx5cMT8.png"
+            "path": "public/thumbnails/ZlOuDCoxB7o.png"
           }
         },
         "linkedin": {
