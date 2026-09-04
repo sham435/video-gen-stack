@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-04T06:12:09.180Z",
+  "updatedAt": "2026-09-04T08:30:16.709Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "E1LGHblCdds",
-      "title": "Resident Evil 2 Director Says Capcom Is Making Current Resident Evil Games Too Damn Scary  | NEWS-MONSTER",
-      "description": "Resident Evil 2 Director Says Capcom Is Making Current Resident Evil Games Too Damn Scary  | NEWS-MONSTER",
+      "id": "-H7eWm7U3Fo",
+      "title": "Galaxy S27 Ultra teased to come with a surprising chip - PhoneArena | NEWS-MONSTER",
+      "description": "Galaxy S27 Ultra teased to come with a surprising chip - PhoneArena | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-04T06:12:08.539Z",
-      "publishedLabel": "Sep 4, 06:12 AM",
-      "thumbnail": "/thumbnails/E1LGHblCdds.png",
-      "thumbnailSha256": "fa11cdcf4f43b8e32ba2f1acf775a6e157f455c57e9505e909914cd9c7c37009",
+      "publishedAt": "2026-09-04T08:30:15.564Z",
+      "publishedLabel": "Sep 4, 08:30 AM",
+      "thumbnail": "/thumbnails/-H7eWm7U3Fo.png",
+      "thumbnailSha256": "26d53c65dcc011f2d2c8cd2833de71804b0d60fef2091024a912b985f2f67a81",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/E1LGHblCdds",
+      "youtubeUrl": "https://youtu.be/-H7eWm7U3Fo",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "E1LGHblCdds",
-          "url": "https://youtu.be/E1LGHblCdds",
+          "videoId": "-H7eWm7U3Fo",
+          "url": "https://youtu.be/-H7eWm7U3Fo",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "fa11cdcf4f43b8e32ba2f1acf775a6e157f455c57e9505e909914cd9c7c37009",
+            "sha256": "26d53c65dcc011f2d2c8cd2833de71804b0d60fef2091024a912b985f2f67a81",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +43,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "fa11cdcf4f43b8e32ba2f1acf775a6e157f455c57e9505e909914cd9c7c37009",
+            "sha256": "26d53c65dcc011f2d2c8cd2833de71804b0d60fef2091024a912b985f2f67a81",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/E1LGHblCdds.png"
+            "path": "public/thumbnails/-H7eWm7U3Fo.png"
           }
         },
         "linkedin": {
@@ -58,83 +58,29 @@
       }
     },
     {
-      "id": "ffgm3kk7yas",
-      "title": "Cramer's lightning round: Buy Howmet Aerospace - CNBC | NEWS-MONSTER",
-      "description": "Cramer's lightning round: Buy Howmet Aerospace - CNBC | NEWS-MONSTER",
+      "id": "LHi9ZUMprKM",
+      "title": "This New Nature-Inspired Collection of Gaming Accessories Is Perfect for Cozy Gamers on PC | NEWS-MONSTER",
+      "description": "This New Nature-Inspired Collection of Gaming Accessories Is Perfect for Cozy Gamers on PC | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-04T06:08:34.285Z",
-      "publishedLabel": "Sep 4, 06:08 AM",
-      "thumbnail": "/thumbnails/ffgm3kk7yas.png",
-      "thumbnailSha256": "72846846b6534b60acc0a488936694f536741f90c644cf38d8fa8ea85350b2da",
+      "publishedAt": "2026-09-04T08:26:11.946Z",
+      "publishedLabel": "Sep 4, 08:26 AM",
+      "thumbnail": "/thumbnails/LHi9ZUMprKM.png",
+      "thumbnailSha256": "c4c06f272e087418419ba5bcb7f0ceda59976c634c24ea29fb5edce8e0613dc3",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/ffgm3kk7yas",
+      "youtubeUrl": "https://youtu.be/LHi9ZUMprKM",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "ffgm3kk7yas",
-          "url": "https://youtu.be/ffgm3kk7yas",
+          "videoId": "LHi9ZUMprKM",
+          "url": "https://youtu.be/LHi9ZUMprKM",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "72846846b6534b60acc0a488936694f536741f90c644cf38d8fa8ea85350b2da",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 41,
-          "thumbnail": {
-            "sha256": "72846846b6534b60acc0a488936694f536741f90c644cf38d8fa8ea85350b2da",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/ffgm3kk7yas.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "-8r4svUFUbA",
-      "title": "Things to Know Before Starting - ign.com | NEWS-MONSTER",
-      "description": "Things to Know Before Starting - ign.com | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-04T06:04:31.322Z",
-      "publishedLabel": "Sep 4, 06:04 AM",
-      "thumbnail": "/thumbnails/-8r4svUFUbA.png",
-      "thumbnailSha256": "098554a2b5a367105dbcacd76674e7119fb4bbfc7c558761a9fd50b01cd62da4",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/-8r4svUFUbA",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "-8r4svUFUbA",
-          "url": "https://youtu.be/-8r4svUFUbA",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "098554a2b5a367105dbcacd76674e7119fb4bbfc7c558761a9fd50b01cd62da4",
+            "sha256": "c4c06f272e087418419ba5bcb7f0ceda59976c634c24ea29fb5edce8e0613dc3",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -151,12 +97,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "098554a2b5a367105dbcacd76674e7119fb4bbfc7c558761a9fd50b01cd62da4",
+            "sha256": "c4c06f272e087418419ba5bcb7f0ceda59976c634c24ea29fb5edce8e0613dc3",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/-8r4svUFUbA.png"
+            "path": "public/thumbnails/LHi9ZUMprKM.png"
           }
         },
         "linkedin": {
