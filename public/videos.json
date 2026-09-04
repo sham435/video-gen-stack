@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-04T08:30:16.709Z",
+  "updatedAt": "2026-09-04T10:11:24.791Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "-H7eWm7U3Fo",
-      "title": "Galaxy S27 Ultra teased to come with a surprising chip - PhoneArena | NEWS-MONSTER",
-      "description": "Galaxy S27 Ultra teased to come with a surprising chip - PhoneArena | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-04T08:30:15.564Z",
-      "publishedLabel": "Sep 4, 08:30 AM",
-      "thumbnail": "/thumbnails/-H7eWm7U3Fo.png",
-      "thumbnailSha256": "26d53c65dcc011f2d2c8cd2833de71804b0d60fef2091024a912b985f2f67a81",
+      "id": "Q1TPqcSG3Yw",
+      "title": "The Moto Watch Ultra is a return to Wear OS | NEWS-MONSTER",
+      "description": "The Moto Watch Ultra is a return to Wear OS | NEWS-MONSTER",
+      "category": "apple",
+      "publishedAt": "2026-09-04T10:11:24.264Z",
+      "publishedLabel": "Sep 4, 10:11 AM",
+      "thumbnail": "/thumbnails/Q1TPqcSG3Yw.png",
+      "thumbnailSha256": "1883ccc72c2a7564e2a1eb6df22f30d8b9b29694b4377940345adc843c81f721",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/-H7eWm7U3Fo",
+      "youtubeUrl": "https://youtu.be/Q1TPqcSG3Yw",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "-H7eWm7U3Fo",
-          "url": "https://youtu.be/-H7eWm7U3Fo",
+          "videoId": "Q1TPqcSG3Yw",
+          "url": "https://youtu.be/Q1TPqcSG3Yw",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "26d53c65dcc011f2d2c8cd2833de71804b0d60fef2091024a912b985f2f67a81",
+            "sha256": "1883ccc72c2a7564e2a1eb6df22f30d8b9b29694b4377940345adc843c81f721",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,66 +43,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "26d53c65dcc011f2d2c8cd2833de71804b0d60fef2091024a912b985f2f67a81",
+            "sha256": "1883ccc72c2a7564e2a1eb6df22f30d8b9b29694b4377940345adc843c81f721",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/-H7eWm7U3Fo.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "LHi9ZUMprKM",
-      "title": "This New Nature-Inspired Collection of Gaming Accessories Is Perfect for Cozy Gamers on PC | NEWS-MONSTER",
-      "description": "This New Nature-Inspired Collection of Gaming Accessories Is Perfect for Cozy Gamers on PC | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-04T08:26:11.946Z",
-      "publishedLabel": "Sep 4, 08:26 AM",
-      "thumbnail": "/thumbnails/LHi9ZUMprKM.png",
-      "thumbnailSha256": "c4c06f272e087418419ba5bcb7f0ceda59976c634c24ea29fb5edce8e0613dc3",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/LHi9ZUMprKM",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "LHi9ZUMprKM",
-          "url": "https://youtu.be/LHi9ZUMprKM",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "c4c06f272e087418419ba5bcb7f0ceda59976c634c24ea29fb5edce8e0613dc3",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "c4c06f272e087418419ba5bcb7f0ceda59976c634c24ea29fb5edce8e0613dc3",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/LHi9ZUMprKM.png"
+            "path": "public/thumbnails/Q1TPqcSG3Yw.png"
           }
         },
         "linkedin": {
