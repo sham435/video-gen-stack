@@ -1,86 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-03T23:09:13.623Z",
+  "updatedAt": "2026-09-04T01:10:39.553Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "QuC787sBTNg",
-      "title": "U.S. Stock Futures Little Changed as Markets Weigh Warsh’s Hawkish Remarks | NEWS-MONSTER",
-      "description": "U.S. Stock Futures Little Changed as Markets Weigh Warsh’s Hawkish Remarks | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-09-03T23:09:13.001Z",
-      "publishedLabel": "Sep 3, 11:09 PM",
-      "thumbnail": "/thumbnails/QuC787sBTNg.png",
-      "thumbnailSha256": "5a84d1da17a0ebe0d585d9b5d7b9d87de7fcad4c01c4a766fe8ba44b62ab5154",
+      "id": "u-o9hN0K0A0",
+      "title": "CEOs de tecnologia e governo Trump pressionam G20 por políticas favoráveis à IA | NEWS-MONSTER",
+      "description": "CEOs de tecnologia e governo Trump pressionam G20 por políticas favoráveis à IA | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-04T01:10:38.879Z",
+      "publishedLabel": "Sep 4, 01:10 AM",
+      "thumbnail": "/thumbnails/u-o9hN0K0A0.png",
+      "thumbnailSha256": "b2d7948e8593aa5d9522852024e0c0a7db92346ebe7f01c1ec27fb93efc144cf",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/QuC787sBTNg",
+      "youtubeUrl": "https://youtu.be/u-o9hN0K0A0",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "QuC787sBTNg",
-          "url": "https://youtu.be/QuC787sBTNg",
+          "videoId": "u-o9hN0K0A0",
+          "url": "https://youtu.be/u-o9hN0K0A0",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "5a84d1da17a0ebe0d585d9b5d7b9d87de7fcad4c01c4a766fe8ba44b62ab5154",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "5a84d1da17a0ebe0d585d9b5d7b9d87de7fcad4c01c4a766fe8ba44b62ab5154",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/QuC787sBTNg.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "penlWq4F4XM",
-      "title": "U.K Said One Thing, Then Did This | NEWS-MONSTER",
-      "description": "U.K Said One Thing, Then Did This | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-09-03T23:05:02.193Z",
-      "publishedLabel": "Sep 3, 11:05 PM",
-      "thumbnail": "/thumbnails/penlWq4F4XM.png",
-      "thumbnailSha256": "ea7ce2dde82f6d8cd6b5ed7b4dba1c890f739d97c7fc40a05c16c6a6a2fd5306",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/penlWq4F4XM",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "penlWq4F4XM",
-          "url": "https://youtu.be/penlWq4F4XM",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "ea7ce2dde82f6d8cd6b5ed7b4dba1c890f739d97c7fc40a05c16c6a6a2fd5306",
+            "sha256": "b2d7948e8593aa5d9522852024e0c0a7db92346ebe7f01c1ec27fb93efc144cf",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +43,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "ea7ce2dde82f6d8cd6b5ed7b4dba1c890f739d97c7fc40a05c16c6a6a2fd5306",
+            "sha256": "b2d7948e8593aa5d9522852024e0c0a7db92346ebe7f01c1ec27fb93efc144cf",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/penlWq4F4XM.png"
+            "path": "public/thumbnails/u-o9hN0K0A0.png"
           }
         },
         "linkedin": {
@@ -112,29 +58,29 @@
       }
     },
     {
-      "id": "xyDU6yyQDqQ",
-      "title": "How Hits Changed Overnight | NEWS-MONSTER",
-      "description": "How Hits Changed Overnight | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-09-03T23:00:59.964Z",
-      "publishedLabel": "Sep 3, 11:00 PM",
-      "thumbnail": "/thumbnails/xyDU6yyQDqQ.png",
-      "thumbnailSha256": "30adf33f1c9cec003603c24e728eb7fc25dca6a5b2dc1bc8a1daec1619a3b88f",
+      "id": "ryIeoPPGYxk",
+      "title": "Mașini fără volan și pedale. Tesla prezintă Cybercab, „mașina viitorului” | NEWS-MONSTER",
+      "description": "Mașini fără volan și pedale. Tesla prezintă Cybercab, „mașina viitorului” | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-04T01:05:35.109Z",
+      "publishedLabel": "Sep 4, 01:05 AM",
+      "thumbnail": "/thumbnails/ryIeoPPGYxk.png",
+      "thumbnailSha256": "98e15e0bb2dcdcbb4b96d22d70097bd08f32e59c4da53ef8ec5048b3252db165",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/xyDU6yyQDqQ",
+      "youtubeUrl": "https://youtu.be/ryIeoPPGYxk",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "xyDU6yyQDqQ",
-          "url": "https://youtu.be/xyDU6yyQDqQ",
+          "videoId": "ryIeoPPGYxk",
+          "url": "https://youtu.be/ryIeoPPGYxk",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "30adf33f1c9cec003603c24e728eb7fc25dca6a5b2dc1bc8a1daec1619a3b88f",
+            "sha256": "98e15e0bb2dcdcbb4b96d22d70097bd08f32e59c4da53ef8ec5048b3252db165",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -151,12 +97,66 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "30adf33f1c9cec003603c24e728eb7fc25dca6a5b2dc1bc8a1daec1619a3b88f",
+            "sha256": "98e15e0bb2dcdcbb4b96d22d70097bd08f32e59c4da53ef8ec5048b3252db165",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/xyDU6yyQDqQ.png"
+            "path": "public/thumbnails/ryIeoPPGYxk.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "c2_lsjyKnMQ",
+      "title": "The Detail Everyone Missed About VSRAD | NEWS-MONSTER",
+      "description": "The Detail Everyone Missed About VSRAD | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-04T01:00:48.726Z",
+      "publishedLabel": "Sep 4, 01:00 AM",
+      "thumbnail": "/thumbnails/c2_lsjyKnMQ.png",
+      "thumbnailSha256": "e255fce8ff14927ae140e890873f654fda63c82de750df56f1b46a3c07100f77",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/c2_lsjyKnMQ",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "c2_lsjyKnMQ",
+          "url": "https://youtu.be/c2_lsjyKnMQ",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "e255fce8ff14927ae140e890873f654fda63c82de750df56f1b46a3c07100f77",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "e255fce8ff14927ae140e890873f654fda63c82de750df56f1b46a3c07100f77",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/c2_lsjyKnMQ.png"
           }
         },
         "linkedin": {
