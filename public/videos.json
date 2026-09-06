@@ -1,29 +1,29 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-06T08:14:22.531Z",
+  "updatedAt": "2026-09-06T08:29:11.293Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "RcHp8KQXRAI",
+      "id": "PlkokTi1x0w",
       "title": "iPhone Ultra, iPhone 18 Pro, and More: Apple's September 9 Event Preview - MacRumors | NEWS-MONSTER",
       "description": "iPhone Ultra, iPhone 18 Pro, and More: Apple's September 9 Event Preview - MacRumors | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-06T08:14:22.014Z",
-      "publishedLabel": "Sep 6, 08:14 AM",
-      "thumbnail": "/thumbnails/RcHp8KQXRAI.png",
+      "publishedAt": "2026-09-06T08:29:10.836Z",
+      "publishedLabel": "Sep 6, 08:29 AM",
+      "thumbnail": "/thumbnails/PlkokTi1x0w.png",
       "thumbnailSha256": "af25b4595d23271d8acbbeaa62d0f4b2e59299135a3042e13c6ce1c335c1d2c4",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/RcHp8KQXRAI",
+      "youtubeUrl": "https://youtu.be/PlkokTi1x0w",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "RcHp8KQXRAI",
-          "url": "https://youtu.be/RcHp8KQXRAI",
+          "videoId": "PlkokTi1x0w",
+          "url": "https://youtu.be/PlkokTi1x0w",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "af25b4595d23271d8acbbeaa62d0f4b2e59299135a3042e13c6ce1c335c1d2c4",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 4,
+          "durationMs": 3,
           "thumbnail": {
             "sha256": "af25b4595d23271d8acbbeaa62d0f4b2e59299135a3042e13c6ce1c335c1d2c4",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/RcHp8KQXRAI.png"
+            "path": "public/thumbnails/PlkokTi1x0w.png"
           }
         },
         "linkedin": {
@@ -58,26 +58,26 @@
       }
     },
     {
-      "id": "S1C9lL5ykXE",
+      "id": "H6zJGHLqwJ4",
       "title": "Mario Kart 8 Deluxe online now seems to have an advantage for Nintendo Switch 1 players vs | NEWS-MONSTER",
       "description": "Mario Kart 8 Deluxe online now seems to have an advantage for Nintendo Switch 1 players vs | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-06T08:10:15.593Z",
-      "publishedLabel": "Sep 6, 08:10 AM",
-      "thumbnail": "/thumbnails/S1C9lL5ykXE.png",
+      "publishedAt": "2026-09-06T08:25:26.139Z",
+      "publishedLabel": "Sep 6, 08:25 AM",
+      "thumbnail": "/thumbnails/H6zJGHLqwJ4.png",
       "thumbnailSha256": "df4189c9b91693f104e2907dc5dc23ca208910607af389fa01aa88b852499604",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/S1C9lL5ykXE",
+      "youtubeUrl": "https://youtu.be/H6zJGHLqwJ4",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "S1C9lL5ykXE",
-          "url": "https://youtu.be/S1C9lL5ykXE",
+          "videoId": "H6zJGHLqwJ4",
+          "url": "https://youtu.be/H6zJGHLqwJ4",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "df4189c9b91693f104e2907dc5dc23ca208910607af389fa01aa88b852499604",
@@ -95,14 +95,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 3,
           "thumbnail": {
             "sha256": "df4189c9b91693f104e2907dc5dc23ca208910607af389fa01aa88b852499604",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/S1C9lL5ykXE.png"
+            "path": "public/thumbnails/H6zJGHLqwJ4.png"
           }
         },
         "linkedin": {
