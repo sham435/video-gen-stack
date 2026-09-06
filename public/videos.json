@@ -1,29 +1,29 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-06T10:02:08.481Z",
+  "updatedAt": "2026-09-06T10:30:01.061Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "T6lnxQ6rH4s",
+      "id": "pX5iQB7smV0",
       "title": "Mario Kart 8 Deluxe online now seems to have an advantage for Nintendo Switch 1 players vs | NEWS-MONSTER",
       "description": "Mario Kart 8 Deluxe online now seems to have an advantage for Nintendo Switch 1 players vs | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-06T10:02:07.456Z",
-      "publishedLabel": "Sep 6, 10:02 AM",
-      "thumbnail": "/thumbnails/T6lnxQ6rH4s.png",
+      "publishedAt": "2026-09-06T10:30:00.101Z",
+      "publishedLabel": "Sep 6, 10:30 AM",
+      "thumbnail": "/thumbnails/pX5iQB7smV0.png",
       "thumbnailSha256": "9617f22712ccdd16991884b53ef7fc82cb00c5e9c9c69258c18e2f6d34392471",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/T6lnxQ6rH4s",
+      "youtubeUrl": "https://youtu.be/pX5iQB7smV0",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "T6lnxQ6rH4s",
-          "url": "https://youtu.be/T6lnxQ6rH4s",
+          "videoId": "pX5iQB7smV0",
+          "url": "https://youtu.be/pX5iQB7smV0",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "9617f22712ccdd16991884b53ef7fc82cb00c5e9c9c69258c18e2f6d34392471",
@@ -48,7 +48,7 @@
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/T6lnxQ6rH4s.png"
+            "path": "public/thumbnails/pX5iQB7smV0.png"
           }
         },
         "linkedin": {
@@ -58,26 +58,26 @@
       }
     },
     {
-      "id": "RvJkmHUeBwM",
+      "id": "DMG7T0ojiwM",
       "title": "gamescom Apologizes for Its Initial Response to Thefts, Promises Improved Security Measure | NEWS-MONSTER",
       "description": "gamescom Apologizes for Its Initial Response to Thefts, Promises Improved Security Measure | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-06T09:57:24.570Z",
-      "publishedLabel": "Sep 6, 09:57 AM",
-      "thumbnail": "/thumbnails/RvJkmHUeBwM.png",
+      "publishedAt": "2026-09-06T10:26:28.612Z",
+      "publishedLabel": "Sep 6, 10:26 AM",
+      "thumbnail": "/thumbnails/DMG7T0ojiwM.png",
       "thumbnailSha256": "d941b476492c7668065e3de269292792afcfa31c410e6b99b05a758f92f9ba06",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/RvJkmHUeBwM",
+      "youtubeUrl": "https://youtu.be/DMG7T0ojiwM",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "RvJkmHUeBwM",
-          "url": "https://youtu.be/RvJkmHUeBwM",
+          "videoId": "DMG7T0ojiwM",
+          "url": "https://youtu.be/DMG7T0ojiwM",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "d941b476492c7668065e3de269292792afcfa31c410e6b99b05a758f92f9ba06",
@@ -102,7 +102,7 @@
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/RvJkmHUeBwM.png"
+            "path": "public/thumbnails/DMG7T0ojiwM.png"
           }
         },
         "linkedin": {
