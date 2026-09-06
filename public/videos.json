@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-06T11:02:07.382Z",
+  "updatedAt": "2026-09-06T11:32:13.233Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "ZUAk2kqG_pI",
-      "title": "Mario Kart 8 Deluxe online now seems to have an advantage for Nintendo Switch 1 players vs | NEWS-MONSTER",
-      "description": "Mario Kart 8 Deluxe online now seems to have an advantage for Nintendo Switch 1 players vs | NEWS-MONSTER",
+      "id": "ABmRmdJAc-k",
+      "title": "gamescom Apologizes for Its Initial Response to Thefts, Promises Improved Security Measure | NEWS-MONSTER",
+      "description": "gamescom Apologizes for Its Initial Response to Thefts, Promises Improved Security Measure | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-06T11:02:06.836Z",
-      "publishedLabel": "Sep 6, 11:02 AM",
-      "thumbnail": "/thumbnails/ZUAk2kqG_pI.png",
-      "thumbnailSha256": "ec3e2b5f1e77b87e04dd5e177c3204e0eab56f630fc108f2692831f22baea208",
+      "publishedAt": "2026-09-06T11:32:12.069Z",
+      "publishedLabel": "Sep 6, 11:32 AM",
+      "thumbnail": "/thumbnails/ABmRmdJAc-k.png",
+      "thumbnailSha256": "2d16d7a35aaa1814b50158142d825a38ab6077aef0333a7829bd55e2b92cbfc3",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/ZUAk2kqG_pI",
+      "youtubeUrl": "https://youtu.be/ABmRmdJAc-k",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "ZUAk2kqG_pI",
-          "url": "https://youtu.be/ZUAk2kqG_pI",
+          "videoId": "ABmRmdJAc-k",
+          "url": "https://youtu.be/ABmRmdJAc-k",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "ec3e2b5f1e77b87e04dd5e177c3204e0eab56f630fc108f2692831f22baea208",
+            "sha256": "2d16d7a35aaa1814b50158142d825a38ab6077aef0333a7829bd55e2b92cbfc3",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +43,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "ec3e2b5f1e77b87e04dd5e177c3204e0eab56f630fc108f2692831f22baea208",
+            "sha256": "2d16d7a35aaa1814b50158142d825a38ab6077aef0333a7829bd55e2b92cbfc3",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/ZUAk2kqG_pI.png"
+            "path": "public/thumbnails/ABmRmdJAc-k.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "4YNCUk4wYJE",
-      "title": "gamescom Apologizes for Its Initial Response to Thefts, Promises Improved Security Measure | NEWS-MONSTER",
-      "description": "gamescom Apologizes for Its Initial Response to Thefts, Promises Improved Security Measure | NEWS-MONSTER",
+      "id": "1Jmr4nfcXik",
+      "title": "How Maushold Changed Overnight | NEWS-MONSTER",
+      "description": "How Maushold Changed Overnight | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-06T10:57:44.416Z",
-      "publishedLabel": "Sep 6, 10:57 AM",
-      "thumbnail": "/thumbnails/4YNCUk4wYJE.png",
-      "thumbnailSha256": "de7bed74d80904ca7743eff85ce0c512256ad0009b332e8d77017aed8e5b69c0",
+      "publishedAt": "2026-09-06T11:27:59.899Z",
+      "publishedLabel": "Sep 6, 11:27 AM",
+      "thumbnail": "/thumbnails/1Jmr4nfcXik.png",
+      "thumbnailSha256": "8c97a42150d0ede94017e592b07eaee48872a0ce28bf9bcae128b6dac64eceee",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/4YNCUk4wYJE",
+      "youtubeUrl": "https://youtu.be/1Jmr4nfcXik",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "4YNCUk4wYJE",
-          "url": "https://youtu.be/4YNCUk4wYJE",
+          "videoId": "1Jmr4nfcXik",
+          "url": "https://youtu.be/1Jmr4nfcXik",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "de7bed74d80904ca7743eff85ce0c512256ad0009b332e8d77017aed8e5b69c0",
+            "sha256": "8c97a42150d0ede94017e592b07eaee48872a0ce28bf9bcae128b6dac64eceee",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,14 +95,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "de7bed74d80904ca7743eff85ce0c512256ad0009b332e8d77017aed8e5b69c0",
+            "sha256": "8c97a42150d0ede94017e592b07eaee48872a0ce28bf9bcae128b6dac64eceee",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/4YNCUk4wYJE.png"
+            "path": "public/thumbnails/1Jmr4nfcXik.png"
           }
         },
         "linkedin": {
