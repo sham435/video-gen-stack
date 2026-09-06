@@ -660,12 +660,20 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         const buffer = fs.readFileSync(videoPath)
         const uploadTitle = `${article.title?.slice(0, 90) || 'News Update'} | NEWS-MONSTER`
         const { HashtagBuilder } = await import('../src/publishing/HashtagBuilder.mjs')
+        const { buildYouTubeSEO } = await import('../src/publishing/YouTubeSEO.mjs')
         const nicheDecision = engine?.productionContext?.niche || null
+        const seoCategory = category || nicheDecision?.key || null
         const hashtags = HashtagBuilder.build({
           topic: HashtagBuilder.topicFromHeadline(article.title),
-          category: category || nicheDecision?.key || 'tech',
+          category: seoCategory || 'tech',
           pipelineProfile: 'breaking',
           channel: 'NEWS-MONSTER',
+        })
+        // YouTube SEO: derive snippet tags + categoryId (Sports/Music/Politics
+        // and every other niche map to a YouTube taxonomy category + keywords).
+        const { tags: seoTags, categoryId: seoCategoryId } = buildYouTubeSEO({
+          category: seoCategory,
+          articleTags: article.tags,
         })
         const desc = `${uploadTitle}\n\nSource: ${article.source || 'NewsAPI'}\n\n${hashtags}`
 
@@ -707,6 +715,8 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             // have embedded manifest data that YouTube's thumbnail API can't render.
             thumbnailPath: ctx.results.THUMBNAIL?.selected?.path || ctx.results.C2PA?.path,
             niche: nicheDecision?.key || null,
+            tags: seoTags,
+            categoryId: seoCategoryId,
           })
         } catch (uploadErr) {
           // Release channel slot on failure

@@ -223,7 +223,7 @@ function validateThumbnailBytes(buffer, mimeType) {
  * --------------------------------------------------------------------------
  */
 export async function publishVideo(inputOrUrl, titleOrOpts, description, privacy = 'public', coverPath = null) {
-  let videoUrl, thumbnailPath, niche, _title, _description, _privacy
+  let videoUrl, thumbnailPath, niche, _title, _description, _privacy, _tags, _categoryId
   if (typeof inputOrUrl === 'object' && inputOrUrl !== null) {
     const opts = inputOrUrl
     videoUrl = opts.videoUrl
@@ -232,6 +232,8 @@ export async function publishVideo(inputOrUrl, titleOrOpts, description, privacy
     _title = opts.title || opts.metadata?.title || 'News Update'
     _description = opts.description || opts.metadata?.description || ''
     _privacy = opts.privacy || 'public'
+    _tags = opts.tags || opts.metadata?.tags || []
+    _categoryId = opts.categoryId || opts.metadata?.categoryId || null
   } else {
     videoUrl = inputOrUrl
     thumbnailPath = coverPath
@@ -239,6 +241,8 @@ export async function publishVideo(inputOrUrl, titleOrOpts, description, privacy
     _title = titleOrOpts
     _description = description
     _privacy = privacy
+    _tags = []
+    _categoryId = null
   }
 
   if (!videoUrl) throw new Error('YOUTUBE_VIDEO_URL_REQUIRED')
@@ -255,8 +259,23 @@ export async function publishVideo(inputOrUrl, titleOrOpts, description, privacy
   console.log(`[YOUTUBE_VIDEO_UPLOAD] bytes=${videoBuffer.byteLength} sizeMB=${(videoBuffer.byteLength / 1024 / 1024).toFixed(1)}`)
 
   const boundary = `youtube-${Date.now()}-${Math.random().toString(16).slice(2)}`
+
+  // SEO: snippet.tags[] + snippet.categoryId are what YouTube uses for search
+  // discovery. We always send tags (deduped, clean, capped) and resolve a
+  // categoryId (defaulting to Science & Technology when none supplied).
+  const cleanTags = Array.isArray(_tags)
+    ? [...new Set(_tags.map((t) => String(t).trim().replace(/^#/, '').toLowerCase()).filter((t) => t.length > 1 && t.length <= 100))]
+    : []
+
+  const snippet = {
+    title: String(_title || 'News Update').slice(0, 100),
+    description: String(_description || '').slice(0, 5000),
+  }
+  if (cleanTags.length) snippet.tags = cleanTags
+  if (_categoryId) snippet.categoryId = String(_categoryId)
+
   const meta = JSON.stringify({
-    snippet: { title: String(_title || 'News Update').slice(0, 100), description: String(_description || '').slice(0, 5000) },
+    snippet,
     status: { privacyStatus: _privacy, selfDeclaredMadeForKids: false },
   })
 
@@ -313,7 +332,7 @@ export async function publishVideo(inputOrUrl, titleOrOpts, description, privacy
     thumbnailAttempts,
     lastError: lastThumbnailError,
     thumbnailUpload,
-    metadata: { title: String(_title).slice(0, 100), privacy: _privacy },
+    metadata: { title: String(_title).slice(0, 100), privacy: _privacy, tags: cleanTags, categoryId: snippet.categoryId || null },
   }
 }
 
@@ -336,7 +355,7 @@ export async function uploadShort(videoUrl, title, description, privacy = 'publi
  * validation + SHA-256 preflight.
  *
  * A 2xx response is NOT authoritative acceptance. Propagation is confirmed by
- * YouTubePropagationVerifier (hasCustomThumbnail + remote 16:9 geometry).
+ * YouTubePropagationVerifier (hasCustomThumbnail + remote 9:16 geometry).
  */
 export async function setThumbnail(token, videoId, thumbnailPath, options = {}) {
   if (!token) throw new Error('YOUTUBE_ACCESS_TOKEN_REQUIRED')
@@ -444,6 +463,105 @@ async function verifyThumbnailRepresentation(token, videoId) {
   console.log(`[YOUTUBE_THUMBNAIL_VERIFY] videoId=${videoId} hasCustomThumbnail=${hasCustomThumbnail} remoteSource=${remoteType} remoteUrl=${remote?.url || 'none'} remoteWidth=${width} remoteHeight=${height} remoteAspectRatio=${width && height ? `${width}:${height}` : 'n/a'} apiStatus=${response.status}`)
 
   return { hasCustomThumbnail, remote }
+}
+
+/**
+ * --------------------------------------------------------------------------
+ * Video snippet update (SEO backfill)
+ * --------------------------------------------------------------------------
+ */
+
+/**
+ * Update an ALREADY-PUBLISHED video's searchable snippet (title, description,
+ * tags[], categoryId). Uses the YouTube Data API `videos.update` (PUT), which
+ * REPLACES the snippet resource — so we first GET the current snippet and merge
+ * only the provided fields forward to avoid wiping existing SEO.
+ *
+ * @param {object} opts
+ * @param {string} opts.videoId          target video id
+ * @param {string} [opts.title]          new title (defaults to current)
+ * @param {string} [opts.description]    new description (defaults to current)
+ * @param {string[]} [opts.tags]         new tags array (defaults to current)
+ * @param {string} [opts.categoryId]     new YouTube categoryId (defaults to current)
+ * @returns {Promise<{videoId:string, title:string, tags:string[], categoryId:string|null}>}
+ */
+export async function updateVideoSnippet({ videoId, title, description, tags, categoryId }) {
+  const token = await getAccessToken()
+
+  // 1. Read current snippet so PUT merges rather than wipes fields.
+  const getRes = await fetchWithTimeout(
+    `${GOOGLE_API_BASE}/youtube/v3/videos?part=snippet&id=${encodeURIComponent(videoId)}`,
+    { headers: { 'Authorization': `Bearer ${token}` } },
+  )
+  const getData = await readJson(getRes)
+  if (!getRes.ok) throw youtubeApiError(getData, getRes.status)
+  const current = getData.items?.[0]?.snippet
+  if (!current) throw new Error(`YOUTUBE_VIDEO_NOT_VISIBLE: ${videoId}`)
+
+  // 2. Clean provided tags (same rules as upload: dedup, no '#', lowercase).
+  const cleanTags = Array.isArray(tags)
+    ? [...new Set(tags.map((t) => String(t).trim().replace(/^#/, '').toLowerCase()).filter((t) => t.length > 1 && t.length <= 100))]
+    : (Array.isArray(current.tags) ? current.tags : [])
+
+  const mergedSnippet = {
+    title: String(title ?? current.title ?? '').slice(0, 100),
+    description: String(description ?? current.description ?? '').slice(0, 5000),
+  }
+  if (cleanTags.length) mergedSnippet.tags = cleanTags
+  if (categoryId) mergedSnippet.categoryId = String(categoryId)
+  else if (current.categoryId) mergedSnippet.categoryId = String(current.categoryId)
+
+  // 3. PUT the merged snippet back.
+  const putRes = await fetchWithTimeout(
+    `${GOOGLE_API_BASE}/youtube/v3/videos?part=snippet`,
+    {
+      method: 'PUT',
+      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: videoId, snippet: mergedSnippet }),
+    },
+  )
+  const putData = await readJson(putRes)
+  if (!putRes.ok) throw youtubeApiError(putData, putRes.status)
+
+  const updated = putData.snippet || mergedSnippet
+  console.log(`[YOUTUBE_UPDATE] videoId=${videoId} tags=${(updated.tags || []).length} categoryId=${updated.categoryId || 'n/a'}`)
+  return {
+    videoId,
+    title: updated.title,
+    tags: updated.tags || [],
+    categoryId: updated.categoryId || null,
+  }
+}
+
+/**
+ * SEO-optimized update for an ALREADY-PUBLISHED video.
+ *
+ * Derives the full YouTube SEO bundle (tags[] + categoryId) from the article's
+ * category/niche via buildYouTubeSEO — same rules as a fresh upload (Sports→17,
+ * Music→10, Politics→25, etc., plus brand + category keyword tags) — then applies
+ * it to the existing video with updateVideoSnippet. This is how you backfill
+ * searchable hashtags onto videos published before SEO was wired in.
+ *
+ * @param {object} opts
+ * @param {string} opts.videoId          target video id
+ * @param {string|null|undefined} opts.category  pipeline category/niche key (any case)
+ * @param {string[]} [opts.articleTags]  explicit article tags to fold in
+ * @param {string|null} [opts.title]     optional new title (carried forward if omitted)
+ * @param {string|null} [opts.description] optional new description (carried forward)
+ * @param {string} [opts.brand]          brand label ("NEWS-MONSTER")
+ * @returns {Promise<{videoId:string, title:string, tags:string[], categoryId:string|null, derived:{
+ *            tags:string[], categoryId:string}}>}
+ */
+export async function updateVideoSEO({ videoId, category, articleTags = [], title, description, brand = 'NEWS-MONSTER' }) {
+  const { buildYouTubeSEO } = await import('../../../src/publishing/YouTubeSEO.mjs')
+  const derived = buildYouTubeSEO({ category, articleTags, brand })
+  return updateVideoSnippet({
+    videoId,
+    title,
+    description,
+    tags: derived.tags,
+    categoryId: derived.categoryId,
+  })
 }
 
 /**
