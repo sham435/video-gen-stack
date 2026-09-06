@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-06T12:32:27.760Z",
+  "updatedAt": "2026-09-06T14:41:16.323Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "lPAFNrpbI5w",
-      "title": "gamescom Apologizes for Its Initial Response to Thefts, Promises Improved Security Measure | NEWS-MONSTER",
-      "description": "gamescom Apologizes for Its Initial Response to Thefts, Promises Improved Security Measure | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-06T12:32:26.592Z",
-      "publishedLabel": "Sep 6, 12:32 PM",
-      "thumbnail": "/thumbnails/lPAFNrpbI5w.png",
-      "thumbnailSha256": "c5e5f90ef473db603ad2c767d10543b58f63864dee53b2df3bc3d34cee29ab85",
+      "id": "1c7EjtsjY3w",
+      "title": "Watch: When did iPads get as expensive as MacBooks? | NEWS-MONSTER",
+      "description": "Watch: When did iPads get as expensive as MacBooks? | NEWS-MONSTER",
+      "category": "techcrunch",
+      "publishedAt": "2026-09-06T14:41:15.789Z",
+      "publishedLabel": "Sep 6, 02:41 PM",
+      "thumbnail": "/thumbnails/1c7EjtsjY3w.png",
+      "thumbnailSha256": "d04f5248aa9ac518d46e60c7180a4dcb849cd32d47deaf3eb3185c09600c815d",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/lPAFNrpbI5w",
+      "youtubeUrl": "https://youtu.be/1c7EjtsjY3w",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "lPAFNrpbI5w",
-          "url": "https://youtu.be/lPAFNrpbI5w",
+          "videoId": "1c7EjtsjY3w",
+          "url": "https://youtu.be/1c7EjtsjY3w",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "c5e5f90ef473db603ad2c767d10543b58f63864dee53b2df3bc3d34cee29ab85",
+            "sha256": "d04f5248aa9ac518d46e60c7180a4dcb849cd32d47deaf3eb3185c09600c815d",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 4,
           "thumbnail": {
-            "sha256": "c5e5f90ef473db603ad2c767d10543b58f63864dee53b2df3bc3d34cee29ab85",
+            "sha256": "d04f5248aa9ac518d46e60c7180a4dcb849cd32d47deaf3eb3185c09600c815d",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/lPAFNrpbI5w.png"
+            "path": "public/thumbnails/1c7EjtsjY3w.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "rFbnh7kpmKQ",
-      "title": "How Maushold Changed Overnight | NEWS-MONSTER",
-      "description": "How Maushold Changed Overnight | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-06T12:28:11.390Z",
-      "publishedLabel": "Sep 6, 12:28 PM",
-      "thumbnail": "/thumbnails/rFbnh7kpmKQ.png",
-      "thumbnailSha256": "8fff2c03523c89ccc2c3fc1ae221ace285a6eb6c79688f533ef8585782b64bd8",
+      "id": "GMpQ5ZSkGjM",
+      "title": "$450M for Noname, two billion-dollar rounds, and good news for crypto startups | TechCrunc | NEWS-MONSTER",
+      "description": "$450M for Noname, two billion-dollar rounds, and good news for crypto startups | TechCrunc | NEWS-MONSTER",
+      "category": "techcrunch",
+      "publishedAt": "2026-09-06T14:37:01.662Z",
+      "publishedLabel": "Sep 6, 02:37 PM",
+      "thumbnail": "/thumbnails/GMpQ5ZSkGjM.png",
+      "thumbnailSha256": "c35a41d57095900b11a5d3cb83875b3d78340eec9660dfdd064a8b6dc8816c4b",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/rFbnh7kpmKQ",
+      "youtubeUrl": "https://youtu.be/GMpQ5ZSkGjM",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "rFbnh7kpmKQ",
-          "url": "https://youtu.be/rFbnh7kpmKQ",
+          "videoId": "GMpQ5ZSkGjM",
+          "url": "https://youtu.be/GMpQ5ZSkGjM",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "8fff2c03523c89ccc2c3fc1ae221ace285a6eb6c79688f533ef8585782b64bd8",
+            "sha256": "c35a41d57095900b11a5d3cb83875b3d78340eec9660dfdd064a8b6dc8816c4b",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,14 +95,68 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 1,
           "thumbnail": {
-            "sha256": "8fff2c03523c89ccc2c3fc1ae221ace285a6eb6c79688f533ef8585782b64bd8",
+            "sha256": "c35a41d57095900b11a5d3cb83875b3d78340eec9660dfdd064a8b6dc8816c4b",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/rFbnh7kpmKQ.png"
+            "path": "public/thumbnails/GMpQ5ZSkGjM.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "M7hm1vg3R3M",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONSTER",
+      "description": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONSTER",
+      "category": "techcrunch",
+      "publishedAt": "2026-09-06T14:32:25.739Z",
+      "publishedLabel": "Sep 6, 02:32 PM",
+      "thumbnail": "/thumbnails/M7hm1vg3R3M.png",
+      "thumbnailSha256": "b3f11b66eebcfd2878b5fb95085f80fb0915353b62295a149f37d3062cb91fd8",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/M7hm1vg3R3M",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "M7hm1vg3R3M",
+          "url": "https://youtu.be/M7hm1vg3R3M",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "b3f11b66eebcfd2878b5fb95085f80fb0915353b62295a149f37d3062cb91fd8",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "b3f11b66eebcfd2878b5fb95085f80fb0915353b62295a149f37d3062cb91fd8",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/M7hm1vg3R3M.png"
           }
         },
         "linkedin": {
