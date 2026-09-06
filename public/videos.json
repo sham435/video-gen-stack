@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-06T18:47:09.514Z",
+  "updatedAt": "2026-09-06T19:16:21.181Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "j8AHAPz-dxM",
+      "id": "1QIti0TH_PQ",
       "title": "Xbox Cloud Gaming's new hourly cap is reportedly set exactly where Microsoft stops making  | NEWS-MONSTER",
       "description": "Xbox Cloud Gaming's new hourly cap is reportedly set exactly where Microsoft stops making  | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-06T18:47:08.864Z",
-      "publishedLabel": "Sep 6, 06:47 PM",
-      "thumbnail": "/thumbnails/j8AHAPz-dxM.png",
-      "thumbnailSha256": "2c623f11462eb23b577abc3d0e5c0c4ce7604be434f39dc26c316b678a8f4292",
+      "publishedAt": "2026-09-06T19:16:20.654Z",
+      "publishedLabel": "Sep 6, 07:16 PM",
+      "thumbnail": "/thumbnails/1QIti0TH_PQ.png",
+      "thumbnailSha256": "cdddb9992286db54e03e88ef85718327dd5902cc7947c9675d15b61da9596661",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/j8AHAPz-dxM",
+      "youtubeUrl": "https://youtu.be/1QIti0TH_PQ",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "j8AHAPz-dxM",
-          "url": "https://youtu.be/j8AHAPz-dxM",
+          "videoId": "1QIti0TH_PQ",
+          "url": "https://youtu.be/1QIti0TH_PQ",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "2c623f11462eb23b577abc3d0e5c0c4ce7604be434f39dc26c316b678a8f4292",
+            "sha256": "cdddb9992286db54e03e88ef85718327dd5902cc7947c9675d15b61da9596661",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "2c623f11462eb23b577abc3d0e5c0c4ce7604be434f39dc26c316b678a8f4292",
+            "sha256": "cdddb9992286db54e03e88ef85718327dd5902cc7947c9675d15b61da9596661",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/j8AHAPz-dxM.png"
+            "path": "public/thumbnails/1QIti0TH_PQ.png"
           }
         },
         "linkedin": {
