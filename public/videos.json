@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-06T20:47:53.078Z",
+  "updatedAt": "2026-09-06T21:17:13.029Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "Zv2eU_viM0Q",
-      "title": "Xbox Cloud Gaming's new hourly cap is reportedly set exactly where Microsoft stops making  | NEWS-MONSTER",
-      "description": "Xbox Cloud Gaming's new hourly cap is reportedly set exactly where Microsoft stops making  | NEWS-MONSTER",
+      "id": "Xw2YsNJ4rTw",
+      "title": "iPhone Handoff will seamlessly share one number between two phones - The Verge | NEWS-MONSTER",
+      "description": "iPhone Handoff will seamlessly share one number between two phones - The Verge | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-06T20:47:51.849Z",
-      "publishedLabel": "Sep 6, 08:47 PM",
-      "thumbnail": "/thumbnails/Zv2eU_viM0Q.png",
-      "thumbnailSha256": "5ac864fdef177a87bd28a49a071dbaeb1b347fc5ce188fd3255ca8c4d0e7ae64",
+      "publishedAt": "2026-09-06T21:17:11.888Z",
+      "publishedLabel": "Sep 6, 09:17 PM",
+      "thumbnail": "/thumbnails/Xw2YsNJ4rTw.png",
+      "thumbnailSha256": "997bd5b98bfaca30c68688d8be445a5688f63c9416ecccb68c7007602394c3bd",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/Zv2eU_viM0Q",
+      "youtubeUrl": "https://youtu.be/Xw2YsNJ4rTw",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "Zv2eU_viM0Q",
-          "url": "https://youtu.be/Zv2eU_viM0Q",
+          "videoId": "Xw2YsNJ4rTw",
+          "url": "https://youtu.be/Xw2YsNJ4rTw",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "5ac864fdef177a87bd28a49a071dbaeb1b347fc5ce188fd3255ca8c4d0e7ae64",
+            "sha256": "997bd5b98bfaca30c68688d8be445a5688f63c9416ecccb68c7007602394c3bd",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +43,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "5ac864fdef177a87bd28a49a071dbaeb1b347fc5ce188fd3255ca8c4d0e7ae64",
+            "sha256": "997bd5b98bfaca30c68688d8be445a5688f63c9416ecccb68c7007602394c3bd",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/Zv2eU_viM0Q.png"
+            "path": "public/thumbnails/Xw2YsNJ4rTw.png"
           }
         },
         "linkedin": {
