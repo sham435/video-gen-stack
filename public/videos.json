@@ -1,29 +1,29 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-06T21:47:30.513Z",
+  "updatedAt": "2026-09-06T22:16:54.616Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "bC1_fiDe1i0",
+      "id": "OrVjZ4T5_EA",
       "title": "iPhone Handoff will seamlessly share one number between two phones - The Verge | NEWS-MONSTER",
       "description": "iPhone Handoff will seamlessly share one number between two phones - The Verge | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-06T21:47:29.389Z",
-      "publishedLabel": "Sep 6, 09:47 PM",
-      "thumbnail": "/thumbnails/bC1_fiDe1i0.png",
+      "publishedAt": "2026-09-06T22:16:53.975Z",
+      "publishedLabel": "Sep 6, 10:16 PM",
+      "thumbnail": "/thumbnails/OrVjZ4T5_EA.png",
       "thumbnailSha256": "ced802878d6801b267b943264b27b3a6d0fb0223520792bb102aaac776bc10c9",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/bC1_fiDe1i0",
+      "youtubeUrl": "https://youtu.be/OrVjZ4T5_EA",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "bC1_fiDe1i0",
-          "url": "https://youtu.be/bC1_fiDe1i0",
+          "videoId": "OrVjZ4T5_EA",
+          "url": "https://youtu.be/OrVjZ4T5_EA",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "ced802878d6801b267b943264b27b3a6d0fb0223520792bb102aaac776bc10c9",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 4,
+          "durationMs": 3,
           "thumbnail": {
             "sha256": "ced802878d6801b267b943264b27b3a6d0fb0223520792bb102aaac776bc10c9",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/bC1_fiDe1i0.png"
+            "path": "public/thumbnails/OrVjZ4T5_EA.png"
           }
         },
         "linkedin": {
