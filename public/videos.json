@@ -1,86 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-06T09:00:08.364Z",
+  "updatedAt": "2026-09-06T09:31:12.091Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "MP0xITxw-V8",
-      "title": "iPhone Ultra, iPhone 18 Pro, and More: Apple's September 9 Event Preview - MacRumors | NEWS-MONSTER",
-      "description": "iPhone Ultra, iPhone 18 Pro, and More: Apple's September 9 Event Preview - MacRumors | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-06T09:00:07.835Z",
-      "publishedLabel": "Sep 6, 09:00 AM",
-      "thumbnail": "/thumbnails/MP0xITxw-V8.png",
-      "thumbnailSha256": "e291320a51f2a00239c40a048b6ab5b61b134fd9b953d8361dcfec4919a2d658",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/MP0xITxw-V8",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "MP0xITxw-V8",
-          "url": "https://youtu.be/MP0xITxw-V8",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "e291320a51f2a00239c40a048b6ab5b61b134fd9b953d8361dcfec4919a2d658",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "e291320a51f2a00239c40a048b6ab5b61b134fd9b953d8361dcfec4919a2d658",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/MP0xITxw-V8.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "x6keKPNQAGY",
+      "id": "mW6iKldCudo",
       "title": "Mario Kart 8 Deluxe online now seems to have an advantage for Nintendo Switch 1 players vs | NEWS-MONSTER",
       "description": "Mario Kart 8 Deluxe online now seems to have an advantage for Nintendo Switch 1 players vs | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-06T08:56:04.023Z",
-      "publishedLabel": "Sep 6, 08:56 AM",
-      "thumbnail": "/thumbnails/x6keKPNQAGY.png",
-      "thumbnailSha256": "9617f22712ccdd16991884b53ef7fc82cb00c5e9c9c69258c18e2f6d34392471",
+      "publishedAt": "2026-09-06T09:31:11.567Z",
+      "publishedLabel": "Sep 6, 09:31 AM",
+      "thumbnail": "/thumbnails/mW6iKldCudo.png",
+      "thumbnailSha256": "a355d866945eff0acaad3a689940c2b80accdcd4efc5332a176ceb138dd06938",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/x6keKPNQAGY",
+      "youtubeUrl": "https://youtu.be/mW6iKldCudo",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "x6keKPNQAGY",
-          "url": "https://youtu.be/x6keKPNQAGY",
+          "videoId": "mW6iKldCudo",
+          "url": "https://youtu.be/mW6iKldCudo",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "9617f22712ccdd16991884b53ef7fc82cb00c5e9c9c69258c18e2f6d34392471",
+            "sha256": "a355d866945eff0acaad3a689940c2b80accdcd4efc5332a176ceb138dd06938",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +43,66 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "9617f22712ccdd16991884b53ef7fc82cb00c5e9c9c69258c18e2f6d34392471",
+            "sha256": "a355d866945eff0acaad3a689940c2b80accdcd4efc5332a176ceb138dd06938",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/x6keKPNQAGY.png"
+            "path": "public/thumbnails/mW6iKldCudo.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "UnlkHo6loNA",
+      "title": "gamescom Apologizes for Its Initial Response to Thefts, Promises Improved Security Measure | NEWS-MONSTER",
+      "description": "gamescom Apologizes for Its Initial Response to Thefts, Promises Improved Security Measure | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-06T09:26:53.133Z",
+      "publishedLabel": "Sep 6, 09:26 AM",
+      "thumbnail": "/thumbnails/UnlkHo6loNA.png",
+      "thumbnailSha256": "b7e183b2cb197d40c2cd9f9c0d6b082c9b9a0df06dcdae874a04637a58e76812",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/UnlkHo6loNA",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "UnlkHo6loNA",
+          "url": "https://youtu.be/UnlkHo6loNA",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "b7e183b2cb197d40c2cd9f9c0d6b082c9b9a0df06dcdae874a04637a58e76812",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 1,
+          "thumbnail": {
+            "sha256": "b7e183b2cb197d40c2cd9f9c0d6b082c9b9a0df06dcdae874a04637a58e76812",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/UnlkHo6loNA.png"
           }
         },
         "linkedin": {
