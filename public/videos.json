@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-06T20:17:34.696Z",
+  "updatedAt": "2026-09-06T20:47:53.078Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "3aQTxKSSLds",
+      "id": "Zv2eU_viM0Q",
       "title": "Xbox Cloud Gaming's new hourly cap is reportedly set exactly where Microsoft stops making  | NEWS-MONSTER",
       "description": "Xbox Cloud Gaming's new hourly cap is reportedly set exactly where Microsoft stops making  | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-06T20:17:33.975Z",
-      "publishedLabel": "Sep 6, 08:17 PM",
-      "thumbnail": "/thumbnails/3aQTxKSSLds.png",
-      "thumbnailSha256": "3438b4c95c1e160863ccf1c8464fd56b409af36fcfdc50aa5dddc0fa43f3fc24",
+      "publishedAt": "2026-09-06T20:47:51.849Z",
+      "publishedLabel": "Sep 6, 08:47 PM",
+      "thumbnail": "/thumbnails/Zv2eU_viM0Q.png",
+      "thumbnailSha256": "5ac864fdef177a87bd28a49a071dbaeb1b347fc5ce188fd3255ca8c4d0e7ae64",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/3aQTxKSSLds",
+      "youtubeUrl": "https://youtu.be/Zv2eU_viM0Q",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "3aQTxKSSLds",
-          "url": "https://youtu.be/3aQTxKSSLds",
+          "videoId": "Zv2eU_viM0Q",
+          "url": "https://youtu.be/Zv2eU_viM0Q",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "3438b4c95c1e160863ccf1c8464fd56b409af36fcfdc50aa5dddc0fa43f3fc24",
+            "sha256": "5ac864fdef177a87bd28a49a071dbaeb1b347fc5ce188fd3255ca8c4d0e7ae64",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +43,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "3438b4c95c1e160863ccf1c8464fd56b409af36fcfdc50aa5dddc0fa43f3fc24",
+            "sha256": "5ac864fdef177a87bd28a49a071dbaeb1b347fc5ce188fd3255ca8c4d0e7ae64",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/3aQTxKSSLds.png"
+            "path": "public/thumbnails/Zv2eU_viM0Q.png"
           }
         },
         "linkedin": {
