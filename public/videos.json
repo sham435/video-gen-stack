@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-06T07:30:04.701Z",
+  "updatedAt": "2026-09-06T07:59:14.747Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "paauRG033O0",
-      "title": "iPhone Ultra, iPhone 18 Pro, and More: Apple's September 9 Event Preview - MacRumors | NEWS-MONSTER",
-      "description": "iPhone Ultra, iPhone 18 Pro, and More: Apple's September 9 Event Preview - MacRumors | NEWS-MONSTER",
+      "id": "700NN0H2SGE",
+      "title": "Mario Kart 8 Deluxe online now seems to have an advantage for Nintendo Switch 1 players vs | NEWS-MONSTER",
+      "description": "Mario Kart 8 Deluxe online now seems to have an advantage for Nintendo Switch 1 players vs | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-06T07:30:03.687Z",
-      "publishedLabel": "Sep 6, 07:30 AM",
-      "thumbnail": "/thumbnails/paauRG033O0.png",
-      "thumbnailSha256": "af25b4595d23271d8acbbeaa62d0f4b2e59299135a3042e13c6ce1c335c1d2c4",
+      "publishedAt": "2026-09-06T07:55:48.910Z",
+      "publishedLabel": "Sep 6, 07:55 AM",
+      "thumbnail": "/thumbnails/700NN0H2SGE.png",
+      "thumbnailSha256": "61310fc2f3852cbab505ca761faaecf85c2b136e2ab415f41f35166ad8b0443d",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/paauRG033O0",
+      "youtubeUrl": "https://youtu.be/700NN0H2SGE",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "paauRG033O0",
-          "url": "https://youtu.be/paauRG033O0",
+          "videoId": "700NN0H2SGE",
+          "url": "https://youtu.be/700NN0H2SGE",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "af25b4595d23271d8acbbeaa62d0f4b2e59299135a3042e13c6ce1c335c1d2c4",
+            "sha256": "61310fc2f3852cbab505ca761faaecf85c2b136e2ab415f41f35166ad8b0443d",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,66 +43,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "af25b4595d23271d8acbbeaa62d0f4b2e59299135a3042e13c6ce1c335c1d2c4",
+            "sha256": "61310fc2f3852cbab505ca761faaecf85c2b136e2ab415f41f35166ad8b0443d",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/paauRG033O0.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "HAZUw6DaQiI",
-      "title": "Mario Kart 8 Deluxe online now seems to have an advantage for Nintendo Switch 1 players vs | NEWS-MONSTER",
-      "description": "Mario Kart 8 Deluxe online now seems to have an advantage for Nintendo Switch 1 players vs | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-06T07:26:08.204Z",
-      "publishedLabel": "Sep 6, 07:26 AM",
-      "thumbnail": "/thumbnails/HAZUw6DaQiI.png",
-      "thumbnailSha256": "df4189c9b91693f104e2907dc5dc23ca208910607af389fa01aa88b852499604",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/HAZUw6DaQiI",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "HAZUw6DaQiI",
-          "url": "https://youtu.be/HAZUw6DaQiI",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "df4189c9b91693f104e2907dc5dc23ca208910607af389fa01aa88b852499604",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "df4189c9b91693f104e2907dc5dc23ca208910607af389fa01aa88b852499604",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/HAZUw6DaQiI.png"
+            "path": "public/thumbnails/700NN0H2SGE.png"
           }
         },
         "linkedin": {
