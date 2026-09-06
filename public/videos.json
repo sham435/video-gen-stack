@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-06T09:31:12.091Z",
+  "updatedAt": "2026-09-06T10:02:08.481Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "mW6iKldCudo",
+      "id": "T6lnxQ6rH4s",
       "title": "Mario Kart 8 Deluxe online now seems to have an advantage for Nintendo Switch 1 players vs | NEWS-MONSTER",
       "description": "Mario Kart 8 Deluxe online now seems to have an advantage for Nintendo Switch 1 players vs | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-06T09:31:11.567Z",
-      "publishedLabel": "Sep 6, 09:31 AM",
-      "thumbnail": "/thumbnails/mW6iKldCudo.png",
-      "thumbnailSha256": "a355d866945eff0acaad3a689940c2b80accdcd4efc5332a176ceb138dd06938",
+      "publishedAt": "2026-09-06T10:02:07.456Z",
+      "publishedLabel": "Sep 6, 10:02 AM",
+      "thumbnail": "/thumbnails/T6lnxQ6rH4s.png",
+      "thumbnailSha256": "9617f22712ccdd16991884b53ef7fc82cb00c5e9c9c69258c18e2f6d34392471",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/mW6iKldCudo",
+      "youtubeUrl": "https://youtu.be/T6lnxQ6rH4s",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "mW6iKldCudo",
-          "url": "https://youtu.be/mW6iKldCudo",
+          "videoId": "T6lnxQ6rH4s",
+          "url": "https://youtu.be/T6lnxQ6rH4s",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "a355d866945eff0acaad3a689940c2b80accdcd4efc5332a176ceb138dd06938",
+            "sha256": "9617f22712ccdd16991884b53ef7fc82cb00c5e9c9c69258c18e2f6d34392471",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "a355d866945eff0acaad3a689940c2b80accdcd4efc5332a176ceb138dd06938",
+            "sha256": "9617f22712ccdd16991884b53ef7fc82cb00c5e9c9c69258c18e2f6d34392471",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/mW6iKldCudo.png"
+            "path": "public/thumbnails/T6lnxQ6rH4s.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "UnlkHo6loNA",
+      "id": "RvJkmHUeBwM",
       "title": "gamescom Apologizes for Its Initial Response to Thefts, Promises Improved Security Measure | NEWS-MONSTER",
       "description": "gamescom Apologizes for Its Initial Response to Thefts, Promises Improved Security Measure | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-06T09:26:53.133Z",
-      "publishedLabel": "Sep 6, 09:26 AM",
-      "thumbnail": "/thumbnails/UnlkHo6loNA.png",
-      "thumbnailSha256": "b7e183b2cb197d40c2cd9f9c0d6b082c9b9a0df06dcdae874a04637a58e76812",
+      "publishedAt": "2026-09-06T09:57:24.570Z",
+      "publishedLabel": "Sep 6, 09:57 AM",
+      "thumbnail": "/thumbnails/RvJkmHUeBwM.png",
+      "thumbnailSha256": "d941b476492c7668065e3de269292792afcfa31c410e6b99b05a758f92f9ba06",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/UnlkHo6loNA",
+      "youtubeUrl": "https://youtu.be/RvJkmHUeBwM",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "UnlkHo6loNA",
-          "url": "https://youtu.be/UnlkHo6loNA",
+          "videoId": "RvJkmHUeBwM",
+          "url": "https://youtu.be/RvJkmHUeBwM",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "b7e183b2cb197d40c2cd9f9c0d6b082c9b9a0df06dcdae874a04637a58e76812",
+            "sha256": "d941b476492c7668065e3de269292792afcfa31c410e6b99b05a758f92f9ba06",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,14 +95,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 1,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "b7e183b2cb197d40c2cd9f9c0d6b082c9b9a0df06dcdae874a04637a58e76812",
+            "sha256": "d941b476492c7668065e3de269292792afcfa31c410e6b99b05a758f92f9ba06",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/UnlkHo6loNA.png"
+            "path": "public/thumbnails/RvJkmHUeBwM.png"
           }
         },
         "linkedin": {
