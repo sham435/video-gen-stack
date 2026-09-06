@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-06T19:34:56.529Z",
+  "updatedAt": "2026-09-06T19:46:48.632Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "bwXYHwrgdGg",
-      "title": "Experts Disagree On U.S | NEWS-MONSTER",
-      "description": "Experts Disagree On U.S | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-09-06T19:34:40.843Z",
-      "publishedLabel": "Sep 6, 07:34 PM",
-      "thumbnail": "/thumbnails/bwXYHwrgdGg.png",
-      "thumbnailSha256": "e65d7fdb0acde9f288a762a9b9250bbe35db02dbf6734211d821e7b10e19a8c5",
+      "id": "cwH01EO6AgE",
+      "title": "Xbox Cloud Gaming's new hourly cap is reportedly set exactly where Microsoft stops making  | NEWS-MONSTER",
+      "description": "Xbox Cloud Gaming's new hourly cap is reportedly set exactly where Microsoft stops making  | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-06T19:46:48.115Z",
+      "publishedLabel": "Sep 6, 07:46 PM",
+      "thumbnail": "/thumbnails/cwH01EO6AgE.png",
+      "thumbnailSha256": "56ec74814ab7a7989876c2efd804b6e009fa52d0aa28f83745ee49827353d280",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/bwXYHwrgdGg",
+      "youtubeUrl": "https://youtu.be/cwH01EO6AgE",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "bwXYHwrgdGg",
-          "url": "https://youtu.be/bwXYHwrgdGg",
+          "videoId": "cwH01EO6AgE",
+          "url": "https://youtu.be/cwH01EO6AgE",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "e65d7fdb0acde9f288a762a9b9250bbe35db02dbf6734211d821e7b10e19a8c5",
+            "sha256": "56ec74814ab7a7989876c2efd804b6e009fa52d0aa28f83745ee49827353d280",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 5,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "e65d7fdb0acde9f288a762a9b9250bbe35db02dbf6734211d821e7b10e19a8c5",
+            "sha256": "56ec74814ab7a7989876c2efd804b6e009fa52d0aa28f83745ee49827353d280",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/bwXYHwrgdGg.png"
+            "path": "public/thumbnails/cwH01EO6AgE.png"
           }
         },
         "linkedin": {
