@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-06T12:02:57.021Z",
+  "updatedAt": "2026-09-06T12:32:27.760Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "fXVX-8P_tdA",
+      "id": "lPAFNrpbI5w",
       "title": "gamescom Apologizes for Its Initial Response to Thefts, Promises Improved Security Measure | NEWS-MONSTER",
       "description": "gamescom Apologizes for Its Initial Response to Thefts, Promises Improved Security Measure | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-06T12:02:55.883Z",
-      "publishedLabel": "Sep 6, 12:02 PM",
-      "thumbnail": "/thumbnails/fXVX-8P_tdA.png",
-      "thumbnailSha256": "5d1aa2349043fe74abeba9e44eeb0de49f863a6c9c0196a183c5d79130c3e08d",
+      "publishedAt": "2026-09-06T12:32:26.592Z",
+      "publishedLabel": "Sep 6, 12:32 PM",
+      "thumbnail": "/thumbnails/lPAFNrpbI5w.png",
+      "thumbnailSha256": "c5e5f90ef473db603ad2c767d10543b58f63864dee53b2df3bc3d34cee29ab85",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/fXVX-8P_tdA",
+      "youtubeUrl": "https://youtu.be/lPAFNrpbI5w",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "fXVX-8P_tdA",
-          "url": "https://youtu.be/fXVX-8P_tdA",
+          "videoId": "lPAFNrpbI5w",
+          "url": "https://youtu.be/lPAFNrpbI5w",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "5d1aa2349043fe74abeba9e44eeb0de49f863a6c9c0196a183c5d79130c3e08d",
+            "sha256": "c5e5f90ef473db603ad2c767d10543b58f63864dee53b2df3bc3d34cee29ab85",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +43,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "5d1aa2349043fe74abeba9e44eeb0de49f863a6c9c0196a183c5d79130c3e08d",
+            "sha256": "c5e5f90ef473db603ad2c767d10543b58f63864dee53b2df3bc3d34cee29ab85",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/fXVX-8P_tdA.png"
+            "path": "public/thumbnails/lPAFNrpbI5w.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "IppBSd1EJII",
+      "id": "rFbnh7kpmKQ",
       "title": "How Maushold Changed Overnight | NEWS-MONSTER",
       "description": "How Maushold Changed Overnight | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-06T11:58:45.614Z",
-      "publishedLabel": "Sep 6, 11:58 AM",
-      "thumbnail": "/thumbnails/IppBSd1EJII.png",
-      "thumbnailSha256": "024b45dee9f727db828a3bfdb33df24cb0745b0047572b2da789358ba84d81ca",
+      "publishedAt": "2026-09-06T12:28:11.390Z",
+      "publishedLabel": "Sep 6, 12:28 PM",
+      "thumbnail": "/thumbnails/rFbnh7kpmKQ.png",
+      "thumbnailSha256": "8fff2c03523c89ccc2c3fc1ae221ace285a6eb6c79688f533ef8585782b64bd8",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/IppBSd1EJII",
+      "youtubeUrl": "https://youtu.be/rFbnh7kpmKQ",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "IppBSd1EJII",
-          "url": "https://youtu.be/IppBSd1EJII",
+          "videoId": "rFbnh7kpmKQ",
+          "url": "https://youtu.be/rFbnh7kpmKQ",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "024b45dee9f727db828a3bfdb33df24cb0745b0047572b2da789358ba84d81ca",
+            "sha256": "8fff2c03523c89ccc2c3fc1ae221ace285a6eb6c79688f533ef8585782b64bd8",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,14 +95,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 4,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "024b45dee9f727db828a3bfdb33df24cb0745b0047572b2da789358ba84d81ca",
+            "sha256": "8fff2c03523c89ccc2c3fc1ae221ace285a6eb6c79688f533ef8585782b64bd8",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/IppBSd1EJII.png"
+            "path": "public/thumbnails/rFbnh7kpmKQ.png"
           }
         },
         "linkedin": {
