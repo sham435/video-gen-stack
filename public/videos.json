@@ -1,169 +1,217 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-07T22:00:16.177Z",
-  "source": "production-ledger",
+  "updatedAt": "2026-09-07T22:37:44.080Z",
+  "source": "youtube-rss",
   "videos": [
     {
       "id": "rYhGlBShocQ",
-      "title": "Labor Day flightmare: Watch as Amazon cargo plane overshoots runway at Miami International | NEWS-MONSTER",
-      "description": "Labor Day flightmare: Watch as Amazon cargo plane overshoots runway at Miami International | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-09-07T22:00:15.135Z",
+      "title": "Labor Day flightmare: Watch as Amazon cargo plane overshoots runway at Miami International | NEWS-MO",
+      "publishedAt": "2026-09-07T22:00:34+00:00",
       "publishedLabel": "Sep 7, 10:00 PM",
       "thumbnail": "/thumbnails/rYhGlBShocQ.png",
-      "thumbnailSha256": "8e1eccf9ff16e7c20ee01386ecc1a4330b6b1df0f0230b9809a02c41c600f8ab",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/rYhGlBShocQ",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
       "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "rYhGlBShocQ",
-          "url": "https://youtu.be/rYhGlBShocQ",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "8e1eccf9ff16e7c20ee01386ecc1a4330b6b1df0f0230b9809a02c41c600f8ab",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "8e1eccf9ff16e7c20ee01386ecc1a4330b6b1df0f0230b9809a02c41c600f8ab",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/rYhGlBShocQ.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
       "id": "0cPXhMdqDfc",
       "title": "Tesla ya tiene los primeros Cybercab autónomos circulando por Austin | NEWS-MONSTER",
-      "description": "Tesla ya tiene los primeros Cybercab autónomos circulando por Austin | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-09-07T21:56:20.462Z",
+      "publishedAt": "2026-09-07T21:56:40+00:00",
       "publishedLabel": "Sep 7, 09:56 PM",
       "thumbnail": "/thumbnails/0cPXhMdqDfc.png",
-      "thumbnailSha256": "77cae045a81e99851c9c875a5803c2919378b2ab390585296a215bdfdcec06c7",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/0cPXhMdqDfc",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
       "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "0cPXhMdqDfc",
-          "url": "https://youtu.be/0cPXhMdqDfc",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "77cae045a81e99851c9c875a5803c2919378b2ab390585296a215bdfdcec06c7",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 4,
-          "thumbnail": {
-            "sha256": "77cae045a81e99851c9c875a5803c2919378b2ab390585296a215bdfdcec06c7",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/0cPXhMdqDfc.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
       "id": "snLtVXeSwmc",
       "title": "Tesla Robotaxi fleet surpasses one million unsupervised miles | NEWS-MONSTER",
-      "description": "Tesla Robotaxi fleet surpasses one million unsupervised miles | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-09-07T21:51:27.919Z",
+      "publishedAt": "2026-09-07T21:51:37+00:00",
       "publishedLabel": "Sep 7, 09:51 PM",
       "thumbnail": "/thumbnails/snLtVXeSwmc.png",
-      "thumbnailSha256": "dfbe06925a5a8d046b5bae2edd41dd2fbe15fc901dfa2507e750f21f37c2842f",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/snLtVXeSwmc",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
       "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "snLtVXeSwmc",
-          "url": "https://youtu.be/snLtVXeSwmc",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "dfbe06925a5a8d046b5bae2edd41dd2fbe15fc901dfa2507e750f21f37c2842f",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "dfbe06925a5a8d046b5bae2edd41dd2fbe15fc901dfa2507e750f21f37c2842f",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/snLtVXeSwmc.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "0us3ouBPxEA",
+      "title": "Apple iPhone 18 Pro Release Date Schedule: Your Complete September Countdown - Forbes | NEWS-MONSTER",
+      "publishedAt": "2026-09-07T18:24:52+00:00",
+      "publishedLabel": "Sep 7, 06:24 PM",
+      "thumbnail": "/thumbnails/0us3ouBPxEA.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "OGeokFvm3KI",
+      "title": "Apple iPhone 18 Pro Release Date Schedule: Your Complete September Countdown - Forbes | NEWS-MONSTER",
+      "publishedAt": "2026-09-07T18:14:05+00:00",
+      "publishedLabel": "Sep 7, 06:14 PM",
+      "thumbnail": "/thumbnails/OGeokFvm3KI.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "PC4HoLl7698",
+      "title": "Apple iPhone 18 Pro Release Date Schedule: Your Complete September Countdown - Forbes | NEWS-MONSTER",
+      "publishedAt": "2026-09-07T17:54:45+00:00",
+      "publishedLabel": "Sep 7, 05:54 PM",
+      "thumbnail": "/thumbnails/PC4HoLl7698.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "whzaO4wYayQ",
+      "title": "Apple iPhone 18 Pro Release Date Schedule: Your Complete September Countdown - Forbes | NEWS-MONSTER",
+      "publishedAt": "2026-09-07T17:24:42+00:00",
+      "publishedLabel": "Sep 7, 05:24 PM",
+      "thumbnail": "/thumbnails/whzaO4wYayQ.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "_oxUalgW4KE",
+      "title": "Apple iPhone 18 Pro Release Date Schedule: Your Complete September Countdown - Forbes | NEWS-MONSTER",
+      "publishedAt": "2026-09-07T16:55:18+00:00",
+      "publishedLabel": "Sep 7, 04:55 PM",
+      "thumbnail": "/thumbnails/_oxUalgW4KE.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "4J9sdlRqDa4",
+      "title": "Apple iPhone 18 Pro Release Date Schedule: Your Complete September Countdown - Forbes | NEWS-MONSTER",
+      "publishedAt": "2026-09-07T16:19:30+00:00",
+      "publishedLabel": "Sep 7, 04:19 PM",
+      "thumbnail": "/thumbnails/4J9sdlRqDa4.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "P6ys89Gb13E",
+      "title": "Apple iPhone 18 Pro Release Date Schedule: Your Complete September Countdown - Forbes | NEWS-MONSTER",
+      "publishedAt": "2026-09-07T15:47:17+00:00",
+      "publishedLabel": "Sep 7, 03:47 PM",
+      "thumbnail": "/thumbnails/P6ys89Gb13E.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "93tjDXDPxTk",
+      "title": "Apple iPhone 18 Pro Release Date Schedule: Your Complete September Countdown - Forbes | NEWS-MONSTER",
+      "publishedAt": "2026-09-07T15:17:43+00:00",
+      "publishedLabel": "Sep 7, 03:17 PM",
+      "thumbnail": "/thumbnails/93tjDXDPxTk.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "Cw-exDgnk4g",
+      "title": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
+      "publishedAt": "2026-09-07T13:36:39+00:00",
+      "publishedLabel": "Sep 7, 01:36 PM",
+      "thumbnail": "/thumbnails/Cw-exDgnk4g.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "u_7QXqntVGY",
+      "title": "How DLSS Changed Overnight | NEWS-MONSTER",
+      "publishedAt": "2026-09-07T13:32:31+00:00",
+      "publishedLabel": "Sep 7, 01:32 PM",
+      "thumbnail": "/thumbnails/u_7QXqntVGY.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "eYYXHdwjGXA",
+      "title": "The Legend of Zelda 40th Anniversary Direct 9.8.2026 and Nintendo Direct 9.9.2026 - Ninten | NEWS-MO",
+      "publishedAt": "2026-09-07T13:27:26+00:00",
+      "publishedLabel": "Sep 7, 01:27 PM",
+      "thumbnail": "/thumbnails/eYYXHdwjGXA.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "VrX-NwjHE1E",
+      "title": "Elon Musk's Inner Circle Pours Millions Into Psychedelics As MDMA Therapy Push Gains Momen | NEWS-MO",
+      "publishedAt": "2026-09-07T13:12:11+00:00",
+      "publishedLabel": "Sep 7, 01:12 PM",
+      "thumbnail": "/thumbnails/VrX-NwjHE1E.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     }
   ]
 }
