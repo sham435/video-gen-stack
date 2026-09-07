@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-07T00:35:40.615Z",
+  "updatedAt": "2026-09-07T01:09:05.112Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "OeW2iSu9ZUQ",
-      "title": "iPhone Handoff will seamlessly share one number between two phones - The Verge | NEWS-MONSTER",
-      "description": "iPhone Handoff will seamlessly share one number between two phones - The Verge | NEWS-MONSTER",
+      "id": "uiAj2COuW_c",
+      "title": "13 Practical USB-C Gadgets You'll Use All The Time - slashgear.com | NEWS-MONSTER",
+      "description": "13 Practical USB-C Gadgets You'll Use All The Time - slashgear.com | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-07T00:35:39.728Z",
-      "publishedLabel": "Sep 7, 12:35 AM",
-      "thumbnail": "/thumbnails/OeW2iSu9ZUQ.png",
-      "thumbnailSha256": "9d576cba506c53dc1e9f47a4dbc885d6759015d0738fa19a26ddea961b1eb71b",
+      "publishedAt": "2026-09-07T01:09:04.633Z",
+      "publishedLabel": "Sep 7, 01:09 AM",
+      "thumbnail": "/thumbnails/uiAj2COuW_c.png",
+      "thumbnailSha256": "fd6811629e71810371305b0ef08ef2845ebb22080a0ba2e2d6e6ff317fa8afce",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/OeW2iSu9ZUQ",
+      "youtubeUrl": "https://youtu.be/uiAj2COuW_c",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "OeW2iSu9ZUQ",
-          "url": "https://youtu.be/OeW2iSu9ZUQ",
+          "videoId": "uiAj2COuW_c",
+          "url": "https://youtu.be/uiAj2COuW_c",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "9d576cba506c53dc1e9f47a4dbc885d6759015d0738fa19a26ddea961b1eb71b",
+            "sha256": "fd6811629e71810371305b0ef08ef2845ebb22080a0ba2e2d6e6ff317fa8afce",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,68 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "9d576cba506c53dc1e9f47a4dbc885d6759015d0738fa19a26ddea961b1eb71b",
+            "sha256": "fd6811629e71810371305b0ef08ef2845ebb22080a0ba2e2d6e6ff317fa8afce",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/OeW2iSu9ZUQ.png"
+            "path": "public/thumbnails/uiAj2COuW_c.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "bAPzKYwhx_M",
+      "title": "iPhone Handoff will seamlessly share one number between two phones - The Verge | NEWS-MONSTER",
+      "description": "iPhone Handoff will seamlessly share one number between two phones - The Verge | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-07T01:04:34.399Z",
+      "publishedLabel": "Sep 7, 01:04 AM",
+      "thumbnail": "/thumbnails/bAPzKYwhx_M.png",
+      "thumbnailSha256": "280160a128c4bd2a174836c46d1c95c16bfc809c3ec87a5e3f8013333c419d90",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/bAPzKYwhx_M",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "bAPzKYwhx_M",
+          "url": "https://youtu.be/bAPzKYwhx_M",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "280160a128c4bd2a174836c46d1c95c16bfc809c3ec87a5e3f8013333c419d90",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "280160a128c4bd2a174836c46d1c95c16bfc809c3ec87a5e3f8013333c419d90",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/bAPzKYwhx_M.png"
           }
         },
         "linkedin": {
