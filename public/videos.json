@@ -1,86 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-07T13:12:03.417Z",
+  "updatedAt": "2026-09-07T13:36:28.581Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "VrX-NwjHE1E",
-      "title": "Elon Musk's Inner Circle Pours Millions Into Psychedelics As MDMA Therapy Push Gains Momen | NEWS-MONSTER",
-      "description": "Elon Musk's Inner Circle Pours Millions Into Psychedelics As MDMA Therapy Push Gains Momen | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-09-07T13:12:02.905Z",
-      "publishedLabel": "Sep 7, 01:12 PM",
-      "thumbnail": "/thumbnails/VrX-NwjHE1E.png",
-      "thumbnailSha256": "1b1dc75262e708aece1a0581ca6f5217444799d81987ab0224be73c39813e6aa",
+      "id": "Cw-exDgnk4g",
+      "title": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
+      "description": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-07T13:36:28.030Z",
+      "publishedLabel": "Sep 7, 01:36 PM",
+      "thumbnail": "/thumbnails/Cw-exDgnk4g.png",
+      "thumbnailSha256": "f4f9a5b7092d33f722fad8af37f70d1314fe03a9e768495f7c8fd335bb0c2d15",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/VrX-NwjHE1E",
+      "youtubeUrl": "https://youtu.be/Cw-exDgnk4g",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "VrX-NwjHE1E",
-          "url": "https://youtu.be/VrX-NwjHE1E",
+          "videoId": "Cw-exDgnk4g",
+          "url": "https://youtu.be/Cw-exDgnk4g",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "1b1dc75262e708aece1a0581ca6f5217444799d81987ab0224be73c39813e6aa",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 4,
-          "thumbnail": {
-            "sha256": "1b1dc75262e708aece1a0581ca6f5217444799d81987ab0224be73c39813e6aa",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/VrX-NwjHE1E.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "uN02cNfeV7w",
-      "title": "Experts Disagree On USD | NEWS-MONSTER",
-      "description": "Experts Disagree On USD | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-09-07T13:07:11.362Z",
-      "publishedLabel": "Sep 7, 01:07 PM",
-      "thumbnail": "/thumbnails/uN02cNfeV7w.png",
-      "thumbnailSha256": "afea12a1a93599e4d13ad0af3ff7d62cbee71205c8e1f1b059883bb1ee32bf9b",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/uN02cNfeV7w",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "uN02cNfeV7w",
-          "url": "https://youtu.be/uN02cNfeV7w",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "afea12a1a93599e4d13ad0af3ff7d62cbee71205c8e1f1b059883bb1ee32bf9b",
+            "sha256": "f4f9a5b7092d33f722fad8af37f70d1314fe03a9e768495f7c8fd335bb0c2d15",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +43,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "afea12a1a93599e4d13ad0af3ff7d62cbee71205c8e1f1b059883bb1ee32bf9b",
+            "sha256": "f4f9a5b7092d33f722fad8af37f70d1314fe03a9e768495f7c8fd335bb0c2d15",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/uN02cNfeV7w.png"
+            "path": "public/thumbnails/Cw-exDgnk4g.png"
           }
         },
         "linkedin": {
@@ -112,29 +58,83 @@
       }
     },
     {
-      "id": "ifVrHlaSIu8",
-      "title": "Uber put $100m into the company that hired Anthony Levandowski | NEWS-MONSTER",
-      "description": "Uber put $100m into the company that hired Anthony Levandowski | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-09-07T13:02:09.290Z",
-      "publishedLabel": "Sep 7, 01:02 PM",
-      "thumbnail": "/thumbnails/ifVrHlaSIu8.png",
-      "thumbnailSha256": "8556f71a83dec4bdc55d4533b0957b84b06bb908c85fe14f6fc6859cea28abf8",
+      "id": "u_7QXqntVGY",
+      "title": "How DLSS Changed Overnight | NEWS-MONSTER",
+      "description": "How DLSS Changed Overnight | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-07T13:32:12.599Z",
+      "publishedLabel": "Sep 7, 01:32 PM",
+      "thumbnail": "/thumbnails/u_7QXqntVGY.png",
+      "thumbnailSha256": "2f92871eaa2e1fad66c3ab3454d72634cc6fd02295a9eb048203c5c070947946",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/ifVrHlaSIu8",
+      "youtubeUrl": "https://youtu.be/u_7QXqntVGY",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "ifVrHlaSIu8",
-          "url": "https://youtu.be/ifVrHlaSIu8",
+          "videoId": "u_7QXqntVGY",
+          "url": "https://youtu.be/u_7QXqntVGY",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "8556f71a83dec4bdc55d4533b0957b84b06bb908c85fe14f6fc6859cea28abf8",
+            "sha256": "2f92871eaa2e1fad66c3ab3454d72634cc6fd02295a9eb048203c5c070947946",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 3,
+          "thumbnail": {
+            "sha256": "2f92871eaa2e1fad66c3ab3454d72634cc6fd02295a9eb048203c5c070947946",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/u_7QXqntVGY.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "eYYXHdwjGXA",
+      "title": "The Legend of Zelda 40th Anniversary Direct 9.8.2026 and Nintendo Direct 9.9.2026 - Ninten | NEWS-MONSTER",
+      "description": "The Legend of Zelda 40th Anniversary Direct 9.8.2026 and Nintendo Direct 9.9.2026 - Ninten | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-07T13:27:14.715Z",
+      "publishedLabel": "Sep 7, 01:27 PM",
+      "thumbnail": "/thumbnails/eYYXHdwjGXA.png",
+      "thumbnailSha256": "d0f6a103f3b207cd34c2738233fde45414597e87fd757bc3dd5fa3e57be1d5a5",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/eYYXHdwjGXA",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "eYYXHdwjGXA",
+          "url": "https://youtu.be/eYYXHdwjGXA",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "d0f6a103f3b207cd34c2738233fde45414597e87fd757bc3dd5fa3e57be1d5a5",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -151,12 +151,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "8556f71a83dec4bdc55d4533b0957b84b06bb908c85fe14f6fc6859cea28abf8",
+            "sha256": "d0f6a103f3b207cd34c2738233fde45414597e87fd757bc3dd5fa3e57be1d5a5",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/ifVrHlaSIu8.png"
+            "path": "public/thumbnails/eYYXHdwjGXA.png"
           }
         },
         "linkedin": {
