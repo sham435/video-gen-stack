@@ -1,29 +1,29 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-07T18:13:57.691Z",
+  "updatedAt": "2026-09-07T18:24:34.195Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "OGeokFvm3KI",
+      "id": "0us3ouBPxEA",
       "title": "Apple iPhone 18 Pro Release Date Schedule: Your Complete September Countdown - Forbes | NEWS-MONSTER",
       "description": "Apple iPhone 18 Pro Release Date Schedule: Your Complete September Countdown - Forbes | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-07T18:13:57.235Z",
-      "publishedLabel": "Sep 7, 06:13 PM",
-      "thumbnail": "/thumbnails/OGeokFvm3KI.png",
+      "publishedAt": "2026-09-07T18:24:33.720Z",
+      "publishedLabel": "Sep 7, 06:24 PM",
+      "thumbnail": "/thumbnails/0us3ouBPxEA.png",
       "thumbnailSha256": "9a985bbd44b825a0c886dc5db9af28e86f53cff8db1cf967bd4a9efd8116d51d",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/OGeokFvm3KI",
+      "youtubeUrl": "https://youtu.be/0us3ouBPxEA",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "OGeokFvm3KI",
-          "url": "https://youtu.be/OGeokFvm3KI",
+          "videoId": "0us3ouBPxEA",
+          "url": "https://youtu.be/0us3ouBPxEA",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "9a985bbd44b825a0c886dc5db9af28e86f53cff8db1cf967bd4a9efd8116d51d",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 6,
           "thumbnail": {
             "sha256": "9a985bbd44b825a0c886dc5db9af28e86f53cff8db1cf967bd4a9efd8116d51d",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/OGeokFvm3KI.png"
+            "path": "public/thumbnails/0us3ouBPxEA.png"
           }
         },
         "linkedin": {
