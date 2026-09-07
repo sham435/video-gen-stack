@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-07T12:02:33.203Z",
+  "updatedAt": "2026-09-07T12:35:23.013Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "7aBGAsAkXDQ",
+      "id": "XoC--cRWqzc",
       "title": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
       "description": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-07T12:02:32.413Z",
-      "publishedLabel": "Sep 7, 12:02 PM",
-      "thumbnail": "/thumbnails/7aBGAsAkXDQ.png",
-      "thumbnailSha256": "9d35e6cd7a949a4bfde6715629b0c207105f0cabc40f9bf782ba4dd0c7664b1e",
+      "publishedAt": "2026-09-07T12:35:21.820Z",
+      "publishedLabel": "Sep 7, 12:35 PM",
+      "thumbnail": "/thumbnails/XoC--cRWqzc.png",
+      "thumbnailSha256": "be3dfae55b5156e427e1310230f2f850067bc3a732fba532a010c73e5a5bbdf6",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/7aBGAsAkXDQ",
+      "youtubeUrl": "https://youtu.be/XoC--cRWqzc",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "7aBGAsAkXDQ",
-          "url": "https://youtu.be/7aBGAsAkXDQ",
+          "videoId": "XoC--cRWqzc",
+          "url": "https://youtu.be/XoC--cRWqzc",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "9d35e6cd7a949a4bfde6715629b0c207105f0cabc40f9bf782ba4dd0c7664b1e",
+            "sha256": "be3dfae55b5156e427e1310230f2f850067bc3a732fba532a010c73e5a5bbdf6",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +43,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "9d35e6cd7a949a4bfde6715629b0c207105f0cabc40f9bf782ba4dd0c7664b1e",
+            "sha256": "be3dfae55b5156e427e1310230f2f850067bc3a732fba532a010c73e5a5bbdf6",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/7aBGAsAkXDQ.png"
+            "path": "public/thumbnails/XoC--cRWqzc.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "y5ii0EiCkfY",
+      "id": "SpFvNPyJ2Ww",
       "title": "How DLSS Changed Overnight | NEWS-MONSTER",
       "description": "How DLSS Changed Overnight | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-07T11:59:09.992Z",
-      "publishedLabel": "Sep 7, 11:59 AM",
-      "thumbnail": "/thumbnails/y5ii0EiCkfY.png",
-      "thumbnailSha256": "3b91f8cea77cf8ce945863c73cb44c3b9467c9870de9c5f567088ba8ef1bd2eb",
+      "publishedAt": "2026-09-07T12:31:23.523Z",
+      "publishedLabel": "Sep 7, 12:31 PM",
+      "thumbnail": "/thumbnails/SpFvNPyJ2Ww.png",
+      "thumbnailSha256": "d91b099e2d7d124746802fde39b8e3be851fd5300df999d81b46cee9fcb1b94d",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/y5ii0EiCkfY",
+      "youtubeUrl": "https://youtu.be/SpFvNPyJ2Ww",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "y5ii0EiCkfY",
-          "url": "https://youtu.be/y5ii0EiCkfY",
+          "videoId": "SpFvNPyJ2Ww",
+          "url": "https://youtu.be/SpFvNPyJ2Ww",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "3b91f8cea77cf8ce945863c73cb44c3b9467c9870de9c5f567088ba8ef1bd2eb",
+            "sha256": "d91b099e2d7d124746802fde39b8e3be851fd5300df999d81b46cee9fcb1b94d",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +97,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "3b91f8cea77cf8ce945863c73cb44c3b9467c9870de9c5f567088ba8ef1bd2eb",
+            "sha256": "d91b099e2d7d124746802fde39b8e3be851fd5300df999d81b46cee9fcb1b94d",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/y5ii0EiCkfY.png"
+            "path": "public/thumbnails/SpFvNPyJ2Ww.png"
           }
         },
         "linkedin": {
@@ -112,29 +112,29 @@
       }
     },
     {
-      "id": "joskL6Se4-o",
+      "id": "7bzF7wRWsmc",
       "title": "The Legend of Zelda 40th Anniversary Direct 9.8.2026 and Nintendo Direct 9.9.2026 - Ninten | NEWS-MONSTER",
       "description": "The Legend of Zelda 40th Anniversary Direct 9.8.2026 and Nintendo Direct 9.9.2026 - Ninten | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-07T11:55:18.850Z",
-      "publishedLabel": "Sep 7, 11:55 AM",
-      "thumbnail": "/thumbnails/joskL6Se4-o.png",
-      "thumbnailSha256": "abc9eed1a880cc11fd00fee34a14f58cb017c36c96f9c4878f694e0ac53121e3",
+      "publishedAt": "2026-09-07T12:26:49.084Z",
+      "publishedLabel": "Sep 7, 12:26 PM",
+      "thumbnail": "/thumbnails/7bzF7wRWsmc.png",
+      "thumbnailSha256": "492dd8c1b0ef11b5916d5df9d65fec252163210c4297ce98592cbf993faa0402",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/joskL6Se4-o",
+      "youtubeUrl": "https://youtu.be/7bzF7wRWsmc",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "joskL6Se4-o",
-          "url": "https://youtu.be/joskL6Se4-o",
+          "videoId": "7bzF7wRWsmc",
+          "url": "https://youtu.be/7bzF7wRWsmc",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "abc9eed1a880cc11fd00fee34a14f58cb017c36c96f9c4878f694e0ac53121e3",
+            "sha256": "492dd8c1b0ef11b5916d5df9d65fec252163210c4297ce98592cbf993faa0402",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -151,12 +151,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "abc9eed1a880cc11fd00fee34a14f58cb017c36c96f9c4878f694e0ac53121e3",
+            "sha256": "492dd8c1b0ef11b5916d5df9d65fec252163210c4297ce98592cbf993faa0402",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/joskL6Se4-o.png"
+            "path": "public/thumbnails/7bzF7wRWsmc.png"
           }
         },
         "linkedin": {
