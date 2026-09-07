@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-06T23:44:03.094Z",
+  "updatedAt": "2026-09-07T00:35:40.615Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "m4QL7_E8mik",
-      "title": "Trump turns up the heat on Warsh as Fed rate hike looms - CNBC | NEWS-MONSTER",
-      "description": "Trump turns up the heat on Warsh as Fed rate hike looms - CNBC | NEWS-MONSTER",
-      "category": "business",
-      "publishedAt": "2026-09-06T23:44:02.637Z",
-      "publishedLabel": "Sep 6, 11:44 PM",
-      "thumbnail": "/thumbnails/m4QL7_E8mik.png",
-      "thumbnailSha256": "6ca9a1514651b410de9969c80a5f70d582c1ff2c808823cd92f5f22e13689612",
+      "id": "OeW2iSu9ZUQ",
+      "title": "iPhone Handoff will seamlessly share one number between two phones - The Verge | NEWS-MONSTER",
+      "description": "iPhone Handoff will seamlessly share one number between two phones - The Verge | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-07T00:35:39.728Z",
+      "publishedLabel": "Sep 7, 12:35 AM",
+      "thumbnail": "/thumbnails/OeW2iSu9ZUQ.png",
+      "thumbnailSha256": "9d576cba506c53dc1e9f47a4dbc885d6759015d0738fa19a26ddea961b1eb71b",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/m4QL7_E8mik",
+      "youtubeUrl": "https://youtu.be/OeW2iSu9ZUQ",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "m4QL7_E8mik",
-          "url": "https://youtu.be/m4QL7_E8mik",
+          "videoId": "OeW2iSu9ZUQ",
+          "url": "https://youtu.be/OeW2iSu9ZUQ",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "6ca9a1514651b410de9969c80a5f70d582c1ff2c808823cd92f5f22e13689612",
+            "sha256": "9d576cba506c53dc1e9f47a4dbc885d6759015d0738fa19a26ddea961b1eb71b",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,66 +43,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "6ca9a1514651b410de9969c80a5f70d582c1ff2c808823cd92f5f22e13689612",
+            "sha256": "9d576cba506c53dc1e9f47a4dbc885d6759015d0738fa19a26ddea961b1eb71b",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/m4QL7_E8mik.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "bNQbgjdSUK8",
-      "title": "Experts Disagree On MTA | NEWS-MONSTER",
-      "description": "Experts Disagree On MTA | NEWS-MONSTER",
-      "category": "business",
-      "publishedAt": "2026-09-06T23:39:59.379Z",
-      "publishedLabel": "Sep 6, 11:39 PM",
-      "thumbnail": "/thumbnails/bNQbgjdSUK8.png",
-      "thumbnailSha256": "6e6ad7b139f44bff41d5b1da34d22780eddb636057a4e3a4ca48ae5d96d7c78d",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/bNQbgjdSUK8",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "bNQbgjdSUK8",
-          "url": "https://youtu.be/bNQbgjdSUK8",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "6e6ad7b139f44bff41d5b1da34d22780eddb636057a4e3a4ca48ae5d96d7c78d",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 5,
-          "thumbnail": {
-            "sha256": "6e6ad7b139f44bff41d5b1da34d22780eddb636057a4e3a4ca48ae5d96d7c78d",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/bNQbgjdSUK8.png"
+            "path": "public/thumbnails/OeW2iSu9ZUQ.png"
           }
         },
         "linkedin": {
