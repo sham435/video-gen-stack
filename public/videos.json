@@ -1,29 +1,29 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-07T06:35:54.197Z",
+  "updatedAt": "2026-09-07T06:50:15.211Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "zVXjYePjYao",
+      "id": "v7eX_fzkopY",
       "title": "Acer's tiny RTX Spark PC takes aim at Mac Studio with Blackwell and 128GB unified memory - | NEWS-MONSTER",
       "description": "Acer's tiny RTX Spark PC takes aim at Mac Studio with Blackwell and 128GB unified memory - | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-07T06:35:53.216Z",
-      "publishedLabel": "Sep 7, 06:35 AM",
-      "thumbnail": "/thumbnails/zVXjYePjYao.png",
+      "publishedAt": "2026-09-07T06:50:14.546Z",
+      "publishedLabel": "Sep 7, 06:50 AM",
+      "thumbnail": "/thumbnails/v7eX_fzkopY.png",
       "thumbnailSha256": "3c6c4ea64ef1bff5ba33ea8191a94856afd52a638d43d67edbc0fd67641f5231",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/zVXjYePjYao",
+      "youtubeUrl": "https://youtu.be/v7eX_fzkopY",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "zVXjYePjYao",
-          "url": "https://youtu.be/zVXjYePjYao",
+          "videoId": "v7eX_fzkopY",
+          "url": "https://youtu.be/v7eX_fzkopY",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "3c6c4ea64ef1bff5ba33ea8191a94856afd52a638d43d67edbc0fd67641f5231",
@@ -48,7 +48,7 @@
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/zVXjYePjYao.png"
+            "path": "public/thumbnails/v7eX_fzkopY.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "iveUdWtkYTA",
+      "id": "BYd60qi4E9g",
       "title": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
       "description": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-07T06:31:05.211Z",
-      "publishedLabel": "Sep 7, 06:31 AM",
-      "thumbnail": "/thumbnails/iveUdWtkYTA.png",
-      "thumbnailSha256": "c5bb341367b021722f030530abed047f300ca6a4afea63dcb7d7965b35894461",
+      "publishedAt": "2026-09-07T06:45:36.489Z",
+      "publishedLabel": "Sep 7, 06:45 AM",
+      "thumbnail": "/thumbnails/BYd60qi4E9g.png",
+      "thumbnailSha256": "830d8fac1cd4973dff03cc8caa3261599b219c8fa2c7ddcac75aa28f13f0fc94",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/iveUdWtkYTA",
+      "youtubeUrl": "https://youtu.be/BYd60qi4E9g",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "iveUdWtkYTA",
-          "url": "https://youtu.be/iveUdWtkYTA",
+          "videoId": "BYd60qi4E9g",
+          "url": "https://youtu.be/BYd60qi4E9g",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "c5bb341367b021722f030530abed047f300ca6a4afea63dcb7d7965b35894461",
+            "sha256": "830d8fac1cd4973dff03cc8caa3261599b219c8fa2c7ddcac75aa28f13f0fc94",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +97,12 @@
           "errors": [],
           "durationMs": 4,
           "thumbnail": {
-            "sha256": "c5bb341367b021722f030530abed047f300ca6a4afea63dcb7d7965b35894461",
+            "sha256": "830d8fac1cd4973dff03cc8caa3261599b219c8fa2c7ddcac75aa28f13f0fc94",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/iveUdWtkYTA.png"
+            "path": "public/thumbnails/BYd60qi4E9g.png"
           }
         },
         "linkedin": {
