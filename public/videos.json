@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-07T06:50:15.211Z",
+  "updatedAt": "2026-09-07T08:43:48.674Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "v7eX_fzkopY",
-      "title": "Acer's tiny RTX Spark PC takes aim at Mac Studio with Blackwell and 128GB unified memory - | NEWS-MONSTER",
-      "description": "Acer's tiny RTX Spark PC takes aim at Mac Studio with Blackwell and 128GB unified memory - | NEWS-MONSTER",
+      "id": "eHkcTh6mheA",
+      "title": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
+      "description": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-07T06:50:14.546Z",
-      "publishedLabel": "Sep 7, 06:50 AM",
-      "thumbnail": "/thumbnails/v7eX_fzkopY.png",
-      "thumbnailSha256": "3c6c4ea64ef1bff5ba33ea8191a94856afd52a638d43d67edbc0fd67641f5231",
+      "publishedAt": "2026-09-07T08:43:47.683Z",
+      "publishedLabel": "Sep 7, 08:43 AM",
+      "thumbnail": "/thumbnails/eHkcTh6mheA.png",
+      "thumbnailSha256": "a3698cc1c386a4acb5c63601b439c0fcede6bec9ae0a1512790ab1af7b8e4583",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/v7eX_fzkopY",
+      "youtubeUrl": "https://youtu.be/eHkcTh6mheA",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "v7eX_fzkopY",
-          "url": "https://youtu.be/v7eX_fzkopY",
+          "videoId": "eHkcTh6mheA",
+          "url": "https://youtu.be/eHkcTh6mheA",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "3c6c4ea64ef1bff5ba33ea8191a94856afd52a638d43d67edbc0fd67641f5231",
+            "sha256": "a3698cc1c386a4acb5c63601b439c0fcede6bec9ae0a1512790ab1af7b8e4583",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 4,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "3c6c4ea64ef1bff5ba33ea8191a94856afd52a638d43d67edbc0fd67641f5231",
+            "sha256": "a3698cc1c386a4acb5c63601b439c0fcede6bec9ae0a1512790ab1af7b8e4583",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/v7eX_fzkopY.png"
+            "path": "public/thumbnails/eHkcTh6mheA.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "BYd60qi4E9g",
-      "title": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
-      "description": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
+      "id": "Uy1Wn9qzJ1g",
+      "title": "How DLSS Changed Overnight | NEWS-MONSTER",
+      "description": "How DLSS Changed Overnight | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-07T06:45:36.489Z",
-      "publishedLabel": "Sep 7, 06:45 AM",
-      "thumbnail": "/thumbnails/BYd60qi4E9g.png",
-      "thumbnailSha256": "830d8fac1cd4973dff03cc8caa3261599b219c8fa2c7ddcac75aa28f13f0fc94",
+      "publishedAt": "2026-09-07T08:40:04.078Z",
+      "publishedLabel": "Sep 7, 08:40 AM",
+      "thumbnail": "/thumbnails/Uy1Wn9qzJ1g.png",
+      "thumbnailSha256": "55445ad504aa98869445af84a4bf7f658dc59b1d158d5a5cbf9ed6cca3404954",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/BYd60qi4E9g",
+      "youtubeUrl": "https://youtu.be/Uy1Wn9qzJ1g",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "BYd60qi4E9g",
-          "url": "https://youtu.be/BYd60qi4E9g",
+          "videoId": "Uy1Wn9qzJ1g",
+          "url": "https://youtu.be/Uy1Wn9qzJ1g",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "830d8fac1cd4973dff03cc8caa3261599b219c8fa2c7ddcac75aa28f13f0fc94",
+            "sha256": "55445ad504aa98869445af84a4bf7f658dc59b1d158d5a5cbf9ed6cca3404954",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +97,66 @@
           "errors": [],
           "durationMs": 4,
           "thumbnail": {
-            "sha256": "830d8fac1cd4973dff03cc8caa3261599b219c8fa2c7ddcac75aa28f13f0fc94",
+            "sha256": "55445ad504aa98869445af84a4bf7f658dc59b1d158d5a5cbf9ed6cca3404954",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/BYd60qi4E9g.png"
+            "path": "public/thumbnails/Uy1Wn9qzJ1g.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "JPOsKuc41cQ",
+      "title": "The Legend of Zelda 40th Anniversary Direct 9.8.2026 and Nintendo Direct 9.9.2026 - Ninten | NEWS-MONSTER",
+      "description": "The Legend of Zelda 40th Anniversary Direct 9.8.2026 and Nintendo Direct 9.9.2026 - Ninten | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-07T08:35:35.100Z",
+      "publishedLabel": "Sep 7, 08:35 AM",
+      "thumbnail": "/thumbnails/JPOsKuc41cQ.png",
+      "thumbnailSha256": "a3805c279629378642771eb84721d5af4762673aa931395195e7662d5513c63b",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/JPOsKuc41cQ",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "JPOsKuc41cQ",
+          "url": "https://youtu.be/JPOsKuc41cQ",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "a3805c279629378642771eb84721d5af4762673aa931395195e7662d5513c63b",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "a3805c279629378642771eb84721d5af4762673aa931395195e7662d5513c63b",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/JPOsKuc41cQ.png"
           }
         },
         "linkedin": {
