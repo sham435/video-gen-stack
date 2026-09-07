@@ -1,169 +1,217 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-07T12:35:23.013Z",
-  "source": "production-ledger",
+  "updatedAt": "2026-09-07T12:53:35.909Z",
+  "source": "youtube-rss",
   "videos": [
     {
       "id": "XoC--cRWqzc",
       "title": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
-      "description": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-07T12:35:21.820Z",
+      "publishedAt": "2026-09-07T12:35:32+00:00",
       "publishedLabel": "Sep 7, 12:35 PM",
       "thumbnail": "/thumbnails/XoC--cRWqzc.png",
-      "thumbnailSha256": "be3dfae55b5156e427e1310230f2f850067bc3a732fba532a010c73e5a5bbdf6",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/XoC--cRWqzc",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
       "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "XoC--cRWqzc",
-          "url": "https://youtu.be/XoC--cRWqzc",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "be3dfae55b5156e427e1310230f2f850067bc3a732fba532a010c73e5a5bbdf6",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "be3dfae55b5156e427e1310230f2f850067bc3a732fba532a010c73e5a5bbdf6",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/XoC--cRWqzc.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
       "id": "SpFvNPyJ2Ww",
       "title": "How DLSS Changed Overnight | NEWS-MONSTER",
-      "description": "How DLSS Changed Overnight | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-07T12:31:23.523Z",
+      "publishedAt": "2026-09-07T12:31:50+00:00",
       "publishedLabel": "Sep 7, 12:31 PM",
       "thumbnail": "/thumbnails/SpFvNPyJ2Ww.png",
-      "thumbnailSha256": "d91b099e2d7d124746802fde39b8e3be851fd5300df999d81b46cee9fcb1b94d",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/SpFvNPyJ2Ww",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
       "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "SpFvNPyJ2Ww",
-          "url": "https://youtu.be/SpFvNPyJ2Ww",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "d91b099e2d7d124746802fde39b8e3be851fd5300df999d81b46cee9fcb1b94d",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "d91b099e2d7d124746802fde39b8e3be851fd5300df999d81b46cee9fcb1b94d",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/SpFvNPyJ2Ww.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     },
     {
       "id": "7bzF7wRWsmc",
-      "title": "The Legend of Zelda 40th Anniversary Direct 9.8.2026 and Nintendo Direct 9.9.2026 - Ninten | NEWS-MONSTER",
-      "description": "The Legend of Zelda 40th Anniversary Direct 9.8.2026 and Nintendo Direct 9.9.2026 - Ninten | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-07T12:26:49.084Z",
-      "publishedLabel": "Sep 7, 12:26 PM",
+      "title": "The Legend of Zelda 40th Anniversary Direct 9.8.2026 and Nintendo Direct 9.9.2026 - Ninten | NEWS-MO",
+      "publishedAt": "2026-09-07T12:27:07+00:00",
+      "publishedLabel": "Sep 7, 12:27 PM",
       "thumbnail": "/thumbnails/7bzF7wRWsmc.png",
-      "thumbnailSha256": "492dd8c1b0ef11b5916d5df9d65fec252163210c4297ce98592cbf993faa0402",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/7bzF7wRWsmc",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
       "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "7bzF7wRWsmc",
-          "url": "https://youtu.be/7bzF7wRWsmc",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "492dd8c1b0ef11b5916d5df9d65fec252163210c4297ce98592cbf993faa0402",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "492dd8c1b0ef11b5916d5df9d65fec252163210c4297ce98592cbf993faa0402",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/7bzF7wRWsmc.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "7aBGAsAkXDQ",
+      "title": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
+      "publishedAt": "2026-09-07T12:02:41+00:00",
+      "publishedLabel": "Sep 7, 12:02 PM",
+      "thumbnail": "/thumbnails/7aBGAsAkXDQ.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "y5ii0EiCkfY",
+      "title": "How DLSS Changed Overnight | NEWS-MONSTER",
+      "publishedAt": "2026-09-07T11:59:20+00:00",
+      "publishedLabel": "Sep 7, 11:59 AM",
+      "thumbnail": "/thumbnails/y5ii0EiCkfY.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "joskL6Se4-o",
+      "title": "The Legend of Zelda 40th Anniversary Direct 9.8.2026 and Nintendo Direct 9.9.2026 - Ninten | NEWS-MO",
+      "publishedAt": "2026-09-07T11:55:28+00:00",
+      "publishedLabel": "Sep 7, 11:55 AM",
+      "thumbnail": "/thumbnails/joskL6Se4-o.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "sipshxrsEiA",
+      "title": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
+      "publishedAt": "2026-09-07T11:34:03+00:00",
+      "publishedLabel": "Sep 7, 11:34 AM",
+      "thumbnail": "/thumbnails/sipshxrsEiA.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "GHmhSGZ_fwQ",
+      "title": "How DLSS Changed Overnight | NEWS-MONSTER",
+      "publishedAt": "2026-09-07T11:30:19+00:00",
+      "publishedLabel": "Sep 7, 11:30 AM",
+      "thumbnail": "/thumbnails/GHmhSGZ_fwQ.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "uRfRtXMRzDY",
+      "title": "The Legend of Zelda 40th Anniversary Direct 9.8.2026 and Nintendo Direct 9.9.2026 - Ninten | NEWS-MO",
+      "publishedAt": "2026-09-07T11:25:40+00:00",
+      "publishedLabel": "Sep 7, 11:25 AM",
+      "thumbnail": "/thumbnails/uRfRtXMRzDY.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "eHkcTh6mheA",
+      "title": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
+      "publishedAt": "2026-09-07T08:43:53+00:00",
+      "publishedLabel": "Sep 7, 08:43 AM",
+      "thumbnail": "/thumbnails/eHkcTh6mheA.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "Uy1Wn9qzJ1g",
+      "title": "How DLSS Changed Overnight | NEWS-MONSTER",
+      "publishedAt": "2026-09-07T08:40:11+00:00",
+      "publishedLabel": "Sep 7, 08:40 AM",
+      "thumbnail": "/thumbnails/Uy1Wn9qzJ1g.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "JPOsKuc41cQ",
+      "title": "The Legend of Zelda 40th Anniversary Direct 9.8.2026 and Nintendo Direct 9.9.2026 - Ninten | NEWS-MO",
+      "publishedAt": "2026-09-07T08:35:43+00:00",
+      "publishedLabel": "Sep 7, 08:35 AM",
+      "thumbnail": "/thumbnails/JPOsKuc41cQ.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "v7eX_fzkopY",
+      "title": "Acer's tiny RTX Spark PC takes aim at Mac Studio with Blackwell and 128GB unified memory - | NEWS-MO",
+      "publishedAt": "2026-09-07T06:50:24+00:00",
+      "publishedLabel": "Sep 7, 06:50 AM",
+      "thumbnail": "/thumbnails/v7eX_fzkopY.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "BYd60qi4E9g",
+      "title": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
+      "publishedAt": "2026-09-07T06:45:56+00:00",
+      "publishedLabel": "Sep 7, 06:45 AM",
+      "thumbnail": "/thumbnails/BYd60qi4E9g.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
+    },
+    {
+      "id": "zVXjYePjYao",
+      "title": "Acer's tiny RTX Spark PC takes aim at Mac Studio with Blackwell and 128GB unified memory - | NEWS-MO",
+      "publishedAt": "2026-09-07T06:36:00+00:00",
+      "publishedLabel": "Sep 7, 06:36 AM",
+      "thumbnail": "/thumbnails/zVXjYePjYao.png",
+      "thumbnailSha256": null,
+      "thumbnailWidth": null,
+      "thumbnailHeight": null,
+      "thumbnailAspectRatio": null,
+      "verified": false,
+      "verificationState": "RSS_FALLBACK",
+      "thumbnailState": "UNKNOWN"
     }
   ]
 }
