@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-07T16:19:16.482Z",
+  "updatedAt": "2026-09-07T16:55:07.111Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "4J9sdlRqDa4",
+      "id": "_oxUalgW4KE",
       "title": "Apple iPhone 18 Pro Release Date Schedule: Your Complete September Countdown - Forbes | NEWS-MONSTER",
       "description": "Apple iPhone 18 Pro Release Date Schedule: Your Complete September Countdown - Forbes | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-07T16:19:15.305Z",
-      "publishedLabel": "Sep 7, 04:19 PM",
-      "thumbnail": "/thumbnails/4J9sdlRqDa4.png",
-      "thumbnailSha256": "7df18a5581f6cb9e3b8ce86d61313f00ab16290a8a9322c8dc7b177f000f091d",
+      "publishedAt": "2026-09-07T16:55:05.999Z",
+      "publishedLabel": "Sep 7, 04:55 PM",
+      "thumbnail": "/thumbnails/_oxUalgW4KE.png",
+      "thumbnailSha256": "5ed7a6320535a40516f7fbf36f18813ca51c16722df4ab6df90f938a082e2dd5",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/4J9sdlRqDa4",
+      "youtubeUrl": "https://youtu.be/_oxUalgW4KE",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "4J9sdlRqDa4",
-          "url": "https://youtu.be/4J9sdlRqDa4",
+          "videoId": "_oxUalgW4KE",
+          "url": "https://youtu.be/_oxUalgW4KE",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "7df18a5581f6cb9e3b8ce86d61313f00ab16290a8a9322c8dc7b177f000f091d",
+            "sha256": "5ed7a6320535a40516f7fbf36f18813ca51c16722df4ab6df90f938a082e2dd5",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "7df18a5581f6cb9e3b8ce86d61313f00ab16290a8a9322c8dc7b177f000f091d",
+            "sha256": "5ed7a6320535a40516f7fbf36f18813ca51c16722df4ab6df90f938a082e2dd5",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/4J9sdlRqDa4.png"
+            "path": "public/thumbnails/_oxUalgW4KE.png"
           }
         },
         "linkedin": {
