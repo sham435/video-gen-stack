@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-07T13:36:28.581Z",
+  "updatedAt": "2026-09-07T15:17:32.218Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "Cw-exDgnk4g",
-      "title": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
-      "description": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
+      "id": "93tjDXDPxTk",
+      "title": "Apple iPhone 18 Pro Release Date Schedule: Your Complete September Countdown - Forbes | NEWS-MONSTER",
+      "description": "Apple iPhone 18 Pro Release Date Schedule: Your Complete September Countdown - Forbes | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-07T13:36:28.030Z",
-      "publishedLabel": "Sep 7, 01:36 PM",
-      "thumbnail": "/thumbnails/Cw-exDgnk4g.png",
-      "thumbnailSha256": "f4f9a5b7092d33f722fad8af37f70d1314fe03a9e768495f7c8fd335bb0c2d15",
+      "publishedAt": "2026-09-07T15:17:31.020Z",
+      "publishedLabel": "Sep 7, 03:17 PM",
+      "thumbnail": "/thumbnails/93tjDXDPxTk.png",
+      "thumbnailSha256": "c1ef45c6c1a53fbaf995c66da24a16ceb2e5d1b2ac2c1fca95a549d4b03e5df3",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/Cw-exDgnk4g",
+      "youtubeUrl": "https://youtu.be/93tjDXDPxTk",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "Cw-exDgnk4g",
-          "url": "https://youtu.be/Cw-exDgnk4g",
+          "videoId": "93tjDXDPxTk",
+          "url": "https://youtu.be/93tjDXDPxTk",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "f4f9a5b7092d33f722fad8af37f70d1314fe03a9e768495f7c8fd335bb0c2d15",
+            "sha256": "c1ef45c6c1a53fbaf995c66da24a16ceb2e5d1b2ac2c1fca95a549d4b03e5df3",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,120 +43,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "f4f9a5b7092d33f722fad8af37f70d1314fe03a9e768495f7c8fd335bb0c2d15",
+            "sha256": "c1ef45c6c1a53fbaf995c66da24a16ceb2e5d1b2ac2c1fca95a549d4b03e5df3",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/Cw-exDgnk4g.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "u_7QXqntVGY",
-      "title": "How DLSS Changed Overnight | NEWS-MONSTER",
-      "description": "How DLSS Changed Overnight | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-07T13:32:12.599Z",
-      "publishedLabel": "Sep 7, 01:32 PM",
-      "thumbnail": "/thumbnails/u_7QXqntVGY.png",
-      "thumbnailSha256": "2f92871eaa2e1fad66c3ab3454d72634cc6fd02295a9eb048203c5c070947946",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/u_7QXqntVGY",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "u_7QXqntVGY",
-          "url": "https://youtu.be/u_7QXqntVGY",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "2f92871eaa2e1fad66c3ab3454d72634cc6fd02295a9eb048203c5c070947946",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "2f92871eaa2e1fad66c3ab3454d72634cc6fd02295a9eb048203c5c070947946",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/u_7QXqntVGY.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "eYYXHdwjGXA",
-      "title": "The Legend of Zelda 40th Anniversary Direct 9.8.2026 and Nintendo Direct 9.9.2026 - Ninten | NEWS-MONSTER",
-      "description": "The Legend of Zelda 40th Anniversary Direct 9.8.2026 and Nintendo Direct 9.9.2026 - Ninten | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-07T13:27:14.715Z",
-      "publishedLabel": "Sep 7, 01:27 PM",
-      "thumbnail": "/thumbnails/eYYXHdwjGXA.png",
-      "thumbnailSha256": "d0f6a103f3b207cd34c2738233fde45414597e87fd757bc3dd5fa3e57be1d5a5",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/eYYXHdwjGXA",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "eYYXHdwjGXA",
-          "url": "https://youtu.be/eYYXHdwjGXA",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "d0f6a103f3b207cd34c2738233fde45414597e87fd757bc3dd5fa3e57be1d5a5",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "d0f6a103f3b207cd34c2738233fde45414597e87fd757bc3dd5fa3e57be1d5a5",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/eYYXHdwjGXA.png"
+            "path": "public/thumbnails/93tjDXDPxTk.png"
           }
         },
         "linkedin": {
