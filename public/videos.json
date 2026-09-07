@@ -1,217 +1,169 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-07T12:53:35.909Z",
-  "source": "youtube-rss",
+  "updatedAt": "2026-09-07T13:12:03.417Z",
+  "source": "production-ledger",
   "videos": [
     {
-      "id": "XoC--cRWqzc",
-      "title": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
-      "publishedAt": "2026-09-07T12:35:32+00:00",
-      "publishedLabel": "Sep 7, 12:35 PM",
-      "thumbnail": "/thumbnails/XoC--cRWqzc.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
+      "id": "VrX-NwjHE1E",
+      "title": "Elon Musk's Inner Circle Pours Millions Into Psychedelics As MDMA Therapy Push Gains Momen | NEWS-MONSTER",
+      "description": "Elon Musk's Inner Circle Pours Millions Into Psychedelics As MDMA Therapy Push Gains Momen | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-07T13:12:02.905Z",
+      "publishedLabel": "Sep 7, 01:12 PM",
+      "thumbnail": "/thumbnails/VrX-NwjHE1E.png",
+      "thumbnailSha256": "1b1dc75262e708aece1a0581ca6f5217444799d81987ab0224be73c39813e6aa",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/VrX-NwjHE1E",
       "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "VrX-NwjHE1E",
+          "url": "https://youtu.be/VrX-NwjHE1E",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "1b1dc75262e708aece1a0581ca6f5217444799d81987ab0224be73c39813e6aa",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "1b1dc75262e708aece1a0581ca6f5217444799d81987ab0224be73c39813e6aa",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/VrX-NwjHE1E.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
     },
     {
-      "id": "SpFvNPyJ2Ww",
-      "title": "How DLSS Changed Overnight | NEWS-MONSTER",
-      "publishedAt": "2026-09-07T12:31:50+00:00",
-      "publishedLabel": "Sep 7, 12:31 PM",
-      "thumbnail": "/thumbnails/SpFvNPyJ2Ww.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
+      "id": "uN02cNfeV7w",
+      "title": "Experts Disagree On USD | NEWS-MONSTER",
+      "description": "Experts Disagree On USD | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-07T13:07:11.362Z",
+      "publishedLabel": "Sep 7, 01:07 PM",
+      "thumbnail": "/thumbnails/uN02cNfeV7w.png",
+      "thumbnailSha256": "afea12a1a93599e4d13ad0af3ff7d62cbee71205c8e1f1b059883bb1ee32bf9b",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/uN02cNfeV7w",
       "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "uN02cNfeV7w",
+          "url": "https://youtu.be/uN02cNfeV7w",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "afea12a1a93599e4d13ad0af3ff7d62cbee71205c8e1f1b059883bb1ee32bf9b",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 3,
+          "thumbnail": {
+            "sha256": "afea12a1a93599e4d13ad0af3ff7d62cbee71205c8e1f1b059883bb1ee32bf9b",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/uN02cNfeV7w.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
     },
     {
-      "id": "7bzF7wRWsmc",
-      "title": "The Legend of Zelda 40th Anniversary Direct 9.8.2026 and Nintendo Direct 9.9.2026 - Ninten | NEWS-MO",
-      "publishedAt": "2026-09-07T12:27:07+00:00",
-      "publishedLabel": "Sep 7, 12:27 PM",
-      "thumbnail": "/thumbnails/7bzF7wRWsmc.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
+      "id": "ifVrHlaSIu8",
+      "title": "Uber put $100m into the company that hired Anthony Levandowski | NEWS-MONSTER",
+      "description": "Uber put $100m into the company that hired Anthony Levandowski | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-07T13:02:09.290Z",
+      "publishedLabel": "Sep 7, 01:02 PM",
+      "thumbnail": "/thumbnails/ifVrHlaSIu8.png",
+      "thumbnailSha256": "8556f71a83dec4bdc55d4533b0957b84b06bb908c85fe14f6fc6859cea28abf8",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/ifVrHlaSIu8",
       "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "7aBGAsAkXDQ",
-      "title": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
-      "publishedAt": "2026-09-07T12:02:41+00:00",
-      "publishedLabel": "Sep 7, 12:02 PM",
-      "thumbnail": "/thumbnails/7aBGAsAkXDQ.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "y5ii0EiCkfY",
-      "title": "How DLSS Changed Overnight | NEWS-MONSTER",
-      "publishedAt": "2026-09-07T11:59:20+00:00",
-      "publishedLabel": "Sep 7, 11:59 AM",
-      "thumbnail": "/thumbnails/y5ii0EiCkfY.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "joskL6Se4-o",
-      "title": "The Legend of Zelda 40th Anniversary Direct 9.8.2026 and Nintendo Direct 9.9.2026 - Ninten | NEWS-MO",
-      "publishedAt": "2026-09-07T11:55:28+00:00",
-      "publishedLabel": "Sep 7, 11:55 AM",
-      "thumbnail": "/thumbnails/joskL6Se4-o.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "sipshxrsEiA",
-      "title": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
-      "publishedAt": "2026-09-07T11:34:03+00:00",
-      "publishedLabel": "Sep 7, 11:34 AM",
-      "thumbnail": "/thumbnails/sipshxrsEiA.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "GHmhSGZ_fwQ",
-      "title": "How DLSS Changed Overnight | NEWS-MONSTER",
-      "publishedAt": "2026-09-07T11:30:19+00:00",
-      "publishedLabel": "Sep 7, 11:30 AM",
-      "thumbnail": "/thumbnails/GHmhSGZ_fwQ.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "uRfRtXMRzDY",
-      "title": "The Legend of Zelda 40th Anniversary Direct 9.8.2026 and Nintendo Direct 9.9.2026 - Ninten | NEWS-MO",
-      "publishedAt": "2026-09-07T11:25:40+00:00",
-      "publishedLabel": "Sep 7, 11:25 AM",
-      "thumbnail": "/thumbnails/uRfRtXMRzDY.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "eHkcTh6mheA",
-      "title": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
-      "publishedAt": "2026-09-07T08:43:53+00:00",
-      "publishedLabel": "Sep 7, 08:43 AM",
-      "thumbnail": "/thumbnails/eHkcTh6mheA.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "Uy1Wn9qzJ1g",
-      "title": "How DLSS Changed Overnight | NEWS-MONSTER",
-      "publishedAt": "2026-09-07T08:40:11+00:00",
-      "publishedLabel": "Sep 7, 08:40 AM",
-      "thumbnail": "/thumbnails/Uy1Wn9qzJ1g.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "JPOsKuc41cQ",
-      "title": "The Legend of Zelda 40th Anniversary Direct 9.8.2026 and Nintendo Direct 9.9.2026 - Ninten | NEWS-MO",
-      "publishedAt": "2026-09-07T08:35:43+00:00",
-      "publishedLabel": "Sep 7, 08:35 AM",
-      "thumbnail": "/thumbnails/JPOsKuc41cQ.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "v7eX_fzkopY",
-      "title": "Acer's tiny RTX Spark PC takes aim at Mac Studio with Blackwell and 128GB unified memory - | NEWS-MO",
-      "publishedAt": "2026-09-07T06:50:24+00:00",
-      "publishedLabel": "Sep 7, 06:50 AM",
-      "thumbnail": "/thumbnails/v7eX_fzkopY.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "BYd60qi4E9g",
-      "title": "Walmart is selling a 2-in-1 laptop and tablet for just $75 - thestreet.com | NEWS-MONSTER",
-      "publishedAt": "2026-09-07T06:45:56+00:00",
-      "publishedLabel": "Sep 7, 06:45 AM",
-      "thumbnail": "/thumbnails/BYd60qi4E9g.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "zVXjYePjYao",
-      "title": "Acer's tiny RTX Spark PC takes aim at Mac Studio with Blackwell and 128GB unified memory - | NEWS-MO",
-      "publishedAt": "2026-09-07T06:36:00+00:00",
-      "publishedLabel": "Sep 7, 06:36 AM",
-      "thumbnail": "/thumbnails/zVXjYePjYao.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "ifVrHlaSIu8",
+          "url": "https://youtu.be/ifVrHlaSIu8",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "8556f71a83dec4bdc55d4533b0957b84b06bb908c85fe14f6fc6859cea28abf8",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "8556f71a83dec4bdc55d4533b0957b84b06bb908c85fe14f6fc6859cea28abf8",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/ifVrHlaSIu8.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
     }
   ]
 }
