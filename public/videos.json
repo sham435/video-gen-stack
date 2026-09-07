@@ -1,29 +1,29 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-07T17:24:32.523Z",
+  "updatedAt": "2026-09-07T17:54:36.375Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "whzaO4wYayQ",
+      "id": "PC4HoLl7698",
       "title": "Apple iPhone 18 Pro Release Date Schedule: Your Complete September Countdown - Forbes | NEWS-MONSTER",
       "description": "Apple iPhone 18 Pro Release Date Schedule: Your Complete September Countdown - Forbes | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-07T17:24:31.527Z",
-      "publishedLabel": "Sep 7, 05:24 PM",
-      "thumbnail": "/thumbnails/whzaO4wYayQ.png",
+      "publishedAt": "2026-09-07T17:54:35.542Z",
+      "publishedLabel": "Sep 7, 05:54 PM",
+      "thumbnail": "/thumbnails/PC4HoLl7698.png",
       "thumbnailSha256": "a6f7d04780ca6d0cf0f156d0c0a6faa81196d898735d387d8bd3614821dab574",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/whzaO4wYayQ",
+      "youtubeUrl": "https://youtu.be/PC4HoLl7698",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "whzaO4wYayQ",
-          "url": "https://youtu.be/whzaO4wYayQ",
+          "videoId": "PC4HoLl7698",
+          "url": "https://youtu.be/PC4HoLl7698",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "a6f7d04780ca6d0cf0f156d0c0a6faa81196d898735d387d8bd3614821dab574",
@@ -48,7 +48,7 @@
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/whzaO4wYayQ.png"
+            "path": "public/thumbnails/PC4HoLl7698.png"
           }
         },
         "linkedin": {
