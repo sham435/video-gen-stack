@@ -1,86 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-08T14:25:12.165Z",
+  "updatedAt": "2026-09-08T14:57:29.161Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "dJDIoZPisO0",
+      "id": "45ngre1-lig",
       "title": "iPhone 18 Pro: Nine Reasons Not to Upgrade This Year - macrumors.com | NEWS-MONSTER",
       "description": "iPhone 18 Pro: Nine Reasons Not to Upgrade This Year - macrumors.com | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T14:25:11.360Z",
-      "publishedLabel": "Sep 8, 02:25 PM",
-      "thumbnail": "/thumbnails/dJDIoZPisO0.png",
-      "thumbnailSha256": "8a1f08195cdd7fe36934a68bcdc0dea1c1f80cdc2797209b58f01aec060ffd4d",
+      "publishedAt": "2026-09-08T14:57:27.947Z",
+      "publishedLabel": "Sep 8, 02:57 PM",
+      "thumbnail": "/thumbnails/45ngre1-lig.png",
+      "thumbnailSha256": "f6f79db560cc6ba213d2da2454d0f5ac672f513e7e299c653e737fb15e21d0e7",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/dJDIoZPisO0",
+      "youtubeUrl": "https://youtu.be/45ngre1-lig",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "dJDIoZPisO0",
-          "url": "https://youtu.be/dJDIoZPisO0",
+          "videoId": "45ngre1-lig",
+          "url": "https://youtu.be/45ngre1-lig",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "8a1f08195cdd7fe36934a68bcdc0dea1c1f80cdc2797209b58f01aec060ffd4d",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "8a1f08195cdd7fe36934a68bcdc0dea1c1f80cdc2797209b58f01aec060ffd4d",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/dJDIoZPisO0.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "Y759lTp0O2M",
-      "title": "Three new iPhones launch this week, here’s what’s coming - 9to5Mac | NEWS-MONSTER",
-      "description": "Three new iPhones launch this week, here’s what’s coming - 9to5Mac | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-08T14:21:26.386Z",
-      "publishedLabel": "Sep 8, 02:21 PM",
-      "thumbnail": "/thumbnails/Y759lTp0O2M.png",
-      "thumbnailSha256": "968b8b7db778a7048c693d83fb87c5e4b1a8dd4c4c92993a1109933a4ad49a43",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/Y759lTp0O2M",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "Y759lTp0O2M",
-          "url": "https://youtu.be/Y759lTp0O2M",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "968b8b7db778a7048c693d83fb87c5e4b1a8dd4c4c92993a1109933a4ad49a43",
+            "sha256": "f6f79db560cc6ba213d2da2454d0f5ac672f513e7e299c653e737fb15e21d0e7",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +43,66 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "968b8b7db778a7048c693d83fb87c5e4b1a8dd4c4c92993a1109933a4ad49a43",
+            "sha256": "f6f79db560cc6ba213d2da2454d0f5ac672f513e7e299c653e737fb15e21d0e7",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/Y759lTp0O2M.png"
+            "path": "public/thumbnails/45ngre1-lig.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "bUz0BSgXItM",
+      "title": "Three new iPhones launch this week, here’s what’s coming - 9to5Mac | NEWS-MONSTER",
+      "description": "Three new iPhones launch this week, here’s what’s coming - 9to5Mac | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-08T14:53:11.965Z",
+      "publishedLabel": "Sep 8, 02:53 PM",
+      "thumbnail": "/thumbnails/bUz0BSgXItM.png",
+      "thumbnailSha256": "b5e7716675c25510d180c0ffc1e1f41150b65c9a2c39ec813fe2f9028bfcc01c",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/bUz0BSgXItM",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "bUz0BSgXItM",
+          "url": "https://youtu.be/bUz0BSgXItM",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "b5e7716675c25510d180c0ffc1e1f41150b65c9a2c39ec813fe2f9028bfcc01c",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 3,
+          "thumbnail": {
+            "sha256": "b5e7716675c25510d180c0ffc1e1f41150b65c9a2c39ec813fe2f9028bfcc01c",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/bUz0BSgXItM.png"
           }
         },
         "linkedin": {
