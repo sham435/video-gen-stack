@@ -35,6 +35,13 @@ export const SCRIPT_UNIQUENESS_POLICY = Object.freeze({
   rollingWindow: 50,
 })
 
+// Scene-level similarity bar for within-video narration checks. The 0.55
+// policy above is calibrated for FULL script comparison (long text, many
+// tokens); at 1-2 sentence scene granularity it false-positives on
+// legitimately similar beats ("Apple unveils new chip" vs "Apple faces chip
+// shortage" ≈ 0.66). Reject only exact matches and near-repeats ≥ 0.85.
+export const NARRATION_SCENE_SIMILARITY_MAX = 0.85
+
 export class ScriptUniqueness {
   constructor(registry, opts = {}) {
     this.registry = registry
@@ -145,13 +152,14 @@ export class ScriptUniqueness {
     return hash
   }
 
-  // ── Internal helpers ──────────────────────────────────────────────
+  // ── Statics: scene-level narration checks (no registry required) ──
+  //
+  // Used by the engine BEFORE TTS (index.mjs pre-voice hard gate) and by
+  // StoryDirector's duplicate-detection/regeneration pass. Stateless — the
+  // within-video question is "does this scene repeat another scene in the
+  // SAME script", which needs no history registry.
 
-  _hash(text) {
-    return crypto.createHash('sha256').update(text || '').digest('hex').slice(0, 16)
-  }
-
-  _normalize(text) {
+  static _norm(text) {
     return (text || '')
       .toLowerCase()
       .replace(/[^\w\s]/g, ' ')     // remove punctuation
@@ -159,8 +167,90 @@ export class ScriptUniqueness {
       .trim()
   }
 
-  _tokenize(normalizedText) {
+  static _tok(normalizedText) {
     return normalizedText.split(' ').filter(w => w.length > 1 && !STOP_WORDS.has(w))
+  }
+
+  static _weighted(tokensA, tokensB) {
+    const a = new Map()
+    for (const t of tokensA) a.set(t, (a.get(t) || 0) + 1)
+    const b = new Map()
+    for (const t of tokensB) b.set(t, (b.get(t) || 0) + 1)
+    let intersection = 0
+    for (const [t, countA] of a) {
+      const countB = b.get(t) || 0
+      intersection += Math.min(countA, countB)
+    }
+    const minTotal = Math.min(tokensA.length, tokensB.length)
+    return minTotal === 0 ? 0 : intersection / minTotal
+  }
+
+  /**
+   * Similarity between two narration segments (1-2 sentences each).
+   * Exact-normalized == 1.0; otherwise weighted overlap on significant
+   * tokens. Uses the scene-level bar (0.85) — NOT the full-script policy
+   * (0.55) which false-positives at this granularity.
+   */
+  static _segmentSimilarity(a, b) {
+    const na = ScriptUniqueness._norm(a)
+    const nb = ScriptUniqueness._norm(b)
+    if (na === nb) return 1.0
+    if (!na || !nb) return 0
+    const ta = ScriptUniqueness._tok(na)
+    const tb = ScriptUniqueness._tok(nb)
+    if (!ta.length || !tb.length) return 0
+    return ScriptUniqueness._weighted(ta, tb)
+  }
+
+  /**
+   * Find duplicate narration segments within a list of scene narrations.
+   * Pairs with similarity >= threshold (default NARRATION_SCENE_SIMILARITY_MAX).
+   *
+   * @returns {{ pass: boolean, duplicates: Array<{a:number, b:number, similarity:number}> }}
+   */
+  static findDuplicateSegments(texts, opts = {}) {
+    const threshold = opts.threshold ?? NARRATION_SCENE_SIMILARITY_MAX
+    const clean = (texts || []).map(t => (t || '').trim())
+    const duplicates = []
+    for (let i = 0; i < clean.length; i++) {
+      if (!clean[i]) continue
+      for (let j = i + 1; j < clean.length; j++) {
+        if (!clean[j]) continue
+        const similarity = ScriptUniqueness._segmentSimilarity(clean[i], clean[j])
+        if (similarity >= threshold) duplicates.push({ a: i, b: j, similarity })
+      }
+    }
+    return { pass: duplicates.length === 0, duplicates }
+  }
+
+  /**
+   * Hard-gate form of the within-video check (used pre-TTS in the engine).
+   * @returns {{ pass: boolean, duplicates: Array<{a,b,similarity}>, reason?: string }}
+   */
+  static validateWithinVideo(texts, opts = {}) {
+    const res = ScriptUniqueness.findDuplicateSegments(texts, opts)
+    if (res.pass) return { pass: true, duplicates: [] }
+    return {
+      pass: false,
+      duplicates: res.duplicates,
+      reason: `NARRATION_DUPLICATE_WITHIN_VIDEO: scenes ${res.duplicates
+        .map(d => `${d.a + 1}~${d.b + 1} (${d.similarity.toFixed(2)})`)
+        .join(', ')} repeat narration`,
+    }
+  }
+
+  // ── Internal helpers ──────────────────────────────────────────────
+
+  _hash(text) {
+    return crypto.createHash('sha256').update(text || '').digest('hex').slice(0, 16)
+  }
+
+  _normalize(text) {
+    return ScriptUniqueness._norm(text)
+  }
+
+  _tokenize(normalizedText) {
+    return ScriptUniqueness._tok(normalizedText)
   }
 
   _bigrams(tokens) {
@@ -177,20 +267,7 @@ export class ScriptUniqueness {
    * for detecting near-duplicates where sentences share key terms.
    */
   _weightedOverlap(tokensA, tokensB) {
-    const a = new Map()
-    for (const t of tokensA) a.set(t, (a.get(t) || 0) + 1)
-    const b = new Map()
-    for (const t of tokensB) b.set(t, (b.get(t) || 0) + 1)
-
-    let intersection = 0
-    for (const [t, countA] of a) {
-      const countB = b.get(t) || 0
-      intersection += Math.min(countA, countB)
-    }
-    const totalA = tokensA.length
-    const totalB = tokensB.length
-    const minTotal = Math.min(totalA, totalB)
-    return minTotal === 0 ? 0 : intersection / minTotal
+    return ScriptUniqueness._weighted(tokensA, tokensB)
   }
 
   _bigramOverlap(bigramsA, bigramsB) {
