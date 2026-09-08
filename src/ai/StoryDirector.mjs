@@ -4,6 +4,7 @@ import { TopicCtaBuilder } from '../publishing/TopicCtaBuilder.mjs'
 import { brandOutroScene, BRAND_OUTRO } from '../publishing/BrandOutro.mjs'
 import { parseStructured } from './parseStructured.mjs'
 import { RepoContextReader } from './RepoContextReader.mjs'
+import { ScriptUniqueness } from '../uniqueness/ScriptUniqueness.mjs'
 
 const HOOK_STRATEGIES = ['mystery', 'shock', 'question', 'stat']
 const SCENE_TYPES = ['hook', 'fact', 'reveal', 'explanation', 'reaction', 'close']
@@ -31,8 +32,26 @@ export class StoryDirector {
     const targetFormat = 'youtube_video'
     this.lastAlgorithm = pickAlgorithm({ title: article.title || '', category: article.category })
     const messages = this.buildPrompt(article, targetFormat)
-    const story = await this.queryLLM(messages, article)
-    return this.validate(story, article, targetFormat)
+    let story = await this.queryLLM(messages, article)
+    story = this.validate(story, article, targetFormat)
+    // NARRATION-DEDUP: the LLM sometimes mirrors the description verbatim
+    // into more than one scene; the downstream buildNarrationScript join then
+    // repeats the line on the voice track. When a provider-fed plan carries
+    // duplicate narration, ask the LLM once to fix it. If regeneration fails
+    // or still duplicates, fall back to the deterministic template (unique
+    // narration by construction) — never ship a repeated line.
+    if (this.provider && !this._lastUsedFallback) {
+      const dup = ScriptUniqueness.findDuplicateSegments((story.scenePlan || []).map(s => s.narration))
+      if (!dup.pass) {
+        const fixed = await this._regenerateDedup(messages, dup)
+        if (fixed && Array.isArray(fixed.scenePlan) && fixed.scenePlan.length >= 2) {
+          story = this.validate(fixed, article, targetFormat)
+        } else {
+          story = this.validate(this.fallbackPlan(article), article, targetFormat)
+        }
+      }
+    }
+    return story
   }
 
   // The last scene is ALWAYS the fixed brand outro — the LLM is told not to
@@ -223,6 +242,7 @@ Rules:
 - Total duration: 30-40 seconds for the 16:9 YouTube video
 - emotionalArc: 3-5 emotions that define the story's emotional journey
 - Each scene must have a distinct purpose
+- Each scene's narration must be UNIQUE — never repeat the same narration text across scenes
 - Hook scene must use hookStrategy for its narration
 - Visual subject describes what to show (concise)
 - Camera motion must match the emotional intensity
@@ -248,7 +268,7 @@ Target Format: youtube_video`
         const raw = await this.provider.generate(messages, { json: true })
         // JSON-001: structured gate — fence-strip, parse, validate, retry once
         // with a correction request, THEN hand the validated plan to validate().
-        return await parseStructured(raw, {
+        const parsed = await parseStructured(raw, {
           schema: STORY_SCHEMA,
           attempts: 1,
           generate: async (prompt, opts) => {
@@ -257,9 +277,39 @@ Target Format: youtube_video`
           },
           correct: (detail) => `Your previous JSON response was invalid. Fix these issues and return ONLY valid JSON: ${detail.errors ? detail.errors.join('; ') : detail.raw || 'invalid structure'}`,
         })
+        this._lastUsedFallback = false
+        return parsed
       } catch (e) { console.log('StoryDirector LLM error:', e.message) }
     }
+    this._lastUsedFallback = true
     return this.fallbackPlan(article)
+  }
+
+  /**
+   * One bounded LLM correction pass for a plan whose scene narrations repeat.
+   * Bounded: initial plan (queryLLM) + this fix = 2 total LLM calls, matching
+   * parseStructured's retry-once semantics. Returns null on any failure so
+   * callers can fall back to the deterministic template.
+   */
+  async _regenerateDedup(messages, dup) {
+    try {
+      const fixPrompt = `Your previous scenePlan had duplicate narration across scenes:
+${dup.duplicates.map(d => `  - scene ${d.a + 1} and scene ${d.b + 1} (similarity ${d.similarity.toFixed(2)})`).join('\n')}
+Rewrite EVERY scene's narration so all narrations are UNIQUE (rephrase the repeats, keep each 1-2 sentences, keep the exact same JSON schema). Return ONLY valid JSON.`
+      const raw = await this.provider.generate([...messages, { role: 'user', content: fixPrompt }], { json: true })
+      return parseStructured(raw, {
+        schema: STORY_SCHEMA,
+        attempts: 0,
+        generate: async (prompt, opts) => {
+          const retry = await this.provider.generate([{ role: 'user', content: prompt }], { json: true, ...opts })
+          return retry
+        },
+        correct: (detail) => `Your previous JSON response was invalid. Fix these issues and return ONLY valid JSON: ${detail.errors ? detail.errors.join('; ') : detail.raw || 'invalid structure'}`,
+      })
+    } catch (e) {
+      console.log('StoryDirector dup-regenerate error:', e.message)
+      return null
+    }
   }
 
   fallbackPlan(article) {
