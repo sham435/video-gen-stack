@@ -172,7 +172,7 @@ jobs:
             # of the push.
             for attempt in 1 2 3; do
               git fetch origin main
-              git reset --soft origin/main
+              git reset --mixed origin/main
               git commit -m "chore: refresh landing page video feed" || true
               if git push origin main 2>/tmp/push.err; then
                 echo "Pushed on attempt $attempt"
