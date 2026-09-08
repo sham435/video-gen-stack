@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-08T04:00:46.662Z",
+  "updatedAt": "2026-09-08T08:28:09.213Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "X-qjjBepge8",
-      "title": "„Gut gemacht!“: Elon Musk gratuliert AfD zum Wahlsieg in Sachsen-Anhalt | NEWS-MONSTER",
-      "description": "„Gut gemacht!“: Elon Musk gratuliert AfD zum Wahlsieg in Sachsen-Anhalt | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-09-08T04:00:45.958Z",
-      "publishedLabel": "Sep 8, 04:00 AM",
-      "thumbnail": "/thumbnails/X-qjjBepge8.png",
-      "thumbnailSha256": "b3be2d15cd0ad3f5971e62075dfcea6e5fae3d46f3257d45e6753703f8878a7a",
+      "id": "_5_hFhKcNTw",
+      "title": "[UPDATE] Halloween: The Game Patches Out Sex Minigame — Dev Confirms 'Major Oversight' - i | NEWS-MONSTER",
+      "description": "[UPDATE] Halloween: The Game Patches Out Sex Minigame — Dev Confirms 'Major Oversight' - i | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-08T08:28:08.057Z",
+      "publishedLabel": "Sep 8, 08:28 AM",
+      "thumbnail": "/thumbnails/_5_hFhKcNTw.png",
+      "thumbnailSha256": "e00fecff5cce702d469aa29990a0c025a3d546aa2fd922e5e20cc3ee623ae202",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/X-qjjBepge8",
+      "youtubeUrl": "https://youtu.be/_5_hFhKcNTw",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "X-qjjBepge8",
-          "url": "https://youtu.be/X-qjjBepge8",
+          "videoId": "_5_hFhKcNTw",
+          "url": "https://youtu.be/_5_hFhKcNTw",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "b3be2d15cd0ad3f5971e62075dfcea6e5fae3d46f3257d45e6753703f8878a7a",
+            "sha256": "e00fecff5cce702d469aa29990a0c025a3d546aa2fd922e5e20cc3ee623ae202",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +43,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "b3be2d15cd0ad3f5971e62075dfcea6e5fae3d46f3257d45e6753703f8878a7a",
+            "sha256": "e00fecff5cce702d469aa29990a0c025a3d546aa2fd922e5e20cc3ee623ae202",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/X-qjjBepge8.png"
+            "path": "public/thumbnails/_5_hFhKcNTw.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "Go3X8Hvztag",
-      "title": "Tvrdá data z půl milionu baterií: Jak je na tom Enyaq, Tesla nebo VW po 150 000 km | NEWS-MONSTER",
-      "description": "Tvrdá data z půl milionu baterií: Jak je na tom Enyaq, Tesla nebo VW po 150 000 km | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-09-08T03:56:37.998Z",
-      "publishedLabel": "Sep 8, 03:56 AM",
-      "thumbnail": "/thumbnails/Go3X8Hvztag.png",
-      "thumbnailSha256": "9382207dcec531932f4cdd27153522cd04ea0b2208f48a05e8a1319de6a43ddc",
+      "id": "GHH1hE0iz8k",
+      "title": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MONSTER",
+      "description": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-08T08:24:12.066Z",
+      "publishedLabel": "Sep 8, 08:24 AM",
+      "thumbnail": "/thumbnails/GHH1hE0iz8k.png",
+      "thumbnailSha256": "3f7ef65c8136e3592359fc9e12425bbc755139a458955be46b1552b27c947009",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/Go3X8Hvztag",
+      "youtubeUrl": "https://youtu.be/GHH1hE0iz8k",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "Go3X8Hvztag",
-          "url": "https://youtu.be/Go3X8Hvztag",
+          "videoId": "GHH1hE0iz8k",
+          "url": "https://youtu.be/GHH1hE0iz8k",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "9382207dcec531932f4cdd27153522cd04ea0b2208f48a05e8a1319de6a43ddc",
+            "sha256": "3f7ef65c8136e3592359fc9e12425bbc755139a458955be46b1552b27c947009",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,66 +97,12 @@
           "errors": [],
           "durationMs": 4,
           "thumbnail": {
-            "sha256": "9382207dcec531932f4cdd27153522cd04ea0b2208f48a05e8a1319de6a43ddc",
+            "sha256": "3f7ef65c8136e3592359fc9e12425bbc755139a458955be46b1552b27c947009",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/Go3X8Hvztag.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "9q5dxvJxmD8",
-      "title": "Индексы США снизились по итогам торгов в пятницу | NEWS-MONSTER",
-      "description": "Индексы США снизились по итогам торгов в пятницу | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-09-08T03:51:59.247Z",
-      "publishedLabel": "Sep 8, 03:51 AM",
-      "thumbnail": "/thumbnails/9q5dxvJxmD8.png",
-      "thumbnailSha256": "9835dc564f60dc1d85d754af3f8651c1a09a5f63220b5d34dce6814815b531fd",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/9q5dxvJxmD8",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "9q5dxvJxmD8",
-          "url": "https://youtu.be/9q5dxvJxmD8",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "9835dc564f60dc1d85d754af3f8651c1a09a5f63220b5d34dce6814815b531fd",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "9835dc564f60dc1d85d754af3f8651c1a09a5f63220b5d34dce6814815b531fd",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/9q5dxvJxmD8.png"
+            "path": "public/thumbnails/GHH1hE0iz8k.png"
           }
         },
         "linkedin": {
