@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-08T00:18:40.059Z",
+  "updatedAt": "2026-09-08T00:48:14.399Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "Ypyv-nqUB4g",
+      "id": "IkH89bMODe8",
       "title": "Report: New Killzone Project in Very Early Stages of Production - MP1st | NEWS-MONSTER",
       "description": "Report: New Killzone Project in Very Early Stages of Production - MP1st | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T00:18:39.400Z",
-      "publishedLabel": "Sep 8, 12:18 AM",
-      "thumbnail": "/thumbnails/Ypyv-nqUB4g.png",
-      "thumbnailSha256": "bb3e1c26e583d2655417e2e094c062c19322a0e334a14fe085b47d8988d40a8b",
+      "publishedAt": "2026-09-08T00:48:13.906Z",
+      "publishedLabel": "Sep 8, 12:48 AM",
+      "thumbnail": "/thumbnails/IkH89bMODe8.png",
+      "thumbnailSha256": "b5c56128668e5ea01e9b7bff683992e4baf2c288b081cf038a7a9c765bf7f368",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/Ypyv-nqUB4g",
+      "youtubeUrl": "https://youtu.be/IkH89bMODe8",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "Ypyv-nqUB4g",
-          "url": "https://youtu.be/Ypyv-nqUB4g",
+          "videoId": "IkH89bMODe8",
+          "url": "https://youtu.be/IkH89bMODe8",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "bb3e1c26e583d2655417e2e094c062c19322a0e334a14fe085b47d8988d40a8b",
+            "sha256": "b5c56128668e5ea01e9b7bff683992e4baf2c288b081cf038a7a9c765bf7f368",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +43,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "bb3e1c26e583d2655417e2e094c062c19322a0e334a14fe085b47d8988d40a8b",
+            "sha256": "b5c56128668e5ea01e9b7bff683992e4baf2c288b081cf038a7a9c765bf7f368",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/Ypyv-nqUB4g.png"
+            "path": "public/thumbnails/IkH89bMODe8.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "jtyBz_ewGQk",
+      "id": "WL2SvoJP2bQ",
       "title": "Miami sheriff blasts Dem mayor for planned Grand Theft Auto 6 tie-in that top cops claim g | NEWS-MONSTER",
       "description": "Miami sheriff blasts Dem mayor for planned Grand Theft Auto 6 tie-in that top cops claim g | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T00:14:42.632Z",
-      "publishedLabel": "Sep 8, 12:14 AM",
-      "thumbnail": "/thumbnails/jtyBz_ewGQk.png",
-      "thumbnailSha256": "1aa9ce67c6e12713c95f5ff21ee8b2bc23f3ddf48998bbd8911f0720ef393ec9",
+      "publishedAt": "2026-09-08T00:44:18.610Z",
+      "publishedLabel": "Sep 8, 12:44 AM",
+      "thumbnail": "/thumbnails/WL2SvoJP2bQ.png",
+      "thumbnailSha256": "8ce00849b050c878f96a4662e7dac5ca0961e23891a0418b012c4fbe81e38ee9",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/jtyBz_ewGQk",
+      "youtubeUrl": "https://youtu.be/WL2SvoJP2bQ",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "jtyBz_ewGQk",
-          "url": "https://youtu.be/jtyBz_ewGQk",
+          "videoId": "WL2SvoJP2bQ",
+          "url": "https://youtu.be/WL2SvoJP2bQ",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "1aa9ce67c6e12713c95f5ff21ee8b2bc23f3ddf48998bbd8911f0720ef393ec9",
+            "sha256": "8ce00849b050c878f96a4662e7dac5ca0961e23891a0418b012c4fbe81e38ee9",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,14 +95,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 4,
           "thumbnail": {
-            "sha256": "1aa9ce67c6e12713c95f5ff21ee8b2bc23f3ddf48998bbd8911f0720ef393ec9",
+            "sha256": "8ce00849b050c878f96a4662e7dac5ca0961e23891a0418b012c4fbe81e38ee9",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/jtyBz_ewGQk.png"
+            "path": "public/thumbnails/WL2SvoJP2bQ.png"
           }
         },
         "linkedin": {
