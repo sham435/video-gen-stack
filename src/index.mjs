@@ -565,15 +565,10 @@ export class NewsBroadcastEngine {
     // Phase 9b: Semantic Visual Ranking V2 — judge feedback re-selects visuals.
     // A visual_unrelated verdict triggers a semantic re-rank of the candidate
     // pool (excluding the current selection), making the judge an active
-    // visual optimizer instead of a passive gate. Every scene's final pick is
-    // tracked in `usedVisualUrls` so a later scene's re-rank can never
-    // converge on an asset another scene already chose.
-    const usedVisualUrls = new Set()
+    // visual optimizer instead of a passive gate.
     for (const sc of timedScenes) {
-      if (sc.image) usedVisualUrls.add(sc.image)
-      const reranked = this.visualRankerV2.applyFeedback(sc, article, { used: [...usedVisualUrls] })
+      const reranked = this.visualRankerV2.applyFeedback(sc, article)
       if (reranked) {
-        usedVisualUrls.add(reranked.url)
         console.log(`Visual Rerank: scene ${sc.id} → ${String(reranked.url).split('/').pop().slice(0, 30)} (${reranked.score}/100)`)
       }
     }

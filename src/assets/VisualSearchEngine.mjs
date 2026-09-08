@@ -86,16 +86,14 @@ export class VisualSearchEngine {
       }
     }
 
-    // 2. Pexels — entity-expanded queries. Run up to maxQueries terms: an
-    // early cap on the FIRST query made every scene draw from the same
-    // deterministic top-8 slice whenever scenes shared a term/fallback.
+    // 2. Pexels — entity-expanded queries
     if (this.pexelsKey) {
-      for (const [qi, term] of queries.slice(0, this.maxQueries).entries()) {
+      for (const term of queries.slice(0, this.maxQueries)) {
         const urls = await this._pexelsSearch(term)
         for (const url of urls) {
           candidates.push({ url, source: 'pexels', keyword: term })
         }
-        if (candidates.length >= 6 && qi >= this.maxQueries - 1) break
+        if (candidates.length >= 6) break
       }
     }
 

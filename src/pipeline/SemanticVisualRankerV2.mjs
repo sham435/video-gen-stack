@@ -62,49 +62,23 @@ export class SemanticVisualRankerV2 {
   }
 
   // Rank candidates best-first, blending semantic similarity (60%) with the
-  // VisualIntent weighted score (40%). Optionally exclude already-used URLs
-  // (options.exclude) and/or hard-disfavor URLs already picked in the current
-  // video (options.used — merged into the exclusion list). Ties are broken by
-  // a scene-scoped slug hash so identical scores do NOT all resolve to the
-  // same top candidate (the flat-40 convergence trap).
+  // VisualIntent weighted score (40%). Optionally exclude already-used URLs.
   rerank(candidates, scene, article = {}, options = {}) {
     const intent = this.visualIntent.buildIntent(scene, article)
-    const excluded = new Set([...(options.exclude || []), ...(options.used || [])])
     return (candidates || [])
       .filter(Boolean)
-      .filter(url => !excluded.has(url))
+      .filter(url => !(options.exclude || []).includes(url))
       .map(url => {
         const semantic = this._semanticScore(url, scene, article, intent)
         const intentScore = this.visualIntent.scoreCandidate(url, intent).score
-        let score = Math.round(0.6 * semantic + 0.4 * intentScore)
-        if ((options.used || []).includes(url)) score -= 18 // used-penalty (belt & suspenders)
-        return { url, score, semantic, intent: intentScore }
+        return { url, score: Math.round(0.6 * semantic + 0.4 * intentScore), semantic, intent: intentScore }
       })
-      .sort((a, b) => b.score - a.score || this._tieBreak(a.url, b.url, scene))
-  }
-
-  // Deterministic, scene-scoped tie-break: same pool, different scenes give
-  // different orderings, so flat scores (empty keywords / slug-less URLs) no
-  // longer collapse every scene onto the same top asset.
-  _tieBreak(a, b, scene) {
-    const seed = this._fnv(String(scene?.id || ''))
-    return (this._fnv(b) ^ seed) - (this._fnv(a) ^ seed)
-  }
-
-  _fnv(str) {
-    let h = 0x811c9dc5
-    for (let i = 0; i < str.length; i++) {
-      h ^= str.charCodeAt(i)
-      h = (h * 0x01000193) >>> 0
-    }
-    return h
+      .sort((a, b) => b.score - a.score)
   }
 
   // Judge-feedback optimization: pick a different asset for a flagged scene.
   // Mutates the scene in place and returns the new selection or null.
-  // options.used = URLs already picked earlier in this video (threaded from
-  // the Phase 9b loop) so a re-rank can never converge on another scene's pick.
-  applyFeedback(scene, article = {}, options = {}) {
+  applyFeedback(scene, article = {}) {
     const verdict = scene.judge
     const flagged = verdict && (verdict.issues?.includes('visual_unrelated') || verdict.recommendation === 'regenerate_scene')
     if (!flagged) return null
@@ -112,9 +86,7 @@ export class SemanticVisualRankerV2 {
     const pool = [...new Set([...(scene.visualPlan?.images || []), ...(scene.images || [])])]
     if (pool.length < 2) return null
 
-    const used = options.used || []
-    const excluded = [scene.image, ...used]
-    const reranked = this.rerank(pool, scene, article, { exclude: excluded, used })
+    const reranked = this.rerank(pool, scene, article, { exclude: [scene.image] })
     const best = reranked[0]
     if (!best) return null
 

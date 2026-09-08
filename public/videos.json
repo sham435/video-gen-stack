@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-08T17:56:17.320Z",
+  "updatedAt": "2026-09-08T18:21:40.423Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "UOH2KslYEuE",
+      "id": "ubKqmbUkG_0",
       "title": "Five iPhone 18 Pro Camera Features Seemingly Leak in Code - MacRumors | NEWS-MONSTER",
       "description": "Five iPhone 18 Pro Camera Features Seemingly Leak in Code - MacRumors | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T17:56:16.441Z",
-      "publishedLabel": "Sep 8, 05:56 PM",
-      "thumbnail": "/thumbnails/UOH2KslYEuE.png",
-      "thumbnailSha256": "87cbc2d02f07282b7d58177ac4d345e48f53e26f7401b8968aca4ba209978505",
+      "publishedAt": "2026-09-08T18:21:39.202Z",
+      "publishedLabel": "Sep 8, 06:21 PM",
+      "thumbnail": "/thumbnails/ubKqmbUkG_0.png",
+      "thumbnailSha256": "cb05aa78166cd66d62be6be80829bfc466d83e126b5a52397a92f039bdbce167",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/UOH2KslYEuE",
+      "youtubeUrl": "https://youtu.be/ubKqmbUkG_0",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "UOH2KslYEuE",
-          "url": "https://youtu.be/UOH2KslYEuE",
+          "videoId": "ubKqmbUkG_0",
+          "url": "https://youtu.be/ubKqmbUkG_0",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "87cbc2d02f07282b7d58177ac4d345e48f53e26f7401b8968aca4ba209978505",
+            "sha256": "cb05aa78166cd66d62be6be80829bfc466d83e126b5a52397a92f039bdbce167",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +43,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "87cbc2d02f07282b7d58177ac4d345e48f53e26f7401b8968aca4ba209978505",
+            "sha256": "cb05aa78166cd66d62be6be80829bfc466d83e126b5a52397a92f039bdbce167",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/UOH2KslYEuE.png"
+            "path": "public/thumbnails/ubKqmbUkG_0.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "nYjZIYskEkU",
+      "id": "C0Gmp898ay4",
       "title": "Labor Day tech deals are still live: You can still shop sales from Apple, Beats, Samsung,  | NEWS-MONSTER",
       "description": "Labor Day tech deals are still live: You can still shop sales from Apple, Beats, Samsung,  | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T17:53:08.448Z",
-      "publishedLabel": "Sep 8, 05:53 PM",
-      "thumbnail": "/thumbnails/nYjZIYskEkU.png",
-      "thumbnailSha256": "b0ba594aed254b482f312221f18207dea4987468aa8c961d221075c3eceff6ee",
+      "publishedAt": "2026-09-08T18:17:25.752Z",
+      "publishedLabel": "Sep 8, 06:17 PM",
+      "thumbnail": "/thumbnails/C0Gmp898ay4.png",
+      "thumbnailSha256": "e48af6e868eeae46b868a383603a4f4448027bb67a88a6e8bf088d4765dcc269",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/nYjZIYskEkU",
+      "youtubeUrl": "https://youtu.be/C0Gmp898ay4",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "nYjZIYskEkU",
-          "url": "https://youtu.be/nYjZIYskEkU",
+          "videoId": "C0Gmp898ay4",
+          "url": "https://youtu.be/C0Gmp898ay4",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "b0ba594aed254b482f312221f18207dea4987468aa8c961d221075c3eceff6ee",
+            "sha256": "e48af6e868eeae46b868a383603a4f4448027bb67a88a6e8bf088d4765dcc269",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +97,12 @@
           "errors": [],
           "durationMs": 4,
           "thumbnail": {
-            "sha256": "b0ba594aed254b482f312221f18207dea4987468aa8c961d221075c3eceff6ee",
+            "sha256": "e48af6e868eeae46b868a383603a4f4448027bb67a88a6e8bf088d4765dcc269",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/nYjZIYskEkU.png"
+            "path": "public/thumbnails/C0Gmp898ay4.png"
           }
         },
         "linkedin": {
@@ -112,29 +112,29 @@
       }
     },
     {
-      "id": "XH5HKHylccA",
+      "id": "WhflOQyHc8c",
       "title": "Experts Disagree On GTA | NEWS-MONSTER",
       "description": "Experts Disagree On GTA | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T17:50:07.812Z",
-      "publishedLabel": "Sep 8, 05:50 PM",
-      "thumbnail": "/thumbnails/XH5HKHylccA.png",
-      "thumbnailSha256": "8555006d770eee633dc70afd6c06744a29dc25735ce07ef0d8fa050b6c7f282e",
+      "publishedAt": "2026-09-08T18:13:14.199Z",
+      "publishedLabel": "Sep 8, 06:13 PM",
+      "thumbnail": "/thumbnails/WhflOQyHc8c.png",
+      "thumbnailSha256": "6f2d949610ec3e18753e80806880e6f46781b76482d7bf8e35dfff1f2f09fafd",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/XH5HKHylccA",
+      "youtubeUrl": "https://youtu.be/WhflOQyHc8c",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "XH5HKHylccA",
-          "url": "https://youtu.be/XH5HKHylccA",
+          "videoId": "WhflOQyHc8c",
+          "url": "https://youtu.be/WhflOQyHc8c",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "8555006d770eee633dc70afd6c06744a29dc25735ce07ef0d8fa050b6c7f282e",
+            "sha256": "6f2d949610ec3e18753e80806880e6f46781b76482d7bf8e35dfff1f2f09fafd",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -149,14 +149,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 1,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "8555006d770eee633dc70afd6c06744a29dc25735ce07ef0d8fa050b6c7f282e",
+            "sha256": "6f2d949610ec3e18753e80806880e6f46781b76482d7bf8e35dfff1f2f09fafd",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/XH5HKHylccA.png"
+            "path": "public/thumbnails/WhflOQyHc8c.png"
           }
         },
         "linkedin": {
