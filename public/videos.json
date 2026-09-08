@@ -1,32 +1,86 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-08T08:52:46.766Z",
+  "updatedAt": "2026-09-08T11:25:29.399Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "spTAT4Z5304",
-      "title": "[UPDATE] Halloween: The Game Patches Out Sex Minigame — Dev Confirms 'Major Oversight' - i | NEWS-MONSTER",
-      "description": "[UPDATE] Halloween: The Game Patches Out Sex Minigame — Dev Confirms 'Major Oversight' - i | NEWS-MONSTER",
+      "id": "BpBxmz05_ws",
+      "title": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MONSTER",
+      "description": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T08:52:45.604Z",
-      "publishedLabel": "Sep 8, 08:52 AM",
-      "thumbnail": "/thumbnails/spTAT4Z5304.png",
-      "thumbnailSha256": "3bac35393f195e2b698ec1a8110533b8bb66f065e49d25dfbb0b3e560e7da55d",
+      "publishedAt": "2026-09-08T11:25:28.830Z",
+      "publishedLabel": "Sep 8, 11:25 AM",
+      "thumbnail": "/thumbnails/BpBxmz05_ws.png",
+      "thumbnailSha256": "6fa92a9edef565011194fe3e1e4268f3c6298fde78f871c9cd7611aaf5d22b9d",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/spTAT4Z5304",
+      "youtubeUrl": "https://youtu.be/BpBxmz05_ws",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "spTAT4Z5304",
-          "url": "https://youtu.be/spTAT4Z5304",
+          "videoId": "BpBxmz05_ws",
+          "url": "https://youtu.be/BpBxmz05_ws",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "3bac35393f195e2b698ec1a8110533b8bb66f065e49d25dfbb0b3e560e7da55d",
+            "sha256": "6fa92a9edef565011194fe3e1e4268f3c6298fde78f871c9cd7611aaf5d22b9d",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "6fa92a9edef565011194fe3e1e4268f3c6298fde78f871c9cd7611aaf5d22b9d",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/BpBxmz05_ws.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "brTEw_QCI-s",
+      "title": "This Week in Gaming (Week 37) - TechPowerUp | NEWS-MONSTER",
+      "description": "This Week in Gaming (Week 37) - TechPowerUp | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-08T11:20:33.971Z",
+      "publishedLabel": "Sep 8, 11:20 AM",
+      "thumbnail": "/thumbnails/brTEw_QCI-s.png",
+      "thumbnailSha256": "ea2918059ebb80471723a9b32aec47de0f593f7e454441a3e89cbad0196f180a",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/brTEw_QCI-s",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "brTEw_QCI-s",
+          "url": "https://youtu.be/brTEw_QCI-s",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "ea2918059ebb80471723a9b32aec47de0f593f7e454441a3e89cbad0196f180a",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,66 +97,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "3bac35393f195e2b698ec1a8110533b8bb66f065e49d25dfbb0b3e560e7da55d",
+            "sha256": "ea2918059ebb80471723a9b32aec47de0f593f7e454441a3e89cbad0196f180a",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/spTAT4Z5304.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "G3A5Q1CCWS4",
-      "title": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MONSTER",
-      "description": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-08T08:48:48.393Z",
-      "publishedLabel": "Sep 8, 08:48 AM",
-      "thumbnail": "/thumbnails/G3A5Q1CCWS4.png",
-      "thumbnailSha256": "b5b5b707cd4ac1e51a155d1027b8261b2f7b87a9a24e20a41ff9955b7a056f38",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/G3A5Q1CCWS4",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "G3A5Q1CCWS4",
-          "url": "https://youtu.be/G3A5Q1CCWS4",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "b5b5b707cd4ac1e51a155d1027b8261b2f7b87a9a24e20a41ff9955b7a056f38",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "b5b5b707cd4ac1e51a155d1027b8261b2f7b87a9a24e20a41ff9955b7a056f38",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/G3A5Q1CCWS4.png"
+            "path": "public/thumbnails/brTEw_QCI-s.png"
           }
         },
         "linkedin": {
