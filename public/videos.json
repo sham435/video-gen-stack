@@ -1,29 +1,29 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-08T15:26:51.171Z",
+  "updatedAt": "2026-09-08T15:57:26.449Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "u1Li89yhHzg",
+      "id": "dITDRqO6bro",
       "title": "iPhone 18 Pro: Nine Reasons Not to Upgrade This Year - macrumors.com | NEWS-MONSTER",
       "description": "iPhone 18 Pro: Nine Reasons Not to Upgrade This Year - macrumors.com | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T15:26:50.425Z",
-      "publishedLabel": "Sep 8, 03:26 PM",
-      "thumbnail": "/thumbnails/u1Li89yhHzg.png",
+      "publishedAt": "2026-09-08T15:57:25.602Z",
+      "publishedLabel": "Sep 8, 03:57 PM",
+      "thumbnail": "/thumbnails/dITDRqO6bro.png",
       "thumbnailSha256": "3344535b90013631004331926450f259225794848fda874b39f81e1832653dec",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/u1Li89yhHzg",
+      "youtubeUrl": "https://youtu.be/dITDRqO6bro",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "u1Li89yhHzg",
-          "url": "https://youtu.be/u1Li89yhHzg",
+          "videoId": "dITDRqO6bro",
+          "url": "https://youtu.be/dITDRqO6bro",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "3344535b90013631004331926450f259225794848fda874b39f81e1832653dec",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 1,
           "thumbnail": {
             "sha256": "3344535b90013631004331926450f259225794848fda874b39f81e1832653dec",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/u1Li89yhHzg.png"
+            "path": "public/thumbnails/dITDRqO6bro.png"
           }
         },
         "linkedin": {
@@ -58,26 +58,26 @@
       }
     },
     {
-      "id": "RXg2_bmXWB0",
+      "id": "rZT4MfG1Jss",
       "title": "Three new iPhones launch this week, here’s what’s coming - 9to5Mac | NEWS-MONSTER",
       "description": "Three new iPhones launch this week, here’s what’s coming - 9to5Mac | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T15:22:54.294Z",
-      "publishedLabel": "Sep 8, 03:22 PM",
-      "thumbnail": "/thumbnails/RXg2_bmXWB0.png",
+      "publishedAt": "2026-09-08T15:52:50.779Z",
+      "publishedLabel": "Sep 8, 03:52 PM",
+      "thumbnail": "/thumbnails/rZT4MfG1Jss.png",
       "thumbnailSha256": "b8d2af18e8b702735ab8c24772ca9a8259b4aa2dae2c13fb569338bd4fef3e0f",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/RXg2_bmXWB0",
+      "youtubeUrl": "https://youtu.be/rZT4MfG1Jss",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "RXg2_bmXWB0",
-          "url": "https://youtu.be/RXg2_bmXWB0",
+          "videoId": "rZT4MfG1Jss",
+          "url": "https://youtu.be/rZT4MfG1Jss",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "b8d2af18e8b702735ab8c24772ca9a8259b4aa2dae2c13fb569338bd4fef3e0f",
@@ -95,14 +95,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 4,
           "thumbnail": {
             "sha256": "b8d2af18e8b702735ab8c24772ca9a8259b4aa2dae2c13fb569338bd4fef3e0f",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/RXg2_bmXWB0.png"
+            "path": "public/thumbnails/rZT4MfG1Jss.png"
           }
         },
         "linkedin": {
