@@ -36,6 +36,7 @@ import { VoiceSync } from './audio/VoiceSync.mjs'
 import { SoundFX } from './audio/SoundFX.mjs'
 import { QualityChecker } from './quality/QualityChecker.mjs'
 import { AudioMixer } from './audio/AudioMixer.mjs'
+import { AudioDirector } from './audio/AudioDirector.mjs'
 import { ScenePlanner } from './ai/ScenePlanner.mjs'
 import { validateRenderOutput } from './video/validateOutput.mjs'
 import { StoryDirector } from './ai/StoryDirector.mjs'
@@ -74,6 +75,7 @@ export class NewsBroadcastEngine {
     this.soundFX = new SoundFX()
     this.qualityChecker = new QualityChecker()
     this.audioMixer = new AudioMixer()
+    this.audioDirector = new AudioDirector()
     this.scenePlanner = new ScenePlanner()
     // AI provider chain: OpenRouter primary → OpenCode Zen fallback → OpenAI /
     // Gemini / Ollama. StoryDirector falls back to a deterministic plan only
