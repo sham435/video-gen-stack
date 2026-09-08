@@ -1,140 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-08T01:24:00.422Z",
+  "updatedAt": "2026-09-08T01:53:38.674Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "JQFoQR9e-ww",
+      "id": "zVkVSVy2JEU",
       "title": "Sunday Preview – Shake the earth with the Sons of Behemat - Warhammer Community | NEWS-MONSTER",
       "description": "Sunday Preview – Shake the earth with the Sons of Behemat - Warhammer Community | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T01:23:59.918Z",
-      "publishedLabel": "Sep 8, 01:23 AM",
-      "thumbnail": "/thumbnails/JQFoQR9e-ww.png",
-      "thumbnailSha256": "bf94d96d3f19aa4a56ed258932d5199c6f8c6ccb510d65f5216f52466c78d65a",
+      "publishedAt": "2026-09-08T01:53:38.146Z",
+      "publishedLabel": "Sep 8, 01:53 AM",
+      "thumbnail": "/thumbnails/zVkVSVy2JEU.png",
+      "thumbnailSha256": "d300f5e5eb7d1f597173389942aa73a564fc775114e61d62c4d1e9f182f7d0f0",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/JQFoQR9e-ww",
+      "youtubeUrl": "https://youtu.be/zVkVSVy2JEU",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "JQFoQR9e-ww",
-          "url": "https://youtu.be/JQFoQR9e-ww",
+          "videoId": "zVkVSVy2JEU",
+          "url": "https://youtu.be/zVkVSVy2JEU",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "bf94d96d3f19aa4a56ed258932d5199c6f8c6ccb510d65f5216f52466c78d65a",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 5,
-          "thumbnail": {
-            "sha256": "bf94d96d3f19aa4a56ed258932d5199c6f8c6ccb510d65f5216f52466c78d65a",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/JQFoQR9e-ww.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "GjfPeYFBTlY",
-      "title": "AI may soon allow humans to talk with animals — but some say it could violate their right  | NEWS-MONSTER",
-      "description": "AI may soon allow humans to talk with animals — but some say it could violate their right  | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-08T01:19:44.967Z",
-      "publishedLabel": "Sep 8, 01:19 AM",
-      "thumbnail": "/thumbnails/GjfPeYFBTlY.png",
-      "thumbnailSha256": "1a7bdc70e2bac627f1038a9b61be613b75593fc72229ad357aacbf01d7ef0c03",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/GjfPeYFBTlY",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "GjfPeYFBTlY",
-          "url": "https://youtu.be/GjfPeYFBTlY",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "1a7bdc70e2bac627f1038a9b61be613b75593fc72229ad357aacbf01d7ef0c03",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "1a7bdc70e2bac627f1038a9b61be613b75593fc72229ad357aacbf01d7ef0c03",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/GjfPeYFBTlY.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "_fKgltDryZw",
-      "title": "Miami sheriff blasts Dem mayor for planned Grand Theft Auto 6 tie-in that top cops claim g | NEWS-MONSTER",
-      "description": "Miami sheriff blasts Dem mayor for planned Grand Theft Auto 6 tie-in that top cops claim g | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-08T01:15:07.356Z",
-      "publishedLabel": "Sep 8, 01:15 AM",
-      "thumbnail": "/thumbnails/_fKgltDryZw.png",
-      "thumbnailSha256": "bd5c608455f028fa2075745d74c32680e8f8cb6c5cfe3ee1ffb0d50e5583eb92",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/_fKgltDryZw",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "_fKgltDryZw",
-          "url": "https://youtu.be/_fKgltDryZw",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "bd5c608455f028fa2075745d74c32680e8f8cb6c5cfe3ee1ffb0d50e5583eb92",
+            "sha256": "d300f5e5eb7d1f597173389942aa73a564fc775114e61d62c4d1e9f182f7d0f0",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -151,12 +43,120 @@
           "errors": [],
           "durationMs": 6,
           "thumbnail": {
-            "sha256": "bd5c608455f028fa2075745d74c32680e8f8cb6c5cfe3ee1ffb0d50e5583eb92",
+            "sha256": "d300f5e5eb7d1f597173389942aa73a564fc775114e61d62c4d1e9f182f7d0f0",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/_fKgltDryZw.png"
+            "path": "public/thumbnails/zVkVSVy2JEU.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "qvJOjLFrHzI",
+      "title": "AI may soon allow humans to talk with animals — but some say it could violate their right  | NEWS-MONSTER",
+      "description": "AI may soon allow humans to talk with animals — but some say it could violate their right  | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-08T01:49:48.067Z",
+      "publishedLabel": "Sep 8, 01:49 AM",
+      "thumbnail": "/thumbnails/qvJOjLFrHzI.png",
+      "thumbnailSha256": "a7409f849ebb304c9ac064a063f6a6c9edc55c82b99581e6a13eb9d6378313fb",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/qvJOjLFrHzI",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "qvJOjLFrHzI",
+          "url": "https://youtu.be/qvJOjLFrHzI",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "a7409f849ebb304c9ac064a063f6a6c9edc55c82b99581e6a13eb9d6378313fb",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 5,
+          "thumbnail": {
+            "sha256": "a7409f849ebb304c9ac064a063f6a6c9edc55c82b99581e6a13eb9d6378313fb",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/qvJOjLFrHzI.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "AzQ0zYSOygk",
+      "title": "Miami sheriff blasts Dem mayor for planned Grand Theft Auto 6 tie-in that top cops claim g | NEWS-MONSTER",
+      "description": "Miami sheriff blasts Dem mayor for planned Grand Theft Auto 6 tie-in that top cops claim g | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-08T01:45:35.029Z",
+      "publishedLabel": "Sep 8, 01:45 AM",
+      "thumbnail": "/thumbnails/AzQ0zYSOygk.png",
+      "thumbnailSha256": "63a805337c3692e734379fd6d9f7d11d4d021bd0da5d383cca5ce65cbaa31464",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/AzQ0zYSOygk",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "AzQ0zYSOygk",
+          "url": "https://youtu.be/AzQ0zYSOygk",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "63a805337c3692e734379fd6d9f7d11d4d021bd0da5d383cca5ce65cbaa31464",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 3,
+          "thumbnail": {
+            "sha256": "63a805337c3692e734379fd6d9f7d11d4d021bd0da5d383cca5ce65cbaa31464",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/AzQ0zYSOygk.png"
           }
         },
         "linkedin": {
