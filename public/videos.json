@@ -1,217 +1,169 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-08T13:18:13.256Z",
-  "source": "youtube-rss",
+  "updatedAt": "2026-09-08T13:40:43.101Z",
+  "source": "production-ledger",
   "videos": [
     {
-      "id": "dw-Tvd9q9aM",
-      "title": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MO",
-      "publishedAt": "2026-09-08T12:55:20+00:00",
-      "publishedLabel": "Sep 8, 12:55 PM",
-      "thumbnail": "/thumbnails/dw-Tvd9q9aM.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
+      "id": "Rh-_wX_3d7Y",
+      "title": "Oil prices hold near six-week highs on US-Iran attacks - Yahoo Finance | NEWS-MONSTER",
+      "description": "Oil prices hold near six-week highs on US-Iran attacks - Yahoo Finance | NEWS-MONSTER",
+      "category": "apple",
+      "publishedAt": "2026-09-08T13:40:42.312Z",
+      "publishedLabel": "Sep 8, 01:40 PM",
+      "thumbnail": "/thumbnails/Rh-_wX_3d7Y.png",
+      "thumbnailSha256": "d8a7cc67b78b9edb5a872f867fda722afdc399fd6085538d5b27c9dd264ef5d6",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/Rh-_wX_3d7Y",
       "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "Rh-_wX_3d7Y",
+          "url": "https://youtu.be/Rh-_wX_3d7Y",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "d8a7cc67b78b9edb5a872f867fda722afdc399fd6085538d5b27c9dd264ef5d6",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 1,
+          "thumbnail": {
+            "sha256": "d8a7cc67b78b9edb5a872f867fda722afdc399fd6085538d5b27c9dd264ef5d6",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/Rh-_wX_3d7Y.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
     },
     {
-      "id": "19dnyFJaULg",
-      "title": "This Week in Gaming (Week 37) - TechPowerUp | NEWS-MONSTER",
-      "publishedAt": "2026-09-08T12:50:53+00:00",
-      "publishedLabel": "Sep 8, 12:50 PM",
-      "thumbnail": "/thumbnails/19dnyFJaULg.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
+      "id": "KPG8zg5Q2-Y",
+      "title": "The 10 fastest-growing jobs in America over the next decade - Fox Business | NEWS-MONSTER",
+      "description": "The 10 fastest-growing jobs in America over the next decade - Fox Business | NEWS-MONSTER",
+      "category": "apple",
+      "publishedAt": "2026-09-08T13:36:16.032Z",
+      "publishedLabel": "Sep 8, 01:36 PM",
+      "thumbnail": "/thumbnails/KPG8zg5Q2-Y.png",
+      "thumbnailSha256": "7c79b8c3f932889163005954a70afec90def0212a9f781618cdf024d82350d77",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/KPG8zg5Q2-Y",
       "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "KPG8zg5Q2-Y",
+          "url": "https://youtu.be/KPG8zg5Q2-Y",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "7c79b8c3f932889163005954a70afec90def0212a9f781618cdf024d82350d77",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "7c79b8c3f932889163005954a70afec90def0212a9f781618cdf024d82350d77",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/KPG8zg5Q2-Y.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
     },
     {
-      "id": "NKDH1obFQlc",
-      "title": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MO",
-      "publishedAt": "2026-09-08T12:24:36+00:00",
-      "publishedLabel": "Sep 8, 12:24 PM",
-      "thumbnail": "/thumbnails/NKDH1obFQlc.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
+      "id": "UX4GddNZg9U",
+      "title": "Amazon Labor Day sale 2026: Can't-miss deals from Apple, Hanes, Dyson and more are up to 7 | NEWS-MONSTER",
+      "description": "Amazon Labor Day sale 2026: Can't-miss deals from Apple, Hanes, Dyson and more are up to 7 | NEWS-MONSTER",
+      "category": "apple",
+      "publishedAt": "2026-09-08T13:31:51.882Z",
+      "publishedLabel": "Sep 8, 01:31 PM",
+      "thumbnail": "/thumbnails/UX4GddNZg9U.png",
+      "thumbnailSha256": "c2f87a785014ac7917210e76a282a583e68d83bea785f2cc8332d62d6b6286fa",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/UX4GddNZg9U",
       "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "g7EHQbxkqUA",
-      "title": "This Week in Gaming (Week 37) - TechPowerUp | NEWS-MONSTER",
-      "publishedAt": "2026-09-08T12:19:54+00:00",
-      "publishedLabel": "Sep 8, 12:19 PM",
-      "thumbnail": "/thumbnails/g7EHQbxkqUA.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "wYxuX2LzhgE",
-      "title": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MO",
-      "publishedAt": "2026-09-08T11:54:01+00:00",
-      "publishedLabel": "Sep 8, 11:54 AM",
-      "thumbnail": "/thumbnails/wYxuX2LzhgE.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "sXMoMUXZIyY",
-      "title": "This Week in Gaming (Week 37) - TechPowerUp | NEWS-MONSTER",
-      "publishedAt": "2026-09-08T11:49:31+00:00",
-      "publishedLabel": "Sep 8, 11:49 AM",
-      "thumbnail": "/thumbnails/sXMoMUXZIyY.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "BpBxmz05_ws",
-      "title": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MO",
-      "publishedAt": "2026-09-08T11:25:32+00:00",
-      "publishedLabel": "Sep 8, 11:25 AM",
-      "thumbnail": "/thumbnails/BpBxmz05_ws.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "brTEw_QCI-s",
-      "title": "This Week in Gaming (Week 37) - TechPowerUp | NEWS-MONSTER",
-      "publishedAt": "2026-09-08T11:20:49+00:00",
-      "publishedLabel": "Sep 8, 11:20 AM",
-      "thumbnail": "/thumbnails/brTEw_QCI-s.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "spTAT4Z5304",
-      "title": "[UPDATE] Halloween: The Game Patches Out Sex Minigame — Dev Confirms 'Major Oversight' - i | NEWS-MO",
-      "publishedAt": "2026-09-08T08:52:57+00:00",
-      "publishedLabel": "Sep 8, 08:52 AM",
-      "thumbnail": "/thumbnails/spTAT4Z5304.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "G3A5Q1CCWS4",
-      "title": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MO",
-      "publishedAt": "2026-09-08T08:49:01+00:00",
-      "publishedLabel": "Sep 8, 08:49 AM",
-      "thumbnail": "/thumbnails/G3A5Q1CCWS4.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "_5_hFhKcNTw",
-      "title": "[UPDATE] Halloween: The Game Patches Out Sex Minigame — Dev Confirms 'Major Oversight' - i | NEWS-MO",
-      "publishedAt": "2026-09-08T08:28:27+00:00",
-      "publishedLabel": "Sep 8, 08:28 AM",
-      "thumbnail": "/thumbnails/_5_hFhKcNTw.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "GHH1hE0iz8k",
-      "title": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MO",
-      "publishedAt": "2026-09-08T08:24:27+00:00",
-      "publishedLabel": "Sep 8, 08:24 AM",
-      "thumbnail": "/thumbnails/GHH1hE0iz8k.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "X-qjjBepge8",
-      "title": "„Gut gemacht!“: Elon Musk gratuliert AfD zum Wahlsieg in Sachsen-Anhalt | NEWS-MONSTER",
-      "publishedAt": "2026-09-08T04:00:54+00:00",
-      "publishedLabel": "Sep 8, 04:00 AM",
-      "thumbnail": "/thumbnails/X-qjjBepge8.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "Go3X8Hvztag",
-      "title": "Tvrdá data z půl milionu baterií: Jak je na tom Enyaq, Tesla nebo VW po 150 000 km | NEWS-MONSTER",
-      "publishedAt": "2026-09-08T03:56:52+00:00",
-      "publishedLabel": "Sep 8, 03:56 AM",
-      "thumbnail": "/thumbnails/Go3X8Hvztag.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "9q5dxvJxmD8",
-      "title": "Индексы США снизились по итогам торгов в пятницу | NEWS-MONSTER",
-      "publishedAt": "2026-09-08T03:52:13+00:00",
-      "publishedLabel": "Sep 8, 03:52 AM",
-      "thumbnail": "/thumbnails/9q5dxvJxmD8.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "UX4GddNZg9U",
+          "url": "https://youtu.be/UX4GddNZg9U",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "c2f87a785014ac7917210e76a282a583e68d83bea785f2cc8332d62d6b6286fa",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "c2f87a785014ac7917210e76a282a583e68d83bea785f2cc8332d62d6b6286fa",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/UX4GddNZg9U.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
     }
   ]
 }
