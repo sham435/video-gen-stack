@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-08T00:48:14.399Z",
+  "updatedAt": "2026-09-08T01:24:00.422Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "IkH89bMODe8",
-      "title": "Report: New Killzone Project in Very Early Stages of Production - MP1st | NEWS-MONSTER",
-      "description": "Report: New Killzone Project in Very Early Stages of Production - MP1st | NEWS-MONSTER",
+      "id": "JQFoQR9e-ww",
+      "title": "Sunday Preview – Shake the earth with the Sons of Behemat - Warhammer Community | NEWS-MONSTER",
+      "description": "Sunday Preview – Shake the earth with the Sons of Behemat - Warhammer Community | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T00:48:13.906Z",
-      "publishedLabel": "Sep 8, 12:48 AM",
-      "thumbnail": "/thumbnails/IkH89bMODe8.png",
-      "thumbnailSha256": "b5c56128668e5ea01e9b7bff683992e4baf2c288b081cf038a7a9c765bf7f368",
+      "publishedAt": "2026-09-08T01:23:59.918Z",
+      "publishedLabel": "Sep 8, 01:23 AM",
+      "thumbnail": "/thumbnails/JQFoQR9e-ww.png",
+      "thumbnailSha256": "bf94d96d3f19aa4a56ed258932d5199c6f8c6ccb510d65f5216f52466c78d65a",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/IkH89bMODe8",
+      "youtubeUrl": "https://youtu.be/JQFoQR9e-ww",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "IkH89bMODe8",
-          "url": "https://youtu.be/IkH89bMODe8",
+          "videoId": "JQFoQR9e-ww",
+          "url": "https://youtu.be/JQFoQR9e-ww",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "b5c56128668e5ea01e9b7bff683992e4baf2c288b081cf038a7a9c765bf7f368",
+            "sha256": "bf94d96d3f19aa4a56ed258932d5199c6f8c6ccb510d65f5216f52466c78d65a",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 5,
           "thumbnail": {
-            "sha256": "b5c56128668e5ea01e9b7bff683992e4baf2c288b081cf038a7a9c765bf7f368",
+            "sha256": "bf94d96d3f19aa4a56ed258932d5199c6f8c6ccb510d65f5216f52466c78d65a",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/IkH89bMODe8.png"
+            "path": "public/thumbnails/JQFoQR9e-ww.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "WL2SvoJP2bQ",
-      "title": "Miami sheriff blasts Dem mayor for planned Grand Theft Auto 6 tie-in that top cops claim g | NEWS-MONSTER",
-      "description": "Miami sheriff blasts Dem mayor for planned Grand Theft Auto 6 tie-in that top cops claim g | NEWS-MONSTER",
+      "id": "GjfPeYFBTlY",
+      "title": "AI may soon allow humans to talk with animals — but some say it could violate their right  | NEWS-MONSTER",
+      "description": "AI may soon allow humans to talk with animals — but some say it could violate their right  | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T00:44:18.610Z",
-      "publishedLabel": "Sep 8, 12:44 AM",
-      "thumbnail": "/thumbnails/WL2SvoJP2bQ.png",
-      "thumbnailSha256": "8ce00849b050c878f96a4662e7dac5ca0961e23891a0418b012c4fbe81e38ee9",
+      "publishedAt": "2026-09-08T01:19:44.967Z",
+      "publishedLabel": "Sep 8, 01:19 AM",
+      "thumbnail": "/thumbnails/GjfPeYFBTlY.png",
+      "thumbnailSha256": "1a7bdc70e2bac627f1038a9b61be613b75593fc72229ad357aacbf01d7ef0c03",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/WL2SvoJP2bQ",
+      "youtubeUrl": "https://youtu.be/GjfPeYFBTlY",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "WL2SvoJP2bQ",
-          "url": "https://youtu.be/WL2SvoJP2bQ",
+          "videoId": "GjfPeYFBTlY",
+          "url": "https://youtu.be/GjfPeYFBTlY",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "8ce00849b050c878f96a4662e7dac5ca0961e23891a0418b012c4fbe81e38ee9",
+            "sha256": "1a7bdc70e2bac627f1038a9b61be613b75593fc72229ad357aacbf01d7ef0c03",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,14 +95,68 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 4,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "8ce00849b050c878f96a4662e7dac5ca0961e23891a0418b012c4fbe81e38ee9",
+            "sha256": "1a7bdc70e2bac627f1038a9b61be613b75593fc72229ad357aacbf01d7ef0c03",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/WL2SvoJP2bQ.png"
+            "path": "public/thumbnails/GjfPeYFBTlY.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "_fKgltDryZw",
+      "title": "Miami sheriff blasts Dem mayor for planned Grand Theft Auto 6 tie-in that top cops claim g | NEWS-MONSTER",
+      "description": "Miami sheriff blasts Dem mayor for planned Grand Theft Auto 6 tie-in that top cops claim g | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-08T01:15:07.356Z",
+      "publishedLabel": "Sep 8, 01:15 AM",
+      "thumbnail": "/thumbnails/_fKgltDryZw.png",
+      "thumbnailSha256": "bd5c608455f028fa2075745d74c32680e8f8cb6c5cfe3ee1ffb0d50e5583eb92",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/_fKgltDryZw",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "_fKgltDryZw",
+          "url": "https://youtu.be/_fKgltDryZw",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "bd5c608455f028fa2075745d74c32680e8f8cb6c5cfe3ee1ffb0d50e5583eb92",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "bd5c608455f028fa2075745d74c32680e8f8cb6c5cfe3ee1ffb0d50e5583eb92",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/_fKgltDryZw.png"
           }
         },
         "linkedin": {

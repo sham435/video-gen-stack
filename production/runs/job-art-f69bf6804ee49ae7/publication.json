@@ -1,7 +1,7 @@
 {
-  "runId": "job-art-be41a60b8463b6e8",
-  "videoId": "_fKgltDryZw",
-  "publishedAt": "2026-09-08T01:15:07.356Z",
+  "runId": "job-art-f69bf6804ee49ae7",
+  "videoId": "JQFoQR9e-ww",
+  "publishedAt": "2026-09-08T01:23:59.919Z",
   "render": {
     "width": 1920,
     "height": 1080,
@@ -13,13 +13,13 @@
       "width": 3840,
       "height": 2160,
       "aspectRatio": "1.7778",
-      "sha256": "bd5c608455f028fa2075745d74c32680e8f8cb6c5cfe3ee1ffb0d50e5583eb92"
+      "sha256": "bf94d96d3f19aa4a56ed258932d5199c6f8c6ccb510d65f5216f52466c78d65a"
     },
     "remote": {
-      "url": "https://i.ytimg.com/vi/_fKgltDryZw/maxresdefault.jpg",
+      "url": "https://i.ytimg.com/vi/JQFoQR9e-ww/maxresdefault.jpg",
       "width": 1280,
       "height": 720,
-      "sha256": "7b7d4aef6bb594bf2da7d5d6f292ca9664f1d67cb500bace143403142a79b305"
+      "sha256": "76ddcc0f700460f1819305452bf2f7e5ba4d4691f2ca11fe54f910f70506c865"
     },
     "identity": "REENCODED",
     "state": "CUSTOM_THUMBNAIL_ACCEPTED"
@@ -27,21 +27,21 @@
   "verification": {
     "state": "VERIFIED (REENCODED)",
     "passed": true,
-    "durationMs": 454,
+    "durationMs": 452,
     "failures": []
   },
   "upload": {
     "state": "SUCCESS",
-    "url": "https://youtu.be/_fKgltDryZw"
+    "url": "https://youtu.be/JQFoQR9e-ww"
   },
   "distribution": {
     "youtube": {
       "state": "SUCCESS",
-      "videoId": "_fKgltDryZw",
-      "url": "https://youtu.be/_fKgltDryZw",
+      "videoId": "JQFoQR9e-ww",
+      "url": "https://youtu.be/JQFoQR9e-ww",
       "thumbnail": {
         "state": "SUCCESS",
-        "sha256": "bd5c608455f028fa2075745d74c32680e8f8cb6c5cfe3ee1ffb0d50e5583eb92",
+        "sha256": "bf94d96d3f19aa4a56ed258932d5199c6f8c6ccb510d65f5216f52466c78d65a",
         "width": 3840,
         "height": 2160,
         "mimeType": "image/png",
@@ -56,14 +56,14 @@
       "manifestUpdated": true,
       "attempts": 1,
       "errors": [],
-      "durationMs": 6,
+      "durationMs": 5,
       "thumbnail": {
-        "sha256": "bd5c608455f028fa2075745d74c32680e8f8cb6c5cfe3ee1ffb0d50e5583eb92",
+        "sha256": "bf94d96d3f19aa4a56ed258932d5199c6f8c6ccb510d65f5216f52466c78d65a",
         "width": 3840,
         "height": 2160,
         "mimeType": "image/png",
         "aspectRatio": "16:9",
-        "path": "public/thumbnails/_fKgltDryZw.png"
+        "path": "public/thumbnails/JQFoQR9e-ww.png"
       }
     },
     "linkedin": {
