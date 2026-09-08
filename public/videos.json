@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-08T19:24:36.715Z",
+  "updatedAt": "2026-09-08T19:53:22.524Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "zoWFGXOaBYI",
+      "id": "_jztOE9a72E",
       "title": "Forza Horizon 6 PS5 Release Window Confirmed - insider-gaming.com | NEWS-MONSTER",
       "description": "Forza Horizon 6 PS5 Release Window Confirmed - insider-gaming.com | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T19:24:35.965Z",
-      "publishedLabel": "Sep 8, 07:24 PM",
-      "thumbnail": "/thumbnails/zoWFGXOaBYI.png",
-      "thumbnailSha256": "9b98f1d2e536e3c460cd4745ef252c755fb3b1123ee859011b7b5060db5b60af",
+      "publishedAt": "2026-09-08T19:53:22.023Z",
+      "publishedLabel": "Sep 8, 07:53 PM",
+      "thumbnail": "/thumbnails/_jztOE9a72E.png",
+      "thumbnailSha256": "15dca87c1a883a276f94fd269068433caf10f061814f596b236e950891570e22",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/zoWFGXOaBYI",
+      "youtubeUrl": "https://youtu.be/_jztOE9a72E",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "zoWFGXOaBYI",
-          "url": "https://youtu.be/zoWFGXOaBYI",
+          "videoId": "_jztOE9a72E",
+          "url": "https://youtu.be/_jztOE9a72E",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "9b98f1d2e536e3c460cd4745ef252c755fb3b1123ee859011b7b5060db5b60af",
+            "sha256": "15dca87c1a883a276f94fd269068433caf10f061814f596b236e950891570e22",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +43,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "9b98f1d2e536e3c460cd4745ef252c755fb3b1123ee859011b7b5060db5b60af",
+            "sha256": "15dca87c1a883a276f94fd269068433caf10f061814f596b236e950891570e22",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/zoWFGXOaBYI.png"
+            "path": "public/thumbnails/_jztOE9a72E.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "JvSXaa8PD3I",
+      "id": "n8-tdL3c3E4",
       "title": "Final Fantasy Resonance modders have already reinstated the original mobile game's biggest | NEWS-MONSTER",
       "description": "Final Fantasy Resonance modders have already reinstated the original mobile game's biggest | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T19:20:03.607Z",
-      "publishedLabel": "Sep 8, 07:20 PM",
-      "thumbnail": "/thumbnails/JvSXaa8PD3I.png",
-      "thumbnailSha256": "6dd5c61d8de296a918a2f228684f3e0ee229551f1dbe9fd0c5f6ff4a68264c0a",
+      "publishedAt": "2026-09-08T19:49:12.568Z",
+      "publishedLabel": "Sep 8, 07:49 PM",
+      "thumbnail": "/thumbnails/n8-tdL3c3E4.png",
+      "thumbnailSha256": "6e9ccfabdf10fbcbe4faa173d3548b9c313691a1d2cc8673edb509db62bb533a",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/JvSXaa8PD3I",
+      "youtubeUrl": "https://youtu.be/n8-tdL3c3E4",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "JvSXaa8PD3I",
-          "url": "https://youtu.be/JvSXaa8PD3I",
+          "videoId": "n8-tdL3c3E4",
+          "url": "https://youtu.be/n8-tdL3c3E4",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "6dd5c61d8de296a918a2f228684f3e0ee229551f1dbe9fd0c5f6ff4a68264c0a",
+            "sha256": "6e9ccfabdf10fbcbe4faa173d3548b9c313691a1d2cc8673edb509db62bb533a",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +97,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "6dd5c61d8de296a918a2f228684f3e0ee229551f1dbe9fd0c5f6ff4a68264c0a",
+            "sha256": "6e9ccfabdf10fbcbe4faa173d3548b9c313691a1d2cc8673edb509db62bb533a",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/JvSXaa8PD3I.png"
+            "path": "public/thumbnails/n8-tdL3c3E4.png"
           }
         },
         "linkedin": {
@@ -112,29 +112,29 @@
       }
     },
     {
-      "id": "k7nQiPc7wxY",
+      "id": "MF97JuB6jEM",
       "title": "Experts Disagree On GTA | NEWS-MONSTER",
       "description": "Experts Disagree On GTA | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T19:14:53.357Z",
-      "publishedLabel": "Sep 8, 07:14 PM",
-      "thumbnail": "/thumbnails/k7nQiPc7wxY.png",
-      "thumbnailSha256": "cd3f2f63dde6beba9db24f68e4e6f3ce7cee74de4bb99034c0e44cdac257a0e3",
+      "publishedAt": "2026-09-08T19:44:43.703Z",
+      "publishedLabel": "Sep 8, 07:44 PM",
+      "thumbnail": "/thumbnails/MF97JuB6jEM.png",
+      "thumbnailSha256": "8d6f19139f8a8b74a0198e83589509dc8ce338ba1b2ed5ac73e3d05fddbf94a7",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/k7nQiPc7wxY",
+      "youtubeUrl": "https://youtu.be/MF97JuB6jEM",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "k7nQiPc7wxY",
-          "url": "https://youtu.be/k7nQiPc7wxY",
+          "videoId": "MF97JuB6jEM",
+          "url": "https://youtu.be/MF97JuB6jEM",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "cd3f2f63dde6beba9db24f68e4e6f3ce7cee74de4bb99034c0e44cdac257a0e3",
+            "sha256": "8d6f19139f8a8b74a0198e83589509dc8ce338ba1b2ed5ac73e3d05fddbf94a7",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -149,14 +149,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 1,
           "thumbnail": {
-            "sha256": "cd3f2f63dde6beba9db24f68e4e6f3ce7cee74de4bb99034c0e44cdac257a0e3",
+            "sha256": "8d6f19139f8a8b74a0198e83589509dc8ce338ba1b2ed5ac73e3d05fddbf94a7",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/k7nQiPc7wxY.png"
+            "path": "public/thumbnails/MF97JuB6jEM.png"
           }
         },
         "linkedin": {
