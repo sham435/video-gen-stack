@@ -41,6 +41,7 @@ import { ScenePlanner } from './ai/ScenePlanner.mjs'
 import { validateRenderOutput } from './video/validateOutput.mjs'
 import { StoryDirector } from './ai/StoryDirector.mjs'
 import { CreativeDirectorAgent } from './ai/CreativeDirectorAgent.mjs'
+import { ScriptUniqueness } from './uniqueness/ScriptUniqueness.mjs'
 import { VisualReasoner } from './ai/VisualReasoner.mjs'
 import { MotionPlanner, TransitionPlanner } from './ai/StoryAnalyzer.mjs'
 import { VisualSearchEngine, ENTITY_EXPANSIONS } from './assets/VisualSearchEngine.mjs'
@@ -664,6 +665,19 @@ export class NewsBroadcastEngine {
     this.timeline = new Timeline(timedScenes, this.renderFps)
 
     const captionScript = this.scenePlanner.buildNarrationScript(timedScenes)
+
+    // NARRATION-DEDUP hard gate. StoryDirector already regenerates duplicated
+    // narration (early catch), but this is the last-line gate NO code path can
+    // skip (run-batch/engine-direct included): refuse to spend TTS + render
+    // cost on a script that repeats a line within the same video. Mirrors the
+    // composer's existing retry→quarantine handling of engine throws.
+    if (process.env.ALLOW_DUPLICATE_NARRATION !== '1') {
+      const narrationGate = ScriptUniqueness.validateWithinVideo(timedScenes.map(s => s.narration))
+      if (!narrationGate.pass) {
+        throw new Error(`VOICE GATE: ${narrationGate.reason} — refusing to render duplicate narration`)
+      }
+    }
+
     const rawDuration = timedScenes.length > 0 ? timedScenes[timedScenes.length - 1].end : 30
     let totalDuration = (!rawDuration || isNaN(rawDuration) || Number(rawDuration) < 15) ? 30 : Number(rawDuration)
     const voicePath = `${outDir}/narration.mp3`
