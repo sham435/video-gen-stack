@@ -33,6 +33,7 @@
     "ai:debug": "node .github/scripts/ai-helper.mjs debug",
     "ai:full": "node .github/scripts/ai-helper.mjs full",
     "test": "node --test tests/*.test.mjs",
+    "test:audio": "node --test tests/audio-loop-duration.test.mjs && node scripts/audio-director-smoke.mjs",
     "postinstall": "patch-package"
   },
   "dependencies": {
