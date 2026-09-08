@@ -1,140 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-08T01:53:38.674Z",
+  "updatedAt": "2026-09-08T04:00:46.662Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "zVkVSVy2JEU",
-      "title": "Sunday Preview – Shake the earth with the Sons of Behemat - Warhammer Community | NEWS-MONSTER",
-      "description": "Sunday Preview – Shake the earth with the Sons of Behemat - Warhammer Community | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-08T01:53:38.146Z",
-      "publishedLabel": "Sep 8, 01:53 AM",
-      "thumbnail": "/thumbnails/zVkVSVy2JEU.png",
-      "thumbnailSha256": "d300f5e5eb7d1f597173389942aa73a564fc775114e61d62c4d1e9f182f7d0f0",
+      "id": "X-qjjBepge8",
+      "title": "„Gut gemacht!“: Elon Musk gratuliert AfD zum Wahlsieg in Sachsen-Anhalt | NEWS-MONSTER",
+      "description": "„Gut gemacht!“: Elon Musk gratuliert AfD zum Wahlsieg in Sachsen-Anhalt | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-08T04:00:45.958Z",
+      "publishedLabel": "Sep 8, 04:00 AM",
+      "thumbnail": "/thumbnails/X-qjjBepge8.png",
+      "thumbnailSha256": "b3be2d15cd0ad3f5971e62075dfcea6e5fae3d46f3257d45e6753703f8878a7a",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/zVkVSVy2JEU",
+      "youtubeUrl": "https://youtu.be/X-qjjBepge8",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "zVkVSVy2JEU",
-          "url": "https://youtu.be/zVkVSVy2JEU",
+          "videoId": "X-qjjBepge8",
+          "url": "https://youtu.be/X-qjjBepge8",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "d300f5e5eb7d1f597173389942aa73a564fc775114e61d62c4d1e9f182f7d0f0",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 6,
-          "thumbnail": {
-            "sha256": "d300f5e5eb7d1f597173389942aa73a564fc775114e61d62c4d1e9f182f7d0f0",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/zVkVSVy2JEU.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "qvJOjLFrHzI",
-      "title": "AI may soon allow humans to talk with animals — but some say it could violate their right  | NEWS-MONSTER",
-      "description": "AI may soon allow humans to talk with animals — but some say it could violate their right  | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-08T01:49:48.067Z",
-      "publishedLabel": "Sep 8, 01:49 AM",
-      "thumbnail": "/thumbnails/qvJOjLFrHzI.png",
-      "thumbnailSha256": "a7409f849ebb304c9ac064a063f6a6c9edc55c82b99581e6a13eb9d6378313fb",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/qvJOjLFrHzI",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "qvJOjLFrHzI",
-          "url": "https://youtu.be/qvJOjLFrHzI",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "a7409f849ebb304c9ac064a063f6a6c9edc55c82b99581e6a13eb9d6378313fb",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 5,
-          "thumbnail": {
-            "sha256": "a7409f849ebb304c9ac064a063f6a6c9edc55c82b99581e6a13eb9d6378313fb",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/qvJOjLFrHzI.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "AzQ0zYSOygk",
-      "title": "Miami sheriff blasts Dem mayor for planned Grand Theft Auto 6 tie-in that top cops claim g | NEWS-MONSTER",
-      "description": "Miami sheriff blasts Dem mayor for planned Grand Theft Auto 6 tie-in that top cops claim g | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-08T01:45:35.029Z",
-      "publishedLabel": "Sep 8, 01:45 AM",
-      "thumbnail": "/thumbnails/AzQ0zYSOygk.png",
-      "thumbnailSha256": "63a805337c3692e734379fd6d9f7d11d4d021bd0da5d383cca5ce65cbaa31464",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/AzQ0zYSOygk",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "AzQ0zYSOygk",
-          "url": "https://youtu.be/AzQ0zYSOygk",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "63a805337c3692e734379fd6d9f7d11d4d021bd0da5d383cca5ce65cbaa31464",
+            "sha256": "b3be2d15cd0ad3f5971e62075dfcea6e5fae3d46f3257d45e6753703f8878a7a",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -151,12 +43,120 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "63a805337c3692e734379fd6d9f7d11d4d021bd0da5d383cca5ce65cbaa31464",
+            "sha256": "b3be2d15cd0ad3f5971e62075dfcea6e5fae3d46f3257d45e6753703f8878a7a",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/AzQ0zYSOygk.png"
+            "path": "public/thumbnails/X-qjjBepge8.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "Go3X8Hvztag",
+      "title": "Tvrdá data z půl milionu baterií: Jak je na tom Enyaq, Tesla nebo VW po 150 000 km | NEWS-MONSTER",
+      "description": "Tvrdá data z půl milionu baterií: Jak je na tom Enyaq, Tesla nebo VW po 150 000 km | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-08T03:56:37.998Z",
+      "publishedLabel": "Sep 8, 03:56 AM",
+      "thumbnail": "/thumbnails/Go3X8Hvztag.png",
+      "thumbnailSha256": "9382207dcec531932f4cdd27153522cd04ea0b2208f48a05e8a1319de6a43ddc",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/Go3X8Hvztag",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "Go3X8Hvztag",
+          "url": "https://youtu.be/Go3X8Hvztag",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "9382207dcec531932f4cdd27153522cd04ea0b2208f48a05e8a1319de6a43ddc",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "9382207dcec531932f4cdd27153522cd04ea0b2208f48a05e8a1319de6a43ddc",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/Go3X8Hvztag.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "9q5dxvJxmD8",
+      "title": "Индексы США снизились по итогам торгов в пятницу | NEWS-MONSTER",
+      "description": "Индексы США снизились по итогам торгов в пятницу | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-08T03:51:59.247Z",
+      "publishedLabel": "Sep 8, 03:51 AM",
+      "thumbnail": "/thumbnails/9q5dxvJxmD8.png",
+      "thumbnailSha256": "9835dc564f60dc1d85d754af3f8651c1a09a5f63220b5d34dce6814815b531fd",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/9q5dxvJxmD8",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "9q5dxvJxmD8",
+          "url": "https://youtu.be/9q5dxvJxmD8",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "9835dc564f60dc1d85d754af3f8651c1a09a5f63220b5d34dce6814815b531fd",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "9835dc564f60dc1d85d754af3f8651c1a09a5f63220b5d34dce6814815b531fd",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/9q5dxvJxmD8.png"
           }
         },
         "linkedin": {
