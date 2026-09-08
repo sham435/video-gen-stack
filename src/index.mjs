@@ -36,9 +36,11 @@ import { VoiceSync } from './audio/VoiceSync.mjs'
 import { SoundFX } from './audio/SoundFX.mjs'
 import { QualityChecker } from './quality/QualityChecker.mjs'
 import { AudioMixer } from './audio/AudioMixer.mjs'
+import { AudioDirector } from './audio/AudioDirector.mjs'
 import { ScenePlanner } from './ai/ScenePlanner.mjs'
 import { validateRenderOutput } from './video/validateOutput.mjs'
 import { StoryDirector } from './ai/StoryDirector.mjs'
+import { CreativeDirectorAgent } from './ai/CreativeDirectorAgent.mjs'
 import { VisualReasoner } from './ai/VisualReasoner.mjs'
 import { MotionPlanner, TransitionPlanner } from './ai/StoryAnalyzer.mjs'
 import { VisualSearchEngine, ENTITY_EXPANSIONS } from './assets/VisualSearchEngine.mjs'
@@ -73,6 +75,7 @@ export class NewsBroadcastEngine {
     this.soundFX = new SoundFX()
     this.qualityChecker = new QualityChecker()
     this.audioMixer = new AudioMixer()
+    this.audioDirector = new AudioDirector()
     this.scenePlanner = new ScenePlanner()
     // AI provider chain: OpenRouter primary → OpenCode Zen fallback → OpenAI /
     // Gemini / Ollama. StoryDirector falls back to a deterministic plan only
@@ -85,6 +88,11 @@ export class NewsBroadcastEngine {
     } catch { /* no provider → deterministic fallback */ }
     this.storyProvider = storyProvider
     this.storyDirector = new StoryDirector(storyProvider)
+    // Creative Director: runs ONCE per script after StoryDirector, before
+    // ScenePlanner. Produces per-scene creative briefs (mood, image direction,
+    // BGM cue, emphasis words) that feed into ImageRanker, MusicFamily, and
+    // InformationLayer as ranking weights / sources — not replacements.
+    this.creativeDirector = new CreativeDirectorAgent(storyProvider)
     this.visualReasoner = new VisualReasoner()
     this.coverGenerator = new CoverGenerator(null)
     this.scriptContract = new ScriptContract()
@@ -137,6 +145,34 @@ export class NewsBroadcastEngine {
       return false
     }
   }
+
+    // Stage the presentation-style outro's 3-beat backdrops from the story's
+    // already-selected hero images (reuses the asset-selection/diversity
+    // output — never hand-picked). The final beat always keeps the fixed brand
+    // moment; the brand card renders over the backdrop.
+    _stageOutroBackdrops(timedScenes) {
+      const outro = timedScenes.find(s => s.outro || s.type === 'close' || s.type === 'brand_close')
+      // Always lower the BGM bed for the outro, independent of imagery.
+      if (outro) outro.musicLevel = outro.presentation?.musicLevel ?? 1
+      const beats = outro?.presentation?.beats
+      if (!outro || !Array.isArray(beats) || !beats.length) return
+      // Distinct backdrops: collect the first image of each non-outro scene,
+      // preserving scene order (diversity planner already spread them out).
+      const backdrops = timedScenes
+        .filter(s => s !== outro && !s.outro && s.type !== 'close' && s.type !== 'brand_close')
+        .map(s => s.images?.[0] || s.image)
+        .filter(Boolean)
+      if (!backdrops.length) return
+      const assigned = [...backdrops]
+      // Wrap round-robin so every beat gets a distinct backdrop even when the
+      // story has fewer imagery scenes than beats.
+      beats.forEach((b, i) => {
+        const url = assigned[i % assigned.length] || assigned[0]
+        b.backdrop = url
+      })
+      // Expose the ordered beat set on the scene for the renderer.
+      outro.presentBackdrops = beats.map(b => b.backdrop).filter(Boolean)
+    }
 
   getCategoryConfig(category) {
     const configs = {
@@ -290,6 +326,23 @@ export class NewsBroadcastEngine {
       console.log(`Council: story ${scores.story_score} / ctr ${scores.ctr_score} / retention ${scores.retention_score} → final ${scores.final_score} (${scores.passed ? 'PASS' : 'BELOW THRESHOLD'})`)
     }
 
+    // Creative Director: per-scene creative briefs (mood, image direction, BGM
+    // cue, emphasis words) — runs ONCE after StoryDirector, before ScenePlanner.
+    // Returns null on LLM failure; pipeline runs unchanged.
+    const creativeBrief = await this.creativeDirector.plan(article, directorStory)
+    if (creativeBrief) {
+      console.log(`CreativeDirector: mood=${creativeBrief.overallMood}, ${creativeBrief.scenes.length} scene briefs`)
+      // Override the article-based music family if the brief's overall mood
+      // strongly suggests a different one. The mood-to-family mapping is
+      // defined in CreativeDirectorAgent.MOOD_TO_FAMILY.
+      const { MOOD_TO_FAMILY } = await import('./ai/CreativeDirectorAgent.mjs')
+      const moodFamily = MOOD_TO_FAMILY[creativeBrief.overallMood]
+      if (moodFamily) {
+        this.audioMixer.musicFamily = moodFamily
+        console.log(`CreativeDirector: BGM family → ${moodFamily} (mood=${creativeBrief.overallMood})`)
+      }
+    }
+
     const sceneDefs = directorStory.scenePlan.map((s, i) => ({
       id: i + 1,
       type: s.type,
@@ -310,6 +363,18 @@ export class NewsBroadcastEngine {
       // verbatim. It must NOT be reconstructed from narration later — narration
       // is VO-only and duplicating it on screen caused text stacking.
       caption: s.caption?.fullText || '',
+      // Carry the brand-outro markers through the reconstruction so the fixed
+      // end card keeps its single-owner text policy + multi-beat presentation
+      // plan all the way to the renderer (these gates/fields are dropped by the
+      // default sceneDef map).
+      outro: s.outro === true ? true : undefined,
+      textPolicy: s.textPolicy || undefined,
+      presentation: s.presentation || undefined,
+      // Creative Director brief: per-scene mood, image direction, BGM cue,
+      // and emphasis words. Flows into ImageRanker (direction weight),
+      // InformationLayer (emphasisWords), and the scene's emotion field
+      // (augmented by MOOD_TO_EMOTION mapping in ScenePlanner.buildScene).
+      creativeBrief: (creativeBrief?.scenes || [])[i] || undefined,
     }))
 
     const rawScenes = this.scenePlanner.planScenes(article, { headline: directorStory.headline, scenes: sceneDefs })
@@ -354,7 +419,7 @@ export class NewsBroadcastEngine {
           }
           const candidates = await this.visualSearchEngine.search(intent)
           if (candidates?.length) {
-            const ranked = this.imageRanker.rank(candidates, { subject: scene.visual.subject, entities: intent.entities, keywords: intent.keywords }, { cooldownDays: 7, videoWindow: 50 })
+            const ranked = this.imageRanker.rank(candidates, { subject: scene.visual.subject, entities: intent.entities, keywords: intent.keywords }, { cooldownDays: 7, videoWindow: 50, brief: sceneDef.creativeBrief })
             const diversity = this.sceneVisualPlanner.pick(
               { index: scene.id, entity: visualIntent.brand, images: ranked },
               { usedScenes: usedAssets, entityCounts }
@@ -451,7 +516,7 @@ export class NewsBroadcastEngine {
           text: layer.text,
           role: layer.type,
           canvas: { width: DesignSystem.W, height: DesignSystem.H },
-          fontFamily: layer.type === 'headline' || layer.type === 'emphasis' ? 'Anton' : 'Inter',
+          fontFamily: layer.type === 'headline' || layer.type === 'emphasis' ? 'Montserrat ExtraBold' : 'Inter',
           preferredFontSize: rolePolicy.preferredFontSize || LAYER_FONT_SIZE[layer.type] || 58,
           maxLines: rolePolicy.maxLines,
         })
@@ -581,6 +646,14 @@ export class NewsBroadcastEngine {
       console.warn(`Cover generation skipped: ${e.message}`)
       this.coverPath = null
     }
+
+    // Presentation-style outro: populate the fixed close scene's 3-beat plan
+    // with DISTINCT background imagery. Rather than hand-picking, we reuse the
+    // asset-selection/diversity system's output — the strongest earlier scenes'
+    // already-chosen hero images become the beat backdrops, so each beat shows
+    // a different scenery while the final beat keeps the fixed brand moment
+    // (brand card renders over the backdrop). Skips scenes that carry no image.
+    this._stageOutroBackdrops(timedScenes)
 
     this.sceneEngine = new SceneEngine(timedScenes)
     this.timeline = new Timeline(timedScenes, this.renderFps)
@@ -837,7 +910,49 @@ export class NewsBroadcastEngine {
     }
 
     const musicPath = this.audioMixer.getRandomMusic()
-    this.audioMixer.mixAudio(silentVideo, voicePath, musicPath, totalDuration, videoPath)
+    // Presentation-style outro: lower the BGM bed during the outro window so
+    // the brand narration/callout sits clearly above a quieter underscore. If
+    // the video has no outro or no level set, the mix keeps its uniform bed.
+    let musicEnvelope = null
+    const outroSc = scenes.find(s => s.outro || s.type === 'close' || s.type === 'brand_close')
+    if (outroSc && Number.isFinite(outroSc.start) && Number.isFinite(outroSc.musicLevel)) {
+      musicEnvelope = { outroStart: outroSc.start, level: outroSc.musicLevel }
+    }
+    // AudioDirector: normalize to -14 LUFS, loop to exact duration, sidechain duck,
+    // optional envelope, SFX-ready. Replaces AudioMixer.mixAudio.
+    if (musicPath && fs.existsSync(musicPath)) {
+      await this.audioDirector.mix({
+        videoPath: silentVideo,
+        voicePath,
+        musicPath,
+        totalDurationSec: totalDuration,
+        outPath: videoPath,
+        envelope: musicEnvelope,
+        sfx: [] // can be populated from scene cues
+      })
+    } else {
+      // Voice-only fallback: no usable bed (music gen failed or dir empty).
+      execFileSync('ffmpeg', ['-y', '-i', silentVideo, '-i', voicePath,
+        '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac',
+        '-movflags', '+faststart', '-t', String(totalDuration), videoPath],
+        { stdio: 'inherit', timeout: 300000 })
+    }
+
+    // Broadcast loudness compliance (-14 LUFS, EBU R128). TTS narration mixes
+    // at source volume over a ducked bed, so the raw mix commonly lands ~-19
+    // LUFS: audible but ~5 LU under target. Final pass normalizes audio only
+    // (video copied bit-exact). Non-fatal: a quiet mix still passes RENDER-001.
+    try {
+      const loudPath = `${outDir}/broadcast_loud.mp4`
+      await this.audioDirector.normalizeFinal(videoPath, loudPath)
+      if (fs.existsSync(loudPath)) {
+        fs.copyFileSync(loudPath, videoPath)
+        fs.unlinkSync(loudPath)
+        console.log('Audio loudness normalized to -14 LUFS')
+      }
+    } catch (e) {
+      console.warn('Loudness normalization skipped:', e.message)
+    }
 
     // Music reuse + learning hook: persist the chosen track against this video
     // so the last-50-videos policy keeps underscores fresh and analytics can

@@ -15,3 +15,7 @@ scripts/get-youtube-token.mjs
 # Agent-local config/memory — never commit real files; use the sanitized example
 .opencode/opencode.json
 .opencode-memory.json
+
+# audio cache + py
+assets/music/normalized/
+scripts/__pycache__/
