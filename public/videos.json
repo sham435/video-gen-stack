@@ -1,32 +1,86 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-08T08:28:09.213Z",
+  "updatedAt": "2026-09-08T08:52:46.766Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "_5_hFhKcNTw",
+      "id": "spTAT4Z5304",
       "title": "[UPDATE] Halloween: The Game Patches Out Sex Minigame — Dev Confirms 'Major Oversight' - i | NEWS-MONSTER",
       "description": "[UPDATE] Halloween: The Game Patches Out Sex Minigame — Dev Confirms 'Major Oversight' - i | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T08:28:08.057Z",
-      "publishedLabel": "Sep 8, 08:28 AM",
-      "thumbnail": "/thumbnails/_5_hFhKcNTw.png",
-      "thumbnailSha256": "e00fecff5cce702d469aa29990a0c025a3d546aa2fd922e5e20cc3ee623ae202",
+      "publishedAt": "2026-09-08T08:52:45.604Z",
+      "publishedLabel": "Sep 8, 08:52 AM",
+      "thumbnail": "/thumbnails/spTAT4Z5304.png",
+      "thumbnailSha256": "3bac35393f195e2b698ec1a8110533b8bb66f065e49d25dfbb0b3e560e7da55d",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/_5_hFhKcNTw",
+      "youtubeUrl": "https://youtu.be/spTAT4Z5304",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "_5_hFhKcNTw",
-          "url": "https://youtu.be/_5_hFhKcNTw",
+          "videoId": "spTAT4Z5304",
+          "url": "https://youtu.be/spTAT4Z5304",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "e00fecff5cce702d469aa29990a0c025a3d546aa2fd922e5e20cc3ee623ae202",
+            "sha256": "3bac35393f195e2b698ec1a8110533b8bb66f065e49d25dfbb0b3e560e7da55d",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "3bac35393f195e2b698ec1a8110533b8bb66f065e49d25dfbb0b3e560e7da55d",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/spTAT4Z5304.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "G3A5Q1CCWS4",
+      "title": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MONSTER",
+      "description": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-08T08:48:48.393Z",
+      "publishedLabel": "Sep 8, 08:48 AM",
+      "thumbnail": "/thumbnails/G3A5Q1CCWS4.png",
+      "thumbnailSha256": "b5b5b707cd4ac1e51a155d1027b8261b2f7b87a9a24e20a41ff9955b7a056f38",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/G3A5Q1CCWS4",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "G3A5Q1CCWS4",
+          "url": "https://youtu.be/G3A5Q1CCWS4",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "b5b5b707cd4ac1e51a155d1027b8261b2f7b87a9a24e20a41ff9955b7a056f38",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,66 +97,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "e00fecff5cce702d469aa29990a0c025a3d546aa2fd922e5e20cc3ee623ae202",
+            "sha256": "b5b5b707cd4ac1e51a155d1027b8261b2f7b87a9a24e20a41ff9955b7a056f38",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/_5_hFhKcNTw.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "GHH1hE0iz8k",
-      "title": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MONSTER",
-      "description": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-08T08:24:12.066Z",
-      "publishedLabel": "Sep 8, 08:24 AM",
-      "thumbnail": "/thumbnails/GHH1hE0iz8k.png",
-      "thumbnailSha256": "3f7ef65c8136e3592359fc9e12425bbc755139a458955be46b1552b27c947009",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/GHH1hE0iz8k",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "GHH1hE0iz8k",
-          "url": "https://youtu.be/GHH1hE0iz8k",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "3f7ef65c8136e3592359fc9e12425bbc755139a458955be46b1552b27c947009",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 4,
-          "thumbnail": {
-            "sha256": "3f7ef65c8136e3592359fc9e12425bbc755139a458955be46b1552b27c947009",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/GHH1hE0iz8k.png"
+            "path": "public/thumbnails/G3A5Q1CCWS4.png"
           }
         },
         "linkedin": {
