@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-08T14:57:29.161Z",
+  "updatedAt": "2026-09-08T15:26:51.171Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "45ngre1-lig",
+      "id": "u1Li89yhHzg",
       "title": "iPhone 18 Pro: Nine Reasons Not to Upgrade This Year - macrumors.com | NEWS-MONSTER",
       "description": "iPhone 18 Pro: Nine Reasons Not to Upgrade This Year - macrumors.com | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T14:57:27.947Z",
-      "publishedLabel": "Sep 8, 02:57 PM",
-      "thumbnail": "/thumbnails/45ngre1-lig.png",
-      "thumbnailSha256": "f6f79db560cc6ba213d2da2454d0f5ac672f513e7e299c653e737fb15e21d0e7",
+      "publishedAt": "2026-09-08T15:26:50.425Z",
+      "publishedLabel": "Sep 8, 03:26 PM",
+      "thumbnail": "/thumbnails/u1Li89yhHzg.png",
+      "thumbnailSha256": "3344535b90013631004331926450f259225794848fda874b39f81e1832653dec",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/45ngre1-lig",
+      "youtubeUrl": "https://youtu.be/u1Li89yhHzg",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "45ngre1-lig",
-          "url": "https://youtu.be/45ngre1-lig",
+          "videoId": "u1Li89yhHzg",
+          "url": "https://youtu.be/u1Li89yhHzg",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "f6f79db560cc6ba213d2da2454d0f5ac672f513e7e299c653e737fb15e21d0e7",
+            "sha256": "3344535b90013631004331926450f259225794848fda874b39f81e1832653dec",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +43,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "f6f79db560cc6ba213d2da2454d0f5ac672f513e7e299c653e737fb15e21d0e7",
+            "sha256": "3344535b90013631004331926450f259225794848fda874b39f81e1832653dec",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/45ngre1-lig.png"
+            "path": "public/thumbnails/u1Li89yhHzg.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "bUz0BSgXItM",
+      "id": "RXg2_bmXWB0",
       "title": "Three new iPhones launch this week, here’s what’s coming - 9to5Mac | NEWS-MONSTER",
       "description": "Three new iPhones launch this week, here’s what’s coming - 9to5Mac | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T14:53:11.965Z",
-      "publishedLabel": "Sep 8, 02:53 PM",
-      "thumbnail": "/thumbnails/bUz0BSgXItM.png",
-      "thumbnailSha256": "b5e7716675c25510d180c0ffc1e1f41150b65c9a2c39ec813fe2f9028bfcc01c",
+      "publishedAt": "2026-09-08T15:22:54.294Z",
+      "publishedLabel": "Sep 8, 03:22 PM",
+      "thumbnail": "/thumbnails/RXg2_bmXWB0.png",
+      "thumbnailSha256": "b8d2af18e8b702735ab8c24772ca9a8259b4aa2dae2c13fb569338bd4fef3e0f",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/bUz0BSgXItM",
+      "youtubeUrl": "https://youtu.be/RXg2_bmXWB0",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "bUz0BSgXItM",
-          "url": "https://youtu.be/bUz0BSgXItM",
+          "videoId": "RXg2_bmXWB0",
+          "url": "https://youtu.be/RXg2_bmXWB0",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "b5e7716675c25510d180c0ffc1e1f41150b65c9a2c39ec813fe2f9028bfcc01c",
+            "sha256": "b8d2af18e8b702735ab8c24772ca9a8259b4aa2dae2c13fb569338bd4fef3e0f",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +97,12 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "b5e7716675c25510d180c0ffc1e1f41150b65c9a2c39ec813fe2f9028bfcc01c",
+            "sha256": "b8d2af18e8b702735ab8c24772ca9a8259b4aa2dae2c13fb569338bd4fef3e0f",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/bUz0BSgXItM.png"
+            "path": "public/thumbnails/RXg2_bmXWB0.png"
           }
         },
         "linkedin": {
