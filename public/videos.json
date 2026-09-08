@@ -1,217 +1,169 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-08T17:30:46.061Z",
-  "source": "youtube-rss",
+  "updatedAt": "2026-09-08T17:56:17.320Z",
+  "source": "production-ledger",
   "videos": [
     {
-      "id": "dITDRqO6bro",
-      "title": "iPhone 18 Pro: Nine Reasons Not to Upgrade This Year - macrumors.com | NEWS-MONSTER",
-      "publishedAt": "2026-09-08T15:57:54+00:00",
-      "publishedLabel": "Sep 8, 03:57 PM",
-      "thumbnail": "/thumbnails/dITDRqO6bro.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
+      "id": "UOH2KslYEuE",
+      "title": "Five iPhone 18 Pro Camera Features Seemingly Leak in Code - MacRumors | NEWS-MONSTER",
+      "description": "Five iPhone 18 Pro Camera Features Seemingly Leak in Code - MacRumors | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-08T17:56:16.441Z",
+      "publishedLabel": "Sep 8, 05:56 PM",
+      "thumbnail": "/thumbnails/UOH2KslYEuE.png",
+      "thumbnailSha256": "87cbc2d02f07282b7d58177ac4d345e48f53e26f7401b8968aca4ba209978505",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/UOH2KslYEuE",
       "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "UOH2KslYEuE",
+          "url": "https://youtu.be/UOH2KslYEuE",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "87cbc2d02f07282b7d58177ac4d345e48f53e26f7401b8968aca4ba209978505",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "87cbc2d02f07282b7d58177ac4d345e48f53e26f7401b8968aca4ba209978505",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/UOH2KslYEuE.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
     },
     {
-      "id": "rZT4MfG1Jss",
-      "title": "Three new iPhones launch this week, here’s what’s coming - 9to5Mac | NEWS-MONSTER",
-      "publishedAt": "2026-09-08T15:53:04+00:00",
-      "publishedLabel": "Sep 8, 03:53 PM",
-      "thumbnail": "/thumbnails/rZT4MfG1Jss.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
+      "id": "nYjZIYskEkU",
+      "title": "Labor Day tech deals are still live: You can still shop sales from Apple, Beats, Samsung,  | NEWS-MONSTER",
+      "description": "Labor Day tech deals are still live: You can still shop sales from Apple, Beats, Samsung,  | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-08T17:53:08.448Z",
+      "publishedLabel": "Sep 8, 05:53 PM",
+      "thumbnail": "/thumbnails/nYjZIYskEkU.png",
+      "thumbnailSha256": "b0ba594aed254b482f312221f18207dea4987468aa8c961d221075c3eceff6ee",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/nYjZIYskEkU",
       "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "nYjZIYskEkU",
+          "url": "https://youtu.be/nYjZIYskEkU",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "b0ba594aed254b482f312221f18207dea4987468aa8c961d221075c3eceff6ee",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "b0ba594aed254b482f312221f18207dea4987468aa8c961d221075c3eceff6ee",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/nYjZIYskEkU.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
     },
     {
-      "id": "u1Li89yhHzg",
-      "title": "iPhone 18 Pro: Nine Reasons Not to Upgrade This Year - macrumors.com | NEWS-MONSTER",
-      "publishedAt": "2026-09-08T15:27:01+00:00",
-      "publishedLabel": "Sep 8, 03:27 PM",
-      "thumbnail": "/thumbnails/u1Li89yhHzg.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
+      "id": "XH5HKHylccA",
+      "title": "Experts Disagree On GTA | NEWS-MONSTER",
+      "description": "Experts Disagree On GTA | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-08T17:50:07.812Z",
+      "publishedLabel": "Sep 8, 05:50 PM",
+      "thumbnail": "/thumbnails/XH5HKHylccA.png",
+      "thumbnailSha256": "8555006d770eee633dc70afd6c06744a29dc25735ce07ef0d8fa050b6c7f282e",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/XH5HKHylccA",
       "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "RXg2_bmXWB0",
-      "title": "Three new iPhones launch this week, here’s what’s coming - 9to5Mac | NEWS-MONSTER",
-      "publishedAt": "2026-09-08T15:23:01+00:00",
-      "publishedLabel": "Sep 8, 03:23 PM",
-      "thumbnail": "/thumbnails/RXg2_bmXWB0.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "45ngre1-lig",
-      "title": "iPhone 18 Pro: Nine Reasons Not to Upgrade This Year - macrumors.com | NEWS-MONSTER",
-      "publishedAt": "2026-09-08T14:57:43+00:00",
-      "publishedLabel": "Sep 8, 02:57 PM",
-      "thumbnail": "/thumbnails/45ngre1-lig.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "bUz0BSgXItM",
-      "title": "Three new iPhones launch this week, here’s what’s coming - 9to5Mac | NEWS-MONSTER",
-      "publishedAt": "2026-09-08T14:53:25+00:00",
-      "publishedLabel": "Sep 8, 02:53 PM",
-      "thumbnail": "/thumbnails/bUz0BSgXItM.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "dJDIoZPisO0",
-      "title": "iPhone 18 Pro: Nine Reasons Not to Upgrade This Year - macrumors.com | NEWS-MONSTER",
-      "publishedAt": "2026-09-08T14:25:23+00:00",
-      "publishedLabel": "Sep 8, 02:25 PM",
-      "thumbnail": "/thumbnails/dJDIoZPisO0.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "Y759lTp0O2M",
-      "title": "Three new iPhones launch this week, here’s what’s coming - 9to5Mac | NEWS-MONSTER",
-      "publishedAt": "2026-09-08T14:21:39+00:00",
-      "publishedLabel": "Sep 8, 02:21 PM",
-      "thumbnail": "/thumbnails/Y759lTp0O2M.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "Rh-_wX_3d7Y",
-      "title": "Oil prices hold near six-week highs on US-Iran attacks - Yahoo Finance | NEWS-MONSTER",
-      "publishedAt": "2026-09-08T13:41:08+00:00",
-      "publishedLabel": "Sep 8, 01:41 PM",
-      "thumbnail": "/thumbnails/Rh-_wX_3d7Y.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "KPG8zg5Q2-Y",
-      "title": "The 10 fastest-growing jobs in America over the next decade - Fox Business | NEWS-MONSTER",
-      "publishedAt": "2026-09-08T13:36:30+00:00",
-      "publishedLabel": "Sep 8, 01:36 PM",
-      "thumbnail": "/thumbnails/KPG8zg5Q2-Y.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "UX4GddNZg9U",
-      "title": "Amazon Labor Day sale 2026: Can't-miss deals from Apple, Hanes, Dyson and more are up to 7 | NEWS-MO",
-      "publishedAt": "2026-09-08T13:32:02+00:00",
-      "publishedLabel": "Sep 8, 01:32 PM",
-      "thumbnail": "/thumbnails/UX4GddNZg9U.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "dw-Tvd9q9aM",
-      "title": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MO",
-      "publishedAt": "2026-09-08T12:55:20+00:00",
-      "publishedLabel": "Sep 8, 12:55 PM",
-      "thumbnail": "/thumbnails/dw-Tvd9q9aM.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "19dnyFJaULg",
-      "title": "This Week in Gaming (Week 37) - TechPowerUp | NEWS-MONSTER",
-      "publishedAt": "2026-09-08T12:50:53+00:00",
-      "publishedLabel": "Sep 8, 12:50 PM",
-      "thumbnail": "/thumbnails/19dnyFJaULg.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "NKDH1obFQlc",
-      "title": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MO",
-      "publishedAt": "2026-09-08T12:24:36+00:00",
-      "publishedLabel": "Sep 8, 12:24 PM",
-      "thumbnail": "/thumbnails/NKDH1obFQlc.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
-    },
-    {
-      "id": "g7EHQbxkqUA",
-      "title": "This Week in Gaming (Week 37) - TechPowerUp | NEWS-MONSTER",
-      "publishedAt": "2026-09-08T12:19:54+00:00",
-      "publishedLabel": "Sep 8, 12:19 PM",
-      "thumbnail": "/thumbnails/g7EHQbxkqUA.png",
-      "thumbnailSha256": null,
-      "thumbnailWidth": null,
-      "thumbnailHeight": null,
-      "thumbnailAspectRatio": null,
-      "verified": false,
-      "verificationState": "RSS_FALLBACK",
-      "thumbnailState": "UNKNOWN"
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "XH5HKHylccA",
+          "url": "https://youtu.be/XH5HKHylccA",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "8555006d770eee633dc70afd6c06744a29dc25735ce07ef0d8fa050b6c7f282e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 1,
+          "thumbnail": {
+            "sha256": "8555006d770eee633dc70afd6c06744a29dc25735ce07ef0d8fa050b6c7f282e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/XH5HKHylccA.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
     }
   ]
 }
