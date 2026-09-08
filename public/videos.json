@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-08T13:40:43.101Z",
+  "updatedAt": "2026-09-08T14:25:12.165Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "Rh-_wX_3d7Y",
-      "title": "Oil prices hold near six-week highs on US-Iran attacks - Yahoo Finance | NEWS-MONSTER",
-      "description": "Oil prices hold near six-week highs on US-Iran attacks - Yahoo Finance | NEWS-MONSTER",
-      "category": "apple",
-      "publishedAt": "2026-09-08T13:40:42.312Z",
-      "publishedLabel": "Sep 8, 01:40 PM",
-      "thumbnail": "/thumbnails/Rh-_wX_3d7Y.png",
-      "thumbnailSha256": "d8a7cc67b78b9edb5a872f867fda722afdc399fd6085538d5b27c9dd264ef5d6",
+      "id": "dJDIoZPisO0",
+      "title": "iPhone 18 Pro: Nine Reasons Not to Upgrade This Year - macrumors.com | NEWS-MONSTER",
+      "description": "iPhone 18 Pro: Nine Reasons Not to Upgrade This Year - macrumors.com | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-08T14:25:11.360Z",
+      "publishedLabel": "Sep 8, 02:25 PM",
+      "thumbnail": "/thumbnails/dJDIoZPisO0.png",
+      "thumbnailSha256": "8a1f08195cdd7fe36934a68bcdc0dea1c1f80cdc2797209b58f01aec060ffd4d",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/Rh-_wX_3d7Y",
+      "youtubeUrl": "https://youtu.be/dJDIoZPisO0",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "Rh-_wX_3d7Y",
-          "url": "https://youtu.be/Rh-_wX_3d7Y",
+          "videoId": "dJDIoZPisO0",
+          "url": "https://youtu.be/dJDIoZPisO0",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "d8a7cc67b78b9edb5a872f867fda722afdc399fd6085538d5b27c9dd264ef5d6",
+            "sha256": "8a1f08195cdd7fe36934a68bcdc0dea1c1f80cdc2797209b58f01aec060ffd4d",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 1,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "d8a7cc67b78b9edb5a872f867fda722afdc399fd6085538d5b27c9dd264ef5d6",
+            "sha256": "8a1f08195cdd7fe36934a68bcdc0dea1c1f80cdc2797209b58f01aec060ffd4d",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/Rh-_wX_3d7Y.png"
+            "path": "public/thumbnails/dJDIoZPisO0.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "KPG8zg5Q2-Y",
-      "title": "The 10 fastest-growing jobs in America over the next decade - Fox Business | NEWS-MONSTER",
-      "description": "The 10 fastest-growing jobs in America over the next decade - Fox Business | NEWS-MONSTER",
-      "category": "apple",
-      "publishedAt": "2026-09-08T13:36:16.032Z",
-      "publishedLabel": "Sep 8, 01:36 PM",
-      "thumbnail": "/thumbnails/KPG8zg5Q2-Y.png",
-      "thumbnailSha256": "7c79b8c3f932889163005954a70afec90def0212a9f781618cdf024d82350d77",
+      "id": "Y759lTp0O2M",
+      "title": "Three new iPhones launch this week, here’s what’s coming - 9to5Mac | NEWS-MONSTER",
+      "description": "Three new iPhones launch this week, here’s what’s coming - 9to5Mac | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-08T14:21:26.386Z",
+      "publishedLabel": "Sep 8, 02:21 PM",
+      "thumbnail": "/thumbnails/Y759lTp0O2M.png",
+      "thumbnailSha256": "968b8b7db778a7048c693d83fb87c5e4b1a8dd4c4c92993a1109933a4ad49a43",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/KPG8zg5Q2-Y",
+      "youtubeUrl": "https://youtu.be/Y759lTp0O2M",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "KPG8zg5Q2-Y",
-          "url": "https://youtu.be/KPG8zg5Q2-Y",
+          "videoId": "Y759lTp0O2M",
+          "url": "https://youtu.be/Y759lTp0O2M",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "7c79b8c3f932889163005954a70afec90def0212a9f781618cdf024d82350d77",
+            "sha256": "968b8b7db778a7048c693d83fb87c5e4b1a8dd4c4c92993a1109933a4ad49a43",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,66 +97,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "7c79b8c3f932889163005954a70afec90def0212a9f781618cdf024d82350d77",
+            "sha256": "968b8b7db778a7048c693d83fb87c5e4b1a8dd4c4c92993a1109933a4ad49a43",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/KPG8zg5Q2-Y.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "UX4GddNZg9U",
-      "title": "Amazon Labor Day sale 2026: Can't-miss deals from Apple, Hanes, Dyson and more are up to 7 | NEWS-MONSTER",
-      "description": "Amazon Labor Day sale 2026: Can't-miss deals from Apple, Hanes, Dyson and more are up to 7 | NEWS-MONSTER",
-      "category": "apple",
-      "publishedAt": "2026-09-08T13:31:51.882Z",
-      "publishedLabel": "Sep 8, 01:31 PM",
-      "thumbnail": "/thumbnails/UX4GddNZg9U.png",
-      "thumbnailSha256": "c2f87a785014ac7917210e76a282a583e68d83bea785f2cc8332d62d6b6286fa",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/UX4GddNZg9U",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "UX4GddNZg9U",
-          "url": "https://youtu.be/UX4GddNZg9U",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "c2f87a785014ac7917210e76a282a583e68d83bea785f2cc8332d62d6b6286fa",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "c2f87a785014ac7917210e76a282a583e68d83bea785f2cc8332d62d6b6286fa",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/UX4GddNZg9U.png"
+            "path": "public/thumbnails/Y759lTp0O2M.png"
           }
         },
         "linkedin": {
