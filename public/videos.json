@@ -1,86 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-08T11:25:29.399Z",
+  "updatedAt": "2026-09-08T11:53:58.604Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "BpBxmz05_ws",
+      "id": "wYxuX2LzhgE",
       "title": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MONSTER",
       "description": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T11:25:28.830Z",
-      "publishedLabel": "Sep 8, 11:25 AM",
-      "thumbnail": "/thumbnails/BpBxmz05_ws.png",
-      "thumbnailSha256": "6fa92a9edef565011194fe3e1e4268f3c6298fde78f871c9cd7611aaf5d22b9d",
+      "publishedAt": "2026-09-08T11:53:57.637Z",
+      "publishedLabel": "Sep 8, 11:53 AM",
+      "thumbnail": "/thumbnails/wYxuX2LzhgE.png",
+      "thumbnailSha256": "8c5382d60e90f0e918044254b05c1ee8ecc440c6f241ba9c67a50a81ddb3f32e",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/BpBxmz05_ws",
+      "youtubeUrl": "https://youtu.be/wYxuX2LzhgE",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "BpBxmz05_ws",
-          "url": "https://youtu.be/BpBxmz05_ws",
+          "videoId": "wYxuX2LzhgE",
+          "url": "https://youtu.be/wYxuX2LzhgE",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "6fa92a9edef565011194fe3e1e4268f3c6298fde78f871c9cd7611aaf5d22b9d",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 4,
-          "thumbnail": {
-            "sha256": "6fa92a9edef565011194fe3e1e4268f3c6298fde78f871c9cd7611aaf5d22b9d",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/BpBxmz05_ws.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "brTEw_QCI-s",
-      "title": "This Week in Gaming (Week 37) - TechPowerUp | NEWS-MONSTER",
-      "description": "This Week in Gaming (Week 37) - TechPowerUp | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-08T11:20:33.971Z",
-      "publishedLabel": "Sep 8, 11:20 AM",
-      "thumbnail": "/thumbnails/brTEw_QCI-s.png",
-      "thumbnailSha256": "ea2918059ebb80471723a9b32aec47de0f593f7e454441a3e89cbad0196f180a",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/brTEw_QCI-s",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "brTEw_QCI-s",
-          "url": "https://youtu.be/brTEw_QCI-s",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "ea2918059ebb80471723a9b32aec47de0f593f7e454441a3e89cbad0196f180a",
+            "sha256": "8c5382d60e90f0e918044254b05c1ee8ecc440c6f241ba9c67a50a81ddb3f32e",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,12 +43,66 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "ea2918059ebb80471723a9b32aec47de0f593f7e454441a3e89cbad0196f180a",
+            "sha256": "8c5382d60e90f0e918044254b05c1ee8ecc440c6f241ba9c67a50a81ddb3f32e",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/brTEw_QCI-s.png"
+            "path": "public/thumbnails/wYxuX2LzhgE.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "sXMoMUXZIyY",
+      "title": "This Week in Gaming (Week 37) - TechPowerUp | NEWS-MONSTER",
+      "description": "This Week in Gaming (Week 37) - TechPowerUp | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-08T11:49:19.306Z",
+      "publishedLabel": "Sep 8, 11:49 AM",
+      "thumbnail": "/thumbnails/sXMoMUXZIyY.png",
+      "thumbnailSha256": "22b31156e058f8fdd4067626189b335603fd4c62855f115ad74a1a103aba3f8c",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/sXMoMUXZIyY",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "sXMoMUXZIyY",
+          "url": "https://youtu.be/sXMoMUXZIyY",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "22b31156e058f8fdd4067626189b335603fd4c62855f115ad74a1a103aba3f8c",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "22b31156e058f8fdd4067626189b335603fd4c62855f115ad74a1a103aba3f8c",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/sXMoMUXZIyY.png"
           }
         },
         "linkedin": {
