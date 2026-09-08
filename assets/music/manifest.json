@@ -1,6 +1,6 @@
 {
-  "engine": "newsmonster-musicgen-v2",
-  "total": 48,
+  "engine": "newsmonster-musicgen-v2+mlx",
+  "total": 78,
   "normalization": "I=-14:TP=-1.5:LRA=11",
   "families": {
     "cinematic-tech-reveal": {
@@ -432,6 +432,246 @@
       "root": 36,
       "file": "nm-track-48-luxury-future-92.mp3",
       "duration": 21.1
+    },
+    {
+      "index": 49,
+      "family": "cinematic-tech-reveal",
+      "bpm": 110,
+      "root": null,
+      "file": "nm-track-49-cinematic-tech-reveal.wav",
+      "duration": 20.0
+    },
+    {
+      "index": 50,
+      "family": "emotional-story",
+      "bpm": 80,
+      "root": null,
+      "file": "nm-track-50-emotional-story.wav",
+      "duration": 20.0
+    },
+    {
+      "index": 51,
+      "family": "action-energy",
+      "bpm": 140,
+      "root": null,
+      "file": "nm-track-51-action-energy.wav",
+      "duration": 20.0
+    },
+    {
+      "index": 52,
+      "family": "luxury-future",
+      "bpm": 95,
+      "root": null,
+      "file": "nm-track-52-luxury-future.wav",
+      "duration": 20.0
+    },
+    {
+      "index": 53,
+      "family": "action-energy",
+      "bpm": 130,
+      "root": null,
+      "file": "nm-track-53-action-energy.wav",
+      "duration": 20.0
+    },
+    {
+      "index": 54,
+      "family": "cinematic-tech-reveal",
+      "bpm": 100,
+      "root": null,
+      "file": "nm-track-54-cinematic-tech-reveal.wav",
+      "duration": 20.0
+    },
+    {
+      "index": 55,
+      "family": "cinematic-tech-reveal",
+      "bpm": 110,
+      "root": null,
+      "file": "nm-track-55-cinematic-tech-reveal.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 56,
+      "family": "cinematic-tech-reveal",
+      "bpm": 110,
+      "root": null,
+      "file": "nm-track-56-cinematic-tech-reveal.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 57,
+      "family": "cinematic-tech-reveal",
+      "bpm": 110,
+      "root": null,
+      "file": "nm-track-57-cinematic-tech-reveal.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 58,
+      "family": "cinematic-tech-reveal",
+      "bpm": 110,
+      "root": null,
+      "file": "nm-track-58-cinematic-tech-reveal.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 59,
+      "family": "emotional-story",
+      "bpm": 80,
+      "root": null,
+      "file": "nm-track-59-emotional-story.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 60,
+      "family": "emotional-story",
+      "bpm": 80,
+      "root": null,
+      "file": "nm-track-60-emotional-story.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 61,
+      "family": "emotional-story",
+      "bpm": 80,
+      "root": null,
+      "file": "nm-track-61-emotional-story.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 62,
+      "family": "emotional-story",
+      "bpm": 80,
+      "root": null,
+      "file": "nm-track-62-emotional-story.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 63,
+      "family": "action-energy",
+      "bpm": 140,
+      "root": null,
+      "file": "nm-track-63-action-energy.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 64,
+      "family": "action-energy",
+      "bpm": 140,
+      "root": null,
+      "file": "nm-track-64-action-energy.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 65,
+      "family": "action-energy",
+      "bpm": 140,
+      "root": null,
+      "file": "nm-track-65-action-energy.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 66,
+      "family": "action-energy",
+      "bpm": 140,
+      "root": null,
+      "file": "nm-track-66-action-energy.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 67,
+      "family": "luxury-future",
+      "bpm": 95,
+      "root": null,
+      "file": "nm-track-67-luxury-future.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 68,
+      "family": "luxury-future",
+      "bpm": 95,
+      "root": null,
+      "file": "nm-track-68-luxury-future.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 69,
+      "family": "luxury-future",
+      "bpm": 95,
+      "root": null,
+      "file": "nm-track-69-luxury-future.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 70,
+      "family": "luxury-future",
+      "bpm": 95,
+      "root": null,
+      "file": "nm-track-70-luxury-future.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 71,
+      "family": "action-energy",
+      "bpm": 130,
+      "root": null,
+      "file": "nm-track-71-action-energy.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 72,
+      "family": "action-energy",
+      "bpm": 130,
+      "root": null,
+      "file": "nm-track-72-action-energy.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 73,
+      "family": "action-energy",
+      "bpm": 130,
+      "root": null,
+      "file": "nm-track-73-action-energy.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 74,
+      "family": "action-energy",
+      "bpm": 130,
+      "root": null,
+      "file": "nm-track-74-action-energy.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 75,
+      "family": "cinematic-tech-reveal",
+      "bpm": 100,
+      "root": null,
+      "file": "nm-track-75-cinematic-tech-reveal.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 76,
+      "family": "cinematic-tech-reveal",
+      "bpm": 100,
+      "root": null,
+      "file": "nm-track-76-cinematic-tech-reveal.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 77,
+      "family": "cinematic-tech-reveal",
+      "bpm": 100,
+      "root": null,
+      "file": "nm-track-77-cinematic-tech-reveal.wav",
+      "duration": 30.0
+    },
+    {
+      "index": 78,
+      "family": "cinematic-tech-reveal",
+      "bpm": 100,
+      "root": null,
+      "file": "nm-track-78-cinematic-tech-reveal.wav",
+      "duration": 30.0
     }
   ]
 }

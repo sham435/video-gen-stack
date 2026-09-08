@@ -36,6 +36,7 @@ import { VoiceSync } from './audio/VoiceSync.mjs'
 import { SoundFX } from './audio/SoundFX.mjs'
 import { QualityChecker } from './quality/QualityChecker.mjs'
 import { AudioMixer } from './audio/AudioMixer.mjs'
+import { AudioDirector } from './audio/AudioDirector.mjs'
 import { ScenePlanner } from './ai/ScenePlanner.mjs'
 import { validateRenderOutput } from './video/validateOutput.mjs'
 import { StoryDirector } from './ai/StoryDirector.mjs'
@@ -74,6 +75,7 @@ export class NewsBroadcastEngine {
     this.soundFX = new SoundFX()
     this.qualityChecker = new QualityChecker()
     this.audioMixer = new AudioMixer()
+    this.audioDirector = new AudioDirector()
     this.scenePlanner = new ScenePlanner()
     // AI provider chain: OpenRouter primary → OpenCode Zen fallback → OpenAI /
     // Gemini / Ollama. StoryDirector falls back to a deterministic plan only
@@ -916,7 +918,42 @@ export class NewsBroadcastEngine {
     if (outroSc && Number.isFinite(outroSc.start) && Number.isFinite(outroSc.musicLevel)) {
       musicEnvelope = { outroStart: outroSc.start, level: outroSc.musicLevel }
     }
-    this.audioMixer.mixAudio(silentVideo, voicePath, musicPath, totalDuration, videoPath, musicEnvelope)
+    // AudioDirector: normalize to -14 LUFS, loop to exact duration, sidechain duck,
+    // optional envelope, SFX-ready. Replaces AudioMixer.mixAudio.
+    if (musicPath && fs.existsSync(musicPath)) {
+      await this.audioDirector.mix({
+        videoPath: silentVideo,
+        voicePath,
+        musicPath,
+        totalDurationSec: totalDuration,
+        outPath: videoPath,
+        envelope: musicEnvelope,
+        sfx: [] // can be populated from scene cues
+      })
+    } else {
+      // Voice-only fallback: no usable bed (music gen failed or dir empty).
+      execFileSync('ffmpeg', ['-y', '-i', silentVideo, '-i', voicePath,
+        '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac',
+        '-movflags', '+faststart', '-t', String(totalDuration), videoPath],
+        { stdio: 'inherit', timeout: 300000 })
+    }
+
+    // Broadcast loudness compliance (-14 LUFS, EBU R128). TTS narration mixes
+    // at source volume over a ducked bed, so the raw mix commonly lands ~-19
+    // LUFS: audible but ~5 LU under target. Final pass normalizes audio only
+    // (video copied bit-exact). Non-fatal: a quiet mix still passes RENDER-001.
+    try {
+      const loudPath = `${outDir}/broadcast_loud.mp4`
+      await this.audioDirector.normalizeFinal(videoPath, loudPath)
+      if (fs.existsSync(loudPath)) {
+        fs.copyFileSync(loudPath, videoPath)
+        fs.unlinkSync(loudPath)
+        console.log('Audio loudness normalized to -14 LUFS')
+      }
+    } catch (e) {
+      console.warn('Loudness normalization skipped:', e.message)
+    }
+
 
     // Music reuse + learning hook: persist the chosen track against this video
     // so the last-50-videos policy keeps underscores fresh and analytics can
