@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-08T12:24:24.226Z",
+  "updatedAt": "2026-09-08T12:55:07.553Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "NKDH1obFQlc",
+      "id": "dw-Tvd9q9aM",
       "title": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MONSTER",
       "description": "LG smart TVs caught logging audio with screen off and snooping on local devices - notebook | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T12:24:23.524Z",
-      "publishedLabel": "Sep 8, 12:24 PM",
-      "thumbnail": "/thumbnails/NKDH1obFQlc.png",
-      "thumbnailSha256": "b6298a5236cd1980180ac45b6a1da07ee3a44318b976bb94a8b6bee108ddc430",
+      "publishedAt": "2026-09-08T12:55:06.378Z",
+      "publishedLabel": "Sep 8, 12:55 PM",
+      "thumbnail": "/thumbnails/dw-Tvd9q9aM.png",
+      "thumbnailSha256": "87b51ea2fca1909e3178b0e4298597acf2eac02fcf2030474e007ad570bd6a62",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/NKDH1obFQlc",
+      "youtubeUrl": "https://youtu.be/dw-Tvd9q9aM",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "NKDH1obFQlc",
-          "url": "https://youtu.be/NKDH1obFQlc",
+          "videoId": "dw-Tvd9q9aM",
+          "url": "https://youtu.be/dw-Tvd9q9aM",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "b6298a5236cd1980180ac45b6a1da07ee3a44318b976bb94a8b6bee108ddc430",
+            "sha256": "87b51ea2fca1909e3178b0e4298597acf2eac02fcf2030474e007ad570bd6a62",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 4,
           "thumbnail": {
-            "sha256": "b6298a5236cd1980180ac45b6a1da07ee3a44318b976bb94a8b6bee108ddc430",
+            "sha256": "87b51ea2fca1909e3178b0e4298597acf2eac02fcf2030474e007ad570bd6a62",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/NKDH1obFQlc.png"
+            "path": "public/thumbnails/dw-Tvd9q9aM.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "g7EHQbxkqUA",
+      "id": "19dnyFJaULg",
       "title": "This Week in Gaming (Week 37) - TechPowerUp | NEWS-MONSTER",
       "description": "This Week in Gaming (Week 37) - TechPowerUp | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-08T12:19:35.594Z",
-      "publishedLabel": "Sep 8, 12:19 PM",
-      "thumbnail": "/thumbnails/g7EHQbxkqUA.png",
-      "thumbnailSha256": "395078fc1a7b7dd12c0ac1f410a27d8145686c807a316acfb128f34b3b3bf583",
+      "publishedAt": "2026-09-08T12:50:38.908Z",
+      "publishedLabel": "Sep 8, 12:50 PM",
+      "thumbnail": "/thumbnails/19dnyFJaULg.png",
+      "thumbnailSha256": "f7b8f09d864a322b4aeb4ed2aadf496c45fd5ccd330916335ac347d6ed7e2467",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/g7EHQbxkqUA",
+      "youtubeUrl": "https://youtu.be/19dnyFJaULg",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "g7EHQbxkqUA",
-          "url": "https://youtu.be/g7EHQbxkqUA",
+          "videoId": "19dnyFJaULg",
+          "url": "https://youtu.be/19dnyFJaULg",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "395078fc1a7b7dd12c0ac1f410a27d8145686c807a316acfb128f34b3b3bf583",
+            "sha256": "f7b8f09d864a322b4aeb4ed2aadf496c45fd5ccd330916335ac347d6ed7e2467",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,14 +95,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "395078fc1a7b7dd12c0ac1f410a27d8145686c807a316acfb128f34b3b3bf583",
+            "sha256": "f7b8f09d864a322b4aeb4ed2aadf496c45fd5ccd330916335ac347d6ed7e2467",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/g7EHQbxkqUA.png"
+            "path": "public/thumbnails/19dnyFJaULg.png"
           }
         },
         "linkedin": {
