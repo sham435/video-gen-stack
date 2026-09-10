@@ -420,7 +420,7 @@ export class NewsBroadcastEngine {
           }
           const candidates = await this.visualSearchEngine.search(intent)
           if (candidates?.length) {
-            const ranked = this.imageRanker.rank(candidates, { subject: scene.visual.subject, entities: intent.entities, keywords: intent.keywords }, { cooldownDays: 7, videoWindow: 50, brief: sceneDef.creativeBrief })
+            const ranked = this.imageRanker.rank(candidates, { subject: scene.visual.subject, entities: intent.entities, keywords: intent.keywords }, { cooldownDays: 7, videoWindow: 50, brief: scene.creativeBrief })
             const diversity = this.sceneVisualPlanner.pick(
               { index: scene.id, entity: visualIntent.brand, images: ranked },
               { usedScenes: usedAssets, entityCounts }
