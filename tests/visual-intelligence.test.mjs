@@ -7,6 +7,7 @@ import { ImageDatabase } from '../src/assets/ImageDatabase.mjs'
 import { AssetUsageTracker } from '../src/assets/AssetUsageTracker.mjs'
 import { ImageRanker } from '../src/assets/ImageRanker.mjs'
 import { SceneVisualPlanner, DIVERSITY } from '../src/assets/SceneVisualPlanner.mjs'
+import { SemanticVisualRankerV2 } from '../src/pipeline/SemanticVisualRankerV2.mjs'
 
 function pngBytes(color = '#ff0000', w = 64, h = 64) {
   const c = createCanvas(w, h)
@@ -355,4 +356,140 @@ test('RetentionPatternLearner — learn() correlates musicFamily → avg retenti
   assert.equal(fam.videos, 2)
   assert.equal(fam.avgRetention, 75, 'mean of 70 + 80')
   fs.rmSync(tmp, { force: true })
+})
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Phase 9b visual-convergence regression tests (A–F)
+//
+// Confirmed production bug: SemanticVisualRankerV2's rerank discarded the
+// VisualIntelligence-selected image and its tie-break was seeded ONLY by
+// scene.id, so the same generic pool + same scene slot produced the SAME
+// final image across unrelated articles.
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Flat pool: slugs contain no article keywords → all semantic scores tie, so
+// ordering is decided purely by the deterministic (scene+article) tie-break.
+const FLAT_POOL = [
+  'https://images.pexels.com/photos/1100001/pexels-photo-1100001.jpeg',
+  'https://images.pexels.com/photos/1100002/pexels-photo-1100002.jpeg',
+  'https://images.pexels.com/photos/1100003/pexels-photo-1100003.jpeg',
+  'https://images.pexels.com/photos/1100004/pexels-photo-1100004.jpeg',
+  'https://images.pexels.com/photos/1100005/pexels-photo-1100005.jpeg',
+  'https://images.pexels.com/photos/1100006/pexels-photo-1100006.jpeg',
+]
+
+function flaggedScene(id, image, overrides = {}) {
+  return {
+    id,
+    image,
+    images: [image],
+    narration: 'scene narration text',
+    caption: 'caption',
+    judge: { issues: ['visual_unrelated'], recommendation: 'regenerate_scene' },
+    ...overrides,
+  }
+}
+
+test('RANKER-A: different article identity can produce different tie-break ordering (same pool, same scene.id)', () => {
+  const ranker = new SemanticVisualRankerV2()
+  const articleA = { id: 'death-stranding-xbox-variety-001', title: 'Death Stranding Hideo Kojima Xbox Variety' }
+  const articleB = { id: 'ipad-macbook-apple-techcrunch-001', title: 'iPad MacBook Apple TechCrunch' }
+  const scene = { id: 3, narration: 'narrative text', caption: 'caption' }
+
+  const orderA = ranker.rerank(FLAT_POOL, scene, articleA).map(r => r.url)
+  const orderB = ranker.rerank(FLAT_POOL, scene, articleB).map(r => r.url)
+
+  assert.equal(orderA.length, FLAT_POOL.length, 'pool fully ranked')
+  assert.equal(new Set(orderA).size, FLAT_POOL.length, 'no duplicates in ordering')
+  // Article identity changes the deterministic seed → ordering may differ.
+  assert.notDeepEqual(orderA, orderB, 'article-aware seed must allow different orderings')
+})
+
+test('RANKER-B: same article + scene.id + pool → identical ordering on repeated runs', () => {
+  const ranker = new SemanticVisualRankerV2()
+  const article = { id: 'ipad-macbook-apple-techcrunch-001', title: 'iPad MacBook Apple TechCrunch' }
+  const scene = { id: 3, narration: 'narrative text', caption: 'caption' }
+
+  const run1 = ranker.rerank(FLAT_POOL, scene, article).map(r => r.url)
+  const run2 = ranker.rerank(FLAT_POOL, scene, article).map(r => r.url)
+  assert.deepEqual(run1, run2, 'deterministic: same inputs → same tie-break ordering')
+})
+
+test('RANKER-C: VI-selected scene.image remains eligible during Phase 9b', () => {
+  const ranker = new SemanticVisualRankerV2()
+  const article = { id: 'playstation-controller-001', title: 'PlayStation controller launch event' }
+  const viUrl = 'https://images.pexels.com/photos/1111111/controller-console.jpeg'
+  const generic = 'https://images.pexels.com/photos/2222222/random-city-street.jpeg'
+  const scene = flaggedScene(3, viUrl, {
+    visualFromIntel: true,
+    assetId: 'abc123',
+    images: [viUrl, generic],
+    visualPlan: { images: [viUrl, generic] },
+  })
+
+  const best = ranker.applyFeedback(scene, article, { used: [] })
+  // The VI pick is NOT excluded: with no better candidate it can (and does) win.
+  assert.ok(best, 'applyFeedback returned a selection')
+  assert.ok(
+    [viUrl, generic].includes(best.url),
+    'rerank selection comes from the eligible pool'
+  )
+})
+
+test('RANKER-D: final selected image CAN still be the VI pick when its score wins', () => {
+  const ranker = new SemanticVisualRankerV2()
+  const article = { id: 'playstation-controller-001', title: 'PlayStation controller launch event' }
+  const viUrl = 'https://images.pexels.com/photos/1111111/controller-console.jpeg'
+  const generic = 'https://images.pexels.com/photos/2222222/random-city-street.jpeg'
+  const scene = flaggedScene(3, viUrl, {
+    visualFromIntel: true,
+    assetId: 'abc123',
+    images: [viUrl, generic],
+    visualPlan: { images: [viUrl, generic] },
+  })
+
+  const best = ranker.applyFeedback(scene, article, { used: [] })
+  // 'controller' matches the article keyword; 'random-city' does not → VI wins.
+  assert.equal(best.url, viUrl, 'VI image stays the winner when it scores higher')
+  assert.equal(scene.image, viUrl, 'scene.image updated to the winning VI pick')
+})
+
+test('RANKER-E: genuinely USED visual URLs remain excluded even for VI-sourced scenes', () => {
+  const ranker = new SemanticVisualRankerV2()
+  const article = { id: 'playstation-controller-001', title: 'PlayStation controller launch event' }
+  const usedUrl = 'https://images.pexels.com/photos/1111111/controller-console.jpeg'
+  const generic = 'https://images.pexels.com/photos/2222222/random-city-street.jpeg'
+  const scene = flaggedScene(3, 'https://images.pexels.com/photos/3333333/another-image.jpeg', {
+    visualFromIntel: true,
+    assetId: 'abc123',
+    images: [usedUrl, generic],
+    visualPlan: { images: [usedUrl, generic] },
+  })
+
+  const best = ranker.applyFeedback(scene, article, { used: [usedUrl] })
+  assert.ok(best, 'applyFeedback returned a selection')
+  assert.notEqual(best.url, usedUrl, 'a URL already used by an earlier scene stays excluded')
+
+  // Non-VI scenes: legacy semantics — the current selection is also excluded.
+  const nonVI = flaggedScene(4, usedUrl, {
+    images: [usedUrl, generic],
+    visualPlan: { images: [usedUrl, generic] },
+  })
+  const best2 = ranker.applyFeedback(nonVI, article, { used: [] })
+  assert.ok(best2, 'non-VI applyFeedback returned a selection')
+  assert.notEqual(best2.url, usedUrl, 'non-VI scene excludes its own current selection')
+})
+
+test('RANKER-F: no cross-video convergence from scene.id-only seeding (Phase 9b refines to article-specific picks)', () => {
+  const ranker = new SemanticVisualRankerV2()
+  const articleA = { id: 'death-stranding-xbox-variety-001', title: 'Death Stranding Hideo Kojima Xbox Variety' }
+  const articleB = { id: 'ipad-macbook-apple-techcrunch-001', title: 'iPad MacBook Apple TechCrunch' }
+  // Same generic visualPlan pool, same scene slot (2..7 scenario: scene 5).
+  const sceneA = flaggedScene(5, FLAT_POOL[0], { visualPlan: { images: FLAT_POOL }, images: [...FLAT_POOL] })
+  const sceneB = flaggedScene(5, FLAT_POOL[0], { visualPlan: { images: FLAT_POOL }, images: [...FLAT_POOL] })
+
+  const bestA = ranker.applyFeedback(sceneA, articleA, { used: [] })
+  const bestB = ranker.applyFeedback(sceneB, articleB, { used: [] })
+  assert.ok(bestA && bestB, 'both videos reranked')
+  assert.notEqual(bestA.url, bestB.url, 'different articles → different final picks for the same scene slot')
 })

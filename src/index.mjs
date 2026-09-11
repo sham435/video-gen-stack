@@ -459,6 +459,7 @@ export class NewsBroadcastEngine {
         image: rankedUrls[0] || visualPlan.primary?.url || null,
         bRoll: rankedUrls[0] || visualPlan.primary?.url || null,
         images: rankedUrls.length ? rankedUrls : fallbackUrls,
+        visualFromIntel: chosenUrls.length > 0,
         assetId: chosenMeta?.sha256 || null,
         assetEntity: chosenMeta?.entity || visualIntent.brand || null,
         camera: cameraPlan.motion,
@@ -565,17 +566,27 @@ export class NewsBroadcastEngine {
 
     // Phase 9b: Semantic Visual Ranking V2 — judge feedback re-selects visuals.
     // A visual_unrelated verdict triggers a semantic re-rank of the candidate
-    // pool (excluding the current selection), making the judge an active
-    // visual optimizer instead of a passive gate. Every scene's final pick is
-    // tracked in `usedVisualUrls` so a later scene's re-rank can never
-    // converge on an asset another scene already chose.
+    // pool, making the judge an active visual optimizer instead of a passive
+    // gate. Every scene's FINAL pick is tracked in `usedVisualUrls` so a later
+    // scene's re-rank can never converge on an asset another scene already
+    // chose. The current scene's pre-existing image is intentionally NOT
+    // pre-added to the used set: VI-sourced scenes must keep their
+    // entity-aware pick eligible so the rerank can refine (and possibly keep)
+    // it instead of discarding it by default.
     const usedVisualUrls = new Set()
     for (const sc of timedScenes) {
-      if (sc.image) usedVisualUrls.add(sc.image)
+      const prior = sc.image
+      // NOTE: `prior` is intentionally NOT passed in `used` for this scene's
+      // own rerank — VI-sourced scenes must keep their entity-aware pick
+      // eligible so Phase 9b can refine it instead of discarding it. It IS
+      // recorded below, so later scenes still cannot reuse it (uniqueness).
       const reranked = this.visualRankerV2.applyFeedback(sc, article, { used: [...usedVisualUrls] })
       if (reranked) {
+        if (prior) usedVisualUrls.add(prior)
         usedVisualUrls.add(reranked.url)
         console.log(`Visual Rerank: scene ${sc.id} → ${String(reranked.url).split('/').pop().slice(0, 30)} (${reranked.score}/100)`)
+      } else if (prior) {
+        usedVisualUrls.add(prior)
       }
     }
 

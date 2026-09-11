@@ -65,8 +65,10 @@ export class SemanticVisualRankerV2 {
   // VisualIntent weighted score (40%). Optionally exclude already-used URLs
   // (options.exclude) and/or hard-disfavor URLs already picked in the current
   // video (options.used — merged into the exclusion list). Ties are broken by
-  // a scene-scoped slug hash so identical scores do NOT all resolve to the
-  // same top candidate (the flat-40 convergence trap).
+  // a scene+article-scoped slug hash so identical scores do NOT all resolve to
+  // the same top candidate (the flat-40 convergence trap), and so the SAME
+  // scene slot in DIFFERENT articles no longer deterministically converges on
+  // the same generic pool image (scene.id-only seeding trap).
   rerank(candidates, scene, article = {}, options = {}) {
     const intent = this.visualIntent.buildIntent(scene, article)
     const excluded = new Set([...(options.exclude || []), ...(options.used || [])])
@@ -80,15 +82,29 @@ export class SemanticVisualRankerV2 {
         if ((options.used || []).includes(url)) score -= 18 // used-penalty (belt & suspenders)
         return { url, score, semantic, intent: intentScore }
       })
-      .sort((a, b) => b.score - a.score || this._tieBreak(a.url, b.url, scene))
+      .sort((a, b) => b.score - a.score || this._tieBreak(a.url, b.url, scene, article))
   }
 
-  // Deterministic, scene-scoped tie-break: same pool, different scenes give
-  // different orderings, so flat scores (empty keywords / slug-less URLs) no
-  // longer collapse every scene onto the same top asset.
-  _tieBreak(a, b, scene) {
-    const seed = this._fnv(String(scene?.id || ''))
+  // Deterministic, scene+article-scoped tie-break: same pool, different scenes
+  // give different orderings, and the same scene slot in DIFFERENT articles
+  // gives different orderings too — so flat scores no longer collapse every
+  // video onto the same top asset. The article identity comes from the
+  // strongest stable identity available (article.id → stable story/storyId →
+  // normalized title) and is never time- or randomness-based, keeping the
+  // result deterministic and CI-safe.
+  _tieBreak(a, b, scene, article = {}) {
+    const sceneSeed = String(scene?.id || '')
+    const articleSeed = this._articleIdentity(article)
+    const seed = this._fnv(`${sceneSeed}|${articleSeed}`)
     return (this._fnv(b) ^ seed) - (this._fnv(a) ^ seed)
+  }
+
+  // Strongest stable article/story identity: article.id if available, else an
+  // existing stable story identifier, else normalized title, else empty.
+  _articleIdentity(article = {}) {
+    const a = article || {}
+    const raw = a.id ?? a.storyId ?? a.guid ?? a.slug ?? a.url ?? a.headline ?? a.title ?? ''
+    return String(raw).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 80)
   }
 
   _fnv(str) {
@@ -104,6 +120,14 @@ export class SemanticVisualRankerV2 {
   // Mutates the scene in place and returns the new selection or null.
   // options.used = URLs already picked earlier in this video (threaded from
   // the Phase 9b loop) so a re-rank can never converge on another scene's pick.
+  //
+  // VI-sourced scenes (scene.visualFromIntel) KEEP their entity-aware pick
+  // eligible: the pool already contains it via scene.images, and excluding
+  // only `used` (not scene.image) lets the rerank REFINE the VI decision —
+  // the VI pick can win again if it is still the strongest candidate, instead
+  // of being thrown away by default. Non-VI scenes keep legacy semantics
+  // (exclude the current selection so the judge's regenerate verdict is
+  // honored).
   applyFeedback(scene, article = {}, options = {}) {
     const verdict = scene.judge
     const flagged = verdict && (verdict.issues?.includes('visual_unrelated') || verdict.recommendation === 'regenerate_scene')
@@ -113,7 +137,8 @@ export class SemanticVisualRankerV2 {
     if (pool.length < 2) return null
 
     const used = options.used || []
-    const excluded = [scene.image, ...used]
+    const viSourced = scene.visualFromIntel === true || scene.assetId != null
+    const excluded = viSourced ? used : [scene.image, ...used]
     const reranked = this.rerank(pool, scene, article, { exclude: excluded, used })
     const best = reranked[0]
     if (!best) return null
