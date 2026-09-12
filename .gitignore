@@ -19,3 +19,10 @@ scripts/get-youtube-token.mjs
 # audio cache + py
 assets/music/normalized/
 scripts/__pycache__/
+
+# Scratch / generated output — never track. Already-tracked files (e.g. the
+# 28 production/runs publication.json) stay visible; only untracked noise is
+# silenced.
+session-ses_*.md
+.newsmonster/
+production/runs/
