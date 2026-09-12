@@ -21,17 +21,35 @@ import crypto from 'node:crypto'
 const DEFAULT_REGISTRY_PATH = path.resolve(process.cwd(), 'data', 'asset-registry.json')
 const ROLLING_WINDOW = 50
 
+// Mandatory rolling image quarantine: a final image committed by ANY video is
+// unavailable for reuse for the next QUARANTINE_DAYS × 24 hours. At 48
+// videos/day this protects ~336 videos inside the rolling window. The window
+// is TIME-based (never a calendar-week reset): an image used at T becomes
+// eligible again only at/after T + QUARANTINE_DAYS * 24h.
+export const QUARANTINE_DAYS = 7
+export const QUARANTINE_MS = QUARANTINE_DAYS * 24 * 60 * 60 * 1000
+
 export class AssetRegistry {
   constructor(options = {}) {
     this.filePath = options.filePath || DEFAULT_REGISTRY_PATH
     this.rollingWindow = options.rollingWindow || ROLLING_WINDOW
+    this._corrupt = false
     this.state = this._load()
   }
 
   _load() {
-    try {
-      if (fs.existsSync(this.filePath)) return JSON.parse(fs.readFileSync(this.filePath, 'utf-8'))
-    } catch { /* corrupt file — reset */ }
+    if (fs.existsSync(this.filePath)) {
+      try {
+        return JSON.parse(fs.readFileSync(this.filePath, 'utf-8'))
+      } catch {
+        // FAIL CLOSED: a corrupt ledger means history is unavailable. Do NOT
+        // silently reset to a fresh ledger — that would let any image be
+        // treated as "never used". Quarantine checks treat the ledger as
+        // UNKNOWN (see isImageQuarantined) until the file is repaired.
+        this._corrupt = true
+        console.warn(`[AssetRegistry] ledger corrupt — fail-closed until repaired: ${this.filePath}`)
+      }
+    }
     return { scripts: {}, images: {}, music: {}, thumbnails: {}, publishedVideos: [], reservations: {} }
   }
 
@@ -77,25 +95,25 @@ export class AssetRegistry {
    * Commit a reservation — assets become permanently recorded.
    * Called after VERIFY succeeds.
    */
-  commit(jobId, { videoId, category } = {}) {
+  commit(jobId, { videoId, category, now } = {}) {
     const res = this.state.reservations[jobId]
     if (!res) return false
 
     // Record to permanent indexes
     if (res.scriptHash) {
-      this._recordScript(res.scriptHash, { jobId, text: res.scriptText || null })
+      this._recordScript(res.scriptHash, { jobId, text: res.scriptText || null, now })
     }
     for (const h of res.imageHashes) {
-      this._recordImage(h, { jobId })
+      this._recordImage(h, { jobId, now })
     }
     if (res.musicTrackId) {
-      this._recordMusic(res.musicTrackId, { jobId })
+      this._recordMusic(res.musicTrackId, { jobId, now })
     }
     if (res.thumbnailHash || res.thumbnailCompositionHash) {
       this._recordThumbnail({
         compositionHash: res.thumbnailCompositionHash || res.thumbnailHash,
         perceptualHash: res.thumbnailHash,
-      }, { jobId })
+      }, { jobId, now })
     }
 
     // Record the published video in the rolling window
@@ -109,7 +127,7 @@ export class AssetRegistry {
       thumbnailPerceptualHash: res.thumbnailHash || null,
       jobId,
       category: category || null,
-      publishedAt: new Date().toISOString(),
+      publishedAt: (now || new Date()).toISOString(),
     })
     if (this.state.publishedVideos.length > this.rollingWindow) {
       this.state.publishedVideos = this.state.publishedVideos.slice(-this.rollingWindow)
@@ -171,11 +189,11 @@ export class AssetRegistry {
 
   // ── Script tracking (committed) ────────────────────────────────────────
 
-  _recordScript(hash, { jobId, title, text } = {}) {
+  _recordScript(hash, { jobId, title, text, now } = {}) {
     const existing = this.state.scripts[hash]
     this.state.scripts[hash] = {
-      firstUsed: existing?.firstUsed || new Date().toISOString(),
-      lastUsed: new Date().toISOString(),
+      firstUsed: existing?.firstUsed || (now || new Date()).toISOString(),
+      lastUsed: (now || new Date()).toISOString(),
       jobId: jobId || null,
       title: title || null,
       text: text || existing?.text || null,
@@ -229,12 +247,12 @@ export class AssetRegistry {
 
   // ── Image tracking (committed) ─────────────────────────────────────────
 
-  _recordImage(hash, { jobId } = {}) {
+  _recordImage(hash, { jobId, now } = {}) {
     const existing = this.state.images[hash]
     this.state.images[hash] = {
-      firstUsed: existing?.firstUsed || new Date().toISOString(),
-      lastUsed: new Date().toISOString(),
-      jobId: jobId || null,
+      firstUsed: existing?.firstUsed || (now || new Date()).toISOString(),
+      lastUsed: (now || new Date()).toISOString(),
+      jobId: jobId || existing?.jobId || null,
       usageCount: (existing?.usageCount || 0) + 1,
     }
   }
@@ -264,11 +282,11 @@ export class AssetRegistry {
 
   // ── Music tracking (committed) ─────────────────────────────────────────
 
-  _recordMusic(trackId, { trackHash, family, jobId } = {}) {
+  _recordMusic(trackId, { trackHash, family, jobId, now } = {}) {
     const existing = this.state.music[trackId]
     this.state.music[trackId] = {
-      firstUsed: existing?.firstUsed || new Date().toISOString(),
-      lastUsed: new Date().toISOString(),
+      firstUsed: existing?.firstUsed || (now || new Date()).toISOString(),
+      lastUsed: (now || new Date()).toISOString(),
       trackHash: trackHash || null,
       family: family || null,
       jobId: jobId || null,
@@ -301,15 +319,15 @@ export class AssetRegistry {
 
   // ── Thumbnail tracking (committed) ────────────────────────────────────
 
-  _recordThumbnail({ compositionHash, perceptualHash }, { jobId } = {}) {
+  _recordThumbnail({ compositionHash, perceptualHash }, { jobId, now } = {}) {
     const key = compositionHash || perceptualHash
     if (!key) return
     const existing = this.state.thumbnails[key]
     this.state.thumbnails[key] = {
       compositionHash: compositionHash || null,
       perceptualHash: perceptualHash || null,
-      firstUsed: existing?.firstUsed || new Date().toISOString(),
-      lastUsed: new Date().toISOString(),
+      firstUsed: existing?.firstUsed || (now || new Date()).toISOString(),
+      lastUsed: (now || new Date()).toISOString(),
       jobId: jobId || null,
       usageCount: (existing?.usageCount || 0) + 1,
     }
@@ -357,7 +375,11 @@ export class AssetRegistry {
    * Public convenience: record a published video directly (for testing / one-off use).
    * Prefer reserve() + commit() for production pipeline.
    */
-  recordPublishedVideo(videoId, { scriptHash, imageHashes, musicTrackId, articleHash, jobId, category, thumbnailCompositionHash, thumbnailPerceptualHash } = {}) {
+  recordPublishedVideo(videoId, { scriptHash, imageHashes, musicTrackId, articleHash, jobId, category, thumbnailCompositionHash, thumbnailPerceptualHash, now } = {}) {
+    const iso = (now || new Date()).toISOString()
+    for (const h of imageHashes || []) {
+      this._recordImage(h, { jobId, now })
+    }
     this.state.publishedVideos.push({
       videoId,
       scriptHash: scriptHash || null,
@@ -368,12 +390,113 @@ export class AssetRegistry {
       category: category || null,
       thumbnailCompositionHash: thumbnailCompositionHash || null,
       thumbnailPerceptualHash: thumbnailPerceptualHash || null,
-      publishedAt: new Date().toISOString(),
+      publishedAt: iso,
     })
     if (this.state.publishedVideos.length > this.rollingWindow) {
       this.state.publishedVideos = this.state.publishedVideos.slice(-this.rollingWindow)
     }
     this._save()
+  }
+
+  /**
+   * Rolling 7-day image quarantine — the mandatory final-asset invariant.
+   *
+   * An image becomes quarantined when it is COMMITTED as a final production
+   * asset (state.images is written only by commit() / recordImage() /
+   * recordPublishedVideo(), i.e. the production/ledger lifecycle). It remains
+   * unavailable for [now, usedAt + QUARANTINE_DAYS×24h). The window is rolling
+   * and TIME-based — never a calendar-week reset.
+   *
+   * FAIL CLOSED: if the ledger is corrupt or a historical record cannot be
+   * timestamped, the image is treated as quarantined (unknown=true). No image
+   * is assumed fresh merely because its history is unavailable.
+   *
+   * @param {string} hash canonical asset fingerprint (sha256)
+   * @param {object} [opts] { excludeJobId, now, days }
+   * @returns {{ quarantined:boolean, unknown:boolean, reason:string|null,
+   *   usedAt:string|null, reservedBy:string|null }}
+   */
+  isImageQuarantined(hash, { excludeJobId = null, now = new Date(), days = QUARANTINE_DAYS } = {}) {
+    const nowMs = toIsoMs(now)
+    const windowMs = days * 24 * 60 * 60 * 1000
+
+    // Corrupt ledger → history unavailable → fail closed.
+    if (this._corrupt) {
+      return { quarantined: true, unknown: true, reason: 'LEDGER_CORRUPT', usedAt: null, reservedBy: null }
+    }
+    if (!hash) {
+      return { quarantined: false, unknown: false, reason: null, usedAt: null, reservedBy: null }
+    }
+
+    // 1. Committed final asset (permanent image index — the source of truth).
+    const img = this.state.images[hash]
+    if (img?.lastUsed) {
+      const usedMs = toIsoMs(img.lastUsed)
+      if (Number.isFinite(usedMs)) {
+        if (nowMs - usedMs < windowMs) {
+          return { quarantined: true, unknown: false, reason: 'IMAGE_QUARANTINED_7D', usedAt: img.lastUsed, reservedBy: null }
+        }
+      } else {
+        // Unparseable timestamp → cannot prove freshness → fail closed.
+        return { quarantined: true, unknown: true, reason: 'AMBIGUOUS_HISTORY', usedAt: img.lastUsed, reservedBy: null }
+      }
+    }
+
+    // 2. Published videos window (second reference). An entry inside the time
+    //    window with an unparseable publishedAt is ambiguous history → fail.
+    for (const v of this.state.publishedVideos) {
+      if (v.excludeJobId === excludeJobId) continue
+      if (!v.imageHashes?.includes(hash)) continue
+      const atMs = toIsoMs(v.publishedAt)
+      if (!Number.isFinite(atMs)) {
+        return { quarantined: true, unknown: true, reason: 'AMBIGUOUS_HISTORY', usedAt: v.publishedAt ?? null, reservedBy: null }
+      }
+      if (nowMs - atMs < windowMs) {
+        return { quarantined: true, unknown: false, reason: 'IMAGE_QUARANTINED_7D', usedAt: v.publishedAt, reservedBy: null }
+      }
+    }
+
+    // 3. Reservations of OTHER jobs — atomic reserve→commit lifecycle.
+    for (const [jid, res] of Object.entries(this.state.reservations)) {
+      if (jid === excludeJobId) continue
+      if (res.imageHashes?.includes(hash)) {
+        return { quarantined: true, unknown: false, reason: 'IMAGE_RESERVED', usedAt: res.reservedAt || null, reservedBy: jid }
+      }
+    }
+
+    return { quarantined: false, unknown: false, reason: null, usedAt: null, reservedBy: null }
+  }
+
+  /**
+   * Time at which a committed image becomes eligible again (usedAt + 7d).
+   * Returns null when the image has no committed history.
+   */
+  quarantineEligibleAt(hash, { now = new Date(), days = QUARANTINE_DAYS } = {}) {
+    const img = this.state.images[hash]
+    if (!img?.lastUsed) return null
+    const usedMs = toIsoMs(img.lastUsed)
+    if (!Number.isFinite(usedMs)) return null
+    return new Date(usedMs + days * 24 * 60 * 60 * 1000).toISOString()
+  }
+
+  /**
+   * All final images committed within the previous `days`×24h (cross-video
+   * quarantine set). Used for the acceptance assertion
+   * `currentVideoFinalImages ∩ previous7DayFinalImages = ∅`.
+   */
+  recentCommittedImages({ now = new Date(), days = QUARANTINE_DAYS } = {}) {
+    if (this._corrupt) return { images: [], unknown: true }
+    const nowMs = toIsoMs(now)
+    const windowMs = days * 24 * 60 * 60 * 1000
+    const images = new Set()
+    let unknown = false
+    for (const [hash, img] of Object.entries(this.state.images || {})) {
+      if (!img?.lastUsed) { unknown = true; continue }
+      const usedMs = toIsoMs(img.lastUsed)
+      if (!Number.isFinite(usedMs)) { unknown = true; continue }
+      if (nowMs - usedMs < windowMs) images.add(hash)
+    }
+    return { images: [...images], unknown }
   }
 
   // ── Convenience ──────────────────────────────────────────────────────
@@ -401,4 +524,16 @@ export class AssetRegistry {
     this.state = { scripts: {}, images: {}, music: {}, thumbnails: {}, publishedVideos: [], reservations: {} }
     try { fs.unlinkSync(this.filePath) } catch { /* ok */ }
   }
+}
+
+/**
+ * Normalized epoch-millis for timestamps written by this registry (ISO 8601)
+ * or by SQLite datetime() ('YYYY-MM-DD HH:MM:SS' UTC). Returns NaN when the
+ * value cannot be parsed — callers treat that as AMBIGUOUS history (fail closed).
+ */
+function toIsoMs(value) {
+  if (value instanceof Date) return value.getTime()
+  if (typeof value !== 'string' || !value) return Number.NaN
+  const iso = value.includes('T') ? value : String(value).replace(' ', 'T') + 'Z'
+  return new Date(iso).getTime()
 }

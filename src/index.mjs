@@ -461,6 +461,11 @@ export class NewsBroadcastEngine {
         images: rankedUrls.length ? rankedUrls : fallbackUrls,
         visualFromIntel: chosenUrls.length > 0,
         assetId: chosenMeta?.sha256 || null,
+        // Final-asset canonical identity for the UNIQUENESS boundary: the
+        // manifest/gate must verify intra-video + 7-day cross-video image
+        // uniqueness on the ACTUAL committed asset, not the candidate list.
+        imageHash: chosenMeta?.sha256 || null,
+        assetDHash: chosenMeta?.dHash || null,
         assetEntity: chosenMeta?.entity || visualIntent.brand || null,
         camera: cameraPlan.motion,
         cameraPlan,
