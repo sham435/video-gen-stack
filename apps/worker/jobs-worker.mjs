@@ -79,7 +79,7 @@ async function runNewsVideo(job) {
   }
 
   const newsText = articlesToSummary(articles)
-  const model = p.modelId || 'gemini-2.5-flash'
+  const model = p.modelId || 'gemini-2.0-flash'
   const endpoint = getEndpoint(model, p.provider)
   if (!endpoint) throw new Error('No video provider configured')
   const load = PROVIDERS[p.provider]
@@ -137,6 +137,15 @@ async function main() {
   updateJobGauges(db)
 
   startMetricsServer(parseInt(process.env.WORKER_METRICS_PORT) || 9101, { log })
+
+  // Keep the YouTube access token warm while the worker loops — long renders
+  // and uploads in this process never hit a stale token.
+  try {
+    const { startYouTubeTokenWarmup } = await import('../api/publishers/youtube.js')
+    startYouTubeTokenWarmup()
+  } catch (e) {
+    log.error({ error: e?.message || e }, 'youtube token warmup failed to start')
+  }
 
   if (once) {
     const n = await drainOnce(limit)

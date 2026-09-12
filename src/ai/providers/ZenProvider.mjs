@@ -32,13 +32,52 @@ function readZenConfig() {
   return null
 }
 
+// OpenCode Zen = OpenAI-compatible gateway at /zen/v1/chat/completions.
+//
+// PRODUCTION ACCESS: a paid Zen API key works directly, like any
+// OpenAI-compatible provider — NO session id, NO OpenCode TUI. Configure the
+// key via the OPENCODE_ZEN_API_KEY env var (secret manager / Railway env, not
+// Git). Big-Pickle (big-pickle) is served through this endpoint in the
+// official Zen catalog. This provider must NOT be classified as
+// "OpenCode-TUI-only".
+//
+// Console free tier: the free-tier console key (e.g. the key OpenCode stores
+// in ~/.config/opencode/opencode.json) is stricter — chat requests without the
+// `x-opencode-session` header get MissingSessionID ("free tier can only be
+// used in OpenCode"). For that path we attach the OpenCode session id — the
+// same header the app sends (packages/opencode/src/session/llm/request.ts).
+// Discovery of the CURRENT app session is best-effort: ZEN_SESSION_ID env
+// wins, then the tail of the app log (every stream line records session.id=),
+// else null. With a paid key the header is inert (sticky routing only).
+export function discoverZenSessionId() {
+  if (process.env.ZEN_SESSION_ID) return process.env.ZEN_SESSION_ID
+  try {
+    const log = path.join(os.homedir(), '.local/share/opencode/log/opencode.log')
+    if (!fs.existsSync(log)) return null
+    const size = fs.statSync(log).size
+    if (size <= 0) return null
+    const buf = Buffer.alloc(Math.min(size, 256 * 1024))
+    const fd = fs.openSync(log, 'r')
+    fs.readSync(fd, buf, 0, buf.length, Math.max(0, size - buf.length))
+    fs.closeSync(fd)
+    const matches = [...buf.toString('utf8').matchAll(/session\.id=([A-Za-z0-9_-]+)/g)]
+    return matches.length ? matches[matches.length - 1][1] : null
+  } catch { /* ignore */ }
+  return null
+}
+
 export class ZenProvider extends AIProvider {
   constructor(apiKey, options = {}) {
     super()
-    this.apiKey = apiKey || process.env.ZEN_API_KEY || readZenConfig()
+    this.apiKey = apiKey || process.env.OPENCODE_ZEN_API_KEY || process.env.ZEN_API_KEY || readZenConfig()
     this.baseUrl = options.baseUrl || process.env.ZEN_BASE_URL || 'https://opencode.ai/zen/v1'
     this.model = options.model || process.env.ZEN_MODEL || 'deepseek-v4-flash-free'
     this.timeout = options.timeout || 60000
+    // Session id for the free tier: the zen gateway rejects chat requests
+    // without the x-opencode-session header (MissingSessionID) even with a
+    // valid key. Optional — absent session simply keeps today's behavior
+    // (the chain falls through to the next provider).
+    this.sessionId = options.sessionId || process.env.ZEN_SESSION_ID || null
     // Bounded model-rotation budget: initial + this many fallback models.
     this.maxModelFallbacks = options.maxModelFallbacks ?? 3
     // Zen model registry is the repository's existing model list (ZEN_MODELS).
@@ -74,7 +113,7 @@ export class ZenProvider extends AIProvider {
   }
 
   async generate(messages, options = {}) {
-    if (!this.apiKey) throw new Error('ZEN_API_KEY not set (zen provider key)')
+    if (!this.apiKey) throw new Error('OPENCODE_ZEN_API_KEY not set (or ZEN_API_KEY / ~/.config/opencode zen config)')
 
     const startModel = options.model || this.model
     this._lastModel = startModel
@@ -151,6 +190,9 @@ export class ZenProvider extends AIProvider {
           headers: {
             'Authorization': `Bearer ${this.apiKey}`,
             'Content-Type': 'application/json',
+            // The free tier requires the OpenCode session id; without it the
+            // gateway returns MissingSessionID. Same header the app sends.
+            ...(this.sessionId ? { 'x-opencode-session': this.sessionId } : {}),
           },
           body: JSON.stringify(payload),
           signal: AbortSignal.timeout(options.timeout || this.timeout),
@@ -159,6 +201,33 @@ export class ZenProvider extends AIProvider {
           const bodyText = await r.text().catch(() => '')
           let errorBody = null
           try { errorBody = JSON.parse(bodyText)?.error ?? JSON.parse(bodyText) } catch { /* non-JSON */ }
+          // Free-tier quota exhaustion (FreeUsageLimitError / Rate limit
+          // exceeded). Classified distinctly so the chain reports
+          // QUOTA_EXHAUSTED — this is not a model failure and not a dead
+          // model; quota may free up, so the error stays retryable and the
+          // bounded chain proceeds to the next provider.
+          const quotaSignal = String(
+            errorBody?.type || errorBody?.code || errorBody?.message || bodyText || ''
+          ).toLowerCase()
+          const isQuota = r.status === 429 ||
+            quotaSignal.includes('freeusagelimiterror') ||
+            quotaSignal.includes('rate limit exceeded') ||
+            quotaSignal.includes('quota')
+          if (isQuota) {
+            const err = new ProviderError(
+              `Zen quota exhausted (${r.status}): ${bodyText.slice(0, 240) || r.statusText}`,
+              {
+                provider: 'Zen', model,
+                status: r.status,
+                code: 'QUOTA_EXHAUSTED',
+                retriable: true,
+                quotaExhausted: true,
+                bodyText,
+                errorBody,
+              }
+            )
+            throw err
+          }
           const dead = classifyModelUnavailable(r.status, bodyText, errorBody)
           if (dead.isModelUnavailable) {
             const err = new ProviderError(

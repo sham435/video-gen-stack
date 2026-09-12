@@ -118,6 +118,23 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
     let articles
     let preset = null
 
+    // TEST_PUBLISH: operator-supplied override title short-circuits the feed
+    // entirely, so the metadata test exercises a deterministic title/category
+    // instead of fighting the news feed (which otherwise always wins).
+    const testOverride = process.env.TEST_PUBLISH === '1' ? process.argv[2]?.trim() : null
+    if (testOverride) {
+      console.log(`[TEST-PUBLISH] using operator override title (feed skipped)`)
+      articles = [{
+        title: testOverride,
+        description: process.argv[3] || 'A story from the NEWS-MONSTER pipeline.',
+        source: 'Operator override',
+        url: '',
+        imageUrl: null,
+        category,
+        publishedAt: new Date().toISOString(),
+      }]
+    } else {
+
     // NewsData.io is the primary source (enforces a 3-hour fetch gap); the
     // RapidAPI Real-Time News Data provider is the second tier (100 req/day
     // free), and NewsAPI remains the final fallback.
@@ -207,7 +224,9 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
 
     // Dedup: skip articles already published in the last 24h (stale free-plan
     // feeds like TechCrunch keep returning the same headlines — the channel
-    // should not repost the identical story every 30 minutes).
+    // should not repost the identical story every 30 minutes). TEST_PUBLISH
+    // uses an operator-supplied override title, so dedup does not apply.
+    if (process.env.TEST_PUBLISH !== '1') {
     try {
       const { PublishEventsStore } = await import('../src/publishing/PublishEventsStore.mjs')
       const cutoff = Date.now() - 864e5
@@ -227,12 +246,19 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         }
       }
     } catch { /* dedup is best-effort */ }
+    }
+
+    } // end TEST_PUBLISH override else (feed path)
 
     if (!articles?.length) {
       // Never publish placeholder junk. If a manual override title was passed
       // (process.argv[2]) that's an explicit operator decision; otherwise abort.
+      // TEST_PUBLISH honors the override even with a news key configured, so a
+      // deterministic metadata test (fixed title/category) can be driven without
+      // fighting the news feed or the 24h dedup.
       const override = process.argv[2]?.trim()
-      if (override && !process.env.NEWSAPI_KEY) {
+      const allowOverride = !!override && (!process.env.NEWSAPI_KEY || process.env.TEST_PUBLISH === '1')
+      if (allowOverride) {
         articles = [{
           title: override,
           description: process.argv[3] || 'A story from the NEWS-MONSTER pipeline.',
@@ -474,7 +500,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           } else throw e
         }
         console.log(`[THUMBNAIL] consumed engine output: ${selected.path} (${selected.width}x${selected.height} ${selected.mimeType}) sha256=${selected.sha256.slice(0, 12)}…`)
-        if (engine?.productionTrace) engine.productionTrace.setThumbnailGenerated()
+        if (typeof engine?.productionTrace?.setThumbnailGenerated === 'function') engine.productionTrace.setThumbnailGenerated()
         return { candidates: [selected], selected, strategy: 'engine-generated' }
       })
 
@@ -503,15 +529,17 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           console.log(`[C2PA] verification: ${verifyResult.valid ? 'PASS' : 'FAIL'} (${verifyMs}ms, ${verifyResult.error || 'ok'})`)
         }
         if (c2paResult.signed) console.log(`[C2PA] signed thumbnail: ${c2paResult.path} (${signMs}ms)`)
-        if (engine?.productionTrace) {
-          engine.productionTrace.setProvenance({
-            signed: c2paResult.signed, verified: verifyResult.valid,
-            manifestId: c2paResult.manifestId,
-            error: c2paResult.error || verifyResult.error || null,
-            signMs, verifyMs, reason: c2paResult.reason || null,
-            validationState: verifyResult.manifest?.validationState || null,
-            failures: verifyResult.manifest?.failures || [],
-          })
+        if (typeof engine?.productionTrace?.setProvenance === 'function') {
+          try {
+            engine.productionTrace.setProvenance({
+              signed: c2paResult.signed, verified: verifyResult.valid,
+              manifestId: c2paResult.manifestId,
+              error: c2paResult.error || verifyResult.error || null,
+              signMs, verifyMs, reason: c2paResult.reason || null,
+              validationState: verifyResult.manifest?.validationState || null,
+              failures: verifyResult.manifest?.failures || [],
+            })
+          } catch { /* best-effort */ }
         }
         if (process.env.C2PA_REQUIRED === 'true') {
           const signOk = c2paResult.signed
@@ -519,10 +547,14 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           if (!signOk || !verifyOk) {
             const gateReason = !signOk ? `signing failed: ${c2paResult.error || c2paResult.reason || 'unknown'}`
               : `verification failed: ${verifyResult.error || 'unknown'}`
-            if (engine?.productionTrace) engine.productionTrace.setProvenance({ gateBlocked: true, gateReason })
+            if (typeof engine?.productionTrace?.setProvenance === 'function') {
+              try { engine.productionTrace.setProvenance({ gateBlocked: true, gateReason }) } catch { /* best-effort */ }
+            }
             throw new Error(`C2PA required but ${gateReason} — blocking publish`)
           }
-          if (engine?.productionTrace) engine.productionTrace.setProvenance({ gateBlocked: false, gateReason: null })
+          if (typeof engine?.productionTrace?.setProvenance === 'function') {
+            try { engine.productionTrace.setProvenance({ gateBlocked: false, gateReason: null }) } catch { /* best-effort */ }
+          }
         }
          return {
           signed: c2paResult.signed, path: c2paResult.path || coverPath,
@@ -710,7 +742,11 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           result = await publishVideo({
             videoUrl: `data:video/mp4;base64,${buffer.toString('base64')}`,
             title: uploadTitle, description: desc,
-            privacy: process.env.YOUTUBE_PRIVACY || 'public',
+            // TEST_PUBLISH never goes live → upload unlisted so Studio shows the
+            // metadata (tags + categoryId) without exposing a half-baked video.
+            privacy: process.env.TEST_PUBLISH === '1'
+              ? 'unlisted'
+              : (process.env.YOUTUBE_PRIVACY || 'public'),
             // Always use the ORIGINAL thumbnail for YouTube — C2PA-signed PNGs
             // have embedded manifest data that YouTube's thumbnail API can't render.
             thumbnailPath: ctx.results.THUMBNAIL?.selected?.path || ctx.results.C2PA?.path,
@@ -749,7 +785,29 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         }
 
         console.log(`[UPLOAD] videoId=${result.videoId} url=${result.url} niche=${result.niche || 'none'} thumbnail=${result.thumbnailUploaded ? 'uploaded' : result.lastError ? 'FAILED: ' + result.lastError : 'skipped'}`)
-        if (engine?.productionTrace) engine.productionTrace.setYouTube(result)
+        // Trace writes are best-effort diagnostics: NEVER let them fail the stage.
+        // On a resumed run the checkpoint returns RENDER's engine as a plain JSON
+        // dict (methods are not serializable), so guard the method itself.
+        if (typeof engine?.productionTrace?.setYouTube === 'function') {
+          try { engine.productionTrace.setYouTube(result) } catch { /* best-effort */ }
+        }
+
+        // TEST_PUBLISH: prove what landed in Studio — fetch the video back and
+        // print tags + categoryId so the SEO mapping is verified before the
+        // video is made public or the backfill runs against the live catalog.
+        if (process.env.TEST_PUBLISH === '1' && result?.videoId) {
+          try {
+            const { fetchVideoSnippet } = await import('../apps/api/publishers/youtube.js')
+            const snippet = await fetchVideoSnippet({ videoId: result.videoId })
+            console.log(`[TEST-PUBLISH] VERIFY videoId=${snippet.videoId}`)
+            console.log(`[TEST-PUBLISH] title=${snippet.title}`)
+            console.log(`[TEST-PUBLISH] categoryId=${snippet.categoryId}`)
+            console.log(`[TEST-PUBLISH] tags(${snippet.tags.length}): ${snippet.tags.join(', ')}`)
+          } catch (verifyErr) {
+            console.warn(`[TEST-PUBLISH] verify failed (video may be propagating): ${verifyErr.message}`)
+          }
+        }
+
         return { uploadTitle, hashtags, nicheDecision, ...result }
       })
 
@@ -775,48 +833,59 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         const coverPath = ctx.results.C2PA?.path || ctx.results.THUMBNAIL?.selected?.path
         const buffer = fs.readFileSync(`${outDir}/final.mp4`)
 
-        // LinkedIn — luxury image post with thumbnail (not video base64)
+        // LinkedIn — luxury native video post (dual-profile: personal +
+        // company page, whenever LINKEDIN_POST_TARGETS/org scope allow).
+        // TEST_PUBLISH intentionally skips the social fan-out: the goal is to
+        // verify YouTube metadata, not to push the test video to followers.
         let linkedinPostId = null
-        if (process.env.LINKEDIN_ACCESS_TOKEN && process.env.LINKEDIN_MEMBER_URN) {
+        const linkedinTargets = []
+        if (process.env.TEST_PUBLISH === '1') {
+          console.log('[LINKEDIN] skipped (TEST_PUBLISH)')
+        } else if (process.env.LINKEDIN_ACCESS_TOKEN && process.env.LINKEDIN_MEMBER_URN) {
           try {
-            const { shareImage, updatePostCommentary } = await import('../apps/api/publishers/linkedin.js')
             const { LinkedInPostFactory } = await import('../src/publishing/LinkedInPostFactory.mjs')
             const factory = new LinkedInPostFactory()
             const thumbPath = ctx.results.THUMBNAIL?.selected?.path || ctx.results.C2PA?.path || 'output/cover.png'
-            const liPost = factory.videoPost({
-              title: article.title || uploadTitle,
-              summary: (article.description || '').slice(0, 200),
-              category: category || 'technology',
-              videoUrl: `https://youtu.be/${videoId}`,
-              youtubeShortsUrl: `https://www.youtube.com/watch?v=${videoId}`,
-              hashtags: (hashtags || '').split(/\s+/).filter(Boolean),
-              thumbnailPath: thumbPath,
-            })
-            const li = await shareImage(
-              process.env.LINKEDIN_ACCESS_TOKEN, process.env.LINKEDIN_MEMBER_URN,
-              `file://${thumbPath}`, liPost.commentary, `https://youtu.be/${videoId}`
+            const results = await factory.publishVideo(
+              process.env.LINKEDIN_ACCESS_TOKEN,
+              process.env.LINKEDIN_MEMBER_URN,
+              buffer,
+              {
+                title: article.title || uploadTitle,
+                summary: (article.description || '').slice(0, 200),
+                category: category || 'technology',
+                videoUrl: `https://youtu.be/${videoId}`,
+                youtubeShortsUrl: `https://www.youtube.com/watch?v=${videoId}`,
+                hashtags: (hashtags || '').split(/\s+/).filter(Boolean),
+                thumbnailPath: thumbPath,
+              }
             )
-            const postId = li?.id || li?.urn
-            if (postId) {
-              linkedinPostId = postId
-              try {
-                await updatePostCommentary(process.env.LINKEDIN_ACCESS_TOKEN, postId,
-                  `${liPost.commentary}\n\nhttps://www.linkedin.com/feed/update/${postId}`)
-                console.log(`[LINKEDIN] image post=${postId} — https://www.linkedin.com/feed/update/${postId}`)
-              } catch (ue) { console.log(`[LINKEDIN] posted ${postId} (link append skipped: ${ue.message})`) }
-            } else {
-              console.log(`[LINKEDIN] image post=ok — https://www.linkedin.com/feed/update/${li?.id || li?.urn}`)
+            for (const r of results) {
+              linkedinTargets.push(r.target)
+              if (r.success) {
+                if (r.target === 'profile' && r.id) linkedinPostId = r.id
+                console.log(`[LINKEDIN] video post ${r.target}=${r.id} — ${r.url || `https://www.linkedin.com/feed/update/${r.id}`}`)
+              } else {
+                console.log(`[LINKEDIN] video post ${r.target} failed (best-effort): ${r.error}`)
+              }
+            }
+            if (results.every(r => r.success)) {
+              console.log(`[LINKEDIN] native video posted to: ${linkedinTargets.join(', ') || 'none'}`)
             }
           } catch (e) {
             console.log(`[LINKEDIN] skipped (best-effort): ${e.message}`)
-            if (engine?.productionTrace) engine.productionTrace.setLinkedIn({ attempted: true, success: false, error: e.message })
+            if (typeof engine?.productionTrace?.setLinkedIn === 'function') {
+              try { engine.productionTrace.setLinkedIn({ attempted: true, success: false, error: e.message }) } catch { /* best-effort */ }
+            }
           }
         } else {
           console.log('[LINKEDIN] skipped — LINKEDIN_ACCESS_TOKEN/LINKEDIN_MEMBER_URN not set')
         }
 
         // Social distribution
-        try {
+        if (process.env.TEST_PUBLISH === '1') {
+          console.log('[DISTRIBUTE-social] skipped (TEST_PUBLISH)')
+        } else try {
           const { SocialDistributionManager } = await import('../src/publishing/SocialDistributionManager.mjs')
           const sdm = new SocialDistributionManager()
           const dist = await sdm.distribute({
@@ -834,7 +903,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
 
         // Pinned comment — use plan hook strategy for CTA
         let commentEvent = null
-        if (videoId) {
+        if (videoId && process.env.TEST_PUBLISH !== '1') {
           try {
             const { PinnedCommentBuilder } = await import('../src/publishing/PinnedCommentBuilder.mjs')
             const { TopicCtaBuilder } = await import('../src/publishing/TopicCtaBuilder.mjs')
@@ -854,6 +923,11 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
 
       // ── DISTRIBUTE — parallel fan-out to YouTube, GitHub Pages, LinkedIn ──
       // One artifact → all destinations. Each destination has independent state and retry.
+      // TEST_PUBLISH: no fan-out — the run stops after the YouTube upload so the
+      // metadata check in Studio is not polluted by test artifacts.
+      if (process.env.TEST_PUBLISH === '1') {
+        job.onStage('DISTRIBUTE', async () => ({ skipped: true, reason: 'TEST_PUBLISH' }))
+      } else {
       job.onStage('DISTRIBUTE', async (ctx) => {
         const { PublicationArtifact } = await import('../src/distribution/PublicationArtifact.mjs')
         const { DistributionOrchestrator } = await import('../src/distribution/DistributionOrchestrator.mjs')
@@ -888,6 +962,28 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
 
         console.log(`[DISTRIBUTE] ${distResult.state === 'SUCCESS' ? '✓' : '✗'} githubPages: ${distResult.state} (${distResult.durationMs}ms)`)
 
+        // Site feed — commit public/* + production records back to the repo so
+        // the live landing page reflects this publication immediately (gh-API
+        // blob→tree→commit→ref; `git push` is unavailable in the sandbox).
+        // Best-effort by design: a GitHub hiccup must not fail the pipeline.
+        let siteDeploy = { state: 'SKIPPED', reason: 'not attempted' }
+        try {
+          const { GitSiteDeployer } = await import('../src/distribution/GitSiteDeployer.mjs')
+          const deployer = new GitSiteDeployer()
+          siteDeploy = await deployer.deploy({
+            outDir,
+            jobId: ctx.jobId,
+            videoId: uploadResult.videoId,
+            testPublish: process.env.TEST_PUBLISH === '1',
+          })
+          if (siteDeploy.state !== 'SUCCESS') {
+            console.log(`[SITE] ${siteDeploy.state.toLowerCase()}: ${siteDeploy.reason}`)
+          }
+        } catch (e) {
+          siteDeploy = { state: 'FAILED', reason: e.message }
+          console.log(`[SITE] skipped (best-effort): ${e.message}`)
+        }
+
         return {
           artifact: artifact.toJSON(),
           distributionState: distResult.state,
@@ -896,8 +992,10 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             githubPages: distResult,
             linkedin: artifact.destinations.linkedin,
           },
+          siteDeploy,
         }
       })
+      }
 
       // ── VERIFY — post-publication verification chain ──
       // Verifies: video reachable, visibility public, hasCustomThumbnail,
@@ -988,7 +1086,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           verification = await verifier.verify({
             videoId,
             expectedTitle: uploadTitle || title,
-            expectedVisibility: 'public',
+            expectedVisibility: process.env.TEST_PUBLISH === '1' ? 'unlisted' : 'public',
             thumbnailPath: thumbPath,
             expectedThumbnailSha256: masterThumbSha || undefined,
             jobId: ctx.jobId,

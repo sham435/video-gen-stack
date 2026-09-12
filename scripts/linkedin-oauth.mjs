@@ -11,9 +11,11 @@
 //     node scripts/linkedin-oauth.mjs --code <code>
 //     → exchanges the code for tokens and writes them to .env
 //
-//   LOCAL SERVER MODE (only if localhost:PORT is registered in the portal):
+//   LOCAL SERVER MODE (port 4567 is the REGISTERED local redirect):
 //     node scripts/linkedin-oauth.mjs --local [port]
-//     → starts a local callback server, opens the browser, auto-saves tokens.
+//     → starts a local callback server on the registered path, opens the
+//       browser, and auto-saves tokens without any copy/paste. This is the
+//       recommended re-auth path when the dashboard is not running.
 import { createServer } from 'node:http'
 import { execSync } from 'node:child_process'
 import { readFileSync, writeFileSync } from 'node:fs'
@@ -36,7 +38,13 @@ function env(key, fallback = '') {
 
 const CLIENT_ID = env('LINKEDIN_CLIENT_ID')
 const CLIENT_SECRET = env('LINKEDIN_CLIENT_SECRET')
-const REDIRECT_URI = env('LINKEDIN_REDIRECT_URI', 'https://video-gen-stack-production.up.railway.app/api/auth/linkedin/callback')
+const REDIRECT_URI = env('LINKEDIN_REDIRECT_URI', 'http://localhost:4567/api/auth/linkedin/callback')
+
+// Request w_organization_social only when org posting is enabled so the
+// consent screen stays minimal for profile-only setups.
+function orgScope() {
+  return process.env.LINKEDIN_ORG_SOCIAL === '1' || readEnv('LINKEDIN_ORG_SOCIAL') === '1'
+}
 
 if (!CLIENT_ID || !CLIENT_SECRET) {
   console.error('❌ LINKEDIN_CLIENT_ID / LINKEDIN_CLIENT_SECRET missing from .env')
@@ -104,14 +112,15 @@ async function main() {
     const PORT = parseInt(portArg || '4567')
     const LOCAL_URI = `http://localhost:${PORT}/api/auth/linkedin/callback`
     const state = randomBytes(24).toString('hex')
+    const scope = orgScope() ? 'openid profile email w_member_social w_organization_social' : 'openid profile email w_member_social'
     const authUrl =
       `${OAUTH}/authorization?response_type=code&client_id=${encodeURIComponent(CLIENT_ID)}` +
-      `&redirect_uri=${encodeURIComponent(LOCAL_URI)}&scope=${encodeURIComponent('openid profile email w_member_social')}` +
+      `&redirect_uri=${encodeURIComponent(LOCAL_URI)}&scope=${encodeURIComponent(scope)}` +
       `&state=${encodeURIComponent(state)}`
 
     const server = createServer(async (req, res) => {
       const url = new URL(req.url, `http://localhost:${PORT}`)
-      if (url.pathname === '/oauth/callback') {
+      if (url.pathname === '/api/auth/linkedin/callback') {
         const { code, state: st, error } = url.searchParams
         if (error) return respond(res, 400, `OAuth error: ${error}`)
         if (!code) return respond(res, 400, 'No code in callback')
@@ -120,7 +129,7 @@ async function main() {
         await exchangeCode(code)
         return respond(res, 200, '<h3>✅ LinkedIn connected!</h3><p>Access token saved to <code>.env</code>. Close this tab.</p>')
       }
-      respond(res, 404, 'Not found — expected /oauth/callback')
+      respond(res, 404, 'Not found — expected /api/auth/linkedin/callback')
     })
     function respond(res, status, text) {
       res.writeHead(status, { 'Content-Type': 'text/html; charset=utf-8' })
@@ -139,9 +148,10 @@ async function main() {
   // Default: print an auth URL using the registered redirect URI; the code
   // appears in the browser's address bar after redirect, then run --code.
   const state = randomBytes(24).toString('hex')
+  const scope = orgScope() ? 'openid profile email w_member_social w_organization_social' : 'openid profile email w_member_social'
   const authUrl =
     `${OAUTH}/authorization?response_type=code&client_id=${encodeURIComponent(CLIENT_ID)}` +
-    `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent('openid profile email w_member_social')}` +
+    `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(scope)}` +
     `&state=${encodeURIComponent(state)}`
   console.log('🔗 Open this URL, approve, then copy the `code` param from the redirect URL and run:\n')
   console.log('    node scripts/linkedin-oauth.mjs --code <the-code>')

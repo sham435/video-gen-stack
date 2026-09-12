@@ -97,7 +97,12 @@ export function classifyError(error, { provider = null, model = null } = {}) {
     else cls = c
   } else if (error?.status != null) {
     const s = Number(error.status)
-    if (s === 429 || (s >= 500 && s <= 599)) cls = 'TRANSIENT'
+    // 429 = provider quota / rate-limit exhaustion (e.g. OpenCode Zen free-tier
+    // FreeUsageLimitError "Rate limit exceeded", OpenRouter "temporarily
+    // rate-limited upstream"). Distinct from generic transient so diagnostics
+    // can state the real cause; still retryable (quota may free up).
+    if (s === 429) cls = 'QUOTA_EXHAUSTED'
+    else if (s >= 500 && s <= 599) cls = 'TRANSIENT'
     else if (s === 401 || s === 403) cls = 'AUTH'
     else if (s === 404) cls = 'MODEL_NOT_FOUND'
     else if (s >= 400 && s < 500) cls = 'INVALID_REQUEST'

@@ -2,7 +2,9 @@ import { existsSync, readFileSync } from 'node:fs'
 
 const CLIENT_ID = process.env.YOUTUBE_CLIENT_ID
 const CLIENT_SECRET = process.env.YOUTUBE_CLIENT_SECRET
-const REFRESH_TOKEN = process.env.YOUTUBE_REFRESH_TOKEN
+// NOTE: refresh token is read at call time (envRefreshToken()) — it can be
+// rotated at runtime (dashboard OAuth re-auth writes a new one into .env +
+// process.env), so never freeze it into a module-level const.
 const REDIRECT_URI = process.env.YOUTUBE_REDIRECT_URI || 'https://video-gen-stack-production.up.railway.app/api/auth/youtube/callback'
 
 const GOOGLE_OAUTH_BASE = 'https://accounts.google.com'
@@ -17,7 +19,99 @@ const YOUTUBE_SCOPES = [
 
 const REQUEST_TIMEOUT_MS = Number(process.env.YOUTUBE_REQUEST_TIMEOUT_MS || 60_000)
 
+// The video upload uses YouTube's resumable protocol: a bounded per-chunk PUT
+// (see resumableUploadChunks). A 10-20MB MP4 at ~84KB/s egress takes minutes;
+// the per-chunk timeout must allow a full chunk (default 4MB) to drain, so it
+// is configurable via env with a 5-minute default (and at least 120s).
+const UPLOAD_TIMEOUT_MS = Number(process.env.YOUTUBE_UPLOAD_TIMEOUT_MS || 300_000)
+
 const MIME_BY_EXT = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg' }
+
+/**
+ * --------------------------------------------------------------------------
+ * Access-token cache — keeps the token warm server-side so long renders /
+ * scheduled uploads never hit a stale token. Google access tokens live ~1h;
+ * we proactively refresh before expiry and reuse the cached token across calls.
+ * --------------------------------------------------------------------------
+ */
+let cachedAccessToken = null
+let cachedAtMs = 0
+const ACCESS_TOKEN_TTL_MS = Number(process.env.YOUTUBE_ACCESS_TOKEN_TTL_MS || 3_600_000) // 1h
+const REFRESH_MARGIN_MS = Number(process.env.YOUTUBE_TOKEN_REFRESH_MARGIN_MS || 10 * 60_000) // refresh 10min before expiry
+const WARMUP_INTERVAL_MS = Number(process.env.YOUTUBE_TOKEN_WARMUP_INTERVAL_MS || 30 * 60_000) // every 30min
+let warmupStarted = false
+
+function envRefreshToken() {
+  return process.env.YOUTUBE_REFRESH_TOKEN
+}
+
+export function cachedTokenInfo() {
+  return {
+    cached: !!cachedAccessToken,
+    ageMs: cachedAccessToken ? Date.now() - cachedAtMs : null,
+    ttlMs: ACCESS_TOKEN_TTL_MS,
+    refreshMarginMs: REFRESH_MARGIN_MS,
+    nextRefreshInMs: cachedAccessToken ? Math.max(0, ACCESS_TOKEN_TTL_MS - REFRESH_MARGIN_MS - (Date.now() - cachedAtMs)) : null,
+  }
+}
+
+/**
+ * Drop the cached access token. Call after rotating YOUTUBE_REFRESH_TOKEN at
+ * runtime (e.g. dashboard OAuth re-auth) so the next getAccessToken() fetch
+ * uses the new refresh token instead of serving the stale cached token.
+ */
+export function resetTokenCache() {
+  cachedAccessToken = null
+  cachedAtMs = 0
+}
+
+/**
+ * Start a background timer that keeps the access token warm. Safe to call
+ * multiple times — only one timer is ever created. Call from long-running
+ * processes (API server, dashboard, jobs worker).
+ *
+ * options.onRefresh({ ok, at, error, ageMs, token }) fires on every refresh
+ * attempt (initial + interval), letting hosts surface warmup activity live
+ * (e.g. dashboard SSE).
+ */
+const warmupHistory = []
+const WARMUP_HISTORY_MAX = 10
+
+function recordWarmupEvent(entry) {
+  warmupHistory.push({ at: new Date().toISOString(), ...entry })
+  if (warmupHistory.length > WARMUP_HISTORY_MAX) warmupHistory.shift()
+}
+
+export function warmupHistoryInfo() {
+  return [...warmupHistory]
+}
+
+export function startYouTubeTokenWarmup(options = {}) {
+  if (warmupStarted) return { started: false, alreadyRunning: true, intervalMs: WARMUP_INTERVAL_MS, history: warmupHistoryInfo(), ...cachedTokenInfo() }
+  warmupStarted = true
+  const intervalMs = options.intervalMs || WARMUP_INTERVAL_MS
+  const onRefresh = typeof options.onRefresh === 'function' ? options.onRefresh : null
+  const run = async () => {
+    const at = Date.now()
+    try {
+      await getAccessToken({ force: true })
+      const info = cachedTokenInfo()
+      const entry = { ok: true, error: null, ageMs: info.ageMs, tokenLength: (cachedAccessToken || '').length }
+      recordWarmupEvent(entry)
+      if (onRefresh) { try { onRefresh({ ok: true, at, ...entry }) } catch {} }
+    } catch (e) {
+      recordWarmupEvent({ ok: false, error: e?.message || String(e) })
+      if (onRefresh) { try { onRefresh({ ok: false, at, error: e?.message || String(e) }) } catch {} }
+      console.error(`[yt-token-warmup] refresh failed: ${e?.message || e}`)
+    }
+  }
+  const timer = setInterval(run, intervalMs)
+  if (timer.unref) timer.unref()
+  // Warm immediately so the very first upload uses a fresh cached token
+  run()
+  console.log(`[yt-token-warmup] started — refresh every ${Math.round(intervalMs / 60_000)}min`)
+  return { started: true, intervalMs, history: warmupHistoryInfo(), ...cachedTokenInfo() }
+}
 
 /**
  * --------------------------------------------------------------------------
@@ -33,7 +127,7 @@ function assertOAuthConfig() {
 }
 
 function assertRefreshToken() {
-  if (!REFRESH_TOKEN) throw new Error('YOUTUBE_REFRESH_TOKEN_NOT_SET: complete OAuth authorization first')
+  if (!envRefreshToken()) throw new Error('YOUTUBE_REFRESH_TOKEN_NOT_SET: complete OAuth authorization first')
 }
 
 /**
@@ -146,9 +240,14 @@ export async function exchangeCode(code) {
   return data
 }
 
-export async function getAccessToken() {
+export async function getAccessToken(options = {}) {
   assertOAuthConfig()
   assertRefreshToken()
+
+  // Serve from cache when still far from expiry (unless force requested).
+  if (!options.force && cachedAccessToken && Date.now() - cachedAtMs < ACCESS_TOKEN_TTL_MS - REFRESH_MARGIN_MS) {
+    return cachedAccessToken
+  }
 
   const response = await fetchWithTimeout(GOOGLE_TOKEN_URL, {
     method: 'POST',
@@ -156,7 +255,7 @@ export async function getAccessToken() {
     body: new URLSearchParams({
       client_id: CLIENT_ID,
       client_secret: CLIENT_SECRET,
-      refresh_token: REFRESH_TOKEN,
+      refresh_token: envRefreshToken(),
       grant_type: 'refresh_token',
     }),
   })
@@ -164,7 +263,9 @@ export async function getAccessToken() {
   const data = await readJson(response)
   if (!response.ok) throw youtubeApiError(data, response.status)
   if (!data.access_token) throw new Error('YOUTUBE_ACCESS_TOKEN_MISSING')
-  return data.access_token
+  cachedAccessToken = data.access_token
+  cachedAtMs = Date.now()
+  return cachedAccessToken
 }
 
 /**
@@ -218,6 +319,117 @@ function validateThumbnailBytes(buffer, mimeType) {
 }
 
 /**
+ * YouTube resumable upload (uploadType=resumable).
+ *
+ * Why this exists: the old single-POST multipart upload aborts any video
+ * larger than what the connection can push inside one timeout window.
+ * Measured ~84KB/s egress locally → a 13.7MB render exceeds a fixed 120s
+ * ceiling, so every publish retried and failed. This flow splits the file
+ * into bounded chunks and PUTs each one independently:
+ *
+ *   POST /upload/youtube/v3/videos?uploadType=resumable&part=snippet,status
+ *     (body = JSON metadata)            → Location header = session URI
+ *   PUT  <session> with `Content-Range: bytes S-E/TOTAL` per chunk
+ *     200/201 → complete (body is the video resource)
+ *     308     → incomplete; `Range: bytes=0-N` header = resume point
+ *
+ * A failed/timed-out chunk is re-sent in isolation (bounded retries with
+ * backoff); a 308 resume rewinds to exactly the byte the server acknowledged.
+ * This is also the network primitive the LinkedIn native-video job reuses
+ * (it PUTs an MP4 to LinkedIn's own uploadUrl the same way).
+ *
+ * When the init response has NO Location header (test doubles, or a server
+ * that completed synchronously) the init response is treated as the upload
+ * result — preserving the legacy single-response contract.
+ */
+async function resumableUploadChunks({ token, videoBuffer, metaJson }) {
+  const total = videoBuffer.length
+  const chunkSize = Math.max(1, Number(process.env.YOUTUBE_UPLOAD_CHUNK_SIZE || 4 * 1024 * 1024))
+  const maxRetries = Math.max(0, Number(process.env.YOUTUBE_UPLOAD_CHUNK_RETRIES || 3))
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+  const initRes = await fetchWithTimeout(
+    `${GOOGLE_API_BASE}/upload/youtube/v3/videos?uploadType=resumable&part=snippet,status`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'X-Upload-Content-Type': 'video/mp4',
+        'X-Upload-Content-Length': String(total),
+      },
+      body: metaJson,
+    },
+    REQUEST_TIMEOUT_MS
+  )
+
+  const location = initRes.headers?.get?.('location') ?? null
+  if (!location) {
+    const data = await readJson(initRes)
+    if (!initRes.ok || data.error) throw youtubeApiError(data, initRes.status)
+    return data
+  }
+
+  let start = 0
+  let result = null
+
+  while (start < total) {
+    const end = Math.min(start + chunkSize, total) - 1
+    const bytes = videoBuffer.subarray(start, end + 1)
+
+    let attempt = 0
+    let res = null
+    for (;;) {
+      try {
+        res = await fetchWithTimeout(
+          location,
+          {
+            method: 'PUT',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Range': `bytes ${start}-${end}/${total}`,
+              'Content-Length': String(bytes.length),
+            },
+            body: bytes,
+          },
+          Math.max(REQUEST_TIMEOUT_MS, UPLOAD_TIMEOUT_MS)
+        )
+      } catch (err) {
+        // Network failure / per-chunk timeout — re-send only this chunk.
+        if (attempt >= maxRetries) throw err
+        attempt++
+        await delay(Math.min(500 * 2 ** attempt, 3000))
+        continue
+      }
+
+      if (res.status === 308) {
+        // Incomplete: server reports what it holds via Range: bytes=0-N.
+        const range = res.headers?.get?.('range') ?? null
+        const received = range ? parseInt(String(range).split('-')[1] ?? '', 10) : NaN
+        start = Number.isFinite(received) && received >= start ? received + 1 : end + 1
+        break
+      }
+      if (res.status === 200 || res.status === 201) {
+        result = await readJson(res)
+        start = total
+        break
+      }
+
+      const data = await readJson(res)
+      if (res.status >= 500 && attempt < maxRetries) {
+        attempt++
+        await delay(Math.min(500 * 2 ** attempt, 3000))
+        continue
+      }
+      throw youtubeApiError(data, res.status)
+    }
+    if (result) break
+  }
+
+  return result || {}
+}
+
+/**
  * --------------------------------------------------------------------------
  * YouTube video upload
  * --------------------------------------------------------------------------
@@ -258,8 +470,6 @@ export async function publishVideo(inputOrUrl, titleOrOpts, description, privacy
   if (!videoBuffer.byteLength) throw new Error('VIDEO_SOURCE_EMPTY')
   console.log(`[YOUTUBE_VIDEO_UPLOAD] bytes=${videoBuffer.byteLength} sizeMB=${(videoBuffer.byteLength / 1024 / 1024).toFixed(1)}`)
 
-  const boundary = `youtube-${Date.now()}-${Math.random().toString(16).slice(2)}`
-
   // SEO: snippet.tags[] + snippet.categoryId are what YouTube uses for search
   // discovery. We always send tags (deduped, clean, capped) and resolve a
   // categoryId (defaulting to Science & Technology when none supplied).
@@ -274,31 +484,16 @@ export async function publishVideo(inputOrUrl, titleOrOpts, description, privacy
   if (cleanTags.length) snippet.tags = cleanTags
   if (_categoryId) snippet.categoryId = String(_categoryId)
 
-  const meta = JSON.stringify({
+  const metaJson = JSON.stringify({
     snippet,
     status: { privacyStatus: _privacy, selfDeclaredMadeForKids: false },
   })
 
-  const parts = [
-    Buffer.from(`--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${meta}\r\n`),
-    Buffer.from(`--${boundary}\r\nContent-Type: video/mp4\r\n\r\n`),
-    Buffer.from(videoBuffer),
-    Buffer.from(`\r\n--${boundary}--\r\n`),
-  ]
-  const requestBody = Buffer.concat(parts)
-
-  const response = await fetchWithTimeout(
-    `${GOOGLE_API_BASE}/upload/youtube/v3/videos?part=snippet,status&uploadType=multipart`,
-    {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': `multipart/related; boundary=${boundary}` },
-      body: requestBody,
-    },
-    Math.max(REQUEST_TIMEOUT_MS, 120_000)
-  )
-
-  const data = await readJson(response)
-  if (!response.ok || data.error) throw youtubeApiError(data, response.status)
+  const data = await resumableUploadChunks({
+    token,
+    videoBuffer: Buffer.from(videoBuffer),
+    metaJson,
+  })
   if (!data.id) throw new Error('YOUTUBE_VIDEO_UPLOAD_SUCCEEDED_WITHOUT_VIDEO_ID')
 
   const videoId = data.id
@@ -355,7 +550,7 @@ export async function uploadShort(videoUrl, title, description, privacy = 'publi
  * validation + SHA-256 preflight.
  *
  * A 2xx response is NOT authoritative acceptance. Propagation is confirmed by
- * YouTubePropagationVerifier (hasCustomThumbnail + remote 9:16 geometry).
+ * YouTubePropagationVerifier (hasCustomThumbnail + remote 16:9 geometry).
  */
 export async function setThumbnail(token, videoId, thumbnailPath, options = {}) {
   if (!token) throw new Error('YOUTUBE_ACCESS_TOKEN_REQUIRED')
@@ -530,6 +725,32 @@ export async function updateVideoSnippet({ videoId, title, description, tags, ca
     title: updated.title,
     tags: updated.tags || [],
     categoryId: updated.categoryId || null,
+  }
+}
+
+/**
+ * Verify what YouTube actually stores for a video (tags + categoryId) — used
+ * by TEST_PUBLISH so we confirm the metadata mapping before touching the live
+ * catalog or before running a backfill across existing videos.
+ */
+export async function fetchVideoSnippet({ videoId }) {
+  const token = await getAccessToken()
+  const getRes = await fetchWithTimeout(
+    `${GOOGLE_API_BASE}/youtube/v3/videos?part=snippet,contentDetails&id=${encodeURIComponent(videoId)}`,
+    { headers: { 'Authorization': `Bearer ${token}` } },
+  )
+  const getData = await readJson(getRes)
+  if (!getRes.ok) throw youtubeApiError(getData, getRes.status)
+  const item = getData.items?.[0]
+  if (!item) throw new Error(`YOUTUBE_VIDEO_NOT_VISIBLE: ${videoId}`)
+  const snippet = item.snippet || {}
+  return {
+    videoId,
+    title: snippet.title || null,
+    tags: Array.isArray(snippet.tags) ? snippet.tags : [],
+    categoryId: snippet.categoryId ?? null,
+    defaultAudioLanguage: snippet.defaultAudioLanguage || null,
+    duration: item.contentDetails?.duration || null,
   }
 }
 

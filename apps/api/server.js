@@ -134,9 +134,17 @@ app.get('/api/health/detailed', requireAuth, (req, res) => {
   })
 })
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   logger.info({ port: PORT }, 'api server listening')
   console.log(`🍿 Video Gen Stack running at http://localhost:${PORT}`)
+  // Keep the YouTube access token warm server-side (long renders / scheduled
+  // uploads never hit a stale token; token lives ~1h, refreshes every 30min).
+  try {
+    const { startYouTubeTokenWarmup } = await import('./publishers/youtube.js')
+    startYouTubeTokenWarmup()
+  } catch (e) {
+    console.error(`[yt-token-warmup] could not start: ${e?.message || e}`)
+  }
   if (!process.env.GEMINI_API_KEY) {
     console.log('📋 Get a FREE Gemini API key (no CC): https://aistudio.google.com/apikey')
     console.log('   Then add to .env: GEMINI_API_KEY=your_key_here')

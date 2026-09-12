@@ -35,6 +35,31 @@ const ACT_STYLE_OVERRIDES = {
 
 const EMOJI_MAP = { tragedy: '\uD83D\uDE2D', courage: '\uD83D\uDCAA', win: '\u2728\uD83D\uDD25', hook: '\uD83D\uDEA8' }
 
+// Stop words that are useless as Pexels search terms.
+const QUERY_STOP_WORDS = new Set(['the', 'and', 'for', 'with', 'from', 'this', 'that', 'his', 'her', 'was', 'were', 'their', 'into', 'under', 'over', 'while', 'news', 'monster', 'source', 'system', 'people', 'first', 'what', 'when', 'they'])
+
+/** Tokenize + clean a string into lowercase, de-duplicated, length-filtered words. */
+export function contentWords(str, limit) {
+  if (!str) return []
+  const tokens = String(str)
+    .replace(/[^a-zA-Z0-9$#+ ]/g, ' ')
+    .split(/\s+/)
+    .map((w) => w.trim().toLowerCase())
+    .filter((w) => w.length > 2)
+  return [...new Set(tokens)].slice(0, limit)
+}
+
+/**
+ * Build a distinct, content-relevant Pexels query for a scene from its OWN
+ * script text. The old `algorithm.visual.pexels + type` produced identical
+ * strings for every scene sharing a type → identical photos across scenes and
+ * videos. A text-derived query varies per beat while staying on-topic.
+ */
+export function distinctSceneQuery(sceneText, fallbackType = 'fact') {
+  const words = contentWords(sceneText, 3).filter((w) => !QUERY_STOP_WORDS.has(w))
+  return (words.length ? words.slice(0, 2) : [fallbackType]).join(' ')
+}
+
 const ARC_SCRIPTS = {
   RAIN_SHELTER_LOVE: {
     tragedy: (t) => `The system was broken. ${t.slice(0,50)}... left in rain, shivering, no hope \uD83D\uDE2D`,
@@ -88,7 +113,7 @@ export function buildScenesForAlgorithm(article, algorithm) {
       text,
       emoji: EMOJI_MAP[type] || '',
       visualStyle: visualVariant,
-      pexelsQuery: `${algorithm.visual.pexels} ${type}`,
+      pexelsQuery: distinctSceneQuery(text, type),
       tone: algorithm.tone.voice,
       duration: type === 'hook' ? 3 : type === 'tragedy' ? 8 : type === 'courage' ? 10 : 7,
       caption: `${type.toUpperCase()} ${EMOJI_MAP[type] || ''}`,
@@ -123,7 +148,14 @@ export class SceneEngine {
     const actBias = ACT_STYLE_OVERRIDES[scene.type] || ACT_STYLE_OVERRIDES.fact
     const sceneSeed = (algorithm?.seed || 0) + (scene.id?.charCodeAt?.(scene.id.length - 1) || 0)
     const sceneIndex = scene.id ? parseInt(scene.id.replace(/\D/g, '') || '0', 10) : 0
-    const pexelsQuery = `${actBias.bias} ${article?.category || 'news'}`
+
+    // Per-scene, content-derived query. The old `${actBias.bias} ${category}`
+    // produced the SAME string for every scene sharing a type, so every scene
+    // hit the same Pexels result page → visibly repeated imagery. We now fold
+    // the scene's own script words (narrated headline copy) into the search so
+    // each beat queries for what it actually says, keeping scenes distinct.
+    const sceneText = scene?.narration || scene?.text || scene?.script || ''
+    const pexelsQuery = distinctSceneQuery(sceneText, scene.type || 'fact')
 
     const key2 = process.env.PEXELS_API_KEY
     if (!key2) return null

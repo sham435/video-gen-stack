@@ -145,6 +145,8 @@ export class AudioMixer {
       // Time-based music bed envelope: drop the bed to `level` from
       // `outroStart` onward (frame-evaluated volume expression). When no
       // envelope is supplied the standard uniform bed is used.
+      // Music bed is the compressed MAIN input; voice is the sidechain key.
+      // (Input order matters in sidechaincompress: main first, key second.)
       let bedFilter = '[bg][v1]sidechaincompress=threshold=0.05:ratio=8:attack=80:release=500:makeup=1.2[duck];'
       let mixInputs = '[v2][duck]amix=inputs=2:duration=longest:dropout_transition=0:normalize=0[a]'
       if (musicEnvelope && Number.isFinite(musicEnvelope.outroStart) && Number.isFinite(musicEnvelope.level)) {
@@ -159,15 +161,15 @@ export class AudioMixer {
         '-i', voicePath,
         '-stream_loop', '-1', '-i', effectiveMusic,
         '-filter_complex',
-        // Voice is the sidechain key: music ducks ~10-12 dB only while speech
-        // is present, then swells back between lines. The per-scene bed gain
-        // (volume=0.22 ≈ -13 dB) keeps the resting underscore well below the
-        // 1.3× voice channel; sidechaincompress then adds dynamic ducking so
-        // intelligibility is preserved without a dead bed.
-        '[2:a]aformat=channel_layouts=stereo,afade=t=in:st=0:d=1,apad[bg];' +
-        '[1:a]aformat=channel_layouts=stereo,volume=1.3,apad,asplit=2[v1][v2];' +
-        bedFilter +
-        mixInputs,
+      // Voice is the sidechain key: music ducks ~10-12 dB only while speech
+      // is present, then swells back between lines. The per-scene bed gain
+      // (volume=0.22 ≈ -13 dB) keeps the resting underscore well below the
+      // 1.3× voice channel; sidechaincompress then adds dynamic ducking so
+      // music never competes with narration.
+      '[2:a]aformat=channel_layouts=stereo,afade=t=in:st=0:d=1,volume=0.22,apad[bg];' +
+      '[1:a]aformat=channel_layouts=stereo,volume=1.3,apad,asplit=2[v1][v2];' +
+      '[bg][v1]sidechaincompress=threshold=0.05:ratio=8:attack=80:release=500:makeup=1.2[duck];' +
+      mixInputs,
         '-map', '0:v', '-map', '[a]',
         '-c:v', 'libx264', '-preset', 'medium', '-crf', '20',
         '-c:a', 'aac', '-b:a', '192k',

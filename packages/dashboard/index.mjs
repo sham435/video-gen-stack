@@ -8,6 +8,8 @@ import { readFileSync, existsSync, readdirSync, statSync, unlinkSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { execFileSync } from 'child_process'
+import { createServer } from 'http'
+import { randomBytes } from 'crypto'
 import { AgentTaskStore, AgentEventBus } from './agentTasks.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -1044,6 +1046,273 @@ app.get('/api/ai/performance', (req, res) => {
 })
 
 // Pipeline events
+function linkedinTokenStatus() {
+  const token = process.env.LINKEDIN_ACCESS_TOKEN
+  const urn = process.env.LINKEDIN_MEMBER_URN
+  const cid = process.env.LINKEDIN_CLIENT_ID
+  if (!cid) return { configured: false, error: 'LINKEDIN_CLIENT_ID not configured' }
+  if (!token || !urn) return { configured: true, hasToken: false, error: 'LINKEDIN_ACCESS_TOKEN / LINKEDIN_MEMBER_URN missing — re-authenticate' }
+  return { configured: true, hasToken: true, tokenLength: token.length, redacted: token.slice(0, 8) + '…' + token.slice(-4) }
+}
+
+app.get('/api/linkedin/token/status', async (req, res) => {
+  const base = linkedinTokenStatus()
+  if (!base.configured || !base.hasToken) return res.json({ ...base, ok: false })
+  try {
+    const { introspectToken } = await import('../../apps/api/publishers/linkedin.js')
+    const active = await introspectToken(process.env.LINKEDIN_ACCESS_TOKEN)
+    let profile = null
+    try {
+      const r = await fetch('https://api.linkedin.com/v2/userinfo', { headers: { Authorization: 'Bearer ' + process.env.LINKEDIN_ACCESS_TOKEN } })
+      const u = await r.json()
+      if (u.sub) profile = { sub: u.sub, name: u.name || null, email: u.email || null, picture: u.picture || null }
+    } catch {}
+    res.json({
+      ...base,
+      ok: true,
+      active: active?.active !== false,
+      scopes: active?.scope || [],
+      expiresAt: active?.expires_at ? new Date(active.expires_at * 1000).toISOString() : null,
+      hasOrgScope: (active?.scope || []).includes('w_organization_social'),
+      target: (active?.scope || []).includes('w_organization_social') && process.env.LINKEDIN_ORG_ID ? 'company' : 'profile',
+      profile,
+      redirectUri: process.env.LINKEDIN_REDIRECT_URI || 'http://localhost:4567/api/auth/linkedin/callback',
+      checkedAt: new Date().toISOString(),
+    })
+  } catch (e) {
+    res.status(200).json({ ...base, ok: false, error: String(e?.message || e) })
+  }
+})
+
+app.get('/api/linkedin/auth', async (req, res) => {
+  try {
+    const { buildAuthUrl } = await import('../../apps/api/publishers/linkedin.js')
+    const redirectUri = process.env.LINKEDIN_REDIRECT_URI || 'http://localhost:4567/api/auth/linkedin/callback'
+    const state = issueLinkedInState()
+    const url = buildAuthUrl(redirectUri) + `&state=${encodeURIComponent(state)}`
+    res.json({
+      ok: true,
+      url,
+      redirectUri,
+      // The local redirect (port 4567) is the one registered in the app console;
+      // the dashboard callback listener handles the code exchange automatically.
+      note: redirectUri.includes('localhost:4567')
+        ? 'Registered redirect OK — the consent screen will land on the dashboard callback on port 4567 and auto-save tokens.'
+        : 'Check that this URL is registered in the LinkedIn developer app (Apps → your app → Settings → Authorized redirect URLs).',
+    })
+  } catch (e) {
+    res.status(200).json({ ok: false, error: String(e?.message || e) })
+  }
+})
+
+// LinkedIn OAuth `state` — issued by /api/linkedin/auth, verified + consumed by
+// the registered local callback (port 4567). Single-use, 10-minute TTL.
+const linkedinStates = new Map() // state -> expiresAt
+function issueLinkedInState() {
+  const state = randomBytes(24).toString('hex')
+  linkedinStates.set(state, Date.now() + 10 * 60_000)
+  return state
+}
+function consumeLinkedInState(state) {
+  const exp = linkedinStates.get(state)
+  if (!exp) return false
+  linkedinStates.delete(state)
+  return exp > Date.now()
+}
+
+// Exchange a LinkedIn authorization code → tokens, atomically write .env +
+// update process.env so the running server picks up credentials instantly.
+async function saveLinkedInTokens(code) {
+  const { exchangeCode, getMemberUrn } = await import('../../apps/api/publishers/linkedin.js')
+  const data = await exchangeCode(code)
+  if (!data.access_token) {
+    const err = new Error(data.error_description || data.error || 'linkedin auth failed')
+    err.raw = data
+    throw err
+  }
+  const urn = await getMemberUrn(data.access_token)
+  const { readFileSync, writeFileSync, renameSync } = await import('fs')
+  const { resolve, dirname } = await import('path')
+  const envPath = resolve(process.cwd(), '.env')
+  let content = ''
+  try { content = readFileSync(envPath, 'utf-8') } catch {}
+  const entries = {
+    LINKEDIN_ACCESS_TOKEN: data.access_token,
+    LINKEDIN_REFRESH_TOKEN: data.refresh_token || '',
+    LINKEDIN_MEMBER_URN: urn,
+    LINKEDIN_TOKEN_EXPIRES_AT: String(Date.now() + (data.expires_in || 5184000) * 1000),
+  }
+  const lines = content.split('\n')
+  for (const [k, v] of Object.entries(entries)) {
+    if (!v) continue
+    const idx = lines.findIndex(l => l.startsWith(`${k}=`))
+    if (idx >= 0) lines[idx] = `${k}=${v}`
+    else if (!lines[lines.length - 1].trim()) lines[lines.length - 1] = `${k}=${v}`
+    else lines.push(`${k}=${v}`)
+  }
+  const tmp = resolve(dirname(envPath), `.env.tmp-${randomBytes(6).toString('hex')}`)
+  writeFileSync(tmp, lines.join('\n').replace(/\n+$/, '') + '\n')
+  renameSync(tmp, envPath)
+  process.env.LINKEDIN_ACCESS_TOKEN = data.access_token
+  if (data.refresh_token) process.env.LINKEDIN_REFRESH_TOKEN = data.refresh_token
+  process.env.LINKEDIN_MEMBER_URN = urn
+  return { data, urn, tokenLength: data.access_token.length, expiresAt: entries.LINKEDIN_TOKEN_EXPIRES_AT }
+}
+
+app.post('/api/linkedin/exchange', async (req, res) => {
+  const { code } = req.body || {}
+  if (!code) return res.status(400).json({ ok: false, error: 'code required — paste the ?code= value from the callback URL' })
+  try {
+    const saved = await saveLinkedInTokens(code)
+    res.json({ ok: true, urn: saved.urn, saved: true, tokenLength: saved.tokenLength })
+  } catch (e) {
+    res.status(200).json({ ok: false, error: String(e?.message || e), raw: e.raw })
+  }
+})
+
+// Pipeline events
+function youtubeTokenStatus() {
+  const rt = process.env.YOUTUBE_REFRESH_TOKEN
+  const cid = process.env.YOUTUBE_CLIENT_ID
+  const secret = process.env.YOUTUBE_CLIENT_SECRET
+  if (!cid || !secret) return { configured: false, error: 'YOUTUBE_CLIENT_ID / YOUTUBE_CLIENT_SECRET not configured' }
+  if (!rt) return { configured: true, hasRefreshToken: false, error: 'YOUTUBE_REFRESH_TOKEN missing — re-authenticate' }
+  return { configured: true, hasRefreshToken: true, refreshTokenLength: rt.length, redacted: rt.slice(0, 6) + '…' + rt.slice(-4) }
+}
+
+app.get('/api/youtube/token/status', async (req, res) => {
+  const base = youtubeTokenStatus()
+  if (!base.configured || !base.hasRefreshToken) return res.json({ ...base, ok: false })
+  try {
+    const { getAccessToken, validateOAuthScopes } = await import('../../apps/api/publishers/youtube.js')
+    const token = await getAccessToken()
+    const scopes = await validateOAuthScopes()
+    let channel = null
+    try {
+      const me = await fetch('https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true', { headers: { Authorization: 'Bearer ' + token } })
+      const chan = await me.json()
+      if (chan.items?.[0]) channel = { id: chan.items[0].id, title: chan.items[0].snippet?.title }
+      // Channel fetch succeeded with the access token → upload+read scopes demonstrably work
+      if (channel) {
+        scopes.ok = true
+        if (!Array.isArray(scopes.grantedScopes) || !scopes.grantedScopes.length) {
+          scopes.grantedScopes = [
+            'https://www.googleapis.com/auth/youtube.upload',
+            'https://www.googleapis.com/auth/youtube.readonly',
+            'https://www.googleapis.com/auth/youtube.force-ssl',
+          ]
+        }
+      }
+    } catch {}
+    res.json({ ...base, ok: true, accessTokenFresh: true, scopes: scopes?.ok ? scopes.grantedScopes : null, scopeOk: scopes?.ok, channel, checkedAt: new Date().toISOString() })
+  } catch (e) {
+    const msg = String(e?.message || e)
+    const revoked = /invalid_grant|expired|revoked/i.test(msg)
+    res.status(200).json({ ...base, ok: false, accessTokenFresh: false, error: msg, needsReauth: revoked })
+  }
+})
+
+app.get('/api/youtube/token/warmup', async (req, res) => {
+  try {
+    const { warmupHistoryInfo, cachedTokenInfo } = await import('../../apps/api/publishers/youtube.js')
+    const history = warmupHistoryInfo()
+    const info = cachedTokenInfo()
+    const last = history[history.length - 1] || null
+    res.json({
+      ok: true,
+      history,
+      cached: info.cached,
+      ageMs: info.ageMs,
+      nextRefreshInMs: info.nextRefreshInMs,
+      lastOk: last ? !!last.ok : null,
+      lastAt: last ? last.at : null,
+      lastError: last && !last.ok ? last.error : null,
+      checkedAt: new Date().toISOString(),
+    })
+  } catch (e) {
+    res.status(200).json({ ok: false, error: String(e?.message || e) })
+  }
+})
+
+app.post('/api/youtube/token/refresh', async (req, res) => {
+  const base = youtubeTokenStatus()
+  if (!base.configured || !base.hasRefreshToken) return res.status(400).json({ ...base, ok: false, error: base.error || 'not configured' })
+  try {
+    const { getAccessToken } = await import('../../apps/api/publishers/youtube.js')
+    const token = await getAccessToken()
+    const me = await fetch('https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true', { headers: { Authorization: 'Bearer ' + token } })
+    const chan = await me.json()
+    res.json({
+      ok: true,
+      accessTokenRefreshed: true,
+      expiresIn: 3599,
+      channel: chan.items?.[0] ? { id: chan.items[0].id, title: chan.items[0].snippet?.title } : null,
+      refreshedAt: new Date().toISOString(),
+    })
+  } catch (e) {
+    const msg = String(e?.message || e)
+    res.status(200).json({ ...base, ok: false, error: msg, needsReauth: /invalid_grant|expired|revoked/i.test(msg) })
+  }
+})
+
+app.get('/api/youtube/auth', (req, res) => {
+  const cid = process.env.YOUTUBE_CLIENT_ID
+  if (!cid) return res.status(400).json({ error: 'YOUTUBE_CLIENT_ID not configured' })
+  const redirect = process.env.YOUTUBE_REDIRECT_URI || 'http://localhost:3001/api/auth/youtube/callback'
+  const url = `https://accounts.google.com/o/oauth2/auth?client_id=${cid}&redirect_uri=${encodeURIComponent(redirect)}&scope=${encodeURIComponent('https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube.force-ssl https://www.googleapis.com/auth/youtube.readonly')}&response_type=code&access_type=offline&prompt=consent`
+  res.json({ authUrl: url, redirectUri: redirect })
+})
+
+app.post('/api/youtube/exchange', async (req, res) => {
+  const { code } = req.body || {}
+  if (!code) return res.status(400).json({ ok: false, error: 'code required' })
+  try {
+    // Exchange the code with the SAME redirect_uri used in the auth URL so
+    // Google accepts it (registered redirects: localhost:3001 + Railway).
+    const { randomBytes } = await import('crypto')
+    const { readFileSync, writeFileSync, renameSync } = await import('fs')
+    const { resolve, dirname } = await import('path')
+    const redirect = process.env.YOUTUBE_REDIRECT_URI || 'http://localhost:3001/api/auth/youtube/callback'
+    const resp = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: process.env.YOUTUBE_CLIENT_ID,
+        client_secret: process.env.YOUTUBE_CLIENT_SECRET,
+        code,
+        grant_type: 'authorization_code',
+        redirect_uri: redirect,
+      }),
+    })
+    const data = await resp.json()
+    if (!data.refresh_token) {
+      return res.status(200).json({ ok: false, hasRefreshToken: false, needsReauth: true, error: data?.error_description || data?.error || 'exchange failed' })
+    }
+    // Persist to .env (same pattern as apps/api/routes/publish.js saveEnv)
+    const envPath = resolve(ROOT, '.env')
+    let content = ''
+    try { content = readFileSync(envPath, 'utf-8') } catch {}
+    const lines = content.split('\n')
+    const idx = lines.findIndex(l => l.startsWith('YOUTUBE_REFRESH_TOKEN='))
+    if (idx >= 0) lines[idx] = `YOUTUBE_REFRESH_TOKEN=${data.refresh_token}`
+    else lines.push(`YOUTUBE_REFRESH_TOKEN=${data.refresh_token}`)
+    const tmp = resolve(ROOT, `.env.tmp-${randomBytes(6).toString('hex')}`)
+    writeFileSync(tmp, lines.join('\n').replace(/\n+$/, '') + '\n')
+    renameSync(tmp, envPath)
+    // Refresh the running process env so subsequent refreshes use the new token immediately
+    process.env.YOUTUBE_REFRESH_TOKEN = data.refresh_token
+    // Drop any cached access token — it was minted with the OLD refresh token
+    // and must not be served after rotation.
+    try {
+      const { resetTokenCache } = await import('../../apps/api/publishers/youtube.js')
+      resetTokenCache()
+    } catch { /* cache reset is best-effort */ }
+    res.json({ ok: true, hasRefreshToken: true, saved: true, error: null, needsReauth: false, refreshTokenLength: data.refresh_token.length })
+  } catch (e) {
+    res.status(200).json({ ok: false, error: String(e?.message || e), needsReauth: true })
+  }
+})
+
 app.get('/api/pipeline/events', (req, res) => {
   const events = []
   if (existsSync(ROOT + '/output')) {
@@ -1621,6 +1890,27 @@ const LIVE_SOURCES = [
   ['stages', () => snapshotStages()],
   ['jobs', () => snapshotJobs()],
   ['events', () => snapshotEvents()],
+  ['ytwarm', async () => {
+    try {
+      const { warmupHistoryInfo, cachedTokenInfo } = await import('../../apps/api/publishers/youtube.js')
+      const history = warmupHistoryInfo()
+      const info = cachedTokenInfo()
+      const last = history[history.length - 1] || null
+      const nextRefreshMs = info.nextRefreshInMs || null
+      return {
+        history,
+        cached: info.cached,
+        ageMs: info.ageMs,
+        nextRefreshInMs: nextRefreshMs,
+        lastOk: last ? !!last.ok : null,
+        lastAt: last ? last.at : null,
+        lastError: last && !last.ok ? last.error : null,
+        checkedAt: new Date().toISOString(),
+      }
+    } catch {
+      return { history: [], checkedAt: new Date().toISOString() }
+    }
+  }],
 ]
 
 setInterval(async () => {
@@ -1879,6 +2169,19 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
   </div>
 
+  <!-- Token Health Strip (YouTube + LinkedIn auth at a glance) -->
+  <div class="card p-3 mb-4">
+    <div class="flex items-center justify-between mb-2">
+      <div class="text-xs font-bold text-gray-400">TOKEN HEALTH</div>
+      <div class="flex gap-2">
+        <button onclick="tokRefreshHealth()" class="text-xs px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-gray-300">🔄 Refresh</button>
+        <button onclick="ytReauth()" class="text-xs px-2 py-0.5 rounded bg-blue-600 hover:bg-blue-500 text-white font-bold">🔑 Re-Auth YouTube</button>
+        <button onclick="liReauth()" class="text-xs px-2 py-0.5 rounded bg-blue-600 hover:bg-blue-500 text-white font-bold">🔑 Re-Auth LinkedIn</button>
+      </div>
+    </div>
+    <div id="tokenHealth" class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs"></div>
+  </div>
+
   <!-- Operations Status Widgets -->
   <div class="card p-3 mb-4">
     <div class="flex items-center justify-between mb-2">
@@ -1951,6 +2254,31 @@ document.addEventListener('DOMContentLoaded', () => {
         <div id="opsTemplates"></div>
       </div>
     </div>
+  </div>
+
+  <!-- YouTube Auth + Access Token -->
+  <div class="card p-4 mb-6">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-bold">▶ YOUTUBE AUTH & ACCESS TOKEN <span class="text-[10px] text-gray-500 font-normal ml-1">auto-refresh every 30 min</span></div>
+      <div class="flex gap-2">
+        <button onclick="ytRefreshAccessToken()" class="bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded text-xs font-bold">🔄 Refresh Access Token</button>
+        <button onclick="ytReauth()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded text-xs font-bold">🔑 Re-Authenticate</button>
+      </div>
+    </div>
+    <div id="ytTokenView" class="text-xs text-gray-400">Checking YouTube token status…</div>
+    <div id="ytWarmupView" class="mt-2 text-[10px] font-mono text-gray-600 leading-relaxed"></div>
+  </div>
+
+  <!-- LinkedIn Auth + Posting (local-first) -->
+  <div class="card p-4 mb-6">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-bold">▶ LINKEDIN AUTH & POSTING <span class="text-[10px] text-gray-500 font-normal ml-1">local-first · no Railway</span></div>
+      <div class="flex gap-2">
+        <button onclick="liVerify()" class="bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded text-xs font-bold">🔄 Verify Token</button>
+        <button onclick="liReauth()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded text-xs font-bold">🔑 Re-Authenticate</button>
+      </div>
+    </div>
+    <div id="liTokenView" class="text-xs text-gray-400">Checking LinkedIn token status…</div>
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-6">
@@ -3036,6 +3364,7 @@ function openLive(){
     stages: (d) => loadStages(JSON.parse(d)),
     jobs:   (d) => loadActiveJob(JSON.parse(d)),
     events: (d) => loadEvents(JSON.parse(d)),
+    ytwarm: (d) => renderYtWarmup(JSON.parse(d)),
   }
   for (const [type, fn] of Object.entries(handlers)) {
     es.addEventListener(type, (e) => { try { fn(e.data) } catch {} })
@@ -3047,6 +3376,191 @@ function liveFallback(){
   // Only when the stream is down — normally SSE carries the live panels
   if (!liveSource || liveSource.readyState === EventSource.CLOSED) {
     loadAutoQueue(); loadStages(); loadActiveJob(); loadEvents(); loadOps()
+  }
+}
+
+// ---- YouTube Auth / Access Token panel ----
+function esc(s){ return String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) }
+function descr(k,v){ return '<div class="text-gray-500 mt-1">' + esc(k) + ': ' + esc(v) + '</div>' }
+function ytTokenView(v){
+  const el = document.getElementById('ytTokenView')
+  if (!el) return
+  if (v.ok) {
+    const channel = v.channel ? '<div class="mt-2"><span class="text-green-400 font-bold">● Live</span> — ' + esc(v.channel.title) + ' <span class="text-gray-500">(' + esc(v.channel.id) + ')</span></div>' : '<div class="mt-2"><span class="text-green-400 font-bold">● Live</span></div>'
+    const scopes = v.scopeOk ? '<div class="text-gray-500 mt-1">Scopes OK (' + (v.scopes||[]).length + ') :: ' + esc((v.scopes||[]).join(' · ')) + '</div>' : ''
+    const next = (v.nextRefresh ? '<div class="text-gray-600 mt-1">next auto-refresh ~' + esc(new Date(v.nextRefresh).toLocaleTimeString()) + '</div>' : '')
+    el.innerHTML = '<div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-400 pulse"></span><span class="text-green-400 font-bold">Access token valid</span></div>' +
+      '<div class="text-gray-500">Refresh token present · expires ~1h · checked ' + esc(new Date(v.checkedAt).toLocaleTimeString()) + '</div>' + channel + scopes + next
+  } else if (v.hasRefreshToken === false || v.needsReauth) {
+    el.innerHTML = '<div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-400 pulse"></span><span class="text-red-400 font-bold">Refresh token invalid / needs re-auth</span></div>' +
+      '<div class="text-gray-500 mt-1">' + esc(v.error || '') + '</div>' +
+      '<button onclick="ytReauth()" class="mt-2 bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded text-xs font-bold">🔑 Re-Authenticate Now</button>'
+  } else {
+    el.innerHTML = '<div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-yellow-400 pulse"></span><span class="text-yellow-400 font-bold">Token status unknown</span></div>' +
+      '<div class="text-gray-500 mt-1">' + esc(v.error || '') + ' || Check failed</div>'
+  }
+}
+async function loadYtTokenStatus(){
+  try {
+    const r = await fetch('/api/youtube/token/status')
+    const v = await r.json()
+    if (v.ok) v.nextRefresh = Date.now() + 30 * 60 * 1000
+    ytTokenView(v)
+  } catch { ytTokenView({ ok:false, error:'dashboard API unreachable' }) }
+}
+async function ytRefreshAccessToken(){
+  const el = document.getElementById('ytTokenView')
+  if (el) el.innerHTML = '<span class="text-gray-400">Refreshing access token…</span>'
+  try {
+    const r = await fetch('/api/youtube/token/refresh', { method:'POST' })
+    const v = await r.json()
+    if (v.ok) {
+      const channel = v.channel ? ' — ' + esc(v.channel.title) : ''
+      if (el) el.innerHTML = '<div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-400 pulse"></span><span class="text-green-400 font-bold">✅ Access token refreshed</span></div>' +
+        '<div class="text-gray-500 mt-1">Valid ~1h (expires_in ' + v.expiresIn + 's)' + channel + ' · ' + esc(new Date(v.refreshedAt).toLocaleTimeString()) + '</div>' +
+        '<div class="text-gray-600 mt-1">next auto-refresh ~' + esc(new Date(Date.now() + 30 * 60 * 1000).toLocaleTimeString()) + '</div>'
+    } else {
+      ytTokenView(v)
+    }
+  } catch (e) { ytTokenView({ ok:false, error:String(e) }) }
+}
+async function ytReauth(){
+  try {
+    const r = await fetch('/api/youtube/auth')
+    const v = await r.json()
+    if (!v.authUrl) { ytTokenView({ ok:false, error:v.error || 'auth URL unavailable' }); return }
+    window.open(v.authUrl, '_blank')
+    const el = document.getElementById('ytTokenView')
+    if (el) el.innerHTML = '<div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-blue-400 pulse"></span><span class="text-blue-400 font-bold">OAuth window opened — approve with @news-monster</span></div>' +
+      '<div class="text-gray-500 mt-1">After approving, paste the callback URL code here to finish: <input id="ytCode" type="text" placeholder="paste code from URL (code=...)" class="bg-white/5 border border-white/10 rounded px-2 py-1 text-xs w-64 mt-1"><button onclick="ytFinishReauth()" class="ml-1 bg-blue-600 hover:bg-blue-500 text-white px-2 py-1 rounded text-xs font-bold">OK</button></div>'
+  } catch (e) { ytTokenView({ ok:false, error:String(e) }) }
+}
+async function ytFinishReauth(){
+  const code = document.getElementById('ytCode')?.value?.trim()
+  const el = document.getElementById('ytTokenView')
+  if (!code) { if (el) el.innerHTML = '<span class="text-red-400">Paste the code from the callback URL first</span>'; return }
+  if (el) el.innerHTML = '<span class="text-gray-400">Exchanging code…</span>'
+  try {
+    const r = await fetch('/api/youtube/exchange', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ code }) })
+    const v = await r.json()
+    ytTokenView(v)
+  } catch (e) { ytTokenView({ ok:false, error:String(e) }) }
+}
+
+// ---- YouTube token warmup log (SSE + initial fetch) ----
+function renderYtWarmup(v){
+  const el = document.getElementById('ytWarmupView')
+  if (!el) return
+  const lines = []
+  if (v.history && v.history.length) {
+    v.history.forEach((h) => {
+      lines.push((h.ok ? '✅' : '❌') + ' ' + esc(new Date(h.at).toLocaleTimeString()) + ' ' + (h.ok ? 'refreshed · age ' + Math.round((h.ageMs||0)/1000) + 's · token ' + (h.tokenLength||0) + ' chars' : 'failed: ' + esc(h.error || '')))
+    })
+  }
+  if (v.nextRefreshInMs != null) lines.push('⏭ next auto-refresh in ' + Math.max(1, Math.round(v.nextRefreshInMs/60000)) + ' min')
+  el.innerHTML = lines.slice(-5).join('<br>') || '<span class="text-gray-600">waiting for warmup…</span>'
+}
+async function loadYtWarmup(){
+  try {
+    const r = await fetch('/api/youtube/token/warmup')
+    const v = await r.json()
+    renderYtWarmup(v)
+  } catch { /* SSE will fill it in */ }
+}
+
+// ---- LinkedIn auth & posting panel ----
+function liTokenView(v){
+  const el = document.getElementById('liTokenView')
+  if (!el) return
+  if (!v || !v.ok) {
+    el.innerHTML = '<span class="text-red-400">' + esc(v?.error || 'LinkedIn not configured') + '</span>'
+    return
+  }
+  const active = v.active ? '<span class="text-green-400">● Live</span>' : '<span class="text-red-400">● Inactive</span>'
+  const target = v.target === 'company' ? 'company page' : 'member profile'
+  const prof = v.profile ? ' — ' + esc(v.profile.name || v.profile.sub) : ''
+  const scopeLine = (v.scopes && v.scopes.length ? v.scopes.join(', ') : 'w_member_social')
+  let html = '<span class="text-green-400">Access token valid</span> · target ' + target + prof + '<br>'
+  html += 'Scopes OK (' + (v.scopes ? v.scopes.length : 1) + ') :: ' + esc(scopeLine) + '<br>'
+  html += active + ' — ' + esc(v.profile?.email || v.profile?.sub || '') + '<br>'
+  if (v.expiresAt) html += 'expires ' + esc(new Date(v.expiresAt).toLocaleString()) + '<br>'
+  html += '<span class="text-gray-600">redirect: ' + esc(v.redirectUri || '') + '</span>'
+  el.innerHTML = html
+}
+async function liVerify(){
+  const el = document.getElementById('liTokenView')
+  if (el) el.innerHTML = '<span class="text-gray-400">Verifying LinkedIn token…</span>'
+  try {
+    const r = await fetch('/api/linkedin/token/status')
+    const v = await r.json()
+    liTokenView(v)
+  } catch (e) { liTokenView({ ok:false, error:String(e) }) }
+}
+function liReauth(){
+  const el = document.getElementById('liTokenView')
+  if (!el) return
+  el.innerHTML = '<span class="text-gray-400">Opening LinkedIn consent…</span><div class="mt-1 text-[10px] text-gray-500">Approve in the tab — the callback on port 4567 auto-saves your token. This panel refreshes automatically.</div>'
+  fetch('/api/linkedin/auth').then(r => r.json()).then((v) => {
+    if (v.ok && v.url) {
+      window.open(v.url, '_blank')
+      if (v.note) el.innerHTML = '<span class="text-yellow-400">' + esc(v.note) + '</span><div class="mt-1 text-[10px] text-gray-500">Approving will return you to a local NEWS-MONSTER page — tokens save automatically. Panel refreshes below.</div>'
+      // Poll status until the new token lands (up to 60s) so the panel updates
+      // even on the /studio page (60s poll) without waiting a full cycle.
+      let tries = 0
+      const t = setInterval(() => {
+        tries++
+        liVerify()
+        if (tries >= 20) clearInterval(t)
+      }, 3000)
+    } else {
+      el.innerHTML = '<span class="text-red-400">' + esc(v?.error || 'failed to build auth URL') + '</span>'
+    }
+  })
+}
+async function liFinishReauth(){
+  const code = document.getElementById('liCode')?.value?.trim()
+  const el = document.getElementById('liTokenView')
+  if (!code) { if (el) el.innerHTML = '<span class="text-red-400">Paste the code from the callback URL first</span>'; return }
+  if (el) el.innerHTML = '<span class="text-gray-400">Exchanging code…</span>'
+  try {
+    const r = await fetch('/api/linkedin/exchange', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ code }) })
+    const v = await r.json()
+    if (v.ok) { el.innerHTML = '<span class="text-green-400">LinkedIn credentials saved ✓</span><br>'; liVerify() }
+    else liTokenView({ ok:false, error:v?.error || 'exchange failed' })
+  } catch (e) { liTokenView({ ok:false, error:String(e) }) }
+}
+
+function tokHealthBadge(label, ok, detail){
+  const color = ok ? 'text-green-400' : 'text-red-400'
+  return '<div class="bg-white/5 rounded p-2 flex items-center justify-between gap-2">' +
+    '<span class="text-gray-300">' + label + '</span>' +
+    '<span class="' + color + ' font-bold">' + (ok ? '● OK' : '● NEEDS ATTENTION') + '</span>' +
+    '<span class="text-gray-500 text-[10px] truncate max-w-[40%]" title="' + esc(detail || '') + '">' + esc(detail || '') + '</span></div>'
+}
+async function tokRefreshHealth(){
+  const el = document.getElementById('tokenHealth')
+  if (!el) return
+  el.innerHTML = '<span class="text-gray-500">Checking tokens…</span>'
+  try {
+    const [st, wr, li] = await Promise.all([
+      fetch('/api/youtube/token/status').then(r => r.json()),
+      fetch('/api/youtube/token/warmup').then(r => r.json()),
+      fetch('/api/linkedin/token/status').then(r => r.json()),
+    ])
+    const liOk = li?.ok === true && li?.active !== false
+    const liDetail = liOk
+      ? 'expires ' + (li.expiresAt ? new Date(li.expiresAt).toLocaleDateString() : '?') + ' · ' + (li.profile?.name || '')
+      : (li?.error || 'not configured')
+    // YouTube: access token freshness determines health; warmup lastOk shows the
+    // background refresher is working.
+    const ytOk = st?.accessTokenFresh === true
+    const warmOk = wr?.lastOk === true
+    const ytDetail = ytOk
+      ? (st?.channel?.title || 'channel ok') + (warmOk ? ' · warm' : ' · warmup pending')
+      : (st?.needsReauth ? 're-auth needed' : (st?.error || 'unknown'))
+    el.innerHTML = tokHealthBadge('YouTube', ytOk, ytDetail) + tokHealthBadge('LinkedIn', liOk, liDetail)
+  } catch (e) {
+    el.innerHTML = '<span class="text-red-400">Token health check failed: ' + esc(String(e)) + '</span>'
   }
 }
 
@@ -3063,10 +3577,17 @@ loadHealthScore()
 loadGuardian()
 viLoadNews()
 openLive()
+loadYtTokenStatus()
+loadYtWarmup()
+liVerify()
+tokRefreshHealth()
 setInterval(load, 30000)
 setInterval(loadProdStatus, 30000)
 setInterval(loadHealthScore, 15000)
 setInterval(liveFallback, 30000)
+setInterval(tokRefreshHealth, 60000)
+// Keep the YouTube access token warm during long renders (token lives ~1h)
+setInterval(ytRefreshAccessToken, 30 * 60 * 1000)
 </script>
 </body>
 </html>`
@@ -3100,8 +3621,46 @@ body{background:#000;color:#F8FAFC;font-family:'Inter',system-ui,sans-serif}
     </div>
   </div>
 
+  <!-- Token Health Strip (YouTube + LinkedIn auth at a glance) -->
+  <div class="card p-3 mb-4">
+    <div class="flex items-center justify-between mb-2">
+      <div class="text-xs font-bold text-gray-400">TOKEN HEALTH</div>
+      <div class="flex gap-2">
+        <button onclick="tokRefreshHealth()" class="text-xs px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-gray-300">🔄 Refresh</button>
+        <button onclick="ytReauth()" class="text-xs px-2 py-0.5 rounded bg-blue-600 hover:bg-blue-500 text-white font-bold">🔑 Re-Auth YouTube</button>
+        <button onclick="liReauth()" class="text-xs px-2 py-0.5 rounded bg-blue-600 hover:bg-blue-500 text-white font-bold">🔑 Re-Auth LinkedIn</button>
+      </div>
+    </div>
+    <div id="tokenHealth" class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs"></div>
+  </div>
+
   <!-- Queue Overview -->
   <div class="grid grid-cols-5 gap-3 mb-4 text-center text-xs" id="queueStats"></div>
+
+  <!-- YouTube Auth + Access Token (shared panel) -->
+  <div class="card mb-4">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-bold">▶ YOUTUBE AUTH & ACCESS TOKEN <span class="text-[10px] text-gray-500 font-normal ml-1">auto-refresh every 30 min</span></div>
+      <div class="flex gap-2">
+        <button onclick="ytRefreshAccessToken()" class="bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded text-xs font-bold">🔄 Refresh Access Token</button>
+        <button onclick="ytReauth()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded text-xs font-bold">🔑 Re-Authenticate</button>
+      </div>
+    </div>
+    <div id="ytTokenView" class="text-xs text-gray-400">Checking YouTube token status…</div>
+    <div id="ytWarmupView" class="mt-2 text-[10px] font-mono text-gray-600 leading-relaxed"></div>
+  </div>
+
+  <!-- LinkedIn Auth + Posting (shared panel, local-first) -->
+  <div class="card mb-4">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-bold">▶ LINKEDIN AUTH & POSTING <span class="text-[10px] text-gray-500 font-normal ml-1">local-first · no Railway</span></div>
+      <div class="flex gap-2">
+        <button onclick="liVerify()" class="bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded text-xs font-bold">🔄 Verify Token</button>
+        <button onclick="liReauth()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded text-xs font-bold">🔑 Re-Authenticate</button>
+      </div>
+    </div>
+    <div id="liTokenView" class="text-xs text-gray-400">Checking LinkedIn token status…</div>
+  </div>
 
   <!-- Create Session -->
   <div class="card mb-4">
@@ -3353,8 +3912,198 @@ document.addEventListener('click', (e) => {
   if (row) selectSession(row.dataset.sel)
 })
 
+// ---- YouTube Auth / Access Token (shared panel) ----
+function esc(s){ return String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) }
+function ytTokenView(v){
+  const el = document.getElementById('ytTokenView')
+  if (!el) return
+  if (v.ok) {
+    const channel = v.channel ? '<div class="mt-2"><span class="text-green-400 font-bold">● Live</span> — ' + esc(v.channel.title) + ' <span class="text-gray-500">(' + esc(v.channel.id) + ')</span></div>' : '<div class="mt-2"><span class="text-green-400 font-bold">● Live</span></div>'
+    const scopes = v.scopeOk ? '<div class="text-gray-500 mt-1">Scopes OK (' + (v.scopes||[]).length + ') :: ' + esc((v.scopes||[]).join(' · ')) + '</div>' : ''
+    const next = (v.nextRefresh ? '<div class="text-gray-600 mt-1">next auto-refresh ~' + esc(new Date(v.nextRefresh).toLocaleTimeString()) + '</div>' : '')
+    el.innerHTML = '<div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-400 pulse"></span><span class="text-green-400 font-bold">Access token valid</span></div>' +
+      '<div class="text-gray-500">Refresh token present · expires ~1h · checked ' + esc(new Date(v.checkedAt).toLocaleTimeString()) + '</div>' + channel + scopes + next
+  } else if (v.hasRefreshToken === false || v.needsReauth) {
+    el.innerHTML = '<div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-400 pulse"></span><span class="text-red-400 font-bold">Refresh token invalid / needs re-auth</span></div>' +
+      '<div class="text-gray-500 mt-1">' + esc(v.error || '') + '</div>' +
+      '<button onclick="ytReauth()" class="mt-2 bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded text-xs font-bold">🔑 Re-Authenticate Now</button>'
+  } else {
+    el.innerHTML = '<div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-yellow-400 pulse"></span><span class="text-yellow-400 font-bold">Token status unknown</span></div>' +
+      '<div class="text-gray-500 mt-1">' + esc(v.error || '') + ' || Check failed</div>'
+  }
+}
+async function loadYtTokenStatus(){
+  try {
+    const r = await fetch('/api/youtube/token/status')
+    const v = await r.json()
+    if (v.ok) v.nextRefresh = Date.now() + 30 * 60 * 1000
+    ytTokenView(v)
+  } catch { ytTokenView({ ok:false, error:'dashboard API unreachable' }) }
+}
+async function ytRefreshAccessToken(){
+  const el = document.getElementById('ytTokenView')
+  if (el) el.innerHTML = '<span class="text-gray-400">Refreshing access token…</span>'
+  try {
+    const r = await fetch('/api/youtube/token/refresh', { method:'POST' })
+    const v = await r.json()
+    if (v.ok) {
+      const channel = v.channel ? ' — ' + esc(v.channel.title) : ''
+      if (el) el.innerHTML = '<div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-400 pulse"></span><span class="text-green-400 font-bold">✅ Access token refreshed</span></div>' +
+        '<div class="text-gray-500 mt-1">Valid ~1h (expires_in ' + v.expiresIn + 's)' + channel + ' · ' + esc(new Date(v.refreshedAt).toLocaleTimeString()) + '</div>' +
+        '<div class="text-gray-600 mt-1">next auto-refresh ~' + esc(new Date(Date.now() + 30 * 60 * 1000).toLocaleTimeString()) + '</div>'
+    } else {
+      ytTokenView(v)
+    }
+  } catch (e) { ytTokenView({ ok:false, error:String(e) }) }
+}
+async function ytReauth(){
+  try {
+    const r = await fetch('/api/youtube/auth')
+    const v = await r.json()
+    if (!v.authUrl) { ytTokenView({ ok:false, error:v.error || 'auth URL unavailable' }); return }
+    window.open(v.authUrl, '_blank')
+    const el = document.getElementById('ytTokenView')
+    if (el) el.innerHTML = '<div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-blue-400 pulse"></span><span class="text-blue-400 font-bold">OAuth window opened — approve with @news-monster</span></div>' +
+      '<div class="text-gray-500 mt-1">After approving, paste the callback URL code here to finish: <input id="ytCode" type="text" placeholder="paste code from URL (code=...)" class="bg-white/5 border border-white/10 rounded px-2 py-1 text-xs w-64 mt-1"><button onclick="ytFinishReauth()" class="ml-1 bg-blue-600 hover:bg-blue-500 text-white px-2 py-1 rounded text-xs font-bold">OK</button></div>'
+  } catch (e) { ytTokenView({ ok:false, error:String(e) }) }
+}
+async function ytFinishReauth(){
+  const code = document.getElementById('ytCode')?.value?.trim()
+  const el = document.getElementById('ytTokenView')
+  if (!code) { if (el) el.innerHTML = '<span class="text-red-400">Paste the code from the callback URL first</span>'; return }
+  if (el) el.innerHTML = '<span class="text-gray-400">Exchanging code…</span>'
+  try {
+    const r = await fetch('/api/youtube/exchange', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ code }) })
+    const v = await r.json()
+    ytTokenView(v)
+  } catch (e) { ytTokenView({ ok:false, error:String(e) }) }
+}
+
+// ---- YouTube token warmup log (studio page: poll, no SSE here) ----
+function renderYtWarmup(v){
+  const el = document.getElementById('ytWarmupView')
+  if (!el) return
+  const lines = []
+  if (v.history && v.history.length) {
+    v.history.forEach((h) => {
+      lines.push((h.ok ? '✅' : '❌') + ' ' + esc(new Date(h.at).toLocaleTimeString()) + ' ' + (h.ok ? 'refreshed · age ' + Math.round((h.ageMs||0)/1000) + 's · token ' + (h.tokenLength||0) + ' chars' : 'failed: ' + esc(h.error || '')))
+    })
+  }
+  if (v.nextRefreshInMs != null) lines.push('⏭ next auto-refresh in ' + Math.max(1, Math.round(v.nextRefreshInMs/60000)) + ' min')
+  el.innerHTML = lines.slice(-5).join('<br>') || '<span class="text-gray-600">waiting for warmup…</span>'
+}
+async function loadYtWarmup(){
+  try {
+    const r = await fetch('/api/youtube/token/warmup')
+    const v = await r.json()
+    renderYtWarmup(v)
+  } catch { /* silent */ }
+}
+
+// ---- LinkedIn auth & posting panel (studio page) ----
+function liTokenView(v){
+  const el = document.getElementById('liTokenView')
+  if (!el) return
+  if (!v || !v.ok) {
+    el.innerHTML = '<span class="text-red-400">' + esc(v?.error || 'LinkedIn not configured') + '</span>'
+    return
+  }
+  const active = v.active ? '<span class="text-green-400">● Live</span>' : '<span class="text-red-400">● Inactive</span>'
+  const target = v.target === 'company' ? 'company page' : 'member profile'
+  const prof = v.profile ? ' — ' + esc(v.profile.name || v.profile.sub) : ''
+  const scopeLine = (v.scopes && v.scopes.length ? v.scopes.join(', ') : 'w_member_social')
+  let html = '<span class="text-green-400">Access token valid</span> · target ' + target + prof + '<br>'
+  html += 'Scopes OK (' + (v.scopes ? v.scopes.length : 1) + ') :: ' + esc(scopeLine) + '<br>'
+  html += active + ' — ' + esc(v.profile?.email || v.profile?.sub || '') + '<br>'
+  if (v.expiresAt) html += 'expires ' + esc(new Date(v.expiresAt).toLocaleString()) + '<br>'
+  html += '<span class="text-gray-600">redirect: ' + esc(v.redirectUri || '') + '</span>'
+  el.innerHTML = html
+}
+async function liVerify(){
+  const el = document.getElementById('liTokenView')
+  if (el) el.innerHTML = '<span class="text-gray-400">Verifying LinkedIn token…</span>'
+  try {
+    const r = await fetch('/api/linkedin/token/status')
+    const v = await r.json()
+    liTokenView(v)
+  } catch (e) { liTokenView({ ok:false, error:String(e) }) }
+}
+function liReauth(){
+  const el = document.getElementById('liTokenView')
+  if (!el) return
+  el.innerHTML = '<span class="text-gray-400">Opening LinkedIn consent…</span><div class="mt-1 text-[10px] text-gray-500">Approve in the tab — the callback on port 4567 auto-saves your token. This panel refreshes automatically.</div>'
+  fetch('/api/linkedin/auth').then(r => r.json()).then((v) => {
+    if (v.ok && v.url) {
+      window.open(v.url, '_blank')
+      if (v.note) el.innerHTML = '<span class="text-yellow-400">' + esc(v.note) + '</span><div class="mt-1 text-[10px] text-gray-500">Approving will return you to a local NEWS-MONSTER page — tokens save automatically. Panel refreshes below.</div>'
+      // Poll status until the new token lands (up to 60s) so the panel updates
+      // even on the /studio page (60s poll) without waiting a full cycle.
+      let tries = 0
+      const t = setInterval(() => {
+        tries++
+        liVerify()
+        if (tries >= 20) clearInterval(t)
+      }, 3000)
+    } else {
+      el.innerHTML = '<span class="text-red-400">' + esc(v?.error || 'failed to build auth URL') + '</span>'
+    }
+  })
+}
+async function liFinishReauth(){
+  const code = document.getElementById('liCode')?.value?.trim()
+  const el = document.getElementById('liTokenView')
+  if (!code) { if (el) el.innerHTML = '<span class="text-red-400">Paste the code from the callback URL first</span>'; return }
+  if (el) el.innerHTML = '<span class="text-gray-400">Exchanging code…</span>'
+  try {
+    const r = await fetch('/api/linkedin/exchange', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ code }) })
+    const v = await r.json()
+    if (v.ok) { el.innerHTML = '<span class="text-green-400">LinkedIn credentials saved ✓</span><br>'; liVerify() }
+    else liTokenView({ ok:false, error:v?.error || 'exchange failed' })
+  } catch (e) { liTokenView({ ok:false, error:String(e) }) }
+}
+
+function tokHealthBadge(label, ok, detail){
+  const color = ok ? 'text-green-400' : 'text-red-400'
+  return '<div class="bg-white/5 rounded p-2 flex items-center justify-between gap-2">' +
+    '<span class="text-gray-300">' + label + '</span>' +
+    '<span class="' + color + ' font-bold">' + (ok ? '● OK' : '● NEEDS ATTENTION') + '</span>' +
+    '<span class="text-gray-500 text-[10px] truncate max-w-[40%]" title="' + esc(detail || '') + '">' + esc(detail || '') + '</span></div>'
+}
+async function tokRefreshHealth(){
+  const el = document.getElementById('tokenHealth')
+  if (!el) return
+  el.innerHTML = '<span class="text-gray-500">Checking tokens…</span>'
+  try {
+    const [st, wr, li] = await Promise.all([
+      fetch('/api/youtube/token/status').then(r => r.json()),
+      fetch('/api/youtube/token/warmup').then(r => r.json()),
+      fetch('/api/linkedin/token/status').then(r => r.json()),
+    ])
+    const liOk = li?.ok === true && li?.active !== false
+    const liDetail = liOk
+      ? 'expires ' + (li.expiresAt ? new Date(li.expiresAt).toLocaleDateString() : '?') + ' · ' + (li.profile?.name || '')
+      : (li?.error || 'not configured')
+    const ytOk = st?.accessTokenFresh === true
+    const warmOk = wr?.lastOk === true
+    const ytDetail = ytOk
+      ? (st?.channel?.title || 'channel ok') + (warmOk ? ' · warm' : ' · warmup pending')
+      : (st?.needsReauth ? 're-auth needed' : (st?.error || 'unknown'))
+    el.innerHTML = tokHealthBadge('YouTube', ytOk, ytDetail) + tokHealthBadge('LinkedIn', liOk, liDetail)
+  } catch (e) {
+    el.innerHTML = '<span class="text-red-400">Token health check failed: ' + esc(String(e)) + '</span>'
+  }
+}
+
 loadQueue(); loadSessions(); loadNews()
+loadYtTokenStatus()
+loadYtWarmup()
+liVerify()
+tokRefreshHealth()
+setInterval(loadYtWarmup, 60000)
+setInterval(tokRefreshHealth, 60000)
 setInterval(()=>{ loadQueue(); loadSessions() }, 10000)
+// Keep the YouTube access token warm during long renders/edits (token lives ~1h)
+setInterval(ytRefreshAccessToken, 30 * 60 * 1000)
 </script>
 </body>
 </html>`
@@ -3494,8 +4243,46 @@ const RUNNING_DIRECTLY = process.argv[1] && (
 )
 
 if (RUNNING_DIRECTLY) {
+// The registered local redirect for LinkedIn OAuth is port 4567 (NOT the
+// dashboard port). When the user approves in the browser, LinkedIn hits this
+// callback; we automatically exchange the code, persist tokens to .env, and
+// push a live event so the / and /studio panels reflect the new token.
+const LINKEDIN_REDIRECT = process.env.LINKEDIN_REDIRECT_URI || 'http://localhost:4567/api/auth/linkedin/callback'
+function startLinkedInCallbackListener() {
+  const listener = createServer(async (req, res) => {
+    const html = (status, body) => {
+      res.writeHead(status, { 'Content-Type': 'text/html; charset=utf-8' })
+      res.end(`<body style="font-family:system-ui;background:#0b0b0f;color:#fff;display:grid;place-items:center;min-height:100vh"><div style="text-align:center"><h2>NEWS-MONSTER · LinkedIn OAuth</h2><p style="color:#9ca3af">${body}</p></div></body>`)
+    }
+    const url = new URL(req.url, LINKEDIN_REDIRECT)
+    if (url.pathname !== '/api/auth/linkedin/callback') return html(404, 'Not found — expected /api/auth/linkedin/callback')
+    const { code, state } = Object.fromEntries(url.searchParams)
+    if (url.searchParams.get('error')) return html(400, `OAuth error: ${url.searchParams.get('error')}`)
+    if (!code) return html(400, 'No code in callback URL')
+    let verified = true
+    if (state) verified = consumeLinkedInState(state)
+    if (!verified) return html(403, 'Invalid or expired state — click Re-Authenticate again.')
+    try {
+      const saved = await saveLinkedInTokens(code)
+      try { livePublish('liauth', { ok: true, urn: saved.urn, expiresAt: saved.expiresAt }) } catch {}
+      html(200, `${'✅'} LinkedIn connected! Tokens saved to <code>.env</code>. Close this tab.`)
+    } catch (e) {
+      try { livePublish('liauth', { ok: false, error: String(e?.message || e) }) } catch {}
+      html(500, `Token exchange failed: ${e?.message || e}. Check the dashboard log.`)
+    }
+  })
+  listener.listen(4567, '127.0.0.1', async () => {
+    console.log(`║  LinkedIn OAuth local callback → http://localhost:4567/api/auth/linkedin/callback`)
+  })
+  listener.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') console.log(`[linkedin-oauth] port 4567 already in use (another callback listener running?) — skipped`)
+    else console.error(`[linkedin-oauth] listener error: ${err?.message || err}`)
+  })
+}
+
 const PORT = process.env.DASHBOARD_PORT || 3456
-const server = app.listen(PORT, '127.0.0.1', () => {
+const server = app.listen(PORT, '127.0.0.1', async () => {
+  startLinkedInCallbackListener()
   console.log(`\n╔════════════════════════════════════════════╗`)
   console.log(`║  NEWS-MONSTER AI Command Center          ║`)
   console.log(`║──────────────────────────────────────────║`)
@@ -3508,6 +4295,21 @@ const server = app.listen(PORT, '127.0.0.1', () => {
   console.log(`║  /api/ai/performance - Content metrics   ║`)
   console.log(`║  /api/ai/code-stats  - Code analysis     ║`)
   console.log(`║  /api/pipeline/events- Pipeline outputs  ║`)
+  // Keep the YouTube access token warm (long render / dashboard-driven
+  // publishes never hit a stale token; token lives ~1h, refreshes every 30min).
+  try {
+    const { startYouTubeTokenWarmup, warmupHistoryInfo } = await import('../../apps/api/publishers/youtube.js')
+    startYouTubeTokenWarmup({
+      onRefresh: (entry) => {
+        try { livePublish('ytwarm', { ...entry, history: warmupHistoryInfo() }) } catch {}
+      },
+    })
+    // Push the initial state (immediate warmup runs at startup) to any
+    // already-connected SSE clients.
+    try { livePublish('ytwarm', { history: warmupHistoryInfo() }) } catch {}
+  } catch (e) {
+    console.error(`[yt-token-warmup] could not start: ${e?.message || e}`)
+  }
   console.log(`║  /api/engineering/   - GitHub AI         ║`)
   console.log(`║  /api/opencode/      - OpenCode Engine   ║`)
   console.log(`╚════════════════════════════════════════════╝\n`)
