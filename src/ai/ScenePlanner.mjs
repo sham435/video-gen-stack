@@ -22,9 +22,23 @@ export class ScenePlanner {
     // headline text stacking onto itself in published videos.
     const isHook = sceneDef.type === 'hook'
     const isClose = sceneDef.type === 'close' || sceneDef.type === 'brand_close'
-    const visualHeadline = isHook || isClose
-      ? safeNarration
-      : this.shortVisualText(safeNarration, 10)
+    // NEWS-FIRST headline: the hook scene opens on the ARTICLE headline (the
+    // main news story), not on the first VO sentence. Publishing the narration
+    // sentence itself as the hero text is what repeated "Nobody expected this
+    // move from death" on screen — the headline must be the news, the VO stays
+    // audio-only.
+    const rawHookTitle = this.cleanNarration(article.title || (article.headline || ''))
+    let visualHeadline = isHook
+      ? this.shortVisualText(rawHookTitle, 10) || safeNarration
+      : isClose
+        ? safeNarration
+        : this.shortVisualText(safeNarration, 10)
+    // Hook headlines are raw article titles, which run long: cap so the hero
+    // text stays within the 16:9 safe zone (< 60 chars, one-two lines).
+    if (isHook && visualHeadline.length > 60) {
+      visualHeadline = this.shortVisualText(visualHeadline, 8)
+      if (visualHeadline.length > 60) visualHeadline = `${visualHeadline.slice(0, 57).trimEnd()}…`
+    }
     // Caption is short center-stage visual text from the LLM, verbatim —
     // never a narration dump (the contract keeps narration audio-only).
     const visualCaption = sceneDef.caption ? this.shortVisualText(this.cleanNarration(sceneDef.caption), 12) : ''

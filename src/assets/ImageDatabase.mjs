@@ -16,6 +16,8 @@ import Database from 'better-sqlite3'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { dHashDistance } from './ImageMetadata.mjs'
+import { DUP_THRESHOLD } from './DuplicateDetector.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..', '..')
@@ -336,6 +338,46 @@ export class ImageDatabase {
       ORDER BY last_used DESC
       LIMIT ?
     `).all(n).map(r => r.video_id)
+  }
+
+  /**
+   * Rolling time-based usage check: has this exact asset (canonical sha256)
+   * been used by ANY video within the previous `days` × 24 hours?
+   * The 7-day quarantine window is TIME-based, not calendar-week based.
+   */
+  usedWithinDays(sha256, days = 7) {
+    if (!sha256 || !days || days <= 0) return false
+    const row = this.db.prepare(`
+      SELECT 1 AS hit FROM usage
+      WHERE sha256 = ? AND used_at >= datetime('now', ?)
+      LIMIT 1
+    `).get(sha256, `-${days} days`)
+    return Boolean(row)
+  }
+
+  /**
+   * Perceptual near-twin used within the previous `days` × 24 hours.
+   * A re-encoded/canonical duplicate of the same underlying photo (dHash
+   * distance <= DUP_THRESHOLD.near) committed within the quarantine window is
+   * treated as the same asset — filename/URL differences cannot bypass it.
+   *
+   * @param {object} asset {sha256, dHash}
+   * @returns {object|null} the matching committed row {sha256, dHash, lastUsed}
+   */
+  nearTwinUsedWithinDays(asset, days = 7) {
+    if (!asset?.dHash || !days || days <= 0) return null
+    let nearest = null
+    for (const row of this.recent(days * 24)) {
+      if (row.sha256 === asset.sha256) continue
+      if (!row.dHash) continue
+      const d = dHashDistance(row.dHash, asset.dHash)
+      if (d <= DUP_THRESHOLD.near && (!nearest || d < nearest.distance)) {
+        nearest = { distance: d, row }
+      }
+    }
+    return nearest
+      ? { sha256: nearest.row.sha256, dHash: nearest.row.dHash, lastUsed: nearest.row.last_used || null, distance: nearest.distance }
+      : null
   }
 
   /**
