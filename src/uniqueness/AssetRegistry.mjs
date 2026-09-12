@@ -18,7 +18,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import crypto from 'node:crypto'
 
-const DEFAULT_REGISTRY_PATH = path.resolve(process.cwd(), 'data', 'asset-registry.json')
+const DEFAULT_REGISTRY_PATH = process.env.ASSET_REGISTRY_PATH || path.resolve(process.cwd(), 'data', 'asset-registry.json')
 const ROLLING_WINDOW = 50
 
 // Mandatory rolling image quarantine: a final image committed by ANY video is

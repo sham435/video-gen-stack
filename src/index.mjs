@@ -42,6 +42,7 @@ import { validateRenderOutput } from './video/validateOutput.mjs'
 import { StoryDirector } from './ai/StoryDirector.mjs'
 import { CreativeDirectorAgent } from './ai/CreativeDirectorAgent.mjs'
 import { ScriptUniqueness } from './uniqueness/ScriptUniqueness.mjs'
+import { AssetRegistry } from './uniqueness/AssetRegistry.mjs'
 import { VisualReasoner } from './ai/VisualReasoner.mjs'
 import { MotionPlanner, TransitionPlanner } from './ai/StoryAnalyzer.mjs'
 import { VisualSearchEngine, ENTITY_EXPANSIONS } from './assets/VisualSearchEngine.mjs'
@@ -88,7 +89,13 @@ export class NewsBroadcastEngine {
       if (providers.length) storyProvider = new ProviderChain(providers)
     } catch { /* no provider → deterministic fallback */ }
     this.storyProvider = storyProvider
-    this.storyDirector = new StoryDirector(storyProvider)
+    // ACROSS-VIDEO NARRATION-DEDUP: one registry-backed ScriptUniqueness is
+    // shared by the StoryDirector generation-time guard and the pre-TTS hard
+    // gate. Lazy-created so engines that never reach voice don't touch the
+    // ledger.
+    this.scriptUniqueness = null
+    this.scriptDedupRegistry = null
+    this.storyDirector = new StoryDirector(storyProvider, { scriptUniqueness: this._scriptUniqueness() })
     // Creative Director: runs ONCE per script after StoryDirector, before
     // ScenePlanner. Produces per-scene creative briefs (mood, image direction,
     // BGM cue, emphasis words) that feed into ImageRanker, MusicFamily, and
@@ -685,12 +692,21 @@ export class NewsBroadcastEngine {
     // NARRATION-DEDUP hard gate. StoryDirector already regenerates duplicated
     // narration (early catch), but this is the last-line gate NO code path can
     // skip (run-batch/engine-direct included): refuse to spend TTS + render
-    // cost on a script that repeats a line within the same video. Mirrors the
-    // composer's existing retry→quarantine handling of engine throws.
+    // cost on a script that repeats a line within the same video — or a past
+    // video's script (across-video, registry-backed). Mirrors the composer's
+    // existing retry→quarantine handling of engine throws.
     if (process.env.ALLOW_DUPLICATE_NARRATION !== '1') {
       const narrationGate = ScriptUniqueness.validateWithinVideo(timedScenes.map(s => s.narration))
       if (!narrationGate.pass) {
         throw new Error(`VOICE GATE: ${narrationGate.reason} — refusing to render duplicate narration`)
+      }
+      const across = this._scriptUniqueness().validate(captionScript, {
+        jobId: this.currentVideoId || null,
+        title: (this.contract?.publish?.title) || directorStory?.headline || (article?.title) || null,
+        excludeJobId: this.currentVideoId || null,
+      })
+      if (!across.pass) {
+        throw new Error(`VOICE GATE (across-video): ${across.reason} — refusing to spend TTS on duplicate narration`)
       }
     }
 
@@ -823,12 +839,40 @@ export class NewsBroadcastEngine {
       }
     }
 
+    // NARRATION-DEDUP: record this video's script into the shared ledger NOW
+    // that the run succeeded — the across-video gate only has teeth once past
+    // scripts are recorded. Post-success only: a run that failed after voice
+    // must not poison the ledger. Never throw here (the video is already
+    // published); a ledger write failure warns and continues.
+    try {
+      this._scriptUniqueness().record(captionScript, {
+        jobId: this.currentVideoId || null,
+        videoId: this.currentVideoId || null,
+        title: (this.contract?.publish?.title) || directorStory?.headline || (article?.title) || null,
+      })
+    } catch (e) {
+      console.warn(`[NARRATION] script ledger record skipped: ${e.message}`)
+    }
+
     // Resolve-once invariant: assert exactly one resolution per run
     if (this._resolveNicheCallCount !== 1) {
       console.warn(`[INVARIANT] resolveNiche called ${this._resolveNicheCallCount}x — expected exactly 1`)
     }
 
     return { videoPath, engine: this, productionContext: this.productionContext, thumbnailPath: this.thumbnailPath, coverPath: this.coverPath, contract: this.contract, trace: trace.finish('published') }
+  }
+
+  // NARRATION-DEDUP (across-video): lazily builds the shared registry-backed
+  // ScriptUniqueness. Fail-safe: an unreadable/corrupt ledger must not sink
+  // the pipeline, but a WRITEABLE ledger is required for the hard gate to
+  // matter — so construct/read failures surface from AssetRegistry itself and
+  // the gate fails closed below.
+  _scriptUniqueness() {
+    if (!this.scriptUniqueness) {
+      this.scriptDedupRegistry = new AssetRegistry()
+      this.scriptUniqueness = new ScriptUniqueness(this.scriptDedupRegistry)
+    }
+    return this.scriptUniqueness
   }
 
   buildScenesFromAnalysis(template, article, analysis) {
