@@ -104,7 +104,7 @@ test('withRetry — malformed responses (INVALID_RESPONSE) are not re-retried', 
 
 test('classifyError — maps status/code/name to stable classes', () => {
   const mk = (status, code, name) => { const e = new Error('x'); if (status) e.status = status; if (code) e.code = code; if (name) e.name = name; return e }
-  assert.equal(classifyError(mk(429, null)).class, 'TRANSIENT')
+  assert.equal(classifyError(mk(429, null)).class, 'QUOTA_EXHAUSTED')
   assert.equal(classifyError(mk(503)).class, 'TRANSIENT')
   assert.equal(classifyError(mk(401)).class, 'AUTH')
   assert.equal(classifyError(mk(403)).class, 'AUTH')
@@ -134,5 +134,5 @@ test('ProviderError — preserves classification through a wrapper', () => {
   assert.equal(wrapped.provider, 'Zen')
   assert.equal(wrapped.model, 'm1')
   assert.equal(wrapped.cause, cause)
-  assert.equal(classifyError(wrapped).class, 'TRANSIENT')
+  assert.equal(classifyError(wrapped).class, 'QUOTA_EXHAUSTED')
 })

@@ -91,6 +91,16 @@ function buildAlgoTags(algo) {
   const nicheHash = (algo.number * 7 + algo.hook.length * 3) % NICHE_VARIANT.length
   tags.add(NICHE_VARIANT[nicheHash])
   tags.add(NICHE_VARIANT[(nicheHash + 3) % NICHE_VARIANT.length])
+  // Backfill to exactly 15 unique tags: niche picks can collide with base picks
+  // (e.g. NICHE_VARIANT[1] === 'breaking' is already a BASE_TAG), which used to
+  // silently shrink sets to 14.
+  for (const pool of [CATEGORY_TAGS[algo.category] || CATEGORY_TAGS.default, NICHE_VARIANT]) {
+    if (tags.size >= 15) break
+    for (const t of pool) {
+      if (tags.size >= 15) break
+      tags.add(t)
+    }
+  }
   // Trim to exactly 15
   return [...tags].slice(0, 15)
 }
@@ -101,7 +111,18 @@ export class HashtagBuilder {
       const tags = buildAlgoTags(algorithm)
       return tags.map(t => `#${t}`).join(' ')
     }
-    const hashtags = [topic, category, pipelineProfile, channel].filter(Boolean)
+    // Dedupe on the normalized form: topic and category often collide
+    // (e.g. a "technology" headline in the technology category would produce
+    // `#technology #technology` without this).
+    const seen = new Set()
+    const hashtags = [topic, category, pipelineProfile, channel]
+      .filter(Boolean)
+      .filter(tag => {
+        const normalized = tag.toLowerCase().replace(/\s+/g, '-')
+        if (seen.has(normalized)) return false
+        seen.add(normalized)
+        return true
+      })
     return hashtags.map(tag => `#${tag.toLowerCase().replace(/\s+/g, '-')}`).join(' ')
   }
 

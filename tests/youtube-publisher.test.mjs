@@ -64,6 +64,10 @@ function mockTransport(handler) {
       ok: result.ok ?? true,
       status: result.status ?? 200,
       statusText: result.statusText ?? 'OK',
+      headers: {
+        get: (k) => (result.headers ?? {})[String(k).toLowerCase()],
+        has: (k) => Object.prototype.hasOwnProperty.call(result.headers ?? {}, String(k).toLowerCase()),
+      },
       json: async () => result.body ?? {},
       arrayBuffer: async () => result.buffer ?? new ArrayBuffer(0),
       text: async () => result.text ?? '',
@@ -126,6 +130,7 @@ test('exchangeCode — throws on error from Google', async () => {
 
 // ── getAccessToken ───────────────────────────────────────────────────────
 test('getAccessToken — returns access token', async () => {
+  youtube.resetTokenCache()
   mockTransport(() => ({
     body: { access_token: 'fresh-token-abc', token_type: 'Bearer' },
   }))
@@ -134,15 +139,9 @@ test('getAccessToken — returns access token', async () => {
 })
 
 test('getAccessToken — throws if no refresh token', async () => {
-  // The module captures REFRESH_TOKEN at load time. We verify the guard
-  // by checking the error message when the token is undefined in a fresh scope.
-  // Since we can't re-import with different env, we test via a proxy approach:
-  // the function checks `process.env.YOUTUBE_REFRESH_TOKEN` at call time in the
-  // actual source. Let's read the source to confirm the behavior.
-  // Actually, looking at the source: `const REFRESH_TOKEN = process.env.YOUTUBE_REFRESH_TOKEN`
-  // is at module top-level. So we just test that getAccessToken works with the env var set.
-  // The guard is for when REFRESH_TOKEN is falsy. Since it was set at import time,
-  // we verify the happy path instead.
+  // The module reads REFRESH_TOKEN from process.env at call time. We verify the
+  // happy path (env token set by the test harness) still works.
+  youtube.resetTokenCache()
   mockTransport(() => ({ body: { access_token: 'tok' } }))
   const token = await youtube.getAccessToken()
   assert.ok(token, 'getAccessToken returns a token when REFRESH_TOKEN is set')
@@ -150,6 +149,7 @@ test('getAccessToken — throws if no refresh token', async () => {
 
 test('getAccessToken — sends refresh_token grant', async () => {
   let sentBody = null
+  youtube.resetTokenCache()
   mockTransport((url, opts) => {
     sentBody = opts.body
     return { body: { access_token: 'tok' } }
@@ -157,6 +157,77 @@ test('getAccessToken — sends refresh_token grant', async () => {
   await youtube.getAccessToken()
   assert.equal(sentBody.get('grant_type'), 'refresh_token')
   assert.equal(sentBody.get('refresh_token'), 'test-refresh-token')
+})
+
+test('getAccessToken — serves cached token without hitting Google (cache hit)', async () => {
+  let fetchCount = 0
+  youtube.resetTokenCache()
+  // Seed the cache
+  mockTransport((url, opts) => {
+    fetchCount++
+    return { body: { access_token: 'cached-tok' } }
+  })
+  await youtube.getAccessToken({ force: true })
+  assert.equal(fetchCount, 1)
+  // Second call (no force) must NOT refetch — served from cache
+  const t1 = await youtube.getAccessToken()
+  const t2 = await youtube.getAccessToken()
+  assert.equal(t1, 'cached-tok')
+  assert.equal(t2, 'cached-tok')
+  assert.equal(fetchCount, 1, 'cache hit must not refetch from Google')
+  // Force refresh rotates the token
+  await youtube.getAccessToken({ force: true })
+  assert.equal(fetchCount, 2)
+  // Cache metadata exposed
+  const info = youtube.cachedTokenInfo()
+  assert.ok(info.cached === true)
+})
+
+test('getAccessToken — resetTokenCache drops cached token', async () => {
+  let fetchCount = 0
+  youtube.resetTokenCache()
+  mockTransport(() => { fetchCount++; return { body: { access_token: 'tok-1' } } })
+  await youtube.getAccessToken({ force: true })
+  assert.equal(fetchCount, 1)
+  youtube.resetTokenCache()
+  // Force a new fetch (fresh cache state, but cache was empty anyway)
+  await youtube.getAccessToken({ force: true })
+  assert.equal(fetchCount, 2)
+  assert.ok(youtube.cachedTokenInfo().cached === true)
+})
+
+test('startYouTubeTokenWarmup — immediate refresh records history and fires onRefresh', async () => {
+  youtube.resetTokenCache()
+  const events = []
+  let warmed = false
+  mockTransport(() => { return { body: { access_token: 'warm-tok' } } })
+  const out = youtube.startYouTubeTokenWarmup({
+    intervalMs: 60_000, // long interval — only the immediate run fires in this test
+    onRefresh: (e) => { events.push(e); warmed = true },
+  })
+  // The immediate run() is async; give it a tick to complete the mock fetch.
+  await new Promise((r) => setTimeout(r, 25))
+  assert.equal(warmed, true, 'onRefresh must fire for the immediate warmup')
+  const last = events[events.length - 1] || {}
+  assert.equal(last.ok, true)
+  assert.ok(typeof last.at === 'number')
+  // History is recorded and exposed
+  const history = youtube.warmupHistoryInfo()
+  assert.ok(history.length >= 1)
+  assert.equal(history[history.length - 1].ok, true)
+  assert.equal(history[history.length - 1].tokenLength, 'warm-tok'.length)
+  // Cache is warm after the initial refresh
+  assert.equal(youtube.cachedTokenInfo().cached, true)
+  // Warmup result shape
+  assert.ok(out.started === true || out.alreadyRunning === true)
+  if (out.started) assert.equal(out.intervalMs, 60_000)
+})
+
+test('startYouTubeTokenWarmup — second call is a no-op (idempotent)', async () => {
+  const out = youtube.startYouTubeTokenWarmup({ intervalMs: 60_000 })
+  assert.equal(out.alreadyRunning, true)
+  assert.equal(out.started, false)
+  assert.ok(Array.isArray(out.history))
 })
 
 // ── uploadShort ──────────────────────────────────────────────────────────
@@ -241,18 +312,6 @@ test('uploadShort — throws if no video ID returned', async () => {
   )
 })
 
-function extractMetadataFromMultipart(body) {
-  // Multipart body: --boundary\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n{JSON}\r\n--boundary...
-  const str = new TextDecoder().decode(body)
-  const start = str.indexOf('\r\n\r\n')
-  if (start === -1) return null
-  const afterStart = str.slice(start + 4)
-  const end = afterStart.indexOf('\r\n--')
-  if (end === -1) return null
-  const jsonStr = afterStart.slice(0, end)
-  try { return JSON.parse(jsonStr) } catch { return null }
-}
-
 test('uploadShort — title truncated to 100 chars', async () => {
   const longTitle = 'A'.repeat(200)
   let capturedMeta = null
@@ -262,8 +321,11 @@ test('uploadShort — title truncated to 100 chars', async () => {
     if (url === 'https://example.com/video.mp4') {
       return { buffer: videoData.buffer }
     }
-    if (String(url).includes('/upload/youtube/v3/videos')) {
-      capturedMeta = extractMetadataFromMultipart(opts.body)
+    if (String(url).includes('/upload/youtube/v3/videos') && opts?.method === 'POST') {
+      capturedMeta = JSON.parse(opts.body)
+      return { headers: { location: 'https://upload.example.com/upload?upload_id=trunc' }, body: {} }
+    }
+    if (String(url).includes('upload_id=')) {
       return { body: { id: 'vid-ok' } }
     }
     return { body: { items: [] } }
@@ -283,8 +345,11 @@ test('uploadShort — description truncated to 5000 chars', async () => {
     if (url === 'https://example.com/video.mp4') {
       return { buffer: videoData.buffer }
     }
-    if (String(url).includes('/upload/youtube/v3/videos')) {
-      capturedMeta = extractMetadataFromMultipart(opts.body)
+    if (String(url).includes('/upload/youtube/v3/videos') && opts?.method === 'POST') {
+      capturedMeta = JSON.parse(opts.body)
+      return { headers: { location: 'https://upload.example.com/upload?upload_id=desc' }, body: {} }
+    }
+    if (String(url).includes('upload_id=')) {
       return { body: { id: 'vid-ok' } }
     }
     return { body: { items: [] } }
@@ -303,8 +368,11 @@ test('uploadShort — privacy status passed correctly', async () => {
     if (url === 'https://example.com/video.mp4') {
       return { buffer: videoData.buffer }
     }
-    if (String(url).includes('/upload/youtube/v3/videos')) {
-      capturedMeta = extractMetadataFromMultipart(opts.body)
+    if (String(url).includes('/upload/youtube/v3/videos') && opts?.method === 'POST') {
+      capturedMeta = JSON.parse(opts.body)
+      return { headers: { location: 'https://upload.example.com/upload?upload_id=priv' }, body: {} }
+    }
+    if (String(url).includes('upload_id=')) {
       return { body: { id: 'vid-ok' } }
     }
     return { body: { items: [] } }
@@ -525,7 +593,7 @@ test('deleteVideo — throws on failure', async () => {
   )
 })
 
-// ── publishVideo — SEO (tags + categoryId) ───────────────────────────────
+// ── publishVideo — SEO (tags + categoryId) — resumable upload ────────────
 test('publishVideo — injects tags[] + categoryId into the snippet', async () => {
   let capturedMeta = null
   const videoData = new Uint8Array([1, 2, 3])
@@ -534,8 +602,13 @@ test('publishVideo — injects tags[] + categoryId into the snippet', async () =
     if (String(url).includes('/example.com/video.mp4')) {
       return { buffer: videoData.buffer }
     }
-    if (String(url).includes('/upload/youtube/v3/videos')) {
-      capturedMeta = extractMetadataFromMultipart(opts.body)
+    // Resumable init: POST /upload/youtube/v3/videos?uploadType=resumable
+    if (String(url).includes('/upload/youtube/v3/videos') && opts?.method === 'POST') {
+      capturedMeta = JSON.parse(opts.body)
+      return { headers: { location: 'https://upload.example.com/upload?upload_id=abc' }, body: {} }
+    }
+    // Resumable data: PUT to the session URI
+    if (String(url).includes('upload_id=')) {
       return { body: { id: 'vid-seo' } }
     }
     return { body: {} }
@@ -552,6 +625,7 @@ test('publishVideo — injects tags[] + categoryId into the snippet', async () =
   assert.ok(capturedMeta, 'must capture upload snippet')
   assert.deepEqual(capturedMeta.snippet.tags, ['sports', 'news', 'match'], 'tags deduped + no leading # + lowercased')
   assert.equal(capturedMeta.snippet.categoryId, '17', 'categoryId present')
+  assert.equal(capturedMeta.status.privacyStatus, 'public')
   assert.ok(result.metadata.tags.length > 0, 'result reports resolved tags')
   assert.equal(result.metadata.categoryId, '17')
 })
@@ -564,8 +638,11 @@ test('publishVideo — omits snippet.tags when no tags supplied (backward compat
     if (String(url).includes('/example.com/video.mp4')) {
       return { buffer: videoData.buffer }
     }
-    if (String(url).includes('/upload/youtube/v3/videos')) {
-      capturedMeta = extractMetadataFromMultipart(opts.body)
+    if (String(url).includes('/upload/youtube/v3/videos') && opts?.method === 'POST') {
+      capturedMeta = JSON.parse(opts.body)
+      return { headers: { location: 'https://upload.example.com/upload?upload_id=def' }, body: {} }
+    }
+    if (String(url).includes('upload_id=')) {
       return { body: { id: 'vid-noseo' } }
     }
     return { body: {} }
@@ -580,6 +657,109 @@ test('publishVideo — omits snippet.tags when no tags supplied (backward compat
   assert.ok(capturedMeta)
   assert.equal(capturedMeta.snippet.tags, undefined, 'no tags key when empty')
   assert.equal(capturedMeta.snippet.categoryId, undefined, 'no categoryId when none supplied')
+})
+
+// Resumable uploader mechanics
+test('publishVideo — splits a large file into chunks with correct Content-Range', async () => {
+  process.env.YOUTUBE_UPLOAD_CHUNK_SIZE = '2' // force 3 chunks of a 5-byte video
+  const videoData = new Uint8Array([1, 2, 3, 4, 5])
+  const ranges = []
+  let puts = 0
+
+  mockTransport((url, opts) => {
+    if (String(url).includes('/example.com/video.mp4')) {
+      return { buffer: videoData.buffer }
+    }
+    if (String(url).includes('/upload/youtube/v3/videos') && opts?.method === 'POST') {
+      return { headers: { location: 'https://upload.example.com/upload?upload_id=chunks' }, body: {} }
+    }
+    if (String(url).includes('upload_id=')) {
+      puts++
+      ranges.push(opts.headers['Content-Range'])
+      if (puts < 3) {
+        const end = Number(opts.headers['Content-Range'].split(' ')[1].split('-')[1])
+        return { ok: false, status: 308, headers: { range: `bytes=0-${end}` } }
+      }
+      return { body: { id: 'vid-chunked' } }
+    }
+    return { body: {} }
+  })
+
+  const result = await youtube.publishVideo({ videoUrl: 'https://example.com/video.mp4', title: 'Chunked', description: 'd' })
+  assert.deepEqual(ranges, ['bytes 0-1/5', 'bytes 2-3/5', 'bytes 4-4/5'], 'each chunk PUT carries its exact byte range')
+  assert.equal(result.videoId, 'vid-chunked')
+  delete process.env.YOUTUBE_UPLOAD_CHUNK_SIZE
+})
+
+test('publishVideo — resumes from the server-reported Range after a 308', async () => {
+  process.env.YOUTUBE_UPLOAD_CHUNK_SIZE = '3' // first PUT covers bytes 0-2
+  const videoData = new Uint8Array([1, 2, 3, 4, 5])
+  const ranges = []
+
+  mockTransport((url, opts) => {
+    if (String(url).includes('/example.com/video.mp4')) {
+      return { buffer: videoData.buffer }
+    }
+    if (String(url).includes('/upload/youtube/v3/videos') && opts?.method === 'POST') {
+      return { headers: { location: 'https://upload.example.com/upload?upload_id=resume' }, body: {} }
+    }
+    if (String(url).includes('upload_id=')) {
+      ranges.push(opts.headers['Content-Range'])
+      if (ranges.length === 1) {
+        // Server reports it received bytes 0-2 (3 bytes of a 5-byte file).
+        return { ok: false, status: 308, headers: { range: 'bytes=0-2' } }
+      }
+      return { body: { id: 'vid-resume' } }
+    }
+    return { body: {} }
+  })
+
+  const result = await youtube.publishVideo({ videoUrl: 'https://example.com/video.mp4', title: 'Resume', description: 'd' })
+  assert.deepEqual(ranges, ['bytes 0-2/5', 'bytes 3-4/5'], 'second PUT resumes exactly after the acknowledged byte')
+  assert.equal(result.videoId, 'vid-resume')
+  delete process.env.YOUTUBE_UPLOAD_CHUNK_SIZE
+})
+
+test('publishVideo — retries a transient 5xx chunk failure then succeeds', async () => {
+  const videoData = new Uint8Array([1, 2, 3])
+  let chunkPuts = 0
+
+  mockTransport((url, opts) => {
+    if (String(url).includes('/example.com/video.mp4')) {
+      return { buffer: videoData.buffer }
+    }
+    if (String(url).includes('/upload/youtube/v3/videos') && opts?.method === 'POST') {
+      return { headers: { location: 'https://upload.example.com/upload?upload_id=retry' }, body: {} }
+    }
+    if (String(url).includes('upload_id=')) {
+      chunkPuts++
+      if (chunkPuts === 1) {
+        return { ok: false, status: 500, body: { error: { message: 'backend hiccup' } } }
+      }
+      return { body: { id: 'vid-retried' } }
+    }
+    return { body: {} }
+  })
+
+  const result = await youtube.publishVideo({ videoUrl: 'https://example.com/video.mp4', title: 'Retry', description: 'd' })
+  assert.equal(chunkPuts, 2, 'chunk re-sent after transient 5xx')
+  assert.equal(result.videoId, 'vid-retried')
+})
+
+test('publishVideo — legacy sessionless response still resolves (no Location header)', async () => {
+  const videoData = new Uint8Array([1, 2, 3])
+  mockTransport((url, opts) => {
+    if (String(url).includes('/example.com/video.mp4')) {
+      return { buffer: videoData.buffer }
+    }
+    if (String(url).includes('/upload/youtube/v3/videos')) {
+      return { body: { id: 'vid-legacy' } } // no headers.location — compatibility shim
+    }
+    return { body: {} }
+  })
+
+  const result = await youtube.publishVideo({ videoUrl: 'https://example.com/video.mp4', title: 'Legacy', description: 'd' })
+  assert.equal(result.videoId, 'vid-legacy')
 })
 
 // ── updateVideoSnippet (SEO backfill) ────────────────────────────────────
