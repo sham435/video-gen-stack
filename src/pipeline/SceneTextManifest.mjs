@@ -28,11 +28,15 @@ export class SceneTextManifest {
       })
     }
 
-    // Caption layer (subtitle) — lowest priority
-    if (scene.caption || scene.narration) {
+    // Caption layer (spoken-sentence visual) — lowest priority.
+    // Contract: caption.fullText is VISUAL ONLY and narration is VO ONLY — a
+    // caption layer must never fall back onto the narration text, otherwise
+    // the spoken sentence gets re-printed on screen (the repeated-narrative
+    // bug). Empty captions simply mean no caption layer.
+    if (scene.caption) {
       layers.push({
         type: 'caption',
-        text: scene.caption || scene.narration,
+        text: String(scene.caption),
         priority: 5,
         position: 'bottom',
         id: `${scene.id || 0}-caption`,

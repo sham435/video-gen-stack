@@ -1,70 +1,64 @@
-// M9 TopicCtaBuilder — 6 arc-specific CTAs with viral triggers
-// Each of the 6 monkey-empathy arcs gets a unique CTA designed to hit million audience.
-// Backward-compatible: new TopicCtaBuilder().build(article) returns { cta, narration, caption, engagement, topic, mode }
+// M9 TopicCtaBuilder — NEWS-aware engagement CTA.
+//
+// The CTA is the on-screen + spoken engagement question on the end card, so it
+// must be ABOUT THE ARTICLE, not about an unrelated emotional arc. The old
+// builder anchored the CTA to the monkey-empathy arc vocabulary ("Have you
+// ever built shelter in the rain?"), which published the same moral question
+// on gaming, tech, and AI-safety videos alike. This version derives the
+// question from the article's own subject + category.
+//
+// Backward-compatible: new TopicCtaBuilder().build(article) returns the same
+// shape { cta, narration, caption, engagement, followUp, pinnedComment, topic,
+// mode, arc }.
 
-const ARC_CTAS = {
-  RAIN_SHELTER_LOVE: {
-    primary: (title) => `Have you ever built shelter in the rain? Comment your story`,
-    pinned: (title) => `NOBODY_EXPECTED - ${title.slice(0, 50)}...\nHave you ever built shelter in the rain? Comment your story\nI read every comment!`,
-    caption: 'YOUR STORY',
-    followUp: 'FOLLOW NOW for more family love stories!',
-    engagement: 'Have you ever built shelter in the rain? Comment your story',
-  },
-  HUNGER_SHARE_HERO: {
-    primary: (title) => `Have you ever shared when you had nothing? Tell us below`,
-    pinned: (title) => `NOBODY_EXPECTED - ${title.slice(0, 50)}...\nHave you ever shared when you had nothing? Tell us below\nI read every comment!`,
-    caption: 'YOUR KINDNESS',
-    followUp: 'FOLLOW NOW for more hero stories!',
-    engagement: 'Have you ever shared when you had nothing? Tell us below',
-  },
-  BULLY_STUDY_SUCCESS: {
-    primary: (title) => `Were you ever counted out? Prove them wrong in the comments`,
-    pinned: (title) => `NOBODY_EXPECTED - ${title.slice(0, 50)}...\nWere you ever counted out? Prove them wrong in the comments\nI read every comment!`,
-    caption: 'YOUR COMEBACK',
-    followUp: 'FOLLOW NOW for more comeback stories!',
-    engagement: 'Were you ever counted out? Prove them wrong in the comments',
-  },
-  RIVER_SAVE_FISH: {
-    primary: (title) => `Have you ever saved someone while drowning yourself? Share below`,
-    pinned: (title) => `NOBODY_EXPECTED - ${title.slice(0, 50)}...\nHave you ever saved someone while drowning yourself? Share below\nI read every comment!`,
-    caption: 'YOUR BRAVERY',
-    followUp: 'FOLLOW NOW for more rescue stories!',
-    engagement: 'Have you ever saved someone while drowning yourself? Share below',
-  },
-  BROKEN_FIX_INSPIRE: {
-    primary: (title) => `Have you fixed something everyone said was broken? Show us below`,
-    pinned: (title) => `NOBODY_EXPECTED - ${title.slice(0, 50)}...\nHave you fixed something everyone said was broken? Show us below\nI read every comment!`,
-    caption: 'YOUR CREATION',
-    followUp: 'FOLLOW NOW for more innovation stories!',
-    engagement: 'Have you fixed something everyone said was broken? Show us below',
-  },
-  LEFT_RUN_REUNION: {
-    primary: (title) => `Have you ever run to reunite with someone you love? Tell us`,
-    pinned: (title) => `NOBODY_EXPECTED - ${title.slice(0, 50)}...\nHave you ever run to reunite with someone you love? Tell us\nI read every comment!`,
-    caption: 'YOUR REUNION',
-    followUp: 'FOLLOW NOW for more reunion stories!',
-    engagement: 'Have you ever run to reunite with someone you love? Tell us',
-  },
+import { subjectOf } from '../ai/thumbnail/CuriosityEngine.mjs'
+
+// Category-aware engagement questions. `<subject>` is the article's own
+// entity/product term extracted from the title (e.g. "Xbox", "iPad", "M4").
+const CATEGORY_QUESTIONS = {
+  gaming: (s) => `What do you think of ${s}? Tell us below`,
+  ai: (s) => `What does ${s} mean for AI? Tell us below`,
+  technology: (s) => `Would you switch to ${s}? Tell us below`,
+  finance: (s) => `Is ${s} the turning point? Tell us below`,
+  health: (s) => `Would you trust ${s}? Tell us below`,
+  space: (s) => `Are you excited about ${s}? Tell us below`,
+  science: (s) => `What should ${s} do next? Tell us below`,
+  sports: (s) => `Is ${s} the story of the year? Tell us below`,
 }
 
-const DEFAULT_ARC = ARC_CTAS.RAIN_SHELTER_LOVE
+const CATEGORY_CAPTION = {
+  gaming: 'YOUR CALL',
+  ai: 'YOUR CALL',
+  technology: 'YOUR CALL',
+  finance: 'YOUR CALL',
+  health: 'YOUR CALL',
+  space: 'YOUR CALL',
+  science: 'YOUR CALL',
+  sports: 'YOUR CALL',
+}
+
+const FALLBACK_QUESTION = 'What do you think of this story? Tell us below'
 
 export class TopicCtaBuilder {
   build(article) {
-    const arc = article?.algorithm?.arc || article?.arc || 'RAIN_SHELTER_LOVE'
-    const ctas = ARC_CTAS[arc] || DEFAULT_ARC
     const category = (article?.category || 'default').toLowerCase()
     const title = article?.title || article?.headline || 'NEWS'
+    const { brand, topic } = subjectOf(article)
+    const subject = brand || topic || title.split(' ').slice(0, 3).join(' ') || 'this story'
+    const ask = CATEGORY_QUESTIONS[category] || CATEGORY_QUESTIONS.technology
+    const question = ask(subject) || FALLBACK_QUESTION
+    const caption = CATEGORY_CAPTION[category] || 'YOUR CALL'
+    const arc = article?.algorithm?.arc || article?.arc || null
 
     return {
-      cta: ctas.primary(title),
-      narration: ctas.primary(title),
-      caption: ctas.caption,
-      engagement: ctas.engagement,
-      followUp: ctas.followUp,
-      pinnedComment: ctas.pinned(title),
-      topic: category,
-      mode: 'arc',
+      cta: question,
+      narration: question,
+      caption,
+      engagement: question,
+      followUp: `FOLLOW NOW for more ${category === 'default' ? 'news' : category} coverage!`,
+      pinnedComment: `${title}\n${question}\nI read every comment!`,
+      topic: topic || category,
+      mode: 'news',
       arc,
     }
   }

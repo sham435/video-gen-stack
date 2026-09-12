@@ -12,6 +12,77 @@ const CAMERA_MOTIONS = ['push_in', 'slow_zoom', 'orbit', 'pan', 'shake', 'parall
 const TRANSITIONS = ['cut', 'flash', 'glitch', 'zoom_blur', 'light_leak', 'crossfade']
 const EMOTIONS = ['shock', 'awe', 'curiosity', 'tension', 'excitement', 'neutral']
 
+// ── NEWS-FIRST CONTENT POLICY ──────────────────────────────────────────────
+// Generic story-template phrases the LLM + deterministic fallback have
+// historically recycled for UNRELATED articles (gaming / tech / AI-safety).
+// They are banned as VISUAL CAPTIONS and as narration hooks: the article is
+// the source of truth, and a phrase that merely describes "somebody's
+// struggle" must never be auto-plugged into every story.
+//
+// Matching is prefix-based on the NORMALIZED (uppercase, punctuation-free)
+// text, so "THE WORLD WAS AGAINST THEM?" and "THE WORLD WAS AGAINST THEM"
+// resolve to the same template, and "NOBODY EXPECTED THIS MOVE FROM DEATH"
+// resolves to the same template as "NOBODY EXPECTED THIS MOVE".
+export const GENERIC_STORY_TEMPLATES = [
+  'NOBODY EXPECTED THIS MOVE',
+  'NOBODY EXPECTED THIS',
+  'IT STARTED LIKE ANY DAY',
+  'THE WORLD WAS AGAINST',
+  'EVERY SMALL WIN',
+  'EVERY NIGHT THEY KEPT GOING',
+  'THEN IT HAPPENED',
+  'THE WHOLE WORLD STARTED WATCHING',
+  'NOW THE WHOLE WORLD IS WATCHING',
+  'THE WORLD IS WATCHING',
+  'THE POWER OF NEVER GIVING UP',
+  'NEVER GIVE UP',
+  'THEY REFUSED TO GIVE UP',
+  'IT ALL STARTED SO WRONG',
+  'THE FIGHT BACK',
+]
+
+// Low-signal words never lead a concise visual caption (uppercase match).
+const CAPTION_OPENERS = new Set([
+  'A', 'AN', 'AND', 'ARE', 'AS', 'AT', 'AFTER', 'BEFORE', 'BUT', 'BY',
+  'COULD', 'DID', 'DO', 'DOES', 'FOR', 'FROM', 'HAS', 'HAVE', 'HOW',
+  'IF', 'IN', 'INTO', 'IS', 'IT', 'ITS', 'MAY', 'MIGHT', 'OF', 'ON',
+  'ONTO', 'OR', 'OUT', 'OVER', 'SHOULD', 'SO', 'THAT', 'THE', 'THEIR',
+  'THERE', 'THESE', 'THIS', 'THOSE', 'TO', 'UNDER', 'UNTIL', 'UP',
+  'WAS', 'WERE', 'WHAT', 'WHEN', 'WHERE', 'WHICH', 'WHILE', 'WHY',
+  'WILL', 'WITH', 'WOULD', 'YOU', 'YOUR',
+])
+
+const TEMPLATE_CACHE = new Map()
+
+// Normalize visual text for template/duplicate comparison: uppercase,
+// punctuation stripped, whitespace collapsed. '?' and '!' are dropped, so
+// "THE WORLD WAS AGAINST THEM?" and "THE WORLD WAS AGAINST THEM." compare
+// equal — the anti-repetition rule treats them as the same narrative beat.
+function normalizeVisualText(text) {
+  const src = String(text || '')
+  if (!src) return ''
+  return src
+    .toUpperCase()
+    .replace(/["'“”‘’`]/g, '')
+    .replace(/[^A-Z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+// True when the normalized text is (or starts with) a banned generic
+// story-template phrase — the same semantic statement used across videos.
+export function isGenericStoryTemplate(normalizedText) {
+  const norm = normalizedText || ''
+  if (!norm) return false
+  if (TEMPLATE_CACHE.has(norm)) return TEMPLATE_CACHE.get(norm)
+  let hit = false
+  for (const tpl of GENERIC_STORY_TEMPLATES) {
+    if (norm === tpl || norm.startsWith(tpl + ' ')) { hit = true; break }
+  }
+  TEMPLATE_CACHE.set(norm, hit)
+  return hit
+}
+
 // JSON-001: the minimal container schema the downstream planner requires. The
 // LLM may return markdown fences, prose, truncated, or wrong-typed JSON — this
 // gate parses + validates + retries once before a scene ever reaches validate().
@@ -77,49 +148,60 @@ Anchor voice: sham435 · ANCHOR (the channel's hard-hitting storyteller).
 
 Given a news article, produce a structured video production plan as JSON for a 16:9 YouTube video.
 
-## STORY FORMULA — 16:9 YOUTUBE
+## STORY FORMULA — 16:9 YOUTUBE (NEWS-FIRST)
 Create a concise cinematic news story for a 16:9 YouTube video.
 
-The story should progress naturally:
+THE ARTICLE IS THE SOURCE OF TRUTH. Every beat — narration, caption,
+headline — must derive from the article's own facts (title, description,
+provided text). Structure the story as NEWS, not fiction:
 
 ACT 1 — HOOK / CONTEXT
-Establish the event and why the viewer should care.
+Lead with the concrete event: what happened, to whom, and why the viewer
+should care.
 
 ACT 2 — DEVELOPMENT
-Explain what happened, who/what is involved, and the important evidence.
+Explain the important evidence: company, product, person, platform,
+partnership, price, release, acquisition, launch, technical capability,
+change, announcement, comparison, consequence.
 
 ACT 3 — IMPACT / REVEAL
 Explain the consequence, significance, or likely next development.
 
-The story must remain factually grounded in the supplied article.
-
 Do NOT invent:
-- victims
-- heroes
-- tragedies
-- family situations
-- sacrifices
-- emotional events
-- outcomes
-- facts not supported by the article
+- victims, heroes, tragedies, family situations, sacrifices, emotional
+  events, outcomes, or facts not supported by the article
+- emotional story archetypes (victim → struggle → courage → transformation)
+  for technology and news articles
+
+BANNED GENERIC STORY LANGUAGE — never use these phrases as narration or
+captions; they recycle propaganda templates across unrelated stories and
+must never become the visual narrative:
+"Nobody expected this move", "It started like any day", "The world was
+against them", "Every small win counted", "Every night they kept going",
+"Then it happened", "The whole world started watching", "Now the whole
+world is watching", "The power of never giving up", "Never give up".
 
 Target duration: 30–40 seconds.
 
 The final scene is ALWAYS the fixed NEWS-MONSTER brand outro.
 
-## Hook Strategies
-Pick one (avoid "hidden/revealed/secret/shocking" phrasing — the channel uses dynamic curiosity patterns only):
-- "mystery": "Nobody expected what X just did"
-- "shock": "X changed everything overnight"
-- "question": "What if everything you knew about X was wrong?"
-- "stat": "One number explains why X just changed everything"
+## Hook Strategies (news-derived only; avoid "hidden/revealed/secret/shocking")
+Pick one and fill it with the ACTUAL article entity + claim:
+- "mystery": "The real story behind {entity} just broke"
+- "shock": "Why {entity} just reshaped its market"
+- "question": "What does {entity}'s move mean for you?"
+- "stat": "One number explains {entity}'s latest move"
 
 NEVER use the phrasing "Actually see", "See how", "See why", "See what",
 "This is", "Here is", "Look at", "Check out" in narration, captions, or
 emphasis keywords — those are dead patterns the channel has banned.
 
-Current algorithm: ${algo.id} (#${algo.number}/48)
-Anchor hook: "Nobody expected this move — ${article.title || 'this'}"
+Algorithm slot: #${algo.number}/48 (pace/visual selector only — the slot's
+internal archetype name is NOT story content; IGNORE its words and write
+from the article only).
+Anchor hook: derive the hook from the ARTICLE, never from a template:
+"No one saw this coming" style phrasing is BANNED — open with the news:
+"${(article.title || '').slice(0, 90)}"
 
 ## Scene Types
 - hook: establish the story immediately
@@ -144,6 +226,20 @@ visual text.
 \`caption.fullText\` is the ONLY spoken-narrative text intended for
 visual rendering.
 
+\`caption.fullText\` MUST be a concise ARTICLE-DERIVED FACT (3-8 words):
+an entity, claim, number, partnership, product, or consequence taken from
+the Article. When your narration states an important fresh fact, turn THAT
+fact into the caption in short visual language — never an invented summary
+and never a generic story phrase.
+
+Examples:
+- narration: "Xbox is expanding its partnership with video game industry
+  legend Hideo Kojima."  →  caption.fullText: "XBOX EXPANDS KOJIMA PARTNERSHIP"
+- narration: "Would you switch out your MacBook for an iPad with an M4
+  chip and OLED display?"  →  caption.fullText: "IPAD WITH M4 + OLED"
+- narration: "Two AI researchers just left Anthropic over safety
+  concerns."  →  caption.fullText: "ANTHROPIC EXITS SHOCK AI"
+
 For 16:9:
 - caption is CENTERED horizontally.
 - caption is CENTERED vertically in the main video/media area.
@@ -155,6 +251,8 @@ For 16:9:
 - caption should normally contain 3–8 words.
 - never exceed 12 words.
 - use concise visual language rather than reproducing the complete VO.
+- never repeat the same caption text in two scenes.
+- never use the banned generic story phrases listed above.
 
 ## 16:9 NARRATIVE TEXT PROGRESSION
 The video uses ONE CENTER-STAGE narrative text position.
@@ -255,7 +353,7 @@ Output ONLY valid JSON.`
 Source: ${article.source || 'News'}
 Description: ${(article.description || article.title || '').slice(0, 500)}
 Category: ${article.category || 'technology'}
-Algorithm: ${algo.id} (#${algo.number}/48)
+Algorithm slot: #${algo.number}/48
 Visual style: ${algo.visual.prompt}
 Target Format: youtube_video`
       }
@@ -314,33 +412,140 @@ Rewrite EVERY scene's narration so all narrations are UNIQUE (rephrase the repea
 
   fallbackPlan(article) {
     const title = article.title || 'Tech News'
-    const desc = article.description || ''
-    const sentences = desc.split(/[.!?]+/).filter(s => s.trim().length > 10)
     const algo = this.lastAlgorithm || pickAlgorithm({ title, category: article.category })
-    const arc = algo.arc.toLowerCase().replace(/_/g, ' ')
-    const brand = (title.split(' ')[0] || 'TECH').toUpperCase()
+    // NEWS-FIRST deterministic plan: every beat derives from the article's own
+    // facts (title + description sentences). No emotional archetype language
+    // ("river save fish", "the world was against them") — the article is the
+    // source of truth even when no LLM is available.
+    const facts = this._newsFacts(article)
+    const narrationLines = []
+    for (const f of facts) {
+      narrationLines.push(f)
+      if (narrationLines.length >= 6) break
+    }
+    while (narrationLines.length < 6) {
+      narrationLines.push(this._connectiveNewsLine(narrationLines.length, article))
+    }
+    const captions = facts.map((f) => StoryDirector.conciseNewsCaption(f))
     const cta = new TopicCtaBuilder().build(article)
+    const headline = String(title).replace(/["'“”‘’]/g, '').trim().slice(0, 80) || 'BREAKING NEWS'
+    const brandTag = (title.split(' ')[0] || 'TECH').replace(/[^A-Za-z0-9]/g, '').toUpperCase() || 'TECH'
     return {
-      headline: `${brand} CHANGED EVERYTHING`,
+      headline,
       hookStrategy: 'mystery',
-      emotionalArc: ['shock', 'courage', 'hope', 'futureVision'],
+      emotionalArc: ['curiosity', 'authority', 'shock', 'futureVision'],
       algorithm: algo,
       scenePlan: [
-        { type: 'hook', duration: 2.5, narration: `Nobody expected this move from ${brand}.`, visual: { subject: brand, style: 'cinematic dramatic', composition: 'close_up' }, camera: 'push_in', motion: 'cinematicReveal', transition: 'glitch', emotion: 'shock', caption: { focus: 'NOBODY', fullText: 'NOBODY EXPECTED THIS' } },
-        // ACT 1 — HOOK / CONTEXT
-        { type: 'fact', duration: 5.5, narration: `It started like any day for the ${arc}. ${title.split(' ').slice(0, 6).join(' ')}. The world was against them.`, visual: { subject: `rain on glass, empty street, ${arc} alone`, style: 'dark rainy documentary, grainy newsroom', composition: 'wide' }, camera: 'slow_zoom', motion: 'depthBlur', transition: 'flash', emotion: 'tension', caption: { focus: 'TRAGEDY', fullText: 'IT ALL STARTED SO WRONG' } },
-        // ACT 2 — DEVELOPMENT
-        { type: 'explanation', duration: 5, narration: `${sentences[0] || 'But they refused to give up.'} Every small win counted. Every night they kept going.`, visual: { subject: 'hands working at night desk lamp, building, small wins', style: algo.visual.prompt, composition: 'medium' }, camera: 'orbit', motion: null, transition: 'zoom_blur', emotion: 'awe', caption: { focus: 'COURAGE', fullText: 'THEY REFUSED TO GIVE UP' } },
-        { type: 'reaction', duration: 5, narration: sentences[1] || 'And little by little, the machine could not ignore them anymore.', visual: { subject: 'spotlight evidence, determination', style: 'documentary', composition: 'medium' }, camera: 'parallax', motion: 'depthBlur', transition: 'light_leak', emotion: 'curiosity', caption: { focus: 'FIGHT', fullText: 'THE FIGHT BACK' } },
-        // ACT 3 — IMPACT / REVEAL
-        { type: 'reveal', duration: 4.5, narration: 'And then it happened. The whole world started watching.', visual: { subject: 'golden hour light, applause, embrace', style: 'golden warm celebration', composition: 'wide' }, camera: 'shake', motion: 'particleField', transition: 'glitch', emotion: 'excitement', caption: { focus: 'TRANSFORM', fullText: 'THE WORLD IS WATCHING' } },
-        { type: 'reaction', duration: 2.5, narration: 'Now the whole world is watching. This is the power of never giving up.', visual: { subject: 'industry impact, golden light', style: 'glowing data streams', composition: 'wide' }, camera: 'pan', motion: 'digitalHUD', transition: 'cut', emotion: 'excitement', caption: { focus: 'IMPACT', fullText: 'NEVER GIVE UP' } },
-        { type: 'close', duration: 3, narration: cta.narration, visual: { subject: 'NEWS-MONSTER brand', style: 'red and cyan futuristic', composition: 'medium' }, camera: 'pull_back', motion: null, transition: 'fade', emotion: 'excitement', caption: { focus: 'SUB', fullText: cta.caption } },
+        // ACT 1 — HOOK / CONTEXT: the story's own headline, not a template.
+        { type: 'hook', duration: 2.5, narration: narrationLines[0], visual: { subject: `${brandTag} newsroom broadcast`, style: algo.visual.prompt, composition: 'close_up' }, camera: 'push_in', motion: 'cinematicReveal', transition: 'glitch', emotion: 'shock', caption: { focus: 'NEWS', fullText: StoryDirector.conciseNewsCaption(facts[0] || title) } },
+        // ACT 2 — DEVELOPMENT: article facts.
+        { type: 'fact', duration: 5.5, narration: narrationLines[1], visual: { subject: `${brandTag} breaking coverage`, style: 'documentary photojournalism, newsroom studio', composition: 'wide' }, camera: 'slow_zoom', motion: 'depthBlur', transition: 'flash', emotion: 'tension', caption: { focus: 'FACT', fullText: captions[1] || '' } },
+        { type: 'explanation', duration: 5, narration: narrationLines[2], visual: { subject: `analysis desk, ${brandTag} charts`, style: algo.visual.prompt, composition: 'medium' }, camera: 'orbit', motion: null, transition: 'zoom_blur', emotion: 'curiosity', caption: { focus: 'WHY', fullText: captions[2] || '' } },
+        { type: 'reaction', duration: 5, narration: narrationLines[3], visual: { subject: `industry reaction, ${brandTag} headlines`, style: 'documentary', composition: 'medium' }, camera: 'parallax', motion: 'depthBlur', transition: 'light_leak', emotion: 'curiosity', caption: { focus: 'IMPACT', fullText: captions[3] || '' } },
+        // ACT 3 — IMPACT / REVEAL: the consequence + next development.
+        { type: 'reveal', duration: 4.5, narration: narrationLines[4], visual: { subject: `${brandTag} launch event, stage lights`, style: 'golden hour, news event', composition: 'wide' }, camera: 'shake', motion: 'particleField', transition: 'glitch', emotion: 'excitement', caption: { focus: 'NEXT', fullText: captions[4] || '' } },
+        { type: 'reaction', duration: 2.5, narration: narrationLines[5], visual: { subject: `futuristic broadcast data, ${brandTag}`, style: 'glowing data streams', composition: 'wide' }, camera: 'pan', motion: 'digitalHUD', transition: 'cut', emotion: 'excitement', caption: { focus: 'AFTER', fullText: captions[5] || '' } },
+        { type: 'close', duration: 3, narration: cta.narration, visual: { subject: 'NEWS-MONSTER brand', style: 'red and cyan futuristic', composition: 'medium' }, camera: 'pull_back', motion: null, transition: 'fade', emotion: 'excitement', caption: { focus: 'STAY_WITH', fullText: cta.caption } },
       ],
       brandMoment: { type: 'cta', sceneIndex: 6 },
       cta: cta.cta,
       engagement: cta.engagement,
     }
+  }
+
+  // Article facts: title/headline first, then description sentences — the
+  // same corpus the LLM is prompted with, deduplicated and ordered by
+  // importance. This is the deterministic source of news-first narration +
+  // captions when no LLM plan is available.
+  _newsFacts(article) {
+    const seen = new Set()
+    const facts = []
+    const push = (s) => {
+      const clean = String(s || '')
+        .replace(/["'“”‘’]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+      if (!clean || clean.length < 12) return
+      const key = clean.toLowerCase()
+      if (seen.has(key)) return
+      seen.add(key)
+      facts.push(clean)
+    }
+    push(article.title)
+    push(article.headline)
+    for (const s of String(article.description || '').split(/[.!?]+/)) {
+      const clean = String(s || '').replace(/["'“”‘’]/g, '').replace(/\s+/g, ' ').trim()
+      if (!clean || clean.length < 12) continue
+      // Reject near-duplicate sentences (title vs lead are often 0.8+ similar,
+      // e.g. "Two more AI researchers leave Anthropic" vs "Two AI researchers
+      // are leaving Anthropic"). Emitting both would trip the within-video
+      // narration gate; the lead adds nothing the title does not already say.
+      // Bar sits below the gate's 0.85 so kept facts have headroom.
+      if (facts.some(f => ScriptUniqueness._segmentSimilarity(f, clean) >= 0.8)) continue
+      push(clean)
+    }
+    return facts
+  }
+
+  // Neutral news-toned connective lines — used ONLY to keep the deterministic
+  // plan full-length when the article has few facts. Never emotional
+  // archetypes, never banned template language; each line is distinct.
+  _connectiveNewsLine(idx, article) {
+    const brandTag = String(article.title || 'TECH').split(' ')[0].replace(/[^A-Za-z0-9]/g, '') || 'the story'
+    const source = article.source || 'the report'
+    const lines = [
+      `Details from ${source} continue to emerge.`,
+      `Analysts are watching how ${brandTag} responds.`,
+      `The announcement marks a major shift for ${brandTag}.`,
+      `More coverage of ${brandTag} is expected soon.`,
+    ]
+    return lines[idx % lines.length]
+  }
+
+  // Deterministic concise visual caption from an article fact: entity-first,
+  // uppercase, ≤ maxWords, punctuation-free. Used to guarantee that important
+  // article facts always have an on-screen representation even when the LLM
+  // caption is missing, duplicated, or a generic story template.
+  static conciseNewsCaption(fact, maxWords = 7) {
+    const clean = String(fact || '').trim().replace(/\s+/g, ' ')
+    if (!clean) return ''
+    const words = clean.split(' ')
+    // Prefer the first proper-noun entity window (product/company/person),
+    // but a capitalized sentence opener is kept too — it is the subject.
+    let start = 0
+    if (!(words.length > 1 && /^[A-Z][a-z]/.test(words[0]))) {
+      const entityIdx = words.findIndex((w, i) => i > 0 && /^[A-Z][a-z]/.test(w) && !CAPTION_OPENERS.has(w.toUpperCase()))
+      if (entityIdx >= 0) start = entityIdx
+    }
+    let cap = words.slice(start, start + Math.max(2, maxWords)).join(' ')
+    if (!cap) cap = words.slice(0, maxWords).join(' ')
+    return cap
+      .toUpperCase()
+      .replace(/["'“”‘’]/g, '')
+      .replace(/[.,;:!?]+$/g, '')
+  }
+
+  // First unused, non-generic, non-duplicate article caption from the pool.
+  _nextNewsCaption(facts, usedNorms) {
+    for (const f of facts) {
+      const cap = StoryDirector.conciseNewsCaption(f, 8)
+      const norm = normalizeVisualText(cap)
+      if (!norm || usedNorms.has(norm) || isGenericStoryTemplate(norm)) continue
+      usedNorms.add(norm)
+      return cap
+    }
+    return ''
+  }
+
+  // First unused article sentence, for replacing banned-template narration.
+  _nextNewsNarration(facts, usedNorms) {
+    for (const f of facts) {
+      const norm = normalizeVisualText(f)
+      if (!norm || usedNorms.has(norm)) continue
+      usedNorms.add(norm)
+      return f
+    }
+    return ''
   }
 
   // Short center-stage visual caption: first sentence, 3-8 words preferred,
@@ -371,10 +576,44 @@ Rewrite EVERY scene's narration so all narrations are UNIQUE (rephrase the repea
       }
       s.caption.focus = typeof s.caption.focus === 'string' ? s.caption.focus.trim().slice(0, 30) : 'NEWS'
       s.caption.fullText = typeof s.caption.fullText === 'string' ? s.caption.fullText.trim() : ''
-      if (!s.caption.fullText && s.narration) {
-        s.caption.fullText = this.shortFullText(s.narration)
-      }
     })
+
+    // NEWS-FIRST caption normalization (this is the content-selection fix):
+    // - empty captions are filled from ARTICLE FACTS, never from narration
+    //   (a caption copied from the VO is what made generic narration become
+    //   on-screen text),
+    // - generic story-template captions are replaced by article facts,
+    // - exact duplicate captions (normalized, punctuation-insensitive) are
+    //   rejected — "THE WORLD WAS AGAINST THEM?" and "THE WORLD WAS AGAINST
+    //   THEM." are the same beat and must not be emitted twice.
+    // The close scene is exempt: applyBrandOutro replaces it with the fixed
+    // brand end card afterwards.
+    const facts = this._newsFacts(article)
+    const usedCaptionNorms = new Set()
+    for (const s of story.scenePlan) {
+      if (s.type === 'close') continue
+      const norm = normalizeVisualText(s.caption.fullText)
+      if (!norm || isGenericStoryTemplate(norm) || usedCaptionNorms.has(norm)) {
+        s.caption.fullText = this._nextNewsCaption(facts, usedCaptionNorms)
+      } else {
+        usedCaptionNorms.add(norm)
+      }
+    }
+
+    // Banned generic story-template NARRATION is replaced with the article's
+    // own sentences (e.g. "Nobody expected this move from death" → the article
+    // lead). Narration remains VO-only; this only stops the recycled template
+    // from being SPOKEN for unrelated stories. The narration-dedup gate below
+    // still guarantees uniqueness across the final scenePlan.
+    const usedNarrationNorms = new Set()
+    for (const s of story.scenePlan) {
+      if (s.type === 'close') continue
+      const nNorm = normalizeVisualText(s.narration)
+      if (nNorm && isGenericStoryTemplate(nNorm)) {
+        const replacement = this._nextNewsNarration(facts, usedNarrationNorms)
+        if (replacement) s.narration = replacement
+      }
+    }
     story.algorithm = story.algorithm || this.lastAlgorithm || pickAlgorithm({ title: article.title || '', category: article.category })
     const total = story.scenePlan.reduce((sum, s) => sum + s.duration, 0)
     if (total < 15 || total > 60) {
