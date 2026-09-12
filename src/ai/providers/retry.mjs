@@ -74,6 +74,12 @@ export class ProviderError extends Error {
     if (classification.model) this.model = classification.model
     if (classification.cause) this.cause = classification.cause
     if (classification.retriable !== undefined) this.retriable = classification.retriable
+    // Dead-model detection fields (additive — set by OpenRouter/Zen providers
+    // when the error signals model unavailability rather than a malformed request).
+    if (classification.modelUnavailable !== undefined) this.modelUnavailable = classification.modelUnavailable
+    if (classification.modelUnavailableReason) this.modelUnavailableReason = classification.modelUnavailableReason
+    if (classification.bodyText !== undefined) this.bodyText = classification.bodyText
+    if (classification.errorBody !== undefined) this.errorBody = classification.errorBody
   }
 }
 
