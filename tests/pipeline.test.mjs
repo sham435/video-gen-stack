@@ -5,6 +5,12 @@ import { tmpdir } from 'os'
 import { join } from 'path'
 import { execFileSync } from 'child_process'
 
+// NARRATION-DEDUP ledger isolation: every engine call in this file renders a
+// REAL video and records its narration script into the shared ledger. Route
+// that recording to a throwaway temp ledger so the suite never grows the
+// production asset-registry.json (would evict real quote entries).
+process.env.ASSET_REGISTRY_PATH = join(tmpdir(), `asset-registry-pipeline-${process.pid}.json`)
+
 let NewsBroadcastEngine
 try {
   ({ NewsBroadcastEngine } = await import('../src/index.mjs'))

@@ -92,10 +92,16 @@ const STORY_SCHEMA = {
 }
 
 export class StoryDirector {
-  constructor(provider) {
+  constructor(provider, options = {}) {
     this.provider = provider
     this.promptEngine = new PromptEngine()
     this.repoContext = new RepoContextReader()
+    // ACROSS-VIDEO NARRATION-DEDUP: when a registry-backed ScriptUniqueness
+    // is supplied, the director also validates the generated narration
+    // against PAST scripts (the within-video statics only catch repeats
+    // inside one script). One bounded regeneration pass, then FAIL CLOSED —
+    // never hand a duplicate script downstream toward TTS.
+    this.scriptUniqueness = options.scriptUniqueness || null
   }
 
   async plan(article, options = {}) {
@@ -119,6 +125,38 @@ export class StoryDirector {
           story = this.validate(fixed, article, targetFormat)
         } else {
           story = this.validate(this.fallbackPlan(article), article, targetFormat)
+        }
+      }
+    }
+    // ACROSS-VIDEO NARRATION-DEDUP (registry-backed). The within-video statics
+    // above cannot see the shared ledger: a script that repeats a PRIOR
+    // video's narration (re-posted article, template echo) only fails at TTS
+    // time. When a registry-backed ScriptUniqueness is supplied here, repair
+    // at generation time with one bounded regeneration pass, then FAIL
+    // CLOSED — never return a script the pre-TTS gate would reject.
+    if (this.scriptUniqueness && !this._lastUsedFallback) {
+      const scriptText = (story.scenePlan || []).map(s => s.narration || '').filter(Boolean).join(' ')
+      const across = this.scriptUniqueness.validate(scriptText, {
+        jobId: options.jobId ?? null,
+        title: story.headline || article.title,
+        excludeJobId: options.jobId ?? null,
+      })
+      if (!across.pass) {
+        const fixed = await this._regenerateAcross(messages, across)
+        if (fixed && Array.isArray(fixed.scenePlan) && fixed.scenePlan.length >= 2) {
+          const retried = this.validate(fixed, article, targetFormat)
+          const retryScript = (retried.scenePlan || []).map(s => s.narration || '').filter(Boolean).join(' ')
+          const recheck = this.scriptUniqueness.validate(retryScript, {
+            jobId: options.jobId ?? null,
+            title: retried.headline || article.title,
+            excludeJobId: options.jobId ?? null,
+          })
+          if (!recheck.pass) {
+            throw new Error(`StoryDirector NARRATION GATE: across-video duplicate persisted after regeneration: ${recheck.reason}`)
+          }
+          story = retried
+        } else {
+          throw new Error(`StoryDirector NARRATION GATE: across-video duplicate and regeneration failed: ${across.reason}`)
         }
       }
     }
@@ -406,6 +444,33 @@ Rewrite EVERY scene's narration so all narrations are UNIQUE (rephrase the repea
       })
     } catch (e) {
       console.log('StoryDirector dup-regenerate error:', e.message)
+      return null
+    }
+  }
+
+  /**
+   * One bounded LLM correction pass for a plan whose narration repeats a
+   * PAST script (across-video). Mirrors _regenerateDedup — bounded to one
+   * extra LLM call, returns null on any failure so callers FAIL CLOSED.
+   * The prompt feeds the gate's reason (duplicate hash/similarity) so the
+   * model can reword away from the historical script.
+   */
+  async _regenerateAcross(messages, verdict) {
+    try {
+      const fixPrompt = `Your previous script's narration is too similar to a script that is already in use (NARRATION_DEDUP: ${verdict.reason}).
+Rewrite EVERY scene's narration so the whole script is clearly distinct from that past narration (rephrase sentences, change the framing, keep each 1-2 sentences, keep the exact same JSON schema). Return ONLY valid JSON.`
+      const raw = await this.provider.generate([...messages, { role: 'user', content: fixPrompt }], { json: true })
+      return parseStructured(raw, {
+        schema: STORY_SCHEMA,
+        attempts: 0,
+        generate: async (prompt, opts) => {
+          const retry = await this.provider.generate([{ role: 'user', content: prompt }], { json: true, ...opts })
+          return retry
+        },
+        correct: (detail) => `Your previous JSON response was invalid. Fix these issues and return ONLY valid JSON: ${detail.errors ? detail.errors.join('; ') : detail.raw || 'invalid structure'}`,
+      })
+    } catch (e) {
+      console.log('StoryDirector across-dup regenerate error:', e.message)
       return null
     }
   }

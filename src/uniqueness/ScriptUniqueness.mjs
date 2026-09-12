@@ -143,6 +143,7 @@ export class ScriptUniqueness {
     if (!this.registry.state.publishedVideos.some(v => v.scriptHash === hash)) {
       this.registry.state.publishedVideos.push({
         videoId: context.videoId || `script-${hash}`,
+        jobId: (context.jobId || context.videoId || null),
         scriptHash: hash,
         scriptText: narrationText,
         title: context.title || null,
@@ -296,6 +297,11 @@ export class ScriptUniqueness {
     // Only consider scripts that are in the rolling window
     if (windowHashes.has(hash)) {
       const entry = this.registry.state.scripts[hash]
+      // SAME-JOB self-exclusion: idempotent re-render of the SAME video id
+      // (composer retry / same-day re-produce) must not trip the hard gate —
+      // every OTHER job's history stays hard-blocked. Null-jobId (legacy)
+      // entries remain counted: exclusion never relaxes them.
+      if (entry && excludeJobId && entry.jobId && entry.jobId === excludeJobId) return null
       if (entry) return entry
     }
 
@@ -315,6 +321,10 @@ export class ScriptUniqueness {
     const window = this.registry.state.publishedVideos?.slice(-this.policy.rollingWindow) || []
 
     for (const v of window) {
+      // SAME-JOB self-exclusion (mirror of the exact-dup gate): the video's
+      // own past entry must not count against its idempotent re-render.
+      const vJobId = v.jobId || this.registry.state.scripts[v.scriptHash]?.jobId || null
+      if (excludeJobId && vJobId && vJobId === excludeJobId) continue
       // Prefer stored text, fall back to hash-only
       const text = v.scriptText || this.registry.state.scripts[v.scriptHash]?.text || null
       if (v.scriptHash && text) {
