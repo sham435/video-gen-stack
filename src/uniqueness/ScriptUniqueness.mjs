@@ -48,6 +48,18 @@ export class ScriptUniqueness {
     this.policy = { ...SCRIPT_UNIQUENESS_POLICY, ...opts.policy }
   }
 
+  // Fail-closed registry health: a corrupt ledger means script history is
+  // UNKNOWN. Returning "pass" would let a duplicate script through the
+  // across-video gate, and record() would overwrite the corrupt file with an
+  // empty history — silently forgetting every past script. Mirror the image
+  // quarantine behavior (AssetRegistry.isImageQuarantined → LEDGER_CORRUPT)
+  // and refuse to validate/record until the ledger is repaired.
+  _assertRegistryHealthy() {
+    if (this.registry?._corrupt) {
+      throw new Error('NARRATION_LEDGER_CORRUPT: script ledger unreadable — narration validation disabled (fail closed)')
+    }
+  }
+
   /**
    * Validate a script for uniqueness against all recent scripts.
    *
@@ -56,6 +68,7 @@ export class ScriptUniqueness {
    * @returns {{ pass: boolean, hash: string, reason: string|null, duplicateOf: object|null, similarity: number|null }}
    */
   validate(narrationText, context = {}) {
+    this._assertRegistryHealthy()
     const hash = this._hash(narrationText)
 
     if (!hash || hash === EMPTY_SCRIPT_HASH) {
@@ -133,6 +146,7 @@ export class ScriptUniqueness {
    * Also adds to publishedVideos for rolling window tracking.
    */
   record(narrationText, context = {}) {
+    this._assertRegistryHealthy()
     const hash = this._hash(narrationText)
     this.registry.recordScript(hash, {
       ...context,

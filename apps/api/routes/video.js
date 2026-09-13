@@ -115,10 +115,17 @@ router.get('/jobs', (req, res) => {
   res.json({ jobs: jobs.map(({ payload, ...meta }) => meta) })
 })
 
-function validateCronToken(req) {
+// Fail-CLOSED cron gate: with CRON_SECRET unset, cron endpoints MUST refuse to
+// run — an environment without a secret is a misconfiguration, not an
+// opportunity to run unauthenticated renders/uploads. Mirrors requireAuth's
+// fail-closed 503 doctrine (packages/auth/requireAuth.js).
+export function validateCronToken(req) {
   const token = (req.body || req.query).token
   const secret = process.env.CRON_SECRET
-  if (secret && token !== secret) {
+  if (!secret) {
+    throw new Error('Unauthorized: CRON_SECRET not configured — cron endpoints disabled')
+  }
+  if (token !== secret) {
     throw new Error('Unauthorized: invalid or missing cron token')
   }
 }
@@ -154,10 +161,14 @@ router.all('/cron/news-video', async (req, res) => {
   }
 })
 
-// Multi-category cron — rotates through categories every run
+// Multi-category cron — rotates through categories every run. Gated by the
+// same fail-closed cron token as /cron/news-video: this endpoint performs a
+// FULL render + public YouTube publish via NewsPipeline.run({publish:true}),
+// so it must never be reachable without a valid CRON_SECRET.
 const CATEGORIES = ['technology', 'science', 'business', 'health', 'entertainment']
 let catIndex = 0
 router.all('/cron/rotate', async (req, res) => {
+  try { validateCronToken(req) } catch (e) { return res.status(401).json({ error: e.message }) }
   const category = CATEGORIES[catIndex % CATEGORIES.length]
   catIndex++
   try {

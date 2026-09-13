@@ -554,7 +554,10 @@ Rewrite EVERY scene's narration so the whole script is clearly distinct from tha
 
   // Neutral news-toned connective lines — used ONLY to keep the deterministic
   // plan full-length when the article has few facts. Never emotional
-  // archetypes, never banned template language; each line is distinct.
+  // archetypes, never banned template language. SIX DISTINCT templates (one
+  // per narrative slot): the pre-TTS within-video narration gate would
+  // hard-fail the render if the degraded no-LLM fallback ever emitted a
+  // repeated line (idx cycles at most 0..5 for the fixed scene plan).
   _connectiveNewsLine(idx, article) {
     const brandTag = String(article.title || 'TECH').split(' ')[0].replace(/[^A-Za-z0-9]/g, '') || 'the story'
     const source = article.source || 'the report'
@@ -563,6 +566,8 @@ Rewrite EVERY scene's narration so the whole script is clearly distinct from tha
       `Analysts are watching how ${brandTag} responds.`,
       `The announcement marks a major shift for ${brandTag}.`,
       `More coverage of ${brandTag} is expected soon.`,
+      `Officials have not yet commented on ${brandTag}'s next steps.`,
+      `Industry insiders are tracking what happens next for ${brandTag}.`,
     ]
     return lines[idx % lines.length]
   }

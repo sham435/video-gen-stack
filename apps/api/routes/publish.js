@@ -277,14 +277,20 @@ router.post('/publish', requireAuth, validateBody(publishSchema), async (req, re
 
   if (targets.includes('tiktok')) {
     try {
-      const { uploadVideo } = await import('../publishers/tiktok.js')
-      const token = process.env.TIKTOK_ACCESS_TOKEN
+      const { uploadVideo, resolveTikTokAccessToken } = await import('../publishers/tiktok.js')
       const openId = process.env.TIKTOK_OPEN_ID
+      // Refresh-first: a stored refresh token yields a fresh access token even
+      // when the stored access token is stale (24h TikTok lifetime).
+      const { token, reason } = await resolveTikTokAccessToken()
       if (token && openId) {
         const r = await uploadVideo(token, openId, videoUrl, description, process.env.TIKTOK_PRIVACY)
         results.tiktok = r
       } else {
-        results.tiktok = { error: 'TikTok not authenticated. Visit /api/tiktok/auth' }
+        results.tiktok = {
+          error: reason === 'not_authenticated'
+            ? 'TikTok not authenticated. Visit /api/tiktok/auth'
+            : (reason === 'refresh_failed' ? 'TikTok refresh failed and no stored access token' : 'TikTok open_id missing. Visit /api/tiktok/auth'),
+        }
       }
     } catch (e) { results.tiktok = { error: e.message } }
   }
