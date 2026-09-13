@@ -23,8 +23,11 @@ function setupScenario() {
   const runner = join(root, 'runner')
   const human = join(root, 'human')
 
-  // Bare remote = origin/main.
-  git(root, ['init', '--bare', remote])
+  // Bare remote = origin/main. -b main pins HEAD regardless of the local
+  // git's init.defaultBranch (CI runners default to master → a clone of an
+  // unborn master would land on detached HEAD and `push origin main` would
+  // find no local branch).
+  git(root, ['init', '--bare', '-b', 'main', remote])
   // Runner worktree: seeds the feed and pushes v1.
   mkdirSync(runner)
   git(runner, ['init'])
