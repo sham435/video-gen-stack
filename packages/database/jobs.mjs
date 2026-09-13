@@ -104,3 +104,13 @@ export function listJobs(db, { status = null, type = null, limit = 50 } = {}) {
   params.push(limit)
   return db.prepare(`SELECT * FROM jobs ${where} ORDER BY created_at DESC LIMIT ?`).all(...params).map(decodeJob)
 }
+
+// Read-only observability: aggregate status counts. No payloads, no results —
+// pure metadata for dashboards/polling (matches the /api/jobs public catalog
+// doctrine).
+export function jobStats(db) {
+  const rows = db.prepare('SELECT status, COUNT(*) AS count FROM jobs GROUP BY status').all()
+  const byStatus = Object.fromEntries(rows.map(r => [r.status, r.count]))
+  const total = rows.reduce((sum, r) => sum + r.count, 0)
+  return { total, byStatus }
+}

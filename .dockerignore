@@ -1,0 +1,15 @@
+# Build context hygiene — never COPY local dev artifacts into the image.
+.git
+node_modules
+apps/renderer/remotion/node_modules
+tests
+data
+storage
+output
+session-*.md
+.opencode-memory.json
+.opencode-model.json
+.env
+.env.*
+*.local
+.DS_Store

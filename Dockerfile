@@ -20,4 +20,10 @@ COPY public/ ./public/
 RUN mkdir -p storage/renders storage/news storage/assets storage/thumbnails storage/subtitles storage/audio storage/cache
 
 EXPOSE 3001
+
+# Read-only health probe: /api/jobs is the public metadata catalog (no auth),
+# so this works in any environment without leaking job payloads.
+HEALTHCHECK --interval=60s --timeout=5s --start-period=15s --retries=3 \
+  CMD node -e "require('http').get('http://127.0.0.1:3001/api/jobs', r => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"
+
 CMD ["node", "apps/api/server.js"]
