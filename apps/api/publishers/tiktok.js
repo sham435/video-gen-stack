@@ -34,6 +34,26 @@ export async function refreshToken(refreshToken) {
   return res.json()
 }
 
+// Deterministic access-token resolution for the publish path. TikTok access
+// tokens live ~24h while the stored REFRESH token lasts much longer — so when
+// a refresh token is present, refresh FIRST and use the fresh access token;
+// fall back to the stored access token only when refresh is unavailable or
+// fails. Fails closed (token: null) when neither credential is usable.
+// `refreshImpl` is injectable for deterministic tests.
+export async function resolveTikTokAccessToken(env = process.env, refreshImpl = refreshToken) {
+  const access = env.TIKTOK_ACCESS_TOKEN
+  const refresh = env.TIKTOK_REFRESH_TOKEN
+  if (!access && !refresh) return { token: null, reason: 'not_authenticated' }
+  if (refresh) {
+    try {
+      const r = await refreshImpl(refresh)
+      if (r?.access_token) return { token: r.access_token, refreshed: true }
+    } catch { /* fall through to the stored access token */ }
+  }
+  if (access) return { token: access, refreshed: false }
+  return { token: null, reason: 'refresh_failed' }
+}
+
 export async function uploadVideo(accessToken, openId, videoUrl, description, privacy = 'PUBLIC') {
   // Step 1: Initialize upload
   const initRes = await fetch(`${BASE}/video/upload/init/`, {

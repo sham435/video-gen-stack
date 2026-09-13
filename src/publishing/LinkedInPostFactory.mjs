@@ -222,6 +222,34 @@ export class LinkedInPostFactory {
     const introspectToken = impl.introspectToken
     const post = this.videoPost(videoMeta)
 
+    // Token freshness (fail-closed): confirm the access token is still active
+    // before any introspection/fan-out work. An inactive token → refresh via
+    // LINKEDIN_REFRESH_TOKEN when available, otherwise a clear deterministic
+    // error instead of a silent best-effort failure deep inside the upload.
+    if (typeof introspectToken === 'function') {
+      let active = null
+      try { active = (await introspectToken(token)).active } catch { active = null }
+      if (active === false) {
+        const refreshImpl = impl.refreshAccessToken
+        const refreshToken = process.env.LINKEDIN_REFRESH_TOKEN
+        if (refreshImpl && refreshToken) {
+          try {
+            const r = await refreshImpl(refreshToken)
+            if (r?.access_token) {
+              token = r.access_token
+              console.log('[LINKEDIN] access token refreshed before publish')
+            } else {
+              throw new Error('LINKEDIN refresh returned no access_token')
+            }
+          } catch (e) {
+            throw new Error(`LINKEDIN_TOKEN_EXPIRED: refresh failed (${e.message}) — re-auth via /api/linkedin/auth`)
+          }
+        } else {
+          throw new Error('LINKEDIN_TOKEN_EXPIRED: token inactive and no LINKEDIN_REFRESH_TOKEN — re-auth via /api/linkedin/auth')
+        }
+      }
+    }
+
     let targets
     try {
       // Pass resolveScope so the org candidate is confirmed against the LIVE

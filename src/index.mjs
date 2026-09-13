@@ -114,8 +114,12 @@ export class NewsBroadcastEngine {
     this.executor = new SelfHealingExecutor(this.guardian)
     this.textResolver = new TextConflictResolver()
     this.visualIntentEngine = new VisualIntentEngine()
-    this.visualRankerV2 = new SemanticVisualRankerV2({ memory: this.productionMemory })
+    // productionMemory must be constructed BEFORE any subsystem that receives
+    // it: SemanticVisualRankerV2 captures the reference at construction time
+    // (this.memory = options.memory || null) — passing an undefined value here
+    // silently disables its visual-feedback learning for the whole engine.
     this.productionMemory = new ProductionMemory()
+    this.visualRankerV2 = new SemanticVisualRankerV2({ memory: this.productionMemory })
     this.hookAnalyzer = new HookAnalyzer()
     this.compositionJudge = new CompositionJudge({ memory: this.productionMemory })
     this.retentionSimulator = new RetentionSimulator({ memory: this.productionMemory })

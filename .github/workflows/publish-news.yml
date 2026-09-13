@@ -24,7 +24,11 @@ env:
 
 concurrency:
   group: publish-news
-  cancel-in-progress: true
+  # Serialize runs instead of cancelling: an in-flight publish (render +
+  # YouTube/LinkedIn upload ≈ 12min) must NEVER be terminated by the next
+  # scheduled arm, or the video is half-uploaded with no retry. The 30-min
+  # cadence bounds backlog (~1 queued run behind a slow run).
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -49,9 +53,17 @@ jobs:
           exit $FAILED
       - name: Validate template
         run: node -e "JSON.parse(require('fs').readFileSync('src/templates/breaking-news.json')); console.log('Template valid')"
+      - name: Install FFmpeg (render smoke tests need it)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: Run test suite (node:test) — deterministic publish gate
+        run: npm test
 
   publish:
     needs: validate
+    # The '23 3 * * *' arm is the retention-learning/gc-artifacts MAINTENANCE
+    # slot — running publish there too would add an unintended 49th daily
+    # publish past the 48/day cadence. workflow_dispatch is unaffected.
+    if: github.event.schedule != '23 3 * * *'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -153,7 +165,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if git diff --quiet public/videos.json && git diff --quiet public/video-detail.json && ! git diff --quiet -- production/runs 2>/dev/null && ! git ls-files --others --exclude-standard production/runs public/videos public/thumbnails | rg -q .; then
+          if git diff --quiet public/videos.json && git diff --quiet public/video-detail.json && git diff --quiet -- production/runs 2>/dev/null && ! git ls-files --others --exclude-standard production/runs public/videos public/thumbnails | rg -q .; then
             echo "No feed change"
           else
             git config user.name "news-monster-bot"
@@ -165,14 +177,20 @@ jobs:
             # composer also regenerates tracked output/ files (dirty tree),
             # which would make git rebase/pull refuse — so instead of
             # rebasing, re-create the feed commit directly ON TOP of the
-            # live origin/main: reset --soft moves HEAD back without touching
-            # the index/worktree, then the videos.json commit is re-made on
-            # the new base. Our freshly generated feed wins by design. The
-            # dirty output/ files stay untracked-in-index and are never part
-            # of the push.
+            # live origin/main: reset --mixed moves our work-in-progress out
+            # of the index, then the feed paths are RE-STAGED and committed on
+            # the new base. Without the re-stage, reset clears the index, the
+            # commit is empty, and the push silently reports "up-to-date" —
+            # losing the feed refresh with no error at all. The dirty output/
+            # files stay untracked-in-index and are never part of the push.
             for attempt in 1 2 3; do
               git fetch origin main
               git reset --mixed origin/main
+              git add public/videos.json public/video-detail.json public/videos public/thumbnails production/runs
+              if git diff --cached --quiet; then
+                echo "Feed change already present on origin/main — nothing to commit"
+                exit 0
+              fi
               git commit -m "chore: refresh landing page video feed" || true
               if git push origin main 2>/tmp/push.err; then
                 echo "Pushed on attempt $attempt"

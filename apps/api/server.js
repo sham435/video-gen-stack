@@ -75,6 +75,18 @@ app.use('/api/youtube', youtubeThumbnailRoutes)
 app.use('/api/ai', aiManagerRoutes)
 
 // Admin RBAC console (JWT + httpOnly cookie) — /admin/login, /admin/dashboard, ...
+// Login is intentionally public (it is the auth entry point) but must be
+// throttled per-IP: scrypt verification is cheap enough to brute-force without
+// a limiter. Reuses the existing express-rate-limit dependency; the render
+// limiter above does not cover /admin.
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 20,
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+  message: { error: 'Too many login attempts — try again later' },
+})
+app.post('/admin/login', loginLimiter)
 app.use('/admin', adminRoutes)
 // Public video download endpoint — /download/:videoId
 app.use(downloadRoutes)
