@@ -4,7 +4,7 @@ import { requireAuth } from '../../../packages/auth/requireAuth.js'
 import { validateBody, generateSchema, newsVideoSchema } from '../../../packages/validation/schemas.mjs'
 import { VIDEO_MODELS, getEndpoint } from '../services/models.js'
 import { fetchTopHeadlines, searchNews, articlesToSummary } from '../services/news.js'
-import { jobDb, enqueue, getJob, listJobs } from '../../../packages/database/jobs.mjs'
+import { jobDb, enqueue, getJob, listJobs, jobStats } from '../../../packages/database/jobs.mjs'
 
 const router = Router()
 
@@ -102,6 +102,12 @@ router.post('/news-video', requireAuth, validateBody(newsVideoSchema), (req, res
 })
 
 // Job queue — poll for status / results
+// NOTE: /jobs/stats must stay ABOVE /jobs/:id — Express matches in order, and
+// 'stats' would otherwise be captured as an id (404).
+router.get('/jobs/stats', (req, res) => {
+  res.json(jobStats(jobDb()))
+})
+
 router.get('/jobs/:id', (req, res) => {
   const job = getJob(jobDb(), req.params.id)
   if (!job) return res.status(404).json({ error: 'Job not found' })

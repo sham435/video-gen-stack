@@ -54,7 +54,7 @@ import { ImagePerformanceMemory } from './analytics/ImagePerformanceMemory.mjs'
 import { SceneVisualPlanner } from './assets/SceneVisualPlanner.mjs'
 import { VIDEO_HD } from './video/RenderProfile.mjs'
 import { DesignSystem } from './visuals/DesignSystem.mjs'
-import { buildProviders } from './ai/providers/resolveProviders.mjs'
+import { buildProviders, warnDegradedModeOnce } from './ai/providers/resolveProviders.mjs'
 import { ProviderChain } from './ai/providers/ProviderChain.mjs'
 
 const RENDER_FPS = 10
@@ -292,6 +292,13 @@ export class NewsBroadcastEngine {
     await this.audioMixer.ensureMusicExists()
 
     console.log('StoryDirector planning...')
+    // Degraded-mode observability: when no provider chain was built (empty
+    // config or build failure), StoryDirector silently produces a deterministic
+    // plan. Warn ONCE per process at the point of use — not at construction, so
+    // test-suite engine instantiations stay quiet.
+    if (!this.storyProvider) {
+      warnDegradedModeOnce('no AI provider chain available — StoryDirector and CreativeDirector use deterministic output')
+    }
     const directorStory = await this.storyDirector.plan(article)
     console.log(`Story: ${directorStory.headline} (${directorStory.scenePlan.length} scenes, hook: ${directorStory.hookStrategy})`)
 

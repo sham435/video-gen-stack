@@ -63,3 +63,16 @@ export function providerSummary(providers) {
   if (!providers || !providers.length) return 'none'
   return providers.map(p => p.name).join(' → ')
 }
+
+// Degraded-mode observability: an empty provider list (no keys configured) or a
+// build failure is a silent path — every consumer (StoryDirector,
+// CreativeDirectorAgent, CompositionJudge) falls back to deterministic output
+// with no log at all. Surface it ONCE per process at the point of use so
+// production logs show the degraded session, without spamming every engine
+// construction during test runs.
+let warnedDegradedOnce = false
+export function warnDegradedModeOnce(reason) {
+  if (warnedDegradedOnce) return
+  warnedDegradedOnce = true
+  console.warn(`[PROVIDERS] degraded mode (deterministic fallback active): ${reason}`)
+}
