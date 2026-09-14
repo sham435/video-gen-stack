@@ -243,7 +243,7 @@ describe('R2 — gate-level cross-video quarantine (SceneAssetUniqueness)', () =
     assert.equal(reg.isImageDuplicate('img-shared', null), false)
     // img-new is a genuinely fresh candidate (absent from the ledger); only
     // img-shared (committed 6 days ago) violates the 7-day quarantine.
-    const r = checker.validate(scenes(['img-new', 'img-shared']))
+    const r = checker.validate(scenes(['img-new', 'img-shared']), { now: NOW })
     assert.equal(r.pass, false)
     assert.equal(r.violations.length, 1)
     assert.match(r.violations[0].reason, /IMAGE_QUARANTINED_7D/, `reason was: ${r.violations[0].reason}`)
