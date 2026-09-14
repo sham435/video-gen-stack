@@ -64,13 +64,23 @@ jobs:
             echo "## OpenCode Review"
             echo ""
             echo "**PR**: #${PR}"
-            echo "**Commit**: ${{ github.sha }}"
+            echo "**Commit**: ${{ github.event.pull_request.head.sha || github.sha }}"
             echo ""
             echo "### Files Changed"
             git diff --name-only origin/main...HEAD -- || echo "(first commit)"
             echo ""
             echo "### Syntax Check"
-            find . -name '*.mjs' -newer HEAD~1 -exec node --check {} \; 2>&1 || echo "No new .mjs files"
+            # Changed .mjs files since the merge-base with origin/main — this is
+            # the SAME source of truth as the Syntax check step above. (Never use
+            # `find -newer HEAD~1`: find takes a real file path, not a git ref.)
+            CHANGED_MJS=$(git diff --name-only --diff-filter=ACMR origin/main...HEAD -- '*.mjs' 2>/dev/null || echo "")
+            if [ -n "$CHANGED_MJS" ]; then
+              for f in $CHANGED_MJS; do
+                [ -f "$f" ] && { node --check "$f" >/dev/null 2>&1 && echo "  ✓ $f" || echo "  ✗ $f"; }
+              done
+            else
+              echo "No new .mjs files"
+            fi
           } > review-report.md
           cat review-report.md
 
