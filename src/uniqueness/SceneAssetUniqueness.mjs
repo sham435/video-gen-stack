@@ -58,7 +58,7 @@ export class SceneAssetUniqueness {
       // ledger/history is unavailable or ambiguous (corrupt file, unparseable
       // timestamp), FAIL CLOSED — never assume an image is fresh because its
       // history cannot be found.
-      const quarantine = this.registry.isImageQuarantined(scene.imageHash, { excludeJobId })
+      const quarantine = this.registry.isImageQuarantined(scene.imageHash, { excludeJobId, now: context.now })
       if (quarantine.unknown) {
         violations.push({
           sceneIndex: scene.sceneIndex,
