@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-22T18:13:09.135Z",
+  "updatedAt": "2026-09-22T18:22:31.732Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "bWhwK_nk8k8",
+      "id": "MT9_Ox0henE",
       "title": "Beats 360 Headphones Review: Best-Performing Beats Yet, and They’re Modular | NEWS-MONSTER",
       "description": "Beats 360 Headphones Review: Best-Performing Beats Yet, and They’re Modular | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-22T18:13:08.437Z",
-      "publishedLabel": "Sep 22, 06:13 PM",
-      "thumbnail": "/thumbnails/bWhwK_nk8k8.png",
-      "thumbnailSha256": "9c3b7570e44a7454f037f14bb9753ce715497e7f2e321bf58274d6334bed1d49",
+      "publishedAt": "2026-09-22T18:22:30.785Z",
+      "publishedLabel": "Sep 22, 06:22 PM",
+      "thumbnail": "/thumbnails/MT9_Ox0henE.png",
+      "thumbnailSha256": "0e0ff134f34de66796e78a4024b28e5369706cf23775c22506b19cd0951cdab4",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/bWhwK_nk8k8",
+      "youtubeUrl": "https://youtu.be/MT9_Ox0henE",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "bWhwK_nk8k8",
-          "url": "https://youtu.be/bWhwK_nk8k8",
+          "videoId": "MT9_Ox0henE",
+          "url": "https://youtu.be/MT9_Ox0henE",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "9c3b7570e44a7454f037f14bb9753ce715497e7f2e321bf58274d6334bed1d49",
+            "sha256": "0e0ff134f34de66796e78a4024b28e5369706cf23775c22506b19cd0951cdab4",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,12 +43,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "9c3b7570e44a7454f037f14bb9753ce715497e7f2e321bf58274d6334bed1d49",
+            "sha256": "0e0ff134f34de66796e78a4024b28e5369706cf23775c22506b19cd0951cdab4",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/bWhwK_nk8k8.png"
+            "path": "public/thumbnails/MT9_Ox0henE.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "5gTY5-H4yQQ",
+      "id": "EpExk15_k50",
       "title": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
       "description": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-22T18:09:47.323Z",
-      "publishedLabel": "Sep 22, 06:09 PM",
-      "thumbnail": "/thumbnails/5gTY5-H4yQQ.png",
-      "thumbnailSha256": "a968cf8b9ddad8758a2746adef14d920916d2c71e621f3bc4384acccbb4df131",
+      "publishedAt": "2026-09-22T18:19:22.497Z",
+      "publishedLabel": "Sep 22, 06:19 PM",
+      "thumbnail": "/thumbnails/EpExk15_k50.png",
+      "thumbnailSha256": "2e8aa06e6335a2335c7b88dd45d35db03ab8bb884fdfc5c2db36fcdb7510314a",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/5gTY5-H4yQQ",
+      "youtubeUrl": "https://youtu.be/EpExk15_k50",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "5gTY5-H4yQQ",
-          "url": "https://youtu.be/5gTY5-H4yQQ",
+          "videoId": "EpExk15_k50",
+          "url": "https://youtu.be/EpExk15_k50",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "a968cf8b9ddad8758a2746adef14d920916d2c71e621f3bc4384acccbb4df131",
+            "sha256": "2e8aa06e6335a2335c7b88dd45d35db03ab8bb884fdfc5c2db36fcdb7510314a",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,14 +95,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "a968cf8b9ddad8758a2746adef14d920916d2c71e621f3bc4384acccbb4df131",
+            "sha256": "2e8aa06e6335a2335c7b88dd45d35db03ab8bb884fdfc5c2db36fcdb7510314a",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/5gTY5-H4yQQ.png"
+            "path": "public/thumbnails/EpExk15_k50.png"
           }
         },
         "linkedin": {
