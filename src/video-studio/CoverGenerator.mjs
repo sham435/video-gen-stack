@@ -1,4 +1,4 @@
-import { CoverDirector } from './CoverDirector.mjs'
+import { CoverDirector, stripMjFlags } from './CoverDirector.mjs'
 import { CoverComposer } from './CoverComposer.mjs'
 import { CoverValidator } from './CoverValidator.mjs'
 import { ThumbnailIntelligence } from '../analytics/ThumbnailIntelligence.mjs'
@@ -62,8 +62,9 @@ export class CoverGenerator {
    * cover but laid out landscape. Deterministic for identical input.
    */
   async generateThumbnail(article, outPath, options = {}) {
-    const brief = await this.director.analyzeStory(article, options.style ? { style: options.style } : {})
+    const brief = await this.director.analyzeStory(article, { style: options.style || null, aspect: '16:9' })
     const tuned = this.intel?.tuneBrief(brief) || brief
+    tuned.aspect = '16:9'
     if (options.hideBranding) tuned.hideBranding = true
     const hero = await this.resolveHero(article, tuned)
     await this.composer.composeThumbnail(tuned, hero, outPath)
@@ -71,8 +72,10 @@ export class CoverGenerator {
   }
 
   async generate(article, outPath, options = {}) {
-    const brief = await this.director.analyzeStory(article, options.style ? { style: options.style } : {})
+    const aspect = options.aspect || '9:16'
+    const brief = await this.director.analyzeStory(article, { style: options.style || null, aspect })
     const tuned = this.intel?.tuneBrief(brief) || brief
+    tuned.aspect = aspect
     if (options.hideBranding) tuned.hideBranding = true
     const hero = await this.resolveHero(article, tuned)
     await this.composer.compose(tuned, hero, outPath)
@@ -164,7 +167,7 @@ export class CoverGenerator {
     }
     // Fallback 4: generate a hero image with FAL_KEY when Pexels unavailable
     if (process.env.FAL_KEY && brief.hero_prompt) {
-      const url = await this.generateWithFal(brief.hero_prompt)
+      const url = await this.generateWithFal(brief.hero_prompt, brief.aspect === '16:9' ? 'landscape_16_9' : 'portrait_4_3')
       if (url) return url
     }
     return null
@@ -174,7 +177,7 @@ export class CoverGenerator {
   resolveSDCPP(article, brief) {
     try {
       if (!this.sdcpp?.available()) return null
-      const prompt = brief.hero_prompt || brief.visual_style || (brief.subject ? `cinematic news scene about ${brief.subject}` : '')
+      const prompt = stripMjFlags(brief.hero_prompt || brief.visual_style || (brief.subject ? `cinematic news scene about ${brief.subject}` : ''))
       if (!prompt) return null
       const seed = (() => { let h = 0; const s = article.title || 'newsm'; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return Math.abs(h) })()
       const result = this.sdcpp.generate({
@@ -187,12 +190,14 @@ export class CoverGenerator {
     } catch { return null }
   }
 
-  async generateWithFal(prompt) {
+  async generateWithFal(prompt, imageSize = 'landscape_16_9') {
     try {
+      const clean = stripMjFlags(prompt)
+      if (!clean) return null
       const resp = await fetch('https://fal.run/fal-ai/fast-sdxl', {
         method: 'POST',
         headers: { Authorization: `Key ${process.env.FAL_KEY}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, image_size: 'landscape_16_9', num_inference_steps: 25, guidance_scale: 7.5 }),
+        body: JSON.stringify({ prompt: clean, image_size: imageSize, num_inference_steps: 25, guidance_scale: 7.5 }),
         signal: AbortSignal.timeout(15000),
       })
       if (!resp.ok) return null
