@@ -1,32 +1,86 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-22T18:48:18.878Z",
+  "updatedAt": "2026-09-22T19:12:04.811Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "jQzCrrGJELg",
-      "title": "Beats 360 Deliver Customizability and a Revamped Over-Ear Headphone Design | NEWS-MONSTER",
-      "description": "Beats 360 Deliver Customizability and a Revamped Over-Ear Headphone Design | NEWS-MONSTER",
+      "id": "Ip-usL2Ojtg",
+      "title": "Beats 360 Headphones Review: Best-Performing Beats Yet, and They’re Modular | NEWS-MONSTER",
+      "description": "Beats 360 Headphones Review: Best-Performing Beats Yet, and They’re Modular | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-22T18:47:21.964Z",
-      "publishedLabel": "Sep 22, 06:47 PM",
-      "thumbnail": "/thumbnails/jQzCrrGJELg.png",
-      "thumbnailSha256": "6b5fe99dffd56c96be8d4e2900df6a33fb2622fdb492aba87f622dafb22cedcb",
+      "publishedAt": "2026-09-22T19:11:16.776Z",
+      "publishedLabel": "Sep 22, 07:11 PM",
+      "thumbnail": "/thumbnails/Ip-usL2Ojtg.png",
+      "thumbnailSha256": "ab584dd669a863468ed5251d6d5b6bacf5b75500caa3736ae7f5012b6fdbd68d",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/jQzCrrGJELg",
+      "youtubeUrl": "https://youtu.be/Ip-usL2Ojtg",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "jQzCrrGJELg",
-          "url": "https://youtu.be/jQzCrrGJELg",
+          "videoId": "Ip-usL2Ojtg",
+          "url": "https://youtu.be/Ip-usL2Ojtg",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "6b5fe99dffd56c96be8d4e2900df6a33fb2622fdb492aba87f622dafb22cedcb",
+            "sha256": "ab584dd669a863468ed5251d6d5b6bacf5b75500caa3736ae7f5012b6fdbd68d",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "ab584dd669a863468ed5251d6d5b6bacf5b75500caa3736ae7f5012b6fdbd68d",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/Ip-usL2Ojtg.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      }
+    },
+    {
+      "id": "vmdPK_h3wP8",
+      "title": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
+      "description": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-22T19:08:17.423Z",
+      "publishedLabel": "Sep 22, 07:08 PM",
+      "thumbnail": "/thumbnails/vmdPK_h3wP8.png",
+      "thumbnailSha256": "fbb7db4c36acc2ea6c1778815860ab3a7e3c3ddfa880e067f9f07620b3a5195e",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/vmdPK_h3wP8",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "vmdPK_h3wP8",
+          "url": "https://youtu.be/vmdPK_h3wP8",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "fbb7db4c36acc2ea6c1778815860ab3a7e3c3ddfa880e067f9f07620b3a5195e",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,66 +97,12 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "6b5fe99dffd56c96be8d4e2900df6a33fb2622fdb492aba87f622dafb22cedcb",
+            "sha256": "fbb7db4c36acc2ea6c1778815860ab3a7e3c3ddfa880e067f9f07620b3a5195e",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/jQzCrrGJELg.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "pD5RG8kM0Xc",
-      "title": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
-      "description": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-22T18:44:09.814Z",
-      "publishedLabel": "Sep 22, 06:44 PM",
-      "thumbnail": "/thumbnails/pD5RG8kM0Xc.png",
-      "thumbnailSha256": "e725469f2802d74d5268f563e0c7dcd5fe81d35c86df247c718cdca81fa74001",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/pD5RG8kM0Xc",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "pD5RG8kM0Xc",
-          "url": "https://youtu.be/pD5RG8kM0Xc",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "e725469f2802d74d5268f563e0c7dcd5fe81d35c86df247c718cdca81fa74001",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "e725469f2802d74d5268f563e0c7dcd5fe81d35c86df247c718cdca81fa74001",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/pD5RG8kM0Xc.png"
+            "path": "public/thumbnails/vmdPK_h3wP8.png"
           }
         },
         "linkedin": {
