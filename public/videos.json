@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-22T18:36:36.642Z",
+  "updatedAt": "2026-09-22T18:48:18.878Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "hcSFlnrV4Bs",
-      "title": "Beats 360 Headphones Review: Best-Performing Beats Yet, and They’re Modular | NEWS-MONSTER",
-      "description": "Beats 360 Headphones Review: Best-Performing Beats Yet, and They’re Modular | NEWS-MONSTER",
+      "id": "jQzCrrGJELg",
+      "title": "Beats 360 Deliver Customizability and a Revamped Over-Ear Headphone Design | NEWS-MONSTER",
+      "description": "Beats 360 Deliver Customizability and a Revamped Over-Ear Headphone Design | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-22T18:36:36.083Z",
-      "publishedLabel": "Sep 22, 06:36 PM",
-      "thumbnail": "/thumbnails/hcSFlnrV4Bs.png",
-      "thumbnailSha256": "ab584dd669a863468ed5251d6d5b6bacf5b75500caa3736ae7f5012b6fdbd68d",
+      "publishedAt": "2026-09-22T18:47:21.964Z",
+      "publishedLabel": "Sep 22, 06:47 PM",
+      "thumbnail": "/thumbnails/jQzCrrGJELg.png",
+      "thumbnailSha256": "6b5fe99dffd56c96be8d4e2900df6a33fb2622fdb492aba87f622dafb22cedcb",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/hcSFlnrV4Bs",
+      "youtubeUrl": "https://youtu.be/jQzCrrGJELg",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "hcSFlnrV4Bs",
-          "url": "https://youtu.be/hcSFlnrV4Bs",
+          "videoId": "jQzCrrGJELg",
+          "url": "https://youtu.be/jQzCrrGJELg",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "ab584dd669a863468ed5251d6d5b6bacf5b75500caa3736ae7f5012b6fdbd68d",
+            "sha256": "6b5fe99dffd56c96be8d4e2900df6a33fb2622fdb492aba87f622dafb22cedcb",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,14 +41,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 5,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "ab584dd669a863468ed5251d6d5b6bacf5b75500caa3736ae7f5012b6fdbd68d",
+            "sha256": "6b5fe99dffd56c96be8d4e2900df6a33fb2622fdb492aba87f622dafb22cedcb",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/hcSFlnrV4Bs.png"
+            "path": "public/thumbnails/jQzCrrGJELg.png"
           }
         },
         "linkedin": {
@@ -58,29 +58,29 @@
       }
     },
     {
-      "id": "LoqM3FJDEKE",
+      "id": "pD5RG8kM0Xc",
       "title": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
       "description": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-22T18:33:11.036Z",
-      "publishedLabel": "Sep 22, 06:33 PM",
-      "thumbnail": "/thumbnails/LoqM3FJDEKE.png",
-      "thumbnailSha256": "4f51b91737314d3a1fb5c418eb3349e3085afcb34b1aad7bbe873cbd1e5b5790",
+      "publishedAt": "2026-09-22T18:44:09.814Z",
+      "publishedLabel": "Sep 22, 06:44 PM",
+      "thumbnail": "/thumbnails/pD5RG8kM0Xc.png",
+      "thumbnailSha256": "e725469f2802d74d5268f563e0c7dcd5fe81d35c86df247c718cdca81fa74001",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/LoqM3FJDEKE",
+      "youtubeUrl": "https://youtu.be/pD5RG8kM0Xc",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "LoqM3FJDEKE",
-          "url": "https://youtu.be/LoqM3FJDEKE",
+          "videoId": "pD5RG8kM0Xc",
+          "url": "https://youtu.be/pD5RG8kM0Xc",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "4f51b91737314d3a1fb5c418eb3349e3085afcb34b1aad7bbe873cbd1e5b5790",
+            "sha256": "e725469f2802d74d5268f563e0c7dcd5fe81d35c86df247c718cdca81fa74001",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,14 +95,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 4,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "4f51b91737314d3a1fb5c418eb3349e3085afcb34b1aad7bbe873cbd1e5b5790",
+            "sha256": "e725469f2802d74d5268f563e0c7dcd5fe81d35c86df247c718cdca81fa74001",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/LoqM3FJDEKE.png"
+            "path": "public/thumbnails/pD5RG8kM0Xc.png"
           }
         },
         "linkedin": {
