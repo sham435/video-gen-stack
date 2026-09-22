@@ -1258,7 +1258,7 @@ app.post('/api/youtube/token/refresh', async (req, res) => {
 app.get('/api/youtube/auth', (req, res) => {
   const cid = process.env.YOUTUBE_CLIENT_ID
   if (!cid) return res.status(400).json({ error: 'YOUTUBE_CLIENT_ID not configured' })
-  const redirect = process.env.YOUTUBE_REDIRECT_URI || 'http://localhost:3001/api/auth/youtube/callback'
+  const redirect = process.env.YOUTUBE_REDIRECT_URI || (process.env.RAILWAY_ENVIRONMENT ? 'https://video-gen-stack-production.up.railway.app/api/auth/youtube/callback' : 'http://localhost:3001/api/auth/youtube/callback')
   const url = `https://accounts.google.com/o/oauth2/auth?client_id=${cid}&redirect_uri=${encodeURIComponent(redirect)}&scope=${encodeURIComponent('https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube.force-ssl https://www.googleapis.com/auth/youtube.readonly')}&response_type=code&access_type=offline&prompt=consent`
   res.json({ authUrl: url, redirectUri: redirect })
 })
@@ -1272,7 +1272,7 @@ app.post('/api/youtube/exchange', async (req, res) => {
     const { randomBytes } = await import('crypto')
     const { readFileSync, writeFileSync, renameSync } = await import('fs')
     const { resolve, dirname } = await import('path')
-    const redirect = process.env.YOUTUBE_REDIRECT_URI || 'http://localhost:3001/api/auth/youtube/callback'
+    const redirect = process.env.YOUTUBE_REDIRECT_URI || (process.env.RAILWAY_ENVIRONMENT ? 'https://video-gen-stack-production.up.railway.app/api/auth/youtube/callback' : 'http://localhost:3001/api/auth/youtube/callback')
     const resp = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

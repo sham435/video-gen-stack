@@ -5,7 +5,7 @@ const CLIENT_SECRET = process.env.YOUTUBE_CLIENT_SECRET
 // NOTE: refresh token is read at call time (envRefreshToken()) — it can be
 // rotated at runtime (dashboard OAuth re-auth writes a new one into .env +
 // process.env), so never freeze it into a module-level const.
-const REDIRECT_URI = process.env.YOUTUBE_REDIRECT_URI || 'https://video-gen-stack-production.up.railway.app/api/auth/youtube/callback'
+const REDIRECT_URI = process.env.YOUTUBE_REDIRECT_URI || (process.env.RAILWAY_ENVIRONMENT ? 'https://video-gen-stack-production.up.railway.app/api/auth/youtube/callback' : 'http://localhost:3001/api/auth/youtube/callback')
 
 const GOOGLE_OAUTH_BASE = 'https://accounts.google.com'
 const GOOGLE_API_BASE = 'https://www.googleapis.com'

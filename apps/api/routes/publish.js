@@ -97,7 +97,8 @@ router.get('/auth/tiktok/callback', async (req, res) => {
 // ── YouTube Auth ──
 router.get('/youtube/auth', requireAuth, (req, res) => {
   const state = issueOAuthState('youtube')
-  res.redirect(`https://accounts.google.com/o/oauth2/auth?client_id=${process.env.YOUTUBE_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.YOUTUBE_REDIRECT_URI || 'http://localhost:4567/auth/youtube/callback')}&scope=https://www.googleapis.com/auth/youtube.upload&response_type=code&access_type=offline&state=${encodeURIComponent(state)}`)
+  const redirect = process.env.YOUTUBE_REDIRECT_URI || (process.env.RAILWAY_ENVIRONMENT ? 'https://video-gen-stack-production.up.railway.app/api/auth/youtube/callback' : 'http://localhost:4567/api/auth/youtube/callback')
+  res.redirect(`https://accounts.google.com/o/oauth2/auth?client_id=${process.env.YOUTUBE_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirect)}&scope=https://www.googleapis.com/auth/youtube.upload&response_type=code&access_type=offline&state=${encodeURIComponent(state)}`)
 })
 
 router.get('/auth/youtube/callback', async (req, res) => {
@@ -107,6 +108,7 @@ router.get('/auth/youtube/callback', async (req, res) => {
     return res.status(403).json({ success: false, error: 'invalid or expired OAuth state — re-authenticate from the dashboard' })
   }
 
+  const redirect = process.env.YOUTUBE_REDIRECT_URI || (process.env.RAILWAY_ENVIRONMENT ? 'https://video-gen-stack-production.up.railway.app/api/auth/youtube/callback' : 'http://localhost:4567/api/auth/youtube/callback')
   const resp = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -115,7 +117,7 @@ router.get('/auth/youtube/callback', async (req, res) => {
       client_secret: process.env.YOUTUBE_CLIENT_SECRET,
       code,
       grant_type: 'authorization_code',
-      redirect_uri: process.env.YOUTUBE_REDIRECT_URI || 'http://localhost:4567/auth/youtube/callback',
+      redirect_uri: redirect,
     }),
     signal: AbortSignal.timeout(15000),
   })
