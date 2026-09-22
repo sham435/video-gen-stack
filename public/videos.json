@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-22T19:46:01.256Z",
+  "updatedAt": "2026-09-22T20:01:38.636Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "uF0MhvVfU6c",
+      "id": "ipp1L_FErBU",
       "title": "Apple Is Developing New Fitness Tracker Aimed at Rivaling Whoop | NEWS-MONSTER",
       "description": "Apple Is Developing New Fitness Tracker Aimed at Rivaling Whoop | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-22T19:46:00.068Z",
-      "publishedLabel": "Sep 22, 07:46 PM",
-      "thumbnail": "/thumbnails/uF0MhvVfU6c.png",
-      "thumbnailSha256": "a0646994d1f2e9a99e01b9959848f682212a5a15831d0fcebf8c577df62aa870",
+      "publishedAt": "2026-09-22T20:01:37.717Z",
+      "publishedLabel": "Sep 22, 08:01 PM",
+      "thumbnail": "/thumbnails/ipp1L_FErBU.png",
+      "thumbnailSha256": "d0ffb5ba7e60aa6e12fcb3fcfc533b68a2c0ffe97a1258ea408f7964f649460e",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/uF0MhvVfU6c",
+      "youtubeUrl": "https://youtu.be/ipp1L_FErBU",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "uF0MhvVfU6c",
-          "url": "https://youtu.be/uF0MhvVfU6c",
+          "videoId": "ipp1L_FErBU",
+          "url": "https://youtu.be/ipp1L_FErBU",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "a0646994d1f2e9a99e01b9959848f682212a5a15831d0fcebf8c577df62aa870",
+            "sha256": "d0ffb5ba7e60aa6e12fcb3fcfc533b68a2c0ffe97a1258ea408f7964f649460e",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,43 +41,43 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "a0646994d1f2e9a99e01b9959848f682212a5a15831d0fcebf8c577df62aa870",
+            "sha256": "d0ffb5ba7e60aa6e12fcb3fcfc533b68a2c0ffe97a1258ea408f7964f649460e",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/uF0MhvVfU6c.png"
+            "path": "public/thumbnails/ipp1L_FErBU.png"
           }
         },
         "linkedin": {
-          "state": "PENDING",
-          "postId": null
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7508254175504388096"
         }
       }
     },
     {
-      "id": "LTWHUqum9BY",
+      "id": "JLvNTK3uErQ",
       "title": "Beats 360 Headphones Review: Best-Performing Beats Yet, and They’re Modular | NEWS-MONSTER",
       "description": "Beats 360 Headphones Review: Best-Performing Beats Yet, and They’re Modular | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-22T19:42:28.113Z",
-      "publishedLabel": "Sep 22, 07:42 PM",
-      "thumbnail": "/thumbnails/LTWHUqum9BY.png",
+      "publishedAt": "2026-09-22T19:58:09.814Z",
+      "publishedLabel": "Sep 22, 07:58 PM",
+      "thumbnail": "/thumbnails/JLvNTK3uErQ.png",
       "thumbnailSha256": "ab584dd669a863468ed5251d6d5b6bacf5b75500caa3736ae7f5012b6fdbd68d",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/LTWHUqum9BY",
+      "youtubeUrl": "https://youtu.be/JLvNTK3uErQ",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "LTWHUqum9BY",
-          "url": "https://youtu.be/LTWHUqum9BY",
+          "videoId": "JLvNTK3uErQ",
+          "url": "https://youtu.be/JLvNTK3uErQ",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "ab584dd669a863468ed5251d6d5b6bacf5b75500caa3736ae7f5012b6fdbd68d",
@@ -95,43 +95,43 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 4,
+          "durationMs": 3,
           "thumbnail": {
             "sha256": "ab584dd669a863468ed5251d6d5b6bacf5b75500caa3736ae7f5012b6fdbd68d",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/LTWHUqum9BY.png"
+            "path": "public/thumbnails/JLvNTK3uErQ.png"
           }
         },
         "linkedin": {
-          "state": "PENDING",
-          "postId": null
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7508253296856449024"
         }
       }
     },
     {
-      "id": "Eb0l1Ho4K7E",
+      "id": "qvOgNUj_2Vo",
       "title": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
       "description": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-22T19:38:44.649Z",
-      "publishedLabel": "Sep 22, 07:38 PM",
-      "thumbnail": "/thumbnails/Eb0l1Ho4K7E.png",
+      "publishedAt": "2026-09-22T19:54:36.115Z",
+      "publishedLabel": "Sep 22, 07:54 PM",
+      "thumbnail": "/thumbnails/qvOgNUj_2Vo.png",
       "thumbnailSha256": "e725469f2802d74d5268f563e0c7dcd5fe81d35c86df247c718cdca81fa74001",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/Eb0l1Ho4K7E",
+      "youtubeUrl": "https://youtu.be/qvOgNUj_2Vo",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "Eb0l1Ho4K7E",
-          "url": "https://youtu.be/Eb0l1Ho4K7E",
+          "videoId": "qvOgNUj_2Vo",
+          "url": "https://youtu.be/qvOgNUj_2Vo",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "e725469f2802d74d5268f563e0c7dcd5fe81d35c86df247c718cdca81fa74001",
@@ -149,19 +149,19 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 1,
           "thumbnail": {
             "sha256": "e725469f2802d74d5268f563e0c7dcd5fe81d35c86df247c718cdca81fa74001",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/Eb0l1Ho4K7E.png"
+            "path": "public/thumbnails/qvOgNUj_2Vo.png"
           }
         },
         "linkedin": {
-          "state": "PENDING",
-          "postId": null
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7508252403708743680"
         }
       }
     }
