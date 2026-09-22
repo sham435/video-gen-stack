@@ -498,6 +498,46 @@ export class NewsBroadcastEngine {
       })
     }
 
+    // LOOP TAIL (Shorts): append a chrome-only REPLAY frame after the final
+    // scene. The video's last frames echo the brand/headline composition, so
+    // the autoplay loop back to frame 0 reads as intentional instead of a cut
+    // to a foreign card. It carries NO image asset (imageHash: null is skipped
+    // by the scene-within-video uniqueness gate — reusing the hook's hash is
+    // ENFORCED-blocked), NO narration (silent tail, caption-only visual), and
+    // a 2.2s duration that stays inside the 45s ceiling. Disable with
+    // LOOP_TAIL=0.
+    if (process.env.LOOP_TAIL !== '0') {
+      const tailHeadline = directorStory?.headline || article.title || 'NEWS-MONSTER'
+      scenes.push({
+        id: scenes.length + 1,
+        type: 'fact',
+        purpose: 'loop-bookend',
+        duration: 2.2,
+        narration: '',
+        text: tailHeadline,
+        caption: 'REPLAY ▶ NEWS-MONSTER',
+        caption_focus: 'REPLAY',
+        subheadline: 'NEWS-MONSTER · LOOP',
+        image: null,
+        bRoll: null,
+        images: [],
+        imageHash: null,
+        assetDHash: null,
+        assetEntity: null,
+        assetId: null,
+        camera: 'push_in',
+        transition: 'flash',
+        emotion: 'suspense',
+        sfx: 'whoosh',
+        music_cue: 'ambient',
+        category: article.category,
+        colors: {},
+        visualPlan: {},
+        visualIntent: {},
+        loopTail: true,
+      })
+    }
+
     // Retention Director: plan a visual/motion/information change every ~2.5s
     this.retentionDirector.plan(scenes).forEach(plan => {
       const sc = scenes.find(s => (s.id || 0) === plan.sceneId)

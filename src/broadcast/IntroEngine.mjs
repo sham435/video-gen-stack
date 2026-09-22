@@ -18,7 +18,7 @@ export class IntroEngine {
     this.uiStyle = new UIStyleSelector()
   }
 
-  async generate({ brand = 'NEWS-MONSTER', duration = 12, category = 'technology', outDir = 'output' } = {}) {
+  async generate({ brand = 'NEWS-MONSTER', duration = 4, category = 'technology', outDir = 'output' } = {}) {
     const style = this.uiStyle.getStyle(category)
     const totalFrames = duration * FPS
     const framesDir = `${outDir}/intro_frames`
@@ -28,12 +28,12 @@ export class IntroEngine {
     console.log(`Intro: ${duration}s, ${totalFrames}frames, category: ${category}`)
     for (let i = 0; i < totalFrames; i++) {
       const p = i / totalFrames
-      this.drawFrame(p, pool, style, brand, `${framesDir}/f${String(i).padStart(4, '0')}.png`)
+      this.drawFrame(p, pool, style, brand, `${framesDir}/f${String(i).padStart(4, '0')}.png`, duration)
       if (i % 60 === 0) process.stdout.write(`  Intro ${i}/${totalFrames}\r`)
     }
     process.stdout.write(`  Intro ${totalFrames}/${totalFrames}\n`)
 
-    const video = `${outDir}/intro_12s.mp4`
+    const video = `${outDir}/intro_${duration}s.mp4`
     const audio = `${outDir}/intro_audio.mp3`
     this.genAudio(audio, duration)
     execFileSync(
@@ -55,9 +55,19 @@ export class IntroEngine {
     return m[cat] || ['TECH','SCIENCE','AI','SPACE','GAMING','POLITICS','FUTURE']
   }
 
-  drawFrame(p, pool, style, brand, path) {
+  drawFrame(p, pool, style, brand, path, duration = 4) {
     const c = createCanvas(W, H), ctx = c.getContext('2d')
-    if (p < 2/12) this.signal(ctx, p/(2/12))
+    // START-ON-CONTENT (Shorts): the old 12s map opened with a 2s black
+    // "signal" phase — dead air that costs retention in the first frame.
+    // Short-form intros (<=5s) open directly on the HOOK (content at frame 0),
+    // then scope, then brand lock. The 12s broadcast intro keeps the signal.
+    if (duration <= 5) {
+      // HOOK starts at p=0.20 so the UNFILTERED letters are already on screen
+      // (partial alpha + tagline fading in) — content, not black, at frame 0.
+      if (p < 0.35) this.hook(ctx, 0.20 + (p / 0.35) * 0.80, style)
+      else if (p < 0.60) this.scope(ctx, (p - 0.35) / 0.25, pool)
+      else this.lock(ctx, (p - 0.60) / 0.40, brand)
+    } else if (p < 2/12) this.signal(ctx, p/(2/12))
     else if (p < 4.5/12) this.hook(ctx, (p-2/12)/(2.5/12), style)
     else if (p < 7.5/12) this.scope(ctx, (p-4.5/12)/(3/12), pool)
     else this.lock(ctx, (p-7.5/12)/(4.5/12), brand)
@@ -188,6 +198,10 @@ export class IntroEngine {
 
   genAudio(outPath, duration) {
     try {
+      // Sound-design beats pinned to the old 12s phase map (hook @2s, scope
+      // @4.5s). Scale proportionally so short-form intros keep the same hits.
+      const whooshMs = Math.round((duration / 12) * 2000)
+      const alertMs = Math.round((duration / 12) * 4500)
       execFileSync(
         'ffmpeg',
         [
@@ -199,7 +213,7 @@ export class IntroEngine {
           '-f', 'lavfi', '-t', String(duration), '-i', `sine=f=60:r=48000,afade=t=in:st=0:d=0.5,afade=t=out:st=${duration - 0.5}:d=0.5,volume=0.12`,
           '-f', 'lavfi', '-t', '2', '-i', 'sine=f=880:r=48000,afade=t=in:st=0:d=0.02,afade=t=out:st=1.8:d=0.2,volume=0.15',
           '-f', 'lavfi', '-t', String(duration), '-i', `sine=f=220:r=48000,afade=t=in:st=0:d=0.3,afade=t=out:st=${duration - 0.5}:d=0.5,volume=0.06`,
-          '-filter_complex', '[0:a]adelay=0|0[hit1];[1:a]adelay=2000|2000[whoosh];[2:a]adelay=4500|4500[alert];[3:a][4:a][5:a][6:a]amix=inputs=4:duration=longest:normalize=0,volume=0.35[bed];[hit1][whoosh][alert][bed]amix=inputs=4:duration=longest:normalize=0,volume=0.6[a]',
+          '-filter_complex', `[0:a]adelay=0|0[hit1];[1:a]adelay=${whooshMs}|${whooshMs}[whoosh];[2:a]adelay=${alertMs}|${alertMs}[alert];[3:a][4:a][5:a][6:a]amix=inputs=4:duration=longest:normalize=0,volume=0.35[bed];[hit1][whoosh][alert][bed]amix=inputs=4:duration=longest:normalize=0,volume=0.6[a]`,
           '-map', '[a]', '-c:a', 'mp3', '-b:a', '192k', outPath,
         ],
         { stdio: 'pipe', timeout: 15000 }
