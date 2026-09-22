@@ -1,140 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-22T20:01:38.636Z",
+  "updatedAt": "2026-09-22T21:17:58.270Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "ipp1L_FErBU",
+      "id": "6WLtQ4dk_1Y",
       "title": "Apple Is Developing New Fitness Tracker Aimed at Rivaling Whoop | NEWS-MONSTER",
       "description": "Apple Is Developing New Fitness Tracker Aimed at Rivaling Whoop | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-22T20:01:37.717Z",
-      "publishedLabel": "Sep 22, 08:01 PM",
-      "thumbnail": "/thumbnails/ipp1L_FErBU.png",
-      "thumbnailSha256": "d0ffb5ba7e60aa6e12fcb3fcfc533b68a2c0ffe97a1258ea408f7964f649460e",
+      "publishedAt": "2026-09-22T21:17:57.583Z",
+      "publishedLabel": "Sep 22, 09:17 PM",
+      "thumbnail": "/thumbnails/6WLtQ4dk_1Y.png",
+      "thumbnailSha256": "de30e58d14be776d64a93108dd49f9693031f00b4f1698356d8b99d69d0116f9",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/ipp1L_FErBU",
+      "youtubeUrl": "https://youtu.be/6WLtQ4dk_1Y",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "ipp1L_FErBU",
-          "url": "https://youtu.be/ipp1L_FErBU",
+          "videoId": "6WLtQ4dk_1Y",
+          "url": "https://youtu.be/6WLtQ4dk_1Y",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "d0ffb5ba7e60aa6e12fcb3fcfc533b68a2c0ffe97a1258ea408f7964f649460e",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "d0ffb5ba7e60aa6e12fcb3fcfc533b68a2c0ffe97a1258ea408f7964f649460e",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/ipp1L_FErBU.png"
-          }
-        },
-        "linkedin": {
-          "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7508254175504388096"
-        }
-      }
-    },
-    {
-      "id": "JLvNTK3uErQ",
-      "title": "Beats 360 Headphones Review: Best-Performing Beats Yet, and They’re Modular | NEWS-MONSTER",
-      "description": "Beats 360 Headphones Review: Best-Performing Beats Yet, and They’re Modular | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-22T19:58:09.814Z",
-      "publishedLabel": "Sep 22, 07:58 PM",
-      "thumbnail": "/thumbnails/JLvNTK3uErQ.png",
-      "thumbnailSha256": "ab584dd669a863468ed5251d6d5b6bacf5b75500caa3736ae7f5012b6fdbd68d",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/JLvNTK3uErQ",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "JLvNTK3uErQ",
-          "url": "https://youtu.be/JLvNTK3uErQ",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "ab584dd669a863468ed5251d6d5b6bacf5b75500caa3736ae7f5012b6fdbd68d",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "ab584dd669a863468ed5251d6d5b6bacf5b75500caa3736ae7f5012b6fdbd68d",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/JLvNTK3uErQ.png"
-          }
-        },
-        "linkedin": {
-          "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7508253296856449024"
-        }
-      }
-    },
-    {
-      "id": "qvOgNUj_2Vo",
-      "title": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
-      "description": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-22T19:54:36.115Z",
-      "publishedLabel": "Sep 22, 07:54 PM",
-      "thumbnail": "/thumbnails/qvOgNUj_2Vo.png",
-      "thumbnailSha256": "e725469f2802d74d5268f563e0c7dcd5fe81d35c86df247c718cdca81fa74001",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/qvOgNUj_2Vo",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "qvOgNUj_2Vo",
-          "url": "https://youtu.be/qvOgNUj_2Vo",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "e725469f2802d74d5268f563e0c7dcd5fe81d35c86df247c718cdca81fa74001",
+            "sha256": "de30e58d14be776d64a93108dd49f9693031f00b4f1698356d8b99d69d0116f9",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -151,17 +43,125 @@
           "errors": [],
           "durationMs": 1,
           "thumbnail": {
-            "sha256": "e725469f2802d74d5268f563e0c7dcd5fe81d35c86df247c718cdca81fa74001",
+            "sha256": "de30e58d14be776d64a93108dd49f9693031f00b4f1698356d8b99d69d0116f9",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/qvOgNUj_2Vo.png"
+            "path": "public/thumbnails/6WLtQ4dk_1Y.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7508252403708743680"
+          "postId": "urn:li:ugcPost:7508273391494189057"
+        }
+      }
+    },
+    {
+      "id": "xdpN1C_o1kk",
+      "title": "Beats 360 Headphones Review: Best-Performing Beats Yet, and They’re Modular | NEWS-MONSTER",
+      "description": "Beats 360 Headphones Review: Best-Performing Beats Yet, and They’re Modular | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-22T21:15:17.539Z",
+      "publishedLabel": "Sep 22, 09:15 PM",
+      "thumbnail": "/thumbnails/xdpN1C_o1kk.png",
+      "thumbnailSha256": "3ae1046b3f0529a64210358b056920f26f87265b9f461375ebeceff9ed3ed9c7",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/xdpN1C_o1kk",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "xdpN1C_o1kk",
+          "url": "https://youtu.be/xdpN1C_o1kk",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "3ae1046b3f0529a64210358b056920f26f87265b9f461375ebeceff9ed3ed9c7",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "3ae1046b3f0529a64210358b056920f26f87265b9f461375ebeceff9ed3ed9c7",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/xdpN1C_o1kk.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7508272719264899073"
+        }
+      }
+    },
+    {
+      "id": "jtY-nh9HOUE",
+      "title": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
+      "description": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-22T21:12:35.696Z",
+      "publishedLabel": "Sep 22, 09:12 PM",
+      "thumbnail": "/thumbnails/jtY-nh9HOUE.png",
+      "thumbnailSha256": "caf8b52f24cb0e663ed448c9aecd8bf5afb576c207a9c37b093a0b3885c8be8e",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/jtY-nh9HOUE",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "jtY-nh9HOUE",
+          "url": "https://youtu.be/jtY-nh9HOUE",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "caf8b52f24cb0e663ed448c9aecd8bf5afb576c207a9c37b093a0b3885c8be8e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 1,
+          "thumbnail": {
+            "sha256": "caf8b52f24cb0e663ed448c9aecd8bf5afb576c207a9c37b093a0b3885c8be8e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/jtY-nh9HOUE.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7508272041268043776"
         }
       }
     }
