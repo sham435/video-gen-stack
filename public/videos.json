@@ -1,86 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-23T18:21:54.889Z",
+  "updatedAt": "2026-09-23T19:16:28.062Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "I_JcVEBF0Mg",
-      "title": "Spotify is giving you the keys to its recommendation algorithm with US launch of 'Taste Pr | NEWS-MONSTER",
-      "description": "Spotify is giving you the keys to its recommendation algorithm with US launch of 'Taste Pr | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-23T18:21:02.693Z",
-      "publishedLabel": "Sep 23, 06:21 PM",
-      "thumbnail": "/thumbnails/I_JcVEBF0Mg.png",
-      "thumbnailSha256": "d0d9c859f76f19ee14bd47b58d62750ddb565e2ec7d37bd1c1a2ccad1af5baaa",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/I_JcVEBF0Mg",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "I_JcVEBF0Mg",
-          "url": "https://youtu.be/I_JcVEBF0Mg",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "d0d9c859f76f19ee14bd47b58d62750ddb565e2ec7d37bd1c1a2ccad1af5baaa",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "d0d9c859f76f19ee14bd47b58d62750ddb565e2ec7d37bd1c1a2ccad1af5baaa",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/I_JcVEBF0Mg.png"
-          }
-        },
-        "linkedin": {
-          "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7508591254285340672"
-        }
-      }
-    },
-    {
-      "id": "gjT3oztsFYo",
+      "id": "oFAVfHKBkik",
       "title": "These 3 Major Upgrades Could Be Heading to Your Next Flagship Android Phone | NEWS-MONSTER",
       "description": "These 3 Major Upgrades Could Be Heading to Your Next Flagship Android Phone | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-23T18:18:12.591Z",
-      "publishedLabel": "Sep 23, 06:18 PM",
-      "thumbnail": "/thumbnails/gjT3oztsFYo.png",
-      "thumbnailSha256": "cce9ecb1ac125f9cfbeebb1de71a27fb1f0d3115a7b61413510df69f801d05c5",
+      "category": "apple",
+      "publishedAt": "2026-09-23T19:14:24.665Z",
+      "publishedLabel": "Sep 23, 07:14 PM",
+      "thumbnail": "/thumbnails/oFAVfHKBkik.png",
+      "thumbnailSha256": "018ae49747950bfa57aa72ab48e903e71dc29f0f0d334fc89572503a165c28e5",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/gjT3oztsFYo",
+      "youtubeUrl": "https://youtu.be/oFAVfHKBkik",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "gjT3oztsFYo",
-          "url": "https://youtu.be/gjT3oztsFYo",
+          "videoId": "oFAVfHKBkik",
+          "url": "https://youtu.be/oFAVfHKBkik",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "cce9ecb1ac125f9cfbeebb1de71a27fb1f0d3115a7b61413510df69f801d05c5",
+            "sha256": "018ae49747950bfa57aa72ab48e903e71dc29f0f0d334fc89572503a165c28e5",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,17 +43,17 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "cce9ecb1ac125f9cfbeebb1de71a27fb1f0d3115a7b61413510df69f801d05c5",
+            "sha256": "018ae49747950bfa57aa72ab48e903e71dc29f0f0d334fc89572503a165c28e5",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/gjT3oztsFYo.png"
+            "path": "public/thumbnails/oFAVfHKBkik.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7508590536837210113"
+          "postId": "urn:li:ugcPost:7508604681217011712"
         }
       }
     }
