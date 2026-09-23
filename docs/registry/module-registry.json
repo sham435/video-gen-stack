@@ -1,0 +1,1379 @@
+{
+  "schemaVersion": 1,
+  "generated": "2026-09-23",
+  "modules": [
+    {
+      "id": "publishing.seoMetadata",
+      "name": "SEO Metadata Builder",
+      "type": "service",
+      "layer": "publishing",
+      "path": "src/publishing/seoMetadata.mjs",
+      "purpose": "Central SEO metadata generation (single sink)",
+      "status": "active",
+      "publicApis": [
+        "buildSeoMetadata",
+        "normalizeTag",
+        "dedupeTags",
+        "mineStoryTags",
+        "SEO_BUILDERS"
+      ],
+      "tests": [
+        "tests/seo-metadata.test.mjs"
+      ],
+      "mirrorPath": "deploy-staging/src/publishing/seoMetadata.mjs"
+    },
+    {
+      "id": "publishing.hashtagBuilder",
+      "name": "HashtagBuilder",
+      "type": "service",
+      "layer": "publishing",
+      "path": "src/publishing/HashtagBuilder.mjs",
+      "purpose": "LEGACY hashtag builder (compat only; do not add callers)",
+      "status": "active",
+      "publicApis": [
+        "HashtagBuilder"
+      ],
+      "tests": [
+        "tests/hashtag-builder.test.mjs"
+      ],
+      "mirrorPath": "deploy-staging/src/publishing/HashtagBuilder.mjs"
+    },
+    {
+      "id": "publishing.youtubeSeo",
+      "name": "YouTube SEO",
+      "type": "service",
+      "layer": "publishing",
+      "path": "src/publishing/YouTubeSEO.mjs",
+      "purpose": "YouTube snippet tags + taxonomy category mapping",
+      "status": "active",
+      "publicApis": [
+        "deriveYouTubeTags",
+        "buildYouTubeSEO",
+        "resolveYouTubeCategoryId",
+        "YOUTUBE_CATEGORY_IDS",
+        "DEFAULT_YOUTUBE_CATEGORY_ID"
+      ],
+      "tests": [
+        "tests/youtube-seo.test.mjs"
+      ],
+      "mirrorPath": "deploy-staging/src/publishing/YouTubeSEO.mjs"
+    },
+    {
+      "id": "publishing.linkedInPostFactory",
+      "name": "LinkedIn Post Factory",
+      "type": "factory",
+      "layer": "publishing",
+      "path": "src/publishing/LinkedInPostFactory.mjs",
+      "purpose": "Luxury LinkedIn post formatter (video+article), native video publish",
+      "status": "active",
+      "publicApis": [
+        "LinkedInPostFactory",
+        "VideoPostFormatter",
+        "ArticlePostFormatter"
+      ],
+      "tests": [
+        "tests/linkedin-post-factory.test.mjs"
+      ],
+      "mirrorPath": "deploy-staging/src/publishing/LinkedInPostFactory.mjs"
+    },
+    {
+      "id": "publishing.linkedInPublisher",
+      "name": "LinkedIn Publisher",
+      "type": "publisher",
+      "layer": "publishing",
+      "path": "src/publishing/LinkedInPublisher.mjs",
+      "purpose": "LinkedIn REST publisher (image/video share)",
+      "status": "active",
+      "publicApis": [
+        "LinkedInPublisher"
+      ],
+      "mirrorPath": "deploy-staging/src/publishing/LinkedInPublisher.mjs"
+    },
+    {
+      "id": "publishing.socialPostGenerator",
+      "name": "Social Post Generator",
+      "type": "service",
+      "layer": "publishing",
+      "path": "src/publishing/SocialPostGenerator.mjs",
+      "purpose": "AUTHORITATIVE producer of central SEO projections for promo posts",
+      "status": "active",
+      "publicApis": [
+        "SocialPostGenerator"
+      ],
+      "tests": [
+        "tests/social-distribution.test.mjs"
+      ],
+      "mirrorPath": "deploy-staging/src/publishing/SocialPostGenerator.mjs"
+    },
+    {
+      "id": "publishing.socialDistributionManager",
+      "name": "Social Distribution Manager",
+      "type": "service",
+      "layer": "publishing",
+      "path": "src/publishing/SocialDistributionManager.mjs",
+      "purpose": "Distribute promo posts per platform with idempotency",
+      "status": "active",
+      "publicApis": [
+        "SocialDistributionManager"
+      ],
+      "tests": [
+        "tests/social-distribution.test.mjs"
+      ],
+      "mirrorPath": "deploy-staging/src/publishing/SocialDistributionManager.mjs"
+    },
+    {
+      "id": "publishing.socialDistributionStore",
+      "name": "Social Distribution Store",
+      "type": "store",
+      "layer": "publishing",
+      "path": "src/publishing/SocialDistributionStore.mjs",
+      "purpose": "Persist distribution attempts/status (DB)",
+      "status": "active",
+      "publicApis": [
+        "SocialDistributionStore"
+      ],
+      "tests": [
+        "tests/social-distribution.test.mjs"
+      ],
+      "mirrorPath": "deploy-staging/src/publishing/SocialDistributionStore.mjs"
+    },
+    {
+      "id": "publishing.youTubeCommunityPublisher",
+      "name": "YouTube Community Publisher",
+      "type": "publisher",
+      "layer": "publishing",
+      "path": "src/publishing/YouTubeCommunityPublisher.mjs",
+      "purpose": "YouTube community post (manual queue; unsupported)",
+      "status": "active",
+      "publicApis": [
+        "YouTubeCommunityPublisher"
+      ],
+      "tests": [
+        "tests/social-distribution.test.mjs"
+      ],
+      "mirrorPath": "deploy-staging/src/publishing/YouTubeCommunityPublisher.mjs"
+    },
+    {
+      "id": "publishing.pinnedCommentBuilder",
+      "name": "Pinned Comment Builder",
+      "type": "service",
+      "layer": "publishing",
+      "path": "src/publishing/PinnedCommentBuilder.mjs",
+      "purpose": "Build pinned comment for published video",
+      "status": "active",
+      "publicApis": [
+        "PinnedCommentBuilder"
+      ],
+      "mirrorPath": "deploy-staging/src/publishing/PinnedCommentBuilder.mjs"
+    },
+    {
+      "id": "publishing.publicationLedger",
+      "name": "Publication Ledger",
+      "type": "store",
+      "layer": "publishing",
+      "path": "src/publishing/PublicationLedger.mjs",
+      "purpose": "Persist upload/thumbnail/verification state (DB)",
+      "status": "active",
+      "publicApis": [
+        "PublicationLedger",
+        "UploadState",
+        "ThumbnailState",
+        "VerificationState",
+        "DistributionDestState",
+        "resolveThumbnailUrl"
+      ],
+      "tests": [
+        "tests/publication-ledger-3axis.test.mjs"
+      ],
+      "mirrorPath": "deploy-staging/src/publishing/PublicationLedger.mjs"
+    },
+    {
+      "id": "publishing.postPublishVerifier",
+      "name": "Post Publish Verifier",
+      "type": "service",
+      "layer": "publishing",
+      "path": "src/publishing/PostPublishVerifier.mjs",
+      "purpose": "Verify LinkedIn post visible after publish",
+      "status": "active",
+      "publicApis": [
+        "PostPublishVerifier"
+      ],
+      "tests": [
+        "tests/post-publish-verify.test.mjs"
+      ],
+      "mirrorPath": "deploy-staging/src/publishing/PostPublishVerifier.mjs"
+    },
+    {
+      "id": "publishing.youTubePropagationVerifier",
+      "name": "YouTube Propagation Verifier",
+      "type": "service",
+      "layer": "publishing",
+      "path": "src/publishing/YouTubePropagationVerifier.mjs",
+      "purpose": "Verify video propagated + thumbnail identity",
+      "status": "active",
+      "publicApis": [
+        "YouTubePropagationVerifier",
+        "VerifyState",
+        "ThumbnailIdentity",
+        "resolveRemoteThumbnail"
+      ],
+      "tests": [
+        "tests/propagation-verifier.test.mjs"
+      ],
+      "mirrorPath": "deploy-staging/src/publishing/YouTubePropagationVerifier.mjs"
+    },
+    {
+      "id": "publishing.publishingEnhancer",
+      "name": "Publishing Enhancer",
+      "type": "service",
+      "layer": "publishing",
+      "path": "src/publishing/PublishingEnhancer.mjs",
+      "purpose": "Enrich publishable metadata",
+      "status": "active",
+      "publicApis": [
+        "PublishingEnhancer"
+      ],
+      "mirrorPath": "deploy-staging/src/publishing/PublishingEnhancer.mjs"
+    },
+    {
+      "id": "publishing.titleTemplates",
+      "name": "Title Templates",
+      "type": "service",
+      "layer": "publishing",
+      "path": "src/publishing/TitleTemplates.mjs",
+      "purpose": "Title formatting per pillar",
+      "status": "active",
+      "publicApis": [
+        "formatTitle",
+        "detectPillar",
+        "pillarEmoji",
+        "pillarColor",
+        "pillarLabel",
+        "PILLAR_EMOJI",
+        "PILLAR_KEYWORDS",
+        "MAX_TITLE"
+      ],
+      "tests": [
+        "tests/title-templates.test.mjs"
+      ],
+      "mirrorPath": "deploy-staging/src/publishing/TitleTemplates.mjs"
+    },
+    {
+      "id": "publishing.topicCtaBuilder",
+      "name": "Topic CTA Builder",
+      "type": "service",
+      "layer": "publishing",
+      "path": "src/publishing/TopicCtaBuilder.mjs",
+      "purpose": "Topic-specific call-to-action copy",
+      "status": "active",
+      "publicApis": [
+        "TopicCtaBuilder"
+      ],
+      "mirrorPath": "deploy-staging/src/publishing/TopicCtaBuilder.mjs"
+    },
+    {
+      "id": "publishing.brandOutro",
+      "name": "Brand Outro",
+      "type": "service",
+      "layer": "publishing",
+      "path": "src/publishing/BrandOutro.mjs",
+      "purpose": "Branded outro scene builder",
+      "status": "active",
+      "publicApis": [
+        "brandOutroScene",
+        "BRAND_OUTRO"
+      ],
+      "mirrorPath": "deploy-staging/src/publishing/BrandOutro.mjs"
+    },
+    {
+      "id": "publishing.retry",
+      "name": "Publishing Retry",
+      "type": "util",
+      "layer": "publishing",
+      "path": "src/publishing/retry.mjs",
+      "purpose": "Transient retry for publisher APIs",
+      "status": "active",
+      "publicApis": [
+        "withTransientRetry",
+        "isTransientError",
+        "sleep"
+      ],
+      "tests": [
+        "tests/social-distribution.test.mjs"
+      ],
+      "mirrorPath": "deploy-staging/src/publishing/retry.mjs"
+    },
+    {
+      "id": "news.newsDataProvider",
+      "name": "NewsData Provider",
+      "type": "provider",
+      "layer": "news",
+      "path": "src/news/NewsDataProvider.mjs",
+      "purpose": "NewsData.io headline ingestion",
+      "status": "active",
+      "publicApis": [
+        "fetchTopHeadlines",
+        "isConfigured",
+        "lastFetchAt"
+      ]
+    },
+    {
+      "id": "news.rapidNewsProvider",
+      "name": "RapidNews Provider",
+      "type": "provider",
+      "layer": "news",
+      "path": "src/news/RapidNewsProvider.mjs",
+      "purpose": "RapidAPI news ingestion",
+      "status": "active",
+      "publicApis": [
+        "fetchTopHeadlines",
+        "isConfigured"
+      ]
+    },
+    {
+      "id": "news.rapidNewsBudget",
+      "name": "RapidNews Budget",
+      "type": "service",
+      "layer": "news",
+      "path": "src/news/RapidNewsBudget.mjs",
+      "purpose": "Per-day fetch budget gate",
+      "status": "active",
+      "publicApis": [
+        "getStatus",
+        "canFetch",
+        "reserve",
+        "consume"
+      ],
+      "tests": [
+        "tests/rapidnews-budget.test.mjs"
+      ]
+    },
+    {
+      "id": "orchestrator.productionJob",
+      "name": "Production Job",
+      "type": "entity",
+      "layer": "orchestrator",
+      "path": "src/orchestrator/ProductionJob.mjs",
+      "purpose": "One production unit (job lifecycle)",
+      "status": "active",
+      "publicApis": [
+        "ProductionJob"
+      ],
+      "tests": [
+        "tests/jobs.test.mjs"
+      ]
+    },
+    {
+      "id": "orchestrator.productionScheduler",
+      "name": "Production Scheduler",
+      "type": "service",
+      "layer": "orchestrator",
+      "path": "src/orchestrator/ProductionScheduler.mjs",
+      "purpose": "Job queue + events",
+      "status": "active",
+      "publicApis": [
+        "ProductionScheduler"
+      ],
+      "tests": [
+        "tests/production-scheduler.test.mjs"
+      ]
+    },
+    {
+      "id": "orchestrator.stages",
+      "name": "Stages",
+      "type": "registry",
+      "layer": "orchestrator",
+      "path": "src/orchestrator/Stages.mjs",
+      "purpose": "Stage graph + FailureClass + classifyError",
+      "status": "active",
+      "publicApis": [
+        "STAGES",
+        "StageStatus",
+        "FailureClass",
+        "getStage",
+        "stageIndex",
+        "nextStage",
+        "classifyError"
+      ],
+      "tests": [
+        "tests/trace-and-gate.test.mjs"
+      ]
+    },
+    {
+      "id": "orchestrator.stageTraceRecorder",
+      "name": "Stage Trace Recorder",
+      "type": "store",
+      "layer": "orchestrator",
+      "path": "src/orchestrator/StageTraceRecorder.mjs",
+      "purpose": "Persist stage traces per run",
+      "status": "active",
+      "publicApis": [
+        "StageTraceRecorder",
+        "TraceStatus",
+        "isTerminalTraceStatus",
+        "StageStatus"
+      ],
+      "tests": [
+        "tests/trace-invariants.test.mjs"
+      ]
+    },
+    {
+      "id": "orchestrator.publishabilityGate",
+      "name": "Publishability Gate",
+      "type": "gate",
+      "layer": "orchestrator",
+      "path": "src/orchestrator/PublishabilityGate.mjs",
+      "purpose": "Gate before publish",
+      "status": "active",
+      "publicApis": [
+        "PublishabilityGate",
+        "ProductionError"
+      ],
+      "tests": [
+        "tests/e2e-failure-simulation.test.mjs"
+      ]
+    },
+    {
+      "id": "orchestrator.retryPolicy",
+      "name": "Retry Policy",
+      "type": "service",
+      "layer": "orchestrator",
+      "path": "src/orchestrator/RetryPolicy.mjs",
+      "purpose": "Delay/retry decision per failure class",
+      "status": "active",
+      "publicApis": [
+        "nextDelay",
+        "shouldRetry",
+        "classifyDecision"
+      ],
+      "tests": [
+        "tests/retention-confidence.test.mjs"
+      ]
+    },
+    {
+      "id": "orchestrator.artifactId",
+      "name": "Artifact ID",
+      "type": "util",
+      "layer": "orchestrator",
+      "path": "src/orchestrator/ArtifactID.mjs",
+      "purpose": "Deterministic artifact ids",
+      "status": "active",
+      "publicApis": [
+        "articleId",
+        "stageArtifactId",
+        "thumbnailArtifactId",
+        "videoArtifactId",
+        "c2paArtifactId",
+        "buildJobId"
+      ]
+    },
+    {
+      "id": "orchestrator.checkpointStore",
+      "name": "Checkpoint Store",
+      "type": "store",
+      "layer": "orchestrator",
+      "path": "src/orchestrator/CheckpointStore.mjs",
+      "purpose": "Resume checkpoints",
+      "status": "active",
+      "publicApis": [
+        "CheckpointStore"
+      ]
+    },
+    {
+      "id": "orchestrator.youTubeQuotaAuditor",
+      "name": "YouTube Quota Auditor",
+      "type": "service",
+      "layer": "orchestrator",
+      "path": "src/orchestrator/YouTubeQuotaAuditor.mjs",
+      "purpose": "Audit YouTube API quota usage",
+      "status": "active",
+      "publicApis": [
+        "YouTubeQuotaAuditor"
+      ]
+    },
+    {
+      "id": "ai.storyAlgorithmRegistry",
+      "name": "Story Algorithm Registry",
+      "type": "registry",
+      "layer": "ai",
+      "path": "src/ai/StoryAlgorithmRegistry.mjs",
+      "purpose": "Narrative algorithm selection",
+      "status": "active",
+      "publicApis": [
+        "pickAlgorithm",
+        "ARCS",
+        "HOOKS",
+        "VISUAL_STYLES",
+        "TONES",
+        "STRUCTURES",
+        "ALGORITHMS_LIST"
+      ]
+    },
+    {
+      "id": "ai.storyDirector",
+      "name": "Story Director",
+      "type": "service",
+      "layer": "ai",
+      "path": "src/ai/StoryDirector.mjs",
+      "purpose": "Story template routing",
+      "status": "active",
+      "publicApis": [
+        "StoryDirector",
+        "GENERIC_STORY_TEMPLATES",
+        "isGenericStoryTemplate"
+      ],
+      "tests": [
+        "tests/cinematic-addendum-v2.test.mjs"
+      ]
+    },
+    {
+      "id": "ai.scenePlanner",
+      "name": "Scene Planner",
+      "type": "service",
+      "layer": "ai",
+      "path": "src/ai/ScenePlanner.mjs",
+      "purpose": "Scene count/duration planning",
+      "status": "active",
+      "publicApis": [
+        "ScenePlanner"
+      ],
+      "tests": [
+        "tests/scene-planner-clamp.test.mjs"
+      ]
+    },
+    {
+      "id": "ai.categoryDirector",
+      "name": "Category Director",
+      "type": "service",
+      "layer": "ai",
+      "path": "src/ai/CategoryDirector.mjs",
+      "purpose": "Per-category production direction",
+      "status": "active",
+      "publicApis": [
+        "CategoryDirector",
+        "getDirector",
+        "CATEGORY_DIRECTORS"
+      ],
+      "tests": [
+        "tests/creative-director.test.mjs"
+      ]
+    },
+    {
+      "id": "ai.topicOpportunityEngine",
+      "name": "Topic Opportunity Engine",
+      "type": "service",
+      "layer": "ai",
+      "path": "src/ai/TopicOpportunityEngine.mjs",
+      "purpose": "Viral potential scoring",
+      "status": "active",
+      "publicApis": [
+        "scoreViralPotential",
+        "TopicOpportunityEngine",
+        "THRESHOLD_REJECT",
+        "THRESHOLD_REGENERATE",
+        "THRESHOLD_PRIORITY",
+        "DEFAULT_WEIGHTS"
+      ],
+      "tests": [
+        "tests/topic-opportunity-engine.test.mjs"
+      ]
+    },
+    {
+      "id": "ai.promptEngine",
+      "name": "Prompt Engine",
+      "type": "service",
+      "layer": "ai",
+      "path": "src/ai/PromptEngine.mjs",
+      "purpose": "Prompt construction",
+      "status": "active",
+      "publicApis": [
+        "PromptEngine"
+      ]
+    },
+    {
+      "id": "ai.selfHealingExecutor",
+      "name": "Self Healing Executor",
+      "type": "service",
+      "layer": "ai",
+      "path": "src/ai/SelfHealingExecutor.mjs",
+      "purpose": "Retry/self-heal provider failures",
+      "status": "active",
+      "publicApis": [
+        "SelfHealingExecutor"
+      ],
+      "tests": [
+        "tests/self-healing-executor.test.mjs"
+      ]
+    },
+    {
+      "id": "ai.providerChain",
+      "name": "Provider Chain",
+      "type": "service",
+      "layer": "ai",
+      "path": "src/ai/providers/ProviderChain.mjs",
+      "purpose": "AI provider chain (Zen/OpenRouter/Gemini/Ollama/OpenAI)",
+      "status": "active",
+      "publicApis": [
+        "ProviderChain"
+      ],
+      "tests": [
+        "tests/provider-chain.test.mjs"
+      ]
+    },
+    {
+      "id": "ai.resolveProviders",
+      "name": "Resolve Providers",
+      "type": "service",
+      "layer": "ai",
+      "path": "src/ai/providers/resolveProviders.mjs",
+      "purpose": "Build provider chain from env",
+      "status": "active",
+      "publicApis": [
+        "buildProviders",
+        "resolveProviderChain",
+        "providerSummary",
+        "warnDegradedModeOnce"
+      ],
+      "tests": [
+        "tests/provider-fallback.test.mjs"
+      ]
+    },
+    {
+      "id": "ai.retry",
+      "name": "AI Retry",
+      "type": "util",
+      "layer": "ai",
+      "path": "src/ai/providers/retry.mjs",
+      "purpose": "Retry/backoff + error classification",
+      "status": "active",
+      "publicApis": [
+        "withRetry",
+        "RETRY_BACKOFF",
+        "RETRYABLE_HTTP",
+        "backoffDelay",
+        "isRetryableError",
+        "ProviderError",
+        "classifyError"
+      ],
+      "tests": [
+        "tests/provider-retry.test.mjs"
+      ]
+    },
+    {
+      "id": "video.sceneEngine",
+      "name": "Scene Engine",
+      "type": "renderer",
+      "layer": "video",
+      "path": "src/video/SceneEngine.mjs",
+      "purpose": "Frame rendering pipeline",
+      "status": "active",
+      "publicApis": [
+        "SceneEngine",
+        "buildScenesForAlgorithm",
+        "contentWords",
+        "distinctSceneQuery"
+      ]
+    },
+    {
+      "id": "video.motionEngine",
+      "name": "Motion Engine",
+      "type": "renderer",
+      "layer": "video",
+      "path": "src/video/MotionEngine.mjs",
+      "purpose": "10 motion effects",
+      "status": "active",
+      "publicApis": [
+        "applyMotionEffect",
+        "applyDefaultEffects",
+        "CINEMATIC_EFFECTS"
+      ]
+    },
+    {
+      "id": "video.compositor",
+      "name": "Compositor",
+      "type": "renderer",
+      "layer": "video",
+      "path": "src/video/Compositor.mjs",
+      "purpose": "Compose layers per frame",
+      "status": "active",
+      "publicApis": [
+        "Compositor"
+      ]
+    },
+    {
+      "id": "video.timeline",
+      "name": "Timeline",
+      "type": "renderer",
+      "layer": "video",
+      "path": "src/video/Timeline.mjs",
+      "purpose": "Frame scheduling",
+      "status": "active",
+      "publicApis": [
+        "Timeline"
+      ],
+      "tests": [
+        "tests/timeline-contract.test.mjs"
+      ]
+    },
+    {
+      "id": "video.textTimelineScheduler",
+      "name": "Text Timeline Scheduler",
+      "type": "renderer",
+      "layer": "video",
+      "path": "src/video/TextTimelineScheduler.mjs",
+      "purpose": "Text layer priority scheduling",
+      "status": "active",
+      "publicApis": [
+        "TextTimelineScheduler",
+        "PRIORITY"
+      ]
+    },
+    {
+      "id": "video.captionEngine",
+      "name": "Caption Engine",
+      "type": "renderer",
+      "layer": "video",
+      "path": "src/video/CaptionEngine.mjs",
+      "purpose": "Word-synced captions",
+      "status": "active",
+      "publicApis": [
+        "buildWordTimings",
+        "renderCaptions",
+        "getActiveWordIndex"
+      ],
+      "tests": [
+        "tests/news-first-captions.test.mjs"
+      ]
+    },
+    {
+      "id": "video.narrativeTextComposition",
+      "name": "Narrative Text Composition",
+      "type": "renderer",
+      "layer": "video",
+      "path": "src/video/NarrativeTextComposition.mjs",
+      "purpose": "Headline/caption/outro state machine",
+      "status": "active",
+      "publicApis": [
+        "resolveNarrativeState",
+        "resolveNarrativeAt",
+        "validateTextComposition",
+        "assertNarrativeComposition",
+        "buildNarrativeLayouts",
+        "NARRATIVE_STATES"
+      ],
+      "tests": [
+        "tests/narrative-composition.test.mjs"
+      ]
+    },
+    {
+      "id": "video.renderProfile",
+      "name": "Render Profile",
+      "type": "registry",
+      "layer": "video",
+      "path": "src/video/RenderProfile.mjs",
+      "purpose": "Resolution profiles",
+      "status": "active",
+      "publicApis": [
+        "VIDEO_HD",
+        "DEFAULT_PROFILE",
+        "sx",
+        "sy",
+        "sf"
+      ],
+      "tests": [
+        "tests/render-profile.test.mjs"
+      ]
+    },
+    {
+      "id": "video.validateOutput",
+      "name": "Validate Output",
+      "type": "service",
+      "layer": "video",
+      "path": "src/video/validateOutput.mjs",
+      "purpose": "Post-render output validation",
+      "status": "active",
+      "publicApis": [
+        "validateRenderOutput",
+        "validateOutput"
+      ],
+      "tests": [
+        "tests/render-validation.test.mjs"
+      ]
+    },
+    {
+      "id": "audio.audioMixer",
+      "name": "Audio Mixer",
+      "type": "service",
+      "layer": "audio",
+      "path": "src/audio/AudioMixer.mjs",
+      "purpose": "Voice 70/music 20/sfx 10, -14 LUFS",
+      "status": "active",
+      "publicApis": [
+        "AudioMixer",
+        "trackIndexFor"
+      ],
+      "tests": [
+        "tests/audio-loop-duration.test.mjs"
+      ]
+    },
+    {
+      "id": "audio.audioDirector",
+      "name": "Audio Director",
+      "type": "service",
+      "layer": "audio",
+      "path": "src/audio/AudioDirector.mjs",
+      "purpose": "Per-scene audio orchestration",
+      "status": "active",
+      "publicApis": [
+        "AudioDirector",
+        "normalizeOne",
+        "computeLoopsNeeded",
+        "execFileAsync"
+      ]
+    },
+    {
+      "id": "audio.musicFamily",
+      "name": "Music Family",
+      "type": "service",
+      "layer": "audio",
+      "path": "src/audio/MusicFamily.mjs",
+      "purpose": "Music family/track selection",
+      "status": "active",
+      "publicApis": [
+        "pickMusicTrack",
+        "resolveMusicFamily",
+        "trackIndexFor",
+        "FAMILY_KEYS",
+        "FAMILY_KEYWORDS",
+        "FAMILY_FALLBACK"
+      ]
+    },
+    {
+      "id": "audio.moodAnalyzer",
+      "name": "Mood Analyzer",
+      "type": "service",
+      "layer": "audio",
+      "path": "src/audio/MoodAnalyzer.mjs",
+      "purpose": "Scene to mood mapping",
+      "status": "active",
+      "publicApis": [
+        "analyzeMood"
+      ]
+    },
+    {
+      "id": "thumbnail.thumbnailCandidateGenerator",
+      "name": "Thumbnail Candidate Generator",
+      "type": "renderer",
+      "layer": "thumbnail",
+      "path": "src/thumbnail/ThumbnailCandidateGenerator.mjs",
+      "purpose": "Generate thumbnail candidates",
+      "status": "active",
+      "publicApis": [
+        "ThumbnailCandidateGenerator",
+        "landscapeHeadline",
+        "landscapeKeyword"
+      ],
+      "tests": [
+        "tests/thumbnail-composition.test.mjs"
+      ]
+    },
+    {
+      "id": "thumbnail.thumbnailJudge",
+      "name": "Thumbnail Judge",
+      "type": "service",
+      "layer": "thumbnail",
+      "path": "src/thumbnail/ThumbnailJudge.mjs",
+      "purpose": "Score thumbnail candidates",
+      "status": "active",
+      "publicApis": [
+        "ThumbnailJudge"
+      ],
+      "tests": [
+        "tests/thumbnail-hardening.test.mjs"
+      ]
+    },
+    {
+      "id": "thumbnail.thumbnailFactory",
+      "name": "Thumbnail Factory",
+      "type": "factory",
+      "layer": "thumbnail",
+      "path": "src/thumbnail/ThumbnailFactory.mjs",
+      "purpose": "Compose thumbnail per style",
+      "status": "active",
+      "publicApis": [
+        "ThumbnailFactory"
+      ],
+      "tests": [
+        "tests/thumbnail-factory.test.mjs"
+      ]
+    },
+    {
+      "id": "thumbnail.thumbnailMediaValidator",
+      "name": "Thumbnail Media Validator",
+      "type": "validator",
+      "layer": "thumbnail",
+      "path": "src/thumbnail/ThumbnailMediaValidator.mjs",
+      "purpose": "Validate against YouTube thumbnail profile",
+      "status": "active",
+      "publicApis": [
+        "validateThumbnailMedia",
+        "validateThumbnailMediaFile",
+        "MediaValidationState",
+        "MAX_YOUTUBE_THUMBNAIL_BYTES"
+      ],
+      "tests": [
+        "tests/thumbnail-media-validator.test.mjs"
+      ]
+    },
+    {
+      "id": "thumbnail.thumbnailUploader",
+      "name": "Thumbnail Uploader",
+      "type": "publisher",
+      "layer": "thumbnail",
+      "path": "src/thumbnail/ThumbnailUploader.mjs",
+      "purpose": "Upload thumbnail to YouTube",
+      "status": "active",
+      "publicApis": [
+        "ThumbnailUploader"
+      ]
+    },
+    {
+      "id": "thumbnail.thumbnailVerifier",
+      "name": "Thumbnail Verifier",
+      "type": "service",
+      "layer": "thumbnail",
+      "path": "src/thumbnail/ThumbnailVerifier.mjs",
+      "purpose": "Verify uploaded thumbnail state",
+      "status": "active",
+      "publicApis": [
+        "ThumbnailVerifier"
+      ]
+    },
+    {
+      "id": "thumbnails.thumbnailLifecycleManager",
+      "name": "Thumbnail Lifecycle Manager",
+      "type": "service",
+      "layer": "thumbnails",
+      "path": "src/thumbnails/ThumbnailLifecycleManager.mjs",
+      "purpose": "Refresh policy + variant families",
+      "status": "active",
+      "publicApis": [
+        "ThumbnailLifecycleManager",
+        "REFRESH_POLICY",
+        "VARIANT_FAMILIES"
+      ],
+      "tests": [
+        "tests/thumbnail-lifecycle.test.mjs"
+      ]
+    },
+    {
+      "id": "uniqueness.assetRegistry",
+      "name": "Asset Registry",
+      "type": "store",
+      "layer": "uniqueness",
+      "path": "src/uniqueness/AssetRegistry.mjs",
+      "purpose": "Global asset registry + quarantine",
+      "status": "active",
+      "publicApis": [
+        "AssetRegistry",
+        "QUARANTINE_DAYS",
+        "QUARANTINE_MS"
+      ],
+      "tests": [
+        "tests/image-quarantine.test.mjs"
+      ]
+    },
+    {
+      "id": "uniqueness.globalAssetUniquenessGate",
+      "name": "Global Asset Uniqueness Gate",
+      "type": "gate",
+      "layer": "uniqueness",
+      "path": "src/uniqueness/GlobalAssetUniquenessGate.mjs",
+      "purpose": "Channel-global asset uniqueness gate",
+      "status": "active",
+      "publicApis": [
+        "GlobalAssetUniquenessGate",
+        "ScopeEnforcement"
+      ],
+      "tests": [
+        "tests/diversity-uniqueness-gate.test.mjs"
+      ]
+    },
+    {
+      "id": "uniqueness.scriptUniqueness",
+      "name": "Script Uniqueness",
+      "type": "gate",
+      "layer": "uniqueness",
+      "path": "src/uniqueness/ScriptUniqueness.mjs",
+      "purpose": "Narration dedup gate",
+      "status": "active",
+      "publicApis": [
+        "ScriptUniqueness",
+        "SCRIPT_UNIQUENESS_POLICY",
+        "NARRATION_SCENE_SIMILARITY_MAX"
+      ],
+      "tests": [
+        "tests/script-uniqueness.test.mjs"
+      ]
+    },
+    {
+      "id": "uniqueness.musicUniqueness",
+      "name": "Music Uniqueness",
+      "type": "gate",
+      "layer": "uniqueness",
+      "path": "src/uniqueness/MusicUniqueness.mjs",
+      "purpose": "Music asset uniqueness check",
+      "status": "active",
+      "publicApis": [
+        "MusicUniqueness"
+      ]
+    },
+    {
+      "id": "assets.visualSearchEngine",
+      "name": "Visual Search Engine",
+      "type": "service",
+      "layer": "assets",
+      "path": "src/assets/VisualSearchEngine.mjs",
+      "purpose": "Stock visual search",
+      "status": "active",
+      "publicApis": [
+        "VisualSearchEngine",
+        "ENTITY_EXPANSIONS"
+      ],
+      "tests": [
+        "tests/sdcpp-provider.test.mjs"
+      ]
+    },
+    {
+      "id": "assets.duplicateDetector",
+      "name": "Duplicate Detector",
+      "type": "service",
+      "layer": "assets",
+      "path": "src/assets/DuplicateDetector.mjs",
+      "purpose": "Duplicate asset rejection/clustering",
+      "status": "active",
+      "publicApis": [
+        "compareAssets",
+        "rejectDuplicates",
+        "clusterDuplicates",
+        "DUP_THRESHOLD"
+      ]
+    },
+    {
+      "id": "assets.imageDatabase",
+      "name": "Image Database",
+      "type": "store",
+      "layer": "assets",
+      "path": "src/assets/ImageDatabase.mjs",
+      "purpose": "SQLite image metadata store",
+      "status": "active",
+      "publicApis": [
+        "ImageDatabase",
+        "DEFAULT_DB_PATH"
+      ]
+    },
+    {
+      "id": "quality.qualityChecker",
+      "name": "Quality Checker",
+      "type": "service",
+      "layer": "quality",
+      "path": "src/quality/QualityChecker.mjs",
+      "purpose": "Render quality gates",
+      "status": "active",
+      "publicApis": [
+        "QualityChecker"
+      ],
+      "tests": [
+        "tests/quality-retention-contract.test.mjs"
+      ]
+    },
+    {
+      "id": "quality.retentionSimulator",
+      "name": "Retention Simulator",
+      "type": "service",
+      "layer": "quality",
+      "path": "src/quality/RetentionSimulator.mjs",
+      "purpose": "Retention simulation",
+      "status": "active",
+      "publicApis": [
+        "RetentionSimulator"
+      ],
+      "tests": [
+        "tests/retention-confidence.test.mjs"
+      ]
+    },
+    {
+      "id": "quality.retentionPredictor",
+      "name": "Retention Predictor",
+      "type": "service",
+      "layer": "quality",
+      "path": "src/quality/RetentionPredictor.mjs",
+      "purpose": "Retention prediction",
+      "status": "active",
+      "publicApis": [
+        "RetentionPredictor"
+      ]
+    },
+    {
+      "id": "quality.viewerBehaviorModel",
+      "name": "Viewer Behavior Model",
+      "type": "service",
+      "layer": "quality",
+      "path": "src/quality/ViewerBehaviorModel.mjs",
+      "purpose": "Viewer behavior modeling",
+      "status": "active",
+      "publicApis": [
+        "ViewerBehaviorModel"
+      ]
+    },
+    {
+      "id": "broadcast.introEngine",
+      "name": "Intro Engine",
+      "type": "renderer",
+      "layer": "broadcast",
+      "path": "src/broadcast/IntroEngine.mjs",
+      "purpose": "12s cinematic intro",
+      "status": "active",
+      "publicApis": [
+        "IntroEngine"
+      ],
+      "tests": [
+        "tests/cinematic-refinement.test.mjs"
+      ]
+    },
+    {
+      "id": "governor.channelController",
+      "name": "Channel Controller",
+      "type": "service",
+      "layer": "governor",
+      "path": "src/governor/ChannelController.mjs",
+      "purpose": "Lease + quota governance (48/day ceiling)",
+      "status": "active",
+      "publicApis": [
+        "ChannelController",
+        "LeaseConflictError",
+        "QuotaExhaustedError"
+      ],
+      "tests": [
+        "tests/channel-controller.test.mjs"
+      ]
+    },
+    {
+      "id": "governor.resourceGovernor",
+      "name": "Resource Governor",
+      "type": "service",
+      "layer": "governor",
+      "path": "src/governor/ResourceGovernor.mjs",
+      "purpose": "Provider budget/rate governance",
+      "status": "active",
+      "publicApis": [
+        "ResourceGovernor"
+      ],
+      "tests": [
+        "tests/resource-governor.test.mjs"
+      ]
+    },
+    {
+      "id": "pipeline.nicheResolver",
+      "name": "Niche Resolver",
+      "type": "service",
+      "layer": "pipeline",
+      "path": "src/pipeline/NicheResolver.mjs",
+      "purpose": "Resolve niche from article",
+      "status": "active",
+      "publicApis": [
+        "resolveNiche",
+        "resolveNicheSync",
+        "NICHES"
+      ],
+      "tests": [
+        "tests/niche-automation.test.mjs"
+      ]
+    },
+    {
+      "id": "pipeline.renderManifest",
+      "name": "Render Manifest",
+      "type": "registry",
+      "layer": "pipeline",
+      "path": "src/pipeline/RenderManifest.mjs",
+      "purpose": "Layer ownership + render gates",
+      "status": "active",
+      "publicApis": [
+        "RenderManifest",
+        "resolveRenderManifest",
+        "resolveRenderGates",
+        "LAYER_OWNERS"
+      ],
+      "tests": [
+        "tests/render-manifest.test.mjs"
+      ]
+    },
+    {
+      "id": "pipeline.productionTrace",
+      "name": "Production Trace",
+      "type": "store",
+      "layer": "pipeline",
+      "path": "src/pipeline/ProductionTrace.mjs",
+      "purpose": "Run-level production trace",
+      "status": "active",
+      "publicApis": [
+        "ProductionTrace"
+      ],
+      "tests": [
+        "tests/trace-invariants.test.mjs"
+      ]
+    },
+    {
+      "id": "pipeline.contentCredentials",
+      "name": "Content Credentials",
+      "type": "service",
+      "layer": "pipeline",
+      "path": "src/pipeline/ContentCredentials.mjs",
+      "purpose": "C2PA signing",
+      "status": "active",
+      "publicApis": [
+        "ContentCredentials"
+      ],
+      "tests": [
+        "tests/content-credentials.test.mjs"
+      ]
+    },
+    {
+      "id": "youtube.nicheResolver",
+      "name": "YouTube Niche Resolver",
+      "type": "service",
+      "layer": "youtube",
+      "path": "src/youtube/nicheResolver.mjs",
+      "purpose": "Niche detection for YouTube production",
+      "status": "active",
+      "publicApis": [
+        "detectNiche",
+        "normalize",
+        "heuristicScore",
+        "applyConfidencePolicy",
+        "buildProductionContext",
+        "NICHES"
+      ],
+      "tests": [
+        "tests/niche-automation.test.mjs"
+      ]
+    },
+    {
+      "id": "youtube.nicheProfiles",
+      "name": "Niche Profiles",
+      "type": "registry",
+      "layer": "youtube",
+      "path": "src/youtube/nicheProfiles.mjs",
+      "purpose": "Niche production profiles",
+      "status": "active",
+      "publicApis": [
+        "getProfile",
+        "getAccentColor",
+        "listNiches",
+        "CategoryProductionProfiles"
+      ]
+    },
+    {
+      "id": "youtube.youtubeStudioLink",
+      "name": "YouTube Studio Link",
+      "type": "service",
+      "layer": "youtube",
+      "path": "src/youtube/youtubeStudioLink.mjs",
+      "purpose": "YouTube OAuth flow",
+      "status": "active",
+      "publicApis": [
+        "getAuthUrl",
+        "exchangeCode",
+        "getAccessToken",
+        "setNicheThumbnail",
+        "SCOPES"
+      ],
+      "tests": [
+        "tests/youtube-studio-link.test.mjs"
+      ]
+    },
+    {
+      "id": "youtube.thumbnailValidator",
+      "name": "YouTube Thumbnail Validator",
+      "type": "validator",
+      "layer": "youtube",
+      "path": "src/youtube/thumbnailValidator.mjs",
+      "purpose": "Thumbnail validation for YouTube",
+      "status": "active",
+      "publicApis": [
+        "validateThumbnail",
+        "assertValidThumbnail",
+        "CANONICAL_THUMBNAIL_PROFILE"
+      ]
+    },
+    {
+      "id": "analytics.analyticsCollector",
+      "name": "Analytics Collector",
+      "type": "service",
+      "layer": "analytics",
+      "path": "src/analytics/AnalyticsCollector.mjs",
+      "purpose": "Collect metrics",
+      "status": "active",
+      "publicApis": [
+        "AnalyticsCollector"
+      ]
+    },
+    {
+      "id": "analytics.engagementScore",
+      "name": "Engagement Score",
+      "type": "service",
+      "layer": "analytics",
+      "path": "src/analytics/EngagementScore.mjs",
+      "purpose": "Engagement scoring",
+      "status": "active",
+      "publicApis": [
+        "engagementScore",
+        "engagementLevel"
+      ]
+    },
+    {
+      "id": "analytics.retentionPatternLearner",
+      "name": "Retention Pattern Learner",
+      "type": "service",
+      "layer": "analytics",
+      "path": "src/analytics/RetentionPatternLearner.mjs",
+      "purpose": "Learn retention patterns",
+      "status": "active",
+      "publicApis": [
+        "RetentionPatternLearner",
+        "SNAPSHOTS_FILE"
+      ],
+      "tests": [
+        "tests/analytics-learning.test.mjs"
+      ]
+    },
+    {
+      "id": "analytics.imagePerformanceMemory",
+      "name": "Image Performance Memory",
+      "type": "store",
+      "layer": "analytics",
+      "path": "src/analytics/ImagePerformanceMemory.mjs",
+      "purpose": "Thumbnail performance memory",
+      "status": "active",
+      "publicApis": [
+        "ImagePerformanceMemory",
+        "PERF"
+      ]
+    },
+    {
+      "id": "index.newsBroadcastEngine",
+      "name": "News Broadcast Engine",
+      "type": "entrypoint",
+      "layer": "index",
+      "path": "src/index.mjs",
+      "purpose": "Top-level broadcast engine",
+      "status": "active",
+      "publicApis": [
+        "NewsBroadcastEngine"
+      ],
+      "tests": [
+        "tests/engine-init-order.test.mjs"
+      ]
+    }
+  ]
+}

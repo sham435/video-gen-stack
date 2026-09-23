@@ -34,7 +34,8 @@
     "ai:full": "node .github/scripts/ai-helper.mjs full",
     "test": "node --test tests/*.test.mjs",
     "test:audio": "node --test tests/audio-loop-duration.test.mjs && node scripts/audio-director-smoke.mjs",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "architecture:validate": "node scripts/architecture-validate.mjs"
   },
   "dependencies": {
     "@contentauth/c2pa-node": "^0.9.1",
