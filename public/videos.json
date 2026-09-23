@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-23T14:48:50.338Z",
+  "updatedAt": "2026-09-23T15:14:18.790Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "hWXPKmmqQZw",
-      "title": "Discord re-launches age verification following backlash over privacy concerns | NEWS-MONSTER",
-      "description": "Discord re-launches age verification following backlash over privacy concerns | NEWS-MONSTER",
+      "id": "XCVBg4zNzoY",
+      "title": "These 3 Major Upgrades Could Be Heading to Your Next Flagship Android Phone | NEWS-MONSTER",
+      "description": "These 3 Major Upgrades Could Be Heading to Your Next Flagship Android Phone | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-23T14:48:09.687Z",
-      "publishedLabel": "Sep 23, 02:48 PM",
-      "thumbnail": "/thumbnails/hWXPKmmqQZw.png",
-      "thumbnailSha256": "0333ce0bdc0f293fd6970677c94acb52d700d09e1ea14f52f4dab6964054baca",
+      "publishedAt": "2026-09-23T15:14:18.426Z",
+      "publishedLabel": "Sep 23, 03:14 PM",
+      "thumbnail": "/thumbnails/XCVBg4zNzoY.png",
+      "thumbnailSha256": "323df496f1aa13e034968714613b7e13b608f2abb1723de560b6ea0471642526",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/hWXPKmmqQZw",
+      "youtubeUrl": "https://youtu.be/XCVBg4zNzoY",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "hWXPKmmqQZw",
-          "url": "https://youtu.be/hWXPKmmqQZw",
+          "videoId": "XCVBg4zNzoY",
+          "url": "https://youtu.be/XCVBg4zNzoY",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "0333ce0bdc0f293fd6970677c94acb52d700d09e1ea14f52f4dab6964054baca",
+            "sha256": "323df496f1aa13e034968714613b7e13b608f2abb1723de560b6ea0471642526",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,73 +41,19 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "0333ce0bdc0f293fd6970677c94acb52d700d09e1ea14f52f4dab6964054baca",
+            "sha256": "323df496f1aa13e034968714613b7e13b608f2abb1723de560b6ea0471642526",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/hWXPKmmqQZw.png"
+            "path": "public/thumbnails/XCVBg4zNzoY.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7508537682571165696"
-        }
-      }
-    },
-    {
-      "id": "MMmYsrWETDk",
-      "title": "Motorola Signature 27 Is Coming to the US to Rival Samsung’s Galaxy Phones | NEWS-MONSTER",
-      "description": "Motorola Signature 27 Is Coming to the US to Rival Samsung’s Galaxy Phones | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-23T14:44:34.756Z",
-      "publishedLabel": "Sep 23, 02:44 PM",
-      "thumbnail": "/thumbnails/MMmYsrWETDk.png",
-      "thumbnailSha256": "fe75c2dbd651e3caf91b1174f751d7aa37ec616d706df5e4e5e61e536c3a4760",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/MMmYsrWETDk",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "MMmYsrWETDk",
-          "url": "https://youtu.be/MMmYsrWETDk",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "fe75c2dbd651e3caf91b1174f751d7aa37ec616d706df5e4e5e61e536c3a4760",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 1,
-          "thumbnail": {
-            "sha256": "fe75c2dbd651e3caf91b1174f751d7aa37ec616d706df5e4e5e61e536c3a4760",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/MMmYsrWETDk.png"
-          }
-        },
-        "linkedin": {
-          "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7508536774319689728"
+          "postId": "urn:li:ugcPost:7508544264855928834"
         }
       }
     }
