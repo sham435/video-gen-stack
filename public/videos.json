@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-22T22:29:59.365Z",
+  "updatedAt": "2026-09-23T00:55:49.863Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "1mxFXsZ5bDM",
-      "title": "Qualcomm releases Android chip built for AI as memory shortage weighs on smartphone market | NEWS-MONSTER",
-      "description": "Qualcomm releases Android chip built for AI as memory shortage weighs on smartphone market | NEWS-MONSTER",
-      "category": "apple",
-      "publishedAt": "2026-09-22T22:27:17.244Z",
-      "publishedLabel": "Sep 22, 10:27 PM",
-      "thumbnail": "/thumbnails/1mxFXsZ5bDM.png",
-      "thumbnailSha256": "d6c75efa4513fd904d19cc5122934a589f0f3ccc79342f38c3e361eaf30246ca",
+      "id": "-uvsw1h-tSE",
+      "title": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
+      "description": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-23T00:55:49.376Z",
+      "publishedLabel": "Sep 23, 12:55 AM",
+      "thumbnail": "/thumbnails/-uvsw1h-tSE.png",
+      "thumbnailSha256": "a968cf8b9ddad8758a2746adef14d920916d2c71e621f3bc4384acccbb4df131",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/1mxFXsZ5bDM",
+      "youtubeUrl": "https://youtu.be/-uvsw1h-tSE",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "1mxFXsZ5bDM",
-          "url": "https://youtu.be/1mxFXsZ5bDM",
+          "videoId": "-uvsw1h-tSE",
+          "url": "https://youtu.be/-uvsw1h-tSE",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "d6c75efa4513fd904d19cc5122934a589f0f3ccc79342f38c3e361eaf30246ca",
+            "sha256": "a968cf8b9ddad8758a2746adef14d920916d2c71e621f3bc4384acccbb4df131",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,19 +41,73 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 1,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "d6c75efa4513fd904d19cc5122934a589f0f3ccc79342f38c3e361eaf30246ca",
+            "sha256": "a968cf8b9ddad8758a2746adef14d920916d2c71e621f3bc4384acccbb4df131",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/1mxFXsZ5bDM.png"
+            "path": "public/thumbnails/-uvsw1h-tSE.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7508290836451737600"
+          "postId": "urn:li:ugcPost:7508328213530664961"
+        }
+      }
+    },
+    {
+      "id": "SFuC_lqOU-c",
+      "title": "Qualcomm releases Android chip built for AI as memory shortage weighs on smartphone market | NEWS-MONSTER",
+      "description": "Qualcomm releases Android chip built for AI as memory shortage weighs on smartphone market | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-23T00:52:05.790Z",
+      "publishedLabel": "Sep 23, 12:52 AM",
+      "thumbnail": "/thumbnails/SFuC_lqOU-c.png",
+      "thumbnailSha256": "7ab4e746b993e1a7f140b4663c127f77148e114cf152b7932224b5e05291d649",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/SFuC_lqOU-c",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "SFuC_lqOU-c",
+          "url": "https://youtu.be/SFuC_lqOU-c",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "7ab4e746b993e1a7f140b4663c127f77148e114cf152b7932224b5e05291d649",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 3,
+          "thumbnail": {
+            "sha256": "7ab4e746b993e1a7f140b4663c127f77148e114cf152b7932224b5e05291d649",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/SFuC_lqOU-c.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7508327268969160705"
         }
       }
     }
