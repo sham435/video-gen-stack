@@ -1,32 +1,86 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-23T17:51:46.156Z",
+  "updatedAt": "2026-09-23T18:21:54.889Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "eQjxi5WJGoQ",
-      "title": "These 3 Major Upgrades Could Be Heading to Your Next Flagship Android Phone | NEWS-MONSTER",
-      "description": "These 3 Major Upgrades Could Be Heading to Your Next Flagship Android Phone | NEWS-MONSTER",
+      "id": "I_JcVEBF0Mg",
+      "title": "Spotify is giving you the keys to its recommendation algorithm with US launch of 'Taste Pr | NEWS-MONSTER",
+      "description": "Spotify is giving you the keys to its recommendation algorithm with US launch of 'Taste Pr | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-23T17:50:12.962Z",
-      "publishedLabel": "Sep 23, 05:50 PM",
-      "thumbnail": "/thumbnails/eQjxi5WJGoQ.png",
-      "thumbnailSha256": "2311eec3fc11e32c4a35282a5b83b5b3149612124c2b21e6b37af845a0592957",
+      "publishedAt": "2026-09-23T18:21:02.693Z",
+      "publishedLabel": "Sep 23, 06:21 PM",
+      "thumbnail": "/thumbnails/I_JcVEBF0Mg.png",
+      "thumbnailSha256": "d0d9c859f76f19ee14bd47b58d62750ddb565e2ec7d37bd1c1a2ccad1af5baaa",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/eQjxi5WJGoQ",
+      "youtubeUrl": "https://youtu.be/I_JcVEBF0Mg",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "eQjxi5WJGoQ",
-          "url": "https://youtu.be/eQjxi5WJGoQ",
+          "videoId": "I_JcVEBF0Mg",
+          "url": "https://youtu.be/I_JcVEBF0Mg",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "2311eec3fc11e32c4a35282a5b83b5b3149612124c2b21e6b37af845a0592957",
+            "sha256": "d0d9c859f76f19ee14bd47b58d62750ddb565e2ec7d37bd1c1a2ccad1af5baaa",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 3,
+          "thumbnail": {
+            "sha256": "d0d9c859f76f19ee14bd47b58d62750ddb565e2ec7d37bd1c1a2ccad1af5baaa",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/I_JcVEBF0Mg.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7508591254285340672"
+        }
+      }
+    },
+    {
+      "id": "gjT3oztsFYo",
+      "title": "These 3 Major Upgrades Could Be Heading to Your Next Flagship Android Phone | NEWS-MONSTER",
+      "description": "These 3 Major Upgrades Could Be Heading to Your Next Flagship Android Phone | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-23T18:18:12.591Z",
+      "publishedLabel": "Sep 23, 06:18 PM",
+      "thumbnail": "/thumbnails/gjT3oztsFYo.png",
+      "thumbnailSha256": "cce9ecb1ac125f9cfbeebb1de71a27fb1f0d3115a7b61413510df69f801d05c5",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/gjT3oztsFYo",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "gjT3oztsFYo",
+          "url": "https://youtu.be/gjT3oztsFYo",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "cce9ecb1ac125f9cfbeebb1de71a27fb1f0d3115a7b61413510df69f801d05c5",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,17 +97,17 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "2311eec3fc11e32c4a35282a5b83b5b3149612124c2b21e6b37af845a0592957",
+            "sha256": "cce9ecb1ac125f9cfbeebb1de71a27fb1f0d3115a7b61413510df69f801d05c5",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/eQjxi5WJGoQ.png"
+            "path": "public/thumbnails/gjT3oztsFYo.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7508583498220244992"
+          "postId": "urn:li:ugcPost:7508590536837210113"
         }
       }
     }
