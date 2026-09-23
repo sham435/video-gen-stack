@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-23T08:08:49.295Z",
+  "updatedAt": "2026-09-23T08:42:24.384Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "odlDFq4XJtA",
-      "title": "Motorola's new Signature 27 is among the first smartphone to use the Snapdragon 8 Elite Ex | NEWS-MONSTER",
-      "description": "Motorola's new Signature 27 is among the first smartphone to use the Snapdragon 8 Elite Ex | NEWS-MONSTER",
+      "id": "GWkGFui2mkE",
+      "title": "New Adtech From Microsoft Would Interrupt Your Game at 'Promoted Content Trigger Events' | NEWS-MONSTER",
+      "description": "New Adtech From Microsoft Would Interrupt Your Game at 'Promoted Content Trigger Events' | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-23T08:07:31.568Z",
-      "publishedLabel": "Sep 23, 08:07 AM",
-      "thumbnail": "/thumbnails/odlDFq4XJtA.png",
-      "thumbnailSha256": "c62beccb5c88439e5e23781bed215b05ca3b5e70464b455d513d4b0892b309e6",
+      "publishedAt": "2026-09-23T08:42:23.415Z",
+      "publishedLabel": "Sep 23, 08:42 AM",
+      "thumbnail": "/thumbnails/GWkGFui2mkE.png",
+      "thumbnailSha256": "1aee301b3c567851012caefe875448cd9020e09dbd0398253b2fff33cf96d9b4",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/odlDFq4XJtA",
+      "youtubeUrl": "https://youtu.be/GWkGFui2mkE",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "odlDFq4XJtA",
-          "url": "https://youtu.be/odlDFq4XJtA",
+          "videoId": "GWkGFui2mkE",
+          "url": "https://youtu.be/GWkGFui2mkE",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "c62beccb5c88439e5e23781bed215b05ca3b5e70464b455d513d4b0892b309e6",
+            "sha256": "1aee301b3c567851012caefe875448cd9020e09dbd0398253b2fff33cf96d9b4",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,19 +41,73 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 5,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "c62beccb5c88439e5e23781bed215b05ca3b5e70464b455d513d4b0892b309e6",
+            "sha256": "1aee301b3c567851012caefe875448cd9020e09dbd0398253b2fff33cf96d9b4",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/odlDFq4XJtA.png"
+            "path": "public/thumbnails/GWkGFui2mkE.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7508436862689239042"
+          "postId": "urn:li:ugcPost:7508445636690661376"
+        }
+      }
+    },
+    {
+      "id": "xTbffVaXj68",
+      "title": "Motorola's new Signature 27 is among the first smartphone to use the Snapdragon 8 Elite Ex | NEWS-MONSTER",
+      "description": "Motorola's new Signature 27 is among the first smartphone to use the Snapdragon 8 Elite Ex | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-23T08:38:37.927Z",
+      "publishedLabel": "Sep 23, 08:38 AM",
+      "thumbnail": "/thumbnails/xTbffVaXj68.png",
+      "thumbnailSha256": "e12c9b7035ce355ca0fd04822b3f73a9e82b4ef45ef75716b8134218ba23709e",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/xTbffVaXj68",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "xTbffVaXj68",
+          "url": "https://youtu.be/xTbffVaXj68",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "e12c9b7035ce355ca0fd04822b3f73a9e82b4ef45ef75716b8134218ba23709e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "e12c9b7035ce355ca0fd04822b3f73a9e82b4ef45ef75716b8134218ba23709e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/xTbffVaXj68.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7508444681941241856"
         }
       }
     }
