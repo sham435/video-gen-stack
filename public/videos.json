@@ -1,86 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-23T08:42:24.384Z",
+  "updatedAt": "2026-09-23T10:18:02.297Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "GWkGFui2mkE",
-      "title": "New Adtech From Microsoft Would Interrupt Your Game at 'Promoted Content Trigger Events' | NEWS-MONSTER",
-      "description": "New Adtech From Microsoft Would Interrupt Your Game at 'Promoted Content Trigger Events' | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-23T08:42:23.415Z",
-      "publishedLabel": "Sep 23, 08:42 AM",
-      "thumbnail": "/thumbnails/GWkGFui2mkE.png",
-      "thumbnailSha256": "1aee301b3c567851012caefe875448cd9020e09dbd0398253b2fff33cf96d9b4",
+      "id": "Ri7Dphx5pag",
+      "title": "Motorola Signature 27 Is Coming to the US to Rival Samsung’s Galaxy Phones | NEWS-MONSTER",
+      "description": "Motorola Signature 27 Is Coming to the US to Rival Samsung’s Galaxy Phones | NEWS-MONSTER",
+      "category": "apple",
+      "publishedAt": "2026-09-23T10:16:48.978Z",
+      "publishedLabel": "Sep 23, 10:16 AM",
+      "thumbnail": "/thumbnails/Ri7Dphx5pag.png",
+      "thumbnailSha256": "9a32ab0be4d66f6315c6c80227ad0383415cd67c30b38d608ea0fd1d85a2dcd5",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/GWkGFui2mkE",
+      "youtubeUrl": "https://youtu.be/Ri7Dphx5pag",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "GWkGFui2mkE",
-          "url": "https://youtu.be/GWkGFui2mkE",
+          "videoId": "Ri7Dphx5pag",
+          "url": "https://youtu.be/Ri7Dphx5pag",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "1aee301b3c567851012caefe875448cd9020e09dbd0398253b2fff33cf96d9b4",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "1aee301b3c567851012caefe875448cd9020e09dbd0398253b2fff33cf96d9b4",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/GWkGFui2mkE.png"
-          }
-        },
-        "linkedin": {
-          "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7508445636690661376"
-        }
-      }
-    },
-    {
-      "id": "xTbffVaXj68",
-      "title": "Motorola's new Signature 27 is among the first smartphone to use the Snapdragon 8 Elite Ex | NEWS-MONSTER",
-      "description": "Motorola's new Signature 27 is among the first smartphone to use the Snapdragon 8 Elite Ex | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-23T08:38:37.927Z",
-      "publishedLabel": "Sep 23, 08:38 AM",
-      "thumbnail": "/thumbnails/xTbffVaXj68.png",
-      "thumbnailSha256": "e12c9b7035ce355ca0fd04822b3f73a9e82b4ef45ef75716b8134218ba23709e",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/xTbffVaXj68",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "xTbffVaXj68",
-          "url": "https://youtu.be/xTbffVaXj68",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "e12c9b7035ce355ca0fd04822b3f73a9e82b4ef45ef75716b8134218ba23709e",
+            "sha256": "9a32ab0be4d66f6315c6c80227ad0383415cd67c30b38d608ea0fd1d85a2dcd5",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,17 +43,17 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "e12c9b7035ce355ca0fd04822b3f73a9e82b4ef45ef75716b8134218ba23709e",
+            "sha256": "9a32ab0be4d66f6315c6c80227ad0383415cd67c30b38d608ea0fd1d85a2dcd5",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/xTbffVaXj68.png"
+            "path": "public/thumbnails/Ri7Dphx5pag.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7508444681941241856"
+          "postId": "urn:li:ugcPost:7508469399901716480"
         }
       }
     }
