@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-23T04:38:53.018Z",
+  "updatedAt": "2026-09-23T05:26:50.344Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "XIKPvvtRtDw",
+      "id": "ZkE8L38O17c",
       "title": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
       "description": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-23T04:38:52.563Z",
-      "publishedLabel": "Sep 23, 04:38 AM",
-      "thumbnail": "/thumbnails/XIKPvvtRtDw.png",
-      "thumbnailSha256": "67b1dd32d4a4c7470a3e5d6b7fb4590f1ba8c908a0e9e4f0ed85c9519b1fbe4f",
+      "category": "techcrunch",
+      "publishedAt": "2026-09-23T05:26:49.910Z",
+      "publishedLabel": "Sep 23, 05:26 AM",
+      "thumbnail": "/thumbnails/ZkE8L38O17c.png",
+      "thumbnailSha256": "7d84f2582a36f1064e5a63a5bd125628db8e5d28b9fd3f511e6673f7e3230437",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/XIKPvvtRtDw",
+      "youtubeUrl": "https://youtu.be/ZkE8L38O17c",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "XIKPvvtRtDw",
-          "url": "https://youtu.be/XIKPvvtRtDw",
+          "videoId": "ZkE8L38O17c",
+          "url": "https://youtu.be/ZkE8L38O17c",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "67b1dd32d4a4c7470a3e5d6b7fb4590f1ba8c908a0e9e4f0ed85c9519b1fbe4f",
+            "sha256": "7d84f2582a36f1064e5a63a5bd125628db8e5d28b9fd3f511e6673f7e3230437",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,19 +41,19 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 6,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "67b1dd32d4a4c7470a3e5d6b7fb4590f1ba8c908a0e9e4f0ed85c9519b1fbe4f",
+            "sha256": "7d84f2582a36f1064e5a63a5bd125628db8e5d28b9fd3f511e6673f7e3230437",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/XIKPvvtRtDw.png"
+            "path": "public/thumbnails/ZkE8L38O17c.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7508384352091688960"
+          "postId": "urn:li:ugcPost:7508396423747428352"
         }
       }
     }
