@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-23T12:14:11.052Z",
+  "updatedAt": "2026-09-23T12:44:53.887Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "nic4-FT1iwU",
+      "id": "QEYW2KNYdGI",
       "title": "Motorola Signature 27 Is Coming to the US to Rival Samsung’s Galaxy Phones | NEWS-MONSTER",
       "description": "Motorola Signature 27 Is Coming to the US to Rival Samsung’s Galaxy Phones | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-23T12:13:29.303Z",
-      "publishedLabel": "Sep 23, 12:13 PM",
-      "thumbnail": "/thumbnails/nic4-FT1iwU.png",
-      "thumbnailSha256": "571f4fe5ca184b165ad61395b7427c7dc00bd697cd4462dec6bf710884028ef2",
+      "publishedAt": "2026-09-23T12:44:07.225Z",
+      "publishedLabel": "Sep 23, 12:44 PM",
+      "thumbnail": "/thumbnails/QEYW2KNYdGI.png",
+      "thumbnailSha256": "0f8d4642569d8a5587d8c292d18cee8b8182e79cd95fb8e6cd5a083eb4cfda8c",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/nic4-FT1iwU",
+      "youtubeUrl": "https://youtu.be/QEYW2KNYdGI",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "nic4-FT1iwU",
-          "url": "https://youtu.be/nic4-FT1iwU",
+          "videoId": "QEYW2KNYdGI",
+          "url": "https://youtu.be/QEYW2KNYdGI",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "571f4fe5ca184b165ad61395b7427c7dc00bd697cd4462dec6bf710884028ef2",
+            "sha256": "0f8d4642569d8a5587d8c292d18cee8b8182e79cd95fb8e6cd5a083eb4cfda8c",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,17 +43,17 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "571f4fe5ca184b165ad61395b7427c7dc00bd697cd4462dec6bf710884028ef2",
+            "sha256": "0f8d4642569d8a5587d8c292d18cee8b8182e79cd95fb8e6cd5a083eb4cfda8c",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/nic4-FT1iwU.png"
+            "path": "public/thumbnails/QEYW2KNYdGI.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7508498759094329345"
+          "postId": "urn:li:ugcPost:7508506463754137600"
         }
       }
     }
