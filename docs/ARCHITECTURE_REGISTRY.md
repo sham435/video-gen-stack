@@ -238,7 +238,7 @@ parameters, duplicate routes, duplicate constants, duplicate content types, miss
 
 Never bypass this gate before a pipeline commit.
 
-## 12. Validation Backlog (from v1, 2026-09-23 — 104 warnings, exit 0)
+## 12. Validation Backlog (from v1, 2026-09-23 — 105 warnings, exit 0)
 
 Actionable, NOT blocking. Each item = register or document; fix incrementally.
 
