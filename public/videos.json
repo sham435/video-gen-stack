@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-23T07:07:15.536Z",
+  "updatedAt": "2026-09-23T07:38:06.179Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "K0KzYDumw70",
-      "title": "New Mac mini drops support for aftermarket storage upgrades | NEWS-MONSTER",
-      "description": "New Mac mini drops support for aftermarket storage upgrades | NEWS-MONSTER",
+      "id": "WBmDwHoir3o",
+      "title": "Motorola's new Signature 27 is among the first smartphone to use the Snapdragon 8 Elite Ex | NEWS-MONSTER",
+      "description": "Motorola's new Signature 27 is among the first smartphone to use the Snapdragon 8 Elite Ex | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-23T07:07:14.927Z",
-      "publishedLabel": "Sep 23, 07:07 AM",
-      "thumbnail": "/thumbnails/K0KzYDumw70.png",
-      "thumbnailSha256": "3dd9ef68990e3ee2d00df5901d57624222c6e967b05ace94602cbecc0480045e",
+      "publishedAt": "2026-09-23T07:36:39.577Z",
+      "publishedLabel": "Sep 23, 07:36 AM",
+      "thumbnail": "/thumbnails/WBmDwHoir3o.png",
+      "thumbnailSha256": "56a38f6a1d9724abb12c3524ef00131589e5b6d3d055e3d88deeb45f24bba5f3",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/K0KzYDumw70",
+      "youtubeUrl": "https://youtu.be/WBmDwHoir3o",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "K0KzYDumw70",
-          "url": "https://youtu.be/K0KzYDumw70",
+          "videoId": "WBmDwHoir3o",
+          "url": "https://youtu.be/WBmDwHoir3o",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "3dd9ef68990e3ee2d00df5901d57624222c6e967b05ace94602cbecc0480045e",
+            "sha256": "56a38f6a1d9724abb12c3524ef00131589e5b6d3d055e3d88deeb45f24bba5f3",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,19 +41,19 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 4,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "3dd9ef68990e3ee2d00df5901d57624222c6e967b05ace94602cbecc0480045e",
+            "sha256": "56a38f6a1d9724abb12c3524ef00131589e5b6d3d055e3d88deeb45f24bba5f3",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/K0KzYDumw70.png"
+            "path": "public/thumbnails/WBmDwHoir3o.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7508421692290035712"
+          "postId": "urn:li:ugcPost:7508429078836690944"
         }
       }
     }
