@@ -15,6 +15,7 @@ This repository follows the **REGISTER FIRST → CONTRACT → IMPLEMENT → TEST
 | `docs/API_REGISTRY.md` | every REST route + auth/rate contract |
 | `docs/DATA_CONTRACTS.md` | article contract, SEO contract, allocation, ledger, events |
 | `docs/DEBUGGING_INDEX.md` | deterministic symptom → module → method → state |
+| `docs/BRAND_GUIDE.md` | permanent NEWS-MONSTER brand/SEO context (`#newsmonster`, `@news-monster`, channel URL/ID) |
 
 Gate: **`npm run architecture:validate`** must stay clean before a pipeline commit
 (module/tests/mirror consistency, exported APIs, env vars).
@@ -30,6 +31,8 @@ Two deploy targets: GitHub Actions (canonical `src/`) + Railway 30-min cron (`de
 | Date | Milestone | Evidence |
 |---|---|---|
 | 2026-09 | **Registration-first architecture docs + `architecture:validate` v1** — 5 registry docs, 87-module machine registry, validator (module/tests/mirror/env/API checks) | `docs/*.md`, `docs/registry/module-registry.json`, `scripts/architecture-validate.mjs` |
+| 2026-09 | **Canonical brand identity registered (BRAND-001)** — `#newsmonster` cross-platform tag, `@news-monster` handle (NOT `@newsmonster`), channel URL/ID locked; `docs/BRAND_GUIDE.md` permanent AI context + validator baseline FAIL rule + brand invariants in tests | `docs/BRAND_GUIDE.md`, `docs/ARCHITECTURE_REGISTRY.md` CHANGE-002 |
+| 2026-09 | **Production evidence — central LinkedIn SEO projection (BRAND-001)** — real published UGC post URN `urn:li:ugcPost:7508583498220244992` (post URL `https://www.linkedin.com/feed/update/urn:li:ugcPost:7508583498220244992/`); contract chain `seoMetadata → buildSeoMetadata → SocialPostGenerator → LinkedInPostFactory`; observed exactly 5 hashtags, baseline order `#technology #breaking #newsmonster`, `#newsmonster` invariant present, 2 story-specific mined hashtags (`#tech`, `#innovation` — evidence for this story, NOT the contract; contract = remaining slots are story-specific mined tags), `#` prefix applied only at presentation boundary; cap `MAX_LINKEDIN_HASHTAGS`; status **production-verified** | BRAND-001 / Commit C |
 | 2026-09 | **LinkedIn native video (embedded player) fixed** — GH Actions now authenticates with client creds, posts via UGC API; verified run 35784582948 → ugcPosts `7508272041268043776` / `7508272719264899073` | commit `7e44233` |
 | 2026-09 | **Central SEO metadata builder** (`seoMetadata.mjs`) — one sink for title/description/hashtags/youtubeTags/linkedinHashtags; baseline `#Technology #Breaking #NewsMonster` + 2–5 story tags, dedup + platform projection (LinkedIn 3–5, YouTube ≤15) | `src/publishing/seoMetadata.mjs` |
 | 2026-09 | **quote-format split** (QuoteVideoEngine/QuoteRenderer/QuoteLineAgent per format) | PR #201 |

@@ -193,6 +193,24 @@ for (const v of [...used].sort()) {
   if (!declared.has(v)) warn.push(`env var '${v}' used in source but absent from .env.example (register or document)`)
 }
 
+// ── brand invariants (docs/BRAND_GUIDE.md, CHANGE-002 / BRAND-001) ───────
+const seoBrandPath = join(ROOT, 'src/publishing/seoMetadata.mjs')
+try {
+  const seoSrc = readFileSync(seoBrandPath, 'utf-8')
+  const blMatch = seoSrc.match(/const\s+BASELINE_HASHTAGS\s*=\s*\[([^\]]*)\]/)
+  const baseline = blMatch
+    ? (blMatch[1].match(/'([^']+)'/g) || []).map((s) => s.slice(1, -1))
+    : []
+  if (!baseline.includes('newsmonster')) {
+    fail.push('BRAND: BASELINE_HASHTAGS must contain canonical brand tag newsmonster (docs/BRAND_GUIDE.md)')
+  }
+  if (!/const\s+MAX_LINKEDIN_HASHTAGS\s*=\s*\d+/.test(seoSrc)) {
+    warn.push('BRAND: MAX_LINKEDIN_HASHTAGS constant missing from seoMetadata.mjs (register in ARCHITECTURE_REGISTRY §7)')
+  }
+} catch {
+  warn.push('BRAND: could not read seoMetadata.mjs to verify brand invariants')
+}
+
 // ── report ────────────────────────────────────────────────────────────────
 let n = 0
 for (const w of [...new Set(warn)].sort()) { console.log(`  [warn] ${w}`); n++ }

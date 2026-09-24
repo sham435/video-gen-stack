@@ -2,7 +2,7 @@
 
 > Top-level architectural registry for NEWS-MONSTER. Entry point: `docs/STACK_INDEX.md`.
 > Companion registries: `docs/MODULE_REGISTRY.md`, `docs/API_REGISTRY.md`,
-> `docs/DATA_CONTRACTS.md`, `docs/DEBUGGING_INDEX.md`.
+> `docs/DATA_CONTRACTS.md`, `docs/DEBUGGING_INDEX.md`, `docs/BRAND_GUIDE.md`.
 >
 > Rule: **REGISTER FIRST → DESIGN CONTRACT → IMPLEMENT → TEST → VERIFY → MIRROR → UPDATE INDEX → COMMIT.**
 > No architectural object may exist only in source code.
@@ -60,6 +60,49 @@ linkedinHashtags
    ├── scripts/composer.mjs UPLOAD→PUBLISH (threads it)
    ├── tests/seo-metadata.test.mjs
    └── deploy-staging mirror (byte-identical)
+```
+
+### CHANGE-002 — Canonical brand identity + discovery context (implemented 2026-09-23)
+
+```yaml
+Change ID:        BRAND-001
+Reason:           NEWS-MONSTER identity rules were scattered/implicit. YouTube handle
+                  @newsmonster is UNAVAILABLE — @news-monster + channel URL/ID are the
+                  authoritative YouTube identity; #newsmonster is the cross-platform
+                  community/brand hashtag. Rules must be permanent AI context.
+Affected module(s): none (documentation + invariants + tests only)
+  - docs/BRAND_GUIDE.md                    (NEW — permanent brand/SEO AI context)
+New method(s):    none
+Changed method(s): none
+New constants (documented; registered here): YOUTUBE_CHANNEL_ID = UC4UC7z16EtqtI-TJzeGZKjQ,
+                   YOUTUBE_CHANNEL_URL = https://www.youtube.com/channel/UC4UC7z16EtqtI-TJzeGZKjQ,
+                   YOUTUBE_HANDLE = @news-monster, LANDING_PAGE =
+                   https://sham435.github.io/video-gen-stack/
+New configuration: none
+New environment variables:  none
+New database objects:       none
+New routes:                 none
+New events:                 none
+New tests:
+  - tests/seo-metadata.test.mjs → brand invariant: #newsmonster always in
+    linkedinHashtags (and posts), bare newsmonster in youtubeTags/hashtags
+New validator rule:
+  - scripts/architecture-validate.mjs → FAIL if BASELINE_HASHTAGS loses 'newsmonster';
+    warn if MAX_LINKEDIN_HASHTAGS constant disappears from seoMetadata.mjs
+Deprecation:      none
+```
+
+Change graph:
+
+```text
+#newsmonster
+   ├── src/publishing/seoMetadata.mjs ── BASELINE_HASHTAGS (canonical, order-locked)
+   ├── src/publishing/SocialPostGenerator.mjs (produces projections)
+   ├── src/publishing/LinkedInPostFactory.mjs (renders '#'-prefixed projection)
+   ├── src/publishing/YouTubeSEO.mjs (bare tags)
+   ├── docs/BRAND_GUIDE.md (permanent AI context)
+   ├── tests/seo-metadata.test.mjs (locked invariants)
+   └── scripts/architecture-validate.mjs (brand-baseline FAIL rule)
 ```
 
 ---
@@ -184,6 +227,10 @@ One concept = one canonical name. Do not create synonyms.
 | YT_MAX_TAGS | publishing.seoMetadata | YouTube snippet tag cap | 15 | no |
 | YT_MAX_TAG_CHARS | publishing.seoMetadata | per-tag char cap | 100 | no |
 | BASELINE_HASHTAGS | publishing.seoMetadata | mandatory brand tags | [technology, breaking, newsmonster] | no |
+| YOUTUBE_CHANNEL_ID | brand identity (BRAND-001) | authoritative YouTube channel | `UC4UC7z16EtqtI-TJzeGZKjQ` | no |
+| YOUTUBE_CHANNEL_URL | brand identity (BRAND-001) | authoritative YouTube link | `https://www.youtube.com/channel/UC4UC7z16EtqtI-TJzeGZKjQ` | no |
+| YOUTUBE_HANDLE | brand identity (BRAND-001) | YouTube handle — NOT `@newsmonster` (unavailable) | `@news-monster` | no |
+| LANDING_PAGE | brand identity (BRAND-001) | landing page | `https://sham435.github.io/video-gen-stack/` | no |
 | BRAND_TAGS | publishing.YouTubeSEO | YouTube brand tags | NEWS-MONSTER set | no |
 | DEFAULT_YOUTUBE_CATEGORY_ID | publishing.YouTubeSEO | fallback category | '28' | no |
 | RAPID_NEWS_DAILY_LIMIT | news.RapidNewsBudget | per-day fetch budget | (see module) | no |

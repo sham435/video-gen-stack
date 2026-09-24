@@ -164,3 +164,25 @@ test('seo metadata — story tags are mined from the article, not a fixed list',
   }
   assert.ok(seo.hashtags.length <= 15)
 })
+// ── brand invariant (docs/BRAND_GUIDE.md, BRAND-001) ─────────────────────
+test('brand — #newsmonster is the canonical identity in every projection', () => {
+  const seo = buildSeoMetadata(ARTICLE)
+  // LinkedIn presentation boundary: '#'-prefixed canonical brand tag
+  assert.ok(seo.linkedinHashtags.includes('#newsmonster'), 'linkedinHashtags must carry #newsmonster')
+  // YouTube: bare term
+  assert.ok(seo.youtubeTags.includes('newsmonster'), 'youtubeTags must carry bare newsmonster')
+  assert.ok(seo.hashtags.includes('newsmonster'), 'hashtags must carry bare newsmonster')
+
+  // Identity is not optional — even an empty article keeps the brand tag
+  const bare = buildSeoMetadata({})
+  assert.ok(bare.linkedinHashtags.includes('#newsmonster'), 'empty article still keeps #newsmonster')
+  assert.ok(bare.youtubeTags.includes('newsmonster'), 'empty article still keeps newsmonster')
+
+  // The published LinkedIn post actually renders it (via the single producer)
+  const g = new SocialPostGenerator()
+  const post = g.build(VIDEO_INPUT)
+  assert.ok(
+    post.platforms.linkedin.commentary.includes('#newsmonster'),
+    'promo LinkedIn commentary must render #newsmonster',
+  )
+})
