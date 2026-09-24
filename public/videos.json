@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-24T10:47:45.775Z",
+  "updatedAt": "2026-09-24T15:43:40.528Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "Y6viARSG8Ns",
-      "title": "Qualcomm announces Snapdragon Sound Elite Gen 2 for AI 'hearables,' even ones with cameras | NEWS-MONSTER",
-      "description": "Qualcomm announces Snapdragon Sound Elite Gen 2 for AI 'hearables,' even ones with cameras | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-09-24T10:47:45.124Z",
-      "publishedLabel": "Sep 24, 10:47 AM",
-      "thumbnail": "/thumbnails/Y6viARSG8Ns.png",
-      "thumbnailSha256": "839d5bb03154551f8df69d97d04e0c8a8fb79d815d796849bc92c4a83887b1b7",
+      "id": "zUbN6FaLXwQ",
+      "title": "Zuckerberg says Meta will lead on smartglasses privacy despite ‘pervert glasses’ criticism | NEWS-MONSTER",
+      "description": "Zuckerberg says Meta will lead on smartglasses privacy despite ‘pervert glasses’ criticism | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-24T15:40:59.014Z",
+      "publishedLabel": "Sep 24, 03:40 PM",
+      "thumbnail": "/thumbnails/zUbN6FaLXwQ.png",
+      "thumbnailSha256": "f9681dba65dd96f9d0242fec43a08a4981aa7d41edd06f4163317a9c3ac0834f",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/Y6viARSG8Ns",
+      "youtubeUrl": "https://youtu.be/zUbN6FaLXwQ",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "Y6viARSG8Ns",
-          "url": "https://youtu.be/Y6viARSG8Ns",
+          "videoId": "zUbN6FaLXwQ",
+          "url": "https://youtu.be/zUbN6FaLXwQ",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "839d5bb03154551f8df69d97d04e0c8a8fb79d815d796849bc92c4a83887b1b7",
+            "sha256": "f9681dba65dd96f9d0242fec43a08a4981aa7d41edd06f4163317a9c3ac0834f",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,73 +41,19 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 21,
+          "durationMs": 4,
           "thumbnail": {
-            "sha256": "839d5bb03154551f8df69d97d04e0c8a8fb79d815d796849bc92c4a83887b1b7",
+            "sha256": "f9681dba65dd96f9d0242fec43a08a4981aa7d41edd06f4163317a9c3ac0834f",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/Y6viARSG8Ns.png"
+            "path": "public/thumbnails/zUbN6FaLXwQ.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7508839569606459393"
-        }
-      }
-    },
-    {
-      "id": "X1blNQZqGnQ",
-      "title": "Meta announces new lightweight virtual reality glasses to one-up Apple’s Vision Pro | NEWS-MONSTER",
-      "description": "Meta announces new lightweight virtual reality glasses to one-up Apple’s Vision Pro | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-09-24T10:42:48.887Z",
-      "publishedLabel": "Sep 24, 10:42 AM",
-      "thumbnail": "/thumbnails/X1blNQZqGnQ.png",
-      "thumbnailSha256": "21d474ead2c0149e51734cc9da5dbf58d4040cdbc96e6856b9effdfc1a184b13",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/X1blNQZqGnQ",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "X1blNQZqGnQ",
-          "url": "https://youtu.be/X1blNQZqGnQ",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "21d474ead2c0149e51734cc9da5dbf58d4040cdbc96e6856b9effdfc1a184b13",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 6,
-          "thumbnail": {
-            "sha256": "21d474ead2c0149e51734cc9da5dbf58d4040cdbc96e6856b9effdfc1a184b13",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/X1blNQZqGnQ.png"
-          }
-        },
-        "linkedin": {
-          "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7508838328629305344"
+          "postId": "urn:li:ugcPost:7508913352585302016"
         }
       }
     }
