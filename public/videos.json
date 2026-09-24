@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-23T22:33:01.743Z",
+  "updatedAt": "2026-09-24T00:48:44.290Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "PxLaHJ7_9-M",
-      "title": "Microsoft refreshes its smaller Surface Pro and Laptop with Qualcomm’s X2 Plus | NEWS-MONSTER",
-      "description": "Microsoft refreshes its smaller Surface Pro and Laptop with Qualcomm’s X2 Plus | NEWS-MONSTER",
-      "category": "apple",
-      "publishedAt": "2026-09-23T22:30:33.712Z",
-      "publishedLabel": "Sep 23, 10:30 PM",
-      "thumbnail": "/thumbnails/PxLaHJ7_9-M.png",
-      "thumbnailSha256": "8a8656bceb8c00d00e6d908034ae84813da5dca9f73493ffe1d8c561d2742765",
+      "id": "Yk2zuZJpchQ",
+      "title": "Microsoft’s new 2026 Surface Pro 12-inch and Laptop 13-inch bring Snapdragon X2 Plus power | NEWS-MONSTER",
+      "description": "Microsoft’s new 2026 Surface Pro 12-inch and Laptop 13-inch bring Snapdragon X2 Plus power | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-24T00:48:43.551Z",
+      "publishedLabel": "Sep 24, 12:48 AM",
+      "thumbnail": "/thumbnails/Yk2zuZJpchQ.png",
+      "thumbnailSha256": "443fc1ed33386a36003e1575298a246ca25b3611fdd73071dc398046c22a4a23",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/PxLaHJ7_9-M",
+      "youtubeUrl": "https://youtu.be/Yk2zuZJpchQ",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "PxLaHJ7_9-M",
-          "url": "https://youtu.be/PxLaHJ7_9-M",
+          "videoId": "Yk2zuZJpchQ",
+          "url": "https://youtu.be/Yk2zuZJpchQ",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "8a8656bceb8c00d00e6d908034ae84813da5dca9f73493ffe1d8c561d2742765",
+            "sha256": "443fc1ed33386a36003e1575298a246ca25b3611fdd73071dc398046c22a4a23",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,19 +41,73 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 4,
+          "durationMs": 10,
           "thumbnail": {
-            "sha256": "8a8656bceb8c00d00e6d908034ae84813da5dca9f73493ffe1d8c561d2742765",
+            "sha256": "443fc1ed33386a36003e1575298a246ca25b3611fdd73071dc398046c22a4a23",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/PxLaHJ7_9-M.png"
+            "path": "public/thumbnails/Yk2zuZJpchQ.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7508654049114615810"
+          "postId": "urn:li:ugcPost:7508688817692823552"
+        }
+      }
+    },
+    {
+      "id": "vnI2L_6vW7s",
+      "title": "Zuckerberg to unveil new AI products as Meta’s Muse app tops charts | NEWS-MONSTER",
+      "description": "Zuckerberg to unveil new AI products as Meta’s Muse app tops charts | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-24T00:43:53.126Z",
+      "publishedLabel": "Sep 24, 12:43 AM",
+      "thumbnail": "/thumbnails/vnI2L_6vW7s.png",
+      "thumbnailSha256": "d2aa6e2d5a1c2e0295eae3f19e4f8423011b02f912616c9e0cf4d8b414a2dc50",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/vnI2L_6vW7s",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "vnI2L_6vW7s",
+          "url": "https://youtu.be/vnI2L_6vW7s",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "d2aa6e2d5a1c2e0295eae3f19e4f8423011b02f912616c9e0cf4d8b414a2dc50",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 3,
+          "thumbnail": {
+            "sha256": "d2aa6e2d5a1c2e0295eae3f19e4f8423011b02f912616c9e0cf4d8b414a2dc50",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/vnI2L_6vW7s.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7508687593786527744"
         }
       }
     }
