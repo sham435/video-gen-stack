@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-24T15:43:40.528Z",
+  "updatedAt": "2026-09-24T19:41:38.309Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "zUbN6FaLXwQ",
+      "id": "Ry8UGkiOhjg",
       "title": "Zuckerberg says Meta will lead on smartglasses privacy despite ‘pervert glasses’ criticism | NEWS-MONSTER",
       "description": "Zuckerberg says Meta will lead on smartglasses privacy despite ‘pervert glasses’ criticism | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-09-24T15:40:59.014Z",
-      "publishedLabel": "Sep 24, 03:40 PM",
-      "thumbnail": "/thumbnails/zUbN6FaLXwQ.png",
-      "thumbnailSha256": "f9681dba65dd96f9d0242fec43a08a4981aa7d41edd06f4163317a9c3ac0834f",
+      "category": "wsj",
+      "publishedAt": "2026-09-24T19:39:35.115Z",
+      "publishedLabel": "Sep 24, 07:39 PM",
+      "thumbnail": "/thumbnails/Ry8UGkiOhjg.png",
+      "thumbnailSha256": "8bfd3176e5c5f59592ec00f70ea28854f33d76abf3d4147a48dfa0f223e69156",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/zUbN6FaLXwQ",
+      "youtubeUrl": "https://youtu.be/Ry8UGkiOhjg",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "zUbN6FaLXwQ",
-          "url": "https://youtu.be/zUbN6FaLXwQ",
+          "videoId": "Ry8UGkiOhjg",
+          "url": "https://youtu.be/Ry8UGkiOhjg",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "f9681dba65dd96f9d0242fec43a08a4981aa7d41edd06f4163317a9c3ac0834f",
+            "sha256": "8bfd3176e5c5f59592ec00f70ea28854f33d76abf3d4147a48dfa0f223e69156",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,19 +41,19 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 4,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "f9681dba65dd96f9d0242fec43a08a4981aa7d41edd06f4163317a9c3ac0834f",
+            "sha256": "8bfd3176e5c5f59592ec00f70ea28854f33d76abf3d4147a48dfa0f223e69156",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/zUbN6FaLXwQ.png"
+            "path": "public/thumbnails/Ry8UGkiOhjg.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7508913352585302016"
+          "postId": "urn:li:ugcPost:7508973405648453632"
         }
       }
     }
