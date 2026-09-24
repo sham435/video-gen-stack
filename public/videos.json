@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-22T18:22:31.732Z",
+  "updatedAt": "2026-09-24T05:45:38.747Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "MT9_Ox0henE",
-      "title": "Beats 360 Headphones Review: Best-Performing Beats Yet, and They’re Modular | NEWS-MONSTER",
-      "description": "Beats 360 Headphones Review: Best-Performing Beats Yet, and They’re Modular | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-22T18:22:30.785Z",
-      "publishedLabel": "Sep 22, 06:22 PM",
-      "thumbnail": "/thumbnails/MT9_Ox0henE.png",
-      "thumbnailSha256": "0e0ff134f34de66796e78a4024b28e5369706cf23775c22506b19cd0951cdab4",
+      "id": "SQuIlSkHQcg",
+      "title": "Meta's Zuckerberg says Muse AI agent will take a small fee from transactions | NEWS-MONSTER",
+      "description": "Meta's Zuckerberg says Muse AI agent will take a small fee from transactions | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-09-24T05:45:37.797Z",
+      "publishedLabel": "Sep 24, 05:45 AM",
+      "thumbnail": "/thumbnails/SQuIlSkHQcg.png",
+      "thumbnailSha256": "829c405ab94150b16d50d4f2561e98c7b8221e6f2907b6173bf181c153592780",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/MT9_Ox0henE",
+      "youtubeUrl": "https://youtu.be/SQuIlSkHQcg",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "MT9_Ox0henE",
-          "url": "https://youtu.be/MT9_Ox0henE",
+          "videoId": "SQuIlSkHQcg",
+          "url": "https://youtu.be/SQuIlSkHQcg",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "0e0ff134f34de66796e78a4024b28e5369706cf23775c22506b19cd0951cdab4",
+            "sha256": "829c405ab94150b16d50d4f2561e98c7b8221e6f2907b6173bf181c153592780",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,46 +41,46 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 7,
           "thumbnail": {
-            "sha256": "0e0ff134f34de66796e78a4024b28e5369706cf23775c22506b19cd0951cdab4",
+            "sha256": "829c405ab94150b16d50d4f2561e98c7b8221e6f2907b6173bf181c153592780",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/MT9_Ox0henE.png"
+            "path": "public/thumbnails/SQuIlSkHQcg.png"
           }
         },
         "linkedin": {
-          "state": "PENDING",
-          "postId": null
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7508763540665556993"
         }
       }
     },
     {
-      "id": "EpExk15_k50",
-      "title": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
-      "description": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-22T18:19:22.497Z",
-      "publishedLabel": "Sep 22, 06:19 PM",
-      "thumbnail": "/thumbnails/EpExk15_k50.png",
-      "thumbnailSha256": "2e8aa06e6335a2335c7b88dd45d35db03ab8bb884fdfc5c2db36fcdb7510314a",
+      "id": "RZ3WnuwXR4Y",
+      "title": "Stock futures flat after soaring Treasury yields trigger market sell-off: Live updates | NEWS-MONSTER",
+      "description": "Stock futures flat after soaring Treasury yields trigger market sell-off: Live updates | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-09-24T05:41:44.905Z",
+      "publishedLabel": "Sep 24, 05:41 AM",
+      "thumbnail": "/thumbnails/RZ3WnuwXR4Y.png",
+      "thumbnailSha256": "85e9d07b516382251124c7ad74a79280ae3ad9ea1688116d80df6b97c516da79",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/EpExk15_k50",
+      "youtubeUrl": "https://youtu.be/RZ3WnuwXR4Y",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "EpExk15_k50",
-          "url": "https://youtu.be/EpExk15_k50",
+          "videoId": "RZ3WnuwXR4Y",
+          "url": "https://youtu.be/RZ3WnuwXR4Y",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "2e8aa06e6335a2335c7b88dd45d35db03ab8bb884fdfc5c2db36fcdb7510314a",
+            "sha256": "85e9d07b516382251124c7ad74a79280ae3ad9ea1688116d80df6b97c516da79",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,19 +95,19 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 4,
           "thumbnail": {
-            "sha256": "2e8aa06e6335a2335c7b88dd45d35db03ab8bb884fdfc5c2db36fcdb7510314a",
+            "sha256": "85e9d07b516382251124c7ad74a79280ae3ad9ea1688116d80df6b97c516da79",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/EpExk15_k50.png"
+            "path": "public/thumbnails/RZ3WnuwXR4Y.png"
           }
         },
         "linkedin": {
-          "state": "PENDING",
-          "postId": null
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7508762559479451650"
         }
       }
     }
