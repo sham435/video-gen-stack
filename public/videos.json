@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-24T19:41:38.309Z",
+  "updatedAt": "2026-09-24T22:57:32.417Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "Ry8UGkiOhjg",
-      "title": "Zuckerberg says Meta will lead on smartglasses privacy despite ‘pervert glasses’ criticism | NEWS-MONSTER",
-      "description": "Zuckerberg says Meta will lead on smartglasses privacy despite ‘pervert glasses’ criticism | NEWS-MONSTER",
+      "id": "9TON6XvKNmo",
+      "title": "Google rolling out Android 17 QPR2 Beta 6 for Pixel | NEWS-MONSTER",
+      "description": "Google rolling out Android 17 QPR2 Beta 6 for Pixel | NEWS-MONSTER",
       "category": "wsj",
-      "publishedAt": "2026-09-24T19:39:35.115Z",
-      "publishedLabel": "Sep 24, 07:39 PM",
-      "thumbnail": "/thumbnails/Ry8UGkiOhjg.png",
-      "thumbnailSha256": "8bfd3176e5c5f59592ec00f70ea28854f33d76abf3d4147a48dfa0f223e69156",
+      "publishedAt": "2026-09-24T22:57:31.948Z",
+      "publishedLabel": "Sep 24, 10:57 PM",
+      "thumbnail": "/thumbnails/9TON6XvKNmo.png",
+      "thumbnailSha256": "7c7ca39948099197f555c91fc6fc05ea245024b3e39ece5c5132cea45635f47f",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/Ry8UGkiOhjg",
+      "youtubeUrl": "https://youtu.be/9TON6XvKNmo",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "Ry8UGkiOhjg",
-          "url": "https://youtu.be/Ry8UGkiOhjg",
+          "videoId": "9TON6XvKNmo",
+          "url": "https://youtu.be/9TON6XvKNmo",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "8bfd3176e5c5f59592ec00f70ea28854f33d76abf3d4147a48dfa0f223e69156",
+            "sha256": "7c7ca39948099197f555c91fc6fc05ea245024b3e39ece5c5132cea45635f47f",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,19 +41,73 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 5,
           "thumbnail": {
-            "sha256": "8bfd3176e5c5f59592ec00f70ea28854f33d76abf3d4147a48dfa0f223e69156",
+            "sha256": "7c7ca39948099197f555c91fc6fc05ea245024b3e39ece5c5132cea45635f47f",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/Ry8UGkiOhjg.png"
+            "path": "public/thumbnails/9TON6XvKNmo.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7508973405648453632"
+          "postId": "urn:li:ugcPost:7509023228393164800"
+        }
+      }
+    },
+    {
+      "id": "ZE0aYQHqecE",
+      "title": "Meta Debuts Dedicated ‘Charm’ Device for Using Muse AI | NEWS-MONSTER",
+      "description": "Meta Debuts Dedicated ‘Charm’ Device for Using Muse AI | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-24T22:52:53.529Z",
+      "publishedLabel": "Sep 24, 10:52 PM",
+      "thumbnail": "/thumbnails/ZE0aYQHqecE.png",
+      "thumbnailSha256": "801f2c439fb4358700bf7fc2be5556824a5a15bac41c99ff016e25f4a59388f6",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/ZE0aYQHqecE",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "ZE0aYQHqecE",
+          "url": "https://youtu.be/ZE0aYQHqecE",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "801f2c439fb4358700bf7fc2be5556824a5a15bac41c99ff016e25f4a59388f6",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 5,
+          "thumbnail": {
+            "sha256": "801f2c439fb4358700bf7fc2be5556824a5a15bac41c99ff016e25f4a59388f6",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/ZE0aYQHqecE.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509022058698383361"
         }
       }
     }
