@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-24T22:57:32.417Z",
+  "updatedAt": "2026-09-25T01:09:29.062Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "9TON6XvKNmo",
-      "title": "Google rolling out Android 17 QPR2 Beta 6 for Pixel | NEWS-MONSTER",
-      "description": "Google rolling out Android 17 QPR2 Beta 6 for Pixel | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-09-24T22:57:31.948Z",
-      "publishedLabel": "Sep 24, 10:57 PM",
-      "thumbnail": "/thumbnails/9TON6XvKNmo.png",
-      "thumbnailSha256": "7c7ca39948099197f555c91fc6fc05ea245024b3e39ece5c5132cea45635f47f",
+      "id": "O-3UNMfbNxY",
+      "title": "Gemini 3.8 Live with Live Avatar gives Google’s AI a face | NEWS-MONSTER",
+      "description": "Gemini 3.8 Live with Live Avatar gives Google’s AI a face | NEWS-MONSTER",
+      "category": "apple",
+      "publishedAt": "2026-09-25T01:09:28.614Z",
+      "publishedLabel": "Sep 25, 01:09 AM",
+      "thumbnail": "/thumbnails/O-3UNMfbNxY.png",
+      "thumbnailSha256": "36057d99e4cbc4772cca68b00aa4702d7ab0b7ee0caacfc4a2e9ce64688d9046",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/9TON6XvKNmo",
+      "youtubeUrl": "https://youtu.be/O-3UNMfbNxY",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "9TON6XvKNmo",
-          "url": "https://youtu.be/9TON6XvKNmo",
+          "videoId": "O-3UNMfbNxY",
+          "url": "https://youtu.be/O-3UNMfbNxY",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "7c7ca39948099197f555c91fc6fc05ea245024b3e39ece5c5132cea45635f47f",
+            "sha256": "36057d99e4cbc4772cca68b00aa4702d7ab0b7ee0caacfc4a2e9ce64688d9046",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,46 +41,46 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 5,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "7c7ca39948099197f555c91fc6fc05ea245024b3e39ece5c5132cea45635f47f",
+            "sha256": "36057d99e4cbc4772cca68b00aa4702d7ab0b7ee0caacfc4a2e9ce64688d9046",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/9TON6XvKNmo.png"
+            "path": "public/thumbnails/O-3UNMfbNxY.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509023228393164800"
+          "postId": "urn:li:ugcPost:7509056433401962496"
         }
       }
     },
     {
-      "id": "ZE0aYQHqecE",
-      "title": "Meta Debuts Dedicated ‘Charm’ Device for Using Muse AI | NEWS-MONSTER",
-      "description": "Meta Debuts Dedicated ‘Charm’ Device for Using Muse AI | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-09-24T22:52:53.529Z",
-      "publishedLabel": "Sep 24, 10:52 PM",
-      "thumbnail": "/thumbnails/ZE0aYQHqecE.png",
-      "thumbnailSha256": "801f2c439fb4358700bf7fc2be5556824a5a15bac41c99ff016e25f4a59388f6",
+      "id": "pUOWg3ueNCM",
+      "title": "Meta gets to consumer AI device market before OpenAI, but Zuckerberg's strategy remains un | NEWS-MONSTER",
+      "description": "Meta gets to consumer AI device market before OpenAI, but Zuckerberg's strategy remains un | NEWS-MONSTER",
+      "category": "apple",
+      "publishedAt": "2026-09-25T01:05:01.999Z",
+      "publishedLabel": "Sep 25, 01:05 AM",
+      "thumbnail": "/thumbnails/pUOWg3ueNCM.png",
+      "thumbnailSha256": "1bbc5a72727ca55563b4f0a12fe048e9522ee7d10c49aeee52b7ed1eaec39731",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/ZE0aYQHqecE",
+      "youtubeUrl": "https://youtu.be/pUOWg3ueNCM",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "ZE0aYQHqecE",
-          "url": "https://youtu.be/ZE0aYQHqecE",
+          "videoId": "pUOWg3ueNCM",
+          "url": "https://youtu.be/pUOWg3ueNCM",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "801f2c439fb4358700bf7fc2be5556824a5a15bac41c99ff016e25f4a59388f6",
+            "sha256": "1bbc5a72727ca55563b4f0a12fe048e9522ee7d10c49aeee52b7ed1eaec39731",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,19 +95,19 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 5,
+          "durationMs": 6,
           "thumbnail": {
-            "sha256": "801f2c439fb4358700bf7fc2be5556824a5a15bac41c99ff016e25f4a59388f6",
+            "sha256": "1bbc5a72727ca55563b4f0a12fe048e9522ee7d10c49aeee52b7ed1eaec39731",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/ZE0aYQHqecE.png"
+            "path": "public/thumbnails/pUOWg3ueNCM.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509022058698383361"
+          "postId": "urn:li:ugcPost:7509055307147440128"
         }
       }
     }
