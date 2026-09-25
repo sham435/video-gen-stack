@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-25T01:09:29.062Z",
+  "updatedAt": "2026-09-25T05:54:11.858Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "O-3UNMfbNxY",
-      "title": "Gemini 3.8 Live with Live Avatar gives Google’s AI a face | NEWS-MONSTER",
-      "description": "Gemini 3.8 Live with Live Avatar gives Google’s AI a face | NEWS-MONSTER",
-      "category": "apple",
-      "publishedAt": "2026-09-25T01:09:28.614Z",
-      "publishedLabel": "Sep 25, 01:09 AM",
-      "thumbnail": "/thumbnails/O-3UNMfbNxY.png",
-      "thumbnailSha256": "36057d99e4cbc4772cca68b00aa4702d7ab0b7ee0caacfc4a2e9ce64688d9046",
+      "id": "-FOlzcQs08s",
+      "title": "Global bond sell-off deepens as oil holds above $100 - Financial Times | NEWS-MONSTER",
+      "description": "Global bond sell-off deepens as oil holds above $100 - Financial Times | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-09-25T05:50:22.101Z",
+      "publishedLabel": "Sep 25, 05:50 AM",
+      "thumbnail": "/thumbnails/-FOlzcQs08s.png",
+      "thumbnailSha256": "079a26fccd220001fd2ffd18e4cf15a2bac63fb3ec62de14faaca94e406a9ca7",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/O-3UNMfbNxY",
+      "youtubeUrl": "https://youtu.be/-FOlzcQs08s",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "O-3UNMfbNxY",
-          "url": "https://youtu.be/O-3UNMfbNxY",
+          "videoId": "-FOlzcQs08s",
+          "url": "https://youtu.be/-FOlzcQs08s",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "36057d99e4cbc4772cca68b00aa4702d7ab0b7ee0caacfc4a2e9ce64688d9046",
+            "sha256": "079a26fccd220001fd2ffd18e4cf15a2bac63fb3ec62de14faaca94e406a9ca7",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,71 +43,17 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "36057d99e4cbc4772cca68b00aa4702d7ab0b7ee0caacfc4a2e9ce64688d9046",
+            "sha256": "079a26fccd220001fd2ffd18e4cf15a2bac63fb3ec62de14faaca94e406a9ca7",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/O-3UNMfbNxY.png"
+            "path": "public/thumbnails/-FOlzcQs08s.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509056433401962496"
-        }
-      }
-    },
-    {
-      "id": "pUOWg3ueNCM",
-      "title": "Meta gets to consumer AI device market before OpenAI, but Zuckerberg's strategy remains un | NEWS-MONSTER",
-      "description": "Meta gets to consumer AI device market before OpenAI, but Zuckerberg's strategy remains un | NEWS-MONSTER",
-      "category": "apple",
-      "publishedAt": "2026-09-25T01:05:01.999Z",
-      "publishedLabel": "Sep 25, 01:05 AM",
-      "thumbnail": "/thumbnails/pUOWg3ueNCM.png",
-      "thumbnailSha256": "1bbc5a72727ca55563b4f0a12fe048e9522ee7d10c49aeee52b7ed1eaec39731",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/pUOWg3ueNCM",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "pUOWg3ueNCM",
-          "url": "https://youtu.be/pUOWg3ueNCM",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "1bbc5a72727ca55563b4f0a12fe048e9522ee7d10c49aeee52b7ed1eaec39731",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 6,
-          "thumbnail": {
-            "sha256": "1bbc5a72727ca55563b4f0a12fe048e9522ee7d10c49aeee52b7ed1eaec39731",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/pUOWg3ueNCM.png"
-          }
-        },
-        "linkedin": {
-          "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509055307147440128"
+          "postId": "urn:li:ugcPost:7509127120321777664"
         }
       }
     }
