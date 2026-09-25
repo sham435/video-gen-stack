@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-25T18:31:55.529Z",
+  "updatedAt": "2026-09-25T19:02:52.022Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "QrMFBdX7Lcs",
+      "id": "8FHa1Wtac9Y",
       "title": "Starfield 2 will likely never happen because the first wasn’t ‘anywhere near successful en | NEWS-MONSTER",
       "description": "Starfield 2 will likely never happen because the first wasn’t ‘anywhere near successful en | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-25T18:31:55.079Z",
-      "publishedLabel": "Sep 25, 06:31 PM",
-      "thumbnail": "/thumbnails/QrMFBdX7Lcs.png",
-      "thumbnailSha256": "47304c3318da640dddc7c6439229c05fb50ce6ecf744e259649db62ab79a2fe9",
+      "publishedAt": "2026-09-25T19:02:50.897Z",
+      "publishedLabel": "Sep 25, 07:02 PM",
+      "thumbnail": "/thumbnails/8FHa1Wtac9Y.png",
+      "thumbnailSha256": "68fb4afeb3dbcb43c4fe5dd002bfb7b996a01cffd3d7a2033eaa4652f5f52ffa",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/QrMFBdX7Lcs",
+      "youtubeUrl": "https://youtu.be/8FHa1Wtac9Y",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "QrMFBdX7Lcs",
-          "url": "https://youtu.be/QrMFBdX7Lcs",
+          "videoId": "8FHa1Wtac9Y",
+          "url": "https://youtu.be/8FHa1Wtac9Y",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "47304c3318da640dddc7c6439229c05fb50ce6ecf744e259649db62ab79a2fe9",
+            "sha256": "68fb4afeb3dbcb43c4fe5dd002bfb7b996a01cffd3d7a2033eaa4652f5f52ffa",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,46 +41,46 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 6,
           "thumbnail": {
-            "sha256": "47304c3318da640dddc7c6439229c05fb50ce6ecf744e259649db62ab79a2fe9",
+            "sha256": "68fb4afeb3dbcb43c4fe5dd002bfb7b996a01cffd3d7a2033eaa4652f5f52ffa",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/QrMFBdX7Lcs.png"
+            "path": "public/thumbnails/8FHa1Wtac9Y.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509318770704826368"
+          "postId": "urn:li:ugcPost:7509326550694121472"
         }
       }
     },
     {
-      "id": "HD4a1-vGZJ4",
+      "id": "eMjFnXsBfws",
       "title": "Rockstar Reveals $400 Grand Theft Auto 6 Box Of Stuff That Doesn’t Include The Game - Kota | NEWS-MONSTER",
       "description": "Rockstar Reveals $400 Grand Theft Auto 6 Box Of Stuff That Doesn’t Include The Game - Kota | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-25T18:27:32.530Z",
-      "publishedLabel": "Sep 25, 06:27 PM",
-      "thumbnail": "/thumbnails/HD4a1-vGZJ4.png",
-      "thumbnailSha256": "65724b990eee5e72a14e06555087b7f0f3fac19e0baa7b53348e134eee588512",
+      "publishedAt": "2026-09-25T18:58:15.534Z",
+      "publishedLabel": "Sep 25, 06:58 PM",
+      "thumbnail": "/thumbnails/eMjFnXsBfws.png",
+      "thumbnailSha256": "f16ab7419a411d88f4f4503d31f44df980f640a0e8a40836532af359efb61a31",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/HD4a1-vGZJ4",
+      "youtubeUrl": "https://youtu.be/eMjFnXsBfws",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "HD4a1-vGZJ4",
-          "url": "https://youtu.be/HD4a1-vGZJ4",
+          "videoId": "eMjFnXsBfws",
+          "url": "https://youtu.be/eMjFnXsBfws",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "65724b990eee5e72a14e06555087b7f0f3fac19e0baa7b53348e134eee588512",
+            "sha256": "f16ab7419a411d88f4f4503d31f44df980f640a0e8a40836532af359efb61a31",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,19 +95,19 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 26,
+          "durationMs": 29,
           "thumbnail": {
-            "sha256": "65724b990eee5e72a14e06555087b7f0f3fac19e0baa7b53348e134eee588512",
+            "sha256": "f16ab7419a411d88f4f4503d31f44df980f640a0e8a40836532af359efb61a31",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/HD4a1-vGZJ4.png"
+            "path": "public/thumbnails/eMjFnXsBfws.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509317661265412096"
+          "postId": "urn:li:ugcPost:7509325394768994304"
         }
       }
     }
