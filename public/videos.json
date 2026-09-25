@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-25T19:02:52.022Z",
+  "updatedAt": "2026-09-25T19:49:31.151Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "8FHa1Wtac9Y",
-      "title": "Starfield 2 will likely never happen because the first wasn’t ‘anywhere near successful en | NEWS-MONSTER",
-      "description": "Starfield 2 will likely never happen because the first wasn’t ‘anywhere near successful en | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-25T19:02:50.897Z",
-      "publishedLabel": "Sep 25, 07:02 PM",
-      "thumbnail": "/thumbnails/8FHa1Wtac9Y.png",
-      "thumbnailSha256": "68fb4afeb3dbcb43c4fe5dd002bfb7b996a01cffd3d7a2033eaa4652f5f52ffa",
+      "id": "Jev7pL9JCfk",
+      "title": "Wegovy Maker Novo Promises New Drugs to Boost Sales, but Investors Are Wary | NEWS-MONSTER",
+      "description": "Wegovy Maker Novo Promises New Drugs to Boost Sales, but Investors Are Wary | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-25T19:48:23.605Z",
+      "publishedLabel": "Sep 25, 07:48 PM",
+      "thumbnail": "/thumbnails/Jev7pL9JCfk.png",
+      "thumbnailSha256": "d917b14fa1cf96407c47f8a3e8d0b0bfccffa0c6366c3c12d3a8967ee3a31106",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/8FHa1Wtac9Y",
+      "youtubeUrl": "https://youtu.be/Jev7pL9JCfk",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "8FHa1Wtac9Y",
-          "url": "https://youtu.be/8FHa1Wtac9Y",
+          "videoId": "Jev7pL9JCfk",
+          "url": "https://youtu.be/Jev7pL9JCfk",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "68fb4afeb3dbcb43c4fe5dd002bfb7b996a01cffd3d7a2033eaa4652f5f52ffa",
+            "sha256": "d917b14fa1cf96407c47f8a3e8d0b0bfccffa0c6366c3c12d3a8967ee3a31106",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,46 +41,46 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 6,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "68fb4afeb3dbcb43c4fe5dd002bfb7b996a01cffd3d7a2033eaa4652f5f52ffa",
+            "sha256": "d917b14fa1cf96407c47f8a3e8d0b0bfccffa0c6366c3c12d3a8967ee3a31106",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/8FHa1Wtac9Y.png"
+            "path": "public/thumbnails/Jev7pL9JCfk.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509326550694121472"
+          "postId": "urn:li:ugcPost:7509338017430441984"
         }
       }
     },
     {
-      "id": "eMjFnXsBfws",
-      "title": "Rockstar Reveals $400 Grand Theft Auto 6 Box Of Stuff That Doesn’t Include The Game - Kota | NEWS-MONSTER",
-      "description": "Rockstar Reveals $400 Grand Theft Auto 6 Box Of Stuff That Doesn’t Include The Game - Kota | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-25T18:58:15.534Z",
-      "publishedLabel": "Sep 25, 06:58 PM",
-      "thumbnail": "/thumbnails/eMjFnXsBfws.png",
-      "thumbnailSha256": "f16ab7419a411d88f4f4503d31f44df980f640a0e8a40836532af359efb61a31",
+      "id": "XQrNr4l00hc",
+      "title": "General Mills Bets on New Products, Marketing to Drive Turnaround | NEWS-MONSTER",
+      "description": "General Mills Bets on New Products, Marketing to Drive Turnaround | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-25T19:44:38.357Z",
+      "publishedLabel": "Sep 25, 07:44 PM",
+      "thumbnail": "/thumbnails/XQrNr4l00hc.png",
+      "thumbnailSha256": "f18e1f8b440a002ffcdedf94e31060d845b78ccd5bd028483f3d73f6806a04db",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/eMjFnXsBfws",
+      "youtubeUrl": "https://youtu.be/XQrNr4l00hc",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "eMjFnXsBfws",
-          "url": "https://youtu.be/eMjFnXsBfws",
+          "videoId": "XQrNr4l00hc",
+          "url": "https://youtu.be/XQrNr4l00hc",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "f16ab7419a411d88f4f4503d31f44df980f640a0e8a40836532af359efb61a31",
+            "sha256": "f18e1f8b440a002ffcdedf94e31060d845b78ccd5bd028483f3d73f6806a04db",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -95,19 +95,19 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 29,
+          "durationMs": 3,
           "thumbnail": {
-            "sha256": "f16ab7419a411d88f4f4503d31f44df980f640a0e8a40836532af359efb61a31",
+            "sha256": "f18e1f8b440a002ffcdedf94e31060d845b78ccd5bd028483f3d73f6806a04db",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/eMjFnXsBfws.png"
+            "path": "public/thumbnails/XQrNr4l00hc.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509325394768994304"
+          "postId": "urn:li:ugcPost:7509337069870301184"
         }
       }
     }
