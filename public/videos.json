@@ -1,32 +1,86 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-25T15:53:13.602Z",
+  "updatedAt": "2026-09-25T16:14:35.789Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "KDvhelILzqI",
-      "title": "Bruttoinlandsprodukt: Brandenburger Wirtschaft wächst stärker als im Bundesschnitt | NEWS-MONSTER",
-      "description": "Bruttoinlandsprodukt: Brandenburger Wirtschaft wächst stärker als im Bundesschnitt | NEWS-MONSTER",
-      "category": "tesla",
-      "publishedAt": "2026-09-25T15:51:46.674Z",
-      "publishedLabel": "Sep 25, 03:51 PM",
-      "thumbnail": "/thumbnails/KDvhelILzqI.png",
-      "thumbnailSha256": "3b8540cb53b862356d66f72fb415d3c015a2257e6b05b386f7cbfc64ba9f1b3d",
+      "id": "J3BBEabKod0",
+      "title": "Digital Foundry: Fire Emblem Fortune’s Weave is 720p docked, 540p handheld and 30fps, but  | NEWS-MONSTER",
+      "description": "Digital Foundry: Fire Emblem Fortune’s Weave is 720p docked, 540p handheld and 30fps, but  | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-25T16:14:34.592Z",
+      "publishedLabel": "Sep 25, 04:14 PM",
+      "thumbnail": "/thumbnails/J3BBEabKod0.png",
+      "thumbnailSha256": "f4ebdcf9368eb40d74ecde1d44071d370240cf6fad6d0f20c93c00d304820614",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/KDvhelILzqI",
+      "youtubeUrl": "https://youtu.be/J3BBEabKod0",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "KDvhelILzqI",
-          "url": "https://youtu.be/KDvhelILzqI",
+          "videoId": "J3BBEabKod0",
+          "url": "https://youtu.be/J3BBEabKod0",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "3b8540cb53b862356d66f72fb415d3c015a2257e6b05b386f7cbfc64ba9f1b3d",
+            "sha256": "f4ebdcf9368eb40d74ecde1d44071d370240cf6fad6d0f20c93c00d304820614",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "f4ebdcf9368eb40d74ecde1d44071d370240cf6fad6d0f20c93c00d304820614",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/J3BBEabKod0.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509284197254160384"
+        }
+      }
+    },
+    {
+      "id": "dMDM0o00ItY",
+      "title": "10 Things I Wish I Knew When I Started ‘Control Resonant’ - Forbes | NEWS-MONSTER",
+      "description": "10 Things I Wish I Knew When I Started ‘Control Resonant’ - Forbes | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-25T16:10:16.000Z",
+      "publishedLabel": "Sep 25, 04:10 PM",
+      "thumbnail": "/thumbnails/dMDM0o00ItY.png",
+      "thumbnailSha256": "0bc9aa6490a6e37e033ff6aee50fba2dd5a667f2b7c9b8842b7b4ee2a9eadd3a",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/dMDM0o00ItY",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "dMDM0o00ItY",
+          "url": "https://youtu.be/dMDM0o00ItY",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "0bc9aa6490a6e37e033ff6aee50fba2dd5a667f2b7c9b8842b7b4ee2a9eadd3a",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,17 +97,17 @@
           "errors": [],
           "durationMs": 4,
           "thumbnail": {
-            "sha256": "3b8540cb53b862356d66f72fb415d3c015a2257e6b05b386f7cbfc64ba9f1b3d",
+            "sha256": "0bc9aa6490a6e37e033ff6aee50fba2dd5a667f2b7c9b8842b7b4ee2a9eadd3a",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/KDvhelILzqI.png"
+            "path": "public/thumbnails/dMDM0o00ItY.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509278470087135232"
+          "postId": "urn:li:ugcPost:7509283117258563585"
         }
       }
     }
