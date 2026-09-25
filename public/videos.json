@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-25T15:43:23.402Z",
+  "updatedAt": "2026-09-25T15:53:13.602Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "49PwzZui81c",
-      "title": "Digital Foundry: Fire Emblem Fortune’s Weave is 720p docked, 540p handheld and 30fps, but  | NEWS-MONSTER",
-      "description": "Digital Foundry: Fire Emblem Fortune’s Weave is 720p docked, 540p handheld and 30fps, but  | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-25T15:43:22.569Z",
-      "publishedLabel": "Sep 25, 03:43 PM",
-      "thumbnail": "/thumbnails/49PwzZui81c.png",
-      "thumbnailSha256": "d471971e840245670e2da9319e41f339d8162092c3509a6cee97d98e895fe411",
+      "id": "KDvhelILzqI",
+      "title": "Bruttoinlandsprodukt: Brandenburger Wirtschaft wächst stärker als im Bundesschnitt | NEWS-MONSTER",
+      "description": "Bruttoinlandsprodukt: Brandenburger Wirtschaft wächst stärker als im Bundesschnitt | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-25T15:51:46.674Z",
+      "publishedLabel": "Sep 25, 03:51 PM",
+      "thumbnail": "/thumbnails/KDvhelILzqI.png",
+      "thumbnailSha256": "3b8540cb53b862356d66f72fb415d3c015a2257e6b05b386f7cbfc64ba9f1b3d",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/49PwzZui81c",
+      "youtubeUrl": "https://youtu.be/KDvhelILzqI",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "49PwzZui81c",
-          "url": "https://youtu.be/49PwzZui81c",
+          "videoId": "KDvhelILzqI",
+          "url": "https://youtu.be/KDvhelILzqI",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "d471971e840245670e2da9319e41f339d8162092c3509a6cee97d98e895fe411",
+            "sha256": "3b8540cb53b862356d66f72fb415d3c015a2257e6b05b386f7cbfc64ba9f1b3d",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,73 +41,19 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 7,
+          "durationMs": 4,
           "thumbnail": {
-            "sha256": "d471971e840245670e2da9319e41f339d8162092c3509a6cee97d98e895fe411",
+            "sha256": "3b8540cb53b862356d66f72fb415d3c015a2257e6b05b386f7cbfc64ba9f1b3d",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/49PwzZui81c.png"
+            "path": "public/thumbnails/KDvhelILzqI.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509276348969037824"
-        }
-      }
-    },
-    {
-      "id": "ji04-J70gTI",
-      "title": "10 Things I Wish I Knew When I Started ‘Control Resonant’ - Forbes | NEWS-MONSTER",
-      "description": "10 Things I Wish I Knew When I Started ‘Control Resonant’ - Forbes | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-25T15:39:46.713Z",
-      "publishedLabel": "Sep 25, 03:39 PM",
-      "thumbnail": "/thumbnails/ji04-J70gTI.png",
-      "thumbnailSha256": "1db42c2b51d0da7e7cf75df2225037557239884d40080c9fa1d7fe81cf141f0c",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/ji04-J70gTI",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "ji04-J70gTI",
-          "url": "https://youtu.be/ji04-J70gTI",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "1db42c2b51d0da7e7cf75df2225037557239884d40080c9fa1d7fe81cf141f0c",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 6,
-          "thumbnail": {
-            "sha256": "1db42c2b51d0da7e7cf75df2225037557239884d40080c9fa1d7fe81cf141f0c",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/ji04-J70gTI.png"
-          }
-        },
-        "linkedin": {
-          "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509275448502063104"
+          "postId": "urn:li:ugcPost:7509278470087135232"
         }
       }
     }
