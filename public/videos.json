@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-25T05:54:11.858Z",
+  "updatedAt": "2026-09-25T10:51:45.815Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "-FOlzcQs08s",
-      "title": "Global bond sell-off deepens as oil holds above $100 - Financial Times | NEWS-MONSTER",
-      "description": "Global bond sell-off deepens as oil holds above $100 - Financial Times | NEWS-MONSTER",
-      "category": "business",
-      "publishedAt": "2026-09-25T05:50:22.101Z",
-      "publishedLabel": "Sep 25, 05:50 AM",
-      "thumbnail": "/thumbnails/-FOlzcQs08s.png",
-      "thumbnailSha256": "079a26fccd220001fd2ffd18e4cf15a2bac63fb3ec62de14faaca94e406a9ca7",
+      "id": "aIrpyHqDlZc",
+      "title": "Wegovy Maker Novo Promises New Drugs to Boost Sales, but Investors Are Wary | NEWS-MONSTER",
+      "description": "Wegovy Maker Novo Promises New Drugs to Boost Sales, but Investors Are Wary | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-25T10:50:25.909Z",
+      "publishedLabel": "Sep 25, 10:50 AM",
+      "thumbnail": "/thumbnails/aIrpyHqDlZc.png",
+      "thumbnailSha256": "a1ea839b2176b68a3ff6d7f3a273d9fad90ecc71670f7f426a3b0af5c460ae13",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/-FOlzcQs08s",
+      "youtubeUrl": "https://youtu.be/aIrpyHqDlZc",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "-FOlzcQs08s",
-          "url": "https://youtu.be/-FOlzcQs08s",
+          "videoId": "aIrpyHqDlZc",
+          "url": "https://youtu.be/aIrpyHqDlZc",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "079a26fccd220001fd2ffd18e4cf15a2bac63fb3ec62de14faaca94e406a9ca7",
+            "sha256": "a1ea839b2176b68a3ff6d7f3a273d9fad90ecc71670f7f426a3b0af5c460ae13",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,17 +43,71 @@
           "errors": [],
           "durationMs": 2,
           "thumbnail": {
-            "sha256": "079a26fccd220001fd2ffd18e4cf15a2bac63fb3ec62de14faaca94e406a9ca7",
+            "sha256": "a1ea839b2176b68a3ff6d7f3a273d9fad90ecc71670f7f426a3b0af5c460ae13",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/-FOlzcQs08s.png"
+            "path": "public/thumbnails/aIrpyHqDlZc.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509127120321777664"
+          "postId": "urn:li:ugcPost:7509202628552216576"
+        }
+      }
+    },
+    {
+      "id": "dgo_7AMP3qU",
+      "title": "General Mills Bets on New Products, Marketing to Drive Turnaround | NEWS-MONSTER",
+      "description": "General Mills Bets on New Products, Marketing to Drive Turnaround | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-25T10:46:43.390Z",
+      "publishedLabel": "Sep 25, 10:46 AM",
+      "thumbnail": "/thumbnails/dgo_7AMP3qU.png",
+      "thumbnailSha256": "f75ffd4d61326e6e1b3a1a3b8bcca2fead73731d54461cddf66c86e8f727f4cc",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/dgo_7AMP3qU",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "dgo_7AMP3qU",
+          "url": "https://youtu.be/dgo_7AMP3qU",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "f75ffd4d61326e6e1b3a1a3b8bcca2fead73731d54461cddf66c86e8f727f4cc",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 5,
+          "thumbnail": {
+            "sha256": "f75ffd4d61326e6e1b3a1a3b8bcca2fead73731d54461cddf66c86e8f727f4cc",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/dgo_7AMP3qU.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509201700767850496"
         }
       }
     }
