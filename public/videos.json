@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-25T19:49:31.151Z",
+  "updatedAt": "2026-09-25T23:05:11.213Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "Jev7pL9JCfk",
+      "id": "CRw4Nvkx37E",
       "title": "Wegovy Maker Novo Promises New Drugs to Boost Sales, but Investors Are Wary | NEWS-MONSTER",
       "description": "Wegovy Maker Novo Promises New Drugs to Boost Sales, but Investors Are Wary | NEWS-MONSTER",
       "category": "wsj",
-      "publishedAt": "2026-09-25T19:48:23.605Z",
-      "publishedLabel": "Sep 25, 07:48 PM",
-      "thumbnail": "/thumbnails/Jev7pL9JCfk.png",
-      "thumbnailSha256": "d917b14fa1cf96407c47f8a3e8d0b0bfccffa0c6366c3c12d3a8967ee3a31106",
+      "publishedAt": "2026-09-25T23:03:44.364Z",
+      "publishedLabel": "Sep 25, 11:03 PM",
+      "thumbnail": "/thumbnails/CRw4Nvkx37E.png",
+      "thumbnailSha256": "bb01b6b6168545e5dfd1b6f7673e6e9cf3376f7a8a98d29fb7ae35d89849638f",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/Jev7pL9JCfk",
+      "youtubeUrl": "https://youtu.be/CRw4Nvkx37E",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "Jev7pL9JCfk",
-          "url": "https://youtu.be/Jev7pL9JCfk",
+          "videoId": "CRw4Nvkx37E",
+          "url": "https://youtu.be/CRw4Nvkx37E",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "d917b14fa1cf96407c47f8a3e8d0b0bfccffa0c6366c3c12d3a8967ee3a31106",
+            "sha256": "bb01b6b6168545e5dfd1b6f7673e6e9cf3376f7a8a98d29fb7ae35d89849638f",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,46 +41,46 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 4,
           "thumbnail": {
-            "sha256": "d917b14fa1cf96407c47f8a3e8d0b0bfccffa0c6366c3c12d3a8967ee3a31106",
+            "sha256": "bb01b6b6168545e5dfd1b6f7673e6e9cf3376f7a8a98d29fb7ae35d89849638f",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/Jev7pL9JCfk.png"
+            "path": "public/thumbnails/CRw4Nvkx37E.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509338017430441984"
+          "postId": "urn:li:ugcPost:7509387175315169280"
         }
       }
     },
     {
-      "id": "XQrNr4l00hc",
+      "id": "igXZOpY9pDk",
       "title": "General Mills Bets on New Products, Marketing to Drive Turnaround | NEWS-MONSTER",
       "description": "General Mills Bets on New Products, Marketing to Drive Turnaround | NEWS-MONSTER",
       "category": "wsj",
-      "publishedAt": "2026-09-25T19:44:38.357Z",
-      "publishedLabel": "Sep 25, 07:44 PM",
-      "thumbnail": "/thumbnails/XQrNr4l00hc.png",
-      "thumbnailSha256": "f18e1f8b440a002ffcdedf94e31060d845b78ccd5bd028483f3d73f6806a04db",
+      "publishedAt": "2026-09-25T22:59:57.055Z",
+      "publishedLabel": "Sep 25, 10:59 PM",
+      "thumbnail": "/thumbnails/igXZOpY9pDk.png",
+      "thumbnailSha256": "e3bcf8ed9315dc804c2246dae8ea5c81780a05345a5d016624bbe4158a9ba857",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/XQrNr4l00hc",
+      "youtubeUrl": "https://youtu.be/igXZOpY9pDk",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "XQrNr4l00hc",
-          "url": "https://youtu.be/XQrNr4l00hc",
+          "videoId": "igXZOpY9pDk",
+          "url": "https://youtu.be/igXZOpY9pDk",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "f18e1f8b440a002ffcdedf94e31060d845b78ccd5bd028483f3d73f6806a04db",
+            "sha256": "e3bcf8ed9315dc804c2246dae8ea5c81780a05345a5d016624bbe4158a9ba857",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,17 +97,17 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "f18e1f8b440a002ffcdedf94e31060d845b78ccd5bd028483f3d73f6806a04db",
+            "sha256": "e3bcf8ed9315dc804c2246dae8ea5c81780a05345a5d016624bbe4158a9ba857",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/XQrNr4l00hc.png"
+            "path": "public/thumbnails/igXZOpY9pDk.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509337069870301184"
+          "postId": "urn:li:ugcPost:7509386219265581056"
         }
       }
     }
