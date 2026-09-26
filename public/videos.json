@@ -1,14 +1,122 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-26T14:47:21.288Z",
+  "updatedAt": "2026-09-26T18:20:39.696Z",
   "source": "production-ledger",
   "videos": [
+    {
+      "id": "o2YEG1DrKVc",
+      "title": "15 early October Prime Day tech deals, hand-picked by our gadget experts - Mashable | NEWS-MONSTER",
+      "description": "15 early October Prime Day tech deals, hand-picked by our gadget experts - Mashable | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-26T18:19:00.955Z",
+      "publishedLabel": "Sep 26, 06:19 PM",
+      "thumbnail": "/thumbnails/o2YEG1DrKVc.png",
+      "thumbnailSha256": "04c95ba9d7461e156e33d4be6b0e07652a8bea1e8f08229f11b27b10b9c6f977",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/o2YEG1DrKVc",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "o2YEG1DrKVc",
+          "url": "https://youtu.be/o2YEG1DrKVc",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "04c95ba9d7461e156e33d4be6b0e07652a8bea1e8f08229f11b27b10b9c6f977",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 3,
+          "thumbnail": {
+            "sha256": "04c95ba9d7461e156e33d4be6b0e07652a8bea1e8f08229f11b27b10b9c6f977",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/o2YEG1DrKVc.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509677910686035969"
+        }
+      }
+    },
+    {
+      "id": "xNyQmjX7oH0",
+      "title": "After seven years, a spacecraft company is releasing its Otters into the wild - Ars Techni | NEWS-MONSTER",
+      "description": "After seven years, a spacecraft company is releasing its Otters into the wild - Ars Techni | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-26T18:15:46.984Z",
+      "publishedLabel": "Sep 26, 06:15 PM",
+      "thumbnail": "/thumbnails/xNyQmjX7oH0.png",
+      "thumbnailSha256": "b3e4ed5b8127f99b9db5263436d9f64520dd3d4c7ba3cbf9256925c73f2453a6",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/xNyQmjX7oH0",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "xNyQmjX7oH0",
+          "url": "https://youtu.be/xNyQmjX7oH0",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "b3e4ed5b8127f99b9db5263436d9f64520dd3d4c7ba3cbf9256925c73f2453a6",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "b3e4ed5b8127f99b9db5263436d9f64520dd3d4c7ba3cbf9256925c73f2453a6",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/xNyQmjX7oH0.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509677097695563777"
+        }
+      }
+    },
     {
       "id": "rEdqQi-MbIk",
       "title": "The surprise winners from record-high diesel prices - The Washington Post | NEWS-MONSTER",
       "description": "The surprise winners from record-high diesel prices - The Washington Post | NEWS-MONSTER",
       "category": "business",
-      "publishedAt": "2026-09-26T14:44:42.286Z",
+      "publishedAt": "2026-09-26T14:44:42.287Z",
       "publishedLabel": "Sep 26, 02:44 PM",
       "thumbnail": "/thumbnails/rEdqQi-MbIk.png",
       "thumbnailSha256": "e112f5127fb871af9dcebb1211326d3380bb6f25861e9d775ab89417638b94ef",
@@ -18,7 +126,7 @@
       "youtubeUrl": "https://youtu.be/rEdqQi-MbIk",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
