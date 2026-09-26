@@ -1,14 +1,122 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-26T21:31:02.100Z",
+  "updatedAt": "2026-09-26T23:53:18.029Z",
   "source": "production-ledger",
   "videos": [
+    {
+      "id": "gsBUSNeyw8o",
+      "title": "Starbucks to close 6 Sacramento-area coffee shops, part of 250 nationwide closures - Abrid | NEWS-MONSTER",
+      "description": "Starbucks to close 6 Sacramento-area coffee shops, part of 250 nationwide closures - Abrid | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-09-26T23:53:17.545Z",
+      "publishedLabel": "Sep 26, 11:53 PM",
+      "thumbnail": "/thumbnails/gsBUSNeyw8o.png",
+      "thumbnailSha256": "c6318415666cbfb3bf224fb0d84e7d3a9744f81c33ec0cbc91e6ada34309fe6e",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/gsBUSNeyw8o",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "gsBUSNeyw8o",
+          "url": "https://youtu.be/gsBUSNeyw8o",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "c6318415666cbfb3bf224fb0d84e7d3a9744f81c33ec0cbc91e6ada34309fe6e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "c6318415666cbfb3bf224fb0d84e7d3a9744f81c33ec0cbc91e6ada34309fe6e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/gsBUSNeyw8o.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509762030321549312"
+        }
+      }
+    },
+    {
+      "id": "NKUFyk198gY",
+      "title": "Stock Market Today: Bond Yields Drop With Oil Prices Near End of Volatile Week — Live Upda | NEWS-MONSTER",
+      "description": "Stock Market Today: Bond Yields Drop With Oil Prices Near End of Volatile Week — Live Upda | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-09-26T23:49:30.179Z",
+      "publishedLabel": "Sep 26, 11:49 PM",
+      "thumbnail": "/thumbnails/NKUFyk198gY.png",
+      "thumbnailSha256": "6ebba2c38ad8c81e5fe6fb18e67a7ece5ccf48083e59f2a0808ce7441fbe3eca",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/NKUFyk198gY",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "NKUFyk198gY",
+          "url": "https://youtu.be/NKUFyk198gY",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "6ebba2c38ad8c81e5fe6fb18e67a7ece5ccf48083e59f2a0808ce7441fbe3eca",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 5,
+          "thumbnail": {
+            "sha256": "6ebba2c38ad8c81e5fe6fb18e67a7ece5ccf48083e59f2a0808ce7441fbe3eca",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/NKUFyk198gY.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509761080794034176"
+        }
+      }
+    },
     {
       "id": "OJayH5e4fD4",
       "title": "Apple Finally Shares tvOS 27 Release Notes With List of New Features - MacRumors | NEWS-MONSTER",
       "description": "Apple Finally Shares tvOS 27 Release Notes With List of New Features - MacRumors | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-26T21:31:01.432Z",
+      "publishedAt": "2026-09-26T21:31:01.433Z",
       "publishedLabel": "Sep 26, 09:31 PM",
       "thumbnail": "/thumbnails/OJayH5e4fD4.png",
       "thumbnailSha256": "173ee6b94143c5aa2433abe689f76991aa8f39dace6cc6ec41cc36580e9ad2b9",
@@ -18,7 +126,7 @@
       "youtubeUrl": "https://youtu.be/OJayH5e4fD4",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
@@ -72,7 +180,7 @@
       "youtubeUrl": "https://youtu.be/decxCQTL6lA",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
