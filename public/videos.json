@@ -1,140 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-26T03:10:37.025Z",
+  "updatedAt": "2026-09-26T03:40:38.777Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "m1SP0asckgo",
+      "id": "6rCnf33r6fM",
       "title": "Experts Disagree On GTA | NEWS-MONSTER",
       "description": "Experts Disagree On GTA | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-26T03:10:35.789Z",
-      "publishedLabel": "Sep 26, 03:10 AM",
-      "thumbnail": "/thumbnails/m1SP0asckgo.png",
-      "thumbnailSha256": "8d8c87e5ba07a815956e9236c7d054279086a59267cc5ccdd70b1b3b44846aa6",
+      "publishedAt": "2026-09-26T03:40:38.230Z",
+      "publishedLabel": "Sep 26, 03:40 AM",
+      "thumbnail": "/thumbnails/6rCnf33r6fM.png",
+      "thumbnailSha256": "7c89d9b5c3bbfd0244cbffe48455a1085dcac3cb47b15a617ad0d21f166a5cb6",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/m1SP0asckgo",
+      "youtubeUrl": "https://youtu.be/6rCnf33r6fM",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "m1SP0asckgo",
-          "url": "https://youtu.be/m1SP0asckgo",
+          "videoId": "6rCnf33r6fM",
+          "url": "https://youtu.be/6rCnf33r6fM",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "8d8c87e5ba07a815956e9236c7d054279086a59267cc5ccdd70b1b3b44846aa6",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 4,
-          "thumbnail": {
-            "sha256": "8d8c87e5ba07a815956e9236c7d054279086a59267cc5ccdd70b1b3b44846aa6",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/m1SP0asckgo.png"
-          }
-        },
-        "linkedin": {
-          "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509449301803098112"
-        }
-      }
-    },
-    {
-      "id": "ytxK0cI2zjE",
-      "title": "Meta gets to consumer AI device market before OpenAI, but Zuckerberg's strategy remains un | NEWS-MONSTER",
-      "description": "Meta gets to consumer AI device market before OpenAI, but Zuckerberg's strategy remains un | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-26T03:06:42.032Z",
-      "publishedLabel": "Sep 26, 03:06 AM",
-      "thumbnail": "/thumbnails/ytxK0cI2zjE.png",
-      "thumbnailSha256": "95e9000d369a0817a8df9ecf4835bca771a11e4364c76d3b476fb1561287be2f",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/ytxK0cI2zjE",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "ytxK0cI2zjE",
-          "url": "https://youtu.be/ytxK0cI2zjE",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "95e9000d369a0817a8df9ecf4835bca771a11e4364c76d3b476fb1561287be2f",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 6,
-          "thumbnail": {
-            "sha256": "95e9000d369a0817a8df9ecf4835bca771a11e4364c76d3b476fb1561287be2f",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/ytxK0cI2zjE.png"
-          }
-        },
-        "linkedin": {
-          "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509448322101878785"
-        }
-      }
-    },
-    {
-      "id": "MC0xH72yD8o",
-      "title": "Nvidia CEO Doesn't Care That Kids Are Forgetting Basic Math Because Of AI: 'I Actually Don | NEWS-MONSTER",
-      "description": "Nvidia CEO Doesn't Care That Kids Are Forgetting Basic Math Because Of AI: 'I Actually Don | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-26T03:02:51.270Z",
-      "publishedLabel": "Sep 26, 03:02 AM",
-      "thumbnail": "/thumbnails/MC0xH72yD8o.png",
-      "thumbnailSha256": "e7712d21c7701cd11d12441d7a30becc1914a015e71e9ab23ce6b88d56ba8038",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/MC0xH72yD8o",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "MC0xH72yD8o",
-          "url": "https://youtu.be/MC0xH72yD8o",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "e7712d21c7701cd11d12441d7a30becc1914a015e71e9ab23ce6b88d56ba8038",
+            "sha256": "7c89d9b5c3bbfd0244cbffe48455a1085dcac3cb47b15a617ad0d21f166a5cb6",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -151,17 +43,125 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "e7712d21c7701cd11d12441d7a30becc1914a015e71e9ab23ce6b88d56ba8038",
+            "sha256": "7c89d9b5c3bbfd0244cbffe48455a1085dcac3cb47b15a617ad0d21f166a5cb6",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/MC0xH72yD8o.png"
+            "path": "public/thumbnails/6rCnf33r6fM.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509447352068268032"
+          "postId": "urn:li:ugcPost:7509456861423812608"
+        }
+      }
+    },
+    {
+      "id": "unRcOxnyBjs",
+      "title": "15 early October Prime Day tech deals, hand-picked by our gadget experts - Mashable | NEWS-MONSTER",
+      "description": "15 early October Prime Day tech deals, hand-picked by our gadget experts - Mashable | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-26T03:36:51.382Z",
+      "publishedLabel": "Sep 26, 03:36 AM",
+      "thumbnail": "/thumbnails/unRcOxnyBjs.png",
+      "thumbnailSha256": "2342cb2c51f23708d76ec41c7648556feb4fab4c47c8956b28fd0f670d750421",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/unRcOxnyBjs",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "unRcOxnyBjs",
+          "url": "https://youtu.be/unRcOxnyBjs",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "2342cb2c51f23708d76ec41c7648556feb4fab4c47c8956b28fd0f670d750421",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "2342cb2c51f23708d76ec41c7648556feb4fab4c47c8956b28fd0f670d750421",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/unRcOxnyBjs.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509455909585285120"
+        }
+      }
+    },
+    {
+      "id": "BeBBTFt1jkc",
+      "title": "Nvidia CEO Doesn't Care That Kids Are Forgetting Basic Math Because Of AI: 'I Actually Don | NEWS-MONSTER",
+      "description": "Nvidia CEO Doesn't Care That Kids Are Forgetting Basic Math Because Of AI: 'I Actually Don | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-26T03:33:16.778Z",
+      "publishedLabel": "Sep 26, 03:33 AM",
+      "thumbnail": "/thumbnails/BeBBTFt1jkc.png",
+      "thumbnailSha256": "c4c6fcabf85a875d0a1e739c59c81bedf2c207dd6b1cbfadfe9d2751cb45a58e",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/BeBBTFt1jkc",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "BeBBTFt1jkc",
+          "url": "https://youtu.be/BeBBTFt1jkc",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "c4c6fcabf85a875d0a1e739c59c81bedf2c207dd6b1cbfadfe9d2751cb45a58e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 5,
+          "thumbnail": {
+            "sha256": "c4c6fcabf85a875d0a1e739c59c81bedf2c207dd6b1cbfadfe9d2751cb45a58e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/BeBBTFt1jkc.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509455002491424769"
         }
       }
     }
