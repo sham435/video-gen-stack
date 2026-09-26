@@ -1,8 +1,62 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-26T14:17:32.501Z",
+  "updatedAt": "2026-09-26T14:47:21.288Z",
   "source": "production-ledger",
   "videos": [
+    {
+      "id": "rEdqQi-MbIk",
+      "title": "The surprise winners from record-high diesel prices - The Washington Post | NEWS-MONSTER",
+      "description": "The surprise winners from record-high diesel prices - The Washington Post | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-09-26T14:44:42.286Z",
+      "publishedLabel": "Sep 26, 02:44 PM",
+      "thumbnail": "/thumbnails/rEdqQi-MbIk.png",
+      "thumbnailSha256": "e112f5127fb871af9dcebb1211326d3380bb6f25861e9d775ab89417638b94ef",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/rEdqQi-MbIk",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "rEdqQi-MbIk",
+          "url": "https://youtu.be/rEdqQi-MbIk",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "e112f5127fb871af9dcebb1211326d3380bb6f25861e9d775ab89417638b94ef",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "e112f5127fb871af9dcebb1211326d3380bb6f25861e9d775ab89417638b94ef",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/rEdqQi-MbIk.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509623964671922176"
+        }
+      }
+    },
     {
       "id": "xjhz3f08EfA",
       "title": "New army rules from Codex: Adeptus Custodes - warhammer-community.com | NEWS-MONSTER",
@@ -18,7 +72,7 @@
       "youtubeUrl": "https://youtu.be/xjhz3f08EfA",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
@@ -1950,7 +2004,7 @@
     {
       "id": "lZ4zp1nu5gE",
       "title": "Video lZ4zp1nu5gE",
-      "description": "",
+      "description": "Video lZ4zp1nu5gE — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-31T06:48:39.758Z",
       "publishedLabel": "Aug 31, 06:48 AM",
@@ -2004,7 +2058,7 @@
     {
       "id": "BGoUhtGRUnw",
       "title": "Video BGoUhtGRUnw",
-      "description": "",
+      "description": "Video BGoUhtGRUnw — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-31T06:45:43.079Z",
       "publishedLabel": "Aug 31, 06:45 AM",
@@ -2058,7 +2112,7 @@
     {
       "id": "GI8YeqqoxYM",
       "title": "Video GI8YeqqoxYM",
-      "description": "",
+      "description": "Video GI8YeqqoxYM — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-31T06:42:25.214Z",
       "publishedLabel": "Aug 31, 06:42 AM",
@@ -2112,7 +2166,7 @@
     {
       "id": "RvcYkNlup5o",
       "title": "Video RvcYkNlup5o",
-      "description": "",
+      "description": "Video RvcYkNlup5o — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-31T05:37:20.540Z",
       "publishedLabel": "Aug 31, 05:37 AM",
@@ -2166,7 +2220,7 @@
     {
       "id": "3jHex1hFMIY",
       "title": "Video 3jHex1hFMIY",
-      "description": "",
+      "description": "Video 3jHex1hFMIY — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-31T00:51:48.478Z",
       "publishedLabel": "Aug 31, 12:51 AM",
@@ -2220,7 +2274,7 @@
     {
       "id": "lc2sbLmQ6Mc",
       "title": "Video lc2sbLmQ6Mc",
-      "description": "",
+      "description": "Video lc2sbLmQ6Mc — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-31T00:49:24.854Z",
       "publishedLabel": "Aug 31, 12:49 AM",
@@ -2274,7 +2328,7 @@
     {
       "id": "Oelemrwm3PY",
       "title": "Video Oelemrwm3PY",
-      "description": "",
+      "description": "Video Oelemrwm3PY — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-30T22:32:44.719Z",
       "publishedLabel": "Aug 30, 10:32 PM",
@@ -2328,7 +2382,7 @@
     {
       "id": "ASk2dw4R2-k",
       "title": "Video ASk2dw4R2-k",
-      "description": "",
+      "description": "Video ASk2dw4R2-k — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-30T22:29:16.112Z",
       "publishedLabel": "Aug 30, 10:29 PM",
@@ -2382,7 +2436,7 @@
     {
       "id": "5rj00cm1F_o",
       "title": "Video 5rj00cm1F_o",
-      "description": "",
+      "description": "Video 5rj00cm1F_o — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-30T22:26:05.437Z",
       "publishedLabel": "Aug 30, 10:26 PM",
@@ -2436,7 +2490,7 @@
     {
       "id": "16SRUsKxFIQ",
       "title": "Video 16SRUsKxFIQ",
-      "description": "",
+      "description": "Video 16SRUsKxFIQ — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-30T21:05:00.648Z",
       "publishedLabel": "Aug 30, 09:05 PM",
@@ -2490,7 +2544,7 @@
     {
       "id": "tLrjkhEoDTQ",
       "title": "Video tLrjkhEoDTQ",
-      "description": "",
+      "description": "Video tLrjkhEoDTQ — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-30T19:46:44.482Z",
       "publishedLabel": "Aug 30, 07:46 PM",
@@ -2544,7 +2598,7 @@
     {
       "id": "Ur7JLR1_tWE",
       "title": "Video Ur7JLR1_tWE",
-      "description": "",
+      "description": "Video Ur7JLR1_tWE — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-30T19:44:22.576Z",
       "publishedLabel": "Aug 30, 07:44 PM",
@@ -2598,7 +2652,7 @@
     {
       "id": "ydI58LStMqQ",
       "title": "Video ydI58LStMqQ",
-      "description": "",
+      "description": "Video ydI58LStMqQ — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-30T19:41:54.393Z",
       "publishedLabel": "Aug 30, 07:41 PM",
@@ -2652,7 +2706,7 @@
     {
       "id": "kr_eErRNVyU",
       "title": "Video kr_eErRNVyU",
-      "description": "",
+      "description": "Video kr_eErRNVyU — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-30T17:50:39.371Z",
       "publishedLabel": "Aug 30, 05:50 PM",
@@ -2706,7 +2760,7 @@
     {
       "id": "AzncMCtUKGU",
       "title": "Video AzncMCtUKGU",
-      "description": "",
+      "description": "Video AzncMCtUKGU — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-30T17:48:10.445Z",
       "publishedLabel": "Aug 30, 05:48 PM",
@@ -2760,7 +2814,7 @@
     {
       "id": "i0tMzepEQmM",
       "title": "Video i0tMzepEQmM",
-      "description": "",
+      "description": "Video i0tMzepEQmM — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-30T17:45:22.089Z",
       "publishedLabel": "Aug 30, 05:45 PM",
@@ -2814,7 +2868,7 @@
     {
       "id": "yni0q1EvM-s",
       "title": "Video yni0q1EvM-s",
-      "description": "",
+      "description": "Video yni0q1EvM-s — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-30T15:11:57.365Z",
       "publishedLabel": "Aug 30, 03:11 PM",
@@ -3030,7 +3084,7 @@
     {
       "id": "ITp2j5hdD44",
       "title": "Video ITp2j5hdD44",
-      "description": "",
+      "description": "Video ITp2j5hdD44 — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-29T18:27:02.183Z",
       "publishedLabel": "Aug 29, 06:27 PM",
