@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-25T23:05:11.213Z",
+  "updatedAt": "2026-09-26T01:07:46.769Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "CRw4Nvkx37E",
-      "title": "Wegovy Maker Novo Promises New Drugs to Boost Sales, but Investors Are Wary | NEWS-MONSTER",
-      "description": "Wegovy Maker Novo Promises New Drugs to Boost Sales, but Investors Are Wary | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-09-25T23:03:44.364Z",
-      "publishedLabel": "Sep 25, 11:03 PM",
-      "thumbnail": "/thumbnails/CRw4Nvkx37E.png",
-      "thumbnailSha256": "bb01b6b6168545e5dfd1b6f7673e6e9cf3376f7a8a98d29fb7ae35d89849638f",
+      "id": "Zb-5rGd6VC8",
+      "title": "These camera apps give you more control over the iPhone 18 Pro’s aperture | NEWS-MONSTER",
+      "description": "These camera apps give you more control over the iPhone 18 Pro’s aperture | NEWS-MONSTER",
+      "category": "apple",
+      "publishedAt": "2026-09-26T01:07:46.265Z",
+      "publishedLabel": "Sep 26, 01:07 AM",
+      "thumbnail": "/thumbnails/Zb-5rGd6VC8.png",
+      "thumbnailSha256": "35d289a9955242873fb0d6541dec1d2740cb41ec8cd866ed453184353ed5504b",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/CRw4Nvkx37E",
+      "youtubeUrl": "https://youtu.be/Zb-5rGd6VC8",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "CRw4Nvkx37E",
-          "url": "https://youtu.be/CRw4Nvkx37E",
+          "videoId": "Zb-5rGd6VC8",
+          "url": "https://youtu.be/Zb-5rGd6VC8",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "bb01b6b6168545e5dfd1b6f7673e6e9cf3376f7a8a98d29fb7ae35d89849638f",
+            "sha256": "35d289a9955242873fb0d6541dec1d2740cb41ec8cd866ed453184353ed5504b",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,73 +41,19 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 4,
+          "durationMs": 6,
           "thumbnail": {
-            "sha256": "bb01b6b6168545e5dfd1b6f7673e6e9cf3376f7a8a98d29fb7ae35d89849638f",
+            "sha256": "35d289a9955242873fb0d6541dec1d2740cb41ec8cd866ed453184353ed5504b",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/CRw4Nvkx37E.png"
+            "path": "public/thumbnails/Zb-5rGd6VC8.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509387175315169280"
-        }
-      }
-    },
-    {
-      "id": "igXZOpY9pDk",
-      "title": "General Mills Bets on New Products, Marketing to Drive Turnaround | NEWS-MONSTER",
-      "description": "General Mills Bets on New Products, Marketing to Drive Turnaround | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-09-25T22:59:57.055Z",
-      "publishedLabel": "Sep 25, 10:59 PM",
-      "thumbnail": "/thumbnails/igXZOpY9pDk.png",
-      "thumbnailSha256": "e3bcf8ed9315dc804c2246dae8ea5c81780a05345a5d016624bbe4158a9ba857",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/igXZOpY9pDk",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "igXZOpY9pDk",
-          "url": "https://youtu.be/igXZOpY9pDk",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "e3bcf8ed9315dc804c2246dae8ea5c81780a05345a5d016624bbe4158a9ba857",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "e3bcf8ed9315dc804c2246dae8ea5c81780a05345a5d016624bbe4158a9ba857",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/igXZOpY9pDk.png"
-          }
-        },
-        "linkedin": {
-          "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509386219265581056"
+          "postId": "urn:li:ugcPost:7509418377606647808"
         }
       }
     }
