@@ -33,6 +33,10 @@ concurrency:
 permissions:
   contents: write
   issues: write
+  # gh workflow run (deploy cascade dispatch) needs the Actions API.
+  # workflow_dispatch triggered by GITHUB_TOKEN is the documented exception to
+  # GitHub's "no recursive workflow runs" rule, so this cannot loop.
+  actions: write
 
 jobs:
   validate:
@@ -172,6 +176,18 @@ jobs:
           else
             git config user.name "news-monster-bot"
             git config user.email "actions@users.noreply.github.com"
+            # Deploy cascade: bot pushes use GITHUB_TOKEN, which GitHub does NOT
+            # re-trigger for on:push workflows (anti-recursion rule). dispatch a
+            # workflow_dispatch on deploy.yml instead — the documented exception
+            # that DOES fire. Run only after a successful feed commit/push.
+            dispatch_deploy() {
+              if gh workflow run deploy.yml --ref main 2>/tmp/dispatch.err; then
+                echo "Dispatched deploy.yml — GitHub Pages will rebuild"
+              else
+                cat /tmp/dispatch.err
+                echo "⚠️  deploy.yml dispatch failed (Pages may be stale until a human push)"
+              fi
+            }
             git add public/videos.json public/video-detail.json public/videos public/thumbnails
             git add -f production/runs 2>/dev/null || true
             git commit -m "chore: refresh landing page video feed + production acceptance records"
@@ -193,11 +209,13 @@ jobs:
               git add -f production/runs 2>/dev/null || true
               if git diff --cached --quiet; then
                 echo "Feed change already present on origin/main — nothing to commit"
+                dispatch_deploy
                 exit 0
               fi
               git commit -m "chore: refresh landing page video feed" || true
               if git push origin main 2>/tmp/push.err; then
                 echo "Pushed on attempt $attempt"
+                dispatch_deploy
                 exit 0
               fi
               cat /tmp/push.err
@@ -206,7 +224,7 @@ jobs:
             done
             # Safety: force push the freshly generated feed if retries exhausted
             echo "All retries failed — force pushing with lease"
-            git push origin main --force-with-lease 2>/tmp/push.err && { echo "Force pushed"; exit 0; }
+            git push origin main --force-with-lease 2>/tmp/push.err && { echo "Force pushed"; dispatch_deploy; exit 0; }
             cat /tmp/push.err
             echo "Push failed after 3 attempts + force"
             exit 1

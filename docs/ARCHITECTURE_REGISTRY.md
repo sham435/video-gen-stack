@@ -105,6 +105,116 @@ Change graph:
    └── scripts/architecture-validate.mjs (brand-baseline FAIL rule)
 ```
 
+### CHANGE-003 — Landing page conversion CTA + UTM attribution (implemented 2026-09-25)
+
+```yaml
+Change ID:        LANDING-001
+Reason:           NEWS-MONSTER videos close with an end-screen CTA to the landing page.
+                  The landing page must receive + persist first-touch UTM attribution
+                  (?utm_source/utm_medium/utm_campaign/utm_content), forward it to
+                  internal conversion links, and expose a prominent "Free AI Tools &
+                  Downloads" CTA — while keeping the 16:9 video-feed architecture and
+                  the /video-gen-stack/ URL as the single authoritative destination
+                  (newsmonster.link is NOT a configured destination and is NOT introduced).
+Affected module(s):
+  - public/index.html                    (landing page — static artifact, GH Pages)
+New method(s):    readUtmFromUrl, loadStoredUtm, saveStoredUtm, captureUtm,
+                  decorateUtmLinks (all scoped inside the page's inline IIFE)
+Changed method(s): init (calls decorateUtmLinks), nav/CTA markup added
+New constants (documented here): UTM_KEYS = [utm_source, utm_medium, utm_campaign,
+                   utm_content]; UTM_STORAGE_KEY = 'newsmonster:utm:v1'
+New configuration: none
+New environment variables:  none
+New database objects:       none
+New routes:                 none
+New events:                 none
+New tests:
+  - tests/landing-page-utm.test.mjs (first-touch persistence, storage-unavailable,
+    link decoration, source-hygiene static checks)
+New deployment mirror:      none (public/index.html is NOT mirrored to deploy-staging;
+                   deploy-staging/public/ holds only videos.json + video-detail.json)
+BRAND-001:        preserved — NEWS-MONSTER name, #newsmonster policy untouched;
+                  16:9-only presentation unchanged; no @newsmonster fabrication.
+Deprecation:      none
+```
+
+Change graph:
+
+```text
+landing UTM
+   ├── public/index.html ── UTM_KEYS / UTM_STORAGE_KEY (client-side, first-touch)
+   ├── CTA band + nav CTA (href="./" → /video-gen-stack/, data-utm decorated)
+   ├── tests/landing-page-utm.test.mjs (behavioral + static)
+   └── docs/BRAND_GUIDE.md LANDING_PAGE constant (unchanged, authoritative)
+```
+
+---
+
+### CHANGE-004 — Accumulated production feed + deploy cascade repair (implemented 2026-09-26)
+
+```yaml
+Change ID:        FEED-001
+Reason:           The live landing page served only 2 videos because (a) bot feed
+                  commits were pushed with GITHUB_TOKEN → GitHub intentionally does
+                  NOT re-trigger on:push workflows, so deploy.yml never ran and the
+                  Pages site froze at the last human push (db607c0, carrying a stale
+                  Sep-22 videos.json); (b) update-videos.mjs preferred the per-run
+                  scratch ledger (output/data) over accumulated durable sources, so
+                  videos.json collapsed to the current run's 1-3 entries and the 31
+                  historical verified publications in production/runs/ were discarded.
+Affected module(s):
+  - scripts/update-videos.mjs            (feed accumulation — merges all durable sources)
+  - .github/workflows/publish-news.yml   (explicit deploy.yml dispatch after push)
+  - scripts/composer.mjs                 (unchanged — already writes ledger to data/ + output/data)
+New method(s):    mergeVerifiedPublicationSources (pure, exported, unit-tested),
+                  readAccumulatedPublications, toVideoEntry
+Changed method(s): refreshVideosFeed (accumulated, newest-first, dedupe by videoId)
+New configuration: publish-news.yml permissions += actions: write (needed for
+                   `gh workflow run`; workflow_dispatch via GITHUB_TOKEN is the
+                   documented anti-recursion exception and cannot loop)
+New environment variables:  none
+New database objects:       none
+New routes:                 none
+New events:                 workflow_dispatch on deploy.yml (already declared) fired
+                   explicitly by publish-news.yml only after a successful feed push
+New tests:
+  - tests/update-videos-accumulate.test.mjs (dedupe by videoId, rejection rules,
+    gallery metadata enrichment without fabrication, empty-source safety)
+New deployment mirror:      none
+BRAND-001:        preserved — no branding changes; production evidence untouched.
+Deprecation:      none
+```
+
+Change graph:
+
+```text
+production/runs/{jobDir}/publication.json  ◄── committed verification evidence (32 runs)
+             +
+PublicationLedger (data/ + output/data)    ◄── ledger (3-axis verified state)
+             +
+public/videos/{videoId}.json               ◄── committed gallery metadata (enrichment only)
+             │
+             ▼
+update-videos.mjs  (mergeVerifiedPublicationSources → dedupe → newest-first)
+             │
+             ▼
+public/videos.json  (accumulated verified feed, source=production-ledger)
+             │
+             ▼
+publish-news.yml bot commit/push (GITHUB_TOKEN)
+             │
+             ▼
+dispatch_deploy → gh workflow run deploy.yml --ref main  (workflow_dispatch, no recursion)
+             │
+             ▼
+GitHub Pages → NEWS-MONSTER landing page feed
+```
+
+Acceptance note (corrected): the earlier TREE-CONSERVED check proved db607c0 kept its
+original tree — but that tree itself contained the stale public/videos.json, so the
+conserved tree carried a feed regression. FEED-001 repairs both the feed accumulation
+and the deploy cascade rather than rewriting history.
+
 ---
 
 ## 2. Content-Type Registry (canonical, one concept = one name)
