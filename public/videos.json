@@ -1,86 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-26T06:17:28.807Z",
+  "updatedAt": "2026-09-26T06:51:44.821Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "7wDIwaXBlEE",
+      "id": "9RGFu6CmFEo",
       "title": "'We heard you, we heard media, we heard analysts': Motorola talks about why now is the tim | NEWS-MONSTER",
       "description": "'We heard you, we heard media, we heard analysts': Motorola talks about why now is the tim | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-26T06:17:28.180Z",
-      "publishedLabel": "Sep 26, 06:17 AM",
-      "thumbnail": "/thumbnails/7wDIwaXBlEE.png",
+      "publishedAt": "2026-09-26T06:51:43.938Z",
+      "publishedLabel": "Sep 26, 06:51 AM",
+      "thumbnail": "/thumbnails/9RGFu6CmFEo.png",
       "thumbnailSha256": "9212583a630b3a12e50c7785c7e7ed91feb2ec513eaf45b12298e0a2aafc3c33",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/7wDIwaXBlEE",
+      "youtubeUrl": "https://youtu.be/9RGFu6CmFEo",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "7wDIwaXBlEE",
-          "url": "https://youtu.be/7wDIwaXBlEE",
+          "videoId": "9RGFu6CmFEo",
+          "url": "https://youtu.be/9RGFu6CmFEo",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "9212583a630b3a12e50c7785c7e7ed91feb2ec513eaf45b12298e0a2aafc3c33",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "9212583a630b3a12e50c7785c7e7ed91feb2ec513eaf45b12298e0a2aafc3c33",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/7wDIwaXBlEE.png"
-          }
-        },
-        "linkedin": {
-          "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509496322761060352"
-        }
-      }
-    },
-    {
-      "id": "ERbRLKhPYhA",
-      "title": "15 early October Prime Day tech deals, hand-picked by our gadget experts - Mashable | NEWS-MONSTER",
-      "description": "15 early October Prime Day tech deals, hand-picked by our gadget experts - Mashable | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-26T06:14:39.399Z",
-      "publishedLabel": "Sep 26, 06:14 AM",
-      "thumbnail": "/thumbnails/ERbRLKhPYhA.png",
-      "thumbnailSha256": "9dad3e3a41c5ac201dbe2eb198fae8c6af57ef90cc12fbdf8c50d66de73ec3d2",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/ERbRLKhPYhA",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "ERbRLKhPYhA",
-          "url": "https://youtu.be/ERbRLKhPYhA",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "9dad3e3a41c5ac201dbe2eb198fae8c6af57ef90cc12fbdf8c50d66de73ec3d2",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,44 +43,44 @@
           "errors": [],
           "durationMs": 4,
           "thumbnail": {
-            "sha256": "9dad3e3a41c5ac201dbe2eb198fae8c6af57ef90cc12fbdf8c50d66de73ec3d2",
+            "sha256": "9212583a630b3a12e50c7785c7e7ed91feb2ec513eaf45b12298e0a2aafc3c33",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/ERbRLKhPYhA.png"
+            "path": "public/thumbnails/9RGFu6CmFEo.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509495617899991041"
+          "postId": "urn:li:ugcPost:7509504947609223168"
         }
       }
     },
     {
-      "id": "BvPCE-aAN68",
-      "title": "Nvidia CEO Doesn't Care That Kids Are Forgetting Basic Math Because Of AI: 'I Actually Don | NEWS-MONSTER",
-      "description": "Nvidia CEO Doesn't Care That Kids Are Forgetting Basic Math Because Of AI: 'I Actually Don | NEWS-MONSTER",
+      "id": "cAWOLmrYe7U",
+      "title": "15 early October Prime Day tech deals, hand-picked by our gadget experts - Mashable | NEWS-MONSTER",
+      "description": "15 early October Prime Day tech deals, hand-picked by our gadget experts - Mashable | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-26T06:12:02.502Z",
-      "publishedLabel": "Sep 26, 06:12 AM",
-      "thumbnail": "/thumbnails/BvPCE-aAN68.png",
-      "thumbnailSha256": "143520a22a57cdcd85f6fbf3b1a7b62e277b3e8fbd668e8e1875df32dad54ff7",
+      "publishedAt": "2026-09-26T06:47:36.371Z",
+      "publishedLabel": "Sep 26, 06:47 AM",
+      "thumbnail": "/thumbnails/cAWOLmrYe7U.png",
+      "thumbnailSha256": "a5f85dc28e2f7457b0c7a00ce3ef10998633bde220c6e0efe0e646a00f5d87a3",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/BvPCE-aAN68",
+      "youtubeUrl": "https://youtu.be/cAWOLmrYe7U",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "BvPCE-aAN68",
-          "url": "https://youtu.be/BvPCE-aAN68",
+          "videoId": "cAWOLmrYe7U",
+          "url": "https://youtu.be/cAWOLmrYe7U",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "143520a22a57cdcd85f6fbf3b1a7b62e277b3e8fbd668e8e1875df32dad54ff7",
+            "sha256": "a5f85dc28e2f7457b0c7a00ce3ef10998633bde220c6e0efe0e646a00f5d87a3",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -149,19 +95,73 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 2,
           "thumbnail": {
-            "sha256": "143520a22a57cdcd85f6fbf3b1a7b62e277b3e8fbd668e8e1875df32dad54ff7",
+            "sha256": "a5f85dc28e2f7457b0c7a00ce3ef10998633bde220c6e0efe0e646a00f5d87a3",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/BvPCE-aAN68.png"
+            "path": "public/thumbnails/cAWOLmrYe7U.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509494959918694400"
+          "postId": "urn:li:ugcPost:7509503910697623553"
+        }
+      }
+    },
+    {
+      "id": "FBRQjwybHMU",
+      "title": "Nvidia CEO Doesn't Care That Kids Are Forgetting Basic Math Because Of AI: 'I Actually Don | NEWS-MONSTER",
+      "description": "Nvidia CEO Doesn't Care That Kids Are Forgetting Basic Math Because Of AI: 'I Actually Don | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-26T06:43:53.823Z",
+      "publishedLabel": "Sep 26, 06:43 AM",
+      "thumbnail": "/thumbnails/FBRQjwybHMU.png",
+      "thumbnailSha256": "7f064a6466bc21c69d791c3fa556b5eb940277810506410adf8b633263c47431",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/FBRQjwybHMU",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "FBRQjwybHMU",
+          "url": "https://youtu.be/FBRQjwybHMU",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "7f064a6466bc21c69d791c3fa556b5eb940277810506410adf8b633263c47431",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "7f064a6466bc21c69d791c3fa556b5eb940277810506410adf8b633263c47431",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/FBRQjwybHMU.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509502975669714944"
         }
       }
     }
