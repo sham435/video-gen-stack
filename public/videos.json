@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-26T10:46:21.529Z",
+  "updatedAt": "2026-09-26T11:16:26.198Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "5PZPy7QQgLo",
-      "title": "Original Castlevania now available for iOS, Android for free - Gematsu | NEWS-MONSTER",
-      "description": "Original Castlevania now available for iOS, Android for free - Gematsu | NEWS-MONSTER",
+      "id": "7DzuNYF0fug",
+      "title": "Nintendo Reportedly Rejected A Ubisoft Zelda Spin-Off Starring Ganondorf - Nintendo Life | NEWS-MONSTER",
+      "description": "Nintendo Reportedly Rejected A Ubisoft Zelda Spin-Off Starring Ganondorf - Nintendo Life | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-26T10:45:03.761Z",
-      "publishedLabel": "Sep 26, 10:45 AM",
-      "thumbnail": "/thumbnails/5PZPy7QQgLo.png",
-      "thumbnailSha256": "f50d2764ebb677e32803c75880288713dcb315048fa8d54ca6abbe6d8ad8eeed",
+      "publishedAt": "2026-09-26T11:15:30.183Z",
+      "publishedLabel": "Sep 26, 11:15 AM",
+      "thumbnail": "/thumbnails/7DzuNYF0fug.png",
+      "thumbnailSha256": "01cd7a7c357a46679ce9b49adbc6385df9eeb1ef4fe8b1cda106f882d6047e0b",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/5PZPy7QQgLo",
+      "youtubeUrl": "https://youtu.be/7DzuNYF0fug",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "5PZPy7QQgLo",
-          "url": "https://youtu.be/5PZPy7QQgLo",
+          "videoId": "7DzuNYF0fug",
+          "url": "https://youtu.be/7DzuNYF0fug",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "f50d2764ebb677e32803c75880288713dcb315048fa8d54ca6abbe6d8ad8eeed",
+            "sha256": "01cd7a7c357a46679ce9b49adbc6385df9eeb1ef4fe8b1cda106f882d6047e0b",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,19 +41,19 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 5,
+          "durationMs": 6,
           "thumbnail": {
-            "sha256": "f50d2764ebb677e32803c75880288713dcb315048fa8d54ca6abbe6d8ad8eeed",
+            "sha256": "01cd7a7c357a46679ce9b49adbc6385df9eeb1ef4fe8b1cda106f882d6047e0b",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/5PZPy7QQgLo.png"
+            "path": "public/thumbnails/7DzuNYF0fug.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509563674907332609"
+          "postId": "urn:li:ugcPost:7509571326035099648"
         }
       }
     }
