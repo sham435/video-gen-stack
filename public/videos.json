@@ -1,14 +1,122 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-26T18:20:39.696Z",
+  "updatedAt": "2026-09-26T21:31:02.100Z",
   "source": "production-ledger",
   "videos": [
+    {
+      "id": "OJayH5e4fD4",
+      "title": "Apple Finally Shares tvOS 27 Release Notes With List of New Features - MacRumors | NEWS-MONSTER",
+      "description": "Apple Finally Shares tvOS 27 Release Notes With List of New Features - MacRumors | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-26T21:31:01.432Z",
+      "publishedLabel": "Sep 26, 09:31 PM",
+      "thumbnail": "/thumbnails/OJayH5e4fD4.png",
+      "thumbnailSha256": "173ee6b94143c5aa2433abe689f76991aa8f39dace6cc6ec41cc36580e9ad2b9",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/OJayH5e4fD4",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "OJayH5e4fD4",
+          "url": "https://youtu.be/OJayH5e4fD4",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "173ee6b94143c5aa2433abe689f76991aa8f39dace6cc6ec41cc36580e9ad2b9",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 11,
+          "thumbnail": {
+            "sha256": "173ee6b94143c5aa2433abe689f76991aa8f39dace6cc6ec41cc36580e9ad2b9",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/OJayH5e4fD4.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509726230712127489"
+        }
+      }
+    },
+    {
+      "id": "decxCQTL6lA",
+      "title": "Google ads caught delivering convincing scareware ads to unsuspecting users - Ars Technica | NEWS-MONSTER",
+      "description": "Google ads caught delivering convincing scareware ads to unsuspecting users - Ars Technica | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-26T21:27:32.732Z",
+      "publishedLabel": "Sep 26, 09:27 PM",
+      "thumbnail": "/thumbnails/decxCQTL6lA.png",
+      "thumbnailSha256": "9f493d4c54ff1169f0ee418b5d4cc4480348b47ac2e1698b42cb09e86c7ccc3a",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/decxCQTL6lA",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "decxCQTL6lA",
+          "url": "https://youtu.be/decxCQTL6lA",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "9f493d4c54ff1169f0ee418b5d4cc4480348b47ac2e1698b42cb09e86c7ccc3a",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "9f493d4c54ff1169f0ee418b5d4cc4480348b47ac2e1698b42cb09e86c7ccc3a",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/decxCQTL6lA.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509725353167278080"
+        }
+      }
+    },
     {
       "id": "o2YEG1DrKVc",
       "title": "15 early October Prime Day tech deals, hand-picked by our gadget experts - Mashable | NEWS-MONSTER",
       "description": "15 early October Prime Day tech deals, hand-picked by our gadget experts - Mashable | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-26T18:19:00.955Z",
+      "publishedAt": "2026-09-26T18:19:00.956Z",
       "publishedLabel": "Sep 26, 06:19 PM",
       "thumbnail": "/thumbnails/o2YEG1DrKVc.png",
       "thumbnailSha256": "04c95ba9d7461e156e33d4be6b0e07652a8bea1e8f08229f11b27b10b9c6f977",
@@ -18,7 +126,7 @@
       "youtubeUrl": "https://youtu.be/o2YEG1DrKVc",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
@@ -62,7 +170,7 @@
       "title": "After seven years, a spacecraft company is releasing its Otters into the wild - Ars Techni | NEWS-MONSTER",
       "description": "After seven years, a spacecraft company is releasing its Otters into the wild - Ars Techni | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-26T18:15:46.984Z",
+      "publishedAt": "2026-09-26T18:15:46.985Z",
       "publishedLabel": "Sep 26, 06:15 PM",
       "thumbnail": "/thumbnails/xNyQmjX7oH0.png",
       "thumbnailSha256": "b3e4ed5b8127f99b9db5263436d9f64520dd3d4c7ba3cbf9256925c73f2453a6",
@@ -72,7 +180,7 @@
       "youtubeUrl": "https://youtu.be/xNyQmjX7oH0",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
