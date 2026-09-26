@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-26T02:40:51.650Z",
+  "updatedAt": "2026-09-26T03:10:37.025Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "D_BpmN0A4oE",
+      "id": "m1SP0asckgo",
       "title": "Experts Disagree On GTA | NEWS-MONSTER",
       "description": "Experts Disagree On GTA | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-26T02:40:50.502Z",
-      "publishedLabel": "Sep 26, 02:40 AM",
-      "thumbnail": "/thumbnails/D_BpmN0A4oE.png",
-      "thumbnailSha256": "911a3b2115600cf720bbf09b83557ed657c1a21ceb28db40c481c4702bddc9dd",
+      "publishedAt": "2026-09-26T03:10:35.789Z",
+      "publishedLabel": "Sep 26, 03:10 AM",
+      "thumbnail": "/thumbnails/m1SP0asckgo.png",
+      "thumbnailSha256": "8d8c87e5ba07a815956e9236c7d054279086a59267cc5ccdd70b1b3b44846aa6",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/D_BpmN0A4oE",
+      "youtubeUrl": "https://youtu.be/m1SP0asckgo",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "D_BpmN0A4oE",
-          "url": "https://youtu.be/D_BpmN0A4oE",
+          "videoId": "m1SP0asckgo",
+          "url": "https://youtu.be/m1SP0asckgo",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "911a3b2115600cf720bbf09b83557ed657c1a21ceb28db40c481c4702bddc9dd",
+            "sha256": "8d8c87e5ba07a815956e9236c7d054279086a59267cc5ccdd70b1b3b44846aa6",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,46 +41,100 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 2,
+          "durationMs": 4,
           "thumbnail": {
-            "sha256": "911a3b2115600cf720bbf09b83557ed657c1a21ceb28db40c481c4702bddc9dd",
+            "sha256": "8d8c87e5ba07a815956e9236c7d054279086a59267cc5ccdd70b1b3b44846aa6",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/D_BpmN0A4oE.png"
+            "path": "public/thumbnails/m1SP0asckgo.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509441812458061824"
+          "postId": "urn:li:ugcPost:7509449301803098112"
         }
       }
     },
     {
-      "id": "8Rzg1ha5bW8",
+      "id": "ytxK0cI2zjE",
       "title": "Meta gets to consumer AI device market before OpenAI, but Zuckerberg's strategy remains un | NEWS-MONSTER",
       "description": "Meta gets to consumer AI device market before OpenAI, but Zuckerberg's strategy remains un | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-26T02:36:55.758Z",
-      "publishedLabel": "Sep 26, 02:36 AM",
-      "thumbnail": "/thumbnails/8Rzg1ha5bW8.png",
-      "thumbnailSha256": "f7c7bbbc7f6306afae9ea5e4196bfa580ef7fd25dca46d0d44df908359eba645",
+      "publishedAt": "2026-09-26T03:06:42.032Z",
+      "publishedLabel": "Sep 26, 03:06 AM",
+      "thumbnail": "/thumbnails/ytxK0cI2zjE.png",
+      "thumbnailSha256": "95e9000d369a0817a8df9ecf4835bca771a11e4364c76d3b476fb1561287be2f",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/8Rzg1ha5bW8",
+      "youtubeUrl": "https://youtu.be/ytxK0cI2zjE",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "8Rzg1ha5bW8",
-          "url": "https://youtu.be/8Rzg1ha5bW8",
+          "videoId": "ytxK0cI2zjE",
+          "url": "https://youtu.be/ytxK0cI2zjE",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "f7c7bbbc7f6306afae9ea5e4196bfa580ef7fd25dca46d0d44df908359eba645",
+            "sha256": "95e9000d369a0817a8df9ecf4835bca771a11e4364c76d3b476fb1561287be2f",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "95e9000d369a0817a8df9ecf4835bca771a11e4364c76d3b476fb1561287be2f",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/ytxK0cI2zjE.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509448322101878785"
+        }
+      }
+    },
+    {
+      "id": "MC0xH72yD8o",
+      "title": "Nvidia CEO Doesn't Care That Kids Are Forgetting Basic Math Because Of AI: 'I Actually Don | NEWS-MONSTER",
+      "description": "Nvidia CEO Doesn't Care That Kids Are Forgetting Basic Math Because Of AI: 'I Actually Don | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-26T03:02:51.270Z",
+      "publishedLabel": "Sep 26, 03:02 AM",
+      "thumbnail": "/thumbnails/MC0xH72yD8o.png",
+      "thumbnailSha256": "e7712d21c7701cd11d12441d7a30becc1914a015e71e9ab23ce6b88d56ba8038",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "16:9",
+      "youtubeUrl": "https://youtu.be/MC0xH72yD8o",
+      "verified": false,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "MC0xH72yD8o",
+          "url": "https://youtu.be/MC0xH72yD8o",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "e7712d21c7701cd11d12441d7a30becc1914a015e71e9ab23ce6b88d56ba8038",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -97,71 +151,17 @@
           "errors": [],
           "durationMs": 3,
           "thumbnail": {
-            "sha256": "f7c7bbbc7f6306afae9ea5e4196bfa580ef7fd25dca46d0d44df908359eba645",
+            "sha256": "e7712d21c7701cd11d12441d7a30becc1914a015e71e9ab23ce6b88d56ba8038",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/8Rzg1ha5bW8.png"
+            "path": "public/thumbnails/MC0xH72yD8o.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509440821172285440"
-        }
-      }
-    },
-    {
-      "id": "xVDqOA78LUA",
-      "title": "Nvidia CEO Doesn't Care That Kids Are Forgetting Basic Math Because Of AI: 'I Actually Don | NEWS-MONSTER",
-      "description": "Nvidia CEO Doesn't Care That Kids Are Forgetting Basic Math Because Of AI: 'I Actually Don | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-26T02:32:59.058Z",
-      "publishedLabel": "Sep 26, 02:32 AM",
-      "thumbnail": "/thumbnails/xVDqOA78LUA.png",
-      "thumbnailSha256": "d2321fe94f06e668b216a73ec478e790e48b5b372e4b093ec731d032517a1e69",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/xVDqOA78LUA",
-      "verified": false,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "xVDqOA78LUA",
-          "url": "https://youtu.be/xVDqOA78LUA",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "d2321fe94f06e668b216a73ec478e790e48b5b372e4b093ec731d032517a1e69",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 5,
-          "thumbnail": {
-            "sha256": "d2321fe94f06e668b216a73ec478e790e48b5b372e4b093ec731d032517a1e69",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/xVDqOA78LUA.png"
-          }
-        },
-        "linkedin": {
-          "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509439830913716224"
+          "postId": "urn:li:ugcPost:7509447352068268032"
         }
       }
     }
