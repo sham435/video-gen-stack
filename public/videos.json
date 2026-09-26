@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-26T10:32:12.996Z",
+  "updatedAt": "2026-09-26T10:46:21.529Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "j4RtMj2kJfo",
-      "title": "These camera apps give you more control over the iPhone 18 Pro’s aperture | NEWS-MONSTER",
-      "description": "These camera apps give you more control over the iPhone 18 Pro’s aperture | NEWS-MONSTER",
-      "category": "apple",
-      "publishedAt": "2026-09-26T10:32:12.528Z",
-      "publishedLabel": "Sep 26, 10:32 AM",
-      "thumbnail": "/thumbnails/j4RtMj2kJfo.png",
-      "thumbnailSha256": "ddb326f5984efa1e8671bd02cfc573584ba11787066b393ae78de6ebf45f4c7c",
+      "id": "5PZPy7QQgLo",
+      "title": "Original Castlevania now available for iOS, Android for free - Gematsu | NEWS-MONSTER",
+      "description": "Original Castlevania now available for iOS, Android for free - Gematsu | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-26T10:45:03.761Z",
+      "publishedLabel": "Sep 26, 10:45 AM",
+      "thumbnail": "/thumbnails/5PZPy7QQgLo.png",
+      "thumbnailSha256": "f50d2764ebb677e32803c75880288713dcb315048fa8d54ca6abbe6d8ad8eeed",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "16:9",
-      "youtubeUrl": "https://youtu.be/j4RtMj2kJfo",
+      "youtubeUrl": "https://youtu.be/5PZPy7QQgLo",
       "verified": false,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "j4RtMj2kJfo",
-          "url": "https://youtu.be/j4RtMj2kJfo",
+          "videoId": "5PZPy7QQgLo",
+          "url": "https://youtu.be/5PZPy7QQgLo",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "ddb326f5984efa1e8671bd02cfc573584ba11787066b393ae78de6ebf45f4c7c",
+            "sha256": "f50d2764ebb677e32803c75880288713dcb315048fa8d54ca6abbe6d8ad8eeed",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -43,17 +43,17 @@
           "errors": [],
           "durationMs": 5,
           "thumbnail": {
-            "sha256": "ddb326f5984efa1e8671bd02cfc573584ba11787066b393ae78de6ebf45f4c7c",
+            "sha256": "f50d2764ebb677e32803c75880288713dcb315048fa8d54ca6abbe6d8ad8eeed",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/j4RtMj2kJfo.png"
+            "path": "public/thumbnails/5PZPy7QQgLo.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509560435566735360"
+          "postId": "urn:li:ugcPost:7509563674907332609"
         }
       }
     }
