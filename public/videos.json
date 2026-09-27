@@ -1,14 +1,176 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-26T23:53:18.029Z",
+  "updatedAt": "2026-09-27T02:22:59.459Z",
   "source": "production-ledger",
   "videos": [
+    {
+      "id": "tsgPaIlhefc",
+      "title": "Watch: When did iPads get as expensive as MacBooks? | NEWS-MONSTER",
+      "description": "Watch: When did iPads get as expensive as MacBooks? | NEWS-MONSTER",
+      "category": "techcrunch",
+      "publishedAt": "2026-09-27T02:22:58.252Z",
+      "publishedLabel": "Sep 27, 02:22 AM",
+      "thumbnail": "/thumbnails/tsgPaIlhefc.png",
+      "thumbnailSha256": "a97f25bebb3e1fb0e095fdced077d90fc93c9f56aa633fde4200ca60edd8916a",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/tsgPaIlhefc",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "tsgPaIlhefc",
+          "url": "https://youtu.be/tsgPaIlhefc",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "a97f25bebb3e1fb0e095fdced077d90fc93c9f56aa633fde4200ca60edd8916a",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 7,
+          "thumbnail": {
+            "sha256": "a97f25bebb3e1fb0e095fdced077d90fc93c9f56aa633fde4200ca60edd8916a",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/tsgPaIlhefc.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509799692893974528"
+        }
+      }
+    },
+    {
+      "id": "jbj0JR6PzQY",
+      "title": "$450M for Noname, two billion-dollar rounds, and good news for crypto startups | TechCrunc | NEWS-MONSTER",
+      "description": "$450M for Noname, two billion-dollar rounds, and good news for crypto startups | TechCrunc | NEWS-MONSTER",
+      "category": "techcrunch",
+      "publishedAt": "2026-09-27T02:18:59.008Z",
+      "publishedLabel": "Sep 27, 02:18 AM",
+      "thumbnail": "/thumbnails/jbj0JR6PzQY.png",
+      "thumbnailSha256": "9d422f255c4e5eafb63ecf7a8f79907560e5e552d05103874230413dc3dbfbd0",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/jbj0JR6PzQY",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "jbj0JR6PzQY",
+          "url": "https://youtu.be/jbj0JR6PzQY",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "9d422f255c4e5eafb63ecf7a8f79907560e5e552d05103874230413dc3dbfbd0",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 5,
+          "thumbnail": {
+            "sha256": "9d422f255c4e5eafb63ecf7a8f79907560e5e552d05103874230413dc3dbfbd0",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/jbj0JR6PzQY.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509798702971064320"
+        }
+      }
+    },
+    {
+      "id": "nHBzZTtVBcU",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONSTER",
+      "description": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONSTER",
+      "category": "techcrunch",
+      "publishedAt": "2026-09-27T02:14:53.811Z",
+      "publishedLabel": "Sep 27, 02:14 AM",
+      "thumbnail": "/thumbnails/nHBzZTtVBcU.png",
+      "thumbnailSha256": "ddc89fc6d5db83f1975442dfe5e775faf29488db10500c60be3f7f52d0b869f7",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/nHBzZTtVBcU",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "nHBzZTtVBcU",
+          "url": "https://youtu.be/nHBzZTtVBcU",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "ddc89fc6d5db83f1975442dfe5e775faf29488db10500c60be3f7f52d0b869f7",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "ddc89fc6d5db83f1975442dfe5e775faf29488db10500c60be3f7f52d0b869f7",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/nHBzZTtVBcU.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509797661382950912"
+        }
+      }
+    },
     {
       "id": "gsBUSNeyw8o",
       "title": "Starbucks to close 6 Sacramento-area coffee shops, part of 250 nationwide closures - Abrid | NEWS-MONSTER",
       "description": "Starbucks to close 6 Sacramento-area coffee shops, part of 250 nationwide closures - Abrid | NEWS-MONSTER",
       "category": "business",
-      "publishedAt": "2026-09-26T23:53:17.545Z",
+      "publishedAt": "2026-09-26T23:53:17.546Z",
       "publishedLabel": "Sep 26, 11:53 PM",
       "thumbnail": "/thumbnails/gsBUSNeyw8o.png",
       "thumbnailSha256": "c6318415666cbfb3bf224fb0d84e7d3a9744f81c33ec0cbc91e6ada34309fe6e",
@@ -18,7 +180,7 @@
       "youtubeUrl": "https://youtu.be/gsBUSNeyw8o",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
@@ -62,7 +224,7 @@
       "title": "Stock Market Today: Bond Yields Drop With Oil Prices Near End of Volatile Week — Live Upda | NEWS-MONSTER",
       "description": "Stock Market Today: Bond Yields Drop With Oil Prices Near End of Volatile Week — Live Upda | NEWS-MONSTER",
       "category": "business",
-      "publishedAt": "2026-09-26T23:49:30.179Z",
+      "publishedAt": "2026-09-26T23:49:30.180Z",
       "publishedLabel": "Sep 26, 11:49 PM",
       "thumbnail": "/thumbnails/NKUFyk198gY.png",
       "thumbnailSha256": "6ebba2c38ad8c81e5fe6fb18e67a7ece5ccf48083e59f2a0808ce7441fbe3eca",
@@ -72,7 +234,7 @@
       "youtubeUrl": "https://youtu.be/NKUFyk198gY",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
