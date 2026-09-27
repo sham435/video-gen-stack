@@ -1,14 +1,68 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-27T14:24:20.924Z",
+  "updatedAt": "2026-09-27T17:17:15.903Z",
   "source": "production-ledger",
   "videos": [
+    {
+      "id": "j4cQ0lPbwVo",
+      "title": "Sony Spooked by Rumoured $400 Million Budget for Hideo Kojima's Physint - Push Square | NEWS-MONSTER",
+      "description": "Sony Spooked by Rumoured $400 Million Budget for Hideo Kojima's Physint - Push Square | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-27T17:15:40.170Z",
+      "publishedLabel": "Sep 27, 05:15 PM",
+      "thumbnail": "/thumbnails/j4cQ0lPbwVo.png",
+      "thumbnailSha256": "2bd96bc808edf07c6ae113ec4d1d81c3be7bcfb58e7920848c90938212c22622",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/j4cQ0lPbwVo",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "j4cQ0lPbwVo",
+          "url": "https://youtu.be/j4cQ0lPbwVo",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "2bd96bc808edf07c6ae113ec4d1d81c3be7bcfb58e7920848c90938212c22622",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 7,
+          "thumbnail": {
+            "sha256": "2bd96bc808edf07c6ae113ec4d1d81c3be7bcfb58e7920848c90938212c22622",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/j4cQ0lPbwVo.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510024357939773440"
+        }
+      }
+    },
     {
       "id": "xy15AHXXsxE",
       "title": "Watch: When did iPads get as expensive as MacBooks? | NEWS-MONSTER",
       "description": "Watch: When did iPads get as expensive as MacBooks? | NEWS-MONSTER",
       "category": "techcrunch",
-      "publishedAt": "2026-09-27T14:24:20.246Z",
+      "publishedAt": "2026-09-27T14:24:20.247Z",
       "publishedLabel": "Sep 27, 02:24 PM",
       "thumbnail": "/thumbnails/xy15AHXXsxE.png",
       "thumbnailSha256": "d14b218913c655e92f7ca1a05080a208c6d40990aed7f99d6769ed6bb4153b26",
@@ -18,7 +72,7 @@
       "youtubeUrl": "https://youtu.be/xy15AHXXsxE",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
@@ -62,7 +116,7 @@
       "title": "$450M for Noname, two billion-dollar rounds, and good news for crypto startups | TechCrunc | NEWS-MONSTER",
       "description": "$450M for Noname, two billion-dollar rounds, and good news for crypto startups | TechCrunc | NEWS-MONSTER",
       "category": "techcrunch",
-      "publishedAt": "2026-09-27T14:20:39.573Z",
+      "publishedAt": "2026-09-27T14:20:39.574Z",
       "publishedLabel": "Sep 27, 02:20 PM",
       "thumbnail": "/thumbnails/8j0s4EcWHqY.png",
       "thumbnailSha256": "c35a41d57095900b11a5d3cb83875b3d78340eec9660dfdd064a8b6dc8816c4b",
@@ -72,7 +126,7 @@
       "youtubeUrl": "https://youtu.be/8j0s4EcWHqY",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
@@ -116,7 +170,7 @@
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONSTER",
       "description": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONSTER",
       "category": "techcrunch",
-      "publishedAt": "2026-09-27T14:16:49.884Z",
+      "publishedAt": "2026-09-27T14:16:49.885Z",
       "publishedLabel": "Sep 27, 02:16 PM",
       "thumbnail": "/thumbnails/7H-EjCTpTM8.png",
       "thumbnailSha256": "ec0aeb368fb3c3823259993c469801c519539f39af14acca720acecc761e0981",
@@ -126,7 +180,7 @@
       "youtubeUrl": "https://youtu.be/7H-EjCTpTM8",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
