@@ -1,8 +1,116 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-27T17:47:42.556Z",
+  "updatedAt": "2026-09-27T18:46:48.388Z",
   "source": "production-ledger",
   "videos": [
+    {
+      "id": "FKVK7HN6B4Y",
+      "title": "63 Prozent Wertverlust: Diese Autos sind nach 5 Jahren kaum noch etwas wert | NEWS-MONSTER",
+      "description": "63 Prozent Wertverlust: Diese Autos sind nach 5 Jahren kaum noch etwas wert | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-27T18:46:47.353Z",
+      "publishedLabel": "Sep 27, 06:46 PM",
+      "thumbnail": "/thumbnails/FKVK7HN6B4Y.png",
+      "thumbnailSha256": "c2e68d0fa86c48c8fa2531c893434cf8a23016f30edb117a189dbffa6d73f8a9",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/FKVK7HN6B4Y",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "FKVK7HN6B4Y",
+          "url": "https://youtu.be/FKVK7HN6B4Y",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "c2e68d0fa86c48c8fa2531c893434cf8a23016f30edb117a189dbffa6d73f8a9",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "c2e68d0fa86c48c8fa2531c893434cf8a23016f30edb117a189dbffa6d73f8a9",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/FKVK7HN6B4Y.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510047288791166976"
+        }
+      }
+    },
+    {
+      "id": "KYb61iLvfHM",
+      "title": "Jesse Watters Gushes Over Meeting Chinese President Xi Jinping at Donald Trump's Lavish St | NEWS-MONSTER",
+      "description": "Jesse Watters Gushes Over Meeting Chinese President Xi Jinping at Donald Trump's Lavish St | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-27T18:41:29.403Z",
+      "publishedLabel": "Sep 27, 06:41 PM",
+      "thumbnail": "/thumbnails/KYb61iLvfHM.png",
+      "thumbnailSha256": "1f92e5d0066b48488559c8478ea915be6eb5db2c04aa3d6744d69ed26a1783c3",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/KYb61iLvfHM",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "KYb61iLvfHM",
+          "url": "https://youtu.be/KYb61iLvfHM",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "1f92e5d0066b48488559c8478ea915be6eb5db2c04aa3d6744d69ed26a1783c3",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "1f92e5d0066b48488559c8478ea915be6eb5db2c04aa3d6744d69ed26a1783c3",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/KYb61iLvfHM.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510045948388007938"
+        }
+      }
+    },
     {
       "id": "JChLLMtAPas",
       "title": "Sony Spooked by Rumoured $400 Million Budget for Hideo Kojima's Physint - Push Square | NEWS-MONSTER",
@@ -18,7 +126,7 @@
       "youtubeUrl": "https://youtu.be/JChLLMtAPas",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
