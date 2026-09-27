@@ -1,14 +1,176 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-27T18:46:48.388Z",
+  "updatedAt": "2026-09-27T21:58:55.552Z",
   "source": "production-ledger",
   "videos": [
+    {
+      "id": "XMwOD8gxp1o",
+      "title": "Survey Sunday: how much pain at the pump will it take to switch to EV? [update] | NEWS-MONSTER",
+      "description": "Survey Sunday: how much pain at the pump will it take to switch to EV? [update] | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-27T21:58:54.412Z",
+      "publishedLabel": "Sep 27, 09:58 PM",
+      "thumbnail": "/thumbnails/XMwOD8gxp1o.png",
+      "thumbnailSha256": "d3668ee65bd6dc8600fbbd9d7109d3a3331310673dc00d24da72127de80330ea",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/XMwOD8gxp1o",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "XMwOD8gxp1o",
+          "url": "https://youtu.be/XMwOD8gxp1o",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "d3668ee65bd6dc8600fbbd9d7109d3a3331310673dc00d24da72127de80330ea",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 41,
+          "thumbnail": {
+            "sha256": "d3668ee65bd6dc8600fbbd9d7109d3a3331310673dc00d24da72127de80330ea",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/XMwOD8gxp1o.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510095633223991296"
+        }
+      }
+    },
+    {
+      "id": "1hzG-GDTxK8",
+      "title": "O assalto ao traficante, o rapto e um motel: o caso Rodízio | NEWS-MONSTER",
+      "description": "O assalto ao traficante, o rapto e um motel: o caso Rodízio | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-27T21:55:20.170Z",
+      "publishedLabel": "Sep 27, 09:55 PM",
+      "thumbnail": "/thumbnails/1hzG-GDTxK8.png",
+      "thumbnailSha256": "95b9c970d3c89ceaf84b6920d2b0377c25fb07d3d5b780a07814d95b47a39f14",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/1hzG-GDTxK8",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "1hzG-GDTxK8",
+          "url": "https://youtu.be/1hzG-GDTxK8",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "95b9c970d3c89ceaf84b6920d2b0377c25fb07d3d5b780a07814d95b47a39f14",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 14,
+          "thumbnail": {
+            "sha256": "95b9c970d3c89ceaf84b6920d2b0377c25fb07d3d5b780a07814d95b47a39f14",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/1hzG-GDTxK8.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510094730299457536"
+        }
+      }
+    },
+    {
+      "id": "-vQGQdPZGKs",
+      "title": "Warning from EV owner caught with low charge in bushfire | NEWS-MONSTER",
+      "description": "Warning from EV owner caught with low charge in bushfire | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-27T21:50:52.895Z",
+      "publishedLabel": "Sep 27, 09:50 PM",
+      "thumbnail": "/thumbnails/-vQGQdPZGKs.png",
+      "thumbnailSha256": "5728e20960fc9e83f93489f2bf0580c26d524f1e19fe618e0ad151ef71f2d96e",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/-vQGQdPZGKs",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "-vQGQdPZGKs",
+          "url": "https://youtu.be/-vQGQdPZGKs",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "5728e20960fc9e83f93489f2bf0580c26d524f1e19fe618e0ad151ef71f2d96e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "5728e20960fc9e83f93489f2bf0580c26d524f1e19fe618e0ad151ef71f2d96e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/-vQGQdPZGKs.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510093613415133185"
+        }
+      }
+    },
     {
       "id": "FKVK7HN6B4Y",
       "title": "63 Prozent Wertverlust: Diese Autos sind nach 5 Jahren kaum noch etwas wert | NEWS-MONSTER",
       "description": "63 Prozent Wertverlust: Diese Autos sind nach 5 Jahren kaum noch etwas wert | NEWS-MONSTER",
       "category": "tesla",
-      "publishedAt": "2026-09-27T18:46:47.353Z",
+      "publishedAt": "2026-09-27T18:46:47.354Z",
       "publishedLabel": "Sep 27, 06:46 PM",
       "thumbnail": "/thumbnails/FKVK7HN6B4Y.png",
       "thumbnailSha256": "c2e68d0fa86c48c8fa2531c893434cf8a23016f30edb117a189dbffa6d73f8a9",
@@ -18,7 +180,7 @@
       "youtubeUrl": "https://youtu.be/FKVK7HN6B4Y",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
@@ -72,7 +234,7 @@
       "youtubeUrl": "https://youtu.be/KYb61iLvfHM",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
