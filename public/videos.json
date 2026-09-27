@@ -1,32 +1,32 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-27T17:17:15.903Z",
+  "updatedAt": "2026-09-27T17:47:42.556Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "j4cQ0lPbwVo",
+      "id": "JChLLMtAPas",
       "title": "Sony Spooked by Rumoured $400 Million Budget for Hideo Kojima's Physint - Push Square | NEWS-MONSTER",
       "description": "Sony Spooked by Rumoured $400 Million Budget for Hideo Kojima's Physint - Push Square | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-27T17:15:40.170Z",
-      "publishedLabel": "Sep 27, 05:15 PM",
-      "thumbnail": "/thumbnails/j4cQ0lPbwVo.png",
-      "thumbnailSha256": "2bd96bc808edf07c6ae113ec4d1d81c3be7bcfb58e7920848c90938212c22622",
+      "publishedAt": "2026-09-27T17:46:02.281Z",
+      "publishedLabel": "Sep 27, 05:46 PM",
+      "thumbnail": "/thumbnails/JChLLMtAPas.png",
+      "thumbnailSha256": "8e71661c4f50204766da509f743ecbf930f42fe71eea382fcc80d33249999a43",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/j4cQ0lPbwVo",
+      "youtubeUrl": "https://youtu.be/JChLLMtAPas",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "j4cQ0lPbwVo",
-          "url": "https://youtu.be/j4cQ0lPbwVo",
+          "videoId": "JChLLMtAPas",
+          "url": "https://youtu.be/JChLLMtAPas",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "2bd96bc808edf07c6ae113ec4d1d81c3be7bcfb58e7920848c90938212c22622",
+            "sha256": "8e71661c4f50204766da509f743ecbf930f42fe71eea382fcc80d33249999a43",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -41,19 +41,19 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 7,
+          "durationMs": 6,
           "thumbnail": {
-            "sha256": "2bd96bc808edf07c6ae113ec4d1d81c3be7bcfb58e7920848c90938212c22622",
+            "sha256": "8e71661c4f50204766da509f743ecbf930f42fe71eea382fcc80d33249999a43",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/j4cQ0lPbwVo.png"
+            "path": "public/thumbnails/JChLLMtAPas.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7510024357939773440"
+          "postId": "urn:li:ugcPost:7510032001362571265"
         }
       }
     },
