@@ -1,14 +1,122 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-27T02:22:59.459Z",
+  "updatedAt": "2026-09-27T08:36:18.811Z",
   "source": "production-ledger",
   "videos": [
+    {
+      "id": "bVmYnSK2HFY",
+      "title": "Rather Than Pay $400, GTA 6 Fans Are Already 3D Printing Items in the Game's Pricey Collec | NEWS-MONSTER",
+      "description": "Rather Than Pay $400, GTA 6 Fans Are Already 3D Printing Items in the Game's Pricey Collec | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-27T08:36:17.630Z",
+      "publishedLabel": "Sep 27, 08:36 AM",
+      "thumbnail": "/thumbnails/bVmYnSK2HFY.png",
+      "thumbnailSha256": "df6877b51c881e00db0d4224a524ce73cf663f3d98a30317ef5da872a3a372eb",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/bVmYnSK2HFY",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "bVmYnSK2HFY",
+          "url": "https://youtu.be/bVmYnSK2HFY",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "df6877b51c881e00db0d4224a524ce73cf663f3d98a30317ef5da872a3a372eb",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "df6877b51c881e00db0d4224a524ce73cf663f3d98a30317ef5da872a3a372eb",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/bVmYnSK2HFY.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509893655952957440"
+        }
+      }
+    },
+    {
+      "id": "Kplae6PA_Uo",
+      "title": "Google Health 5.09 arrives with more than just your new Pixel Watch features - Android Aut | NEWS-MONSTER",
+      "description": "Google Health 5.09 arrives with more than just your new Pixel Watch features - Android Aut | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-27T08:32:17.117Z",
+      "publishedLabel": "Sep 27, 08:32 AM",
+      "thumbnail": "/thumbnails/Kplae6PA_Uo.png",
+      "thumbnailSha256": "3f61e428af05babd7eba4cc843218ca449d11bad1e35bd2cc53560b604e027e5",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/Kplae6PA_Uo",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "Kplae6PA_Uo",
+          "url": "https://youtu.be/Kplae6PA_Uo",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "3f61e428af05babd7eba4cc843218ca449d11bad1e35bd2cc53560b604e027e5",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 7,
+          "thumbnail": {
+            "sha256": "3f61e428af05babd7eba4cc843218ca449d11bad1e35bd2cc53560b604e027e5",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/Kplae6PA_Uo.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509892640398659584"
+        }
+      }
+    },
     {
       "id": "tsgPaIlhefc",
       "title": "Watch: When did iPads get as expensive as MacBooks? | NEWS-MONSTER",
       "description": "Watch: When did iPads get as expensive as MacBooks? | NEWS-MONSTER",
       "category": "techcrunch",
-      "publishedAt": "2026-09-27T02:22:58.252Z",
+      "publishedAt": "2026-09-27T02:22:58.253Z",
       "publishedLabel": "Sep 27, 02:22 AM",
       "thumbnail": "/thumbnails/tsgPaIlhefc.png",
       "thumbnailSha256": "a97f25bebb3e1fb0e095fdced077d90fc93c9f56aa633fde4200ca60edd8916a",
@@ -18,7 +126,7 @@
       "youtubeUrl": "https://youtu.be/tsgPaIlhefc",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
@@ -62,7 +170,7 @@
       "title": "$450M for Noname, two billion-dollar rounds, and good news for crypto startups | TechCrunc | NEWS-MONSTER",
       "description": "$450M for Noname, two billion-dollar rounds, and good news for crypto startups | TechCrunc | NEWS-MONSTER",
       "category": "techcrunch",
-      "publishedAt": "2026-09-27T02:18:59.008Z",
+      "publishedAt": "2026-09-27T02:18:59.009Z",
       "publishedLabel": "Sep 27, 02:18 AM",
       "thumbnail": "/thumbnails/jbj0JR6PzQY.png",
       "thumbnailSha256": "9d422f255c4e5eafb63ecf7a8f79907560e5e552d05103874230413dc3dbfbd0",
@@ -72,7 +180,7 @@
       "youtubeUrl": "https://youtu.be/jbj0JR6PzQY",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
@@ -116,7 +224,7 @@
       "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONSTER",
       "description": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONSTER",
       "category": "techcrunch",
-      "publishedAt": "2026-09-27T02:14:53.811Z",
+      "publishedAt": "2026-09-27T02:14:53.812Z",
       "publishedLabel": "Sep 27, 02:14 AM",
       "thumbnail": "/thumbnails/nHBzZTtVBcU.png",
       "thumbnailSha256": "ddc89fc6d5db83f1975442dfe5e775faf29488db10500c60be3f7f52d0b869f7",
@@ -126,7 +234,7 @@
       "youtubeUrl": "https://youtu.be/nHBzZTtVBcU",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
