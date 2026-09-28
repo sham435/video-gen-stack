@@ -1,14 +1,176 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-28T12:23:53.607Z",
+  "updatedAt": "2026-09-28T20:03:55.816Z",
   "source": "production-ledger",
   "videos": [
+    {
+      "id": "0AuXKntJros",
+      "title": "Wegovy Maker Novo Promises New Drugs to Boost Sales, but Investors Are Wary | NEWS-MONSTER",
+      "description": "Wegovy Maker Novo Promises New Drugs to Boost Sales, but Investors Are Wary | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-28T20:03:54.830Z",
+      "publishedLabel": "Sep 28, 08:03 PM",
+      "thumbnail": "/thumbnails/0AuXKntJros.png",
+      "thumbnailSha256": "a036f201f5bb7e9197e789546f4e26178795996ebade71854fee2a75f7d27b49",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/0AuXKntJros",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "0AuXKntJros",
+          "url": "https://youtu.be/0AuXKntJros",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "a036f201f5bb7e9197e789546f4e26178795996ebade71854fee2a75f7d27b49",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 7,
+          "thumbnail": {
+            "sha256": "a036f201f5bb7e9197e789546f4e26178795996ebade71854fee2a75f7d27b49",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/0AuXKntJros.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510429080001982464"
+        }
+      }
+    },
+    {
+      "id": "8KIxoeyaN4g",
+      "title": "General Mills Bets on New Products, Marketing to Drive Turnaround | NEWS-MONSTER",
+      "description": "General Mills Bets on New Products, Marketing to Drive Turnaround | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-28T19:59:52.413Z",
+      "publishedLabel": "Sep 28, 07:59 PM",
+      "thumbnail": "/thumbnails/8KIxoeyaN4g.png",
+      "thumbnailSha256": "307a6e413caed07b9ccc7f3181f018a595499c6a95b76abb60615eed0410c751",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/8KIxoeyaN4g",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "8KIxoeyaN4g",
+          "url": "https://youtu.be/8KIxoeyaN4g",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "307a6e413caed07b9ccc7f3181f018a595499c6a95b76abb60615eed0410c751",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 7,
+          "thumbnail": {
+            "sha256": "307a6e413caed07b9ccc7f3181f018a595499c6a95b76abb60615eed0410c751",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/8KIxoeyaN4g.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510428062593753090"
+        }
+      }
+    },
+    {
+      "id": "wV-wMGcYrJk",
+      "title": "NKorea Testing Swarm Attacks Mixing Drones and Missiles... | NEWS-MONSTER",
+      "description": "NKorea Testing Swarm Attacks Mixing Drones and Missiles... | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-28T19:55:42.858Z",
+      "publishedLabel": "Sep 28, 07:55 PM",
+      "thumbnail": "/thumbnails/wV-wMGcYrJk.png",
+      "thumbnailSha256": "3219aad699fcc23a36422e63dafcc0bdc1bc7e5a49b3ebbaa5d682c66f2b8d30",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/wV-wMGcYrJk",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "wV-wMGcYrJk",
+          "url": "https://youtu.be/wV-wMGcYrJk",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "3219aad699fcc23a36422e63dafcc0bdc1bc7e5a49b3ebbaa5d682c66f2b8d30",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 7,
+          "thumbnail": {
+            "sha256": "3219aad699fcc23a36422e63dafcc0bdc1bc7e5a49b3ebbaa5d682c66f2b8d30",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/wV-wMGcYrJk.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510427016236703744"
+        }
+      }
+    },
     {
       "id": "gaprdteWK6Q",
       "title": "Experts Disagree On RTX | NEWS-MONSTER",
       "description": "Experts Disagree On RTX | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-28T12:23:52.549Z",
+      "publishedAt": "2026-09-28T12:23:52.550Z",
       "publishedLabel": "Sep 28, 12:23 PM",
       "thumbnail": "/thumbnails/gaprdteWK6Q.png",
       "thumbnailSha256": "08e01593d5941830673b7d245a79f2fc290c70a368de57f60b6632a62c39094b",
@@ -18,7 +180,7 @@
       "youtubeUrl": "https://youtu.be/gaprdteWK6Q",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
@@ -62,7 +224,7 @@
       "title": "Video shows a southpaw using the iPhone Duo with one hand - phonearena.com | NEWS-MONSTER",
       "description": "Video shows a southpaw using the iPhone Duo with one hand - phonearena.com | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-28T12:20:53.297Z",
+      "publishedAt": "2026-09-28T12:20:53.298Z",
       "publishedLabel": "Sep 28, 12:20 PM",
       "thumbnail": "/thumbnails/9hIEnid0kWM.png",
       "thumbnailSha256": "a265844a7648d3cd704373c89daadb7962941783d8a5c3c1edf435d635cc35db",
@@ -72,7 +234,7 @@
       "youtubeUrl": "https://youtu.be/9hIEnid0kWM",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
@@ -126,7 +288,7 @@
       "youtubeUrl": "https://youtu.be/fZxDKjxexfo",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
@@ -1836,114 +1998,6 @@
         "linkedin": {
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509448322101878785"
-        }
-      }
-    },
-    {
-      "id": "CRw4Nvkx37E",
-      "title": "Wegovy Maker Novo Promises New Drugs to Boost Sales, but Investors Are Wary | NEWS-MONSTER",
-      "description": "Wegovy Maker Novo Promises New Drugs to Boost Sales, but Investors Are Wary | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-09-25T23:03:44.365Z",
-      "publishedLabel": "Sep 25, 11:03 PM",
-      "thumbnail": "/thumbnails/CRw4Nvkx37E.png",
-      "thumbnailSha256": "bb01b6b6168545e5dfd1b6f7673e6e9cf3376f7a8a98d29fb7ae35d89849638f",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/CRw4Nvkx37E",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "CRw4Nvkx37E",
-          "url": "https://youtu.be/CRw4Nvkx37E",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "bb01b6b6168545e5dfd1b6f7673e6e9cf3376f7a8a98d29fb7ae35d89849638f",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 4,
-          "thumbnail": {
-            "sha256": "bb01b6b6168545e5dfd1b6f7673e6e9cf3376f7a8a98d29fb7ae35d89849638f",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/CRw4Nvkx37E.png"
-          }
-        },
-        "linkedin": {
-          "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509387175315169280"
-        }
-      }
-    },
-    {
-      "id": "igXZOpY9pDk",
-      "title": "General Mills Bets on New Products, Marketing to Drive Turnaround | NEWS-MONSTER",
-      "description": "General Mills Bets on New Products, Marketing to Drive Turnaround | NEWS-MONSTER",
-      "category": "wsj",
-      "publishedAt": "2026-09-25T22:59:57.056Z",
-      "publishedLabel": "Sep 25, 10:59 PM",
-      "thumbnail": "/thumbnails/igXZOpY9pDk.png",
-      "thumbnailSha256": "e3bcf8ed9315dc804c2246dae8ea5c81780a05345a5d016624bbe4158a9ba857",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/igXZOpY9pDk",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "igXZOpY9pDk",
-          "url": "https://youtu.be/igXZOpY9pDk",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "e3bcf8ed9315dc804c2246dae8ea5c81780a05345a5d016624bbe4158a9ba857",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "e3bcf8ed9315dc804c2246dae8ea5c81780a05345a5d016624bbe4158a9ba857",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/igXZOpY9pDk.png"
-          }
-        },
-        "linkedin": {
-          "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509386219265581056"
         }
       }
     },
