@@ -1,29 +1,29 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-28T00:13:16.449Z",
+  "updatedAt": "2026-09-28T00:32:09.813Z",
   "source": "production-ledger",
   "videos": [
     {
-      "id": "0mUFvCmscrM",
+      "id": "DJA7_mkT74A",
       "title": "What does Meta’s Muse do that Spotify’s AI can’t? - Mashable | NEWS-MONSTER",
       "description": "What does Meta’s Muse do that Spotify’s AI can’t? - Mashable | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-28T00:13:15.991Z",
-      "publishedLabel": "Sep 28, 12:13 AM",
-      "thumbnail": "/thumbnails/0mUFvCmscrM.png",
+      "publishedAt": "2026-09-28T00:32:09.320Z",
+      "publishedLabel": "Sep 28, 12:32 AM",
+      "thumbnail": "/thumbnails/DJA7_mkT74A.png",
       "thumbnailSha256": "d7f4a7465e0d84e18be5c9cfd3c67ae3c88e7024fa66b56a3acce827bf801edd",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/0mUFvCmscrM",
+      "youtubeUrl": "https://youtu.be/DJA7_mkT74A",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "0mUFvCmscrM",
-          "url": "https://youtu.be/0mUFvCmscrM",
+          "videoId": "DJA7_mkT74A",
+          "url": "https://youtu.be/DJA7_mkT74A",
           "thumbnail": {
             "state": "SUCCESS",
             "sha256": "d7f4a7465e0d84e18be5c9cfd3c67ae3c88e7024fa66b56a3acce827bf801edd",
@@ -41,19 +41,19 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 6,
+          "durationMs": 10,
           "thumbnail": {
             "sha256": "d7f4a7465e0d84e18be5c9cfd3c67ae3c88e7024fa66b56a3acce827bf801edd",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/0mUFvCmscrM.png"
+            "path": "public/thumbnails/DJA7_mkT74A.png"
           }
         },
         "linkedin": {
           "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7510129447048503296"
+          "postId": "urn:li:ugcPost:7510134201044840448"
         }
       }
     },
