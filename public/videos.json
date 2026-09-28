@@ -1,14 +1,68 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-28T01:35:36.923Z",
+  "updatedAt": "2026-09-28T05:47:49.737Z",
   "source": "production-ledger",
   "videos": [
+    {
+      "id": "x0E-UEDJ8E0",
+      "title": "A Storied Indian Business Empire Is Being Torn Apart by Infighting - WSJ | NEWS-MONSTER",
+      "description": "A Storied Indian Business Empire Is Being Torn Apart by Infighting - WSJ | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-09-28T05:46:40.648Z",
+      "publishedLabel": "Sep 28, 05:46 AM",
+      "thumbnail": "/thumbnails/x0E-UEDJ8E0.png",
+      "thumbnailSha256": "cf4726422a22f6d0e389a43bdb7d254ee3348b7f163259d571e6e28d079f1933",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/x0E-UEDJ8E0",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "x0E-UEDJ8E0",
+          "url": "https://youtu.be/x0E-UEDJ8E0",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "cf4726422a22f6d0e389a43bdb7d254ee3348b7f163259d571e6e28d079f1933",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 5,
+          "thumbnail": {
+            "sha256": "cf4726422a22f6d0e389a43bdb7d254ee3348b7f163259d571e6e28d079f1933",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/x0E-UEDJ8E0.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510213342439931905"
+        }
+      }
+    },
     {
       "id": "mWgOriTYkDc",
       "title": "Prime Day Hasn’t Started Yet, but I’ve Already Found Deals Worth Buying - WIRED | NEWS-MONSTER",
       "description": "Prime Day Hasn’t Started Yet, but I’ve Already Found Deals Worth Buying - WIRED | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-28T01:33:02.986Z",
+      "publishedAt": "2026-09-28T01:33:02.987Z",
       "publishedLabel": "Sep 28, 01:33 AM",
       "thumbnail": "/thumbnails/mWgOriTYkDc.png",
       "thumbnailSha256": "eb30ab830613a6b42f95f70e27771af76319dbf4dca893bcefc383e1697817b0",
@@ -18,7 +72,7 @@
       "youtubeUrl": "https://youtu.be/mWgOriTYkDc",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
