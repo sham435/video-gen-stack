@@ -1,14 +1,176 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-28T05:47:49.737Z",
+  "updatedAt": "2026-09-28T12:23:53.607Z",
   "source": "production-ledger",
   "videos": [
+    {
+      "id": "gaprdteWK6Q",
+      "title": "Experts Disagree On RTX | NEWS-MONSTER",
+      "description": "Experts Disagree On RTX | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-28T12:23:52.549Z",
+      "publishedLabel": "Sep 28, 12:23 PM",
+      "thumbnail": "/thumbnails/gaprdteWK6Q.png",
+      "thumbnailSha256": "08e01593d5941830673b7d245a79f2fc290c70a368de57f60b6632a62c39094b",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/gaprdteWK6Q",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "gaprdteWK6Q",
+          "url": "https://youtu.be/gaprdteWK6Q",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "08e01593d5941830673b7d245a79f2fc290c70a368de57f60b6632a62c39094b",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "08e01593d5941830673b7d245a79f2fc290c70a368de57f60b6632a62c39094b",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/gaprdteWK6Q.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510313314212814848"
+        }
+      }
+    },
+    {
+      "id": "9hIEnid0kWM",
+      "title": "Video shows a southpaw using the iPhone Duo with one hand - phonearena.com | NEWS-MONSTER",
+      "description": "Video shows a southpaw using the iPhone Duo with one hand - phonearena.com | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-28T12:20:53.297Z",
+      "publishedLabel": "Sep 28, 12:20 PM",
+      "thumbnail": "/thumbnails/9hIEnid0kWM.png",
+      "thumbnailSha256": "a265844a7648d3cd704373c89daadb7962941783d8a5c3c1edf435d635cc35db",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/9hIEnid0kWM",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "9hIEnid0kWM",
+          "url": "https://youtu.be/9hIEnid0kWM",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "a265844a7648d3cd704373c89daadb7962941783d8a5c3c1edf435d635cc35db",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 5,
+          "thumbnail": {
+            "sha256": "a265844a7648d3cd704373c89daadb7962941783d8a5c3c1edf435d635cc35db",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/9hIEnid0kWM.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510312563860017152"
+        }
+      }
+    },
+    {
+      "id": "fZxDKjxexfo",
+      "title": "Microsoft CEO Says Xbox's \"Streamlining\" Is \"Great To See\" Following Recent Layoffs - tech | NEWS-MONSTER",
+      "description": "Microsoft CEO Says Xbox's \"Streamlining\" Is \"Great To See\" Following Recent Layoffs - tech | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-28T12:18:08.604Z",
+      "publishedLabel": "Sep 28, 12:18 PM",
+      "thumbnail": "/thumbnails/fZxDKjxexfo.png",
+      "thumbnailSha256": "d03c95c2b323b35523877276f55af4e28533e41239d25ac98157bca6f12c2412",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/fZxDKjxexfo",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "fZxDKjxexfo",
+          "url": "https://youtu.be/fZxDKjxexfo",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "d03c95c2b323b35523877276f55af4e28533e41239d25ac98157bca6f12c2412",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "d03c95c2b323b35523877276f55af4e28533e41239d25ac98157bca6f12c2412",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/fZxDKjxexfo.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510311871132942336"
+        }
+      }
+    },
     {
       "id": "x0E-UEDJ8E0",
       "title": "A Storied Indian Business Empire Is Being Torn Apart by Infighting - WSJ | NEWS-MONSTER",
       "description": "A Storied Indian Business Empire Is Being Torn Apart by Infighting - WSJ | NEWS-MONSTER",
       "category": "business",
-      "publishedAt": "2026-09-28T05:46:40.648Z",
+      "publishedAt": "2026-09-28T05:46:40.649Z",
       "publishedLabel": "Sep 28, 05:46 AM",
       "thumbnail": "/thumbnails/x0E-UEDJ8E0.png",
       "thumbnailSha256": "cf4726422a22f6d0e389a43bdb7d254ee3348b7f163259d571e6e28d079f1933",
@@ -18,7 +180,7 @@
       "youtubeUrl": "https://youtu.be/x0E-UEDJ8E0",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
