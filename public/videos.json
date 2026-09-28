@@ -1,14 +1,68 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-28T01:03:17.656Z",
+  "updatedAt": "2026-09-28T01:35:36.923Z",
   "source": "production-ledger",
   "videos": [
+    {
+      "id": "mWgOriTYkDc",
+      "title": "Prime Day Hasn’t Started Yet, but I’ve Already Found Deals Worth Buying - WIRED | NEWS-MONSTER",
+      "description": "Prime Day Hasn’t Started Yet, but I’ve Already Found Deals Worth Buying - WIRED | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-28T01:33:02.986Z",
+      "publishedLabel": "Sep 28, 01:33 AM",
+      "thumbnail": "/thumbnails/mWgOriTYkDc.png",
+      "thumbnailSha256": "eb30ab830613a6b42f95f70e27771af76319dbf4dca893bcefc383e1697817b0",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/mWgOriTYkDc",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "mWgOriTYkDc",
+          "url": "https://youtu.be/mWgOriTYkDc",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "eb30ab830613a6b42f95f70e27771af76319dbf4dca893bcefc383e1697817b0",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "eb30ab830613a6b42f95f70e27771af76319dbf4dca893bcefc383e1697817b0",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/mWgOriTYkDc.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510149525190246401"
+        }
+      }
+    },
     {
       "id": "wXvmFYyviQQ",
       "title": "What does Meta’s Muse do that Spotify’s AI can’t? - Mashable | NEWS-MONSTER",
       "description": "What does Meta’s Muse do that Spotify’s AI can’t? - Mashable | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-28T01:03:16.552Z",
+      "publishedAt": "2026-09-28T01:03:16.553Z",
       "publishedLabel": "Sep 28, 01:03 AM",
       "thumbnail": "/thumbnails/wXvmFYyviQQ.png",
       "thumbnailSha256": "d7f4a7465e0d84e18be5c9cfd3c67ae3c88e7024fa66b56a3acce827bf801edd",
@@ -18,7 +72,7 @@
       "youtubeUrl": "https://youtu.be/wXvmFYyviQQ",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
