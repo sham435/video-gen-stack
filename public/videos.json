@@ -1,14 +1,68 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-27T21:58:55.552Z",
+  "updatedAt": "2026-09-28T00:13:16.449Z",
   "source": "production-ledger",
   "videos": [
+    {
+      "id": "0mUFvCmscrM",
+      "title": "What does Meta’s Muse do that Spotify’s AI can’t? - Mashable | NEWS-MONSTER",
+      "description": "What does Meta’s Muse do that Spotify’s AI can’t? - Mashable | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-28T00:13:15.991Z",
+      "publishedLabel": "Sep 28, 12:13 AM",
+      "thumbnail": "/thumbnails/0mUFvCmscrM.png",
+      "thumbnailSha256": "d7f4a7465e0d84e18be5c9cfd3c67ae3c88e7024fa66b56a3acce827bf801edd",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/0mUFvCmscrM",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "0mUFvCmscrM",
+          "url": "https://youtu.be/0mUFvCmscrM",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "d7f4a7465e0d84e18be5c9cfd3c67ae3c88e7024fa66b56a3acce827bf801edd",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "d7f4a7465e0d84e18be5c9cfd3c67ae3c88e7024fa66b56a3acce827bf801edd",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/0mUFvCmscrM.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510129447048503296"
+        }
+      }
+    },
     {
       "id": "XMwOD8gxp1o",
       "title": "Survey Sunday: how much pain at the pump will it take to switch to EV? [update] | NEWS-MONSTER",
       "description": "Survey Sunday: how much pain at the pump will it take to switch to EV? [update] | NEWS-MONSTER",
       "category": "tesla",
-      "publishedAt": "2026-09-27T21:58:54.412Z",
+      "publishedAt": "2026-09-27T21:58:54.413Z",
       "publishedLabel": "Sep 27, 09:58 PM",
       "thumbnail": "/thumbnails/XMwOD8gxp1o.png",
       "thumbnailSha256": "d3668ee65bd6dc8600fbbd9d7109d3a3331310673dc00d24da72127de80330ea",
@@ -18,7 +72,7 @@
       "youtubeUrl": "https://youtu.be/XMwOD8gxp1o",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
@@ -62,7 +116,7 @@
       "title": "O assalto ao traficante, o rapto e um motel: o caso Rodízio | NEWS-MONSTER",
       "description": "O assalto ao traficante, o rapto e um motel: o caso Rodízio | NEWS-MONSTER",
       "category": "tesla",
-      "publishedAt": "2026-09-27T21:55:20.170Z",
+      "publishedAt": "2026-09-27T21:55:20.171Z",
       "publishedLabel": "Sep 27, 09:55 PM",
       "thumbnail": "/thumbnails/1hzG-GDTxK8.png",
       "thumbnailSha256": "95b9c970d3c89ceaf84b6920d2b0377c25fb07d3d5b780a07814d95b47a39f14",
@@ -72,7 +126,7 @@
       "youtubeUrl": "https://youtu.be/1hzG-GDTxK8",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
@@ -116,7 +170,7 @@
       "title": "Warning from EV owner caught with low charge in bushfire | NEWS-MONSTER",
       "description": "Warning from EV owner caught with low charge in bushfire | NEWS-MONSTER",
       "category": "tesla",
-      "publishedAt": "2026-09-27T21:50:52.895Z",
+      "publishedAt": "2026-09-27T21:50:52.896Z",
       "publishedLabel": "Sep 27, 09:50 PM",
       "thumbnail": "/thumbnails/-vQGQdPZGKs.png",
       "thumbnailSha256": "5728e20960fc9e83f93489f2bf0580c26d524f1e19fe618e0ad151ef71f2d96e",
@@ -126,7 +180,7 @@
       "youtubeUrl": "https://youtu.be/-vQGQdPZGKs",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
