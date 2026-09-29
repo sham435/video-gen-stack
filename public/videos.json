@@ -1,6 +1,6 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-29T11:55:03.175Z",
+  "updatedAt": "2026-09-29T17:27:35.631Z",
   "source": "production-ledger",
   "videos": [
     {
@@ -18,7 +18,7 @@
       "youtubeUrl": "https://youtu.be/D3QUptauTyQ",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
