@@ -1,14 +1,68 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-29T00:15:37.869Z",
+  "updatedAt": "2026-09-29T06:04:23.448Z",
   "source": "production-ledger",
   "videos": [
+    {
+      "id": "1RuL5D-bdLU",
+      "title": "'Sony's Hearing a Lot of the Feedback from Customers': NIS America Boss Weighs in on PS5 D | NEWS-MONSTER",
+      "description": "'Sony's Hearing a Lot of the Feedback from Customers': NIS America Boss Weighs in on PS5 D | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-29T06:04:22.518Z",
+      "publishedLabel": "Sep 29, 06:04 AM",
+      "thumbnail": "/thumbnails/1RuL5D-bdLU.png",
+      "thumbnailSha256": "0efa37043042713b4b58c25e6b1041b3f98b4feb2827c17699eb767fd4c09d47",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/1RuL5D-bdLU",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "1RuL5D-bdLU",
+          "url": "https://youtu.be/1RuL5D-bdLU",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "0efa37043042713b4b58c25e6b1041b3f98b4feb2827c17699eb767fd4c09d47",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 7,
+          "thumbnail": {
+            "sha256": "0efa37043042713b4b58c25e6b1041b3f98b4feb2827c17699eb767fd4c09d47",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/1RuL5D-bdLU.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510580195079258113"
+        }
+      }
+    },
     {
       "id": "GOFYTfX9nmc",
       "title": "Experimental Emulator Brings Nintendo Switch Games to Jailbroken PS5 Consoles - TechPowerU | NEWS-MONSTER",
       "description": "Experimental Emulator Brings Nintendo Switch Games to Jailbroken PS5 Consoles - TechPowerU | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-29T00:15:37.226Z",
+      "publishedAt": "2026-09-29T00:15:37.228Z",
       "publishedLabel": "Sep 29, 12:15 AM",
       "thumbnail": "/thumbnails/GOFYTfX9nmc.png",
       "thumbnailSha256": "f77bef3ecb969d26959ced57961761c5a9392ee1c4bcd4707124066db68491f4",
@@ -18,7 +72,7 @@
       "youtubeUrl": "https://youtu.be/GOFYTfX9nmc",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
@@ -54,60 +108,6 @@
         "linkedin": {
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7510492431847477249"
-        }
-      }
-    },
-    {
-      "id": "dlUZVXgtDUk",
-      "title": "'Sony's Hearing a Lot of the Feedback from Customers': NIS America Boss Weighs in on PS5 D | NEWS-MONSTER",
-      "description": "'Sony's Hearing a Lot of the Feedback from Customers': NIS America Boss Weighs in on PS5 D | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-09-29T00:11:28.658Z",
-      "publishedLabel": "Sep 29, 12:11 AM",
-      "thumbnail": "/thumbnails/dlUZVXgtDUk.png",
-      "thumbnailSha256": "e7fb5387080ff5ce5e8ba2a5d5ae0476e9b8553edb67f48df7b7ffe29893b074",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/dlUZVXgtDUk",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "dlUZVXgtDUk",
-          "url": "https://youtu.be/dlUZVXgtDUk",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "e7fb5387080ff5ce5e8ba2a5d5ae0476e9b8553edb67f48df7b7ffe29893b074",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 7,
-          "thumbnail": {
-            "sha256": "e7fb5387080ff5ce5e8ba2a5d5ae0476e9b8553edb67f48df7b7ffe29893b074",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/dlUZVXgtDUk.png"
-          }
-        },
-        "linkedin": {
-          "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7510491386836619264"
         }
       }
     },
