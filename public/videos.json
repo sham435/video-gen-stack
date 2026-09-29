@@ -1,14 +1,68 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-29T06:04:23.448Z",
+  "updatedAt": "2026-09-29T11:55:03.175Z",
   "source": "production-ledger",
   "videos": [
+    {
+      "id": "D3QUptauTyQ",
+      "title": "Stock Market Today: Rejected Iran Truce Pushes Oil, Yields Higher; Dow Futures Slip — Live | NEWS-MONSTER",
+      "description": "Stock Market Today: Rejected Iran Truce Pushes Oil, Yields Higher; Dow Futures Slip — Live | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-09-29T11:51:18.956Z",
+      "publishedLabel": "Sep 29, 11:51 AM",
+      "thumbnail": "/thumbnails/D3QUptauTyQ.png",
+      "thumbnailSha256": "b064d9fba69673a719b3c09b4b7da9621b41e900315b7a183fbc4d84f3f8a507",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/D3QUptauTyQ",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "D3QUptauTyQ",
+          "url": "https://youtu.be/D3QUptauTyQ",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "b064d9fba69673a719b3c09b4b7da9621b41e900315b7a183fbc4d84f3f8a507",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "b064d9fba69673a719b3c09b4b7da9621b41e900315b7a183fbc4d84f3f8a507",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/D3QUptauTyQ.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510667500221718528"
+        }
+      }
+    },
     {
       "id": "1RuL5D-bdLU",
       "title": "'Sony's Hearing a Lot of the Feedback from Customers': NIS America Boss Weighs in on PS5 D | NEWS-MONSTER",
       "description": "'Sony's Hearing a Lot of the Feedback from Customers': NIS America Boss Weighs in on PS5 D | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-09-29T06:04:22.518Z",
+      "publishedAt": "2026-09-29T06:04:22.519Z",
       "publishedLabel": "Sep 29, 06:04 AM",
       "thumbnail": "/thumbnails/1RuL5D-bdLU.png",
       "thumbnailSha256": "0efa37043042713b4b58c25e6b1041b3f98b4feb2827c17699eb767fd4c09d47",
@@ -18,7 +72,7 @@
       "youtubeUrl": "https://youtu.be/1RuL5D-bdLU",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
