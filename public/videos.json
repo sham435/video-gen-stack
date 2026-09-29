@@ -1,8 +1,116 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-09-28T20:03:55.816Z",
+  "updatedAt": "2026-09-29T00:15:37.869Z",
   "source": "production-ledger",
   "videos": [
+    {
+      "id": "GOFYTfX9nmc",
+      "title": "Experimental Emulator Brings Nintendo Switch Games to Jailbroken PS5 Consoles - TechPowerU | NEWS-MONSTER",
+      "description": "Experimental Emulator Brings Nintendo Switch Games to Jailbroken PS5 Consoles - TechPowerU | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-29T00:15:37.226Z",
+      "publishedLabel": "Sep 29, 12:15 AM",
+      "thumbnail": "/thumbnails/GOFYTfX9nmc.png",
+      "thumbnailSha256": "f77bef3ecb969d26959ced57961761c5a9392ee1c4bcd4707124066db68491f4",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/GOFYTfX9nmc",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "GOFYTfX9nmc",
+          "url": "https://youtu.be/GOFYTfX9nmc",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "f77bef3ecb969d26959ced57961761c5a9392ee1c4bcd4707124066db68491f4",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "f77bef3ecb969d26959ced57961761c5a9392ee1c4bcd4707124066db68491f4",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/GOFYTfX9nmc.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510492431847477249"
+        }
+      }
+    },
+    {
+      "id": "dlUZVXgtDUk",
+      "title": "'Sony's Hearing a Lot of the Feedback from Customers': NIS America Boss Weighs in on PS5 D | NEWS-MONSTER",
+      "description": "'Sony's Hearing a Lot of the Feedback from Customers': NIS America Boss Weighs in on PS5 D | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-29T00:11:28.658Z",
+      "publishedLabel": "Sep 29, 12:11 AM",
+      "thumbnail": "/thumbnails/dlUZVXgtDUk.png",
+      "thumbnailSha256": "e7fb5387080ff5ce5e8ba2a5d5ae0476e9b8553edb67f48df7b7ffe29893b074",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/dlUZVXgtDUk",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "dlUZVXgtDUk",
+          "url": "https://youtu.be/dlUZVXgtDUk",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "e7fb5387080ff5ce5e8ba2a5d5ae0476e9b8553edb67f48df7b7ffe29893b074",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 7,
+          "thumbnail": {
+            "sha256": "e7fb5387080ff5ce5e8ba2a5d5ae0476e9b8553edb67f48df7b7ffe29893b074",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/dlUZVXgtDUk.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510491386836619264"
+        }
+      }
+    },
     {
       "id": "0AuXKntJros",
       "title": "Wegovy Maker Novo Promises New Drugs to Boost Sales, but Investors Are Wary | NEWS-MONSTER",
@@ -18,7 +126,7 @@
       "youtubeUrl": "https://youtu.be/0AuXKntJros",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
@@ -62,7 +170,7 @@
       "title": "General Mills Bets on New Products, Marketing to Drive Turnaround | NEWS-MONSTER",
       "description": "General Mills Bets on New Products, Marketing to Drive Turnaround | NEWS-MONSTER",
       "category": "wsj",
-      "publishedAt": "2026-09-28T19:59:52.413Z",
+      "publishedAt": "2026-09-28T19:59:52.414Z",
       "publishedLabel": "Sep 28, 07:59 PM",
       "thumbnail": "/thumbnails/8KIxoeyaN4g.png",
       "thumbnailSha256": "307a6e413caed07b9ccc7f3181f018a595499c6a95b76abb60615eed0410c751",
@@ -72,7 +180,7 @@
       "youtubeUrl": "https://youtu.be/8KIxoeyaN4g",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
@@ -126,7 +234,7 @@
       "youtubeUrl": "https://youtu.be/wV-wMGcYrJk",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
