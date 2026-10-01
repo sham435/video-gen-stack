@@ -1,6 +1,6 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-10-01T15:22:35.354Z",
+  "updatedAt": "2026-10-01T18:13:46.398Z",
   "source": "production-ledger",
   "videos": [
     {
@@ -55,7 +55,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7510667500221718528"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "1RuL5D-bdLU",
@@ -109,7 +112,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7510580195079258113"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "GOFYTfX9nmc",
@@ -163,7 +169,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7510492431847477249"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "0AuXKntJros",
@@ -217,7 +226,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7510429080001982464"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "8KIxoeyaN4g",
@@ -271,7 +283,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7510428062593753090"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "wV-wMGcYrJk",
@@ -325,7 +340,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7510427016236703744"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "gaprdteWK6Q",
@@ -379,7 +397,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7510313314212814848"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "9hIEnid0kWM",
@@ -433,7 +454,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7510312563860017152"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "fZxDKjxexfo",
@@ -487,7 +511,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7510311871132942336"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "x0E-UEDJ8E0",
@@ -541,7 +568,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7510213342439931905"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "mWgOriTYkDc",
@@ -595,7 +625,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7510149525190246401"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "wXvmFYyviQQ",
@@ -649,7 +682,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7510142035283075072"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "XMwOD8gxp1o",
@@ -703,7 +739,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7510095633223991296"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "1hzG-GDTxK8",
@@ -757,7 +796,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7510094730299457536"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "-vQGQdPZGKs",
@@ -811,7 +853,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7510093613415133185"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "FKVK7HN6B4Y",
@@ -865,7 +910,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7510047288791166976"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "KYb61iLvfHM",
@@ -919,7 +967,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7510045948388007938"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "JChLLMtAPas",
@@ -973,7 +1024,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7510032001362571265"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "xy15AHXXsxE",
@@ -1027,7 +1081,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509981234798747648"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "8j0s4EcWHqY",
@@ -1081,7 +1138,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509980316275630080"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "7H-EjCTpTM8",
@@ -1135,7 +1195,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509979351912820736"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "bVmYnSK2HFY",
@@ -1189,7 +1252,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509893655952957440"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "Kplae6PA_Uo",
@@ -1243,7 +1309,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509892640398659584"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "gsBUSNeyw8o",
@@ -1297,7 +1366,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509762030321549312"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "NKUFyk198gY",
@@ -1351,7 +1423,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509761080794034176"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "OJayH5e4fD4",
@@ -1405,7 +1480,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509726230712127489"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "decxCQTL6lA",
@@ -1459,7 +1537,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509725353167278080"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "o2YEG1DrKVc",
@@ -1513,7 +1594,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509677910686035969"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "xNyQmjX7oH0",
@@ -1567,7 +1651,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509677097695563777"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "rEdqQi-MbIk",
@@ -1621,7 +1708,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509623964671922176"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "xjhz3f08EfA",
@@ -1675,7 +1765,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509616775609896961"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-01T18:13:46.398Z",
+      "availabilitySource": "oembed-live"
     },
     {
       "id": "Z81HMzfHR-4",
@@ -1729,7 +1822,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509586232885043202"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "5PZPy7QQgLo",
@@ -1783,7 +1879,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509563674907332609"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "j4RtMj2kJfo",
@@ -1837,7 +1936,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509560435566735360"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "h62_Xz9fUq8",
@@ -1891,7 +1993,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509534529464737792"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "9RGFu6CmFEo",
@@ -1945,7 +2050,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509504947609223168"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "FBRQjwybHMU",
@@ -1999,7 +2107,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509502975669714944"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "poYhb4l008g",
@@ -2053,7 +2164,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509492477230276608"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "6rCnf33r6fM",
@@ -2107,7 +2221,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509456861423812608"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "ytxK0cI2zjE",
@@ -2161,7 +2278,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509448322101878785"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "8FHa1Wtac9Y",
@@ -2215,7 +2335,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509326550694121472"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "eMjFnXsBfws",
@@ -2269,7 +2392,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509325394768994304"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "ssuocBWEjAc",
@@ -2323,7 +2449,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509291640461897728"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "ce5zi2SvddY",
@@ -2377,7 +2506,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509290603155828736"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "KDvhelILzqI",
@@ -2431,7 +2563,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509278470087135232"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "-FOlzcQs08s",
@@ -2485,7 +2620,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509127120321777664"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "O-3UNMfbNxY",
@@ -2539,7 +2677,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509056433401962496"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "pUOWg3ueNCM",
@@ -2593,7 +2734,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509055307147440128"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "9TON6XvKNmo",
@@ -2647,7 +2791,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509023228393164800"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "ZE0aYQHqecE",
@@ -2701,7 +2848,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509022058698383361"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "Ry8UGkiOhjg",
@@ -2755,7 +2905,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7508973405648453632"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "zUbN6FaLXwQ",
@@ -2809,7 +2962,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7508913352585302016"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "Y6viARSG8Ns",
@@ -2863,7 +3019,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7508839569606459393"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "X1blNQZqGnQ",
@@ -2917,7 +3076,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7508838328629305344"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "SQuIlSkHQcg",
@@ -2971,7 +3133,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7508763540665556993"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "RZ3WnuwXR4Y",
@@ -3025,7 +3190,10 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7508762559479451650"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "MT9_Ox0henE",
@@ -3079,7 +3247,10 @@
           "state": "PENDING",
           "postId": null
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "EpExk15_k50",
@@ -3133,7 +3304,10 @@
           "state": "PENDING",
           "postId": null
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "6JiX1MTc8PE",
@@ -3187,1195 +3361,10 @@
           "state": "PENDING",
           "postId": null
         }
-      }
-    },
-    {
-      "id": "dMHJxuMESLY",
-      "title": "Bandai Namco Is Bringing My Hero Academia: All's Justice To Switch 2 - Nintendo Life | NEWS-MONSTER",
-      "description": "Bandai Namco Is Bringing My Hero Academia: All's Justice To Switch 2 - Nintendo Life | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-08-31T14:59:37.082Z",
-      "publishedLabel": "Aug 31, 02:59 PM",
-      "thumbnail": "/thumbnails/dMHJxuMESLY.png",
-      "thumbnailSha256": "e965770a0e367d97a7b9b8d9ba7f65ca136eed5fa6fedd1188e62356181fda0a",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/dMHJxuMESLY",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "dMHJxuMESLY",
-          "url": "https://youtu.be/dMHJxuMESLY",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "e965770a0e367d97a7b9b8d9ba7f65ca136eed5fa6fedd1188e62356181fda0a",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "e965770a0e367d97a7b9b8d9ba7f65ca136eed5fa6fedd1188e62356181fda0a",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/dMHJxuMESLY.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "ou5YOQooBbU",
-      "title": "iPhone Ultra could turn out to be an unwise long-term decision - PhoneArena | NEWS-MONSTER",
-      "description": "iPhone Ultra could turn out to be an unwise long-term decision - PhoneArena | NEWS-MONSTER",
-      "category": "technology",
-      "publishedAt": "2026-08-31T14:57:18.616Z",
-      "publishedLabel": "Aug 31, 02:57 PM",
-      "thumbnail": "/thumbnails/ou5YOQooBbU.png",
-      "thumbnailSha256": "5458ce64feeb64d47fa313d5b707f0f072c7a662b1cd467ecfd5bb8b834b340d",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/ou5YOQooBbU",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "ou5YOQooBbU",
-          "url": "https://youtu.be/ou5YOQooBbU",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "5458ce64feeb64d47fa313d5b707f0f072c7a662b1cd467ecfd5bb8b834b340d",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "5458ce64feeb64d47fa313d5b707f0f072c7a662b1cd467ecfd5bb8b834b340d",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/ou5YOQooBbU.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "yzUOUwymZuE",
-      "title": "Sony Reconsidering Digital-Only Plans as Xbox Pushes Physical - MP1st | NEWS-MONSTER",
-      "description": "Sony Reconsidering Digital-Only Plans as Xbox Pushes Physical - MP1st | NEWS-MONSTER — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
-      "category": "technology",
-      "publishedAt": "2026-08-31T10:06:33.303Z",
-      "publishedLabel": "Aug 31, 10:06 AM",
-      "thumbnail": "https://i.ytimg.com/vi/yzUOUwymZuE/maxresdefault.jpg",
-      "thumbnailSha256": "12b0a1b68525b19c376fd3e1e37ae813409c5ba8be2d8463859cf8a15f5a4330",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/yzUOUwymZuE",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "yzUOUwymZuE",
-          "url": "https://youtu.be/yzUOUwymZuE",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "12b0a1b68525b19c376fd3e1e37ae813409c5ba8be2d8463859cf8a15f5a4330",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "12b0a1b68525b19c376fd3e1e37ae813409c5ba8be2d8463859cf8a15f5a4330",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/yzUOUwymZuE.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "ua4GtvMN9nw",
-      "title": "Amazon is selling a pair of ‘practical’ $20 cordless table lamps that have 3 color modes - | NEWS-MONSTER",
-      "description": "Amazon is selling a pair of ‘practical’ $20 cordless table lamps that have 3 color modes - | NEWS-MONSTER — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
-      "category": "technology",
-      "publishedAt": "2026-08-31T10:03:06.467Z",
-      "publishedLabel": "Aug 31, 10:03 AM",
-      "thumbnail": "https://i.ytimg.com/vi/ua4GtvMN9nw/maxresdefault.jpg",
-      "thumbnailSha256": "dd3d3a9e7838b1a083eccd4b3990f6a45f78c97d6f52511bdb765afb4ca6aeba",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/ua4GtvMN9nw",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "ua4GtvMN9nw",
-          "url": "https://youtu.be/ua4GtvMN9nw",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "dd3d3a9e7838b1a083eccd4b3990f6a45f78c97d6f52511bdb765afb4ca6aeba",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "dd3d3a9e7838b1a083eccd4b3990f6a45f78c97d6f52511bdb765afb4ca6aeba",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/ua4GtvMN9nw.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "fy5Xr2kw8wY",
-      "title": "Upcoming Iron Man Game Footage Leaks, EA Remains Cool: \"That Didn't Go As Planned\" - TechP | NEWS-MONSTER",
-      "description": "Upcoming Iron Man Game Footage Leaks, EA Remains Cool: \"That Didn't Go As Planned\" - TechP | NEWS-MONSTER — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
-      "category": "technology",
-      "publishedAt": "2026-08-31T09:59:51.379Z",
-      "publishedLabel": "Aug 31, 09:59 AM",
-      "thumbnail": "https://i.ytimg.com/vi/fy5Xr2kw8wY/maxresdefault.jpg",
-      "thumbnailSha256": "9dfe5d1f1e21663960baac8daaa85e378260880dc086f9a0deda3b4c98d52124",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/fy5Xr2kw8wY",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "fy5Xr2kw8wY",
-          "url": "https://youtu.be/fy5Xr2kw8wY",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "9dfe5d1f1e21663960baac8daaa85e378260880dc086f9a0deda3b4c98d52124",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "9dfe5d1f1e21663960baac8daaa85e378260880dc086f9a0deda3b4c98d52124",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/fy5Xr2kw8wY.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "lZ4zp1nu5gE",
-      "title": "Video lZ4zp1nu5gE",
-      "description": "Video lZ4zp1nu5gE — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
-      "category": "general",
-      "publishedAt": "2026-08-31T06:48:39.758Z",
-      "publishedLabel": "Aug 31, 06:48 AM",
-      "thumbnail": "https://i.ytimg.com/vi/lZ4zp1nu5gE/maxresdefault.jpg",
-      "thumbnailSha256": "f8e0b7e4296627395df91416c057218abafe47dfc7eb1247e386b50c19c70766",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/lZ4zp1nu5gE",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "lZ4zp1nu5gE",
-          "url": "https://youtu.be/lZ4zp1nu5gE",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "f8e0b7e4296627395df91416c057218abafe47dfc7eb1247e386b50c19c70766",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "f8e0b7e4296627395df91416c057218abafe47dfc7eb1247e386b50c19c70766",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/lZ4zp1nu5gE.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "BGoUhtGRUnw",
-      "title": "Video BGoUhtGRUnw",
-      "description": "Video BGoUhtGRUnw — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
-      "category": "general",
-      "publishedAt": "2026-08-31T06:45:43.079Z",
-      "publishedLabel": "Aug 31, 06:45 AM",
-      "thumbnail": "https://i.ytimg.com/vi/BGoUhtGRUnw/maxresdefault.jpg",
-      "thumbnailSha256": "0efbb44c161931305d8e3107b52162e25d801488a240bb08170e288f62adecff",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/BGoUhtGRUnw",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "BGoUhtGRUnw",
-          "url": "https://youtu.be/BGoUhtGRUnw",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "0efbb44c161931305d8e3107b52162e25d801488a240bb08170e288f62adecff",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 1,
-          "thumbnail": {
-            "sha256": "0efbb44c161931305d8e3107b52162e25d801488a240bb08170e288f62adecff",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/BGoUhtGRUnw.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "GI8YeqqoxYM",
-      "title": "Video GI8YeqqoxYM",
-      "description": "Video GI8YeqqoxYM — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
-      "category": "general",
-      "publishedAt": "2026-08-31T06:42:25.214Z",
-      "publishedLabel": "Aug 31, 06:42 AM",
-      "thumbnail": "https://i.ytimg.com/vi/GI8YeqqoxYM/maxresdefault.jpg",
-      "thumbnailSha256": "186414512006c1bd5e734d62e7164efc20bd588170408189db4bedb91eb08d3e",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/GI8YeqqoxYM",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "GI8YeqqoxYM",
-          "url": "https://youtu.be/GI8YeqqoxYM",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "186414512006c1bd5e734d62e7164efc20bd588170408189db4bedb91eb08d3e",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "186414512006c1bd5e734d62e7164efc20bd588170408189db4bedb91eb08d3e",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/GI8YeqqoxYM.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "RvcYkNlup5o",
-      "title": "Video RvcYkNlup5o",
-      "description": "Video RvcYkNlup5o — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
-      "category": "general",
-      "publishedAt": "2026-08-31T05:37:20.540Z",
-      "publishedLabel": "Aug 31, 05:37 AM",
-      "thumbnail": "https://i.ytimg.com/vi/RvcYkNlup5o/maxresdefault.jpg",
-      "thumbnailSha256": "34102070243ccc20f0ac84616d0c622e2925734651b40f0e2313bb5e954a6031",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/RvcYkNlup5o",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "RvcYkNlup5o",
-          "url": "https://youtu.be/RvcYkNlup5o",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "34102070243ccc20f0ac84616d0c622e2925734651b40f0e2313bb5e954a6031",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 4,
-          "thumbnail": {
-            "sha256": "34102070243ccc20f0ac84616d0c622e2925734651b40f0e2313bb5e954a6031",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/RvcYkNlup5o.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "3jHex1hFMIY",
-      "title": "Video 3jHex1hFMIY",
-      "description": "Video 3jHex1hFMIY — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
-      "category": "general",
-      "publishedAt": "2026-08-31T00:51:48.478Z",
-      "publishedLabel": "Aug 31, 12:51 AM",
-      "thumbnail": "https://i.ytimg.com/vi/3jHex1hFMIY/maxresdefault.jpg",
-      "thumbnailSha256": "469c78efe024502303ec6255c8db79edc563e64ef4c46537450f486e78e180d5",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/3jHex1hFMIY",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "3jHex1hFMIY",
-          "url": "https://youtu.be/3jHex1hFMIY",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "469c78efe024502303ec6255c8db79edc563e64ef4c46537450f486e78e180d5",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 4,
-          "thumbnail": {
-            "sha256": "469c78efe024502303ec6255c8db79edc563e64ef4c46537450f486e78e180d5",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/3jHex1hFMIY.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "lc2sbLmQ6Mc",
-      "title": "Video lc2sbLmQ6Mc",
-      "description": "Video lc2sbLmQ6Mc — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
-      "category": "general",
-      "publishedAt": "2026-08-31T00:49:24.854Z",
-      "publishedLabel": "Aug 31, 12:49 AM",
-      "thumbnail": "https://i.ytimg.com/vi/lc2sbLmQ6Mc/maxresdefault.jpg",
-      "thumbnailSha256": "13e07b56d1363c20de95458114c83acd997171e6341b68a316d727bca7a11f4e",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/lc2sbLmQ6Mc",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "lc2sbLmQ6Mc",
-          "url": "https://youtu.be/lc2sbLmQ6Mc",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "13e07b56d1363c20de95458114c83acd997171e6341b68a316d727bca7a11f4e",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "13e07b56d1363c20de95458114c83acd997171e6341b68a316d727bca7a11f4e",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/lc2sbLmQ6Mc.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "Oelemrwm3PY",
-      "title": "Video Oelemrwm3PY",
-      "description": "Video Oelemrwm3PY — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
-      "category": "general",
-      "publishedAt": "2026-08-30T22:32:44.719Z",
-      "publishedLabel": "Aug 30, 10:32 PM",
-      "thumbnail": "https://i.ytimg.com/vi/Oelemrwm3PY/maxresdefault.jpg",
-      "thumbnailSha256": "e832ca632f09a916d771c6dd5732ed86d1d5748d06c8f686d37274a22b820be5",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/Oelemrwm3PY",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "Oelemrwm3PY",
-          "url": "https://youtu.be/Oelemrwm3PY",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "e832ca632f09a916d771c6dd5732ed86d1d5748d06c8f686d37274a22b820be5",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 6,
-          "thumbnail": {
-            "sha256": "e832ca632f09a916d771c6dd5732ed86d1d5748d06c8f686d37274a22b820be5",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/Oelemrwm3PY.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "ASk2dw4R2-k",
-      "title": "Video ASk2dw4R2-k",
-      "description": "Video ASk2dw4R2-k — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
-      "category": "general",
-      "publishedAt": "2026-08-30T22:29:16.112Z",
-      "publishedLabel": "Aug 30, 10:29 PM",
-      "thumbnail": "https://i.ytimg.com/vi/ASk2dw4R2-k/maxresdefault.jpg",
-      "thumbnailSha256": "63a19f2def972784f5141a6e2f763b088383d3de9afd6786ec94a9cc3dde89a8",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/ASk2dw4R2-k",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "ASk2dw4R2-k",
-          "url": "https://youtu.be/ASk2dw4R2-k",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "63a19f2def972784f5141a6e2f763b088383d3de9afd6786ec94a9cc3dde89a8",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "63a19f2def972784f5141a6e2f763b088383d3de9afd6786ec94a9cc3dde89a8",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/ASk2dw4R2-k.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "5rj00cm1F_o",
-      "title": "Video 5rj00cm1F_o",
-      "description": "Video 5rj00cm1F_o — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
-      "category": "general",
-      "publishedAt": "2026-08-30T22:26:05.437Z",
-      "publishedLabel": "Aug 30, 10:26 PM",
-      "thumbnail": "https://i.ytimg.com/vi/5rj00cm1F_o/maxresdefault.jpg",
-      "thumbnailSha256": "5b3eb2a8eed040b1d3a385cda9d86822d3654981d75d02a30732040ac75059e6",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/5rj00cm1F_o",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "5rj00cm1F_o",
-          "url": "https://youtu.be/5rj00cm1F_o",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "5b3eb2a8eed040b1d3a385cda9d86822d3654981d75d02a30732040ac75059e6",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 1,
-          "thumbnail": {
-            "sha256": "5b3eb2a8eed040b1d3a385cda9d86822d3654981d75d02a30732040ac75059e6",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/5rj00cm1F_o.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "16SRUsKxFIQ",
-      "title": "Video 16SRUsKxFIQ",
-      "description": "Video 16SRUsKxFIQ — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
-      "category": "general",
-      "publishedAt": "2026-08-30T21:05:00.648Z",
-      "publishedLabel": "Aug 30, 09:05 PM",
-      "thumbnail": "https://i.ytimg.com/vi/16SRUsKxFIQ/maxresdefault.jpg",
-      "thumbnailSha256": "93283249662d6a40f8a609f573aa7cdecdb5103b643a9c1c6c15198ac23eee9a",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/16SRUsKxFIQ",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "16SRUsKxFIQ",
-          "url": "https://youtu.be/16SRUsKxFIQ",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "93283249662d6a40f8a609f573aa7cdecdb5103b643a9c1c6c15198ac23eee9a",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "93283249662d6a40f8a609f573aa7cdecdb5103b643a9c1c6c15198ac23eee9a",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/16SRUsKxFIQ.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "tLrjkhEoDTQ",
-      "title": "Video tLrjkhEoDTQ",
-      "description": "Video tLrjkhEoDTQ — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
-      "category": "general",
-      "publishedAt": "2026-08-30T19:46:44.482Z",
-      "publishedLabel": "Aug 30, 07:46 PM",
-      "thumbnail": "https://i.ytimg.com/vi/tLrjkhEoDTQ/maxresdefault.jpg",
-      "thumbnailSha256": "416046b0f3d1dd2e09079dceac882a2f77224533e2377acad15bca8e1cdd2c37",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/tLrjkhEoDTQ",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "tLrjkhEoDTQ",
-          "url": "https://youtu.be/tLrjkhEoDTQ",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "416046b0f3d1dd2e09079dceac882a2f77224533e2377acad15bca8e1cdd2c37",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 1,
-          "thumbnail": {
-            "sha256": "416046b0f3d1dd2e09079dceac882a2f77224533e2377acad15bca8e1cdd2c37",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/tLrjkhEoDTQ.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "Ur7JLR1_tWE",
-      "title": "Video Ur7JLR1_tWE",
-      "description": "Video Ur7JLR1_tWE — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
-      "category": "general",
-      "publishedAt": "2026-08-30T19:44:22.576Z",
-      "publishedLabel": "Aug 30, 07:44 PM",
-      "thumbnail": "https://i.ytimg.com/vi/Ur7JLR1_tWE/maxresdefault.jpg",
-      "thumbnailSha256": "11de636551debd10beec53d3f27510cca1db65a05fa2d2783e3f1419a191f5ad",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/Ur7JLR1_tWE",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "Ur7JLR1_tWE",
-          "url": "https://youtu.be/Ur7JLR1_tWE",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "11de636551debd10beec53d3f27510cca1db65a05fa2d2783e3f1419a191f5ad",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "11de636551debd10beec53d3f27510cca1db65a05fa2d2783e3f1419a191f5ad",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/Ur7JLR1_tWE.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "ydI58LStMqQ",
-      "title": "Video ydI58LStMqQ",
-      "description": "Video ydI58LStMqQ — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
-      "category": "general",
-      "publishedAt": "2026-08-30T19:41:54.393Z",
-      "publishedLabel": "Aug 30, 07:41 PM",
-      "thumbnail": "https://i.ytimg.com/vi/ydI58LStMqQ/maxresdefault.jpg",
-      "thumbnailSha256": "3a8feb9e95d4410053d3ef6d338691a10d53ff67bd2d952cf7c3a32835a9aaec",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/ydI58LStMqQ",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "ydI58LStMqQ",
-          "url": "https://youtu.be/ydI58LStMqQ",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "3a8feb9e95d4410053d3ef6d338691a10d53ff67bd2d952cf7c3a32835a9aaec",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 2,
-          "thumbnail": {
-            "sha256": "3a8feb9e95d4410053d3ef6d338691a10d53ff67bd2d952cf7c3a32835a9aaec",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/ydI58LStMqQ.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "kr_eErRNVyU",
-      "title": "Video kr_eErRNVyU",
-      "description": "Video kr_eErRNVyU — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
-      "category": "general",
-      "publishedAt": "2026-08-30T17:50:39.371Z",
-      "publishedLabel": "Aug 30, 05:50 PM",
-      "thumbnail": "https://i.ytimg.com/vi/kr_eErRNVyU/maxresdefault.jpg",
-      "thumbnailSha256": "25163c4887f16ac1d59d24fb3bc9cc6ad7d80220025f0944abac3754dca7fe79",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/kr_eErRNVyU",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "kr_eErRNVyU",
-          "url": "https://youtu.be/kr_eErRNVyU",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "25163c4887f16ac1d59d24fb3bc9cc6ad7d80220025f0944abac3754dca7fe79",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 1,
-          "thumbnail": {
-            "sha256": "25163c4887f16ac1d59d24fb3bc9cc6ad7d80220025f0944abac3754dca7fe79",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/kr_eErRNVyU.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "AzncMCtUKGU",
-      "title": "Video AzncMCtUKGU",
-      "description": "Video AzncMCtUKGU — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
-      "category": "general",
-      "publishedAt": "2026-08-30T17:48:10.445Z",
-      "publishedLabel": "Aug 30, 05:48 PM",
-      "thumbnail": "https://i.ytimg.com/vi/AzncMCtUKGU/maxresdefault.jpg",
-      "thumbnailSha256": "1195542d21f5756219ab103e961082035e9193987ede95c4ee92caa97404eaa2",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/AzncMCtUKGU",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "AzncMCtUKGU",
-          "url": "https://youtu.be/AzncMCtUKGU",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "1195542d21f5756219ab103e961082035e9193987ede95c4ee92caa97404eaa2",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "1195542d21f5756219ab103e961082035e9193987ede95c4ee92caa97404eaa2",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/AzncMCtUKGU.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "i0tMzepEQmM",
-      "title": "Video i0tMzepEQmM",
-      "description": "Video i0tMzepEQmM — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
-      "category": "general",
-      "publishedAt": "2026-08-30T17:45:22.089Z",
-      "publishedLabel": "Aug 30, 05:45 PM",
-      "thumbnail": "https://i.ytimg.com/vi/i0tMzepEQmM/maxresdefault.jpg",
-      "thumbnailSha256": "f493fa9562c5838e9ff305a57e367f7ae21e7d3a299d43d9e09c2a1d08f1e759",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/i0tMzepEQmM",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "i0tMzepEQmM",
-          "url": "https://youtu.be/i0tMzepEQmM",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "f493fa9562c5838e9ff305a57e367f7ae21e7d3a299d43d9e09c2a1d08f1e759",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "f493fa9562c5838e9ff305a57e367f7ae21e7d3a299d43d9e09c2a1d08f1e759",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/i0tMzepEQmM.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
-    },
-    {
-      "id": "yni0q1EvM-s",
-      "title": "Video yni0q1EvM-s",
-      "description": "Video yni0q1EvM-s — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
-      "category": "general",
-      "publishedAt": "2026-08-30T15:11:57.365Z",
-      "publishedLabel": "Aug 30, 03:11 PM",
-      "thumbnail": "https://i.ytimg.com/vi/yni0q1EvM-s/maxresdefault.jpg",
-      "thumbnailSha256": "8ccbb1bff9ef76faf61ac5a8e9abcdce023b1576a17710ca245ebff200f990d2",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/yni0q1EvM-s",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "yni0q1EvM-s",
-          "url": "https://youtu.be/yni0q1EvM-s",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "8ccbb1bff9ef76faf61ac5a8e9abcdce023b1576a17710ca245ebff200f990d2",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 4,
-          "thumbnail": {
-            "sha256": "8ccbb1bff9ef76faf61ac5a8e9abcdce023b1576a17710ca245ebff200f990d2",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/yni0q1EvM-s.png"
-          }
-        },
-        "linkedin": {
-          "state": "PENDING",
-          "postId": null
-        }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "bQaEwsb613Q",
@@ -4429,7 +3418,10 @@
           "state": "PENDING",
           "postId": null
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "GicGqDHflO4",
@@ -4483,7 +3475,10 @@
           "state": "PENDING",
           "postId": null
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "2CinTjlXdy8",
@@ -4537,7 +3532,10 @@
           "state": "PENDING",
           "postId": null
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     },
     {
       "id": "ITp2j5hdD44",
@@ -4591,7 +3589,11 @@
           "state": "PENDING",
           "postId": null
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z",
+      "availabilitySource": "api-state"
     }
-  ]
+  ],
+  "availabilityGate": "live"
 }
