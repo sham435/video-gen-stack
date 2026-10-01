@@ -217,6 +217,81 @@ and the deploy cascade rather than rewriting history.
 
 ---
 
+### CHANGE-005 — Public availability reconciliation (implemented 2026-09-26)
+
+```yaml
+Change ID:        FEED-002
+Reason:           SUCCESS at publication time ≠ PUBLIC forever. On 2026-09-26 a live
+                  check of the 57-video accumulated feed showed only 34 PUBLIC
+                  (22 DELETED + 1 UNLISTED). The client-facing landing page was
+                  rendering ~23 dead "Video unavailable" cards. History must be
+                  preserved; the DISCOVERABLE feed must be filtered.
+Affected module(s):
+  - scripts/availability.mjs             (NEW — availability reconciliation)
+  - scripts/update-videos.mjs            (feed gate: applyAvailabilityGate inserted
+                                          between schema validation and publish)
+  - .github/workflows/publish-news.yml   (refresh step now passes YOUTUBE_* OAuth env)
+New method(s):    classifyPrivacyStatus, chunkIds, getAccessToken, checkBatchAvailability
+                  (live videos.list?part=status, ≤50 ids/call), readAvailabilityState,
+                  writeAvailabilityState, applyAvailabilityGate (pure, exported, tested)
+Changed method(s): refreshVideosFeed — accumulated → dedupe → schema → availability
+                  gate → PUBLIC only → public/videos.json
+New configuration: none
+New environment variables: YOUTUBE_API_KEY (optional; OAuth trio already used by
+                  compose/verify steps is the default auth)
+New database objects: none
+New persistent state: data/availability-state.json (gitignored, cache-persisted via
+                  newsroom-data-main — append-only per videoId, never deletes history;
+                  records PUBLIC/PRIVATE/UNLISTED/DELETED/UNKNOWN + checkedAt)
+New routes:       none
+New events:       none
+New tests:
+  - tests/update-videos-availability.test.mjs (19 assertions: privacy classification,
+    batching ≤50, live-deleted, live-private, quota/5xx fail-closed UNKNOWN, network
+    fail-closed, mixed batch, gate PUBLIC-only, missing-map fail-closed, ordering +
+    schema preservation, no input mutation, availability tags, historical removal,
+    all-unavailable → empty feed, duplicate-id dedupe)
+New deployment mirror: none
+BRAND-001:        preserved — no branding changes.
+Deprecation:      none
+```
+
+Change graph:
+
+```text
+accumulated publication sources (ledger + production/runs + detail pages)
+              │
+              ▼
+mergeVerifiedPublicationSources → dedupe by videoId
+              │
+              ▼
+toVideoEntry → schema validation
+              │
+              ▼
+YouTube availability reconciliation   ◄── FEED-002 (scripts/availability.mjs)
+   PUBLIC │ PRIVATE │ UNLISTED │ DELETED │ UNKNOWN
+     │     └────────┴──────────┴─────────┴────────┘  → data/availability-state.json
+     ▼                                            (history retained, hidden from feed)
+public/videos.json (PUBLIC only, newest-first)
+              │
+              ▼
+publish-news.yml bot commit/push (GITHUB_TOKEN)
+              │
+              ▼
+dispatch_deploy → gh workflow run deploy.yml --ref main
+              │
+              ▼
+GitHub Pages → NEWS-MONSTER landing page feed (static, deterministic, zero client
+               YouTube calls)
+```
+
+Acceptance note: the landing page NEVER calls the YouTube API itself — reconciliation
+happens entirely in the GitHub Action upstream. Client rendering stays fast/static and
+deterministic; a deleted video disappears from the feed at the next refresh cycle while
+its record persists in production/runs + the ledger + availability-state.json.
+
+---
+
 ## 2. Content-Type Registry (canonical, one concept = one name)
 
 | contentType | language | market | region | sourceStack | allocation/day | status |

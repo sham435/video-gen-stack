@@ -138,6 +138,13 @@ jobs:
 
       - name: Refresh landing page video feed
         if: always()
+        env:
+          # FEED-002: the feed is gated on LIVE YouTube availability, so the
+          # refresh needs the same OAuth credentials as the compose step.
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: node scripts/update-videos.mjs
 
       - name: Generate video detail pages (hub + OG/SEO)

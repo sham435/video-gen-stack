@@ -9,7 +9,11 @@
  * FALLBACK: YouTube RSS feed (for pre-ledger videos).
  *
  * Invariant: if a video appears here, it has passed post-publish verification
- * (ledger 3-axis state OR committed production/runs verification).
+ * (ledger 3-axis state OR committed production/runs verification) AND is
+ * currently PUBLIC on YouTube (FEED-002 availability reconciliation — see
+ * scripts/availability.mjs). PRIVATE/UNLISTED/DELETED/UNKNOWN videos are
+ * retained in the accumulated sources + data/availability-state.json but are
+ * never published to the client-facing feed.
  * Never regenerates thumbnails — consumes the canonical artifact.
  *
  * Usage: node scripts/update-videos.mjs
@@ -18,6 +22,14 @@
 import { writeFileSync, existsSync, mkdirSync, readFileSync, readdirSync } from 'node:fs'
 import { resolve, dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import {
+  checkBatchAvailability,
+  getAccessToken,
+  applyAvailabilityGate,
+  readAvailabilityState,
+  writeAvailabilityState,
+  Availability,
+} from './availability.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const OUT = resolve(__dirname, '..', 'public', 'videos.json')
@@ -229,7 +241,7 @@ async function readRssFeed(channelId) {
   }).filter(v => v.id)
 }
 
-export async function refreshVideosFeed(channelId = CHANNEL_ID) {
+export async function refreshVideosFeed(channelId = CHANNEL_ID, options = {}) {
   // Primary: accumulated verified publications (ledger + production/runs + detail pages)
   const rawEntries = readAccumulatedPublications()
   const verifiedVideos = rawEntries
@@ -239,12 +251,72 @@ export async function refreshVideosFeed(channelId = CHANNEL_ID) {
   // Deterministic: newest published first
   verifiedVideos.sort((a, b) => new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0))
 
+  const updatedAt = new Date().toISOString()
+
   if (verifiedVideos.length > 0) {
-    const json = { channelId, updatedAt: new Date().toISOString(), source: 'production-ledger', videos: verifiedVideos }
-    if (!existsSync(dirname(OUT))) mkdirSync(dirname(OUT), { recursive: true })
-    writeFileSync(OUT, JSON.stringify(json, null, 2))
-    console.log(`📋 videos.json from accumulated verified publications: ${verifiedVideos.length} videos → ${OUT}`)
-    return json
+    // FEED-002 — YouTube availability reconciliation. Only videos currently
+    // PUBLIC are client-facing. PRIVATE/UNLISTED/DELETED/UNKNOWN are excluded.
+    const videoIds = verifiedVideos.map(v => v.id)
+
+    // Reuse previously persisted state when no live check is possible
+    // (e.g. token already consumed this run). Live check is the default.
+    let availability = readAvailabilityState()
+    let availabilityNewlyChecked = false
+    try {
+      let token = options.accessToken
+      if (!token) {
+        try { token = await getAccessToken() } catch (e) { /* missing creds → live check skipped */ }
+      }
+      if (token || options.apiKey || options.forceLiveCheck) {
+        const live = await checkBatchAvailability(videoIds, {
+          token,
+          apiKey: options.apiKey || process.env.YOUTUBE_API_KEY || '',
+          checkedAt: updatedAt,
+          fetchImpl: options.fetchImpl,
+        })
+        if (live.size > 0) {
+          availability = live
+          availabilityNewlyChecked = true
+          writeAvailabilityState(live, updatedAt)
+        }
+      }
+    } catch (e) {
+      console.warn(`⚠️  availability live check failed — using persisted state (${availability.size} records): ${e.message}`)
+    }
+
+    // Gate: PUBLIC only. Everything else is excluded from the landing feed
+    // but stays in the accumulated sources + availability state.
+    const { available, excluded } = applyAvailabilityGate(verifiedVideos, availability)
+    const excludedCount = excluded.length
+    if (excludedCount > 0) {
+      const byState = excluded.reduce((acc, x) => ((acc[x.availability] = (acc[x.availability] || 0) + 1), acc), {})
+      console.log(`🔒 availability gate excluded ${excludedCount} video(s): ${excluded.map(x => `${x.availability}:${x.id}`).slice(0, 8).join(', ')}${excludedCount > 8 ? '…' : ''} (${availabilityNewlyChecked ? 'live check' : 'persisted state'})`)
+      if (byState[DATA_UNAVAILABLE]) console.error(`   ⚠️  ${byState[DATA_UNAVAILABLE]} UNKNOWN — API outage, fail closed`)
+    }
+
+    if (available.length > 0) {
+      const json = {
+        channelId,
+        updatedAt,
+        source: 'production-ledger',
+        availabilityGate: availabilityNewlyChecked ? 'live' : 'persisted',
+        videos: available,
+      }
+      if (!existsSync(dirname(OUT))) mkdirSync(dirname(OUT), { recursive: true })
+      writeFileSync(OUT, JSON.stringify(json, null, 2))
+      console.log(`📋 videos.json (PUBLIC only): ${available.length} of ${verifiedVideos.length} verified videos → ${OUT}`)
+      return json
+    }
+
+    // All verified videos are currently unavailable — write an empty feed so
+    // the client never renders dead cards, but keep history intact.
+    if (verifiedVideos.length > 0) {
+      console.warn(`⚠️  all ${verifiedVideos.length} verified videos are currently unavailable — writing empty feed`)
+      const json = { channelId, updatedAt, source: 'production-ledger', availabilityGate: availabilityNewlyChecked ? 'live' : 'persisted', videos: [] }
+      if (!existsSync(dirname(OUT))) mkdirSync(dirname(OUT), { recursive: true })
+      writeFileSync(OUT, JSON.stringify(json, null, 2))
+      return json
+    }
   }
 
   // Fallback: YouTube RSS (for pre-ledger videos)
@@ -254,12 +326,15 @@ export async function refreshVideosFeed(channelId = CHANNEL_ID) {
     console.warn('⚠️  videos.json refresh skipped — no data available')
     return null
   }
-  const json = { channelId, updatedAt: new Date().toISOString(), source: 'youtube-rss', videos: rssVideos }
+  const json = { channelId, updatedAt, source: 'youtube-rss', availabilityGate: 'n/a', videos: rssVideos }
   if (!existsSync(dirname(OUT))) mkdirSync(dirname(OUT), { recursive: true })
   writeFileSync(OUT, JSON.stringify(json, null, 2))
   console.log(`📋 videos.json from RSS: ${rssVideos.length} videos → ${OUT}`)
   return json
 }
+
+// Constant used only for the UNKNOWN count warning above.
+const DATA_UNAVAILABLE = Availability.UNKNOWN
 
 // CLI entry only — do not run the refresh when imported by tests/modules.
 import { pathToFileURL } from 'node:url'

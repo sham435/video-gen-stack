@@ -123,3 +123,54 @@ SEO Builder  → YouTube synthetic tags    (deepEqual seo.youtubeTags)
 SEO Builder  → LinkedIn post hashtags    (deepEqual seo.linkedinHashtags)
 SocialPostGenerator → platform text      (contains '#tag' renderings)
 ```
+## 10. Public Feed Availability Contract (FEED-002)
+
+public/videos.json is the DISCOVERABLE feed: it lists ONLY videos currently **PUBLIC**
+on YouTube. Publication-history (ledger, production/runs, availability state) is
+retained in full; availability filtering happens upstream in the GitHub Action, never
+on the client.
+
+```yaml
+public/videos.json:
+  videos[]:
+    id: string                   # YouTube videoId
+    availability: 'PUBLIC'       # always PUBLIC in the feed (gate invariant)
+    availabilityCheckedAt: datetime  # when availability was verified (live)
+    # ...all existing schema keys (title, publishedAt, thumbnail, youtubeUrl, …)
+
+data/availability-state.json:    # gitignored; cache-persisted (newsroom-data-main)
+  schema: 'availability-state@1'
+  updatedAt: datetime
+  videos:                        # keyed by videoId — append-only, never deletes
+    <videoId>:
+      availability: PUBLIC|PRIVATE|UNLISTED|DELETED|UNKNOWN
+      checkedAt: datetime        # last verification timestamp
+      privacyStatus?: string     # YouTube privacyStatus when the API returned it
+      reason?: string            # DELETED 'absent from videos.list' / UNKNOWN error
+```
+
+State semantics (fail closed):
+- `PUBLIC`   → included in public/videos.json
+- `PRIVATE`  → excluded (retained in state + ledger)
+- `UNLISTED` → excluded (retained in state + ledger)
+- `DELETED`  → excluded (retained in state + ledger; API responded OK but id absent)
+- `UNKNOWN`  → excluded (fail closed: quota/5xx/network/timeout — availability not
+  established, must never be guessed)
+
+Invariants:
+- Never fabricates an availability verdict: a 200 response that omits an id = DELETED,
+  an errored/aborted batch = UNKNOWN for every id in that batch.
+- The client landing page makes ZERO YouTube API calls — fully static/deterministic.
+- Ordering: newest publishedAt first, preserved from the validated feed.
+- updatedAt in videos.json = feed regeneration time (not publish time).
+
+Contract tests: `tests/update-videos-availability.test.mjs`
+- privacy classification (public/private/unlisted/unknown)
+- batching to the YouTube ≤50-id limit
+- deleted (200, id absent), private, unlisted, quota/5xx → UNKNOWN, network → UNKNOWN
+- gate: PUBLIC only; missing availability map entry → excluded (fail closed)
+- ordering + schema preservation; no input mutation; availability tags present
+- historical video becoming unavailable → removed from feed, retained in history
+- all videos unavailable → empty feed (valid schema, no dead cards)
+- duplicate videoIds deduped upstream (one API call per unique id)
+```
