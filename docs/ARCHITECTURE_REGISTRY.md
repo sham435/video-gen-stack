@@ -292,6 +292,76 @@ its record persists in production/runs + the ledger + availability-state.json.
 
 ---
 
+### CHANGE-006 — YouTube credential failure must fail loud + name its cause (implemented 2026-10-22)
+
+```yaml
+Change ID:        PUBLISH-001
+Reason:           On 2026-10-17 a full audit of 18 consecutive "successful" publish runs
+                  (2026-09-29 → 2026-10-17) showed EVERY upload had failed with
+                  `YOUTUBE_API_ERROR: HTTP 400` and the article was quarantined. The job
+                  still exited 0, so notify-failure never fired: the channel silently went
+                  dark for 18 days. Locally reproducing the token refresh proved the real
+                  cause — Google's OAuth token endpoint returns HTTP 400 with
+                  `{"error":"invalid_grant","error_description":"Bad Request"}`, where
+                  `error` is a STRING. `youtubeApiError()` only read `error.message`, so a
+                  revoked/expired refresh token collapsed to a meaningless bare "HTTP 400".
+                  A systemic credential failure must (a) name its cause and (b) fail the run.
+Affected module(s):
+  - apps/api/publishers/youtube.js    (youtubeApiError: parse OAuth error shape +
+                                       isAuthError classification)
+  - scripts/composer.mjs              (fail-fast credential verification before render;
+                                       non-zero exit on unusable credential)
+New method(s):    none (youtubeApiError is internal; getAccessToken unchanged)
+Changed method(s): youtubeApiError — reads OAuth `error`/`error_description` when `error`
+                  is a string; sets `err.reason` from the OAuth code; sets
+                  `err.isAuthError` for invalid_grant/invalid_client/…/401.
+                  composer runFull — verifies getAccessToken({force:true}) after the
+                  production preflight; exits 1 on isAuthError / missing OAuth config;
+                  warns (continues) on transient network/5xx.
+New configuration: none
+New environment variables: none
+New database objects: none
+New persistent state: none
+New routes:       none
+New events:       none
+New tests:
+  - tests/youtube-auth-error.test.mjs (4 assertions: invalid_grant surfaced not bare
+    "HTTP 400" + isAuthError; 401 object-shape flagged; 500 not flagged as auth;
+    YouTube Data API quota error keeps message/reason and is not auth)
+New deployment mirror: none
+BRAND-001:        preserved — no branding changes.
+Deprecation:      none
+```
+
+Change graph:
+
+```text
+publish-news.yml (schedule */30)
+      │
+      ▼
+composer runFull
+      │
+      ├─ ProductionPreflight.run()  ── pre-existing gate
+      │
+      ├─ [NEW] getAccessToken({force:true})
+      │        │
+      │        ├─ invalid_grant ──► [AUTH] FATAL → exit 1 → notify-failure issue/email
+      │        │                    (no 10-minute render wasted, no silent dry spell)
+      │        └─ OK ──► render → UPLOAD → YouTube
+      │
+      ▼
+youtubeApiError(): OAuth string shape → "YOUTUBE_API_ERROR: invalid_grant: Bad Request"
+                   (+ isAuthError) · API object shape → unchanged
+```
+
+Operational requirement (NOT code): the refresh token that failed was revoked/expired.
+Re-authorize with `node scripts/youtube-oauth.mjs`, then
+`gh secret set YOUTUBE_REFRESH_TOKEN`. If the Google OAuth consent screen is in
+"Testing", refresh tokens expire after 7 days — publish the app to stop the weekly
+expiry that caused this outage.
+
+---
+
 ## 2. Content-Type Registry (canonical, one concept = one name)
 
 | contentType | language | market | region | sourceStack | allocation/day | status |

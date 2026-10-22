@@ -105,6 +105,30 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
       process.exit(1)
     }
 
+    // ── Fail-fast: verify the YouTube credential BEFORE rendering ──────────
+    // A revoked/expired refresh token (Google → `invalid_grant`) makes EVERY
+    // upload fail. Historically that surfaced only as a per-article QUARANTINE
+    // while the run still exited 0, so the channel silently stopped publishing
+    // for days (the notify-failure alarm needs a non-zero exit). Verify the
+    // credential up front and abort loudly so the guardrail actually fires.
+    try {
+      const { getAccessToken } = await import('../apps/api/publishers/youtube.js')
+      await getAccessToken({ force: true })
+      console.log('[AUTH] YouTube refresh token OK')
+    } catch (e) {
+      const missingConfig = /YOUTUBE_(OAUTH_CONFIG_MISSING|REFRESH_TOKEN_NOT_SET|ACCESS_TOKEN_MISSING)/.test(String(e?.message))
+      if (e?.isAuthError || missingConfig) {
+        console.error(`[AUTH] FATAL — YouTube credential unusable: ${e.message}`)
+        console.error('[AUTH] Re-authorize: node scripts/youtube-oauth.mjs')
+        console.error('[AUTH] then update the YOUTUBE_REFRESH_TOKEN repository secret.')
+        console.error('[AUTH] Aborting before render — no point producing a video that cannot upload.')
+        process.exit(1)
+      }
+      // Transient network/5xx — don't block a run that may still publish; the
+      // UPLOAD stage keeps its own retries.
+      console.warn(`[AUTH] YouTube preflight inconclusive (continuing): ${e.message}`)
+    }
+
     const { ProductionJob } = await import('../src/orchestrator/ProductionJob.mjs')
     const { ResourceGovernor } = await import('../src/governor/ResourceGovernor.mjs')
     const governor = new ResourceGovernor()

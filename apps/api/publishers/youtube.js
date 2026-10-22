@@ -154,12 +154,33 @@ async function readJson(response) {
 }
 
 function youtubeApiError(data, fallbackStatus) {
+  // Two different Google error shapes reach here:
+  //   1. OAuth token endpoint:  { error: "invalid_grant", error_description: "..." }
+  //      — `error` is a STRING, so `error.message` is undefined.
+  //   2. YouTube Data API:      { error: { code, message, errors:[{reason}], status } }
+  // The old code read only `error.message`, so shape (1) collapsed to a bare
+  // "HTTP 400" and the real reason (e.g. invalid_grant = a revoked/expired
+  // refresh token) was lost — hiding a total publish outage as a generic 400.
   const error = data?.error
-  const message = error?.message || `HTTP ${fallbackStatus} ${error?.status || ''}`.trim() || 'unknown YouTube API error'
+  const oauthError = typeof error === 'string' ? error : null
+  const oauthDescription = typeof data?.error_description === 'string' ? data.error_description : null
+  const apiMessage = error && typeof error === 'object' ? error.message : null
+  const message =
+    apiMessage ||
+    (oauthError ? `${oauthError}${oauthDescription ? `: ${oauthDescription}` : ''}` : null) ||
+    `HTTP ${fallbackStatus}`
   const err = new Error(`YOUTUBE_API_ERROR: ${message}`)
   err.httpStatus = fallbackStatus
-  err.reason = error?.errors?.[0]?.reason || error?.status || null
+  err.reason = (error && typeof error === 'object' ? (error.errors?.[0]?.reason || error.status) : null) || oauthError || null
   err.youtubeError = error || null
+  // An unusable credential is SYSTEMIC — every upload will fail. Flag it so the
+  // composer can fail the run loudly instead of quarantining each article while
+  // the pipeline still reports success.
+  const AUTH_RE = /invalid_grant|invalid_client|unauthorized_client|invalid_token|expired|revoked/i
+  err.isAuthError =
+    fallbackStatus === 401 ||
+    (typeof err.reason === 'string' && AUTH_RE.test(err.reason)) ||
+    AUTH_RE.test(String(message))
   return err
 }
 
