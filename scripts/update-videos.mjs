@@ -28,6 +28,8 @@ import {
   applyAvailabilityGate,
   readAvailabilityState,
   writeAvailabilityState,
+  mergeAuthoritativeState,
+  hasUnverifiedExclusion,
   Availability,
 } from './availability.mjs'
 
@@ -260,7 +262,8 @@ export async function refreshVideosFeed(channelId = CHANNEL_ID, options = {}) {
 
     // Reuse previously persisted state when no live check is possible
     // (e.g. token already consumed this run). Live check is the default.
-    let availability = readAvailabilityState()
+    const priorState = readAvailabilityState()
+    let availability = priorState
     let availabilityNewlyChecked = false
     try {
       let token = options.accessToken
@@ -274,10 +277,21 @@ export async function refreshVideosFeed(channelId = CHANNEL_ID, options = {}) {
           checkedAt: updatedAt,
           fetchImpl: options.fetchImpl,
         })
-        if (live.size > 0) {
-          availability = live
+
+        // An outage (401/403/quota/network/expired credential) yields UNKNOWN
+        // for EVERY id. That is a failure to observe, not a verdict: UNKNOWN
+        // results are dropped so they can never overwrite a known PUBLIC record
+        // or be persisted (see mergeAuthoritativeState).
+        const { state: merged, authoritative, isOutage } = mergeAuthoritativeState(priorState, live)
+        if (authoritative.size > 0) {
+          availability = merged
           availabilityNewlyChecked = true
-          writeAvailabilityState(live, updatedAt)
+          writeAvailabilityState(authoritative, updatedAt)
+        } else if (isOutage) {
+          console.warn(
+            `⚠️  availability check returned UNKNOWN for all ${live.size} video(s) ` +
+            `(API/credential outage) — keeping last known good state`,
+          )
         }
       }
     } catch (e) {
@@ -291,7 +305,7 @@ export async function refreshVideosFeed(channelId = CHANNEL_ID, options = {}) {
     if (excludedCount > 0) {
       const byState = excluded.reduce((acc, x) => ((acc[x.availability] = (acc[x.availability] || 0) + 1), acc), {})
       console.log(`🔒 availability gate excluded ${excludedCount} video(s): ${excluded.map(x => `${x.availability}:${x.id}`).slice(0, 8).join(', ')}${excludedCount > 8 ? '…' : ''} (${availabilityNewlyChecked ? 'live check' : 'persisted state'})`)
-      if (byState[DATA_UNAVAILABLE]) console.error(`   ⚠️  ${byState[DATA_UNAVAILABLE]} UNKNOWN — API outage, fail closed`)
+      if (byState[DATA_UNAVAILABLE]) console.error(`   ⚠️  ${byState[DATA_UNAVAILABLE]} UNKNOWN — API/credential outage (unverified, not a verdict)`)
     }
 
     if (available.length > 0) {
@@ -308,15 +322,26 @@ export async function refreshVideosFeed(channelId = CHANNEL_ID, options = {}) {
       return json
     }
 
-    // All verified videos are currently unavailable — write an empty feed so
-    // the client never renders dead cards, but keep history intact.
-    if (verifiedVideos.length > 0) {
-      console.warn(`⚠️  all ${verifiedVideos.length} verified videos are currently unavailable — writing empty feed`)
-      const json = { channelId, updatedAt, source: 'production-ledger', availabilityGate: availabilityNewlyChecked ? 'live' : 'persisted', videos: [] }
-      if (!existsSync(dirname(OUT))) mkdirSync(dirname(OUT), { recursive: true })
-      writeFileSync(OUT, JSON.stringify(json, null, 2))
-      return json
+    // Safety rail: an empty feed is only legitimate when EVERY video was
+    // authoritatively resolved as not-public (DELETED/PRIVATE/UNLISTED).
+    // If any video is merely UNVERIFIED (UNKNOWN — API/credential outage), we
+    // must not overwrite the existing feed: an unusable credential must never
+    // blank the public site. Leave videos.json untouched and report loudly.
+    const unverified = excluded.filter(x => x.availability === Availability.UNKNOWN)
+    if (hasUnverifiedExclusion(excluded)) {
+      console.error(
+        `❌ refusing to write an empty feed — ${unverified.length} of ${verifiedVideos.length} ` +
+        `video(s) could not be verified (UNKNOWN). Keeping the existing feed unchanged.`,
+      )
+      return null
     }
+
+    // Every video was authoritatively resolved as gone/not-public.
+    console.warn(`⚠️  all ${verifiedVideos.length} verified videos are authoritatively unavailable — writing empty feed`)
+    const json = { channelId, updatedAt, source: 'production-ledger', availabilityGate: availabilityNewlyChecked ? 'live' : 'persisted', videos: [] }
+    if (!existsSync(dirname(OUT))) mkdirSync(dirname(OUT), { recursive: true })
+    writeFileSync(OUT, JSON.stringify(json, null, 2))
+    return json
   }
 
   // Fallback: YouTube RSS (for pre-ledger videos)

@@ -362,6 +362,55 @@ expiry that caused this outage.
 
 ---
 
+### CHANGE-007 — An availability outage must never blank the public feed (implemented 2026-10-22)
+
+```yaml
+Change ID:        FEED-003
+Reason:           Cascade of PUBLISH-001. Because the refresh token died on
+                  2026-09-29, the availability live check could no longer observe
+                  any video. checkBatchAvailability correctly returns UNKNOWN per
+                  id on 401/403/quota/network, but update-videos.mjs treated that
+                  map as authoritative: it persisted 85 UNKNOWN records over 34
+                  good PUBLIC ones, the gate then excluded everything ("fail
+                  closed"), and an EMPTY public/videos.json was committed and
+                  deployed. The landing page was blank for ~3 weeks (2026-09-29 →
+                  2026-10-22) — the worst possible outcome for a site that is the
+                  LinkedIn CTA destination. An outage is a failure to OBSERVE,
+                  never a verdict about the videos.
+Affected module(s):
+  - scripts/availability.mjs     (NEW mergeAuthoritativeState, hasUnverifiedExclusion)
+  - scripts/update-videos.mjs    (use them; refuse to write an empty feed when any
+                                  exclusion is unverified)
+New method(s):    mergeAuthoritativeState, hasUnverifiedExclusion
+Changed method(s): update-videos refreshVideosFeed — availability state is now
+                  merged (UNKNOWN never overwrites known state, never persisted);
+                  an empty feed is written ONLY when every video is
+                  authoritatively DELETED/PRIVATE/UNLISTED.
+New configuration: none
+New environment variables: none
+New database objects: none
+New persistent state: none (data/availability-state.json schema unchanged)
+New routes:       none
+New events:       none
+New tests:        9 added to tests/update-videos-availability.test.mjs (27 total)
+New deployment mirror: none
+BRAND-001:        preserved.
+Deprecation:      none
+```
+
+Invariant established:
+
+> `public/videos.json` may only SHRINK when the shrink is explained by
+> authoritative per-video verdicts. If any video is UNKNOWN, the existing feed
+> is preserved and the run reports the outage.
+
+Evidence: locally reproducing the incident (57 records poisoned to UNKNOWN,
+credential unusable) now logs
+`❌ refusing to write an empty feed — 57 of 57 video(s) could not be verified
+(UNKNOWN). Keeping the existing feed unchanged.` and the 34-video feed survives.
+
+---
+
 ## 2. Content-Type Registry (canonical, one concept = one name)
 
 | contentType | language | market | region | sourceStack | allocation/day | status |

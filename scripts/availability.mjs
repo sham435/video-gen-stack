@@ -216,3 +216,45 @@ export function applyAvailabilityGate(entries, availability) {
   }
   return { available, excluded }
 }
+
+/**
+ * Merge live availability results into previously persisted state.
+ *
+ * Critical distinction: an outage (expired credential / 401 / 403 quota /
+ * network) makes checkBatchAvailability return UNKNOWN for EVERY id. That is a
+ * failure to OBSERVE, not evidence that the videos are gone. Treating it as a
+ * verdict is what blanked the public feed from 2026-09-29 to 2026-10-22:
+ * 85 UNKNOWN records overwrote 34 PUBLIC ones, the gate excluded everything,
+ * and an empty videos.json was deployed.
+ *
+ * Therefore: UNKNOWN results are DROPPED. Only authoritative results
+ * (PUBLIC/PRIVATE/UNLISTED/DELETED) may overwrite a prior record.
+ *
+ * @param {Map} priorState  previously persisted state
+ * @param {Map} live        results from checkBatchAvailability
+ * @returns {{state: Map, authoritative: Map, isOutage: boolean}}
+ *          state         — prior state with authoritative results applied
+ *          authoritative — the subset safe to persist
+ *          isOutage      — a check ran but produced no authoritative result
+ */
+export function mergeAuthoritativeState(priorState = new Map(), live = new Map()) {
+  const authoritative = new Map()
+  for (const [id, rec] of live) {
+    if (rec && rec.availability && rec.availability !== Availability.UNKNOWN) {
+      authoritative.set(id, rec)
+    }
+  }
+  const state = new Map(priorState)
+  for (const [id, rec] of authoritative) state.set(id, rec)
+  return { state, authoritative, isOutage: live.size > 0 && authoritative.size === 0 }
+}
+
+/**
+ * True when any excluded video is merely UNVERIFIED. In that case an empty
+ * feed is not legitimate — the videos may well still be PUBLIC and we simply
+ * could not see them. Callers must keep the existing feed instead.
+ * @param {Array<{availability: string}>} excluded
+ */
+export function hasUnverifiedExclusion(excluded = []) {
+  return excluded.some(x => x?.availability === Availability.UNKNOWN)
+}

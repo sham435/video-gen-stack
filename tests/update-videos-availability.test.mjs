@@ -16,6 +16,8 @@ import {
   chunkIds,
   checkBatchAvailability,
   applyAvailabilityGate,
+  mergeAuthoritativeState,
+  hasUnverifiedExclusion,
   Availability,
 } from '../scripts/availability.mjs'
 
@@ -237,5 +239,97 @@ describe('duplicate ids across sources', () => {
     const { available } = applyAvailabilityGate([entry('DUP1')], res)
     assert.equal(available.length, 1)
     assert.equal(available[0].availability, Availability.PUBLIC)
+  })
+})
+// ─────────────────────────────────────────────────────────────────────────────
+// 2026-10-22 incident: expired YOUTUBE_REFRESH_TOKEN → YouTube API 401 →
+// checkBatchAvailability returned UNKNOWN for all 85 videos → the UNKNOWN map
+// was treated as authoritative, persisted over 34 good PUBLIC records, the gate
+// excluded everything, and an EMPTY videos.json was deployed. The landing page
+// was blank for ~3 weeks (2026-09-29 → 2026-10-22).
+//
+// Rule: an outage is a failure to OBSERVE, never a verdict. UNKNOWN must not
+// overwrite known state, and an outage must never blank the public feed.
+// ─────────────────────────────────────────────────────────────────────────────
+describe('mergeAuthoritativeState — UNKNOWN must never overwrite known state', () => {
+  it('all-UNKNOWN (outage) preserves prior PUBLIC records and reports an outage', () => {
+    const prior = new Map([
+      ['A', { availability: Availability.PUBLIC, checkedAt: '2026-09-26T18:45:04.272Z' }],
+      ['B', { availability: Availability.PUBLIC, checkedAt: '2026-09-26T18:45:04.272Z' }],
+    ])
+    const live = new Map([
+      ['A', { availability: Availability.UNKNOWN, reason: 'HTTP 401' }],
+      ['B', { availability: Availability.UNKNOWN, reason: 'HTTP 401' }],
+    ])
+    const { state, authoritative, isOutage } = mergeAuthoritativeState(prior, live)
+    assert.equal(isOutage, true)
+    assert.equal(authoritative.size, 0) // nothing safe to persist
+    assert.equal(state.get('A').availability, Availability.PUBLIC)
+    assert.equal(state.get('B').availability, Availability.PUBLIC)
+    // the prior check timestamp is untouched — no false "verified now" signal
+    assert.equal(state.get('A').checkedAt, '2026-09-26T18:45:04.272Z')
+  })
+
+  it('partial outage applies authoritative verdicts and keeps prior state for unknowns', () => {
+    const prior = new Map([
+      ['A', { availability: Availability.PUBLIC }],
+      ['B', { availability: Availability.PUBLIC }],
+    ])
+    const live = new Map([
+      ['A', { availability: Availability.DELETED, reason: 'absent from videos.list' }],
+      ['B', { availability: Availability.UNKNOWN, reason: 'HTTP 403' }],
+    ])
+    const { state, authoritative, isOutage } = mergeAuthoritativeState(prior, live)
+    assert.equal(isOutage, false)
+    assert.deepEqual([...authoritative.keys()], ['A']) // only A may be persisted
+    assert.equal(state.get('A').availability, Availability.DELETED)
+    assert.equal(state.get('B').availability, Availability.PUBLIC) // preserved
+  })
+
+  it('a skipped check (empty live map) is not an outage', () => {
+    const prior = new Map([['A', { availability: Availability.PUBLIC }]])
+    const { state, authoritative, isOutage } = mergeAuthoritativeState(prior, new Map())
+    assert.equal(isOutage, false)
+    assert.equal(authoritative.size, 0)
+    assert.equal(state.get('A').availability, Availability.PUBLIC)
+  })
+
+  it('quota/network failures classified UNKNOWN cannot downgrade DELETED or PUBLIC', () => {
+    const prior = new Map([
+      ['PUB', { availability: Availability.PUBLIC }],
+      ['DEL', { availability: Availability.DELETED }],
+    ])
+    const live = new Map([
+      ['PUB', { availability: Availability.UNKNOWN }],
+      ['DEL', { availability: Availability.UNKNOWN }],
+    ])
+    const { state } = mergeAuthoritativeState(prior, live)
+    assert.equal(state.get('PUB').availability, Availability.PUBLIC)
+    assert.equal(state.get('DEL').availability, Availability.DELETED)
+  })
+})
+
+describe('hasUnverifiedExclusion — never blank the feed on an outage', () => {
+  it('detects an UNKNOWN exclusion', () => {
+    assert.equal(hasUnverifiedExclusion([{ availability: Availability.PUBLIC }].slice(1).concat([{ availability: Availability.UNKNOWN }])), true)
+  })
+
+  it('authoritative deletions alone permit an empty feed', () => {
+    assert.equal(hasUnverifiedExclusion([
+      { availability: Availability.DELETED },
+      { availability: Availability.UNLISTED },
+      { availability: Availability.PRIVATE },
+    ]), false)
+  })
+
+  it('an outage mixed with real deletions still blocks the empty feed', () => {
+    assert.equal(hasUnverifiedExclusion([
+      { availability: Availability.DELETED },
+      { availability: Availability.UNKNOWN },
+    ]), true)
+  })
+
+  it('no exclusions is not an unverified state', () => {
+    assert.equal(hasUnverifiedExclusion([]), false)
   })
 })
