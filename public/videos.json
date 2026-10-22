@@ -1,17 +1,17 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-10-22T04:39:37.215Z",
+  "updatedAt": "2026-10-22T13:16:26.733Z",
   "source": "production-ledger",
   "availabilityGate": "persisted",
   "videos": [
     {
       "id": "Z81HMzfHR-4",
-      "title": "Video Z81HMzfHR-4",
-      "description": "",
-      "category": "general",
+      "title": "Nintendo Reportedly Rejected A Ubisoft Zelda Spin-Off Starring Ganondorf - Nintendo Life | NEWS-MONSTER",
+      "description": "Nintendo Reportedly Rejected A Ubisoft Zelda Spin-Off Starring Ganondorf - Nintendo Life | NEWS-MONSTER",
+      "category": "technology",
       "publishedAt": "2026-09-26T12:14:44.960Z",
-      "publishedLabel": "Sep 26, 05:44 PM",
-      "thumbnail": "https://i.ytimg.com/vi/Z81HMzfHR-4/maxresdefault.jpg",
+      "publishedLabel": "Sep 26, 12:14 PM",
+      "thumbnail": "/thumbnails/Z81HMzfHR-4.png",
       "thumbnailSha256": "73c0f5fd2588894a64b9d1d3bc92acbaf91db44a0a418f42e681277bc9e3c436",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -56,18 +56,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509586232885043202"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "5PZPy7QQgLo",
-      "title": "Video 5PZPy7QQgLo",
-      "description": "",
-      "category": "general",
+      "title": "Original Castlevania now available for iOS, Android for free - Gematsu | NEWS-MONSTER",
+      "description": "Original Castlevania now available for iOS, Android for free - Gematsu | NEWS-MONSTER",
+      "category": "technology",
       "publishedAt": "2026-09-26T10:45:03.761Z",
-      "publishedLabel": "Sep 26, 04:15 PM",
-      "thumbnail": "https://i.ytimg.com/vi/5PZPy7QQgLo/maxresdefault.jpg",
+      "publishedLabel": "Sep 26, 10:45 AM",
+      "thumbnail": "/thumbnails/5PZPy7QQgLo.png",
       "thumbnailSha256": "f50d2764ebb677e32803c75880288713dcb315048fa8d54ca6abbe6d8ad8eeed",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -112,18 +110,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509563674907332609"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "j4RtMj2kJfo",
-      "title": "Video j4RtMj2kJfo",
-      "description": "",
-      "category": "general",
+      "title": "These camera apps give you more control over the iPhone 18 Pro’s aperture | NEWS-MONSTER",
+      "description": "These camera apps give you more control over the iPhone 18 Pro’s aperture | NEWS-MONSTER",
+      "category": "apple",
       "publishedAt": "2026-09-26T10:32:12.529Z",
-      "publishedLabel": "Sep 26, 04:02 PM",
-      "thumbnail": "https://i.ytimg.com/vi/j4RtMj2kJfo/maxresdefault.jpg",
+      "publishedLabel": "Sep 26, 10:32 AM",
+      "thumbnail": "/thumbnails/j4RtMj2kJfo.png",
       "thumbnailSha256": "ddb326f5984efa1e8671bd02cfc573584ba11787066b393ae78de6ebf45f4c7c",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -168,18 +164,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509560435566735360"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "h62_Xz9fUq8",
-      "title": "Video h62_Xz9fUq8",
-      "description": "",
-      "category": "general",
+      "title": "15 early October Prime Day tech deals, hand-picked by our gadget experts - Mashable | NEWS-MONSTER",
+      "description": "15 early October Prime Day tech deals, hand-picked by our gadget experts - Mashable | NEWS-MONSTER",
+      "category": "technology",
       "publishedAt": "2026-09-26T08:49:16.221Z",
-      "publishedLabel": "Sep 26, 02:19 PM",
-      "thumbnail": "https://i.ytimg.com/vi/h62_Xz9fUq8/maxresdefault.jpg",
+      "publishedLabel": "Sep 26, 08:49 AM",
+      "thumbnail": "/thumbnails/h62_Xz9fUq8.png",
       "thumbnailSha256": "9dad3e3a41c5ac201dbe2eb198fae8c6af57ef90cc12fbdf8c50d66de73ec3d2",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -224,18 +218,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509534529464737792"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "9RGFu6CmFEo",
-      "title": "Video 9RGFu6CmFEo",
-      "description": "",
-      "category": "general",
+      "title": "'We heard you, we heard media, we heard analysts': Motorola talks about why now is the tim | NEWS-MONSTER",
+      "description": "'We heard you, we heard media, we heard analysts': Motorola talks about why now is the tim | NEWS-MONSTER",
+      "category": "technology",
       "publishedAt": "2026-09-26T06:51:43.939Z",
-      "publishedLabel": "Sep 26, 12:21 PM",
-      "thumbnail": "https://i.ytimg.com/vi/9RGFu6CmFEo/maxresdefault.jpg",
+      "publishedLabel": "Sep 26, 06:51 AM",
+      "thumbnail": "/thumbnails/9RGFu6CmFEo.png",
       "thumbnailSha256": "9212583a630b3a12e50c7785c7e7ed91feb2ec513eaf45b12298e0a2aafc3c33",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -280,18 +272,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509504947609223168"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "FBRQjwybHMU",
-      "title": "Video FBRQjwybHMU",
-      "description": "",
-      "category": "general",
+      "title": "Nvidia CEO Doesn't Care That Kids Are Forgetting Basic Math Because Of AI: 'I Actually Don | NEWS-MONSTER",
+      "description": "Nvidia CEO Doesn't Care That Kids Are Forgetting Basic Math Because Of AI: 'I Actually Don | NEWS-MONSTER",
+      "category": "technology",
       "publishedAt": "2026-09-26T06:43:53.823Z",
-      "publishedLabel": "Sep 26, 12:13 PM",
-      "thumbnail": "https://i.ytimg.com/vi/FBRQjwybHMU/maxresdefault.jpg",
+      "publishedLabel": "Sep 26, 06:43 AM",
+      "thumbnail": "/thumbnails/FBRQjwybHMU.png",
       "thumbnailSha256": "7f064a6466bc21c69d791c3fa556b5eb940277810506410adf8b633263c47431",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -336,18 +326,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509502975669714944"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "poYhb4l008g",
-      "title": "Video poYhb4l008g",
-      "description": "",
-      "category": "general",
+      "title": "Here’s the Tesla Semi… again - The Verge | NEWS-MONSTER",
+      "description": "Here’s the Tesla Semi… again - The Verge | NEWS-MONSTER",
+      "category": "business",
       "publishedAt": "2026-09-26T06:02:14.133Z",
-      "publishedLabel": "Sep 26, 11:32 AM",
-      "thumbnail": "https://i.ytimg.com/vi/poYhb4l008g/maxresdefault.jpg",
+      "publishedLabel": "Sep 26, 06:02 AM",
+      "thumbnail": "/thumbnails/poYhb4l008g.png",
       "thumbnailSha256": "62b9437e12d0605ebe7020b211982e2fb81bdad2d3d870c6bf833d6b06f9e85f",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -392,18 +380,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509492477230276608"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "6rCnf33r6fM",
-      "title": "Video 6rCnf33r6fM",
-      "description": "",
-      "category": "general",
+      "title": "Experts Disagree On GTA | NEWS-MONSTER",
+      "description": "Experts Disagree On GTA | NEWS-MONSTER",
+      "category": "technology",
       "publishedAt": "2026-09-26T03:40:38.232Z",
-      "publishedLabel": "Sep 26, 09:10 AM",
-      "thumbnail": "https://i.ytimg.com/vi/6rCnf33r6fM/maxresdefault.jpg",
+      "publishedLabel": "Sep 26, 03:40 AM",
+      "thumbnail": "/thumbnails/6rCnf33r6fM.png",
       "thumbnailSha256": "7c89d9b5c3bbfd0244cbffe48455a1085dcac3cb47b15a617ad0d21f166a5cb6",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -448,18 +434,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509456861423812608"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "ytxK0cI2zjE",
-      "title": "Video ytxK0cI2zjE",
-      "description": "",
-      "category": "general",
+      "title": "Meta gets to consumer AI device market before OpenAI, but Zuckerberg's strategy remains un | NEWS-MONSTER",
+      "description": "Meta gets to consumer AI device market before OpenAI, but Zuckerberg's strategy remains un | NEWS-MONSTER",
+      "category": "technology",
       "publishedAt": "2026-09-26T03:06:42.033Z",
-      "publishedLabel": "Sep 26, 08:36 AM",
-      "thumbnail": "https://i.ytimg.com/vi/ytxK0cI2zjE/maxresdefault.jpg",
+      "publishedLabel": "Sep 26, 03:06 AM",
+      "thumbnail": "/thumbnails/ytxK0cI2zjE.png",
       "thumbnailSha256": "95e9000d369a0817a8df9ecf4835bca771a11e4364c76d3b476fb1561287be2f",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -504,13 +488,11 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509448322101878785"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "CRw4Nvkx37E",
-      "title": "Video CRw4Nvkx37E",
+      "title": "Wegovy Maker Novo Promises New Drugs to Boost Sales, but Investors Are Wary | NEWS-MONSTER",
       "description": "",
       "category": "general",
       "publishedAt": "2026-09-25T23:03:44.365Z",
@@ -566,7 +548,7 @@
     },
     {
       "id": "igXZOpY9pDk",
-      "title": "Video igXZOpY9pDk",
+      "title": "General Mills Bets on New Products, Marketing to Drive Turnaround | NEWS-MONSTER",
       "description": "",
       "category": "general",
       "publishedAt": "2026-09-25T22:59:57.056Z",
@@ -622,12 +604,12 @@
     },
     {
       "id": "8FHa1Wtac9Y",
-      "title": "Video 8FHa1Wtac9Y",
-      "description": "",
-      "category": "general",
+      "title": "Starfield 2 will likely never happen because the first wasn’t ‘anywhere near successful en | NEWS-MONSTER",
+      "description": "Starfield 2 will likely never happen because the first wasn’t ‘anywhere near successful en | NEWS-MONSTER",
+      "category": "technology",
       "publishedAt": "2026-09-25T19:02:50.898Z",
-      "publishedLabel": "Sep 26, 12:32 AM",
-      "thumbnail": "https://i.ytimg.com/vi/8FHa1Wtac9Y/maxresdefault.jpg",
+      "publishedLabel": "Sep 25, 07:02 PM",
+      "thumbnail": "/thumbnails/8FHa1Wtac9Y.png",
       "thumbnailSha256": "68fb4afeb3dbcb43c4fe5dd002bfb7b996a01cffd3d7a2033eaa4652f5f52ffa",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -672,18 +654,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509326550694121472"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "eMjFnXsBfws",
-      "title": "Video eMjFnXsBfws",
-      "description": "",
-      "category": "general",
+      "title": "Rockstar Reveals $400 Grand Theft Auto 6 Box Of Stuff That Doesn’t Include The Game - Kota | NEWS-MONSTER",
+      "description": "Rockstar Reveals $400 Grand Theft Auto 6 Box Of Stuff That Doesn’t Include The Game - Kota | NEWS-MONSTER",
+      "category": "technology",
       "publishedAt": "2026-09-25T18:58:15.535Z",
-      "publishedLabel": "Sep 26, 12:28 AM",
-      "thumbnail": "https://i.ytimg.com/vi/eMjFnXsBfws/maxresdefault.jpg",
+      "publishedLabel": "Sep 25, 06:58 PM",
+      "thumbnail": "/thumbnails/eMjFnXsBfws.png",
       "thumbnailSha256": "f16ab7419a411d88f4f4503d31f44df980f640a0e8a40836532af359efb61a31",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -728,18 +708,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509325394768994304"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "ssuocBWEjAc",
-      "title": "Video ssuocBWEjAc",
-      "description": "",
-      "category": "general",
+      "title": "Digital Foundry: Fire Emblem Fortune’s Weave is 720p docked, 540p handheld and 30fps, but  | NEWS-MONSTER",
+      "description": "Digital Foundry: Fire Emblem Fortune’s Weave is 720p docked, 540p handheld and 30fps, but  | NEWS-MONSTER",
+      "category": "technology",
       "publishedAt": "2026-09-25T16:44:07.257Z",
-      "publishedLabel": "Sep 25, 10:14 PM",
-      "thumbnail": "https://i.ytimg.com/vi/ssuocBWEjAc/maxresdefault.jpg",
+      "publishedLabel": "Sep 25, 04:44 PM",
+      "thumbnail": "/thumbnails/ssuocBWEjAc.png",
       "thumbnailSha256": "a6a6e658997e77f431d79ba364d64f2dd49a6f9495cc4172ca37f16d98960e78",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -784,18 +762,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509291640461897728"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "ce5zi2SvddY",
-      "title": "Video ce5zi2SvddY",
-      "description": "",
-      "category": "general",
+      "title": "10 Things I Wish I Knew When I Started ‘Control Resonant’ - Forbes | NEWS-MONSTER",
+      "description": "10 Things I Wish I Knew When I Started ‘Control Resonant’ - Forbes | NEWS-MONSTER",
+      "category": "technology",
       "publishedAt": "2026-09-25T16:39:59.368Z",
-      "publishedLabel": "Sep 25, 10:09 PM",
-      "thumbnail": "https://i.ytimg.com/vi/ce5zi2SvddY/maxresdefault.jpg",
+      "publishedLabel": "Sep 25, 04:39 PM",
+      "thumbnail": "/thumbnails/ce5zi2SvddY.png",
       "thumbnailSha256": "808160df1d591ad6abd57bce81ddd1d679b2ea5e25804eb46403583f9797aa1a",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -840,18 +816,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509290603155828736"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "KDvhelILzqI",
-      "title": "Video KDvhelILzqI",
-      "description": "",
-      "category": "general",
+      "title": "Bruttoinlandsprodukt: Brandenburger Wirtschaft wächst stärker als im Bundesschnitt | NEWS-MONSTER",
+      "description": "Bruttoinlandsprodukt: Brandenburger Wirtschaft wächst stärker als im Bundesschnitt | NEWS-MONSTER",
+      "category": "tesla",
       "publishedAt": "2026-09-25T15:51:46.675Z",
-      "publishedLabel": "Sep 25, 09:21 PM",
-      "thumbnail": "https://i.ytimg.com/vi/KDvhelILzqI/maxresdefault.jpg",
+      "publishedLabel": "Sep 25, 03:51 PM",
+      "thumbnail": "/thumbnails/KDvhelILzqI.png",
       "thumbnailSha256": "3b8540cb53b862356d66f72fb415d3c015a2257e6b05b386f7cbfc64ba9f1b3d",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -896,18 +870,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509278470087135232"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "-FOlzcQs08s",
-      "title": "Video -FOlzcQs08s",
-      "description": "",
-      "category": "general",
+      "title": "Global bond sell-off deepens as oil holds above $100 - Financial Times | NEWS-MONSTER",
+      "description": "Global bond sell-off deepens as oil holds above $100 - Financial Times | NEWS-MONSTER",
+      "category": "business",
       "publishedAt": "2026-09-25T05:50:22.102Z",
-      "publishedLabel": "Sep 25, 11:20 AM",
-      "thumbnail": "https://i.ytimg.com/vi/-FOlzcQs08s/maxresdefault.jpg",
+      "publishedLabel": "Sep 25, 05:50 AM",
+      "thumbnail": "/thumbnails/-FOlzcQs08s.png",
       "thumbnailSha256": "079a26fccd220001fd2ffd18e4cf15a2bac63fb3ec62de14faaca94e406a9ca7",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -952,18 +924,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509127120321777664"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "O-3UNMfbNxY",
-      "title": "Video O-3UNMfbNxY",
-      "description": "",
-      "category": "general",
+      "title": "Gemini 3.8 Live with Live Avatar gives Google’s AI a face | NEWS-MONSTER",
+      "description": "Gemini 3.8 Live with Live Avatar gives Google’s AI a face | NEWS-MONSTER",
+      "category": "apple",
       "publishedAt": "2026-09-25T01:09:28.617Z",
-      "publishedLabel": "Sep 25, 06:39 AM",
-      "thumbnail": "https://i.ytimg.com/vi/O-3UNMfbNxY/maxresdefault.jpg",
+      "publishedLabel": "Sep 25, 01:09 AM",
+      "thumbnail": "/thumbnails/O-3UNMfbNxY.png",
       "thumbnailSha256": "36057d99e4cbc4772cca68b00aa4702d7ab0b7ee0caacfc4a2e9ce64688d9046",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -1008,18 +978,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509056433401962496"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "pUOWg3ueNCM",
-      "title": "Video pUOWg3ueNCM",
-      "description": "",
-      "category": "general",
+      "title": "Meta gets to consumer AI device market before OpenAI, but Zuckerberg's strategy remains un | NEWS-MONSTER",
+      "description": "Meta gets to consumer AI device market before OpenAI, but Zuckerberg's strategy remains un | NEWS-MONSTER",
+      "category": "apple",
       "publishedAt": "2026-09-25T01:05:02.000Z",
-      "publishedLabel": "Sep 25, 06:35 AM",
-      "thumbnail": "https://i.ytimg.com/vi/pUOWg3ueNCM/maxresdefault.jpg",
+      "publishedLabel": "Sep 25, 01:05 AM",
+      "thumbnail": "/thumbnails/pUOWg3ueNCM.png",
       "thumbnailSha256": "1bbc5a72727ca55563b4f0a12fe048e9522ee7d10c49aeee52b7ed1eaec39731",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -1064,18 +1032,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509055307147440128"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "9TON6XvKNmo",
-      "title": "Video 9TON6XvKNmo",
-      "description": "",
-      "category": "general",
+      "title": "Google rolling out Android 17 QPR2 Beta 6 for Pixel | NEWS-MONSTER",
+      "description": "Google rolling out Android 17 QPR2 Beta 6 for Pixel | NEWS-MONSTER",
+      "category": "wsj",
       "publishedAt": "2026-09-24T22:57:31.949Z",
-      "publishedLabel": "Sep 25, 04:27 AM",
-      "thumbnail": "https://i.ytimg.com/vi/9TON6XvKNmo/maxresdefault.jpg",
+      "publishedLabel": "Sep 24, 10:57 PM",
+      "thumbnail": "/thumbnails/9TON6XvKNmo.png",
       "thumbnailSha256": "7c7ca39948099197f555c91fc6fc05ea245024b3e39ece5c5132cea45635f47f",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -1120,18 +1086,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509023228393164800"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "ZE0aYQHqecE",
-      "title": "Video ZE0aYQHqecE",
-      "description": "",
-      "category": "general",
+      "title": "Meta Debuts Dedicated ‘Charm’ Device for Using Muse AI | NEWS-MONSTER",
+      "description": "Meta Debuts Dedicated ‘Charm’ Device for Using Muse AI | NEWS-MONSTER",
+      "category": "wsj",
       "publishedAt": "2026-09-24T22:52:53.530Z",
-      "publishedLabel": "Sep 25, 04:22 AM",
-      "thumbnail": "https://i.ytimg.com/vi/ZE0aYQHqecE/maxresdefault.jpg",
+      "publishedLabel": "Sep 24, 10:52 PM",
+      "thumbnail": "/thumbnails/ZE0aYQHqecE.png",
       "thumbnailSha256": "801f2c439fb4358700bf7fc2be5556824a5a15bac41c99ff016e25f4a59388f6",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -1176,18 +1140,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509022058698383361"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "Ry8UGkiOhjg",
-      "title": "Video Ry8UGkiOhjg",
-      "description": "",
-      "category": "general",
+      "title": "Zuckerberg says Meta will lead on smartglasses privacy despite ‘pervert glasses’ criticism | NEWS-MONSTER",
+      "description": "Zuckerberg says Meta will lead on smartglasses privacy despite ‘pervert glasses’ criticism | NEWS-MONSTER",
+      "category": "wsj",
       "publishedAt": "2026-09-24T19:39:35.115Z",
-      "publishedLabel": "Sep 25, 01:09 AM",
-      "thumbnail": "https://i.ytimg.com/vi/Ry8UGkiOhjg/maxresdefault.jpg",
+      "publishedLabel": "Sep 24, 07:39 PM",
+      "thumbnail": "/thumbnails/Ry8UGkiOhjg.png",
       "thumbnailSha256": "8bfd3176e5c5f59592ec00f70ea28854f33d76abf3d4147a48dfa0f223e69156",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -1232,18 +1194,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7508973405648453632"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "zUbN6FaLXwQ",
-      "title": "Video zUbN6FaLXwQ",
-      "description": "",
-      "category": "general",
+      "title": "Zuckerberg says Meta will lead on smartglasses privacy despite ‘pervert glasses’ criticism | NEWS-MONSTER",
+      "description": "Zuckerberg says Meta will lead on smartglasses privacy despite ‘pervert glasses’ criticism | NEWS-MONSTER",
+      "category": "tesla",
       "publishedAt": "2026-09-24T15:40:59.015Z",
-      "publishedLabel": "Sep 24, 09:10 PM",
-      "thumbnail": "https://i.ytimg.com/vi/zUbN6FaLXwQ/maxresdefault.jpg",
+      "publishedLabel": "Sep 24, 03:40 PM",
+      "thumbnail": "/thumbnails/zUbN6FaLXwQ.png",
       "thumbnailSha256": "f9681dba65dd96f9d0242fec43a08a4981aa7d41edd06f4163317a9c3ac0834f",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -1288,18 +1248,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7508913352585302016"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "Y6viARSG8Ns",
-      "title": "Video Y6viARSG8Ns",
-      "description": "",
-      "category": "general",
+      "title": "Qualcomm announces Snapdragon Sound Elite Gen 2 for AI 'hearables,' even ones with cameras | NEWS-MONSTER",
+      "description": "Qualcomm announces Snapdragon Sound Elite Gen 2 for AI 'hearables,' even ones with cameras | NEWS-MONSTER",
+      "category": "wsj",
       "publishedAt": "2026-09-24T10:47:45.125Z",
-      "publishedLabel": "Sep 24, 04:17 PM",
-      "thumbnail": "https://i.ytimg.com/vi/Y6viARSG8Ns/maxresdefault.jpg",
+      "publishedLabel": "Sep 24, 10:47 AM",
+      "thumbnail": "/thumbnails/Y6viARSG8Ns.png",
       "thumbnailSha256": "839d5bb03154551f8df69d97d04e0c8a8fb79d815d796849bc92c4a83887b1b7",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -1344,18 +1302,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7508839569606459393"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "X1blNQZqGnQ",
-      "title": "Video X1blNQZqGnQ",
-      "description": "",
-      "category": "general",
+      "title": "Meta announces new lightweight virtual reality glasses to one-up Apple’s Vision Pro | NEWS-MONSTER",
+      "description": "Meta announces new lightweight virtual reality glasses to one-up Apple’s Vision Pro | NEWS-MONSTER",
+      "category": "wsj",
       "publishedAt": "2026-09-24T10:42:48.887Z",
-      "publishedLabel": "Sep 24, 04:12 PM",
-      "thumbnail": "https://i.ytimg.com/vi/X1blNQZqGnQ/maxresdefault.jpg",
+      "publishedLabel": "Sep 24, 10:42 AM",
+      "thumbnail": "/thumbnails/X1blNQZqGnQ.png",
       "thumbnailSha256": "21d474ead2c0149e51734cc9da5dbf58d4040cdbc96e6856b9effdfc1a184b13",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -1400,18 +1356,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7508838328629305344"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "SQuIlSkHQcg",
-      "title": "Video SQuIlSkHQcg",
-      "description": "",
-      "category": "general",
+      "title": "Meta's Zuckerberg says Muse AI agent will take a small fee from transactions | NEWS-MONSTER",
+      "description": "Meta's Zuckerberg says Muse AI agent will take a small fee from transactions | NEWS-MONSTER",
+      "category": "business",
       "publishedAt": "2026-09-24T05:45:37.798Z",
-      "publishedLabel": "Sep 24, 11:15 AM",
-      "thumbnail": "https://i.ytimg.com/vi/SQuIlSkHQcg/maxresdefault.jpg",
+      "publishedLabel": "Sep 24, 05:45 AM",
+      "thumbnail": "/thumbnails/SQuIlSkHQcg.png",
       "thumbnailSha256": "829c405ab94150b16d50d4f2561e98c7b8221e6f2907b6173bf181c153592780",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -1456,18 +1410,16 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7508763540665556993"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "RZ3WnuwXR4Y",
-      "title": "Video RZ3WnuwXR4Y",
-      "description": "",
-      "category": "general",
+      "title": "Stock futures flat after soaring Treasury yields trigger market sell-off: Live updates | NEWS-MONSTER",
+      "description": "Stock futures flat after soaring Treasury yields trigger market sell-off: Live updates | NEWS-MONSTER",
+      "category": "business",
       "publishedAt": "2026-09-24T05:41:44.906Z",
-      "publishedLabel": "Sep 24, 11:11 AM",
-      "thumbnail": "https://i.ytimg.com/vi/RZ3WnuwXR4Y/maxresdefault.jpg",
+      "publishedLabel": "Sep 24, 05:41 AM",
+      "thumbnail": "/thumbnails/RZ3WnuwXR4Y.png",
       "thumbnailSha256": "85e9d07b516382251124c7ad74a79280ae3ad9ea1688116d80df6b97c516da79",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
@@ -1512,9 +1464,7 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7508762559479451650"
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "MT9_Ox0henE",
@@ -1522,7 +1472,7 @@
       "description": "Beats 360 Headphones Review: Best-Performing Beats Yet, and They’re Modular | NEWS-MONSTER",
       "category": "technology",
       "publishedAt": "2026-09-22T18:22:30.786Z",
-      "publishedLabel": "Sep 22, 11:52 PM",
+      "publishedLabel": "Sep 22, 06:22 PM",
       "thumbnail": "/thumbnails/MT9_Ox0henE.png",
       "thumbnailSha256": "0e0ff134f34de66796e78a4024b28e5369706cf23775c22506b19cd0951cdab4",
       "thumbnailWidth": 3840,
@@ -1568,9 +1518,7 @@
           "state": "PENDING",
           "postId": null
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "EpExk15_k50",
@@ -1578,7 +1526,7 @@
       "description": "With new Macs, Apple aims to take on Microsoft, Nvidia in a rush to lower AI costs | NEWS-MONSTER",
       "category": "technology",
       "publishedAt": "2026-09-22T18:19:22.498Z",
-      "publishedLabel": "Sep 22, 11:49 PM",
+      "publishedLabel": "Sep 22, 06:19 PM",
       "thumbnail": "/thumbnails/EpExk15_k50.png",
       "thumbnailSha256": "2e8aa06e6335a2335c7b88dd45d35db03ab8bb884fdfc5c2db36fcdb7510314a",
       "thumbnailWidth": 3840,
@@ -1624,9 +1572,7 @@
           "state": "PENDING",
           "postId": null
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "6JiX1MTc8PE",
@@ -1634,7 +1580,7 @@
       "description": "Beats 360 Deliver Customizability and a Revamped Over-Ear Headphone Design | NEWS-MONSTER",
       "category": "technology",
       "publishedAt": "2026-09-22T18:02:49.391Z",
-      "publishedLabel": "Sep 22, 11:32 PM",
+      "publishedLabel": "Sep 22, 06:02 PM",
       "thumbnail": "/thumbnails/6JiX1MTc8PE.png",
       "thumbnailSha256": "753c606d1b9caa724bef5e7a9025676949979f0088e937bd25247e99366fd528",
       "thumbnailWidth": 3840,
@@ -1680,9 +1626,7 @@
           "state": "PENDING",
           "postId": null
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "bQaEwsb613Q",
@@ -1690,7 +1634,7 @@
       "description": "Fatal Fury: City of the Wolves is free to play for the weekend though only on one platform | NEWS-MO — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-30T14:23:35.137Z",
-      "publishedLabel": "Aug 30, 07:53 PM",
+      "publishedLabel": "Aug 30, 02:23 PM",
       "thumbnail": "https://i.ytimg.com/vi/bQaEwsb613Q/maxresdefault.jpg",
       "thumbnailSha256": "0888e99815868a8a53bffac8986eeafe3583f761fc22338d4bda86e06a708ef8",
       "thumbnailWidth": 3840,
@@ -1736,9 +1680,7 @@
           "state": "PENDING",
           "postId": null
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "GicGqDHflO4",
@@ -1746,7 +1688,7 @@
       "description": "Apple implements price hikes for its TV streaming service and 'One' subscription bundle -  | NEWS-MO — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-30T07:19:42.169Z",
-      "publishedLabel": "Aug 30, 12:49 PM",
+      "publishedLabel": "Aug 30, 07:19 AM",
       "thumbnail": "https://i.ytimg.com/vi/GicGqDHflO4/maxresdefault.jpg",
       "thumbnailSha256": "94b0cec33766cff0f0fefb00f7feeed538f863aacd60f5d4627bf1f99b30af9c",
       "thumbnailWidth": 2160,
@@ -1792,9 +1734,7 @@
           "state": "PENDING",
           "postId": null
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "2CinTjlXdy8",
@@ -1802,7 +1742,7 @@
       "description": "tesla-protocol 1.2.0 | NEWS-MONSTER — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
       "category": "general",
       "publishedAt": "2026-08-30T00:45:40.661Z",
-      "publishedLabel": "Aug 30, 06:15 AM",
+      "publishedLabel": "Aug 30, 12:45 AM",
       "thumbnail": "https://i.ytimg.com/vi/2CinTjlXdy8/maxresdefault.jpg",
       "thumbnailSha256": "29f41988608b54c8f9fe61bce86d2db502df82d0e80d599abb48568ca463950f",
       "thumbnailWidth": 2160,
@@ -1848,17 +1788,15 @@
           "state": "PENDING",
           "postId": null
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     },
     {
       "id": "ITp2j5hdD44",
-      "title": "Video ITp2j5hdD44",
-      "description": "",
-      "category": "general",
+      "title": "Apple’s new M6 adds feature previously exclusive to high-end chips - 9to5Mac | NEWS-MONSTER",
+      "description": "Video ITp2j5hdD44 — a fresh 16:9 news video from the NEWS-MONSTER autonomous video factory.",
+      "category": "technology",
       "publishedAt": "2026-08-29T18:27:02.183Z",
-      "publishedLabel": "Aug 29, 11:57 PM",
+      "publishedLabel": "Aug 29, 06:27 PM",
       "thumbnail": "https://i.ytimg.com/vi/ITp2j5hdD44/maxresdefault.jpg",
       "thumbnailSha256": "fc80f7e9e31853294a3d03512fca26bceff307b35d3bc77bff967ce6578ef16a",
       "thumbnailWidth": 2160,
@@ -1867,7 +1805,7 @@
       "youtubeUrl": "https://youtu.be/ITp2j5hdD44",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
+      "thumbnailState": "OK",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
@@ -1904,9 +1842,7 @@
           "state": "PENDING",
           "postId": null
         }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      }
     }
   ]
 }
