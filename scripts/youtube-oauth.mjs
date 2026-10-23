@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-// YouTube OAuth helper. Mode 1 (--code): prints an auth URL using the registered
-// redirect URI; after approving, copy `code` from the Railway callback URL and run
+// YouTube OAuth helper. Mode 1: prints an auth URL using the registered
+// redirect URI; after approving, copy `code` from the address bar (the redirect
+// target does NOT need to be reachable) and run
 //   node scripts/youtube-oauth.mjs --code <code>
 import { readFileSync, writeFileSync } from 'node:fs'
 import { randomBytes } from 'node:crypto'
@@ -80,7 +81,7 @@ async function main() {
     `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}` +
     `&scope=${encodeURIComponent('https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.force-ssl')}` +
     `&response_type=code&access_type=offline&prompt=consent&state=${encodeURIComponent(state)}`
-  console.log('🔗 Open this URL, pick the channel, approve ALL screens, then copy the `code` param from the Railway URL and run:\n')
+  console.log(`🔗 Open this URL, pick the News-Monster channel account, approve ALL screens. The browser will then redirect to ${REDIRECT_URI} — the page will FAIL to load ("can't connect" / 404). That is EXPECTED: nothing needs to be listening there. Copy the \`code\` param from the address bar and run:\n`)
   console.log('    node scripts/youtube-oauth.mjs --code <the-code>')
   console.log(`\n  ${authUrl}\n`)
   try { const { execSync } = await import('node:child_process'); execSync(`open "${authUrl}"`) } catch {}
