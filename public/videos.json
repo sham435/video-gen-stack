@@ -1,33 +1,33 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-10-23T19:29:44.621Z",
+  "updatedAt": "2026-10-23T19:40:18.229Z",
   "source": "production-ledger",
   "availabilityGate": "live",
   "videos": [
     {
-      "id": "-wiM-M8QoPs",
-      "title": "Apple’s $1,999 iPhone Duo hits stores Friday amid limited supplies | NEWS-MONSTER",
-      "description": "Apple’s $1,999 iPhone Duo hits stores Friday amid limited supplies | NEWS-MONSTER",
+      "id": "ddHXUeKBbao",
+      "title": "Samsung Galaxy S27 Release Date: Earlier Launch, Battery Confirmed | NEWS-MONSTER",
+      "description": "Samsung Galaxy S27 Release Date: Earlier Launch, Battery Confirmed | NEWS-MONSTER",
       "category": "technology",
-      "publishedAt": "2026-10-23T19:29:22.154Z",
-      "publishedLabel": "Oct 23, 07:29 PM",
-      "thumbnail": "/thumbnails/-wiM-M8QoPs.png",
-      "thumbnailSha256": "fcbfd863cc23c04a7061f6a2191ba698ed20bf1e35411e2fa7e87e04d7da0385",
+      "publishedAt": "2026-10-23T19:40:17.707Z",
+      "publishedLabel": "Oct 23, 07:40 PM",
+      "thumbnail": "/thumbnails/ddHXUeKBbao.png",
+      "thumbnailSha256": "ac24b4e027c1b8e2bf11719263501159aaca01aa05ad56e870face6db1560aeb",
       "thumbnailWidth": 3840,
       "thumbnailHeight": 2160,
       "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/-wiM-M8QoPs",
+      "youtubeUrl": "https://youtu.be/ddHXUeKBbao",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
       "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
-          "videoId": "-wiM-M8QoPs",
-          "url": "https://youtu.be/-wiM-M8QoPs",
+          "videoId": "ddHXUeKBbao",
+          "url": "https://youtu.be/ddHXUeKBbao",
           "thumbnail": {
             "state": "SUCCESS",
-            "sha256": "fcbfd863cc23c04a7061f6a2191ba698ed20bf1e35411e2fa7e87e04d7da0385",
+            "sha256": "ac24b4e027c1b8e2bf11719263501159aaca01aa05ad56e870face6db1560aeb",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
@@ -42,14 +42,14 @@
           "manifestUpdated": true,
           "attempts": 1,
           "errors": [],
-          "durationMs": 3,
+          "durationMs": 5,
           "thumbnail": {
-            "sha256": "fcbfd863cc23c04a7061f6a2191ba698ed20bf1e35411e2fa7e87e04d7da0385",
+            "sha256": "ac24b4e027c1b8e2bf11719263501159aaca01aa05ad56e870face6db1560aeb",
             "width": 3840,
             "height": 2160,
             "mimeType": "image/png",
             "aspectRatio": "16:9",
-            "path": "public/thumbnails/-wiM-M8QoPs.png"
+            "path": "public/thumbnails/ddHXUeKBbao.png"
           }
         },
         "linkedin": {
@@ -58,7 +58,63 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
+    },
+    {
+      "id": "SbOXueAlvLs",
+      "title": "Apple’s $1,999 iPhone Duo hits stores Friday amid limited supplies | NEWS-MONSTER",
+      "description": "Apple’s $1,999 iPhone Duo hits stores Friday amid limited supplies | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-10-23T19:37:00.978Z",
+      "publishedLabel": "Oct 23, 07:37 PM",
+      "thumbnail": "/thumbnails/SbOXueAlvLs.png",
+      "thumbnailSha256": "5cda185e0e8ce25249c9d87dcecea44cfd844e776b3cc0f2c01654e33fcbea69",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/SbOXueAlvLs",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "SbOXueAlvLs",
+          "url": "https://youtu.be/SbOXueAlvLs",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "5cda185e0e8ce25249c9d87dcecea44cfd844e776b3cc0f2c01654e33fcbea69",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "5cda185e0e8ce25249c9d87dcecea44cfd844e776b3cc0f2c01654e33fcbea69",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/SbOXueAlvLs.png"
+          }
+        },
+        "linkedin": {
+          "state": "PENDING",
+          "postId": null
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "D3QUptauTyQ",
@@ -114,7 +170,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "1RuL5D-bdLU",
@@ -170,7 +226,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "GOFYTfX9nmc",
@@ -226,7 +282,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "0AuXKntJros",
@@ -282,7 +338,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "8KIxoeyaN4g",
@@ -338,7 +394,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "wV-wMGcYrJk",
@@ -394,7 +450,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "gaprdteWK6Q",
@@ -450,7 +506,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "9hIEnid0kWM",
@@ -506,7 +562,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "fZxDKjxexfo",
@@ -562,7 +618,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "x0E-UEDJ8E0",
@@ -618,7 +674,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "mWgOriTYkDc",
@@ -674,7 +730,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "wXvmFYyviQQ",
@@ -730,7 +786,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "XMwOD8gxp1o",
@@ -786,7 +842,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "1hzG-GDTxK8",
@@ -842,7 +898,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "-vQGQdPZGKs",
@@ -898,7 +954,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "FKVK7HN6B4Y",
@@ -954,7 +1010,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "KYb61iLvfHM",
@@ -1010,7 +1066,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "JChLLMtAPas",
@@ -1066,7 +1122,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "xy15AHXXsxE",
@@ -1122,7 +1178,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "8j0s4EcWHqY",
@@ -1178,7 +1234,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "7H-EjCTpTM8",
@@ -1234,7 +1290,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "bVmYnSK2HFY",
@@ -1290,7 +1346,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "Kplae6PA_Uo",
@@ -1346,7 +1402,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "gsBUSNeyw8o",
@@ -1402,7 +1458,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "NKUFyk198gY",
@@ -1458,7 +1514,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "OJayH5e4fD4",
@@ -1514,7 +1570,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "decxCQTL6lA",
@@ -1570,7 +1626,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "o2YEG1DrKVc",
@@ -1626,7 +1682,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "xNyQmjX7oH0",
@@ -1682,7 +1738,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "rEdqQi-MbIk",
@@ -1738,7 +1794,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "xjhz3f08EfA",
@@ -1794,7 +1850,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "Z81HMzfHR-4",
@@ -1850,7 +1906,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "5PZPy7QQgLo",
@@ -1906,7 +1962,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "j4RtMj2kJfo",
@@ -1962,7 +2018,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "h62_Xz9fUq8",
@@ -2018,7 +2074,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "9RGFu6CmFEo",
@@ -2074,7 +2130,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "FBRQjwybHMU",
@@ -2130,7 +2186,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "poYhb4l008g",
@@ -2186,7 +2242,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "6rCnf33r6fM",
@@ -2242,7 +2298,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "ytxK0cI2zjE",
@@ -2298,7 +2354,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "8FHa1Wtac9Y",
@@ -2354,7 +2410,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "eMjFnXsBfws",
@@ -2410,7 +2466,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "ssuocBWEjAc",
@@ -2466,7 +2522,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "ce5zi2SvddY",
@@ -2522,7 +2578,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "KDvhelILzqI",
@@ -2578,7 +2634,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "-FOlzcQs08s",
@@ -2634,7 +2690,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "O-3UNMfbNxY",
@@ -2690,7 +2746,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "pUOWg3ueNCM",
@@ -2746,7 +2802,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "9TON6XvKNmo",
@@ -2802,7 +2858,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "ZE0aYQHqecE",
@@ -2858,7 +2914,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "Ry8UGkiOhjg",
@@ -2914,7 +2970,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "zUbN6FaLXwQ",
@@ -2970,7 +3026,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "Y6viARSG8Ns",
@@ -3026,7 +3082,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "X1blNQZqGnQ",
@@ -3082,7 +3138,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "SQuIlSkHQcg",
@@ -3138,7 +3194,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "RZ3WnuwXR4Y",
@@ -3194,7 +3250,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "MT9_Ox0henE",
@@ -3250,7 +3306,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "EpExk15_k50",
@@ -3306,7 +3362,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "6JiX1MTc8PE",
@@ -3362,7 +3418,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "bQaEwsb613Q",
@@ -3418,7 +3474,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "GicGqDHflO4",
@@ -3474,7 +3530,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "2CinTjlXdy8",
@@ -3530,7 +3586,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     },
     {
       "id": "ITp2j5hdD44",
@@ -3586,7 +3642,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-23T19:29:44.621Z"
+      "availabilityCheckedAt": "2026-10-23T19:40:18.229Z"
     }
   ]
 }
