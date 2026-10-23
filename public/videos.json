@@ -1,9 +1,1745 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-10-22T13:16:26.733Z",
+  "updatedAt": "2026-10-23T19:23:07.397Z",
   "source": "production-ledger",
-  "availabilityGate": "persisted",
+  "availabilityGate": "live",
   "videos": [
+    {
+      "id": "D3QUptauTyQ",
+      "title": "Stock Market Today: Rejected Iran Truce Pushes Oil, Yields Higher; Dow Futures Slip — Live | NEWS-MONSTER",
+      "description": "Stock Market Today: Rejected Iran Truce Pushes Oil, Yields Higher; Dow Futures Slip — Live | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-09-29T11:51:18.956Z",
+      "publishedLabel": "Sep 29, 11:51 AM",
+      "thumbnail": "/thumbnails/D3QUptauTyQ.png",
+      "thumbnailSha256": "b064d9fba69673a719b3c09b4b7da9621b41e900315b7a183fbc4d84f3f8a507",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/D3QUptauTyQ",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "D3QUptauTyQ",
+          "url": "https://youtu.be/D3QUptauTyQ",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "b064d9fba69673a719b3c09b4b7da9621b41e900315b7a183fbc4d84f3f8a507",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "b064d9fba69673a719b3c09b4b7da9621b41e900315b7a183fbc4d84f3f8a507",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/D3QUptauTyQ.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510667500221718528"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "1RuL5D-bdLU",
+      "title": "'Sony's Hearing a Lot of the Feedback from Customers': NIS America Boss Weighs in on PS5 D | NEWS-MONSTER",
+      "description": "'Sony's Hearing a Lot of the Feedback from Customers': NIS America Boss Weighs in on PS5 D | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-29T06:04:22.519Z",
+      "publishedLabel": "Sep 29, 06:04 AM",
+      "thumbnail": "/thumbnails/1RuL5D-bdLU.png",
+      "thumbnailSha256": "0efa37043042713b4b58c25e6b1041b3f98b4feb2827c17699eb767fd4c09d47",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/1RuL5D-bdLU",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "1RuL5D-bdLU",
+          "url": "https://youtu.be/1RuL5D-bdLU",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "0efa37043042713b4b58c25e6b1041b3f98b4feb2827c17699eb767fd4c09d47",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 7,
+          "thumbnail": {
+            "sha256": "0efa37043042713b4b58c25e6b1041b3f98b4feb2827c17699eb767fd4c09d47",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/1RuL5D-bdLU.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510580195079258113"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "GOFYTfX9nmc",
+      "title": "Experimental Emulator Brings Nintendo Switch Games to Jailbroken PS5 Consoles - TechPowerU | NEWS-MONSTER",
+      "description": "Experimental Emulator Brings Nintendo Switch Games to Jailbroken PS5 Consoles - TechPowerU | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-29T00:15:37.228Z",
+      "publishedLabel": "Sep 29, 12:15 AM",
+      "thumbnail": "/thumbnails/GOFYTfX9nmc.png",
+      "thumbnailSha256": "f77bef3ecb969d26959ced57961761c5a9392ee1c4bcd4707124066db68491f4",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/GOFYTfX9nmc",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "GOFYTfX9nmc",
+          "url": "https://youtu.be/GOFYTfX9nmc",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "f77bef3ecb969d26959ced57961761c5a9392ee1c4bcd4707124066db68491f4",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "f77bef3ecb969d26959ced57961761c5a9392ee1c4bcd4707124066db68491f4",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/GOFYTfX9nmc.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510492431847477249"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "0AuXKntJros",
+      "title": "Wegovy Maker Novo Promises New Drugs to Boost Sales, but Investors Are Wary | NEWS-MONSTER",
+      "description": "Wegovy Maker Novo Promises New Drugs to Boost Sales, but Investors Are Wary | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-28T20:03:54.830Z",
+      "publishedLabel": "Sep 28, 08:03 PM",
+      "thumbnail": "/thumbnails/0AuXKntJros.png",
+      "thumbnailSha256": "a036f201f5bb7e9197e789546f4e26178795996ebade71854fee2a75f7d27b49",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/0AuXKntJros",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "0AuXKntJros",
+          "url": "https://youtu.be/0AuXKntJros",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "a036f201f5bb7e9197e789546f4e26178795996ebade71854fee2a75f7d27b49",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 7,
+          "thumbnail": {
+            "sha256": "a036f201f5bb7e9197e789546f4e26178795996ebade71854fee2a75f7d27b49",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/0AuXKntJros.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510429080001982464"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "8KIxoeyaN4g",
+      "title": "General Mills Bets on New Products, Marketing to Drive Turnaround | NEWS-MONSTER",
+      "description": "General Mills Bets on New Products, Marketing to Drive Turnaround | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-28T19:59:52.414Z",
+      "publishedLabel": "Sep 28, 07:59 PM",
+      "thumbnail": "/thumbnails/8KIxoeyaN4g.png",
+      "thumbnailSha256": "307a6e413caed07b9ccc7f3181f018a595499c6a95b76abb60615eed0410c751",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/8KIxoeyaN4g",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "8KIxoeyaN4g",
+          "url": "https://youtu.be/8KIxoeyaN4g",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "307a6e413caed07b9ccc7f3181f018a595499c6a95b76abb60615eed0410c751",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 7,
+          "thumbnail": {
+            "sha256": "307a6e413caed07b9ccc7f3181f018a595499c6a95b76abb60615eed0410c751",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/8KIxoeyaN4g.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510428062593753090"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "wV-wMGcYrJk",
+      "title": "NKorea Testing Swarm Attacks Mixing Drones and Missiles... | NEWS-MONSTER",
+      "description": "NKorea Testing Swarm Attacks Mixing Drones and Missiles... | NEWS-MONSTER",
+      "category": "wsj",
+      "publishedAt": "2026-09-28T19:55:42.858Z",
+      "publishedLabel": "Sep 28, 07:55 PM",
+      "thumbnail": "/thumbnails/wV-wMGcYrJk.png",
+      "thumbnailSha256": "3219aad699fcc23a36422e63dafcc0bdc1bc7e5a49b3ebbaa5d682c66f2b8d30",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/wV-wMGcYrJk",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "wV-wMGcYrJk",
+          "url": "https://youtu.be/wV-wMGcYrJk",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "3219aad699fcc23a36422e63dafcc0bdc1bc7e5a49b3ebbaa5d682c66f2b8d30",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 7,
+          "thumbnail": {
+            "sha256": "3219aad699fcc23a36422e63dafcc0bdc1bc7e5a49b3ebbaa5d682c66f2b8d30",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/wV-wMGcYrJk.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510427016236703744"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "gaprdteWK6Q",
+      "title": "Experts Disagree On RTX | NEWS-MONSTER",
+      "description": "Experts Disagree On RTX | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-28T12:23:52.550Z",
+      "publishedLabel": "Sep 28, 12:23 PM",
+      "thumbnail": "/thumbnails/gaprdteWK6Q.png",
+      "thumbnailSha256": "08e01593d5941830673b7d245a79f2fc290c70a368de57f60b6632a62c39094b",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/gaprdteWK6Q",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "gaprdteWK6Q",
+          "url": "https://youtu.be/gaprdteWK6Q",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "08e01593d5941830673b7d245a79f2fc290c70a368de57f60b6632a62c39094b",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "08e01593d5941830673b7d245a79f2fc290c70a368de57f60b6632a62c39094b",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/gaprdteWK6Q.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510313314212814848"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "9hIEnid0kWM",
+      "title": "Video shows a southpaw using the iPhone Duo with one hand - phonearena.com | NEWS-MONSTER",
+      "description": "Video shows a southpaw using the iPhone Duo with one hand - phonearena.com | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-28T12:20:53.298Z",
+      "publishedLabel": "Sep 28, 12:20 PM",
+      "thumbnail": "/thumbnails/9hIEnid0kWM.png",
+      "thumbnailSha256": "a265844a7648d3cd704373c89daadb7962941783d8a5c3c1edf435d635cc35db",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/9hIEnid0kWM",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "9hIEnid0kWM",
+          "url": "https://youtu.be/9hIEnid0kWM",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "a265844a7648d3cd704373c89daadb7962941783d8a5c3c1edf435d635cc35db",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 5,
+          "thumbnail": {
+            "sha256": "a265844a7648d3cd704373c89daadb7962941783d8a5c3c1edf435d635cc35db",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/9hIEnid0kWM.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510312563860017152"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "fZxDKjxexfo",
+      "title": "Microsoft CEO Says Xbox's \"Streamlining\" Is \"Great To See\" Following Recent Layoffs - tech | NEWS-MONSTER",
+      "description": "Microsoft CEO Says Xbox's \"Streamlining\" Is \"Great To See\" Following Recent Layoffs - tech | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-28T12:18:08.604Z",
+      "publishedLabel": "Sep 28, 12:18 PM",
+      "thumbnail": "/thumbnails/fZxDKjxexfo.png",
+      "thumbnailSha256": "d03c95c2b323b35523877276f55af4e28533e41239d25ac98157bca6f12c2412",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/fZxDKjxexfo",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "fZxDKjxexfo",
+          "url": "https://youtu.be/fZxDKjxexfo",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "d03c95c2b323b35523877276f55af4e28533e41239d25ac98157bca6f12c2412",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "d03c95c2b323b35523877276f55af4e28533e41239d25ac98157bca6f12c2412",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/fZxDKjxexfo.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510311871132942336"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "x0E-UEDJ8E0",
+      "title": "A Storied Indian Business Empire Is Being Torn Apart by Infighting - WSJ | NEWS-MONSTER",
+      "description": "A Storied Indian Business Empire Is Being Torn Apart by Infighting - WSJ | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-09-28T05:46:40.649Z",
+      "publishedLabel": "Sep 28, 05:46 AM",
+      "thumbnail": "/thumbnails/x0E-UEDJ8E0.png",
+      "thumbnailSha256": "cf4726422a22f6d0e389a43bdb7d254ee3348b7f163259d571e6e28d079f1933",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/x0E-UEDJ8E0",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "x0E-UEDJ8E0",
+          "url": "https://youtu.be/x0E-UEDJ8E0",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "cf4726422a22f6d0e389a43bdb7d254ee3348b7f163259d571e6e28d079f1933",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 5,
+          "thumbnail": {
+            "sha256": "cf4726422a22f6d0e389a43bdb7d254ee3348b7f163259d571e6e28d079f1933",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/x0E-UEDJ8E0.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510213342439931905"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "mWgOriTYkDc",
+      "title": "Prime Day Hasn’t Started Yet, but I’ve Already Found Deals Worth Buying - WIRED | NEWS-MONSTER",
+      "description": "Prime Day Hasn’t Started Yet, but I’ve Already Found Deals Worth Buying - WIRED | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-28T01:33:02.987Z",
+      "publishedLabel": "Sep 28, 01:33 AM",
+      "thumbnail": "/thumbnails/mWgOriTYkDc.png",
+      "thumbnailSha256": "eb30ab830613a6b42f95f70e27771af76319dbf4dca893bcefc383e1697817b0",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/mWgOriTYkDc",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "mWgOriTYkDc",
+          "url": "https://youtu.be/mWgOriTYkDc",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "eb30ab830613a6b42f95f70e27771af76319dbf4dca893bcefc383e1697817b0",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "eb30ab830613a6b42f95f70e27771af76319dbf4dca893bcefc383e1697817b0",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/mWgOriTYkDc.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510149525190246401"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "wXvmFYyviQQ",
+      "title": "What does Meta’s Muse do that Spotify’s AI can’t? - Mashable | NEWS-MONSTER",
+      "description": "What does Meta’s Muse do that Spotify’s AI can’t? - Mashable | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-28T01:03:16.553Z",
+      "publishedLabel": "Sep 28, 01:03 AM",
+      "thumbnail": "/thumbnails/wXvmFYyviQQ.png",
+      "thumbnailSha256": "d7f4a7465e0d84e18be5c9cfd3c67ae3c88e7024fa66b56a3acce827bf801edd",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/wXvmFYyviQQ",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "wXvmFYyviQQ",
+          "url": "https://youtu.be/wXvmFYyviQQ",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "d7f4a7465e0d84e18be5c9cfd3c67ae3c88e7024fa66b56a3acce827bf801edd",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 7,
+          "thumbnail": {
+            "sha256": "d7f4a7465e0d84e18be5c9cfd3c67ae3c88e7024fa66b56a3acce827bf801edd",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/wXvmFYyviQQ.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510142035283075072"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "XMwOD8gxp1o",
+      "title": "Survey Sunday: how much pain at the pump will it take to switch to EV? [update] | NEWS-MONSTER",
+      "description": "Survey Sunday: how much pain at the pump will it take to switch to EV? [update] | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-27T21:58:54.413Z",
+      "publishedLabel": "Sep 27, 09:58 PM",
+      "thumbnail": "/thumbnails/XMwOD8gxp1o.png",
+      "thumbnailSha256": "d3668ee65bd6dc8600fbbd9d7109d3a3331310673dc00d24da72127de80330ea",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/XMwOD8gxp1o",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "XMwOD8gxp1o",
+          "url": "https://youtu.be/XMwOD8gxp1o",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "d3668ee65bd6dc8600fbbd9d7109d3a3331310673dc00d24da72127de80330ea",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 41,
+          "thumbnail": {
+            "sha256": "d3668ee65bd6dc8600fbbd9d7109d3a3331310673dc00d24da72127de80330ea",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/XMwOD8gxp1o.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510095633223991296"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "1hzG-GDTxK8",
+      "title": "O assalto ao traficante, o rapto e um motel: o caso Rodízio | NEWS-MONSTER",
+      "description": "O assalto ao traficante, o rapto e um motel: o caso Rodízio | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-27T21:55:20.171Z",
+      "publishedLabel": "Sep 27, 09:55 PM",
+      "thumbnail": "/thumbnails/1hzG-GDTxK8.png",
+      "thumbnailSha256": "95b9c970d3c89ceaf84b6920d2b0377c25fb07d3d5b780a07814d95b47a39f14",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/1hzG-GDTxK8",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "1hzG-GDTxK8",
+          "url": "https://youtu.be/1hzG-GDTxK8",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "95b9c970d3c89ceaf84b6920d2b0377c25fb07d3d5b780a07814d95b47a39f14",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 14,
+          "thumbnail": {
+            "sha256": "95b9c970d3c89ceaf84b6920d2b0377c25fb07d3d5b780a07814d95b47a39f14",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/1hzG-GDTxK8.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510094730299457536"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "-vQGQdPZGKs",
+      "title": "Warning from EV owner caught with low charge in bushfire | NEWS-MONSTER",
+      "description": "Warning from EV owner caught with low charge in bushfire | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-27T21:50:52.896Z",
+      "publishedLabel": "Sep 27, 09:50 PM",
+      "thumbnail": "/thumbnails/-vQGQdPZGKs.png",
+      "thumbnailSha256": "5728e20960fc9e83f93489f2bf0580c26d524f1e19fe618e0ad151ef71f2d96e",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/-vQGQdPZGKs",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "-vQGQdPZGKs",
+          "url": "https://youtu.be/-vQGQdPZGKs",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "5728e20960fc9e83f93489f2bf0580c26d524f1e19fe618e0ad151ef71f2d96e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "5728e20960fc9e83f93489f2bf0580c26d524f1e19fe618e0ad151ef71f2d96e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/-vQGQdPZGKs.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510093613415133185"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "FKVK7HN6B4Y",
+      "title": "63 Prozent Wertverlust: Diese Autos sind nach 5 Jahren kaum noch etwas wert | NEWS-MONSTER",
+      "description": "63 Prozent Wertverlust: Diese Autos sind nach 5 Jahren kaum noch etwas wert | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-27T18:46:47.354Z",
+      "publishedLabel": "Sep 27, 06:46 PM",
+      "thumbnail": "/thumbnails/FKVK7HN6B4Y.png",
+      "thumbnailSha256": "c2e68d0fa86c48c8fa2531c893434cf8a23016f30edb117a189dbffa6d73f8a9",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/FKVK7HN6B4Y",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "FKVK7HN6B4Y",
+          "url": "https://youtu.be/FKVK7HN6B4Y",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "c2e68d0fa86c48c8fa2531c893434cf8a23016f30edb117a189dbffa6d73f8a9",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "c2e68d0fa86c48c8fa2531c893434cf8a23016f30edb117a189dbffa6d73f8a9",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/FKVK7HN6B4Y.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510047288791166976"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "KYb61iLvfHM",
+      "title": "Jesse Watters Gushes Over Meeting Chinese President Xi Jinping at Donald Trump's Lavish St | NEWS-MONSTER",
+      "description": "Jesse Watters Gushes Over Meeting Chinese President Xi Jinping at Donald Trump's Lavish St | NEWS-MONSTER",
+      "category": "tesla",
+      "publishedAt": "2026-09-27T18:41:29.403Z",
+      "publishedLabel": "Sep 27, 06:41 PM",
+      "thumbnail": "/thumbnails/KYb61iLvfHM.png",
+      "thumbnailSha256": "1f92e5d0066b48488559c8478ea915be6eb5db2c04aa3d6744d69ed26a1783c3",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/KYb61iLvfHM",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "KYb61iLvfHM",
+          "url": "https://youtu.be/KYb61iLvfHM",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "1f92e5d0066b48488559c8478ea915be6eb5db2c04aa3d6744d69ed26a1783c3",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "1f92e5d0066b48488559c8478ea915be6eb5db2c04aa3d6744d69ed26a1783c3",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/KYb61iLvfHM.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510045948388007938"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "JChLLMtAPas",
+      "title": "Sony Spooked by Rumoured $400 Million Budget for Hideo Kojima's Physint - Push Square | NEWS-MONSTER",
+      "description": "Sony Spooked by Rumoured $400 Million Budget for Hideo Kojima's Physint - Push Square | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-27T17:46:02.281Z",
+      "publishedLabel": "Sep 27, 05:46 PM",
+      "thumbnail": "/thumbnails/JChLLMtAPas.png",
+      "thumbnailSha256": "8e71661c4f50204766da509f743ecbf930f42fe71eea382fcc80d33249999a43",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/JChLLMtAPas",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "JChLLMtAPas",
+          "url": "https://youtu.be/JChLLMtAPas",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "8e71661c4f50204766da509f743ecbf930f42fe71eea382fcc80d33249999a43",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "8e71661c4f50204766da509f743ecbf930f42fe71eea382fcc80d33249999a43",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/JChLLMtAPas.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7510032001362571265"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "xy15AHXXsxE",
+      "title": "Watch: When did iPads get as expensive as MacBooks? | NEWS-MONSTER",
+      "description": "Watch: When did iPads get as expensive as MacBooks? | NEWS-MONSTER",
+      "category": "techcrunch",
+      "publishedAt": "2026-09-27T14:24:20.247Z",
+      "publishedLabel": "Sep 27, 02:24 PM",
+      "thumbnail": "/thumbnails/xy15AHXXsxE.png",
+      "thumbnailSha256": "d14b218913c655e92f7ca1a05080a208c6d40990aed7f99d6769ed6bb4153b26",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/xy15AHXXsxE",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "xy15AHXXsxE",
+          "url": "https://youtu.be/xy15AHXXsxE",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "d14b218913c655e92f7ca1a05080a208c6d40990aed7f99d6769ed6bb4153b26",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 23,
+          "thumbnail": {
+            "sha256": "d14b218913c655e92f7ca1a05080a208c6d40990aed7f99d6769ed6bb4153b26",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/xy15AHXXsxE.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509981234798747648"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "8j0s4EcWHqY",
+      "title": "$450M for Noname, two billion-dollar rounds, and good news for crypto startups | TechCrunc | NEWS-MONSTER",
+      "description": "$450M for Noname, two billion-dollar rounds, and good news for crypto startups | TechCrunc | NEWS-MONSTER",
+      "category": "techcrunch",
+      "publishedAt": "2026-09-27T14:20:39.574Z",
+      "publishedLabel": "Sep 27, 02:20 PM",
+      "thumbnail": "/thumbnails/8j0s4EcWHqY.png",
+      "thumbnailSha256": "c35a41d57095900b11a5d3cb83875b3d78340eec9660dfdd064a8b6dc8816c4b",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/8j0s4EcWHqY",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "8j0s4EcWHqY",
+          "url": "https://youtu.be/8j0s4EcWHqY",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "c35a41d57095900b11a5d3cb83875b3d78340eec9660dfdd064a8b6dc8816c4b",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "c35a41d57095900b11a5d3cb83875b3d78340eec9660dfdd064a8b6dc8816c4b",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/8j0s4EcWHqY.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509980316275630080"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "7H-EjCTpTM8",
+      "title": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONSTER",
+      "description": "Bye-bye bots: Altera's game-playing AI agents get backing from Eric Schmidt | TechCrunch | NEWS-MONSTER",
+      "category": "techcrunch",
+      "publishedAt": "2026-09-27T14:16:49.885Z",
+      "publishedLabel": "Sep 27, 02:16 PM",
+      "thumbnail": "/thumbnails/7H-EjCTpTM8.png",
+      "thumbnailSha256": "ec0aeb368fb3c3823259993c469801c519539f39af14acca720acecc761e0981",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/7H-EjCTpTM8",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "7H-EjCTpTM8",
+          "url": "https://youtu.be/7H-EjCTpTM8",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "ec0aeb368fb3c3823259993c469801c519539f39af14acca720acecc761e0981",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 7,
+          "thumbnail": {
+            "sha256": "ec0aeb368fb3c3823259993c469801c519539f39af14acca720acecc761e0981",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/7H-EjCTpTM8.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509979351912820736"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "bVmYnSK2HFY",
+      "title": "Rather Than Pay $400, GTA 6 Fans Are Already 3D Printing Items in the Game's Pricey Collec | NEWS-MONSTER",
+      "description": "Rather Than Pay $400, GTA 6 Fans Are Already 3D Printing Items in the Game's Pricey Collec | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-27T08:36:17.632Z",
+      "publishedLabel": "Sep 27, 08:36 AM",
+      "thumbnail": "/thumbnails/bVmYnSK2HFY.png",
+      "thumbnailSha256": "df6877b51c881e00db0d4224a524ce73cf663f3d98a30317ef5da872a3a372eb",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/bVmYnSK2HFY",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "bVmYnSK2HFY",
+          "url": "https://youtu.be/bVmYnSK2HFY",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "df6877b51c881e00db0d4224a524ce73cf663f3d98a30317ef5da872a3a372eb",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 4,
+          "thumbnail": {
+            "sha256": "df6877b51c881e00db0d4224a524ce73cf663f3d98a30317ef5da872a3a372eb",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/bVmYnSK2HFY.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509893655952957440"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "Kplae6PA_Uo",
+      "title": "Google Health 5.09 arrives with more than just your new Pixel Watch features - Android Aut | NEWS-MONSTER",
+      "description": "Google Health 5.09 arrives with more than just your new Pixel Watch features - Android Aut | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-27T08:32:17.118Z",
+      "publishedLabel": "Sep 27, 08:32 AM",
+      "thumbnail": "/thumbnails/Kplae6PA_Uo.png",
+      "thumbnailSha256": "3f61e428af05babd7eba4cc843218ca449d11bad1e35bd2cc53560b604e027e5",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/Kplae6PA_Uo",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "Kplae6PA_Uo",
+          "url": "https://youtu.be/Kplae6PA_Uo",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "3f61e428af05babd7eba4cc843218ca449d11bad1e35bd2cc53560b604e027e5",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 7,
+          "thumbnail": {
+            "sha256": "3f61e428af05babd7eba4cc843218ca449d11bad1e35bd2cc53560b604e027e5",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/Kplae6PA_Uo.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509892640398659584"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "gsBUSNeyw8o",
+      "title": "Starbucks to close 6 Sacramento-area coffee shops, part of 250 nationwide closures - Abrid | NEWS-MONSTER",
+      "description": "Starbucks to close 6 Sacramento-area coffee shops, part of 250 nationwide closures - Abrid | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-09-26T23:53:17.546Z",
+      "publishedLabel": "Sep 26, 11:53 PM",
+      "thumbnail": "/thumbnails/gsBUSNeyw8o.png",
+      "thumbnailSha256": "c6318415666cbfb3bf224fb0d84e7d3a9744f81c33ec0cbc91e6ada34309fe6e",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/gsBUSNeyw8o",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "gsBUSNeyw8o",
+          "url": "https://youtu.be/gsBUSNeyw8o",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "c6318415666cbfb3bf224fb0d84e7d3a9744f81c33ec0cbc91e6ada34309fe6e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "c6318415666cbfb3bf224fb0d84e7d3a9744f81c33ec0cbc91e6ada34309fe6e",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/gsBUSNeyw8o.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509762030321549312"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "NKUFyk198gY",
+      "title": "Stock Market Today: Bond Yields Drop With Oil Prices Near End of Volatile Week — Live Upda | NEWS-MONSTER",
+      "description": "Stock Market Today: Bond Yields Drop With Oil Prices Near End of Volatile Week — Live Upda | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-09-26T23:49:30.180Z",
+      "publishedLabel": "Sep 26, 11:49 PM",
+      "thumbnail": "/thumbnails/NKUFyk198gY.png",
+      "thumbnailSha256": "6ebba2c38ad8c81e5fe6fb18e67a7ece5ccf48083e59f2a0808ce7441fbe3eca",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/NKUFyk198gY",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "NKUFyk198gY",
+          "url": "https://youtu.be/NKUFyk198gY",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "6ebba2c38ad8c81e5fe6fb18e67a7ece5ccf48083e59f2a0808ce7441fbe3eca",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 5,
+          "thumbnail": {
+            "sha256": "6ebba2c38ad8c81e5fe6fb18e67a7ece5ccf48083e59f2a0808ce7441fbe3eca",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/NKUFyk198gY.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509761080794034176"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "OJayH5e4fD4",
+      "title": "Apple Finally Shares tvOS 27 Release Notes With List of New Features - MacRumors | NEWS-MONSTER",
+      "description": "Apple Finally Shares tvOS 27 Release Notes With List of New Features - MacRumors | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-26T21:31:01.433Z",
+      "publishedLabel": "Sep 26, 09:31 PM",
+      "thumbnail": "/thumbnails/OJayH5e4fD4.png",
+      "thumbnailSha256": "173ee6b94143c5aa2433abe689f76991aa8f39dace6cc6ec41cc36580e9ad2b9",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/OJayH5e4fD4",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "OJayH5e4fD4",
+          "url": "https://youtu.be/OJayH5e4fD4",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "173ee6b94143c5aa2433abe689f76991aa8f39dace6cc6ec41cc36580e9ad2b9",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 11,
+          "thumbnail": {
+            "sha256": "173ee6b94143c5aa2433abe689f76991aa8f39dace6cc6ec41cc36580e9ad2b9",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/OJayH5e4fD4.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509726230712127489"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "decxCQTL6lA",
+      "title": "Google ads caught delivering convincing scareware ads to unsuspecting users - Ars Technica | NEWS-MONSTER",
+      "description": "Google ads caught delivering convincing scareware ads to unsuspecting users - Ars Technica | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-26T21:27:32.732Z",
+      "publishedLabel": "Sep 26, 09:27 PM",
+      "thumbnail": "/thumbnails/decxCQTL6lA.png",
+      "thumbnailSha256": "9f493d4c54ff1169f0ee418b5d4cc4480348b47ac2e1698b42cb09e86c7ccc3a",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/decxCQTL6lA",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "decxCQTL6lA",
+          "url": "https://youtu.be/decxCQTL6lA",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "9f493d4c54ff1169f0ee418b5d4cc4480348b47ac2e1698b42cb09e86c7ccc3a",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "9f493d4c54ff1169f0ee418b5d4cc4480348b47ac2e1698b42cb09e86c7ccc3a",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/decxCQTL6lA.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509725353167278080"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "o2YEG1DrKVc",
+      "title": "15 early October Prime Day tech deals, hand-picked by our gadget experts - Mashable | NEWS-MONSTER",
+      "description": "15 early October Prime Day tech deals, hand-picked by our gadget experts - Mashable | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-26T18:19:00.956Z",
+      "publishedLabel": "Sep 26, 06:19 PM",
+      "thumbnail": "/thumbnails/o2YEG1DrKVc.png",
+      "thumbnailSha256": "04c95ba9d7461e156e33d4be6b0e07652a8bea1e8f08229f11b27b10b9c6f977",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/o2YEG1DrKVc",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "o2YEG1DrKVc",
+          "url": "https://youtu.be/o2YEG1DrKVc",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "04c95ba9d7461e156e33d4be6b0e07652a8bea1e8f08229f11b27b10b9c6f977",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 3,
+          "thumbnail": {
+            "sha256": "04c95ba9d7461e156e33d4be6b0e07652a8bea1e8f08229f11b27b10b9c6f977",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/o2YEG1DrKVc.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509677910686035969"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "xNyQmjX7oH0",
+      "title": "After seven years, a spacecraft company is releasing its Otters into the wild - Ars Techni | NEWS-MONSTER",
+      "description": "After seven years, a spacecraft company is releasing its Otters into the wild - Ars Techni | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-26T18:15:46.985Z",
+      "publishedLabel": "Sep 26, 06:15 PM",
+      "thumbnail": "/thumbnails/xNyQmjX7oH0.png",
+      "thumbnailSha256": "b3e4ed5b8127f99b9db5263436d9f64520dd3d4c7ba3cbf9256925c73f2453a6",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/xNyQmjX7oH0",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "xNyQmjX7oH0",
+          "url": "https://youtu.be/xNyQmjX7oH0",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "b3e4ed5b8127f99b9db5263436d9f64520dd3d4c7ba3cbf9256925c73f2453a6",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 2,
+          "thumbnail": {
+            "sha256": "b3e4ed5b8127f99b9db5263436d9f64520dd3d4c7ba3cbf9256925c73f2453a6",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/xNyQmjX7oH0.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509677097695563777"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "rEdqQi-MbIk",
+      "title": "The surprise winners from record-high diesel prices - The Washington Post | NEWS-MONSTER",
+      "description": "The surprise winners from record-high diesel prices - The Washington Post | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-09-26T14:44:42.287Z",
+      "publishedLabel": "Sep 26, 02:44 PM",
+      "thumbnail": "/thumbnails/rEdqQi-MbIk.png",
+      "thumbnailSha256": "e112f5127fb871af9dcebb1211326d3380bb6f25861e9d775ab89417638b94ef",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/rEdqQi-MbIk",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "rEdqQi-MbIk",
+          "url": "https://youtu.be/rEdqQi-MbIk",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "e112f5127fb871af9dcebb1211326d3380bb6f25861e9d775ab89417638b94ef",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "e112f5127fb871af9dcebb1211326d3380bb6f25861e9d775ab89417638b94ef",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/rEdqQi-MbIk.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509623964671922176"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
+    {
+      "id": "xjhz3f08EfA",
+      "title": "New army rules from Codex: Adeptus Custodes - warhammer-community.com | NEWS-MONSTER",
+      "description": "New army rules from Codex: Adeptus Custodes - warhammer-community.com | NEWS-MONSTER",
+      "category": "technology",
+      "publishedAt": "2026-09-26T14:16:05.608Z",
+      "publishedLabel": "Sep 26, 02:16 PM",
+      "thumbnail": "/thumbnails/xjhz3f08EfA.png",
+      "thumbnailSha256": "fa0895bb23feadda198e0a456f3a53fedc44aad84c017fbcf142e29eae0ccdb0",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/xjhz3f08EfA",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "UNKNOWN",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "xjhz3f08EfA",
+          "url": "https://youtu.be/xjhz3f08EfA",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "fa0895bb23feadda198e0a456f3a53fedc44aad84c017fbcf142e29eae0ccdb0",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 3,
+          "thumbnail": {
+            "sha256": "fa0895bb23feadda198e0a456f3a53fedc44aad84c017fbcf142e29eae0ccdb0",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/xjhz3f08EfA.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7509616775609896961"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
+    },
     {
       "id": "Z81HMzfHR-4",
       "title": "Nintendo Reportedly Rejected A Ubisoft Zelda Spin-Off Starring Ganondorf - Nintendo Life | NEWS-MONSTER",
@@ -56,7 +1792,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509586232885043202"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "5PZPy7QQgLo",
@@ -110,7 +1848,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509563674907332609"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "j4RtMj2kJfo",
@@ -164,7 +1904,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509560435566735360"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "h62_Xz9fUq8",
@@ -218,7 +1960,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509534529464737792"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "9RGFu6CmFEo",
@@ -272,7 +2016,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509504947609223168"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "FBRQjwybHMU",
@@ -326,7 +2072,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509502975669714944"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "poYhb4l008g",
@@ -380,7 +2128,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509492477230276608"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "6rCnf33r6fM",
@@ -434,7 +2184,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509456861423812608"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "ytxK0cI2zjE",
@@ -488,119 +2240,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509448322101878785"
         }
-      }
-    },
-    {
-      "id": "CRw4Nvkx37E",
-      "title": "Wegovy Maker Novo Promises New Drugs to Boost Sales, but Investors Are Wary | NEWS-MONSTER",
-      "description": "",
-      "category": "general",
-      "publishedAt": "2026-09-25T23:03:44.365Z",
-      "publishedLabel": "Sep 26, 04:33 AM",
-      "thumbnail": "https://i.ytimg.com/vi/CRw4Nvkx37E/maxresdefault.jpg",
-      "thumbnailSha256": "bb01b6b6168545e5dfd1b6f7673e6e9cf3376f7a8a98d29fb7ae35d89849638f",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/CRw4Nvkx37E",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "CRw4Nvkx37E",
-          "url": "https://youtu.be/CRw4Nvkx37E",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "bb01b6b6168545e5dfd1b6f7673e6e9cf3376f7a8a98d29fb7ae35d89849638f",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 4,
-          "thumbnail": {
-            "sha256": "bb01b6b6168545e5dfd1b6f7673e6e9cf3376f7a8a98d29fb7ae35d89849638f",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/CRw4Nvkx37E.png"
-          }
-        },
-        "linkedin": {
-          "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509387175315169280"
-        }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
-    },
-    {
-      "id": "igXZOpY9pDk",
-      "title": "General Mills Bets on New Products, Marketing to Drive Turnaround | NEWS-MONSTER",
-      "description": "",
-      "category": "general",
-      "publishedAt": "2026-09-25T22:59:57.056Z",
-      "publishedLabel": "Sep 26, 04:29 AM",
-      "thumbnail": "https://i.ytimg.com/vi/igXZOpY9pDk/maxresdefault.jpg",
-      "thumbnailSha256": "e3bcf8ed9315dc804c2246dae8ea5c81780a05345a5d016624bbe4158a9ba857",
-      "thumbnailWidth": 3840,
-      "thumbnailHeight": 2160,
-      "thumbnailAspectRatio": "1.7778",
-      "youtubeUrl": "https://youtu.be/igXZOpY9pDk",
-      "verified": true,
-      "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "UNKNOWN",
-      "distribution": {
-        "youtube": {
-          "state": "SUCCESS",
-          "videoId": "igXZOpY9pDk",
-          "url": "https://youtu.be/igXZOpY9pDk",
-          "thumbnail": {
-            "state": "SUCCESS",
-            "sha256": "e3bcf8ed9315dc804c2246dae8ea5c81780a05345a5d016624bbe4158a9ba857",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9"
-          }
-        },
-        "githubPages": {
-          "destination": "githubPages",
-          "state": "SUCCESS",
-          "deployment": "committed",
-          "thumbnailCopied": true,
-          "manifestUpdated": true,
-          "attempts": 1,
-          "errors": [],
-          "durationMs": 3,
-          "thumbnail": {
-            "sha256": "e3bcf8ed9315dc804c2246dae8ea5c81780a05345a5d016624bbe4158a9ba857",
-            "width": 3840,
-            "height": 2160,
-            "mimeType": "image/png",
-            "aspectRatio": "16:9",
-            "path": "public/thumbnails/igXZOpY9pDk.png"
-          }
-        },
-        "linkedin": {
-          "state": "SUCCESS",
-          "postId": "urn:li:ugcPost:7509386219265581056"
-        }
-      },
-      "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-09-26T18:45:04.272Z"
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "8FHa1Wtac9Y",
@@ -654,7 +2296,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509326550694121472"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "eMjFnXsBfws",
@@ -708,7 +2352,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509325394768994304"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "ssuocBWEjAc",
@@ -762,7 +2408,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509291640461897728"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "ce5zi2SvddY",
@@ -816,7 +2464,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509290603155828736"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "KDvhelILzqI",
@@ -870,7 +2520,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509278470087135232"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "-FOlzcQs08s",
@@ -924,7 +2576,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509127120321777664"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "O-3UNMfbNxY",
@@ -978,7 +2632,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509056433401962496"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "pUOWg3ueNCM",
@@ -1032,7 +2688,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509055307147440128"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "9TON6XvKNmo",
@@ -1086,7 +2744,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509023228393164800"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "ZE0aYQHqecE",
@@ -1140,7 +2800,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7509022058698383361"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "Ry8UGkiOhjg",
@@ -1194,7 +2856,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7508973405648453632"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "zUbN6FaLXwQ",
@@ -1248,7 +2912,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7508913352585302016"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "Y6viARSG8Ns",
@@ -1302,7 +2968,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7508839569606459393"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "X1blNQZqGnQ",
@@ -1356,7 +3024,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7508838328629305344"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "SQuIlSkHQcg",
@@ -1410,7 +3080,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7508763540665556993"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "RZ3WnuwXR4Y",
@@ -1464,7 +3136,9 @@
           "state": "SUCCESS",
           "postId": "urn:li:ugcPost:7508762559479451650"
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "MT9_Ox0henE",
@@ -1518,7 +3192,9 @@
           "state": "PENDING",
           "postId": null
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "EpExk15_k50",
@@ -1572,7 +3248,9 @@
           "state": "PENDING",
           "postId": null
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "6JiX1MTc8PE",
@@ -1626,7 +3304,9 @@
           "state": "PENDING",
           "postId": null
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "bQaEwsb613Q",
@@ -1680,7 +3360,9 @@
           "state": "PENDING",
           "postId": null
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "GicGqDHflO4",
@@ -1734,7 +3416,9 @@
           "state": "PENDING",
           "postId": null
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "2CinTjlXdy8",
@@ -1788,7 +3472,9 @@
           "state": "PENDING",
           "postId": null
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     },
     {
       "id": "ITp2j5hdD44",
@@ -1805,7 +3491,7 @@
       "youtubeUrl": "https://youtu.be/ITp2j5hdD44",
       "verified": true,
       "verificationState": "VERIFIED (REENCODED)",
-      "thumbnailState": "OK",
+      "thumbnailState": "UNKNOWN",
       "distribution": {
         "youtube": {
           "state": "SUCCESS",
@@ -1842,7 +3528,9 @@
           "state": "PENDING",
           "postId": null
         }
-      }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-23T19:23:07.397Z"
     }
   ]
 }
