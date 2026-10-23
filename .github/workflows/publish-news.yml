@@ -109,17 +109,30 @@ jobs:
             fs.mkdirSync("data", { recursive: true });
             let events = [];
             try { events = JSON.parse(fs.readFileSync("data/publish-events.json", "utf8")); } catch {}
-            if (events.length) { console.log("dedup ledger already has " + events.length + " event(s)"); process.exit(0); }
             try {
               const feed = JSON.parse(fs.readFileSync("public/videos.json", "utf8"));
-              events = (feed.videos || []).map(v => ({
+              const feedEvents = (feed.videos || []).map(v => ({
                 videoId: v.id || null,
                 title: String(v.title || "").replace(/\s*\|\s*NEWS-MONSTER\s*$/i, "").trim().slice(0, 90),
                 category: v.category || null,
                 publishedAt: v.publishedAt || null,
               })).filter(e => e.title);
-              fs.writeFileSync("data/publish-events.json", JSON.stringify(events, null, 2));
-              console.log("dedup ledger hydrated from committed feed: " + events.length + " entries");
+              // UNION-MERGE (not hydrate-if-empty): a stale/partial ledger such as
+              // the frozen 'newsroom-data-main' snapshot (1 ancient event) must
+              // also be healed here. Key = normalized article title.
+              const byKey = new Map();
+              for (const e of events) {
+                const k = String(e.title || "").trim().toLowerCase().slice(0, 90);
+                if (k) byKey.set(k, e);
+              }
+              let added = 0;
+              for (const fe of feedEvents) {
+                const k = String(fe.title).toLowerCase();
+                if (!byKey.has(k)) { byKey.set(k, fe); added++; }
+              }
+              const merged = [...byKey.values()];
+              fs.writeFileSync("data/publish-events.json", JSON.stringify(merged, null, 2));
+              console.log("dedup ledger: " + events.length + " existing + " + added + " from committed feed = " + merged.length);
             } catch (e) { console.log("seed skipped: " + e.message); }
           '
 
