@@ -521,6 +521,109 @@ they exist in `.env` / GitHub Actions secrets / Railway.
 
 Code MUST NOT reference unregistered env vars. `architecture:validate` warns on unknown `process.env.*`.
 
+### CHANGE-008 — Production memory must survive cache restores — no story ships twice via the ledger (implemented 2026-10-23)
+
+```yaml
+Change ID:        FEED-004
+Reason:           2026-10-23 19:29–20:14 incident. actions/cache used the
+                  static key 'newsroom-data-main'. Once a run's restore hit the
+                  exact key, the post-save step refused to write ("Cache hit
+                  occurred on the primary key, not saving cache"), so
+                  data/publish-events.json — the PublishEventsStore dedup
+                  ledger — was frozen at the snapshot from whenever the key was
+                  first created. Every run re-fetched the same top stories and
+                  re-uploaded them: eight videos total, five duplicates
+                  (Apple iPhone Duo x4, Galaxy S27 x2, ASUS x2 by the time
+                  detection completed). [DEDUP] never fired because the ledger
+                  each run saw was empty or stale.
+Affected module(s):
+  - .github/workflows/publish-news.yml
+      restore steps:   key rotated to newsroom-data-${{ github.run_id }}
+                       (restore-keys prefix newsroom-data- stays; exact key
+                       never pre-exists, so the restore post-save now always
+                       writes a fresh snapshot)
+      persist step:    actions/cache/save@v5 with
+                       newsroom-data-${{ github.run_id }}-persist — always saves
+      NEW seeder step: union-merges data/publish-events.json with titles from
+                       the committed public/videos.json (suffix stripped,
+                       slice(0,90)) every run — a stale or partial ledger is
+                       healed, and a full cache eviction (GHA ~7-day TTL) can
+                       no longer wipe cross-run dedup knowledge
+  - scripts/composer.mjs
+      dedup compare    normalized to slice(0,90) on BOTH sides: the marker
+                       stored slice(0,100) of article.title while the compare
+                       used the full string, so any article longer than 100
+                       chars never matched (mirror of uploadTitle =
+                       article.title.slice(0,90) + ' | NEWS-MONSTER')
+Commits: 847488f (static ffmpeg, apt eliminated), d79334d (cache rotation +
+         seeder), 6293c08 (seeder union-merge + slice normalization)
+New configuration: none
+New environment variables: none
+New database objects: none
+New persistent state: data/publish-events.json — now ALWAYS persisted each run
+                      (previously frozen); seeder derives supplementary entries
+                      from public/videos.json
+New routes: none
+New events: none
+New tests: none (workflow-level cache semantics; verification was live-run
+           based: run 40019159390 shows '[DEDUP] skipped 1' + fresh upload)
+New deployment mirror: none
+BRAND-001: preserved.
+Deprecation: none
+```
+
+Invariant established:
+
+> The publish pipeline's memory of what it already shipped must have at least
+> two independent persistence paths (per-run cache SNAPSHOT + committed feed),
+> and a stale partial ledger is an expected input to heal, not a reason to
+> trust it.
+
+### CHANGE-009 — Ground-truth channel guard: ask YouTube before shipping (implemented 2026-10-23)
+
+```yaml
+Change ID:        FEED-005
+Reason:           2026-10-23 20:44 residual incident. Even with FEED-004, a run
+                  dispatched minutes behind another restored a prefix-matched
+                  older cache snapshot taken BEFORE the prior run's persist
+                  (legitimate restore-keys semantics), raced past its feed
+                  commit, and re-published the ASUS story (pajBf1Y0Pmc) nine
+                  minutes after uUryMpO-Bo8. Ledger/seeder layers are only as
+                  fresh as their writers; the only source that cannot lie about
+                  what the channel just shipped is the channel itself. Guard is
+                  placed in the UPLOAD stage before any upload cost; two cheap
+                  API calls (channels.list mine -> uploads playlist -> last 30
+                  titles) then normalized the same way as the ledger
+                  (suffix strip, lowercase, slice(0,90)). Exact match aborts
+                  the article with DUPLICATE_RECENT_UPLOAD. Transient API
+                  errors fail OPEN (availability beats redundancy; two ledger
+                  layers remain always-on).
+Affected module(s):
+  - src/publishing/RecentUploadGuard.mjs   (NEW: normalizePublishedTitle,
+                                            getRecentlyUploadedTitles — 10-min
+                                            per-process TTL)
+  - scripts/composer.mjs                   (UPLOAD stage calls the guard right
+                                            after computing uploadTitle)
+Commits: 9daf33a
+New configuration: none
+New environment variables: none (uses the same YOUTUBE_* OAuth cred path as
+                            the publisher itself)
+New database objects: none
+New persistent state: none (10-min in-process cache only)
+New routes: none
+New events: none
+New tests: none
+New deployment mirror: none
+BRAND-001: preserved.
+Deprecation: none
+```
+
+Invariant established:
+
+> No video reaches the upload API unless the channel's own recent-upload
+> window (last 30 titles, normalized) does not already contain the exact
+> normalized story title. Cache and git are hints; the channel is truth.
+
 ## 7. Constant Registry (canonical names)
 
 One concept = one canonical name. Do not create synonyms.
