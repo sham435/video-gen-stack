@@ -257,10 +257,10 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
       const used = new Set()
       for (const ev of new PublishEventsStore().events) {
         const ts = ev.publishedAt ? new Date(ev.publishedAt).getTime() : 0
-        if (ts > cutoff && ev.title) used.add(String(ev.title).trim().toLowerCase())
+        if (ts > cutoff && ev.title) used.add(String(ev.title).trim().toLowerCase().slice(0, 90))
       }
       if (used.size) {
-        const fresh = (articles || []).filter(a => !used.has(String(a.title || '').trim().toLowerCase()))
+        const fresh = (articles || []).filter(a => !used.has(String(a.title || '').trim().toLowerCase().slice(0, 90)))
         if (fresh.length) {
           console.log(`[DEDUP] skipped ${articles.length - fresh.length} already-published article(s)`)
           articles = fresh

@@ -99,8 +99,29 @@ jobs:
         uses: actions/cache@v5
         with:
           path: data
-          key: newsroom-data-main
+          key: newsroom-data-${{ github.run_id }}
           restore-keys: newsroom-data-
+
+      - name: Seed dedup ledger from committed feed (cache-eviction-proof)
+        run: |
+          node -e '
+            const fs = require("fs");
+            fs.mkdirSync("data", { recursive: true });
+            let events = [];
+            try { events = JSON.parse(fs.readFileSync("data/publish-events.json", "utf8")); } catch {}
+            if (events.length) { console.log("dedup ledger already has " + events.length + " event(s)"); process.exit(0); }
+            try {
+              const feed = JSON.parse(fs.readFileSync("public/videos.json", "utf8"));
+              events = (feed.videos || []).map(v => ({
+                videoId: v.id || null,
+                title: String(v.title || "").replace(/\s*\|\s*NEWS-MONSTER\s*$/i, "").trim().slice(0, 90),
+                category: v.category || null,
+                publishedAt: v.publishedAt || null,
+              })).filter(e => e.title);
+              fs.writeFileSync("data/publish-events.json", JSON.stringify(events, null, 2));
+              console.log("dedup ledger hydrated from committed feed: " + events.length + " entries");
+            } catch (e) { console.log("seed skipped: " + e.message); }
+          '
 
       - name: Install dependencies
         run: npm install --include=optional
@@ -164,11 +185,10 @@ jobs:
 
       - name: Persist production memory + retention snapshots
         if: always()
-        uses: actions/cache@v5
+        uses: actions/cache/save@v5
         with:
           path: data
-          key: newsroom-data-main
-          restore-keys: newsroom-data-
+          key: newsroom-data-${{ github.run_id }}-persist
 
       - name: Refresh landing page video feed
         if: always()
@@ -285,7 +305,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: data
-          key: newsroom-data-main
+          key: newsroom-data-${{ github.run_id }}
           restore-keys: newsroom-data-
       - name: Install dependencies
         run: npm install --include=optional
