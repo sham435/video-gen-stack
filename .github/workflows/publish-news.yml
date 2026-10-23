@@ -58,7 +58,7 @@ jobs:
       - name: Validate template
         run: node -e "JSON.parse(require('fs').readFileSync('src/templates/breaking-news.json')); console.log('Template valid')"
       - name: Install FFmpeg (render smoke tests need it)
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+        run: command -v ffmpeg >/dev/null 2>&1 || { sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg; }
       - name: Run test suite (node:test) — deterministic publish gate
         run: npm test
 
@@ -90,9 +90,9 @@ jobs:
 
       - name: Install FFmpeg + TTS
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg python3-pip espeak
-          pip3 install edge-tts -q
+          command -v ffmpeg >/dev/null 2>&1 || { sudo apt-get update -qq; sudo apt-get install -y -qq ffmpeg; }
+          command -v espeak >/dev/null 2>&1 || { sudo apt-get update -qq; sudo apt-get install -y -qq python3-pip espeak; }
+          python3 -m pip show edge-tts >/dev/null 2>&1 || pip3 install edge-tts -q
 
       - name: Pick category (rotates through selections every 30 min — 6 per 3h cycle, 48 posts/day max)
         id: pick
