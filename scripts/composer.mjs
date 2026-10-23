@@ -715,6 +715,20 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         const { publishVideo } = await import('../apps/api/publishers/youtube.js')
         const buffer = fs.readFileSync(videoPath)
         const uploadTitle = `${article.title?.slice(0, 90) || 'News Update'} | NEWS-MONSTER`
+
+        // Ground-truth dedup (FEED-005): ask the CHANNEL what it shipped
+        // recently — immune to cache races, feed lag, or crashed runs. Two
+        // cheap API calls; wins over every locally-cached heuristic.
+        try {
+          const { getRecentlyUploadedTitles, normalizePublishedTitle } = await import('../src/publishing/RecentUploadGuard.mjs')
+          const recentTitles = await getRecentlyUploadedTitles()
+          if (recentTitles.has(normalizePublishedTitle(uploadTitle))) {
+            throw new Error(`DUPLICATE_RECENT_UPLOAD — channel already shipped this story recently`)
+          }
+        } catch (e) {
+          if (String(e.message || '').startsWith('DUPLICATE_RECENT_UPLOAD')) throw e
+          console.log('[DEDUP-CHANNEL] guard skipped (fail-open):', e.message)
+        }
         const { buildSeoMetadata } = await import('../src/publishing/seoMetadata.mjs')
         const { buildYouTubeSEO } = await import('../src/publishing/YouTubeSEO.mjs')
         const nicheDecision = engine?.productionContext?.niche || null
