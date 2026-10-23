@@ -64,7 +64,7 @@ function apiHeaders(token, opts = {}) {
     Authorization: `Bearer ${token}`,
     'X-Restli-Protocol-Version': '2.0.0',
     'LinkedIn-Version': API_VERSION,
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json; charset=utf-8',
     ...opts,
   }
 }
