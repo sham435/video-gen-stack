@@ -57,8 +57,25 @@ jobs:
           exit $FAILED
       - name: Validate template
         run: node -e "JSON.parse(require('fs').readFileSync('src/templates/breaking-news.json')); console.log('Template valid')"
+      - name: Restore cached FFmpeg binaries
+        uses: actions/cache@v5
+        with:
+          path: ~/nm-tools
+          key: nm-tools-ffmpeg-static-v1
       - name: Install FFmpeg (render smoke tests need it)
-        run: command -v ffmpeg >/dev/null 2>&1 || { sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg; }
+        run: |
+          set -e
+          if [ ! -x "$HOME/nm-tools/bin/ffmpeg" ]; then
+            echo "static ffmpeg not cached — downloading once"
+            mkdir -p /tmp/ffx~/nm-tools/bin
+            rmdir /tmp/ffx~/nm-tools/bin
+            mkdir -p /tmp/ffx "$HOME/nm-tools/bin"
+            curl -fL --retry 3 -o /tmp/ff.tar.xz https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz
+            tar -xJf /tmp/ff.tar.xz -C /tmp/ffx --strip-components=2 --wildcards '*/bin/ff*'
+            mv /tmp/ffx/ff* "$HOME/nm-tools/bin/"
+            rm -rf /tmp/ffx /tmp/ff.tar.xz
+          fi
+          echo "$HOME/nm-tools/bin" >> "$GITHUB_PATH"
       - name: Run test suite (node:test) — deterministic publish gate
         run: npm test
 
@@ -88,11 +105,28 @@ jobs:
       - name: Install dependencies
         run: npm install --include=optional
 
+      - name: Restore cached FFmpeg binaries
+        uses: actions/cache@v5
+        with:
+          path: ~/nm-tools
+          key: nm-tools-ffmpeg-static-v1
       - name: Install FFmpeg + TTS
         run: |
-          command -v ffmpeg >/dev/null 2>&1 || { sudo apt-get update -qq; sudo apt-get install -y -qq ffmpeg; }
-          command -v espeak >/dev/null 2>&1 || { sudo apt-get update -qq; sudo apt-get install -y -qq python3-pip espeak; }
-          python3 -m pip show edge-tts >/dev/null 2>&1 || pip3 install edge-tts -q
+          set -e
+          if [ ! -x "$HOME/nm-tools/bin/ffmpeg" ]; then
+            echo "static ffmpeg not cached — downloading once"
+            mkdir -p /tmp/ffx "$HOME/nm-tools/bin"
+            curl -fL --retry 3 -o /tmp/ff.tar.xz https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz
+            tar -xJf /tmp/ff.tar.xz -C /tmp/ffx --strip-components=2 --wildcards '*/bin/ff*'
+            mv /tmp/ffx/ff* "$HOME/nm-tools/bin/"
+            rm -rf /tmp/ffx /tmp/ff.tar.xz
+          fi
+          echo "$HOME/nm-tools/bin" >> "$GITHUB_PATH"
+          # edge-tts self-installs at runtime (scripts/tts.mjs ensureEdgeTts).
+          # espeak is only the tertiary fallback; the package step is bounded
+          # so a congested Ubuntu mirror can never wedge the job again
+          # (observed: 25-40min apt delays, one 24h hang, 2026-10-23/24).
+          command -v espeak >/dev/null 2>&1 || timeout 180 sudo apt-get install -y -qq espeak || echo "espeak unavailable — TTS stays on edge-tts fallback"
 
       - name: Pick category (rotates through selections every 30 min — 6 per 3h cycle, 48 posts/day max)
         id: pick
