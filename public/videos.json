@@ -1,9 +1,121 @@
 {
   "channelId": "UC4UC7z16EtqtI-TJzeGZKjQ",
-  "updatedAt": "2026-10-25T13:58:09.913Z",
+  "updatedAt": "2026-10-25T17:42:02.515Z",
   "source": "production-ledger",
   "availabilityGate": "live",
   "videos": [
+    {
+      "id": "RCwRRklG4jg",
+      "title": "Royal Carribean cruise to the Bahamas went to Canada instead - New York Post | NEWS-MONSTER",
+      "description": "Royal Carribean cruise to the Bahamas went to Canada instead - New York Post | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-10-25T17:42:01.060Z",
+      "publishedLabel": "Oct 25, 05:42 PM",
+      "thumbnail": "/thumbnails/RCwRRklG4jg.png",
+      "thumbnailSha256": "2180a220cfb0f7424453318d8233c2ac45aa87836b9e166acf7de34d65ebbbab",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/RCwRRklG4jg",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "RCwRRklG4jg",
+          "url": "https://youtu.be/RCwRRklG4jg",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "2180a220cfb0f7424453318d8233c2ac45aa87836b9e166acf7de34d65ebbbab",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 7,
+          "thumbnail": {
+            "sha256": "2180a220cfb0f7424453318d8233c2ac45aa87836b9e166acf7de34d65ebbbab",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/RCwRRklG4jg.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7520177844174417920"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
+    },
+    {
+      "id": "pSGKygWg0ag",
+      "title": "Six Flags adding seat belts to some rollercoasters following death - BBC | NEWS-MONSTER",
+      "description": "Six Flags adding seat belts to some rollercoasters following death - BBC | NEWS-MONSTER",
+      "category": "business",
+      "publishedAt": "2026-10-25T17:36:59.449Z",
+      "publishedLabel": "Oct 25, 05:36 PM",
+      "thumbnail": "/thumbnails/pSGKygWg0ag.png",
+      "thumbnailSha256": "1be324a360b3844f87bb04714e3f5cf28ff046cd5babaf93553c8d57ea95ed85",
+      "thumbnailWidth": 3840,
+      "thumbnailHeight": 2160,
+      "thumbnailAspectRatio": "1.7778",
+      "youtubeUrl": "https://youtu.be/pSGKygWg0ag",
+      "verified": true,
+      "verificationState": "VERIFIED (REENCODED)",
+      "thumbnailState": "CUSTOM_THUMBNAIL_ACCEPTED",
+      "distribution": {
+        "youtube": {
+          "state": "SUCCESS",
+          "videoId": "pSGKygWg0ag",
+          "url": "https://youtu.be/pSGKygWg0ag",
+          "thumbnail": {
+            "state": "SUCCESS",
+            "sha256": "1be324a360b3844f87bb04714e3f5cf28ff046cd5babaf93553c8d57ea95ed85",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9"
+          }
+        },
+        "githubPages": {
+          "destination": "githubPages",
+          "state": "SUCCESS",
+          "deployment": "committed",
+          "thumbnailCopied": true,
+          "manifestUpdated": true,
+          "attempts": 1,
+          "errors": [],
+          "durationMs": 6,
+          "thumbnail": {
+            "sha256": "1be324a360b3844f87bb04714e3f5cf28ff046cd5babaf93553c8d57ea95ed85",
+            "width": 3840,
+            "height": 2160,
+            "mimeType": "image/png",
+            "aspectRatio": "16:9",
+            "path": "public/thumbnails/pSGKygWg0ag.png"
+          }
+        },
+        "linkedin": {
+          "state": "SUCCESS",
+          "postId": "urn:li:ugcPost:7520176581869219840"
+        }
+      },
+      "availability": "PUBLIC",
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
+    },
     {
       "id": "sPa1OEhZHF8",
       "title": "October 23, 2026 - Letters from an American | Heather Cox Richardson | NEWS-MONSTER",
@@ -58,7 +170,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "WPRlz6r_ei8",
@@ -114,7 +226,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "S7mp7gxwQa0",
@@ -170,7 +282,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "wRjA6eM1qYk",
@@ -226,7 +338,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "i4bj5Tseb5Q",
@@ -282,7 +394,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "p7bClxnRo0Q",
@@ -338,7 +450,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "pajBf1Y0Pmc",
@@ -394,7 +506,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "AuESMdnKb_k",
@@ -450,7 +562,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "5aJKN7MEa0I",
@@ -506,7 +618,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "KtFzSWN6Xdo",
@@ -562,7 +674,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "gSUjGWh5tbg",
@@ -618,7 +730,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "D3QUptauTyQ",
@@ -674,7 +786,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "1RuL5D-bdLU",
@@ -730,7 +842,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "GOFYTfX9nmc",
@@ -786,7 +898,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "0AuXKntJros",
@@ -842,7 +954,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "8KIxoeyaN4g",
@@ -898,7 +1010,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "wV-wMGcYrJk",
@@ -954,7 +1066,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "gaprdteWK6Q",
@@ -1010,7 +1122,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "9hIEnid0kWM",
@@ -1066,7 +1178,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "fZxDKjxexfo",
@@ -1122,7 +1234,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "x0E-UEDJ8E0",
@@ -1178,7 +1290,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "mWgOriTYkDc",
@@ -1234,7 +1346,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "wXvmFYyviQQ",
@@ -1290,7 +1402,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "XMwOD8gxp1o",
@@ -1346,7 +1458,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "1hzG-GDTxK8",
@@ -1402,7 +1514,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "-vQGQdPZGKs",
@@ -1458,7 +1570,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "FKVK7HN6B4Y",
@@ -1514,7 +1626,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "KYb61iLvfHM",
@@ -1570,7 +1682,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "JChLLMtAPas",
@@ -1626,7 +1738,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "xy15AHXXsxE",
@@ -1682,7 +1794,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "8j0s4EcWHqY",
@@ -1738,7 +1850,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "7H-EjCTpTM8",
@@ -1794,7 +1906,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "bVmYnSK2HFY",
@@ -1850,7 +1962,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "Kplae6PA_Uo",
@@ -1906,7 +2018,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "gsBUSNeyw8o",
@@ -1962,7 +2074,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "NKUFyk198gY",
@@ -2018,7 +2130,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "OJayH5e4fD4",
@@ -2074,7 +2186,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "decxCQTL6lA",
@@ -2130,7 +2242,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "o2YEG1DrKVc",
@@ -2186,7 +2298,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "xNyQmjX7oH0",
@@ -2242,7 +2354,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "rEdqQi-MbIk",
@@ -2298,7 +2410,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "xjhz3f08EfA",
@@ -2354,7 +2466,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "Z81HMzfHR-4",
@@ -2410,7 +2522,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "5PZPy7QQgLo",
@@ -2466,7 +2578,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "j4RtMj2kJfo",
@@ -2522,7 +2634,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "h62_Xz9fUq8",
@@ -2578,7 +2690,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "9RGFu6CmFEo",
@@ -2634,7 +2746,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "FBRQjwybHMU",
@@ -2690,7 +2802,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "poYhb4l008g",
@@ -2746,7 +2858,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "6rCnf33r6fM",
@@ -2802,7 +2914,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "ytxK0cI2zjE",
@@ -2858,7 +2970,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "8FHa1Wtac9Y",
@@ -2914,7 +3026,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "eMjFnXsBfws",
@@ -2970,7 +3082,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "ssuocBWEjAc",
@@ -3026,7 +3138,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "ce5zi2SvddY",
@@ -3082,7 +3194,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "KDvhelILzqI",
@@ -3138,7 +3250,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "-FOlzcQs08s",
@@ -3194,7 +3306,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "O-3UNMfbNxY",
@@ -3250,7 +3362,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "pUOWg3ueNCM",
@@ -3306,7 +3418,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "9TON6XvKNmo",
@@ -3362,7 +3474,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "ZE0aYQHqecE",
@@ -3418,7 +3530,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "Ry8UGkiOhjg",
@@ -3474,7 +3586,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "zUbN6FaLXwQ",
@@ -3530,7 +3642,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "Y6viARSG8Ns",
@@ -3586,7 +3698,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "X1blNQZqGnQ",
@@ -3642,7 +3754,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "SQuIlSkHQcg",
@@ -3698,7 +3810,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "RZ3WnuwXR4Y",
@@ -3754,7 +3866,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "MT9_Ox0henE",
@@ -3810,7 +3922,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "EpExk15_k50",
@@ -3866,7 +3978,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "6JiX1MTc8PE",
@@ -3922,7 +4034,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "bQaEwsb613Q",
@@ -3978,7 +4090,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "GicGqDHflO4",
@@ -4034,7 +4146,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "2CinTjlXdy8",
@@ -4090,7 +4202,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     },
     {
       "id": "ITp2j5hdD44",
@@ -4146,7 +4258,7 @@
         }
       },
       "availability": "PUBLIC",
-      "availabilityCheckedAt": "2026-10-25T13:58:09.913Z"
+      "availabilityCheckedAt": "2026-10-25T17:42:02.515Z"
     }
   ]
 }
