@@ -177,8 +177,14 @@ export class ScriptUniqueness {
   static _norm(text) {
     return (text || '')
       .toLowerCase()
-      .replace(/[^\w\s]/g, ' ')     // remove punctuation
-      .replace(/\s+/g, ' ')         // collapse whitespace
+      // Unicode-aware: \w is ASCII-only in JS, which stripped EVERY character
+      // of Tamil/Sinhala narrations — distinct translated scenes all
+      // normalized to '' (or a lone number), producing false 1.00 similarity
+      // across pairs (observed: VOICE GATE quarantined a fully valid Tamil
+      // script). \p{L}/\p{N} keep every Unicode letter/number so comparison
+      // works per-script.
+      .replace(/[^\p{L}\p{N}\s]/gu, ' ')   // remove punctuation, keep any script
+      .replace(/\s+/g, ' ')                 // collapse whitespace
       .trim()
   }
 

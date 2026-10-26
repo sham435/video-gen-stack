@@ -811,16 +811,58 @@ export class NewsBroadcastEngine {
     const rawDuration = timedScenes.length > 0 ? timedScenes[timedScenes.length - 1].end : 30
     let totalDuration = (!rawDuration || isNaN(rawDuration) || Number(rawDuration) < 15) ? 30 : Number(rawDuration)
     const voicePath = `${outDir}/narration.mp3`
-    // Premium narration or FAIL. generateTTS refuses espeak — a robotic voice
-    // must never reach the render/publish stage (see src/audio/VoiceSync.mjs).
+
+    // LOCALIZE timing adaptation (non-EN): Tamil/Sinhala need more speaking
+    // time than the EN plan allots. Evidence on run v6: single-track TA narration
+    // extended the TOTAL duration to 39.5s (vs EN 31.7s) while scene/caption
+    // windows stayed plan-based — voice and screens drifted apart. Per-scene
+    // TTS chunks + re-timed windows fix that: every scene grows to cover its
+    // own speech, and the narration is placed EXACTLY at the window starts.
+    let adaptedTiming = null
+    const adaptNeeded = !!(options?.langPack?.translate) && process.env.LOCALIZE_TIMING_ADAPT !== '0'
+    if (adaptNeeded) {
+      try {
+        const { adaptTimeline, TimingAdaptError } = await import('./localize/TimingAdapter.mjs')
+        adaptedTiming = await adaptTimeline(timedScenes, {
+          outDir,
+          makeChunk: async (text, chunkPath) => {
+            // Voice parity with BOTH paths: same generateTTS + pack the
+            // single-track call would use; espeak chunks are refused loudly.
+            await this.voiceSync.generateTTS(text, chunkPath, options.langPack)
+            const report = this.voiceSync.lastReport || {}
+            if (report.provider === 'espeak') {
+              throw new TimingAdaptError('espeak chunk produced — refusing robotic localized narration')
+            }
+            if (!fs.existsSync(chunkPath)) throw new TimingAdaptError('chunk file missing after generateTTS')
+          },
+        })
+        // Re-timed windows drive EVERYTHING downstream: rebuild the timeline
+        // with adapted scenes so captions/word-timings/frames follow voice.
+        // sceneEngine renders whatever scene object each frame passes.
+        timedScenes = adaptedTiming.scenes
+        this.timeline = new Timeline(timedScenes, this.renderFps)
+        totalDuration = adaptedTiming.totalDuration
+        console.log(`[TIMING-ADAPT] ${options.langPack.code}: plan ${adaptedTiming.stats.planTotal}s → adapted ${adaptedTiming.stats.adaptedTotal}s (${adaptedTiming.stats.narrated} chunks) — speech and scenes aligned`)
+      } catch (e) {
+        console.warn(`[TIMING-ADAPT] fallback to single-track narration: ${e.message}`)
+        adaptedTiming = null
+      }
+    }
     try {
-      await this.voiceSync.generateTTS(captionScript, voicePath, options?.langPack ?? null)
+      if (adaptedTiming) {
+        // Skip single-track synthesis AND the extend/pad path: the chunked
+        // track IS total-aligned by construction (placed at window starts).
+      } else {
+        await this.voiceSync.generateTTS(captionScript, voicePath, options?.langPack ?? null)
+      }
     } catch (e) {
       console.error(`[VOICE] narration failed: ${e.message}`)
       throw new Error(`Voice generation failed — ${e.message}`)
     }
 
-    const voiceDur = this.voiceSync.getDuration(voicePath)
+    const voiceDur = adaptedTiming
+      ? this.voiceSync.getDuration(adaptedTiming.audioPath)
+      : this.voiceSync.getDuration(voicePath)
     const voiceSize = fs.existsSync(voicePath) ? fs.statSync(voicePath).size : 0
     const voiceReport = this.voiceSync.lastReport || {}
     if (voiceReport.provider === 'espeak') {
@@ -829,22 +871,41 @@ export class NewsBroadcastEngine {
     console.log(`Narration: ${voiceDur.toFixed(1)}s, ${(voiceSize / 1024).toFixed(0)}KB via ${voiceReport.provider || 'tts'} (template: ${totalDuration}s)`)
 
     if (voiceSize < 1024 || voiceDur < 1) {
-      throw new Error('Voice QA: narration file is empty/invalid — refusing to publish')
+      throw new Error(
+        adaptedTiming
+          ? `[TIMING-ADAPT] chunked narration track invalid (${(voiceSize / 1024).toFixed(1)}KB, ${voiceDur.toFixed(2)}s) — failing loud instead of rendering empty audio`
+          : 'Voice QA: narration file is empty/invalid — refusing to publish'
+      )
     }
 
+    // UNIFIED narration-alignment handling (both paths):
     // The closing tagline is the LAST words of the narration track. If the
     // narrator runs longer than the scene timeline, mixAudio's `-t totalDuration`
     // would slice them off — the outro would never be read. Extend the video
     // timeline to cover the full narration so the brand outro is always spoken.
+    // NOTE: with adaptedTiming the total is 0.5s of tail beyond the final
+    // window by construction; if a stray chunk still exceeds it, extend all
+    // trailing windows so the LAST window keeps its speech fully audible AND
+    // the fixed windows stay aligned.
     if (voiceDur > totalDuration) {
       const templateDur = totalDuration
-      totalDuration = Math.ceil(voiceDur) + 0.5
-      console.log(`Narration ${voiceDur.toFixed(1)}s > template ${templateDur}s — extending video to ${totalDuration.toFixed(1)}s so the closing tagline is fully read`)
+      if (adaptedTiming) {
+        const extra = Math.ceil(voiceDur) + 0.5 - totalDuration
+        adaptedTiming.scenes[adaptedTiming.scenes.length - 1].end += extra
+        totalDuration = Math.ceil(voiceDur) + 0.5
+        this.timeline = new Timeline(adaptedTiming.scenes, this.renderFps)
+        console.log(`[TIMING-ADAPT] trailing chunk overran by ${extra.toFixed(2)}s — final window extended (timeline rebuilt)`)
+      } else {
+        totalDuration = Math.ceil(voiceDur) + 0.5
+        console.log(`Narration ${voiceDur.toFixed(1)}s > template ${templateDur}s — extending video to ${totalDuration.toFixed(1)}s so the closing tagline is fully read`)
+      }
     }
 
-    // Pad short narration with silence so platforms don't reject the video
-    const finalVoiceDur = this.voiceSync.getDuration(voicePath)
-    if (finalVoiceDur < totalDuration) {
+    // Pad short narration with silence so platforms don't reject the video.
+    // Skipped when adaptedTiming: chunk placement used apad=whole_dur to the
+    // exact adapted total — padding again would DOUBLE-pad the outro.
+    const finalVoiceDur = adaptedTiming ? this.voiceSync.getDuration(adaptedTiming.audioPath) : this.voiceSync.getDuration(voicePath)
+    if (!adaptedTiming && finalVoiceDur < totalDuration) {
       const paddedVoice = `${outDir}/narration_padded.mp3`
       const padSecs = (totalDuration - finalVoiceDur).toFixed(2)
       try {

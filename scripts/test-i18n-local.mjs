@@ -137,5 +137,36 @@ await t('non-EN pack activates shaping only for non-Latin strings', () => {
   setRenderLanguage(null)
 })
 
+console.log('— ScriptUniqueness tri-lingual gates —')
+const { ScriptUniqueness } = await import('../src/uniqueness/ScriptUniqueness.mjs')
+await t('distinct Tamil narrations do NOT collapse to 1.00 (Unicode-aware _norm)', () => {
+  const a = 'அறிவிப்பு இந்தக் கதைக்கு ஒரு முக்கிய மாற்றத்தை குறிக்கிறது.'
+  const b = 'விரைவில் இந்தக் கதையைப் பற்றிய மேலதிக உள்ளீடு எதிர்பார்க்கப்படுகிறது.'
+  const v = ScriptUniqueness._segmentSimilarity(a, b)
+  assert.ok(v < 0.85, `expected below dedup threshold, got ${v}`)
+})
+await t('Sinhala distinct narrations pass the within-video gate', () => {
+  const gate = ScriptUniqueness.validateWithinVideo([
+    'අද රාත්‍රියේ මුදල් යන්නේ කොහෙද සොයමු.',
+    'එම සංඛ්‍යාව මෙම මැතිවරණයේ ගණිතය වෙනස් කළේය.',
+    'සංඛ්‍යා එනතුරු අප සමඟ රැඳී සිටන්න.',
+  ])
+  assert.equal(gate.pass, true, JSON.stringify(gate.duplicates))
+})
+await t('identical Tamil narrations still caught (gate sanity)', () => {
+  const gate = ScriptUniqueness.validateWithinVideo([
+    'இது முக்கியமான செய்தி ஆகும்',
+    'இது முக்கியமான செய்தி ஆகும்',
+  ])
+  assert.equal(gate.pass, false)
+})
+await t('English within-video gate unchanged (zero regression)', () => {
+  const gate = ScriptUniqueness.validateWithinVideo([
+    'The money moved in eleven offshore transfers.',
+    'Officials quietly changed the filing rules last week.',
+  ])
+  assert.equal(gate.pass, true)
+})
+
 console.log(`\n${passed} passed, ${failed} failed`)
 process.exit(failed ? 1 : 0)

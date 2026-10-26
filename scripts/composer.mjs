@@ -326,16 +326,26 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         // target language. Cache-first: re-runs replay, never re-bill.
         let article = articleEn
         if (langPack.translate) {
-          const { translateStrings } = await import('../src/i18n/Translator.mjs')
-          const t = await translateStrings(
-            [
-              { key: 'title', text: articleEn.title },
-              { key: 'summary', text: articleEn.description },
-            ],
-            langPack
-          )
-          article = { ...articleEn, title: t.title, description: t.summary || articleEn.description, lang: langPack.code }
-          console.log(`[LANG] variant ${langPack.code}: "${String(article.title)?.slice(0, 64)}"`)
+          try {
+            const { translateStrings } = await import('../src/i18n/Translator.mjs')
+            const t = await translateStrings(
+              [
+                { key: 'title', text: articleEn.title },
+                { key: 'summary', text: articleEn.description },
+              ],
+              langPack
+            )
+            article = { ...articleEn, title: t.title, description: t.summary || articleEn.description, lang: langPack.code }
+            console.log(`[LANG] variant ${langPack.code}: "${String(article.title)?.slice(0, 64)}"`)
+          } catch (e) {
+            // TRI-LINGUAL: translation for this language is unavailable —
+            // quarantine ONLY this variant. The EN master (and other
+            // languages with live providers) still publish; a failed
+            // language must never abort a sibling (observed: SI provider
+            // flake killing a fully successful TA/EN run).
+            console.error(`[LANG] variant ${langPack.code} quarantined for this run: ${e.message}`)
+            continue
+          }
         }
         fs.mkdirSync(outDir, { recursive: true })
 

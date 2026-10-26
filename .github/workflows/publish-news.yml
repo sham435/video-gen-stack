@@ -130,6 +130,11 @@ jobs:
           INPUT_CATEGORY: ${{ steps.pick.outputs.category }}
           LANGS: ${{ github.event.inputs.langs || 'en,ta,si' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # Router intent: OpenRouter hosts the free reasoning models used by
+          # I18N translation when Gemini quota exhausts; OPENROUTER_MODEL also
+          # forces router routing even if an OPENAI_API_KEY exists (402 guard).
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENROUTER_MODEL: ${{ secrets.OPENROUTER_MODEL || 'recursive/flint-v1.0:free' }}
         run: |
           python3 -m pip install --user edge-tts -q
           PATH="$HOME/.local/bin:$PATH" node scripts/composer.mjs '${{ github.event.inputs.title || '' }}'

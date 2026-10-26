@@ -28,6 +28,23 @@ export const LANGUAGES = Object.freeze({
     langHashtag: '',            // no extra language hashtag
     translate: false,
   }),
+  // en-LK — natural English narration for Sri Lankan audiences. Same English
+  // texts (translate:false → zero regression on the EN master), a catalog-
+  // verified South-Asian-English accent (en-IN-NeerjaNeural; the catalog has
+  // NO en-LK voice — accent fallback is EXPLICIT here, not silent), overridable.
+  'en-LK': Object.freeze({
+    code: 'en-LK',
+    label: 'English (LK)',
+    nativeLabel: 'English (LK)',
+    primary: false,
+    provider: 'edge',
+    edgeVoice: 'en-IN-NeerjaNeural', // catalog-verified natural accent fallback for en-LK
+    fontFamily: null,
+    fontFiles: null,
+    titleTag: 'English (LK)',
+    langHashtag: '#EnglishLK',
+   translate: false,
+  }),
   ta: Object.freeze({
     code: 'ta',
     label: 'Tamil',
@@ -72,13 +89,17 @@ export const PRIMARY_LANG = 'en'
 export function parseLangSpec(spec) {
   const raw = (spec ?? process.env.LANGS ?? 'en').split(',').map((s) => s.trim().toLowerCase()).filter(Boolean)
   if (raw.length === 0) return [LANGUAGES.en]
-  const codes = [...new Set(raw)]
-  for (const code of codes) {
-    if (!LANGUAGES[code]) throw new Error(`UNKNOWN_LANGUAGE: "${code}" — known: ${Object.keys(LANGUAGES).join(',')}`)
+  // Case-insensitive lookup: spec slugs are lowercased but codes carry locale
+  // casing (en-LK). Unknown codes still fail loud (operator typo guard).
+  const resolved = []
+  for (const code of raw) {
+    const match = Object.keys(LANGUAGES).find((k) => k.toLowerCase() === code)
+    if (!match) throw new Error(`UNKNOWN_LANGUAGE: "${code}" — known: ${Object.keys(LANGUAGES).join(',')}`)
+    if (!resolved.includes(match)) resolved.push(match)
   }
   // Primary first, then extras in requested order
   return [
     LANGUAGES[PRIMARY_LANG],
-    ...codes.filter((c) => c !== PRIMARY_LANG).map((c) => LANGUAGES[c]),
-  ].filter((p) => codes.includes(p.code))
+    ...resolved.filter((c) => c !== PRIMARY_LANG).map((c) => LANGUAGES[c]),
+  ].filter((p) => resolved.includes(p.code))
 }
