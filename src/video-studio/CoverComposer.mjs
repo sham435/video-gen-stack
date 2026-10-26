@@ -4,6 +4,7 @@ import path from 'path'
 import { ANCHOR_CONFIG, BrandStyleResolver } from '../visual/BrandStyleResolver.mjs'
 import { drawThumbnailOverlay, drawFooterBand } from './ThumbnailOverlay.mjs'
 import { composeLandscape } from '../thumbnail/LandscapeComposition.mjs'
+import { getRenderLanguage, drawShaped, measureShaped, wrapLocalized } from '../i18n/ShapedText.mjs'
 
 // Footer band asset — generated from the shared FooterLayout engine
 // (scripts/footer.mjs --asset 1920x300). Lazy-loaded once and cached; a
@@ -111,7 +112,7 @@ export class CoverComposer {
 
     // PILLAR MODE: 3-layer ThumbnailOverlay when _pillar is set
     if (brief._pillar) {
-      drawThumbnailOverlay(ctx, {
+      await drawThumbnailOverlay(ctx, {
         pillar: brief._pillar,
         title: brief.headline || '',
         hook: brief._hook,
@@ -127,21 +128,39 @@ export class CoverComposer {
     const topText = algo?.hook && algo.hook !== 'SHOCKING_NUMBER'
       ? 'NOBODY EXPECTED THIS MOVE'
       : safeOverlay(brief.text_overlay?.top)
-    ctx.font = `900 ${Math.round(U * 2.2)}px Anton, Impact, sans-serif`
+    const topFontPx = Math.round(U * 2.2)
+    ctx.font = `900 ${topFontPx}px Anton, Impact, sans-serif`
     ctx.fillStyle = accent
     ctx.shadowColor = accent
     ctx.shadowBlur = Math.round(W * 0.03)
-    ctx.fillText(topText, W / 2, H * 0.20)
+    const topPack = getRenderLanguage()
+    if (topPack) {
+      await drawShaped(ctx, topText, W / 2, H * 0.20, {
+        fontFile: topPack.fontFiles,
+        size: topFontPx,
+        weight: 900,
+        align: 'center',
+        baseline: 'alphabetic',
+        fillStyle: accent,
+      })
+    } else {
+      ctx.fillText(topText, W / 2, H * 0.20)
+    }
     ctx.shadowBlur = 0
 
     // headline — smart wrap + auto-scale to fit W*0.88 width, max 4 lines
     const headline = (brief.headline || 'TECH NEWS').toUpperCase()
+    const cPack = getRenderLanguage()
     const maxW = W * 0.88
     let hFontSize = headline.length > 60 ? U * 1.2 : headline.length > 40 ? U * 1.5 : headline.length > 25 ? U * 1.8 : U * 2.1
-    const lines = []
-    const wrap = () => {
+    let lines = []
+    const wrap = async () => {
       lines.length = 0
       ctx.font = `900 ${hFontSize}px Anton, Impact, sans-serif`
+      if (cPack) {
+        lines.push(...await wrapLocalized(ctx, headline, maxW, { fontFile: cPack.fontFiles, size: hFontSize, weight: 900 }))
+        return
+      }
       const words = headline.split(' ')
       let line = ''
       for (const w of words) {
@@ -150,12 +169,12 @@ export class CoverComposer {
       }
       if (line.trim()) lines.push(line.trim())
     }
-    wrap()
+    await wrap()
     // shrink if still overflowing (long titles)
     let guard = 0
     while (lines.length > 4 && hFontSize > U * 0.9 && guard < 20) {
       hFontSize -= U * 0.08
-      wrap()
+      await wrap()
       guard++
     }
     ctx.font = `900 ${hFontSize}px Anton, Impact, sans-serif`
@@ -165,7 +184,20 @@ export class CoverComposer {
     const lineH = hFontSize * 1.15
     const blockH = lines.length * lineH
     const startY = H * 0.36 - blockH / 2
-    lines.forEach((l, i) => ctx.fillText(l, W / 2, startY + i * lineH + hFontSize * 0.8))
+    for (let i = 0; i < lines.length; i++) {
+      if (cPack) {
+        await drawShaped(ctx, lines[i], W / 2, startY + i * lineH + hFontSize * 0.8, {
+          fontFile: cPack.fontFiles,
+          size: hFontSize,
+          weight: 900,
+          align: 'center',
+          baseline: 'alphabetic',
+          fillStyle: '#FFFFFF',
+        })
+      } else {
+        ctx.fillText(lines[i], W / 2, startY + i * lineH + hFontSize * 0.8)
+      }
+    }
     ctx.shadowBlur = 0
 
     // bottom overlay badge — niche pill from profile takes priority
@@ -173,14 +205,29 @@ export class CoverComposer {
     const bottomText = nicheText || safeOverlay(brief.text_overlay?.bottom, 'NEW DETAILS')
     ctx.shadowBlur = 0
     ctx.font = `900 ${Math.round(U * 1.0)}px Anton, Impact, sans-serif`
-    const bw = ctx.measureText(bottomText).width + Math.round(W * 0.04)
+    const bPack = getRenderLanguage()
+    const bottomW = bPack
+      ? await measureShaped(bottomText, { fontFile: bPack.fontFiles, size: Math.round(U * 1.0), weight: 900 })
+      : ctx.measureText(bottomText).width
+    const bw = bottomW + Math.round(W * 0.04)
     const badgH = Math.round(H * 0.075)
     ctx.fillStyle = accent
     ctx.beginPath()
     ctx.roundRect(W / 2 - bw / 2, H * 0.72, bw, badgH, Math.round(badgH / 3))
     ctx.fill()
     ctx.fillStyle = '#FFFFFF'
-    ctx.fillText(bottomText, W / 2, H * 0.72 + badgH / 2)
+    if (bPack) {
+      await drawShaped(ctx, bottomText, W / 2, H * 0.72 + badgH / 2, {
+        fontFile: bPack.fontFiles,
+        size: Math.round(U * 1.0),
+        weight: 900,
+        align: 'center',
+        baseline: 'middle',
+        fillStyle: '#FFFFFF',
+      })
+    } else {
+      ctx.fillText(bottomText, W / 2, H * 0.72 + badgH / 2)
+    }
     } // end legacy mode
 
     // 4. Bottom brand strip (FIXED) — the footer band replaces the text strip
@@ -310,7 +357,7 @@ export class CoverComposer {
     // 3. Top overlay badge (accent, glow)
     // PILLAR MODE: 3-layer ThumbnailOverlay when _pillar is set
     if (brief._pillar) {
-      drawThumbnailOverlay(ctx, {
+      await drawThumbnailOverlay(ctx, {
         pillar: brief._pillar,
         title: brief.headline || '',
         hook: brief._hook,
@@ -326,22 +373,40 @@ export class CoverComposer {
       ? 'NOBODY EXPECTED THIS MOVE'
       : safeOverlay(brief.text_overlay?.top)
     ctx.textAlign = 'center'
-    ctx.font = `900 ${Math.round(U * 1.6)}px Anton, Impact, sans-serif`
+    const topFontPx2 = Math.round(U * 1.6)
+    ctx.font = `900 ${topFontPx2}px Anton, Impact, sans-serif`
     ctx.fillStyle = accent
     ctx.shadowColor = accent
     ctx.shadowBlur = Math.round(TW * 0.02)
-    ctx.fillText(topText, TW / 2, TH * 0.20)
+    const topPack2 = getRenderLanguage()
+    if (topPack2) {
+      await drawShaped(ctx, topText, TW / 2, TH * 0.20, {
+        fontFile: topPack2.fontFiles,
+        size: topFontPx2,
+        weight: 900,
+        align: 'center',
+        baseline: 'alphabetic',
+        fillStyle: accent,
+      })
+    } else {
+      ctx.fillText(topText, TW / 2, TH * 0.20)
+    }
     ctx.shadowBlur = 0
 
     // 4. Headline — wrap to max TW*0.88 width, max 4 lines, auto-scale
     const headline = (brief.headline || 'TECH NEWS').toUpperCase()
+    const tPack = getRenderLanguage()
     ctx.font = `900 ${Math.round(U * 1.9)}px Anton, Impact, sans-serif`
     const maxW = TW * 0.88
     let hFontSize = headline.length > 90 ? U * 1.2 : headline.length > 60 ? U * 1.4 : headline.length > 40 ? U * 1.7 : U * 2.0
-    const lines = []
-    const wrap = () => {
+    let lines = []
+    const wrap = async () => {
       lines.length = 0
       ctx.font = `900 ${hFontSize}px Anton, Impact, sans-serif`
+      if (tPack) {
+        lines.push(...await wrapLocalized(ctx, headline, maxW, { fontFile: tPack.fontFiles, size: hFontSize, weight: 900 }))
+        return
+      }
       const words = headline.split(' ')
       let line = ''
       for (const w of words) {
@@ -350,11 +415,11 @@ export class CoverComposer {
       }
       if (line.trim()) lines.push(line.trim())
     }
-    wrap()
+    await wrap()
     let guard = 0
     while (lines.length > 4 && hFontSize > U * 0.9 && guard < 24) {
       hFontSize -= U * 0.07
-      wrap()
+      await wrap()
       guard++
     }
     ctx.font = `900 ${hFontSize}px Anton, Impact, sans-serif`
@@ -364,20 +429,48 @@ export class CoverComposer {
     const lineH = hFontSize * 1.1
     const blockH = lines.length * lineH
     const startY = TH * 0.36 - blockH / 2
-    lines.forEach((l, i) => ctx.fillText(l, TW / 2, startY + i * lineH + hFontSize * 0.8))
+    for (let i = 0; i < lines.length; i++) {
+      if (tPack) {
+        await drawShaped(ctx, lines[i], TW / 2, startY + i * lineH + hFontSize * 0.8, {
+          fontFile: tPack.fontFiles,
+          size: hFontSize,
+          weight: 900,
+          align: 'center',
+          baseline: 'alphabetic',
+          fillStyle: '#FFFFFF',
+        })
+      } else {
+        ctx.fillText(lines[i], TW / 2, startY + i * lineH + hFontSize * 0.8)
+      }
+    }
     ctx.shadowBlur = 0
 
     // 5. Bottom accent badge — niche pill from profile takes priority
     const bottomText = profile?.label || safeOverlay(brief.text_overlay?.bottom, 'NEW DETAILS')
     ctx.font = `900 ${Math.round(U * 1.0)}px Anton, Impact, sans-serif`
-    const bw = ctx.measureText(bottomText).width + Math.round(TW * 0.04)
+    const bPack2 = getRenderLanguage()
+    const bottomW2 = bPack2
+      ? await measureShaped(bottomText, { fontFile: bPack2.fontFiles, size: Math.round(U * 1.0), weight: 900 })
+      : ctx.measureText(bottomText).width
+    const bw = bottomW2 + Math.round(TW * 0.04)
     const badgH = Math.round(TH * 0.075)
     ctx.fillStyle = accent
     ctx.beginPath()
     ctx.roundRect(TW / 2 - bw / 2, TH * 0.72, bw, badgH, Math.round(badgH / 3))
     ctx.fill()
     ctx.fillStyle = '#FFFFFF'
-    ctx.fillText(bottomText, TW / 2, TH * 0.72 + badgH / 2)
+    if (bPack2) {
+      await drawShaped(ctx, bottomText, TW / 2, TH * 0.72 + badgH / 2, {
+        fontFile: bPack2.fontFiles,
+        size: Math.round(U * 1.0),
+        weight: 900,
+        align: 'center',
+        baseline: 'middle',
+        fillStyle: '#FFFFFF',
+      })
+    } else {
+      ctx.fillText(bottomText, TW / 2, TH * 0.72 + badgH / 2)
+    }
     } // end legacy mode
 
     // 6. Bottom brand strip

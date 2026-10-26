@@ -13,6 +13,10 @@ on:
         description: 'Override article title (optional)'
         required: false
         default: ''
+      langs:
+        description: 'Comma list of languages (en,ta,si) — lead story renders one variant per language'
+        required: false
+        default: 'en,ta,si'
 
 # ── DevOps guardrail ───────────────────────────────────────────────────────
 # Every FAILED run opens a GitHub Issue on this repo. Issues create email
@@ -57,25 +61,8 @@ jobs:
           exit $FAILED
       - name: Validate template
         run: node -e "JSON.parse(require('fs').readFileSync('src/templates/breaking-news.json')); console.log('Template valid')"
-      - name: Restore cached FFmpeg binaries
-        uses: actions/cache@v5
-        with:
-          path: ~/nm-tools
-          key: nm-tools-ffmpeg-static-v1
       - name: Install FFmpeg (render smoke tests need it)
-        run: |
-          set -e
-          if [ ! -x "$HOME/nm-tools/bin/ffmpeg" ]; then
-            echo "static ffmpeg not cached — downloading once"
-            mkdir -p /tmp/ffx~/nm-tools/bin
-            rmdir /tmp/ffx~/nm-tools/bin
-            mkdir -p /tmp/ffx "$HOME/nm-tools/bin"
-            curl -fL --retry 3 -o /tmp/ff.tar.xz https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz
-            tar -xJf /tmp/ff.tar.xz -C /tmp/ffx --strip-components=2 --wildcards '*/bin/ff*'
-            mv /tmp/ffx/ff* "$HOME/nm-tools/bin/"
-            rm -rf /tmp/ffx /tmp/ff.tar.xz
-          fi
-          echo "$HOME/nm-tools/bin" >> "$GITHUB_PATH"
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
       - name: Run test suite (node:test) — deterministic publish gate
         run: npm test
 
@@ -99,68 +86,17 @@ jobs:
         uses: actions/cache@v5
         with:
           path: data
-          key: newsroom-data-${{ github.run_id }}
+          key: newsroom-data-main
           restore-keys: newsroom-data-
-
-      - name: Seed dedup ledger from committed feed (cache-eviction-proof)
-        run: |
-          node -e '
-            const fs = require("fs");
-            fs.mkdirSync("data", { recursive: true });
-            let events = [];
-            try { events = JSON.parse(fs.readFileSync("data/publish-events.json", "utf8")); } catch {}
-            try {
-              const feed = JSON.parse(fs.readFileSync("public/videos.json", "utf8"));
-              const feedEvents = (feed.videos || []).map(v => ({
-                videoId: v.id || null,
-                title: String(v.title || "").replace(/\s*\|\s*NEWS-MONSTER\s*$/i, "").trim().slice(0, 90),
-                category: v.category || null,
-                publishedAt: v.publishedAt || null,
-              })).filter(e => e.title);
-              // UNION-MERGE (not hydrate-if-empty): a stale/partial ledger such as
-              // the frozen 'newsroom-data-main' snapshot (1 ancient event) must
-              // also be healed here. Key = normalized article title.
-              const byKey = new Map();
-              for (const e of events) {
-                const k = String(e.title || "").trim().toLowerCase().slice(0, 90);
-                if (k) byKey.set(k, e);
-              }
-              let added = 0;
-              for (const fe of feedEvents) {
-                const k = String(fe.title).toLowerCase();
-                if (!byKey.has(k)) { byKey.set(k, fe); added++; }
-              }
-              const merged = [...byKey.values()];
-              fs.writeFileSync("data/publish-events.json", JSON.stringify(merged, null, 2));
-              console.log("dedup ledger: " + events.length + " existing + " + added + " from committed feed = " + merged.length);
-            } catch (e) { console.log("seed skipped: " + e.message); }
-          '
 
       - name: Install dependencies
         run: npm install --include=optional
 
-      - name: Restore cached FFmpeg binaries
-        uses: actions/cache@v5
-        with:
-          path: ~/nm-tools
-          key: nm-tools-ffmpeg-static-v1
       - name: Install FFmpeg + TTS
         run: |
-          set -e
-          if [ ! -x "$HOME/nm-tools/bin/ffmpeg" ]; then
-            echo "static ffmpeg not cached — downloading once"
-            mkdir -p /tmp/ffx "$HOME/nm-tools/bin"
-            curl -fL --retry 3 -o /tmp/ff.tar.xz https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz
-            tar -xJf /tmp/ff.tar.xz -C /tmp/ffx --strip-components=2 --wildcards '*/bin/ff*'
-            mv /tmp/ffx/ff* "$HOME/nm-tools/bin/"
-            rm -rf /tmp/ffx /tmp/ff.tar.xz
-          fi
-          echo "$HOME/nm-tools/bin" >> "$GITHUB_PATH"
-          # edge-tts self-installs at runtime (scripts/tts.mjs ensureEdgeTts).
-          # espeak is only the tertiary fallback; the package step is bounded
-          # so a congested Ubuntu mirror can never wedge the job again
-          # (observed: 25-40min apt delays, one 24h hang, 2026-10-23/24).
-          command -v espeak >/dev/null 2>&1 || timeout 180 sudo apt-get install -y -qq espeak || echo "espeak unavailable — TTS stays on edge-tts fallback"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg python3-pip espeak
+          pip3 install edge-tts -q
 
       - name: Pick category (rotates through selections every 30 min — 6 per 3h cycle, 48 posts/day max)
         id: pick
@@ -192,16 +128,19 @@ jobs:
           ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
           QUICK_RENDER: 'true'
           INPUT_CATEGORY: ${{ steps.pick.outputs.category }}
+          LANGS: ${{ github.event.inputs.langs || 'en,ta,si' }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           python3 -m pip install --user edge-tts -q
           PATH="$HOME/.local/bin:$PATH" node scripts/composer.mjs '${{ github.event.inputs.title || '' }}'
 
       - name: Persist production memory + retention snapshots
         if: always()
-        uses: actions/cache/save@v5
+        uses: actions/cache@v5
         with:
           path: data
-          key: newsroom-data-${{ github.run_id }}-persist
+          key: newsroom-data-main
+          restore-keys: newsroom-data-
 
       - name: Refresh landing page video feed
         if: always()
@@ -318,7 +257,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: data
-          key: newsroom-data-${{ github.run_id }}
+          key: newsroom-data-main
           restore-keys: newsroom-data-
       - name: Install dependencies
         run: npm install --include=optional

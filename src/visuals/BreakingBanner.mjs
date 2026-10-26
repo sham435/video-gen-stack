@@ -1,5 +1,6 @@
 import { mulberry32 } from '../style/seeded-random.mjs'
 import { DesignSystem } from './DesignSystem.mjs'
+import { getRenderLanguage, drawShaped } from '../i18n/ShapedText.mjs'
 
 const COLORS = {
   red: '#E10600',
@@ -17,7 +18,7 @@ const COLORS = {
 // the composition follows the active render profile (always 16:9 landscape,
 // e.g. 1280x720 or 1920x1080). sx/sy scale the design-space values into that
 // canvas.
-export function drawBreakingBanner(ctx, text, progress, fontSize = 64) {
+export async function drawBreakingBanner(ctx, text, progress, fontSize = 64) {
   const { W, H, sx, sy } = DesignSystem
   const p = Math.min(1, progress * 2)
   const hasSub = Boolean(text && String(text).trim())
@@ -64,11 +65,26 @@ export function drawBreakingBanner(ctx, text, progress, fontSize = 64) {
   ctx.fillText('BREAKING', W / 2, bannerY + bannerH * (hasSub ? 0.38 : 0.5))
 
   if (hasSub) {
-    ctx.font = `900 ${Math.max(sx(32), Math.min(sx(44), bandFont * 0.68))}px Anton, Impact, sans-serif`
+    const sub = String(text).toUpperCase()
+    const subFont = Math.max(sx(32), Math.min(sx(44), bandFont * 0.68))
+    ctx.font = `900 ${subFont}px Anton, Impact, sans-serif`
     ctx.fillStyle = COLORS.red
     ctx.shadowColor = COLORS.red
     ctx.shadowBlur = sx(24)
-    ctx.fillText(String(text).toUpperCase(), W / 2, bannerY + bannerH * 0.72)
+    const subPack = getRenderLanguage()
+    if (subPack) {
+      // Translated subtext — shaped glyph outlines in the same red/shadow style.
+      await drawShaped(ctx, sub, W / 2, bannerY + bannerH * 0.72, {
+        fontFile: subPack.fontFiles,
+        size: subFont,
+        weight: 900,
+        align: 'center',
+        baseline: 'middle',
+        fillStyle: COLORS.red,
+      })
+    } else {
+      ctx.fillText(sub, W / 2, bannerY + bannerH * 0.72)
+    }
   }
   ctx.shadowBlur = 0
 

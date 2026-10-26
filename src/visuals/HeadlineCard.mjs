@@ -10,6 +10,7 @@
 // TextLayoutEngine — never re-scale them (the old sx()/sy() rescale crushed
 // the line gap and caused the shipped overlap).
 import { DesignSystem } from './DesignSystem.mjs'
+import { getRenderLanguage, drawShaped, wrapLocalized } from '../i18n/ShapedText.mjs'
 
 const BRIGHT_WHITE_STOPS = [
   [0.00, '#FFFFFF'], // top crisp white
@@ -29,8 +30,9 @@ function brightWhiteGradient(ctx, y, fontSize) {
   return grad
 }
 
-export function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF', fontSize = 0, layout = null) {
+export async function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF', fontSize = 0, layout = null) {
   const { W, H, sx, sy } = DesignSystem
+  const pack = getRenderLanguage() // null for English → native canvas path, unchanged
   const p = Math.min(1, progress * 1.2)
   const words = text.split(' ')
   const lines = []
@@ -84,7 +86,15 @@ export function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF', fontSiz
   ctx.shadowOffsetX = depthOffset * 0.5
   ctx.shadowOffsetY = depthOffset
 
-  lines.forEach((line, i) => {
+  // TRI-LINGUAL: layout.lines were wrapped by English-metric measurement. For a
+  // shaped (non-English) pack, re-wrap the translated text with real glyph
+  // advances so the 3D block stays inside the frame.
+  const drawLines = pack
+    ? (await wrapLocalized(ctx, text, W * 0.80, { fontFile: pack.fontFiles, size, weight: 900 })).slice(0, 4)
+    : lines
+
+  for (let i = 0; i < drawLines.length; i++) {
+    const line = drawLines[i]
     const charP = Math.max(0, Math.min(1, (p * 1.2) - i * 0.08))
     // Middle-baseline step within the block box: line i occupies
     // [blockTop + i*lh, blockTop + (i+1)*lh), glyph centered on the box middle.
@@ -100,31 +110,58 @@ export function drawHeadlineCard(ctx, text, progress, color = '#FFFFFF', fontSiz
     ctx.textBaseline = 'middle'
     ctx.lineJoin = 'round'
 
-    // 1) 3D extrusion — repeated fills pulled down, darkest slate = furthest
-    //    depth, slightly transparent so the bevel reads as depth.
-    for (let d = 0; d < EXTRUSION_DEPTHS.length; d++) {
-      const depth = EXTRUSION_DEPTHS[d]
-      ctx.globalAlpha = charP * (0.9 - d / 24)
-      ctx.fillStyle = EXTRUSION_COLORS[d]
-      ctx.fillText(line, x, y + depth)
+    if (pack) {
+      // 1) 3D extrusion — repeated fills pulled down (same slate depths).
+      for (let d = 0; d < EXTRUSION_DEPTHS.length; d++) {
+        ctx.globalAlpha = charP * (0.9 - d / 24)
+        await drawShaped(ctx, line, x, y + EXTRUSION_DEPTHS[d], {
+          fontFile: pack.fontFiles,
+          size,
+          weight: 900,
+          align: 'center',
+          baseline: 'middle',
+          fillStyle: EXTRUSION_COLORS[d],
+        })
+      }
+      // 2+3) BLACK OUTLINE + bright white face in one shaped pass
+      //      (stroke-then-fill per glyph — the verified CoreText-parity order).
+      ctx.globalAlpha = charP
+      await drawShaped(ctx, line, x, y, {
+        fontFile: pack.fontFiles,
+        size,
+        weight: 900,
+        align: 'center',
+        baseline: 'middle',
+        fillStyle: brightWhiteGradient(ctx, y, size),
+        stroke: { style: 'rgb(0,0,0)', width: Math.max(2, size * 0.10) },
+      })
+    } else {
+      // 1) 3D extrusion — repeated fills pulled down, darkest slate = furthest
+      //    depth, slightly transparent so the bevel reads as depth.
+      for (let d = 0; d < EXTRUSION_DEPTHS.length; d++) {
+        const depth = EXTRUSION_DEPTHS[d]
+        ctx.globalAlpha = charP * (0.9 - d / 24)
+        ctx.fillStyle = EXTRUSION_COLORS[d]
+        ctx.fillText(line, x, y + depth)
+      }
+
+      // 2) BLACK OUTLINE — the visible broadcast stroke (spec: pure black
+      //    #000000, thickness 8-12% of font size, here 10%). Drawn wide enough
+      //    that its solid core shows as a crisp dark edge around the white face.
+      ctx.globalAlpha = charP
+      ctx.strokeStyle = 'rgb(0,0,0)'
+      ctx.lineWidth = Math.max(2, size * 0.10)
+      ctx.lineJoin = 'round'
+      ctx.strokeText(line, x, y)
+
+      // 3) Bright white fill — clean broadcast white face (spec: pure white
+      //    #FFFFFF) on top of the black outline.
+      ctx.fillStyle = brightWhiteGradient(ctx, y, size)
+      ctx.fillText(line, x, y)
     }
 
-    // 2) BLACK OUTLINE — the visible broadcast stroke (spec: pure black
-    //    #000000, thickness 8-12% of font size, here 10%). Drawn wide enough
-    //    that its solid core shows as a crisp dark edge around the white face.
-    ctx.globalAlpha = charP
-    ctx.strokeStyle = 'rgb(0,0,0)'
-    ctx.lineWidth = Math.max(2, size * 0.10)
-    ctx.lineJoin = 'round'
-    ctx.strokeText(line, x, y)
-
-    // 3) Bright white fill — clean broadcast white face (spec: pure white
-    //    #FFFFFF) on top of the black outline.
-    ctx.fillStyle = brightWhiteGradient(ctx, y, size)
-    ctx.fillText(line, x, y)
-
     ctx.restore()
-  })
+  }
 
   ctx.restore()
 }

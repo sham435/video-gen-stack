@@ -29,7 +29,7 @@ const YELLOW_ACCENT = '#FFE600' // broadcast brand yellow used across chrome
 // - `body`:   the callout text (already capped at 2 lines by the caller).
 // Returns nothing; draws onto `ctx`.
 export class NarrationCalloutLayer {
-  draw(ctx, scene, progress, labelT = 1, body = '') {
+  async draw(ctx, scene, progress, labelT = 1, body = '') {
     const { W, H, sy } = DesignSystem
     if (!body) return
 
@@ -40,7 +40,7 @@ export class NarrationCalloutLayer {
     if (labelT > 0) {
       ctx.save()
       ctx.globalAlpha = Math.min(1, labelT)
-      drawUnderlinedLabel(
+      await drawUnderlinedLabel(
         ctx,
         'WHY IT MATTERS',
         W / 2,
@@ -66,7 +66,7 @@ export class NarrationCalloutLayer {
     ctx.save()
     ctx.globalAlpha = Math.min(1, progress)
     for (const line of lines) {
-      drawStyledText(
+      await drawStyledText(
         ctx,
         line,
         W / 2,

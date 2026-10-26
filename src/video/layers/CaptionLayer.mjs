@@ -4,7 +4,7 @@ import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
 import { canRenderText } from '../TextPolicy.mjs'
 
 export class CaptionLayer {
-  draw(ctx, scene, progress, wordIndex, alpha = 1, narrative = null) {
+  async draw(ctx, scene, progress, wordIndex, alpha = 1, narrative = null) {
     if (alpha <= 0.01 || !scene.caption || scene.captionHidden) return
     // Shared text policy: outro scenes own their text exclusively. The
     // brand-outro scene already renders STAY WITH / NEWS-MONSTER as its own
@@ -21,7 +21,7 @@ export class CaptionLayer {
     // injected layout, then the narrative composition's, so the renderer never
     // re-wraps or guesses positions.
     const layout = scene.captionLayout || narrative?.captionLayout || null
-    renderCaptions(
+    await renderCaptions(
       ctx,
       captionText,
       wordIndex,

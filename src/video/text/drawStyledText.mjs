@@ -15,16 +15,44 @@
 //   drawStyledText(ctx, 'STOCK FUTURES FALL', canvasWidth / 2, y, { fontSize: 58 })
 //   drawUnderlinedLabel(ctx, 'WHY IT MATTERS', x, y, { fontSize: 46 })
 
+import { getRenderLanguage, drawShaped, measureShaped } from '../../i18n/ShapedText.mjs'
+
 const FONT_FAMILY = 'Montserrat ExtraBold'
 const DEFAULT_WEIGHT = 900 // ExtraBold 800 not registered separately; file is ExtraBold
 
-export function drawStyledText(ctx, text, x, y, options = {}) {
+// A string needs the shaped renderer when a non-English language pack is
+// active AND it contains non-Latin script (Latin falls back to the native
+// path — zero regression for the English broadcast).
+function needsShapingFor(text) {
+  const pack = getRenderLanguage()
+  if (!pack) return null
+  if (/^[\x00-\x7F\u2000-\u206F]*$/.test(text)) return null
+  return pack
+}
+
+
+export async function drawStyledText(ctx, text, x, y, options = {}) {
   const fontSize = options.fontSize || 58
   const weight = options.weight || DEFAULT_WEIGHT
   const fontFamily = options.fontFamily || FONT_FAMILY
   const strokePct = options.strokePct ?? 0.10 // 10%, within the 8–12% spec range
   const align = options.align || 'center'
   const baseline = options.baseline || 'middle'
+
+  const pack = needsShapingFor(String(text))
+  if (pack) {
+    // Shaped path: HarfBuzz glyph outlines carrying the same style tokens.
+    await drawShaped(ctx, String(text), x, y, {
+      fontFile: pack.fontFiles,
+      size: fontSize,
+      weight,
+      align,
+      baseline,
+      fillStyle: options.fillColor || '#FFFFFF',
+      stroke: { style: options.strokeColor || '#000000', width: fontSize * strokePct },
+    })
+    return
+  }
 
   ctx.save()
   ctx.font = `${weight} ${fontSize}px "${fontFamily}"`
@@ -46,15 +74,22 @@ export function drawStyledText(ctx, text, x, y, options = {}) {
 
 // Convenience for underlined labels (e.g. "WHY IT MATTERS"). Draws the text
 // then a solid rule beneath it sized to the text's measured width.
-export function drawUnderlinedLabel(ctx, text, x, y, options = {}) {
-  drawStyledText(ctx, text, x, y, options)
+export async function drawUnderlinedLabel(ctx, text, x, y, options = {}) {
+  await drawStyledText(ctx, text, x, y, options)
 
   const fontSize = options.fontSize || 58
   const weight = options.weight || DEFAULT_WEIGHT
   const fontFamily = options.fontFamily || FONT_FAMILY
+  const width = await (needsShapingFor(String(text))
+    ? measureShaped(String(text), { fontFile: getRenderLanguage().fontFiles, size: fontSize, weight })
+    : Promise.resolve(undefined).then(() => {
+        ctx.save()
+        ctx.font = `${weight} ${fontSize}px "${fontFamily}"`
+        const w = ctx.measureText(text).width
+        ctx.restore()
+        return w
+      }))
   ctx.save()
-  ctx.font = `${weight} ${fontSize}px "${fontFamily}"`
-  const width = ctx.measureText(text).width
   const underlineY = y + fontSize * 0.50
   const underlineThickness = Math.max(3, fontSize * 0.06)
 

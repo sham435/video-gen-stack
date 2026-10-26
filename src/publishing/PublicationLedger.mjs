@@ -61,6 +61,7 @@ export class PublicationLedger {
       jobId: verification.jobId,
       title: verification.title || null,
       category: verification.category || null,
+      lang: verification.lang || 'en',
       thumbnail: resolveThumbnailUrl(verification.videoId, verification.thumbnail),
       visibility: verification.visibility || 'public',
       verifiedAt: verification.verifiedAt || new Date().toISOString(),

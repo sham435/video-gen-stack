@@ -7,6 +7,7 @@ import { wrapText } from '../../layout/wrapText.mjs'
 import { renderTextBlock } from '../../layout/TextBlock.mjs'
 import { FooterLayout } from '../footer/FooterLayout.mjs'
 import { BROADCAST_TEXT } from '../../style/text-tokens.mjs'
+import { getRenderLanguage, drawShaped, wrapLocalized } from '../../i18n/ShapedText.mjs'
 
 // Bright yellow for the explanation heading + body (high contrast on the dark
 // scrim, matches the "WHY IT MATTERS" yellow design).
@@ -27,17 +28,17 @@ export class InformationLayer {
     switch (scene.type) {
       case 'hook':
         this.renderBanner(ctx, scene, progress, category, envelope('banner'))
-        this.renderHero(ctx, scene, progress, category, envelope('hero'))
-        this.renderSecondary(ctx, scene, progress, category, envelope('secondary'), time, timeline?.layers.find(l => l.id === 'secondary')?.start || 0)
+        await this.renderHero(ctx, scene, progress, category, envelope('hero'))
+        await this.renderSecondary(ctx, scene, progress, category, envelope('secondary'), time, timeline?.layers.find(l => l.id === 'secondary')?.start || 0)
         break
       case 'fact':
-        this.renderFact(ctx, scene, progress)
+        await this.renderFact(ctx, scene, progress)
         break
       case 'explanation':
-        this.renderExplanation(ctx, scene, progress)
+        await this.renderExplanation(ctx, scene, progress)
         break
       case 'retention':
-        this.renderRetention(ctx, scene, progress)
+        await this.renderRetention(ctx, scene, progress)
         break
       case 'brand_close':
       case 'close':
@@ -46,20 +47,20 @@ export class InformationLayer {
     }
   }
 
-  renderBanner(ctx, scene, progress, category, alpha) {
+  async renderBanner(ctx, scene, progress, category, alpha) {
     if (alpha <= 0.01) return
     const bannerText = scene.subheadline && scene.subheadline !== scene.text && scene.subheadline.split(' ').length <= 6
       ? scene.subheadline
       : ''
     ctx.save()
     ctx.globalAlpha = alpha
-    drawBreakingBanner(ctx, bannerText, progress, scene.headlineLayout?.fontSize || scene.headlineFontSize || 64)
+    await drawBreakingBanner(ctx, bannerText, progress, scene.headlineLayout?.fontSize || scene.headlineFontSize || 64)
     ctx.restore()
   }
 
   // Hero headline — gold gradient, heavy shadow, slight glow, largest font,
   // center of frame, max 2 lines, scale-in with the timeline envelope.
-  renderHero(ctx, scene, progress, category, alpha) {
+  async renderHero(ctx, scene, progress, category, alpha) {
     const { W, H } = DesignSystem
     if (alpha <= 0.01 || !scene.text) return
     const hp = alpha
@@ -89,12 +90,33 @@ export class InformationLayer {
     const gold = ctx.createLinearGradient(0, -offset - fontSize, 0, offset + fontSize)
     gold.addColorStop(0, '#FFD700')
     gold.addColorStop(1, '#FFEB3B')
-    lines.forEach((line, i) => {
-      ctx.strokeStyle = 'rgba(0,0,0,0.9)'
-      ctx.strokeText(line, 0, -offset + i * lineH)
-      ctx.fillStyle = gold
-      ctx.fillText(line, 0, -offset + i * lineH)
-    })
+    const pack = getRenderLanguage()
+    if (pack) {
+      // Shaped (non-English) hero: layout.lines were wrapped with English font
+      // metrics — re-wrap the translated text with real glyph advances, then
+      // draw HarfBuzz-ordered outlines carrying the same gold-face + outline
+      // style tokens.
+      const heroLines = (await wrapLocalized(ctx, text, W * 0.82, { fontFile: pack.fontFiles, size: fontSize, weight: 900 })).slice(0, 3)
+      const hOffset = ((heroLines.length - 1) * lineH) / 2
+      for (let i = 0; i < heroLines.length; i++) {
+        await drawShaped(ctx, heroLines[i], 0, -hOffset + i * lineH, {
+          fontFile: pack.fontFiles,
+          size: fontSize,
+          weight: 900,
+          align: 'center',
+          baseline: 'middle',
+          fillStyle: gold,
+          stroke: { style: 'rgba(0,0,0,0.9)', width: Math.max(2, fontSize * 0.10) },
+        })
+      }
+    } else {
+      lines.forEach((line, i) => {
+        ctx.strokeStyle = 'rgba(0,0,0,0.9)'
+        ctx.strokeText(line, 0, -offset + i * lineH)
+        ctx.fillStyle = gold
+        ctx.fillText(line, 0, -offset + i * lineH)
+      })
+    }
     ctx.shadowBlur = 0
     ctx.shadowOffsetY = 0
     ctx.restore()
@@ -102,9 +124,10 @@ export class InformationLayer {
 
   // Secondary headline — white, keyword in accent red only, 70% of hero size,
   // word-stagger fade-up. Renders only in its own timeline window.
-  renderSecondary(ctx, scene, progress, category, alpha, time, layerStart = 0) {
+  async renderSecondary(ctx, scene, progress, category, alpha, time, layerStart = 0) {
     const { W, H } = DesignSystem
     if (alpha <= 0.01 || !scene.text) return
+    const pack = getRenderLanguage()
     const layout = scene.headlineLayout
     const heroSize = layout?.fontSize || scene.headlineFontSize || 92
     const fontSize = Math.max(40, Math.round(heroSize * 0.7))
@@ -165,7 +188,8 @@ export class InformationLayer {
     // is mid-fly. This addresses the single-word "FREE" case where the old timing
     // made the whole line read as a fast blur regardless of stagger.
     const holdUntil = Math.max(assembledAt + TAIL_HOLD_MS, assembledAt + MIN_DISPLAY_S)
-    lines.forEach((line, i) => {
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i]
       // hard wrap long lines
       const pieces = []
       let cur = []
@@ -175,7 +199,8 @@ export class InformationLayer {
       }
       if (cur.length) pieces.push(cur.join(' '))
       const pieceOffset = ((pieces.length - 1) * lineH) / 2
-      pieces.forEach((piece, pi) => {
+      for (let pi = 0; pi < pieces.length; pi++) {
+        const piece = pieces[pi]
         const py = -offset + i * lineH - pieceOffset + pi * lineH
         for (const w of piece.split(' ')) {
           const isKeyword = (keyword && w.includes(keyword)) || (briefEmphasis.length > 0 && briefEmphasis.some(ew => w.includes(ew)))
@@ -196,24 +221,37 @@ export class InformationLayer {
           ctx.shadowBlur = 12
           ctx.lineWidth = Math.max(2, fontSize * 0.10)
           ctx.strokeStyle = 'rgb(0,0,0)'
-          ctx.strokeText(w, 0, py)
-          ctx.fillStyle = isKeyword ? '#E10600' : '#FFFFFF'
-          ctx.fillText(w, 0, py)
+          if (pack) {
+            await drawShaped(ctx, w, 0, py, {
+              fontFile: pack.fontFiles,
+              size: fontSize,
+              weight: 900,
+              align: 'center',
+              baseline: 'middle',
+              fillStyle: isKeyword ? '#E10600' : '#FFFFFF',
+              stroke: { style: 'rgb(0,0,0)', width: Math.max(2, fontSize * 0.10) },
+            })
+          } else {
+            ctx.strokeText(w, 0, py)
+            ctx.fillStyle = isKeyword ? '#E10600' : '#FFFFFF'
+            ctx.fillText(w, 0, py)
+          }
           ctx.restore()
           wordCounter++
         }
-      })
-    })
+      }
+    }
     ctx.shadowBlur = 0
     ctx.restore()
   }
 
-  renderFact(ctx, scene, progress) {
-    drawHeadlineCard(ctx, scene.text, progress, '#FFFFFF', scene.headlineLayout?.fontSize || scene.headlineFontSize || 0, scene.headlineLayout || null)
+  async renderFact(ctx, scene, progress) {
+    await drawHeadlineCard(ctx, scene.text, progress, '#FFFFFF', scene.headlineLayout?.fontSize || scene.headlineFontSize || 0, scene.headlineLayout || null)
   }
 
-  renderExplanation(ctx, scene, progress) {
+  async renderExplanation(ctx, scene, progress) {
     const { W, H, sy } = DesignSystem
+    const pack = getRenderLanguage()
     const textWidth = W * 0.85
     const startX = W / 2 - textWidth / 2
 
@@ -261,9 +299,28 @@ export class InformationLayer {
     // Comfortable line spacing: 1.6x the body font size per line. The old
     // sy(56)~(21px for a 42px font, ~0.5x) packed lines onto each other.
     const bodyLineStep = Math.round(bodySize * 1.6)
+    let lineY = H * DesignSystem.layout.explanationBody + sy(92)
+    if (pack) {
+      // Shaped (non-English) body: wrap with real glyph advances and draw
+      // shaped outlines, left-aligned under the (English) heading label.
+      const bodyLines = await wrapLocalized(ctx, body, maxBodyWidth, { fontFile: pack.fontFiles, size: bodySize, weight: bodyToken.weight })
+      for (const bl of bodyLines) {
+        await drawShaped(ctx, bl, startX, lineY, {
+          fontFile: pack.fontFiles,
+          size: bodySize,
+          weight: bodyToken.weight,
+          align: 'left',
+          baseline: 'top',
+          fillStyle: BRIGHT_YELLOW,
+        })
+        lineY += bodyLineStep
+      }
+      ctx.shadowBlur = 0
+      ctx.restore()
+      return
+    }
     const words = body.split(' ')
     let line = ''
-    let lineY = H * DesignSystem.layout.explanationBody + sy(92)
     for (const w of words) {
       const probe = line ? line + ' ' + w : w
       if (ctx.measureText(probe).width <= maxBodyWidth || !line) line += (line ? ' ' : '') + w
@@ -278,7 +335,7 @@ export class InformationLayer {
     ctx.restore()
   }
 
-  renderRetention(ctx, scene, progress) {
+  async renderRetention(ctx, scene, progress) {
     const { W, H, sx } = DesignSystem
     const p = Math.min(1, progress * 1.2)
 
@@ -335,7 +392,21 @@ export class InformationLayer {
     if (currentLine) textLines.push(currentLine)
     const lh = retentionToken.size * DesignSystem.getLineHeight('headline')
     const startY2 = -(textLines.length - 1) * lh / 2
-    textLines.forEach((l, i) => ctx.fillText(l, 0, startY2 + i * lh))
+    const rPack = getRenderLanguage()
+    for (let i = 0; i < textLines.length; i++) {
+      if (rPack) {
+        await drawShaped(ctx, textLines[i], 0, startY2 + i * lh, {
+          fontFile: rPack.fontFiles,
+          size: retentionToken.size,
+          weight: retentionToken.weight,
+          align: 'center',
+          baseline: 'middle',
+          fillStyle: DesignSystem.brand.accent,
+        })
+      } else {
+        ctx.fillText(textLines[i], 0, startY2 + i * lh)
+      }
+    }
     ctx.shadowBlur = 0
     ctx.restore()
   }

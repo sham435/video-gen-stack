@@ -1,4 +1,5 @@
 import { pillarColor, pillarLabel, pillarEmoji } from '../publishing/TitleTemplates.mjs'
+import { getRenderLanguage, drawShaped } from '../i18n/ShapedText.mjs'
 
 // ThumbnailOverlay — 3-layer text overlay for 16:9 YouTube thumbnail covers.
 //
@@ -76,7 +77,7 @@ function extractPayoff(title = '', pillar = 'tech') {
  * @param {Image} [opts.footerImage] - loaded footer_asset_1920x300.png; when
  *   present the footer band is drawn across the bottom of the canvas
  */
-export function drawThumbnailOverlay(ctx, opts = {}) {
+export async function drawThumbnailOverlay(ctx, opts = {}) {
   const {
     pillar = 'tech',
     title = '',
@@ -120,15 +121,31 @@ export function drawThumbnailOverlay(ctx, opts = {}) {
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
 
-  // Black stroke
-  ctx.strokeStyle = '#000000'
-  ctx.lineWidth = Math.max(4, Math.round(hookFont * 0.1))
-  ctx.lineJoin = 'round'
-  ctx.strokeText(hook, w / 2, hookY)
+  // TRI-LINGUAL: the hook is extracted from the article title — for localized
+  // variants that title is Tamil/Sinhala and MUST draw through the shaped
+  // glyph renderer (Skia's fillText cannot shape complex scripts).
+  const hookPack = getRenderLanguage()
+  if (hookPack) {
+    await drawShaped(ctx, hook, w / 2, hookY, {
+      fontFile: hookPack.fontFiles,
+      size: hookFont,
+      weight: 900,
+      align: 'center',
+      baseline: 'middle',
+      fillStyle: '#FFFFFF',
+      stroke: { style: '#000000', width: Math.max(4, Math.round(hookFont * 0.1)) },
+    })
+  } else {
+    // Black stroke
+    ctx.strokeStyle = '#000000'
+    ctx.lineWidth = Math.max(4, Math.round(hookFont * 0.1))
+    ctx.lineJoin = 'round'
+    ctx.strokeText(hook, w / 2, hookY)
 
-  // White fill
-  ctx.fillStyle = '#FFFFFF'
-  ctx.fillText(hook, w / 2, hookY)
+    // White fill
+    ctx.fillStyle = '#FFFFFF'
+    ctx.fillText(hook, w / 2, hookY)
+  }
 
   // ── Layer 3: BOTTOM PAYOFF ───────────────────────────────────────────
   const payoffY = h * 0.62

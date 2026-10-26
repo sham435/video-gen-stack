@@ -1,4 +1,5 @@
 import { DesignSystem } from '../visuals/DesignSystem.mjs'
+import { getRenderLanguage, drawShaped, measureShaped } from '../i18n/ShapedText.mjs'
 
 export function buildWordTimings(script, duration) {
   const words = script.split(' ')
@@ -17,8 +18,18 @@ export function getActiveWordIndex(wordTimings, time) {
   return -1
 }
 
-export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accentColor = '#E10600', fontSize = 58, layout = null) {
+export async function renderCaptions(ctx, text, wordIndex, progress, focusWord, accentColor = '#E10600', fontSize = 58, layout = null) {
   const { W, H, sx } = DesignSystem
+  const pack = getRenderLanguage() // null for English → every draw below falls back to native canvas text
+  const shaped = !!pack
+  const capFont = async (weightSource) => ctx.font // no-op for sized sync; shaped path uses explicit fontFile
+  const measure = async (t) => shaped
+    ? measureShaped(t, { fontFile: pack.fontFiles, size: fontSize, weight: 800 })
+    : (ctx.measureText(t.toUpperCase()).width)
+  const drawWord = async (w, x, y) => shaped
+    ? drawShaped(ctx, w, x, y, { fontFile: pack.fontFiles, size: fontSize, weight: 800, align: 'center', baseline: 'middle', fillStyle: ctx.fillStyle, stroke: { style: ctx.strokeStyle, width: ctx.lineWidth } })
+    : (ctx.strokeText(w.toUpperCase(), 0, 0), ctx.fillText(w.toUpperCase(), 0, 0))
+
   // Phase 1 — Duplicate Word Filter: the emphasis word is already rendered large
   // by InformationLayer. Remove it from the caption sentence so it's never repeated.
   const focusKey = (focusWord || '').toUpperCase()
@@ -50,21 +61,39 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
     // 78% of the design caption size and capped at 3 lines.
     fontSize = sx(fontSize || 58)
     fontSize = Math.max(30, Math.round(fontSize * 0.78))
-    ctx.font = `900 ${fontSize}px 'Montserrat ExtraBold', Inter, sans-serif`
-    const maxW = W * 0.72
-    const wrapped = []
-    let cur = []
-    for (const w of words) {
-      const probe = cur.length ? [...cur, w].join(' ') : w
-      if (ctx.measureText(probe.toUpperCase()).width <= maxW || cur.length === 0) {
-        cur.push(w)
-        continue
+    if (shaped) {
+      const maxW = W * 0.72
+      const wrapped = []
+      let cur = []
+      for (const w of words) {
+        const probe = cur.length ? [...cur, w].join(' ') : w
+        const probeW = await measure(probe)
+        if (probeW <= maxW || cur.length === 0) {
+          cur.push(w)
+          continue
+        }
+        wrapped.push(cur)
+        cur = [w]
       }
-      wrapped.push(cur)
-      cur = [w]
+      if (cur.length) wrapped.push(cur)
+      rendered = wrapped.slice(0, 3) // hard cap: max 3 lines
+    } else {
+      ctx.font = `900 ${fontSize}px 'Montserrat ExtraBold', Inter, sans-serif`
+      const maxW = W * 0.72
+      const wrapped = []
+      let cur = []
+      for (const w of words) {
+        const probe = cur.length ? [...cur, w].join(' ') : w
+        if (ctx.measureText(probe.toUpperCase()).width <= maxW || cur.length === 0) {
+          cur.push(w)
+          continue
+        }
+        wrapped.push(cur)
+        cur = [w]
+      }
+      if (cur.length) wrapped.push(cur)
+      rendered = wrapped.slice(0, 3) // hard cap: max 3 lines
     }
-    if (cur.length) wrapped.push(cur)
-    rendered = wrapped.slice(0, 3) // hard cap: max 3 lines
   }
 
   const totalH = rendered.length * lineH
@@ -79,7 +108,7 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
   for (const line of rendered) {
     const lineText = line.join(' ')
     ctx.font = `900 ${fontSize}px 'Montserrat ExtraBold', Inter, sans-serif`
-    const lineW = ctx.measureText(lineText.toUpperCase()).width
+    const lineW = await measure(lineText)
     const startX = centerX - lineW / 2
     const lineY = startY + linesIndexOf(rendered, line) * lineH
 
@@ -94,6 +123,21 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
     ctx.shadowColor = 'rgba(0,0,0,0.85)'
     ctx.shadowBlur = 12
 
+    // Word x positions: measured advances (shaped) or proportional estimate.
+    let wordXs
+    if (shaped) {
+      wordXs = []
+      let cw = startX + 12
+      const spaceW = await measure(' ')
+      for (const w of line) {
+        const ww = await measure(w)
+        wordXs.push(cw + ww / 2)
+        cw += ww + spaceW
+      }
+    } else {
+      wordXs = line.map((w) => startX + 15 + line.indexOf(w) * (lineW / line.length) + fontSize * 0.25)
+    }
+
     for (const w of line) {
       const isActive = wordCounter === wordIndex
       const isPast = wordCounter < wordIndex
@@ -102,10 +146,18 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
 
       ctx.save()
 
+      const wordIdxInLine = line.indexOf(w)
+      const wordCenter = shaped ? wordXs[wordIdxInLine] : null
+
       if (isActive) {
         const scale = 0.8 + lp * 0.2
-        ctx.translate(startX + 15 + line.indexOf(w) * (lineW / line.length) + fontSize * 0.25, lineY + fontSize * 0.18)
-        ctx.scale(scale, scale)
+        if (shaped) {
+          ctx.translate(wordCenter, lineY + fontSize * 0.18)
+          ctx.scale(scale, scale)
+        } else {
+          ctx.translate(startX + 15 + wordIdxInLine * (lineW / line.length) + fontSize * 0.25, lineY + fontSize * 0.18)
+          ctx.scale(scale, scale)
+        }
         ctx.shadowColor = isFocus ? accentColor : '#00E5FF'
         ctx.shadowBlur = 20 * lp
         ctx.fillStyle = isFocus ? accentColor : '#FFFFFF'
@@ -113,9 +165,13 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
       } else if (isPast) {
         ctx.fillStyle = isFocus ? accentColor : 'rgba(255,255,255,0.65)'
         ctx.font = `800 ${fontSize}px 'Montserrat ExtraBold', Inter, sans-serif`
+        if (shaped) ctx.translate(wordCenter, lineY + fontSize * 0.18)
+        else ctx.translate(startX + 15 + wordIdxInLine * (lineW / line.length) + fontSize * 0.25, lineY + fontSize * 0.18)
       } else {
         ctx.fillStyle = isFocus ? accentColor : 'rgba(255,255,255,0.25)'
         ctx.font = `800 ${fontSize}px 'Montserrat ExtraBold', Inter, sans-serif`
+        if (shaped) ctx.translate(wordCenter, lineY + fontSize * 0.18)
+        else ctx.translate(startX + 15 + wordIdxInLine * (lineW / line.length) + fontSize * 0.25, lineY + fontSize * 0.18)
       }
 
       // NEWS-MONSTER caption standard: white/700 weight face + 3-5px black
@@ -126,8 +182,8 @@ export function renderCaptions(ctx, text, wordIndex, progress, focusWord, accent
       ctx.miterLimit = 2
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
-      ctx.strokeText(w.toUpperCase(), 0, 0)
-      ctx.fillText(w.toUpperCase(), 0, 0)
+      await drawWord(w, shaped ? 0 : 0, 0)
+
       ctx.restore()
 
       wordCounter++

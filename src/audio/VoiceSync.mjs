@@ -49,8 +49,22 @@ export class VoiceSync {
   // quality report in this.lastReport. Throws when no human-quality voice
   // could be produced — the pipeline must fail the render rather than
   // publish robotic narration.
-  async generateTTS(text, outPath) {
+  async generateTTS(text, outPath, langPack = null) {
     const script = text.slice(0, 2500)
+    // Tri-lingual: Tamil/Sinhala have no ElevenLabs voice — go straight to
+    // edge-tts with the language's native voice. Never route them through
+    // elevenLabsWithRetry (it would 404 and waste retries).
+    if (langPack && langPack.code && langPack.code !== 'en') {
+      const edgePath = this.edgeTTS(script, outPath, langPack.edgeVoice)
+      if (edgePath) {
+        this.lastReport = this.measure(edgePath, `edge-tts:${langPack.code}`)
+        return edgePath
+      }
+      throw new Error(
+        `Voice generation failed: edge-tts unavailable for ${langPack.code} (${langPack.edgeVoice}). ` +
+        'Tri-lingual variants require edge-tts — install it or drop the language from LANGS.'
+      )
+    }
     if (this.apiKey) {
       try {
         const path = await this.elevenLabsWithRetry(script, outPath)
@@ -153,12 +167,12 @@ export class VoiceSync {
     return outPath
   }
 
-  edgeTTS(text, outPath) {
-    const args = ['--voice', 'en-US-AriaNeural', '--text', text.slice(0, 1000), '--write-media', outPath]
+  edgeTTS(text, outPath, voiceId = 'en-US-AriaNeural') {
+    const args = ['--voice', voiceId, '--text', text.slice(0, 1000), '--write-media', outPath]
     try {
       execFileSync('edge-tts', args, { stdio: 'pipe', timeout: 60000 })
       if (this.validateAudio(outPath)) {
-        console.log('TTS (edge-tts en-US-AriaNeural):', outPath)
+        console.log(`TTS (edge-tts ${voiceId}):`, outPath)
         return outPath
       }
       console.warn('[TTS] edge-tts produced invalid audio')

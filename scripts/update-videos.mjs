@@ -183,6 +183,9 @@ function toVideoEntry(e) {
     title: e.title || `Video ${e.videoId}`,
     description: e.description || e.title || '',
     category: e.category || 'general',
+    // Broadcast language ('en' default) — localized variants carry 'ta'/'si'
+    // so the hub can build per-language playlists/filtering.
+    lang: e.lang || 'en',
     publishedAt: e.publishedAt || e.verifiedAt || null,
     publishedLabel: e.publishedAt || e.verifiedAt
       ? new Date(e.publishedAt || e.verifiedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })

@@ -26,7 +26,7 @@ const VIDEOS_JSON = resolve(ROOT, 'public', 'videos.json')
 const DETAIL_OUT = resolve(ROOT, 'public', 'video-detail.json')
 const PER_VIDEO_OUT = resolve(ROOT, 'public', 'videos')
 const CHANNEL_ID = process.env.YOUTUBE_CHANNEL_ID || 'UC4UC7z16EtqtI-TJzeGZKjQ'
-const SITE_BASE = process.env.SITE_BASE || 'https://sham435.github.io/video-gen-stack'
+const SITE_BASE = process.env.SITE_BASE || 'https://news-monster.github.io'
 
 /** Build an absolute base URL for OG/image links (best-effort; keeps local
  *  relative paths when run outside a deploy environment). */

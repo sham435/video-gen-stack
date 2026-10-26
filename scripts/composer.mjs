@@ -4,6 +4,8 @@ import { execFileSync } from 'child_process'
 import { ensureMusicExists } from './audio.mjs'
 import { fetchBestImage } from './pexels.mjs'
 import { NewsBroadcastEngine } from '../src/index.mjs'
+import { parseLangSpec } from '../src/i18n/languages.mjs'
+import 'dotenv/config'
 import { validateRenderOutput } from '../src/video/validateOutput.mjs'
 import { resolveRenderManifest, resolveRenderGates } from '../src/pipeline/RenderManifest.mjs'
 import { ChannelController } from '../src/governor/ChannelController.mjs'
@@ -134,8 +136,8 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
     const governor = new ResourceGovernor()
 
     const category = process.env.INPUT_CATEGORY || process.argv[2] || 'technology'
-    const outDir = 'output'
-    fs.mkdirSync(outDir, { recursive: true })
+    const outDirEn = 'output'
+    fs.mkdirSync(outDirEn, { recursive: true })
 
     await ensureMusicExists()
 
@@ -257,10 +259,10 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
       const used = new Set()
       for (const ev of new PublishEventsStore().events) {
         const ts = ev.publishedAt ? new Date(ev.publishedAt).getTime() : 0
-        if (ts > cutoff && ev.title) used.add(String(ev.title).trim().toLowerCase().slice(0, 90))
+        if (ts > cutoff && ev.title) used.add(String(ev.title).trim().toLowerCase())
       }
       if (used.size) {
-        const fresh = (articles || []).filter(a => !used.has(String(a.title || '').trim().toLowerCase().slice(0, 90)))
+        const fresh = (articles || []).filter(a => !used.has(String(a.title || '').trim().toLowerCase()))
         if (fresh.length) {
           console.log(`[DEDUP] skipped ${articles.length - fresh.length} already-published article(s)`)
           articles = fresh
@@ -300,8 +302,13 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
       }
     }
 
+    // TRI-LINGUAL fan-out: parse LANGS once ('en,ta,si'). The lead story gets
+    // one variant per language — the EN master in the canonical outDir, each
+    // extra language in its own suffixed dir (`out-ta`) with per-language
+    // asset-registry isolation (narration pools + thumbnails never collide).
+    const langPacks = parseLangSpec(process.env.LANGS)
     for (const rawArticle of articles) {
-      const article = {
+      const articleEn = {
         title: rawArticle.title,
         description: rawArticle.description || rawArticle.title,
         source: rawArticle.source?.name || rawArticle.source || 'NewsAPI',
@@ -311,7 +318,28 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         publishedAt: rawArticle.publishedAt || new Date().toISOString(),
       }
 
-      console.log(`\nProcessing: "${article.title?.slice(0, 80)}..."`)
+      for (const langPack of langPacks) {
+        // EN keeps the canonical dir (zero regression); variants get `-ta`/`-si`.
+        const outDir = langPack.code === 'en' ? outDirEn : `${outDirEn}-${langPack.code}`
+        // Localize the article identity (title/description) ONCE here so every
+        // downstream stage (upload title, publish copy, dedup guard) sees the
+        // target language. Cache-first: re-runs replay, never re-bill.
+        let article = articleEn
+        if (langPack.translate) {
+          const { translateStrings } = await import('../src/i18n/Translator.mjs')
+          const t = await translateStrings(
+            [
+              { key: 'title', text: articleEn.title },
+              { key: 'summary', text: articleEn.description },
+            ],
+            langPack
+          )
+          article = { ...articleEn, title: t.title, description: t.summary || articleEn.description, lang: langPack.code }
+          console.log(`[LANG] variant ${langPack.code}: "${String(article.title)?.slice(0, 64)}"`)
+        }
+        fs.mkdirSync(outDir, { recursive: true })
+
+        console.log(`\nProcessing (${langPack.code}): "${article.title?.slice(0, 80)}..."`)
 
       // ── Experiment + Metrics collection ──
       let experimentManager = null
@@ -446,6 +474,12 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
       job.onStage('RENDER', async (ctx) => {
         const plan = ctx.results.DISCOVER?.plan
         const renderOptions = { quick: !!process.env.QUICK_RENDER, mediaType: TARGET_MEDIA_TYPE, aspectRatio: TARGET_ASPECT }
+        // TRI-LINGUAL: thread the active language pack through the engine —
+        // selects the native TTS voice, shaped-glyph fonts, and translation of
+        // scene-level text. titlesLocalized: composer already localized the
+        // article title/description (do not re-translate).
+        renderOptions.langPack = langPack
+        renderOptions.titlesLocalized = langPack.translate
         if (plan) {
           renderOptions.strategy = {
             sceneStrategy: plan.sceneStrategy,
@@ -714,21 +748,10 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
 
         const { publishVideo } = await import('../apps/api/publishers/youtube.js')
         const buffer = fs.readFileSync(videoPath)
-        const uploadTitle = `${article.title?.slice(0, 90) || 'News Update'} | NEWS-MONSTER`
-
-        // Ground-truth dedup (FEED-005): ask the CHANNEL what it shipped
-        // recently — immune to cache races, feed lag, or crashed runs. Two
-        // cheap API calls; wins over every locally-cached heuristic.
-        try {
-          const { getRecentlyUploadedTitles, normalizePublishedTitle } = await import('../src/publishing/RecentUploadGuard.mjs')
-          const recentTitles = await getRecentlyUploadedTitles()
-          if (recentTitles.has(normalizePublishedTitle(uploadTitle))) {
-            throw new Error(`DUPLICATE_RECENT_UPLOAD — channel already shipped this story recently`)
-          }
-        } catch (e) {
-          if (String(e.message || '').startsWith('DUPLICATE_RECENT_UPLOAD')) throw e
-          console.log('[DEDUP-CHANNEL] guard skipped (fail-open):', e.message)
-        }
+        // TRI-LINGUAL: localized variants carry their native-language tag in the
+        // title so viewers (and the RecentUploadGuard) can distinguish variants.
+        const langSuffix = langPack.code !== 'en' ? ` | ${langPack.nativeLabel}` : ''
+        const uploadTitle = `${article.title?.slice(0, 90) || 'News Update'}${langSuffix} | NEWS-MONSTER`
         const { buildSeoMetadata } = await import('../src/publishing/seoMetadata.mjs')
         const { buildYouTubeSEO } = await import('../src/publishing/YouTubeSEO.mjs')
         const nicheDecision = engine?.productionContext?.niche || null
@@ -744,7 +767,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           hashtags: Array.isArray(article.tags) ? article.tags : [],
           keywords: article.keywords || [],
         })
-        const hashtags = seo.hashtags.map((t) => `#${t}`).join(' ')
+        const hashtags = seo.hashtags.map((t) => `#${t}`).join(' ') + (langPack.langHashtag ? ` ${langPack.langHashtag}` : '')
         // YouTube SEO: consume the central youtubeTags projection. `seo` is
         // threaded so the YouTube snippet.tags ALWAYS equal the central output
         // (deriveYouTubeTags stays only for standalone callers of YouTubeSEO).
@@ -768,6 +791,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             videoId: null,
             title: article.title?.slice(0, 100),
             category: category || 'technology',
+            lang: langPack.code,
             pending: true,
           })
         } catch { /* best-effort */ }
@@ -1197,6 +1221,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             title: uploadTitle || title,
             description: (article?.description || uploadTitle || title || '').slice(0, 400),
             category: category || 'technology',
+            lang: langPack.code,
             thumbnail: verifiedThumbnailUrl || `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`,
             thumbnailSha256: masterThumbSha || null,
             thumbnailWidth: ctx.results.THUMBNAIL?.selected?.width || null,
@@ -1300,6 +1325,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           const updated = store.updateByTitle(title100, {
             videoId,
             category: category || 'technology',
+            lang: langPack.code,
             cta: { topic: cta.topic, mode: cta.mode, text: cta.narration },
             comment: commentEvent || null,
           })
@@ -1307,6 +1333,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
             store.record({
               videoId, title: title100,
               category: category || 'technology',
+              lang: langPack.code,
               cta: { topic: cta.topic, mode: cta.mode, text: cta.narration },
               comment: commentEvent || null,
             })
@@ -1378,7 +1405,6 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
         const reason = result.quarantineReason || result.reason || 'unknown'
         console.error(`[JOB] Article quarantined: ${reason}`)
       }
-
       // ── ProductionManifest — immutable per-video provenance ──
       try {
         const { ProductionManifest } = await import('../src/experiment/ProductionManifest.mjs')
@@ -1466,6 +1492,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           console.log(`[EXPERIMENT] recording skipped: ${e.message}`)
         }
       }
+      } // ── end per-language variant loop ──
     }
 
     console.log('\nNEWS-MONSTER Broadcast Pipeline Complete')

@@ -141,7 +141,7 @@ export class Compositor {
     }
     // Emphasis (AI accent) yields to a visible caption internally (non-hook);
     // hooks schedule it as their own AI phase. Governed by its own timeline.
-    if (owned('emphasis') && canRenderText(scene, 'emphasis')) this.emphasis.draw(ctx, scene, progress, category, env('ai'))
+    if (owned('emphasis') && canRenderText(scene, 'emphasis')) await this.emphasis.draw(ctx, scene, progress, category, env('ai'))
     if (owned('caption') && canRenderText(scene, 'caption') && activeNarrative.state === 'CAPTION') {
       // For narration scenes the callout takes over the rear of the caption
       // window (temporal replacement — never both on screen): the spoken
@@ -149,7 +149,7 @@ export class Compositor {
       const hasNarrationCallout = !!scene.narration && !!buildCalloutBody(scene) && duration >= CALLOUT_MIN_DURATION &&
         scene.type !== 'close' && scene.type !== 'brand_close' && !scene.outro
       if (!hasNarrationCallout || timeFrac < CAPTION_TO_CALLOUT) {
-        this.captions.draw(ctx, scene, progress, wordIndex, env('caption'), narrative)
+        await this.captions.draw(ctx, scene, progress, wordIndex, env('caption'), narrative)
       }
     }
 
@@ -171,7 +171,7 @@ export class Compositor {
       if (calloutBody) {
         const labelT = Math.min(1, Math.max(0, (timeFrac - CAPTION_TO_CALLOUT) / 0.12))
         const calloutP = Math.min(1, Math.max(0, (timeFrac - CAPTION_TO_CALLOUT - 0.12) / 0.10))
-        this.callout.draw(ctx, scene, calloutP, labelT, calloutBody)
+        await this.callout.draw(ctx, scene, calloutP, labelT, calloutBody)
       }
     }
 

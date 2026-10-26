@@ -29,6 +29,7 @@
 import { createCanvas, loadImage, GlobalFonts } from '@napi-rs/canvas'
 import fs from 'node:fs'
 import path from 'node:path'
+import { getRenderLanguage, drawShaped, measureShaped, wrapLocalized } from '../i18n/ShapedText.mjs'
 
 // ── Brand + identity constants (NEWS-MONSTER) ────────────────────────────
 export const BRAND = 'NEWS-MONSTER'
@@ -218,7 +219,7 @@ function drawGradientSubject(ctx, { W, H, layout, headerH, footerH, accent }) {
  * Returns placement metadata { keywordBox, headlineLines, headlineBox } used
  * by the readability gate.
  */
-export function drawStoryText(ctx, { W, H, keyword, headline, layout, accent, headerH, footerH, subjectRect: srect }) {
+export async function drawStoryText(ctx, { W, H, keyword, headline, layout, accent, headerH, footerH, subjectRect: srect }) {
   const U = Math.round(Math.min(W, H) / 18)
   const safeMargin = Math.round(W * SAFE_MARGIN)
   const topSafe = headerH + Math.round(H * 0.02)
@@ -273,14 +274,21 @@ export function drawStoryText(ctx, { W, H, keyword, headline, layout, accent, he
   // ── Keyword (level 3) ──
   let keywordBox = null
   if (kw) {
+    // TRI-LINGUAL: for a shaped pack (localized variant) the keyword/headline
+    // are Tamil/Sinhala — measure with the Noto glyph advances (Anton's
+    // metrics are meaningless for those scripts) and draw shaped outlines.
+    const tPack = getRenderLanguage()
+    const kwMeasure = (font, s) => tPack
+      ? measureShaped(s, { fontFile: tPack.fontFiles, size: font, weight: 900 })
+      : (ctx.font = `900 ${font}px Anton, Impact, sans-serif`, ctx.measureText(s).width)
     let kwFont = Math.round(U * 2.2)
     ctx.font = `900 ${kwFont}px Anton, Impact, sans-serif`
-    while (ctx.measureText(kw).width > tW && kwFont > U * 0.8) { kwFont -= U * 0.1; ctx.font = `900 ${kwFont}px Anton, Impact, sans-serif` }
+    while (kwMeasure(kwFont, kw) > tW && kwFont > U * 0.8) { kwFont -= U * 0.1; ctx.font = `900 ${kwFont}px Anton, Impact, sans-serif` }
     const kwH = Math.round(kwFont * 1.15)
     const kwY = ty0 + Math.round(kwH * 0.7)
     // accent underline
     ctx.fillStyle = accent
-    const kwW = ctx.measureText(kw).width
+    const kwW = await kwMeasure(kwFont, kw)
     ctx.fillRect(tx0, kwY + Math.round(kwH * 0.2), kwW, Math.max(4, Math.round(H * 0.012)))
     // keyword text
     ctx.shadowColor = 'rgba(0,0,0,0.95)'
@@ -288,28 +296,41 @@ export function drawStoryText(ctx, { W, H, keyword, headline, layout, accent, he
     ctx.fillStyle = WHITE
     ctx.textAlign = 'left'
     ctx.textBaseline = 'middle'
-    ctx.fillText(kw, tx0, kwY)
+    if (tPack) {
+      await drawShaped(ctx, kw, tx0, kwY, {
+        fontFile: tPack.fontFiles,
+        size: kwFont,
+        weight: 900,
+        align: 'left',
+        baseline: 'middle',
+        fillStyle: WHITE,
+      })
+    } else {
+      ctx.fillText(kw, tx0, kwY)
+    }
     ctx.shadowBlur = 0
     keywordBox = { x: tx0, y: kwY - kwH / 2, w: kwW, h: kwH }
     ty0 = kwY + Math.round(kwH * 0.55)
   }
 
   // ── Headline (level 4) — wrap, max 3 lines, auto-scale to fit region ──
+  const tPack = getRenderLanguage()
   let hFontSize = Math.round(U * 1.5)
   const maxLines = MAX_HEADLINE_LINES
-  let lines = []
   const maxW = tW
-  const fitLines = (size) => {
+  const fitLines = async (size) => {
     ctx.font = `900 ${size}px Anton, Impact, sans-serif`
-    return wrapText(ctx, head, `900 ${size}px Anton, Impact, sans-serif`, maxW)
+    return tPack
+      ? await wrapLocalized(ctx, head, maxW, { fontFile: tPack.fontFiles, size, weight: 900 })
+      : wrapText(ctx, head, `900 ${size}px Anton, Impact, sans-serif`, maxW)
   }
-  lines = fitLines(hFontSize)
+  lines = await fitLines(hFontSize)
   const regionRemaining = bottomSafe - ty0
   let lineH = Math.round(hFontSize * 1.1)
   let guard = 0
   while ((lines.length > maxLines || lines.length * lineH > regionRemaining) && hFontSize > U * 0.7 && guard < 25) {
     hFontSize -= U * 0.06
-    lines = fitLines(hFontSize)
+    lines = await fitLines(hFontSize)
     lineH = Math.round(hFontSize * 1.1)
     guard++
   }
@@ -323,10 +344,23 @@ export function drawStoryText(ctx, { W, H, keyword, headline, layout, accent, he
   ctx.textAlign = 'left'
   ctx.textBaseline = 'middle'
   ctx.fillStyle = WHITE
-  lines.forEach((l, i) => {
-    ctx.strokeText(l, tx0, startY + i * lineH)
-    ctx.fillText(l, tx0, startY + i * lineH)
-  })
+  for (let i = 0; i < lines.length; i++) {
+    const l = lines[i]
+    if (tPack) {
+      await drawShaped(ctx, l, tx0, startY + i * lineH, {
+        fontFile: tPack.fontFiles,
+        size: hFontSize,
+        weight: 900,
+        align: 'left',
+        baseline: 'middle',
+        fillStyle: WHITE,
+        stroke: { style: 'rgba(0,0,0,0.9)', width: Math.max(2, Math.round(hFontSize * 0.12)) },
+      })
+    } else {
+      ctx.strokeText(l, tx0, startY + i * lineH)
+      ctx.fillText(l, tx0, startY + i * lineH)
+    }
+  }
   const headlineBox = { x: tx0, y: startY - lineH / 2, w: maxW, h: blockH }
 
   ctx.textAlign = 'center'
@@ -408,7 +442,7 @@ export async function composeLandscape(brief, heroImage, outPath, opts = {}) {
   const footerH = drawCompactFooter(ctx, { W, H, brand: brief.brand || BRAND, status, accent })
 
   const srect = await drawStoryVisual(ctx, { W, H, heroImage, accent, layout, headerH, footerH })
-  const textPlacement = drawStoryText(ctx, {
+  const textPlacement = await drawStoryText(ctx, {
     W, H,
     keyword: brief.keyword,
     headline: brief.headline,

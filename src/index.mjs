@@ -302,13 +302,60 @@ export class NewsBroadcastEngine {
     const directorStory = await this.storyDirector.plan(article)
     console.log(`Story: ${directorStory.headline} (${directorStory.scenePlan.length} scenes, hook: ${directorStory.hookStrategy})`)
 
+    // ─── Tri-lingual localization (EN master → தமிழ் / සිංහල) ───
+    // Non-English variant: translate the authored story (headline, per-scene
+    // narration, caption fullText, article title/summary) BEFORE any downstream
+    // consumer (contract, cover, VOICE, captions) sees it. The translate call is
+    // cache-first (deterministic re-runs); failure throws LANG_TRANSLATE_FAILED
+    // so the variant quarantines instead of publishing half-English output.
+    const langPack = options?.langPack ?? null
+    if (langPack) {
+      const { setRenderLanguage } = await import('./i18n/ShapedText.mjs')
+      setRenderLanguage(langPack) // shaped glyphs for SC/Indic scripts during this render
+    }
+    if (langPack && langPack.translate) {
+      const { translateStrings } = await import('./i18n/Translator.mjs')
+      // Composer-level fan-out already localized title/description
+      // (titlesLocalized) — skip them here so cached variants are never
+      // re-translated a second time.
+      const localizeTitles = !options?.titlesLocalized
+      const items = [
+        ...(localizeTitles ? [
+          { key: 'title', text: article.title },
+          { key: 'summary', text: article.description },
+        ] : []),
+        { key: 'headline', text: directorStory.headline },
+        ...directorStory.scenePlan.flatMap((s, i) => [
+          s?.narration ? { key: `n${i}`, text: s.narration } : null,
+          s?.caption?.fullText ? { key: `c${i}`, text: s.caption.fullText } : null,
+        ].filter(Boolean)),
+      ]
+      const t = await translateStrings(items, langPack)
+      if (localizeTitles) {
+        if (t.title) article.title = t.title
+        if (t.summary) article.description = t.summary
+      }
+      if (t.headline) directorStory.headline = t.headline
+      directorStory.scenePlan.forEach((s, i) => {
+        if (s?.narration && t[`n${i}`]) s.narration = t[`n${i}`]
+        if (s?.caption?.fullText && t[`c${i}`]) s.caption.fullText = t[`c${i}`]
+        if (s?.caption) s.caption.focus = '' // English word-accent cannot match localized script
+      })
+      console.log(`[LANG] story localized → ${langPack.nativeLabel} (${langPack.code})`)
+    }
+
     // Channel Growth Optimizer — ThumbnailBrandOptimizer packaging judge.
     // Detects repetitive brand patterns (HIDDEN/REVEALED/SECRET/SHOCKING),
     // scores alternatives with the CTR predictor + brand safety + novelty,
     // and swaps in the strongest curiosity-gap title before the contract,
     // cover, and publish title are built. BrandPerformanceMemory makes the
     // avoidance automatic once real CTR data proves a pattern weak.
-    const packaging = this.thumbnailBrandOptimizer.judge(article, this.contract?.cover || null, article.title)
+    // TRI-LINGUAL: the judge builds English template titles ("Not X, but Y") —
+    // never apply it to localized variants, or it would overwrite the
+    // translated title with an English-pattern rewrite.
+    const packaging = langPack && langPack.translate
+      ? { selected: null, score: 0, analysis: { brandRisk: 'LOW', detected: [] } }
+      : this.thumbnailBrandOptimizer.judge(article, this.contract?.cover || null, article.title)
     if (packaging.selected && packaging.selected.title !== article.title) {
       console.log(`Packaging: "${article.title}" → "${packaging.selected.title}" (${packaging.selected.score}/100, ${packaging.selected.angle || 'curiosity'})`)
       article.title = packaging.selected.title
@@ -767,7 +814,7 @@ export class NewsBroadcastEngine {
     // Premium narration or FAIL. generateTTS refuses espeak — a robotic voice
     // must never reach the render/publish stage (see src/audio/VoiceSync.mjs).
     try {
-      await this.voiceSync.generateTTS(captionScript, voicePath)
+      await this.voiceSync.generateTTS(captionScript, voicePath, options?.langPack ?? null)
     } catch (e) {
       console.error(`[VOICE] narration failed: ${e.message}`)
       throw new Error(`Voice generation failed — ${e.message}`)
