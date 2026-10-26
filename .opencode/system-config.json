@@ -81,7 +81,8 @@
     "modify-secrets",
     "infrastructure-change",
     "dependency-add",
-    "schema-change"
+    "schema-change",
+    "modify-content"
   ],
   "data_sources": [
     "project-directory",

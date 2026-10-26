@@ -11,6 +11,7 @@ import { execFileSync } from 'child_process'
 import { createServer } from 'http'
 import { randomBytes } from 'crypto'
 import { AgentTaskStore, AgentEventBus } from './agentTasks.mjs'
+import { appendAgentAudit, actorFrom, RateLimiter } from './agentAudit.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -31,6 +32,10 @@ try {
 
 const app = express()
 app.use(express.json())
+
+// Chat spend guard: 20 AI model requests / minute / IP (policy security.md
+// §API Security 4 — rate limiting). In-memory, reset on process restart.
+const agentChatLimiter = new RateLimiter({ max: 20, windowMs: 60000 })
 
 // Public auth routes — registered BEFORE requireAuth so the login flow works
 // without a key. Everything else fails closed. On success we issue an httpOnly
@@ -410,6 +415,9 @@ function detectIntent(message) {
 app.post('/api/ai/chat', async (req, res) => {
   const { message, context, mode, conversation_id } = req.body
   if (!message) return res.status(400).json({ error: 'message required' })
+  const limiter = agentChatLimiter.check(String(req.ip || 'local'))
+  if (!limiter.ok) return res.status(429).json({ error: 'chat rate limit', retry_after_s: limiter.retryAfterS })
+  const actor = actorFrom(req)
 
   try {
     if (!dashboardAI || !dashboardAI.isEnabled) {
@@ -419,13 +427,14 @@ app.post('/api/ai/chat', async (req, res) => {
     // ---- Persistent task state: conversation_id + resumable task ----
     const cid = conversation_id || crypto.randomUUID()
     let task = agentTasks.get(cid) || agentTasks.create(cid)
-    const resume = AgentTaskStore.resumeIntent(message) && task.status === 'interrupted'
+    const resume = AgentTaskStore.resumeIntent(message) && (task.status === 'interrupted' || task.status === 'cancelled')
     agentTasks.update(cid, {
       status: 'running',
       stage: resume ? task.stage + 1 : 1,
       progress: resume ? Math.max(15, task.progress) : 15,
       current_action: resume ? 'Resuming previous task' : 'Thinking',
     })
+    appendAgentAudit({ actor, type: 'chat', cid, detail: String(message).slice(0, 200) })
     agentEvents.emit(cid, { type: 'task_started', stage: resume ? 'resuming_task' : 'understanding_request', percent: 15, current_action: resume ? 'Resuming previous task' : 'Thinking' })
 
     const intent = detectIntent(message)
@@ -498,7 +507,13 @@ app.post('/api/ai/chat', async (req, res) => {
     // tasks get double the rounds so a paused audit can finish.
     const maxRounds = resume ? 6 : 3
     let hitCap = false
+    let cancelled = false
+    // Mid-loop cancellation: /stop flips the task to 'cancelled' and the loop
+    // re-checks the persisted state before every round and after every model
+    // call, so an in-flight audit never burns further rounds (risk 8 fix).
+    const isCancelled = () => agentTasks.get(cid)?.status === 'cancelled'
     for (let round = 0; round < maxRounds; round++) {
+      if (isCancelled()) { cancelled = true; break }
       let match
       const calls = []
       while ((match = toolCallRe.exec(finalReply))) {
@@ -525,7 +540,9 @@ app.post('/api/ai/chat', async (req, res) => {
         { role: 'system', content: sys },
         { role: 'user', content: message },
       ], { temperature: 0.6 })
+      if (isCancelled()) { cancelled = true; break }
     }
+    if (!cancelled && isCancelled()) cancelled = true
     // Defensive: never surface raw tool blocks in the final reply; if the
     // synthesis pass only re-emitted blocks or came back empty, retry once,
     // then fall back to the first pass + a plain rendering of tool results.
@@ -548,7 +565,7 @@ app.post('/api/ai/chat', async (req, res) => {
       || /\b(scanning|analyzing|auditing|indexing|processing|checking)\s+now\b/i.test(t)
       || /(file count|files detected|total files)[^:\n]*:\s*\-\-/i.test(t)
     let stub = looksLikeStub(finalReply)
-    if (stub && !hitCap) {
+    if (stub && !hitCap && !cancelled) {
       const sys = systemContext + '\n\nYour previous reply was a STATUS STUB, not an answer — it announced "' + finalReply.slice(0, 200) + '" but never delivered results. Execute the repository tools NOW (repo_stats, find, grep, read_file, list_directory, search_symbols — whichever fit the request) and then write the real, complete answer as plain text. No placeholders, no "scanning now", no "-- ... --" markers.'
       const hard = await dashboardAI.aiProvider.generate([{ role: 'system', content: sys }, { role: 'user', content: message }], { temperature: 0.4 })
       let m
@@ -579,16 +596,16 @@ app.post('/api/ai/chat', async (req, res) => {
     const finalPending = [...pendingApprovals, ...toolCalls.filter(t => t.approvalRequired?.length && !t.executed).map(t => ({ tool: t.tool, actions: t.approvalRequired }))]
     const paused = hitCap || finalPending.length || stub
     agentTasks.update(cid, {
-      status: paused ? 'interrupted' : 'completed',
-      stage: paused ? task.stage + maxRounds + (stub ? 1 : 0) : 4,
-      progress: paused ? 85 : 100,
-      current_action: finalPending.length ? `Needs approval: ${finalPending[0].actions.join(', ')}` : (paused ? 'Paused — final answer incomplete; say "proceed" to continue' : 'Done'),
-      partial_result: finalReply,
+      status: cancelled ? 'cancelled' : paused ? 'interrupted' : 'completed',
+      stage: cancelled ? Math.max(1, task.stage) : paused ? task.stage + maxRounds + (stub ? 1 : 0) : 4,
+      progress: cancelled ? Math.max(15, task.progress) : paused ? 85 : 100,
+      current_action: cancelled ? 'Cancelled by user — say "proceed" to resume' : finalPending.length ? `Needs approval: ${finalPending[0].actions.join(', ')}` : (paused ? 'Paused — final answer incomplete; say "proceed" to continue' : 'Done'),
+      partial_result: cancelled ? finalReply + '\n\n(Task was cancelled after this point — say "proceed" to resume.)' : finalReply,
       history: [...messages, { role: 'assistant', content: finalReply }].slice(-16),
       tool_calls: toolCalls,
     })
     task = agentTasks.get(cid)
-    agentEvents.emit(cid, { type: 'task_finished', status: task.status, percent: paused ? 85 : 100, canContinue: task.status === 'interrupted' })
+    agentEvents.emit(cid, { type: cancelled ? 'task_cancelled' : 'task_finished', status: task.status, percent: cancelled ? Math.max(15, task.progress) : paused ? 85 : 100, canContinue: task.status === 'interrupted' || task.status === 'cancelled' })
 
     // Confidence heuristic: provider chain health + response length + intent match
     const confidence = Math.min(96, Math.round(72 + (reply?.length > 60 ? 12 : 4) + (intent.intent !== 'learn' ? 6 : 0)))
@@ -656,7 +673,9 @@ app.get('/api/ai/task/:cid', (req, res) => {
 app.post('/api/ai/task/:cid/stop', (req, res) => {
   const t = agentTasks.get(req.params.cid)
   if (!t) return res.status(404).json({ error: 'no task for this conversation' })
-  agentTasks.update(t.conversation_id, { status: 'interrupted', current_action: 'Stopped by user — say "proceed" to resume' })
+  agentTasks.update(t.conversation_id, { status: 'cancelled', current_action: 'Stopped by user — say "proceed" to resume' })
+  agentEvents.emit(t.conversation_id, { type: 'task_stopped', current_action: 'Cancelling in-flight rounds' })
+  appendAgentAudit({ actor: actorFrom(req), type: 'stop', cid: t.conversation_id })
   res.json({ ok: true })
 })
 
@@ -670,6 +689,7 @@ app.post('/api/ai/task/:cid/approve', (req, res) => {
   if (!actions.length) return res.status(400).json({ error: 'actions required' })
   const granted = [...new Set([...(t.approvals || []), ...actions])]
   agentTasks.update(t.conversation_id, { approvals: granted, current_action: 'Approved — say "proceed" to execute' })
+  appendAgentAudit({ actor: actorFrom(req), type: 'approve', cid: t.conversation_id, actions })
   res.json({ ok: true, approvals: granted })
 })
 
