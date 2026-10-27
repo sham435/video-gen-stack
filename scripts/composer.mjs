@@ -321,6 +321,19 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
       for (const langPack of langPacks) {
         // EN keeps the canonical dir (zero regression); variants get `-ta`/`-si`.
         const outDir = langPack.code === 'en' ? outDirEn : `${outDirEn}-${langPack.code}`
+        // FONT PREFLIGHT (before translation spend or any frame): the pack's
+        // font files must exist in THIS environment and shape the script's
+        // canary corpus with zero .notdef (tofu) glyphs — missing/miscovered
+        // fonts can never reach the render. Failure quarantines ONLY this
+        // variant, exactly the translation-failure contract below.
+        try {
+          const { assertLanguageFonts } = await import('../src/i18n/FontPreflight.mjs')
+          await assertLanguageFonts(langPack)
+          if (langPack.fontFiles) console.log(`[LANG] font preflight ${langPack.code}: OK (${langPack.fontFiles.join('+')})`)
+        } catch (e) {
+          console.error(`[LANG] variant ${langPack.code} quarantined for this run: ${e.message}`)
+          continue
+        }
         // Localize the article identity (title/description) ONCE here so every
         // downstream stage (upload title, publish copy, dedup guard) sees the
         // target language. Cache-first: re-runs replay, never re-bill.

@@ -8,6 +8,7 @@
 import { DesignSystem } from '../../visuals/DesignSystem.mjs'
 import { canRenderText } from '../TextPolicy.mjs'
 import { FooterLayout } from '../footer/FooterLayout.mjs'
+import { getRenderLanguage, drawShaped } from '../../i18n/ShapedText.mjs'
 
 // Category accent palette for the AI layer (per production spec):
 // technology = electric cyan / neon blue, business = emerald,
@@ -31,7 +32,7 @@ export const AI_ACCENT_BY_CATEGORY = {
 }
 
 export class EmphasisLayer {
-  draw(ctx, scene, progress, category = 'technology', alpha = 1) {
+  async draw(ctx, scene, progress, category = 'technology', alpha = 1) {
     if (alpha <= 0.01) return
     const word = scene.caption_focus || scene.focus || ''
     if (!word) return
@@ -64,8 +65,32 @@ export class EmphasisLayer {
     ctx.shadowColor = accent
     ctx.shadowBlur = glow * p
 
-    lines.forEach((line, i) => {
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i]
       ctx.globalAlpha = Math.max(0.05, Math.min(1, (p - i * 0.15) * alpha))
+      // TRI-LINGUAL: caption_focus is story-derived, so for localized packs it
+      // can carry Tamil/Sinhala — which 'Montserrat ExtraBold' notdefs (the
+      // run-9 SI/TA renders drew hollow neon .notdef boxes in this layer's
+      // glow pulse: visual QA decree evidence, §RC6 in the shaping audit).
+      // Shaped path keeps every style token: accent fill, black 10% stroke,
+      // the shadow glow set above (ctx state carries into drawShaped's
+      // fill/stroke calls), and the translate+scale transform. English has
+      // no active pack → the native path below is byte-identical.
+      const pack = getRenderLanguage()
+      ctx.lineJoin = 'round'
+      if (pack) {
+        ctx.miterLimit = 2
+        await drawShaped(ctx, line, 0, i * lineH, {
+          fontFile: pack.fontFiles,
+          size: fontSize,
+          weight: 900,
+          align: 'center',
+          baseline: 'middle',
+          fillStyle: accent,
+          stroke: { style: 'rgb(0,0,0)', width: Math.max(2, fontSize * 0.10) },
+        })
+        continue
+      }
       ctx.font = `900 ${fontSize}px Montserrat ExtraBold, sans-serif`
       ctx.lineWidth = Math.max(2, fontSize * 0.10)
       ctx.lineJoin = 'round'
@@ -73,7 +98,7 @@ export class EmphasisLayer {
       ctx.strokeText(line, 0, i * lineH)
       ctx.fillStyle = accent
       ctx.fillText(line, 0, i * lineH)
-    })
+    }
 
     ctx.shadowBlur = 0
     ctx.restore()

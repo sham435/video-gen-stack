@@ -168,7 +168,16 @@ export class VoiceSync {
   }
 
   edgeTTS(text, outPath, voiceId = 'en-US-AriaNeural') {
-    const args = ['--voice', voiceId, '--text', text.slice(0, 1000), '--write-media', outPath]
+    // LOCALIZE_TTS_RATE (e.g. "+15%"): broadcast duration compliance for
+    // localized variants — Tamil/Sinhala narrations synthesize LONGER than the
+    // EN plan (run-4 evidence: TA scene chunks summed 41.2s vs SI 28.3s for the
+    // same article → 46.4s total vs the 45s hard cap). A spoken-rate adjustment
+    // shortens chunk audio; caption windows stay aligned because the
+    // TimingAdapter adapts to the ACTUAL chunk durations. Unset → args
+    // unchanged (byte-identical EN + prior-variant behavior).
+    const ttsRate = process.env.LOCALIZE_TTS_RATE
+    const rateArgs = ttsRate ? ['--rate', String(ttsRate)] : []
+    const args = ['--voice', voiceId, ...rateArgs, '--text', text.slice(0, 1000), '--write-media', outPath]
     try {
       execFileSync('edge-tts', args, { stdio: 'pipe', timeout: 60000 })
       if (this.validateAudio(outPath)) {

@@ -309,9 +309,16 @@ export class NewsBroadcastEngine {
     // cache-first (deterministic re-runs); failure throws LANG_TRANSLATE_FAILED
     // so the variant quarantines instead of publishing half-English output.
     const langPack = options?.langPack ?? null
+    this.currentLangPack = langPack ?? null
     if (langPack) {
       const { setRenderLanguage } = await import('./i18n/ShapedText.mjs')
       setRenderLanguage(langPack) // shaped glyphs for SC/Indic scripts during this render
+      // RENDER PREFLIGHT: the pack's fonts must exist in THIS environment and
+      // shape the script's canary corpus with zero .notdef (tofu) glyphs.
+      // Cache-backed — the composer already ran it per-variant, so this is a
+      // cheap fail-fast for direct engine callers (tests, other entry points).
+      const { assertLanguageFonts } = await import('./i18n/FontPreflight.mjs')
+      await assertLanguageFonts(langPack)
     }
     if (langPack && langPack.translate) {
       const { translateStrings } = await import('./i18n/Translator.mjs')
@@ -1210,11 +1217,38 @@ export class NewsBroadcastEngine {
     await this.assertValidRender(silentVideo, 'concat', { requireAudio: false })
     await this.assertValidRender(videoPath, 'audio-mix', { requireAudio: true })
 
+    // TRI-LINGUAL SIDECARS: the canvas CaptionLayer is the burned-in caption
+    // authority for localized renders (libass/Inter lacks the glyphs — RC4),
+    // so the narration also ships as SRT/VTT sidecars built from the SAME
+    // window timing the render used (the scenes handed here carry the
+    // TimingAdapter-adapted start/end) via the canonical exporter the
+    // LocalizationPipeline uses. Proves captions and speech cannot disagree
+    // about when a line is spoken. EN path unchanged (its burn branch below
+    // owns sidecars when the gate is on).
+    const lpSide = this.currentLangPack
+    if (lpSide && lpSide.code !== 'en' && lpSide.translate) {
+      try {
+        const { exportSubtitles } = await import('./localize/SubtitleExporter.mjs')
+        const clips = (scenes || []).map((s) => ({ start: Number(s.start) || 0, end: Number(s.end) || 0, text: s.narration || '' }))
+        const side = exportSubtitles(clips, { outDir, baseName: 'captions' })
+        console.log(`[SUBTITLES] localized sidecars: ${path.basename(side.srtPath)} + ${path.basename(side.vttPath)} (${side.clips} clips, ${side.totalDuration}s)`)
+      } catch (e) {
+        console.warn(`Subtitle sidecars skipped: ${e.message}`)
+      }
+    }
+
     // Burn subtitles from narration beat timings (SRT).
     // Single-owner rule: only when the manifest hands the subtitle layer to
     // ffmpeg (options.burnSubtitles: true). Off by default — the canvas
     // CaptionLayer is the narration authority.
-    if (gates.burnSubtitles) {
+    // TRI-LINGUAL: libass burns with FontName=Inter, which has NO Tamil or
+    // Sinhala glyphs — a localized burn is tofu over the picture. For
+    // localized renders the canvas CaptionLayer remains the burned-in
+    // authority and the .srt/.vtt sidecars still ship. EN unchanged.
+    const lpBurn = this.currentLangPack
+    if (gates.burnSubtitles && lpBurn && lpBurn.code !== 'en' && lpBurn.translate) {
+      console.info(`[SUBTITLES] localized render (${lpBurn.code}): skipping libass burn — Inter lacks ${lpBurn.nativeLabel} glyphs; canvas CaptionLayer is the burned-in authority, SRT/VTT sidecars still ship`)
+    } else if (gates.burnSubtitles) {
       try {
         const { generateSRT, burnSubtitles } = await import('../scripts/captions.mjs')
         const narrationScript = scenes.map(s => s.caption || s.narration || '').filter(Boolean).join(' ')

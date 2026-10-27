@@ -57,6 +57,11 @@ export const LANGUAGES = Object.freeze({
       'assets/fonts/NotoSansTamil-Regular.ttf',
       'assets/fonts/NotoSansTamil-Bold.ttf',
     ],
+    // Noto Sans Tamil ships WITHOUT Latin letters (digits + basic punctuation
+    // only — preflight-canary verified). English brand words inside Tamil
+    // headlines ("AI", "youtube") would .notdef-tofu; ShapedText splits
+    // script runs and draws Latin runs from this companion font.
+    latinFontFiles: ['assets/fonts/Montserrat-ExtraBold.ttf'],
     titleTag: 'தமிழ்',
     langHashtag: '#தமிழ்Trending',
     translate: true,
