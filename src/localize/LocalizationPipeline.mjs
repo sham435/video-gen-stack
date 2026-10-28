@@ -61,7 +61,7 @@ function writeState(p, state) {
 }
 
 export class LocalizationPipeline {
-  constructor({ jobId, lang, langPack = null, outDir, makeChunk = null, title = null } = {}) {
+  constructor({ jobId, lang, langPack = null, outDir, makeChunk = null, title = null, registry = null } = {}) {
     if (!jobId || !lang) throw new Error('LocalizationPipeline: jobId + lang required')
     this.jobId = jobId
     this.lang = lang
@@ -70,6 +70,11 @@ export class LocalizationPipeline {
     this.outDir = outDir || `output-${lang}`
     this.makeChunk = makeChunk
     this.title = title
+    // Optional shared script ledger for the across-video dedup gate. Accepts
+    // a registry-like object (AssetRegistry shape: state.scripts /
+    // state.publishedVideos / recordScript / _save) or a ScriptUniqueness
+    // instance; runGates defaults to it so run(input) carries the ledger.
+    this.registry = registry
     this.state = {
       jobId,
       lang,
@@ -173,12 +178,14 @@ export class LocalizationPipeline {
   }
 
   /** Streaming feed (stages 2+3 combined, near realtime): validate one
-   *  in-flight segment and translate it cache-first. Returns its translation. */
-  async pushSegment({ index, start, end, source }) {
+   *  in-flight segment and translate it cache-first. Returns its translation.
+   *  sourceLang (optional) pins the source language for cross-locale pairs
+   *  (si→ta, ta→si) the way Google Translate pins sl/tl. */
+  async pushSegment({ index, start, end, source, sourceLang = null }) {
     const seg = { index, start, end, text: String(source || ''), captionText: '' }
     this.state.stage = Math.max(this.state.stage, 3)
     this.state.status = 'streaming'
-    const r = await translateSegments([seg], this.langPack)
+    const r = await translateSegments([seg], this.langPack, { sourceLang: sourceLang ?? null })
     const out = r.segments[0]
     this.state.translations = this.state.translations.filter((s) => s.index !== index).concat(out)
     this._write()
@@ -196,12 +203,36 @@ export class LocalizationPipeline {
     if (!this.langPack.translate) {
       // EN/secondary passthrough: single narration track semantics now come
       // from the SAME inventory — but no re-timing request; keep windows as-is.
-      this.state.timings = { audioPath: videoPath ? null : null, scenes: this.state.manifest.segments, chunks: [], passthrough: true, totalDuration: null }
+      this.state.timings = { audioPath: null, scenes: this.state.manifest.segments, chunks: [], passthrough: true, totalDuration: null, videoPath: videoPath ?? null }
       this.state.stage = 4
       this.state.status = 'narrated_passthrough'
       this._write()
       return { skipped: false, timings: this.state.timings }
     }
+    // FONT GATE (no-tofu guarantee): before ANY speech/render spend, this
+    // variant's vendored fonts must (a) exist + shape the canary corpus and
+    // (b) cover EVERY string about to be published — translated narration and
+    // on-screen captions. A glyph the renderer cannot draw means tofu boxes in
+    // the output video: refused HERE, per-locale, before cost is incurred.
+    let fontGate = { pass: true, skipped: !this.langPack.fontFiles }
+    if (this.langPack.fontFiles) {
+      try {
+        const { assertLanguageFonts, assertContentCovers } = await import('../i18n/FontPreflight.mjs')
+        await assertLanguageFonts(this.langPack)
+        const contentTexts = [
+          ...narrationSource.map((s) => s.narration),
+          ...this.state.manifest.segments.map((s) => s.captionText || ''),
+        ].filter((t) => t && t.trim())
+        const covered = await assertContentCovers(this.langPack, contentTexts, { label: 'localized narration/captions' })
+        fontGate = { pass: true, canaryOk: true, contentStrings: covered.checked }
+      } catch (e) {
+        this.state.status = 'failed_fonts'
+        this.state.errors.push(`font preflight: ${e.message}`)
+        this._write()
+        throw new PipelineBlocked(4, `font preflight failed: ${e.message}`, this.state)
+      }
+    }
+    this.state.gates.fonts = fontGate
     if (!this.makeChunk) {
       this.state.status = 'blocked_voice'
       this.state.errors.push('makeChunk provider not configured — cannot synthesize localized speech')
@@ -225,14 +256,26 @@ export class LocalizationPipeline {
     const align = captionAlignmentCheck(adapted.scenes, adapted.chunks)
     const clips = clipsFromAdaptedScenes(adapted.scenes)
     const subs = exportSubtitlesSafe(clips, { outDir: this.outDir })
-    this.state.timings = {      audioPath: adapted.audioPath,
+    this.state.timings = {
+      audioPath: adapted.audioPath,
       scenes: adapted.scenes,
       chunks: adapted.chunks,
       totalDuration: adapted.totalDuration,
       stats: adapted.stats,
       passthrough: false,
+      videoPath: videoPath ?? null,
     }
     this.state.subtitles = subs
+    // Subtitle sidecars are part of the locale's publish contract, not a
+    // best-effort artifact: an export failure must BLOCK this locale loudly
+    // (previously the error was swallowed and finalize would have published
+    // a localized video with subtitles: null).
+    if (subs.error) {
+      this.state.status = 'failed_subtitles'
+      this.state.errors.push(`subtitle export failed: ${subs.error}`)
+      this._write()
+      throw new PipelineBlocked(4, `subtitle export failed: ${subs.error}`, this.state)
+    }
     this.state.gates.alignment = align
     if (!align.ok) {
       this.state.status = 'failed_alignment'
@@ -246,8 +289,10 @@ export class LocalizationPipeline {
     return { skipped: false, timings: this.state.timings, subtitles: subs, alignment: align }
   }
 
-  /** Stage 5. Gate review state; duplicate narration (within+across). */
-  async runGates({ registry = null } = {}) {
+  /** Stage 5. Gate review state; duplicate narration (within+across video).
+   *  registry: shared script ledger (AssetRegistry-like or ScriptUniqueness
+   *  instance). Defaults to the constructor's ledger so run(input) carries it. */
+  async runGates({ registry = this.registry } = {}) {
     // Review gate: TRANSLATION_REVIEW=1 → pending items block THIS locale only
     const reviewGate = TRANSLATION_REVIEW_ON()
       ? (() => {
@@ -258,8 +303,19 @@ export class LocalizationPipeline {
     // Duplicate narration gate — OUR OWN guard rail (trailing-name duplicates
     // across locales are impossible here: this gate is per-locale only).
     const within = ScriptUniqueness.validateWithinVideo(this.state.translations.map((s) => s.text))
+    // Across-video gate (ledger-backed): this locale's joined narration must
+    // not re-broadcast a PAST video's script. The join mirrors the engine's
+    // ledger format (ScenePlanner.buildNarrationScript → join'. '); the
+    // ledger's exact-hash + similarity levels apply to localized text too.
+    // Same-job re-renders are self-excluded (idempotent resume/retry).
+    let across = { pass: true, skipped: true, reason: 'no script ledger provided' }
+    if (registry) {
+      const su = registry instanceof ScriptUniqueness ? registry : new ScriptUniqueness(registry)
+      const joined = this.state.translations.map((s) => (s.text || '').trim()).filter(Boolean).join('. ')
+      across = su.validate(joined, { jobId: this.jobId, excludeJobId: this.jobId })
+    }
     this.state.gates.review = reviewGate
-    this.state.gates.dedup = within
+    this.state.gates.dedup = { within, across }
     if (!reviewGate.pass) {
       this.state.status = 'pending_review'
       this._write()
@@ -269,6 +325,12 @@ export class LocalizationPipeline {
       this.state.status = 'failed_dedup'
       this._write()
       throw new PipelineBlocked(5, `duplicate narration: ${within.reason}`, this.state)
+    }
+    if (!across.pass) {
+      this.state.status = 'failed_dedup'
+      this.state.errors.push(`across-video dedup: ${across.reason}`)
+      this._write()
+      throw new PipelineBlocked(5, `duplicate narration (across video): ${across.reason}`, this.state)
     }
     this.state.stage = Math.max(this.state.stage, 5)
     this.state.status = 'gated'
@@ -286,6 +348,21 @@ export class LocalizationPipeline {
       this.state.status = 'publish_blocked'
       this._write()
       throw new PipelineBlocked(6, `not publishable (status=${this.state.status}, stage=${this.state.stage})`, this.state)
+    }
+    // Localized captions are stage-6 publish metadata: a translate-locale
+    // (langPack.translate) broadcast without its SRT/VTT sidecars is NOT
+    // complete — those files are what the publish step uploads as caption
+    // tracks. Passthrough locales (translate:false) have no sidecars by
+    // design and are exempt.
+    if (this.langPack.translate) {
+      const srtOk = !!this.state.subtitles?.srtPath && fs.existsSync(this.state.subtitles.srtPath)
+      const vttOk = !!this.state.subtitles?.vttPath && fs.existsSync(this.state.subtitles.vttPath)
+      if (!srtOk || !vttOk) {
+        this.state.status = 'publish_blocked'
+        this.state.errors.push('localized captions missing on finalizePublish (SRT/VTT sidecars required)')
+        this._write()
+        throw new PipelineBlocked(6, 'localized captions missing — subtitle sidecars must exist before publishing this locale', this.state)
+      }
     }
     const meta = this.state.manifest?.metadata || {}
     const baseTitle = (this.title || meta.title || '').trim()
@@ -341,6 +418,9 @@ export function TRANSLATION_REVIEW_ON() {
   return process.env.TRANSLATION_REVIEW === '1'
 }
 
+/** Export helper: NEVER throws at the call site — a failure is returned as
+ *  { ..., error } and localizeNarration turns it into a PipelineBlocked(4)
+ *  for THIS locale (sidecars are publish-contract artifacts, not optional). */
 function exportSubtitlesSafe(clips, { outDir } = {}) {
   try {
     return exportSubtitles(clips, { outDir, baseName: 'subtitles' })

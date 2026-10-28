@@ -295,7 +295,11 @@ export async function drawShaped(ctx, text, x, y, opts = {}) {
     : (pack && fontFile === pack.fontFiles ? pack.latinFontFiles || null : null)
   const layout = await shapeText(text, { fontFile, size, weight, latinFontFiles })
   if (layout.hasNotdef) {
-    console.warn(`[SHAPED] tofu glyphs in "${text.slice(0, 24)}…" — font missing coverage; fontFile=${resolveFontFile(fontFile, weight)}`)
+    // HARD STOP (no-tofu guarantee): glyphs the vendored fonts cannot draw
+    // would appear as boxes in the published video. The preflight/content
+    // gates block earlier with diagnostics; THIS is the last line of
+    // defense — refuse to draw instead of shipping boxes.
+    throw new Error(`SHAPED_TOFU: glyphs missing for "${text.slice(0, 24)}…" — fontFile=${resolveFontFile(fontFile, weight)} cannot cover this string; refusing to render tofu`)
   }
 
   let ox = x
@@ -321,7 +325,12 @@ export async function drawShaped(ctx, text, x, y, opts = {}) {
       : (baseline === 'top' ? y + gRec.asc * gScale : y)
     const otGlyph = gRec.otFont.glyphs.get(g.gid)
     if (!otGlyph || gidIsBlank(otGlyph)) continue
-    const p = otGlyph.getPath(g.x + ox + letterSpacing, gOy - g.y)
+    // SCALE FIDELITY (spacing guarantee): getPath's fontSize arg MUST equal the
+    // requested size. opentype.js defaults it to 72, which drew outlines at
+    // 72/upem while HarfBuzz advances scale at size/upem — glyphs drew 1.24×
+    // their reserved slot at caption sizes (letters merge → meaning destroyed)
+    // and shrank below their slots at headline sizes (scattered words).
+    const p = otGlyph.getPath(g.x + ox + letterSpacing, gOy - g.y, size)
     const path = new Path2D(p.toPathData(3))
     if (stroke) ctx.stroke(path)
     ctx.fillStyle = fillStyle

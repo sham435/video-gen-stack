@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs'
+import crypto from 'node:crypto'
 
 const CLIENT_ID = process.env.YOUTUBE_CLIENT_ID
 const CLIENT_SECRET = process.env.YOUTUBE_CLIENT_SECRET
@@ -893,4 +894,169 @@ export async function deleteVideo(videoId) {
   }
   console.log(`[YOUTUBE_DELETE] deleted videoId=${videoId}`)
   return true
+}
+
+/**
+ * --------------------------------------------------------------------------
+ * Caption tracks (captions.list + captions.insert)
+ * --------------------------------------------------------------------------
+ *
+ * Uploads the pipeline's localized caption sidecars as real YouTube caption
+ * tracks, keyed per language. Contract (YouTube Data API v3 reference, rev
+ * 2026-10-15 — `captions.set` no longer exists; insert is the method):
+ *
+ *   captions.list  → GET  /youtube/v3/captions?part=snippet&videoId=…   (50 units)
+ *   captions.insert→ POST /upload/youtube/v3/captions?part=snippet      (400 units)
+ *     Media upload: multipart/related — part 1 = JSON caption resource
+ *     {snippet:{videoId, language, name, isDraft}}, part 2 = track file bytes.
+ *     Duplicate (videoId, language, name) → 409 captionExists, which is the
+ *     natural idempotency signal for resume/backfill.
+ *
+ * Both methods need the `youtube.force-ssl` scope — already declared in
+ * YOUTUBE_SCOPES, so the existing publisher authentication works as-is.
+ *
+ * Errors thrown here ALWAYS carry `.status` (real HTTP status, or synthetic
+ * 5xx for transport-level failures) so src/publishing/retry.mjs's
+ * isTransientError can classify them: 429/5xx → transient; 400/403/404/409
+ * → permanent. Quota care: each insert attempt costs 400 units, so this is
+ * not invoked speculatively — the orchestrator (CaptionTrackPublisher.mjs)
+ * owns skip/duplicate-check logic and the per-language state store.
+ */
+
+export async function listCaptionTracks(videoId) {
+  if (!videoId) throw new Error('YOUTUBE_VIDEO_ID_REQUIRED')
+  const token = await getAccessToken()
+
+  const response = await fetchWithTimeout(
+    `${GOOGLE_API_BASE}/youtube/v3/captions?part=snippet&videoId=${encodeURIComponent(videoId)}`,
+    { headers: { 'Authorization': `Bearer ${token}` } },
+  )
+  const data = await readJson(response)
+  if (!response.ok || data.error) throw Object.assign(youtubeApiError(data, response.status), { status: response.status })
+
+  // Module convention mirrors the caption resource: id + snippet fields +
+  // trackKind. NOTE: the live API currently omits `trackKind` from caption
+  // resource rows — it stays null here rather than being fabricated as
+  // 'standard' (distinguish machine tracks via empty `name` instead).
+  const items = Array.isArray(data.items) ? data.items : []
+  return items.map((item) => ({
+    id: item.id || null,
+    trackKind: item.trackKind || null,
+    videoId: item.snippet?.videoId || videoId,
+    language: item.snippet?.language || null,
+    name: item.snippet?.name || null,
+    isAutoSynced: item.snippet?.isAutoSynced === true,
+    isDraft: item.snippet?.isDraft === true,
+    uploadStatus: item.snippet?.status?.uploadStatus || null,
+    failureReason: item.snippet?.status?.failureReason || null,
+  }))
+}
+
+const CAPTION_MEDIA_MIME = 'application/octet-stream' // listed-accepted media type; YouTube sniffs SRT/TTML content itself
+const CAPTION_NAME_MAX = 150 // API hard limit (400 nameTooLong above it)
+
+export async function insertCaptionTrack({ videoId, language, name, filePath, isDraft = false }) {
+  if (!videoId) throw new Error('YOUTUBE_VIDEO_ID_REQUIRED')
+  if (!language) throw new Error('CAPTION_LANGUAGE_REQUIRED')
+  if (!name) throw new Error('CAPTION_NAME_REQUIRED')
+  if (String(name).length > CAPTION_NAME_MAX) throw new Error(`CAPTION_NAME_TOO_LONG: ${String(name).length} > ${CAPTION_NAME_MAX}`)
+  if (!filePath) throw new Error('CAPTION_FILE_PATH_REQUIRED')
+  if (!existsSync(filePath)) throw new Error(`CAPTION_FILE_NOT_FOUND: ${filePath}`)
+
+  const trackBuffer = readFileSync(filePath)
+  if (!trackBuffer.length) throw new Error(`CAPTION_SIDECAR_EMPTY: ${filePath}`)
+
+  const token = await getAccessToken()
+  const boundary = `nm-cap-${crypto.randomUUID()}`
+
+  // Part 1: the caption resource. Required snippet fields: videoId, language,
+  // name — isDraft:false so the track is live on upload, not a Studio draft.
+  const resource = {
+    snippet: {
+      videoId: String(videoId),
+      language: String(language),
+      name: String(name),
+      isDraft: isDraft === true,
+    },
+  }
+  const metadataPart = Buffer.from(`--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${JSON.stringify(resource)}\r\n`)
+  const mediaPart = Buffer.concat([
+    Buffer.from(`--${boundary}\r\nContent-Type: ${CAPTION_MEDIA_MIME}\r\nContent-Transfer-Encoding: binary\r\n\r\n`),
+    trackBuffer,
+    Buffer.from('\r\n'),
+  ])
+  const closing = Buffer.from(`--${boundary}--\r\n`)
+  const body = Buffer.concat([metadataPart, mediaPart, closing])
+
+  console.log(`[YOUTUBE_CAPTION_INSERT] START videoId=${videoId} language=${language} name="${name}" bytes=${trackBuffer.length}`)
+  const response = await fetchWithTimeout(
+    `${GOOGLE_API_BASE}/upload/youtube/v3/captions?part=snippet`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': `multipart/related; boundary="${boundary}"`,
+        'Content-Length': String(body.length),
+      },
+      body,
+    },
+  )
+
+  const data = await readJson(response)
+  if (!response.ok || data.error) {
+    const error = youtubeApiError(data, response.status)
+    // `.status` is the shape withTransientRetry classifies; carry both so the
+    // orchestrator's classification and any future retry wiring agree.
+    error.status = response.status
+    const failed = classifyCaptionInsertError(error, response.status)
+    error.captionFailure = failed
+    console.warn(`[YOUTUBE_CAPTION_INSERT] FAIL videoId=${videoId} language=${language} http=${response.status} class=${failed.class} action=${failed.action} error=${error.message}`)
+    throw error
+  }
+
+  const track = data?.id ? data : (data?.items?.[0] || {})
+  console.log(`[YOUTUBE_CAPTION_INSERT] SUCCESS videoId=${videoId} language=${language} name="${name}" trackId=${track.id || 'unknown'} uploadStatus=${track.snippet?.status?.uploadStatus || 'n/a'} bytes=${trackBuffer.length}`)
+  return {
+    id: track.id || null,
+    language,
+    name: String(name),
+    bytes: trackBuffer.length,
+    uploadStatus: track.snippet?.status?.uploadStatus || null,
+    response: { id: track.id || null },
+  }
+}
+
+/**
+ * Classify a YouTube captions.insert failure (mirrors the thumbnail ladder).
+ * The orchestrator (CaptionTrackPublisher) consumes this for logging and for
+ * choosing the recorded store state:
+ *   - 409 captionExists → SKIP action: identical (language, name) track is
+ *     already on YouTube — idempotent re-run, recorded as 'exists'.
+ *   - 400 invalid metadata/content/name-too-long → doomed request; fixing
+ *     the input is on the pipeline, retrying cannot help.
+ *   - Everything else (403, 404, 5xx, unknown) → QUARANTINE-shaped failure
+ *     diagnosis; retriability is decided purely by HTTP status semantics.
+ */
+export function classifyCaptionInsertError(error, httpStatus) {
+  const status = Number(httpStatus || error?.httpStatus || error?.status || 0)
+  const reason = String(error?.reason || '')
+  const body = JSON.stringify(error?.youtubeError || '')
+
+  if (status === 409 || /captionExists/i.test(reason + ' ' + body)) {
+    return { class: 'CAPTION_TRACK_EXISTS', action: 'SKIP', reason: 'identical language+name track already uploaded' }
+  }
+  if (status === 400) {
+    const badContent = /contentRequired/i.test(reason + ' ' + body)
+    const badMeta = /invalidMetadata|nameTooLong/i.test(reason + ' ' + body)
+    if (badContent) return { class: 'CAPTION_CONTENT_REQUIRED', action: 'FIX_INPUT', reason: 'track bytes missing/empty' }
+    if (badMeta) return { class: 'CAPTION_INVALID_METADATA', action: 'FIX_INPUT', reason: 'videoId/language/name rejected' }
+    return { class: 'CAPTION_INVALID_METADATA', action: 'FIX_INPUT', reason: 'unknown 400' }
+  }
+  if (status === 404) {
+    return { class: 'CAPTION_VIDEO_NOT_FOUND', action: 'SKIP_AUDIT', reason: 'videoId not visible to this credential' }
+  }
+  if (status === 403) {
+    return { class: 'CAPTION_FORBIDDEN', action: 'QUARANTINE', reason: 'scopes/permissions insufficient for captions.insert' }
+  }
+  return { class: 'CAPTION_UPLOAD_FAILED', action: 'QUARANTINE', reason: `http ${status || 'unknown'}` }
 }

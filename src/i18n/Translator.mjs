@@ -15,7 +15,9 @@
  *    half-English "localized" video.
  *
  * Providers (env-driven, first available wins):
- *   GEMINI_API_KEY        → generativelanguage (model GEMINI_MODEL, default gemini-2.0-flash)
+ *   GEMINI_API_KEY        → generativelanguage (model GEMINI_MODEL, default
+ *                           gemini-2.5-flash; thinking disabled by default for
+ *                           latency — GEMINI_THINKING=1 restores it)
  *   OPENROUTER_API_KEY    → OpenRouter OpenAI-compatible (OPENROUTER_MODEL, default google/gemini-2.0-flash-001)
  *   OPENAI_API_KEY        → OpenAI Chat Completions (OPENAI_MODEL, default gpt-4o-mini)
  */
@@ -30,7 +32,7 @@ const SCRIPT_RANGES = {
   ta: /[\u0B80-\u0BFF]/,
   si: /[\u0D80-\u0DFF]/,
 }
-const SCRIPT_NAMES = { ta: 'Tamil', si: 'Sinhala' }
+const SCRIPT_NAMES = { en: 'English', ta: 'Tamil', si: 'Sinhala' }
 
 function readCache(lang) {
   const file = path.join(CACHE_DIR, `${lang}.json`)
@@ -51,8 +53,9 @@ function writeCache(lang, cache) {
 
 const key = (text) => crypto.createHash('sha256').update(text).digest('hex').slice(0, 32)
 
-function buildPrompt(items, langCode) {
+function buildPrompt(items, langCode, sourceLang = null) {
   const target = SCRIPT_NAMES[langCode] || langCode
+  const src = sourceLang ? (SCRIPT_NAMES[sourceLang] || sourceLang) : null
   // Bullet markers, NOT numbered lines: a reasoning model studied on this
   // task echoed "1." / "2." prefixes back INTO the output array elements
   // when the inputs were numbered (observed: recursive/flint). Bullets are
@@ -60,7 +63,7 @@ function buildPrompt(items, langCode) {
   // arrays in live probes for both Tamil and Sinhala.
   const body = items.map((it, i) => `- ${it.text}`).join('\n')
   return [
-    `Translate each line into ${target}.`,
+    src ? `Translate each line from ${src} into ${target}.` : `Translate each line into ${target}.`,
     'This is broadcast narration for a news video: keep it natural, concise and spoken-language fluent.',
     'Rules:',
     '- Keep numbers, percentages, names and URLs unchanged.',
@@ -72,6 +75,21 @@ function buildPrompt(items, langCode) {
   ].join('\n')
 }
 
+/**
+ * Count characters that belong to another CONFIGURED broadcast script (the
+ * SCRIPT_RANGES entries other than langCode). Latin is intentionally exempt:
+ * brand words (NEWS MONSTER), URLs and numbers are legitimate broadcast copy.
+ */
+function foreignScriptCount(t, langCode) {
+  let impure = 0
+  for (const ch of t) {
+    for (const [code, re] of Object.entries(SCRIPT_RANGES)) {
+      if (re.test(ch) && code !== langCode) { impure++; break }
+    }
+  }
+  return impure
+}
+
 function validateOutput(items, outTexts, langCode) {
   if (!Array.isArray(outTexts)) return false
   if (outTexts.length !== items.length) return false
@@ -79,8 +97,18 @@ function validateOutput(items, outTexts, langCode) {
   for (let i = 0; i < items.length; i++) {
     const t = outTexts[i]
     if (typeof t !== 'string' || t.trim().length === 0) return false
-    // Language script must be present for ta/si (Latin-only = provider gave English back)
-    if (t.length > 8 && !script.test(t)) return false
+    if (t.length > 8) {
+      // Presence: ta/si outputs must actually carry the target script
+      // (Latin-only = the provider gave English back).
+      if (script && !script.test(t)) return false
+      // Purity: characters of ANOTHER configured script are never legitimate
+      // in Tamil/Sinhala copy. Measured live 2026-10-28: a Gemini batch
+      // returned an element that was half untranslated (30 Sinhala chars)
+      // concatenated with the Tamil translation (43 chars); the presence-only
+      // gate ADMITTED it and cache-first storage would replay the garble
+      // forever. Fail the string, fail the batch, fail visibly.
+      if (script && foreignScriptCount(t, langCode) > 0) return false
+    }
   }
   return true
 }
@@ -97,7 +125,30 @@ function extractJsonArray(text) {
   }
 }
 
-async function callGemini(items, langCode) {
+/**
+ * Shared generation config for BOTH Gemini call paths (translateStrings UI
+ * batches + context-aware segments). Gemini 2.5+ THINKS BY DEFAULT and thought
+ * tokens bill against maxOutputTokens; live measurement (2026-10-28, key
+ * operator-supplied): a 2-line broadcast batch burned 2341 thought tokens to
+ * emit 46 response tokens (12.2s round trip), while the identical shape with
+ * thinkingBudget:0 measured 72 total tokens (1.18s). Broadcast translation is
+ * a deterministic task — thinking buys latency and truncation risk, not
+ * quality. Default: OFF. GEMINI_THINKING=1 restores the thinking pass.
+ * The 2.5/3 family condition avoids sending an unknown field to older models.
+ * maxOutputTokens unifies on the I18N_MAX_TOKENS tier (16000, parity with the
+ * openai-compat paths): with thinking off, responses are ~10^2 tokens and the
+ * cap only guards worst-case batches.
+ */
+export function geminiGenerationConfig() {
+  const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash'
+  const cfg = { temperature: 0, maxOutputTokens: Number(process.env.I18N_MAX_TOKENS) || 16000 }
+  if (/^gemini-(2\.5|3)/.test(model) && process.env.GEMINI_THINKING !== '1') {
+    cfg.thinkingConfig = { thinkingBudget: 0 }
+  }
+  return cfg
+}
+
+async function callGemini(items, langCode, sourceLang = null) {
   const apiKey = process.env.GEMINI_API_KEY
   if (!apiKey) return null
   const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash'
@@ -107,8 +158,8 @@ async function callGemini(items, langCode) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
       body: JSON.stringify({
-        contents: [{ role: 'user', parts: [{ text: buildPrompt(items, langCode) }] }],
-        generationConfig: { temperature: 0, maxOutputTokens: 4096 },
+        contents: [{ role: 'user', parts: [{ text: buildPrompt(items, langCode, sourceLang) }] }],
+        generationConfig: geminiGenerationConfig(),
       }),
     }
   )
@@ -118,7 +169,7 @@ async function callGemini(items, langCode) {
   return extractJsonArray(parts.map((p) => p.text || '').join(''))
 }
 
-async function callOpenAICompat(items, langCode, { routerOverride = false } = {}) {
+async function callOpenAICompat(items, langCode, { routerOverride = false, sourceLang = null } = {}) {
   // Router intent: OPENROUTER_MODEL set → route through OpenRouter even when
   // an OPENAI_API_KEY also exists (evidenced: paired keys where the OpenAI
   // key 402s would otherwise silently shadow the working router path).
@@ -146,7 +197,7 @@ async function callOpenAICompat(items, langCode, { routerOverride = false } = {}
       // Sinhala 8-line used 5173. 16000 covers both languages worst-case.
       // Override with I18N_MAX_TOKENS.
       max_tokens: Number(process.env.I18N_MAX_TOKENS) || 16000,
-      messages: [{ role: 'user', content: buildPrompt(items, langCode) }],
+      messages: [{ role: 'user', content: buildPrompt(items, langCode, sourceLang) }],
     }),
   })
   if (!r.ok) {
@@ -154,7 +205,7 @@ async function callOpenAICompat(items, langCode, { routerOverride = false } = {}
     // on the primary endpoint falls back ONCE to router mode when a usable
     // OpenRouter key is configured.
     if (!isRouter && routerOverride === false && process.env.OPENROUTER_API_KEY) {
-      return await callOpenAICompat(items, langCode, { routerOverride: true })
+      return await callOpenAICompat(items, langCode, { routerOverride: true, sourceLang })
     }
     throw new Error(`openai-compat HTTP ${r.status}`)
   }
@@ -162,8 +213,8 @@ async function callOpenAICompat(items, langCode, { routerOverride = false } = {}
   return extractJsonArray(j?.choices?.[0]?.message?.content)
 }
 
-async function callProvider(kind, items, langCode) {
-  const out = kind === 'gemini' ? await callGemini(items, langCode) : await callOpenAICompat(items, langCode)
+async function callProvider(kind, items, langCode, sourceLang = null) {
+  const out = kind === 'gemini' ? await callGemini(items, langCode, sourceLang) : await callOpenAICompat(items, langCode, { sourceLang })
   if (!out) return null
   return validateOutput(items, out, langCode) ? out : null
 }
@@ -186,7 +237,7 @@ async function callProvider(kind, items, langCode) {
  * EN passthrough (langPack.translate false) returns segments untouched —
  * the English master path never pays a translation bill.
  */
-export async function translateSegments(segments, langPack, { batchSize, onBatch } = {}) {
+export async function translateSegments(segments, langPack, { batchSize, onBatch, sourceLang = null } = {}) {
   const lang = langPack?.code
   // Accept SourceIngest manifests ({text}) and pipeline-native ({source}).
   const segs = (segments || [])
@@ -229,7 +280,7 @@ export async function translateSegments(segments, langPack, { batchSize, onBatch
         for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
           try {
             const segItems = missing.map((s) => ({ key: key(s.source), text: s.source }))
-            const out = await callProviderContext(providerK, segItems, lang, ctxBefore, ctxAfter)
+            const out = await callProviderContext(providerK, segItems, lang, ctxBefore, ctxAfter, sourceLang)
             if (out) {
               texts = out
               provider = providerK
@@ -292,10 +343,11 @@ function extractNames(text) {
 
 /** Context-aware prompt: context is read-only preamble, translation body is
  * the same bullet-form the providers validated live (flint echo quirk safe). */
-function buildContextPrompt(items, langCode, ctxBefore = [], ctxAfter = []) {
+function buildContextPrompt(items, langCode, ctxBefore = [], ctxAfter = [], sourceLang = null) {
   const target = SCRIPT_NAMES[langCode] || langCode
+  const src = sourceLang ? (SCRIPT_NAMES[sourceLang] || sourceLang) : null
   const lines = [
-    `Translate each line into ${target}.`,
+    src ? `Translate each line from ${src} into ${target}.` : `Translate each line into ${target}.`,
     'This is broadcast narration for a news video: keep it natural, concise and spoken-language fluent.',
     'Rules:',
     '- Keep numbers, percentages, names and URLs unchanged.',
@@ -316,14 +368,16 @@ function buildContextPrompt(items, langCode, ctxBefore = [], ctxAfter = []) {
   return lines.join('\n')
 }
 
-async function callProviderContext(kind, items, langCode, ctxBefore, ctxAfter) {
-  const RAW = kind === 'gemini' ? await callGeminiContext(items, langCode, ctxBefore, ctxAfter) : await callOpenAICompatContext(items, langCode, ctxBefore, ctxAfter)
+async function callProviderContext(kind, items, langCode, ctxBefore, ctxAfter, sourceLang = null) {
+  const RAW = kind === 'gemini'
+    ? await callGeminiContext(items, langCode, ctxBefore, ctxAfter, sourceLang)
+    : await callOpenAICompatContext(items, langCode, ctxBefore, ctxAfter, { sourceLang })
   if (!RAW) return null
   if (!validateOutput(items, RAW, langCode)) return null
   return RAW
 }
 
-async function callGeminiContext(items, langCode, ctxBefore, ctxAfter) {
+async function callGeminiContext(items, langCode, ctxBefore, ctxAfter, sourceLang = null) {
   const apiKey = process.env.GEMINI_API_KEY
   if (!apiKey) return null
   const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash'
@@ -331,8 +385,8 @@ async function callGeminiContext(items, langCode, ctxBefore, ctxAfter) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
     body: JSON.stringify({
-      contents: [{ role: 'user', parts: [{ text: buildContextPrompt(items, langCode, ctxBefore, ctxAfter) }] }],
-      generationConfig: { temperature: 0, maxOutputTokens: Number(process.env.I18N_MAX_TOKENS) || 16000 },
+      contents: [{ role: 'user', parts: [{ text: buildContextPrompt(items, langCode, ctxBefore, ctxAfter, sourceLang) }] }],
+      generationConfig: geminiGenerationConfig(),
     }),
   })
   if (!r.ok) throw new Error(`gemini HTTP ${r.status}`)
@@ -341,7 +395,7 @@ async function callGeminiContext(items, langCode, ctxBefore, ctxAfter) {
   return extractJsonArray(parts.map((p) => p.text || '').join(''))
 }
 
-async function callOpenAICompatContext(items, langCode, ctxBefore, ctxAfter, { routerOverride = false } = {}) {
+async function callOpenAICompatContext(items, langCode, ctxBefore, ctxAfter, { routerOverride = false, sourceLang = null } = {}) {
   const isRouter = routerOverride || (!!process.env.OPENROUTER_API_KEY && (!process.env.OPENAI_API_KEY || !!process.env.OPENROUTER_MODEL))
   const apiKey = process.env.OPENAI_API_KEY || process.env.OPENROUTER_API_KEY
   if (!apiKey) return null
@@ -354,7 +408,7 @@ async function callOpenAICompatContext(items, langCode, ctxBefore, ctxAfter, { r
       model,
       temperature: 0,
       max_tokens: Number(process.env.I18N_MAX_TOKENS) || 16000,
-      messages: [{ role: 'user', content: buildContextPrompt(items, langCode, ctxBefore, ctxAfter) }],
+      messages: [{ role: 'user', content: buildContextPrompt(items, langCode, ctxBefore, ctxAfter, sourceLang) }],
     }),
   })
   if (!r.ok) {
@@ -363,7 +417,7 @@ async function callOpenAICompatContext(items, langCode, ctxBefore, ctxAfter, { r
     // mode with the configured free model. A 402 must never fail the whole
     // run when a usable provider is configured.
     if (!isRouter && routerOverride === false && process.env.OPENROUTER_API_KEY) {
-      return await callOpenAICompatContext(items, langCode, ctxBefore, ctxAfter, { routerOverride: true })
+      return await callOpenAICompatContext(items, langCode, ctxBefore, ctxAfter, { routerOverride: true, sourceLang })
     }
     throw new Error(`openai-compat HTTP ${r.status}`)
   }
@@ -425,4 +479,4 @@ export async function translateStrings(items, langPack) {
   return result
 }
 
-export const _internals = { buildPrompt, validateOutput, extractJsonArray } // exposed for tests
+export const _internals = { buildPrompt, validateOutput, extractJsonArray, geminiGenerationConfig } // exposed for tests

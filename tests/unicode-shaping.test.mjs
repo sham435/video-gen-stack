@@ -432,3 +432,95 @@ test('unicode: Tamil and Sinhala packs declare their vendored Noto fonts + per-p
   assert.deepEqual(SI.fontFiles, ['assets/fonts/NotoSansSinhala-Regular.ttf', 'assets/fonts/NotoSansSinhala-Bold.ttf'])
   assert.equal(SI.translate, true)
 })
+
+// ── spacing fidelity (Task-135): outline scale == advance scale ─────────────
+// HISTORY: drawShaped called glyph.getPath(x, y) WITHOUT the fontSize argument
+// and opentype.js defaults it to 72 — outlines drew at 72/upem while HarfBuzz
+// advances scaled at size/upem. At caption sizes (<72px) letters drew ~1.24×
+// wider than their reserved slots and MERGED (meaning destroyed); at headline
+// sizes letters shrank into scattered fragments. The fix passes `size` and
+// these tests pin it forever.
+
+function inkColumns(ctx, W, H) {
+  const d = ctx.getImageData(0, 0, W, H).data
+  const cols = []
+  for (let x = 0; x < W; x++) {
+    let ink = false
+    for (let y = 0; y < H; y += 2) { if (d[(y * W + x) * 4] < 100) { ink = true; break } }
+    cols.push(ink)
+  }
+  return cols
+}
+
+test('unicode: spacing fidelity — drawn glyph ink is scale-invariant vs its advance ( getPath(size) fix pin )', async t => {
+  t.after(() => setRenderLanguage(null))
+  for (const [code, letter] of [['ta', 'க'], ['si', 'අ']]) {
+    const pack = LANGUAGES[code]
+    const ratios = []
+    const spans = []
+    for (const size of [58, 96, 160]) {
+      const layout = await shapeText(letter, { fontFile: pack.fontFiles, size, weight: 800 })
+      const adv = layout.advancePx
+      const pad = Math.ceil(size)
+      const W = Math.ceil(adv) + pad * 2, H = Math.ceil(size * 2.5)
+      const cv = createCanvas(W, H)
+      const ctx = cv.getContext('2d')
+      ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H)
+      ctx.fillStyle = '#000'
+      await drawShaped(ctx, letter, pad, H / 2, { fontFile: pack.fontFiles, size, weight: 800, baseline: 'middle', fillStyle: '#000' })
+      const cols = inkColumns(ctx, W, H)
+      const first = cols.indexOf(true), last = cols.lastIndexOf(true)
+      const span = last - first + 1
+      spans.push(span)
+      ratios.push(span / adv)
+    }
+    const max = Math.max(...ratios), min = Math.min(...ratios)
+    assert.ok(
+      (max - min) / ratios[1] <= 0.04,
+      `${code} ink/advance ratio must not depend on size (the 72px-outline bug drew 1.24× slots at 58px): got ${JSON.stringify(ratios.map(r => +r.toFixed(3)))}`
+    )
+    // ink must grow linearly with size: ink@160 == ink@58 × (160/58) ±4%
+    const lin = spans[2] / (spans[0] * (160 / 58))
+    assert.ok(lin > 0.96 && lin < 1.04, `${code} drawn ink must scale linearly with size (got ×${lin.toFixed(3)})`)
+  }
+})
+
+test('unicode: spacing fidelity — word-to-word ink separation visible at caption size (CaptionEngine-style layout, 58px)', async t => {
+  t.after(() => setRenderLanguage(null))
+  for (const [code, seq] of [
+    ['ta', 'பருவமழை உலகளாவிய அறுவடை'],
+    ['si', 'මෝසම් වැසි අස්වැන්න'],
+  ]) {
+    const pack = LANGUAGES[code]
+    const size = 58
+    setRenderLanguage(pack)
+    const words = seq.split(' ')
+    const line = words.join(' ')
+    const W = 2400, H = 200, y = 100
+    const cv = createCanvas(W, H)
+    const ctx = cv.getContext('2d')
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H)
+    ctx.fillStyle = '#000'
+    // CaptionEngine's real algorithm: lineAdvance from shaped measure, word
+    // slots cw += wordAdvance + shapedSpaceAdvance, words centered in slots.
+    const lineW = (await shapeText(line, { fontFile: pack.fontFiles, size, weight: 800 })).advancePx
+    const spaceW = (await shapeText(' ', { fontFile: pack.fontFiles, size, weight: 800 })).advancePx
+    let cw = (W - lineW) / 2
+    for (const w of words) {
+      const ww = (await shapeText(w, { fontFile: pack.fontFiles, size, weight: 800 })).advancePx
+      await drawShaped(ctx, w, cw + ww / 2, y, { fontFile: pack.fontFiles, size, weight: 800, align: 'center', baseline: 'middle', fillStyle: '#000' })
+      cw += ww + spaceW
+    }
+    const cols = inkColumns(ctx, W, H)
+    const first = cols.indexOf(true), last = cols.lastIndexOf(true)
+    let best = 0, run = 0
+    for (let x = first; x <= last; x++) {
+      if (!cols[x]) { run++; if (run > best) best = run } else run = 0
+    }
+    const emRun = best / size
+    assert.ok(
+      emRun >= 0.28,
+      `${code}: word-to-word ink gap too thin at caption size (${best}px = ${emRun.toFixed(2)}em — pre-fix the 72px outline bug squeezed it to 9px/0.155em)`
+    )
+  }
+})

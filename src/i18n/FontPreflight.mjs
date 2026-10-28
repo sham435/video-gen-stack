@@ -103,6 +103,41 @@ export async function assertLanguageFonts(pack) {
   return report
 }
 
+/** CONTENT-coverage gate: canaries only prove the font file is present and
+ *  healthy — the ACTUAL strings a variant will publish (translated narration,
+ *  captions, review corrections) may contain codepoints the canaries never
+ *  touched. Shapes every unique text with the SAME shaper/fonts the renderer
+ *  uses and refuses any .notdef, so render-time tofu is blocked before any
+ *  speech/render cost is paid. env: pack.latinFontFiles drives the
+ *  mixed-script run split, exactly like the draw path. */
+export async function assertContentCovers(pack, texts, { label = 'content' } = {}) {
+  if (!pack || !pack.fontFiles) {
+    return { code: pack?.code || 'en', ok: true, checked: 0, skipped: true, note: 'no pack fonts (native Latin path)' }
+  }
+  const list = Array.from(new Set((texts || []).map((t) => String(t ?? '').trim()).filter(Boolean)))
+  const report = { code: pack.code, ok: true, checked: list.length }
+  for (const text of list) {
+    const layout = await shapeText(text, { fontFile: pack.fontFiles, size: 64, weight: 400, latinFontFiles: pack.latinFontFiles ?? null })
+    if (layout.hasNotdef) {
+      // Diagnose: shape each unique codepoint to name exactly what is missing.
+      const bad = []
+      for (const ch of new Set(Array.from(text))) {
+        if (!ch.trim()) continue
+        const one = await shapeText(ch, { fontFile: pack.fontFiles, size: 64, weight: 400, latinFontFiles: pack.latinFontFiles ?? null })
+        if (one.hasNotdef) bad.push(`U+${ch.codePointAt(0).toString(16).toUpperCase().padStart(4, '0')} '${ch}'`)
+      }
+      report.ok = false
+      throw Object.assign(
+        new Error(
+          `RENDER_PREFLIGHT_FAILED (${pack.code}): missing glyphs (${bad.join(', ') || 'unresolved'}) in ${label} "${text.slice(0, 40)}…" — vendored font(s) ${pack.fontFiles.join('|')}${pack.latinFontFiles ? ` + latin ${pack.latinFontFiles.join('|')}` : ''} cannot cover this content; no rendering (and no tofu boxes) will be produced for this variant`
+        ),
+        { report }
+      )
+    }
+  }
+  return report
+}
+
 /** Non-throwing variant for diagnostics/dashboards. */
 export async function languageFontReport(pack) {
   try {

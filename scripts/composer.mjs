@@ -901,7 +901,36 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
           }
         }
 
-        return { uploadTitle, hashtags, seo, nicheDecision, ...result }
+        // TRI-LINGUAL: package the localized caption sidecar as a real YouTube
+        // caption track (captions.insert). NON-FATAL by contract — the video is
+        // already live at this point; caption state lives in
+        // data/captions-state.json (keyed videoId|language) so resume, retry
+        // and backfill all stay idempotent (remote 409 captionExists backstop).
+        let captionsResult = null
+        if (langPack && langPack.code !== 'en' && result?.videoId && process.env.YOUTUBE_CAPTIONS_DISABLE !== '1') {
+          try {
+            const { publishCaptionTrack } = await import('../src/publishing/CaptionTrackPublisher.mjs')
+            captionsResult = await publishCaptionTrack({
+              videoId: result.videoId,
+              srtPath: `${outDir}/captions.srt`,
+              language: langPack.code,
+              name: langPack.nativeLabel || langPack.code.toUpperCase(),
+              skipFastWhenUploaded: true,
+            })
+            console.log(`[YOUTUBE_CAPTIONS] ${captionsResult.status} language=${langPack.code} videoId=${result.videoId}${captionsResult.trackId ? ` trackId=${captionsResult.trackId}` : ''}${captionsResult.reason ? ` reason=${captionsResult.reason}` : ''}${captionsResult.error ? ` error=${captionsResult.error}` : ''}`)
+          } catch (e) {
+            console.warn(`[YOUTUBE_CAPTIONS] unexpected failure (non-fatal): ${e.message}`)
+            captionsResult = { status: 'failed', error: e.message }
+          }
+        } else if (langPack && langPack.code !== 'en' && !result?.videoId) {
+          console.warn('[YOUTUBE_CAPTIONS] skipped — uploaded videoId missing')
+          captionsResult = { status: 'skipped', reason: 'NO_VIDEO_ID' }
+        } else if (process.env.YOUTUBE_CAPTIONS_DISABLE === '1') {
+          console.log('[YOUTUBE_CAPTIONS] disabled (YOUTUBE_CAPTIONS_DISABLE=1)')
+          captionsResult = { status: 'skipped', reason: 'DISABLED_ENV' }
+        }
+
+        return { uploadTitle, hashtags, seo, nicheDecision, ...result, captions: captionsResult }
       })
 
       // ── PUBLISH — gated by publishability, then cross-platform distribution ──
